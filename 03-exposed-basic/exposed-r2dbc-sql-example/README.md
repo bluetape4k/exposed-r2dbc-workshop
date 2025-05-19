@@ -1,4 +1,4 @@
-# exposed-sql-example
+# exposed-r2dbc-sql-example
 
 Exposed DSL 방식으로 SQL 문을 생성하는 법을 알아보기 위한 예제 프로젝트입니다.
 

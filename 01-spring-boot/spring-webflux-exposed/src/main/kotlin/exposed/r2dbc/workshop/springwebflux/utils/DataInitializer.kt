@@ -5,11 +5,10 @@ import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.ActorInMovieTable
 import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.ActorTable
 import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.MovieTable
 import exposed.r2dbc.workshop.springwebflux.domain.MovieWithActorDTO
-import io.bluetape4k.junit5.coroutines.runSuspendTest
 import io.bluetape4k.logging.KLogging
 import io.bluetape4k.logging.info
-import io.r2dbc.spi.IsolationLevel
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.batchInsert
@@ -31,8 +30,8 @@ class DataInitializer(private val database: R2dbcDatabase): ApplicationListener<
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
         log.info { "샘플 데이터 추가" }
 
-        runSuspendTest {
-            suspendTransaction(db = database, transactionIsolation = IsolationLevel.READ_COMMITTED) {
+        runBlocking {
+            suspendTransaction {
                 populateData()
             }
         }
