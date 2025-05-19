@@ -25,7 +25,6 @@ dependencies {
     implementation(Libs.exposed_json)
     implementation(Libs.exposed_migration)
     implementation(Libs.exposed_money)
-    implementation(Libs.exposed_spring_boot_starter)
 
     api(Libs.bluetape4k_jdbc)
     api(Libs.bluetape4k_r2dbc)
