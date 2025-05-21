@@ -7,9 +7,6 @@ dependencies {
 
     implementation(project(":exposed-r2dbc-shared"))
 
-    // Bluetape4k Exposed
-    implementation(Libs.bluetape4k_exposed)
-
     // Exposed
     implementation(Libs.exposed_core)
     implementation(Libs.exposed_r2dbc)

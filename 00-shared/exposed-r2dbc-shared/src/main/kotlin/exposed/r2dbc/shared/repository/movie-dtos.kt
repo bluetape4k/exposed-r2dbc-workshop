@@ -1,6 +1,6 @@
 package exposed.r2dbc.shared.repository
 
-import io.bluetape4k.exposed.dao.HasIdentifier
+import io.bluetape4k.exposed.r2dbc.HasIdentifier
 import java.io.Serializable
 
 

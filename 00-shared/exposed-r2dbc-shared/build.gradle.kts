@@ -9,12 +9,6 @@ configurations {
 dependencies {
     implementation(platform(Libs.exposed_bom))
 
-    // Bluetape4k Exposed
-    api(Libs.bluetape4k_exposed)
-    implementation(Libs.bluetape4k_exposed_jackson)
-    implementation(Libs.bluetape4k_exposed_fastjson2)
-    implementation(Libs.bluetape4k_exposed_jasypt)
-
     // Exposed
     api(Libs.exposed_core)
     api(Libs.exposed_dao)

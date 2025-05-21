@@ -34,6 +34,7 @@ import org.jetbrains.exposed.v1.core.compoundOr
 import org.jetbrains.exposed.v1.core.or
 import org.jetbrains.exposed.v1.r2dbc.Query
 import org.jetbrains.exposed.v1.r2dbc.andWhere
+import org.jetbrains.exposed.v1.r2dbc.batchInsert
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.select
 import org.jetbrains.exposed.v1.r2dbc.selectAll
@@ -1081,10 +1082,8 @@ class Ex01_Select: R2dbcExposedTestBase() {
             val amount = 10
             val start = 8L
 
-            allLetters.forEach { letter ->
-                alphabet.insert {
-                    it[alphabet.letter] = letter
-                }
+            alphabet.batchInsert(allLetters) { letter ->
+                this[alphabet.letter] = letter
             }
 
             // SELECT alphabet.letter FROM alphabet LIMIT 10
