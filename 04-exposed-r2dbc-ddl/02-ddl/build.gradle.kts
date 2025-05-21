@@ -5,7 +5,7 @@ configurations {
 dependencies {
     implementation(platform(Libs.exposed_bom))
 
-    testImplementation(project(":exposed-r2dbc-shared"))
+    implementation(project(":exposed-r2dbc-shared"))
 
     // Exposed
     implementation(Libs.exposed_core)
