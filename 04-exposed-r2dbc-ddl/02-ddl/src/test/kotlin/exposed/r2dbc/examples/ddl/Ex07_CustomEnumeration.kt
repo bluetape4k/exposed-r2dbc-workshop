@@ -5,7 +5,7 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.r2dbc.postgresql.PostgresqlConnectionConfiguration
 import io.r2dbc.postgresql.codec.EnumCodec
 import kotlinx.coroutines.flow.single
@@ -34,7 +34,7 @@ import org.junit.jupiter.params.provider.MethodSource
  */
 class Ex07_CustomEnumeration: R2dbcExposedTestBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     private val supportsCustomEnumerationDB =
         TestDB.ALL_POSTGRES + TestDB.ALL_MYSQL
