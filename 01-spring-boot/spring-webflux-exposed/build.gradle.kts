@@ -35,11 +35,13 @@ dependencies {
     testImplementation(Libs.bluetape4k_spring_tests)
 
     // Exposed
-    implementation(Libs.bluetape4k_exposed)
     implementation(Libs.exposed_r2dbc)
     implementation(Libs.exposed_core)
     implementation(Libs.exposed_jdbc)
     implementation(Libs.exposed_java_time)
+
+    // bluetape4k_exposed 가 사용하는 exposed_core 의 버전 및 namespace 가 다르므로, 참조하면 안됩니다.
+    // implementation(Libs.bluetape4k_exposed)
 
     api(Libs.h2_v2)
 
