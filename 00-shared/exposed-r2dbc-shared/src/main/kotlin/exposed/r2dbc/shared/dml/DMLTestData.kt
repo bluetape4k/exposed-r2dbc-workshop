@@ -120,7 +120,7 @@ object DMLTestData {
     @Suppress("UnusedReceiverParameter")
     suspend fun R2dbcExposedTestBase.withCitiesAndUsers(
         testDB: TestDB,
-        statement: R2dbcTransaction.(
+        statement: suspend R2dbcTransaction.(
             cities: Cities,
             users: Users,
             userData: UserData,
@@ -209,7 +209,7 @@ object DMLTestData {
     @Suppress("UnusedReceiverParameter")
     suspend fun R2dbcExposedTestBase.withSales(
         dialect: TestDB,
-        statement: R2dbcTransaction.(testDB: TestDB, sales: Sales) -> Unit,
+        statement: suspend R2dbcTransaction.(testDB: TestDB, sales: Sales) -> Unit,
     ) {
         val sales = Sales
 
@@ -239,7 +239,7 @@ object DMLTestData {
     @Suppress("UnusedReceiverParameter")
     suspend fun R2dbcExposedTestBase.withSomeAmounts(
         testDB: TestDB,
-        statement: R2dbcTransaction.(testDB: TestDB, someAmounts: SomeAmounts) -> Unit,
+        statement: suspend R2dbcTransaction.(testDB: TestDB, someAmounts: SomeAmounts) -> Unit,
     ) {
         val someAmounts = SomeAmounts
 
@@ -260,7 +260,7 @@ object DMLTestData {
     @Suppress("UnusedReceiverParameter")
     suspend fun R2dbcExposedTestBase.withSalesAndSomeAmounts(
         testDB: TestDB,
-        statement: R2dbcTransaction.(
+        statement: suspend R2dbcTransaction.(
             testDB: TestDB,
             sales: Sales,
             someAmounts: SomeAmounts,

@@ -10,7 +10,7 @@
         </encoder>
     </appender>
 
-    <logger name="exposed.r2dbc.examples.ddl" level="DEBUG"/>
+    <logger name="exposed.r2dbc.examples.dml" level="DEBUG"/>
     <logger name="org.jetbrains.exposed.r2dbc" level="DEBUG"/>
 
     <logger name="Exposed" level="DEBUG"/>
