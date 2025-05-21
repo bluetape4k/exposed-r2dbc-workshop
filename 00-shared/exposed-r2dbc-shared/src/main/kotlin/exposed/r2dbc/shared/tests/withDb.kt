@@ -1,6 +1,5 @@
 package exposed.r2dbc.shared.tests
 
-import io.bluetape4k.junit5.coroutines.runSuspendTest
 import io.bluetape4k.utils.Runtimex
 import org.jetbrains.exposed.v1.core.DatabaseConfig
 import org.jetbrains.exposed.v1.core.Key
@@ -20,11 +19,11 @@ private object CurrentTestDBInterceptor: StatementInterceptor {
     }
 }
 
-fun withDb(
+suspend fun withDb(
     testDB: TestDB,
     configure: (DatabaseConfig.Builder.() -> Unit)? = {},
     statement: suspend R2dbcTransaction.(TestDB) -> Unit,
-) = runSuspendTest {
+) {
 
     val unregistered = testDB !in registeredOnShutdown
     val newConfiguration = configure != null && !unregistered

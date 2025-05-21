@@ -156,7 +156,7 @@ object PersonSchema {
         var address: Address? = null,
     ): Serializable
 
-    fun R2dbcExposedTestBase.withPersons(
+    suspend fun R2dbcExposedTestBase.withPersons(
         testDB: TestDB,
         block: suspend R2dbcTransaction.(PersonTable, AddressTable) -> Unit,
     ) {
@@ -168,7 +168,7 @@ object PersonSchema {
 
 
 @Suppress("UnusedReceiverParameter")
-fun R2dbcExposedTestBase.withPersonsAndAddress(
+suspend fun R2dbcExposedTestBase.withPersonsAndAddress(
     testDB: TestDB,
     statement: suspend R2dbcTransaction.(
         persons: PersonSchema.PersonTable,

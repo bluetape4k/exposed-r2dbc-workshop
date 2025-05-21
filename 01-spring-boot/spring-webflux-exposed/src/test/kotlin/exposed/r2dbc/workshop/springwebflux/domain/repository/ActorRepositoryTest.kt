@@ -2,8 +2,7 @@ package exposed.r2dbc.workshop.springwebflux.domain.repository
 
 import exposed.r2dbc.workshop.springwebflux.AbstractSpringWebfluxTest
 import exposed.r2dbc.workshop.springwebflux.domain.ActorDTO
-import exposed.r2dbc.workshop.springwebflux.domain.toActorDTO
-import io.bluetape4k.junit5.coroutines.runSuspendTest
+import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import org.amshove.kluent.shouldBeEqualTo
@@ -26,11 +25,11 @@ class ActorRepositoryTest(
     }
 
     @Test
-    fun `find actor by id`() = runSuspendTest {
+    fun `find actor by id`() = runSuspendIO {
         suspendTransaction(readOnly = true) {
             val actorId = 1L
 
-            val actor = actorRepository.findById(actorId)?.toActorDTO()
+            val actor = actorRepository.findById(actorId)
 
             log.debug { "Actor: $actor" }
             actor.shouldNotBeNull()
@@ -46,7 +45,7 @@ class ActorRepositoryTest(
      * ```
      */
     @Test
-    fun `search actors by lastName`() = runSuspendTest {
+    fun `search actors by lastName`() = runSuspendIO {
         suspendTransaction(readOnly = true) {
             val params = mapOf("lastName" to "Depp")
             val actors = actorRepository.searchActor(params).toList()
@@ -66,7 +65,7 @@ class ActorRepositoryTest(
      * ```
      */
     @Test
-    fun `search actors by firstName`() = runSuspendTest {
+    fun `search actors by firstName`() = runSuspendIO {
         suspendTransaction(readOnly = true) {
             val params = mapOf("firstName" to "Angelina")
             val actors = actorRepository.searchActor(params).toList()
@@ -79,16 +78,16 @@ class ActorRepositoryTest(
     }
 
     @Test
-    fun `create new actor`() = runSuspendTest {
+    fun `create new actor`() = runSuspendIO {
         suspendTransaction {
             val prevCount = actorRepository.count()
 
             val actor = newActorDTO()
 
-            val savedActor = actorRepository.create(actor).toActorDTO()
+            val savedActor = actorRepository.create(actor)
             savedActor shouldBeEqualTo actor.copy(id = savedActor.id)
 
-            val newActor = actorRepository.findById(savedActor.id!!)?.toActorDTO()
+            val newActor = actorRepository.findById(savedActor.id!!)
             newActor shouldBeEqualTo savedActor
 
             actorRepository.count() shouldBeEqualTo prevCount + 1L
@@ -96,10 +95,10 @@ class ActorRepositoryTest(
     }
 
     @Test
-    fun `delete actor by id`() = runSuspendTest {
+    fun `delete actor by id`() = runSuspendIO {
         suspendTransaction {
             val actor = newActorDTO()
-            val savedActor = actorRepository.create(actor).toActorDTO()
+            val savedActor = actorRepository.create(actor)
             savedActor.shouldNotBeNull()
             savedActor.id.shouldNotBeNull()
 

@@ -5,7 +5,6 @@ import exposed.r2dbc.workshop.springwebflux.domain.MovieActorCountDTO
 import exposed.r2dbc.workshop.springwebflux.domain.MovieDTO
 import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.ActorInMovieTable
 import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.ActorTable
-import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.MovieEntity
 import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.MovieTable
 import exposed.r2dbc.workshop.springwebflux.domain.MovieWithActorDTO
 import exposed.r2dbc.workshop.springwebflux.domain.MovieWithProducingActorDTO
@@ -23,9 +22,9 @@ import org.jetbrains.exposed.v1.core.Join
 import org.jetbrains.exposed.v1.core.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.v1.core.count
 import org.jetbrains.exposed.v1.core.innerJoin
-import org.jetbrains.exposed.v1.dao.load
 import org.jetbrains.exposed.v1.r2dbc.andWhere
 import org.jetbrains.exposed.v1.r2dbc.deleteWhere
+import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 import org.jetbrains.exposed.v1.r2dbc.select
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.springframework.stereotype.Repository
@@ -57,20 +56,20 @@ class MovieRepository {
     suspend fun count(): Long =
         MovieTable.selectAll().count()
 
-    suspend fun findById(movieId: Long): MovieEntity? {
+    suspend fun findById(movieId: Long): MovieDTO? {
         log.debug { "Find Movie by id. id: $movieId" }
 
         return MovieTable.selectAll()
             .where { MovieTable.id eq movieId }
             .firstOrNull()
-            ?.let { MovieEntity.wrapRow(it) }
+            ?.toMovieDTO()
     }
 
-    suspend fun findAll(): List<MovieEntity> {
-        return MovieTable.selectAll().toList().map { MovieEntity.wrapRow(it) }.toList()
+    suspend fun findAll(): List<MovieDTO> {
+        return MovieTable.selectAll().map { it.toMovieDTO() }.toList()
     }
 
-    suspend fun searchMovie(params: Map<String, String?>): List<MovieEntity> {
+    suspend fun searchMovie(params: Map<String, String?>): List<MovieDTO> {
         log.debug { "Search Movie by params. params: $params" }
 
         val query = MovieTable.selectAll()
@@ -88,19 +87,20 @@ class MovieRepository {
             }
         }
 
-        return query.toList().map { MovieEntity.wrapRow(it) }
+        return query.map { it.toMovieDTO() }.toList()
     }
 
-    suspend fun create(movie: MovieDTO): MovieEntity {
+    suspend fun create(movie: MovieDTO): MovieDTO {
         log.debug { "Create Movie. movie: $movie" }
 
-        return MovieEntity.new {
-            name = movie.name
-            producerName = movie.producerName
+        val id = MovieTable.insertAndGetId {
+            it[name] = movie.name
+            it[producerName] = movie.producerName
             if (movie.releaseDate.isNotBlank()) {
-                releaseDate = LocalDateTime.parse(movie.releaseDate)
+                it[releaseDate] = LocalDateTime.parse(movie.releaseDate)
             }
         }
+        return movie.copy(id = id.value)
     }
 
     suspend fun deleteById(movieId: Long): Int {
@@ -176,10 +176,18 @@ class MovieRepository {
      */
     suspend fun getMovieWithActors(movieId: Long): MovieWithActorDTO? {
         log.debug { "Get Movie with actors. movieId=$movieId" }
-        return MovieEntity
-            .findById(movieId)
-            ?.load(MovieEntity::actors)     // eager loading
-            ?.toMovieWithActorDTO()
+        val actors = ActorTable
+            .innerJoin(ActorInMovieTable)
+            .selectAll()
+            .where { ActorInMovieTable.movieId eq movieId }
+            .map { it.toActorDTO() }
+            .toList()
+
+        return MovieTable
+            .selectAll()
+            .where { MovieTable.id eq movieId }
+            .firstOrNull()
+            ?.toMovieWithActorDTO(actors)
     }
 
     /**

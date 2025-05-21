@@ -7,7 +7,7 @@ import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.transactionManager
 
-fun withTables(
+suspend fun withTables(
     testDB: TestDB,
     vararg tables: Table,
     configure: (DatabaseConfig.Builder.() -> Unit)? = null,

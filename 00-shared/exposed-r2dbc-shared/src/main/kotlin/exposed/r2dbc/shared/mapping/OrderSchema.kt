@@ -137,7 +137,7 @@ object OrderSchema {
                 ?: 0
     }
 
-    fun R2dbcExposedTestBase.withOrdersTables(
+    suspend fun R2dbcExposedTestBase.withOrdersTables(
         testDB: TestDB,
         statement: suspend R2dbcTransaction.(
             orders: OrderTable,

@@ -5,7 +5,7 @@ import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.sql.example.Schema.CityTable
 import exposed.r2dbc.sql.example.Schema.UserTable
 import exposed.r2dbc.sql.example.Schema.withCityUsers
-import io.bluetape4k.junit5.coroutines.runSuspendTest
+import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.KLogging
 import io.bluetape4k.logging.info
 import kotlinx.coroutines.flow.single
@@ -38,7 +38,7 @@ class R2dbcExposedSQLExample: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `Raw SQL을 이용하여 Update 수행합니다`(testDB: TestDB) = runSuspendTest {
+    fun `Raw SQL을 이용하여 Update 수행합니다`(testDB: TestDB) = runSuspendIO {
         withCityUsers(testDB) {
             UserTable.update({ UserTable.id eq "alex" }) {
                 it[name] = "Alexey"   // Alex -> Alexey
@@ -71,7 +71,7 @@ class R2dbcExposedSQLExample: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `Raw SQL을 이용하여 DELETE를 수행합니다`(testDB: TestDB) = runSuspendTest {
+    fun `Raw SQL을 이용하여 DELETE를 수행합니다`(testDB: TestDB) = runSuspendIO {
         withCityUsers(testDB) {
             val affectedCount = UserTable.deleteWhere { UserTable.name like "%thing" }
             affectedCount shouldBeEqualTo 1
@@ -99,7 +99,7 @@ class R2dbcExposedSQLExample: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `manual inner join`(testDB: TestDB) = runSuspendTest {
+    fun `manual inner join`(testDB: TestDB) = runSuspendIO {
         withCityUsers(testDB) {
             UserTable
                 .innerJoin(CityTable)
@@ -128,7 +128,7 @@ class R2dbcExposedSQLExample: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `join with foreign key`(testDB: TestDB) = runSuspendTest {
+    fun `join with foreign key`(testDB: TestDB) = runSuspendIO {
         withCityUsers(testDB) {
             UserTable
                 .innerJoin(CityTable)
@@ -158,7 +158,7 @@ class R2dbcExposedSQLExample: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `use functions and group by`(testDB: TestDB) = runSuspendTest {
+    fun `use functions and group by`(testDB: TestDB) = runSuspendIO {
         withCityUsers(testDB) {
             val query = CityTable.innerJoin(UserTable)
                 .select(CityTable.name, UserTable.id.count())

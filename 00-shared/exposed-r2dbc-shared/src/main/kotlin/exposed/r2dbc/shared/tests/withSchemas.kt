@@ -5,7 +5,7 @@ import org.jetbrains.exposed.v1.core.Schema
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 
-fun withSchemas(
+suspend fun withSchemas(
     dialect: TestDB,
     vararg schemas: Schema,
     configure: (DatabaseConfig.Builder.() -> Unit)? = {},

@@ -1,9 +1,7 @@
 package exposed.r2dbc.shared.repository
 
 
-import exposed.r2dbc.shared.repository.MovieSchema.ActorEntity
 import exposed.r2dbc.shared.repository.MovieSchema.ActorTable
-import exposed.r2dbc.shared.repository.MovieSchema.MovieEntity
 import exposed.r2dbc.shared.repository.MovieSchema.MovieTable
 import org.jetbrains.exposed.v1.core.ResultRow
 
@@ -12,13 +10,6 @@ fun ResultRow.toActorDTO() = ActorDTO(
     firstName = this[ActorTable.firstName],
     lastName = this[ActorTable.lastName],
     birthday = this[ActorTable.birthday]?.toString()
-)
-
-fun ActorEntity.toActorDTO() = ActorDTO(
-    id = this.id.value,
-    firstName = this.firstName,
-    lastName = this.lastName,
-    birthday = this.birthday?.toString()
 )
 
 fun ResultRow.toMovieDTO() = MovieDTO(
@@ -45,22 +36,6 @@ fun MovieDTO.toMovieWithActorDTO(actors: List<ActorDTO>) =
         actors = actors.toMutableList(),
         id = this.id
     )
-
-fun MovieEntity.toMovieDTO() = MovieDTO(
-    name = this.name,
-    producerName = this.producerName,
-    releaseDate = this.releaseDate.toString(),
-    id = this.id.value
-)
-
-fun MovieEntity.toMovieWithActorDTO() = MovieWithActorDTO(
-    name = this.name,
-    producerName = this.producerName,
-    releaseDate = this.releaseDate.toString(),
-    actors = this.actors.map { it.toActorDTO() }.toMutableList(),
-    id = this.id.value
-)
-
 
 fun ResultRow.toMovieWithProducingActorDTO() = MovieWithProducingActorDTO(
     movieName = this[MovieTable.name],

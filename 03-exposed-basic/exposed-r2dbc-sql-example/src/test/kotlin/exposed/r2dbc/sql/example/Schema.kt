@@ -61,7 +61,7 @@ object Schema {
     /**
      * [CityTable], [UserTable]을 이용하여 [statement]를 수행합니다.
      */
-    fun withCityUsers(testDB: TestDB, statement: suspend R2dbcTransaction.() -> Unit) {
+    suspend fun withCityUsers(testDB: TestDB, statement: suspend R2dbcTransaction.() -> Unit) {
         withTables(testDB, CityTable, UserTable) {
             insertSampleData()
             commit()

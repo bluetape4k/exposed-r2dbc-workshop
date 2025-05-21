@@ -118,7 +118,7 @@ object DMLTestData {
 
 
     @Suppress("UnusedReceiverParameter")
-    fun R2dbcExposedTestBase.withCitiesAndUsers(
+    suspend fun R2dbcExposedTestBase.withCitiesAndUsers(
         testDB: TestDB,
         statement: R2dbcTransaction.(
             cities: Cities,
@@ -207,7 +207,7 @@ object DMLTestData {
     }
 
     @Suppress("UnusedReceiverParameter")
-    fun R2dbcExposedTestBase.withSales(
+    suspend fun R2dbcExposedTestBase.withSales(
         dialect: TestDB,
         statement: R2dbcTransaction.(testDB: TestDB, sales: Sales) -> Unit,
     ) {
@@ -237,7 +237,7 @@ object DMLTestData {
     }
 
     @Suppress("UnusedReceiverParameter")
-    fun R2dbcExposedTestBase.withSomeAmounts(
+    suspend fun R2dbcExposedTestBase.withSomeAmounts(
         testDB: TestDB,
         statement: R2dbcTransaction.(testDB: TestDB, someAmounts: SomeAmounts) -> Unit,
     ) {
@@ -258,7 +258,7 @@ object DMLTestData {
     }
 
     @Suppress("UnusedReceiverParameter")
-    fun R2dbcExposedTestBase.withSalesAndSomeAmounts(
+    suspend fun R2dbcExposedTestBase.withSalesAndSomeAmounts(
         testDB: TestDB,
         statement: R2dbcTransaction.(
             testDB: TestDB,

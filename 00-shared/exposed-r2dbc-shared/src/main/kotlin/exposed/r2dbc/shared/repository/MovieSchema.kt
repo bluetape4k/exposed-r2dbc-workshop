@@ -3,9 +3,6 @@ package exposed.r2dbc.shared.repository
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.exposed.dao.idEquals
-import io.bluetape4k.exposed.dao.idHashCode
-import io.bluetape4k.exposed.dao.toStringBuilder
 import io.bluetape4k.logging.KLogging
 import io.bluetape4k.logging.info
 import kotlinx.coroutines.flow.first
@@ -15,8 +12,6 @@ import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
-import org.jetbrains.exposed.v1.dao.LongEntity
-import org.jetbrains.exposed.v1.dao.LongEntityClass
 import org.jetbrains.exposed.v1.dao.flushCache
 import org.jetbrains.exposed.v1.javatime.date
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
@@ -47,43 +42,45 @@ object MovieSchema: KLogging() {
         override val primaryKey = PrimaryKey(movieId, actorId)
     }
 
-    class MovieEntity(id: EntityID<Long>): LongEntity(id) {
-        companion object: LongEntityClass<MovieEntity>(MovieTable)
+    // R2DBC Exposed does not support DAO yet, so we cannot use it here
 
-        var name by MovieTable.name
-        var producerName by MovieTable.producerName
-        var releaseDate by MovieTable.releaseDate
+//    class MovieEntity(id: EntityID<Long>): LongEntity(id) {
+//        companion object: LongEntityClass<MovieEntity>(MovieTable)
+//
+//        var name by MovieTable.name
+//        var producerName by MovieTable.producerName
+//        var releaseDate by MovieTable.releaseDate
+//
+//        val actors by ActorEntity via ActorInMovieTable
+//
+//        override fun equals(other: Any?): Boolean = idEquals(other)
+//        override fun hashCode(): Int = idHashCode()
+//        override fun toString(): String = toStringBuilder()
+//            .add("name", name)
+//            .add("producerName", producerName)
+//            .add("releaseDate", releaseDate)
+//            .toString()
+//    }
+//
+//    class ActorEntity(id: EntityID<Long>): LongEntity(id) {
+//        companion object: LongEntityClass<ActorEntity>(ActorTable)
+//
+//        var firstName by ActorTable.firstName
+//        var lastName by ActorTable.lastName
+//        var birthday by ActorTable.birthday
+//
+//        val movies by MovieEntity via ActorInMovieTable
+//
+//        override fun equals(other: Any?): Boolean = idEquals(other)
+//        override fun hashCode(): Int = idHashCode()
+//        override fun toString(): String = toStringBuilder()
+//            .add("firstName", firstName)
+//            .add("lastName", lastName)
+//            .add("birthday", birthday)
+//            .toString()
+//    }
 
-        val actors by ActorEntity via ActorInMovieTable
-
-        override fun equals(other: Any?): Boolean = idEquals(other)
-        override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
-            .add("name", name)
-            .add("producerName", producerName)
-            .add("releaseDate", releaseDate)
-            .toString()
-    }
-
-    class ActorEntity(id: EntityID<Long>): LongEntity(id) {
-        companion object: LongEntityClass<ActorEntity>(ActorTable)
-
-        var firstName by ActorTable.firstName
-        var lastName by ActorTable.lastName
-        var birthday by ActorTable.birthday
-
-        val movies by MovieEntity via ActorInMovieTable
-
-        override fun equals(other: Any?): Boolean = idEquals(other)
-        override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
-            .add("firstName", firstName)
-            .add("lastName", lastName)
-            .add("birthday", birthday)
-            .toString()
-    }
-
-    fun R2dbcExposedTestBase.withMovieAndActors(
+    suspend fun R2dbcExposedTestBase.withMovieAndActors(
         testDB: TestDB,
         statement: suspend R2dbcTransaction.() -> Unit,
     ) {

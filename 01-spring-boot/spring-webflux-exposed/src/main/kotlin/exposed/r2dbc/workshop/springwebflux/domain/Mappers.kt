@@ -1,8 +1,6 @@
 package exposed.r2dbc.workshop.springwebflux.domain
 
-import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.ActorEntity
 import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.ActorTable
-import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.MovieEntity
 import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.MovieTable
 import org.jetbrains.exposed.v1.core.ResultRow
 
@@ -14,12 +12,6 @@ fun ResultRow.toActorDTO() = ActorDTO(
     birthday = this[ActorTable.birthday]?.toString()
 )
 
-fun ActorEntity.toActorDTO() = ActorDTO(
-    id = this.id.value,
-    firstName = this.firstName,
-    lastName = this.lastName,
-    birthday = this.birthday?.toString()
-)
 
 fun ResultRow.toMovieDTO() = MovieDTO(
     id = this[MovieTable.id].value,
@@ -43,22 +35,6 @@ fun MovieDTO.toMovieWithActorDTO(actors: Collection<ActorDTO>) = MovieWithActorD
     releaseDate = this.releaseDate,
     actors = actors.toMutableList(),
 )
-
-fun MovieEntity.toMovieDTO() = MovieDTO(
-    id = this.id.value,
-    name = this.name,
-    producerName = this.producerName,
-    releaseDate = this.releaseDate.toString(),
-)
-
-fun MovieEntity.toMovieWithActorDTO() = MovieWithActorDTO(
-    id = this.id.value,
-    name = this.name,
-    producerName = this.producerName,
-    releaseDate = this.releaseDate.toString(),
-    actors = this.actors.map { it.toActorDTO() }.toMutableList(),
-)
-
 
 fun ResultRow.toMovieWithProducingActorDTO() = MovieWithProducingActorDTO(
     movieName = this[MovieTable.name],

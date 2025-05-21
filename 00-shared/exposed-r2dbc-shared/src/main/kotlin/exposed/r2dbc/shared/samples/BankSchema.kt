@@ -124,7 +124,7 @@ object BankSchema {
             .toString()
     }
 
-    fun R2dbcExposedTestBase.withBankTables(
+    suspend fun R2dbcExposedTestBase.withBankTables(
         testDB: TestDB,
         block: suspend R2dbcTransaction.(accounts: BankAccountTable, owners: AccountOwnerTable) -> Unit,
     ) {
@@ -162,6 +162,6 @@ object BankSchema {
         }
     }
 
-    fun R2dbcTransaction.getAccount(accountId: Int): BankAccount = BankAccount.findById(accountId)!!
-    fun R2dbcTransaction.getOwner(ownerId: Int): AccountOwner = AccountOwner.findById(ownerId)!!
+    suspend fun R2dbcTransaction.getAccount(accountId: Int): BankAccount = BankAccount.findById(accountId)!!
+    suspend fun R2dbcTransaction.getOwner(ownerId: Int): AccountOwner = AccountOwner.findById(ownerId)!!
 }

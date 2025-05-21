@@ -7,10 +7,12 @@ import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.MovieTable
 import exposed.r2dbc.workshop.springwebflux.domain.MovieWithActorDTO
 import io.bluetape4k.logging.KLogging
 import io.bluetape4k.logging.info
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
+import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.batchInsert
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.select
@@ -30,11 +32,21 @@ class DataInitializer(private val database: R2dbcDatabase): ApplicationListener<
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
         log.info { "샘플 데이터 추가" }
 
-        runBlocking {
+        runBlocking(Dispatchers.IO) {
             suspendTransaction {
+                createSchema()
                 populateData()
             }
         }
+    }
+
+    private suspend fun createSchema() {
+        log.info { "Creating schema ..." }
+
+        suspendTransaction {
+            SchemaUtils.create(ActorTable, MovieTable, ActorInMovieTable)
+        }
+        log.info { "Schema created!" }
     }
 
     private suspend fun populateData() {
