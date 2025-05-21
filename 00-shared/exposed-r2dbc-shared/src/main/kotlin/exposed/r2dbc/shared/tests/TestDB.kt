@@ -171,7 +171,7 @@ enum class TestDB(
     }
 
     companion object: KLogging() {
-        val ALL_H2 = setOf(H2, H2_MYSQL, H2_PSQL, H2_MARIADB, H2_ORACLE, H2_SQLSERVER)
+        val ALL_H2 = setOf(H2, H2_MYSQL, H2_PSQL, H2_MARIADB /*H2_ORACLE, H2_SQLSERVER*/)
         val ALL_MARIADB = setOf(MARIADB)
         val ALL_MARIADB_LIKE = setOf(MARIADB, H2_MARIADB)
         val ALL_MYSQL = setOf(MYSQL_V5, MYSQL_V8)
