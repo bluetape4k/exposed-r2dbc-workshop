@@ -17,7 +17,7 @@ fun <T> R2dbcTransaction.assertEquals(exp: T, act: T) = assertEquals(exp, act, "
 fun <T> R2dbcTransaction.assertEquals(exp: T, act: Collection<T>) =
     assertEquals(exp, act.single(), "Failed on $failedOn")
 
-suspend fun R2dbcTransaction.assertFailAndRollback(message: String, block: () -> Unit) {
+suspend fun R2dbcTransaction.assertFailAndRollback(message: String, block: suspend () -> Unit) {
     commit()
     assertFails("Failed on ${currentDialectTest.name}. $message") {
         block()
@@ -26,7 +26,7 @@ suspend fun R2dbcTransaction.assertFailAndRollback(message: String, block: () ->
     rollback()
 }
 
-inline fun <reified T: Throwable> expectException(body: () -> Unit) {
+suspend inline fun <reified T: Throwable> expectException(body: suspend () -> Unit) {
     assertFailsWith<T>("Failed on ${currentDialectTest.name}") {
         body()
     }

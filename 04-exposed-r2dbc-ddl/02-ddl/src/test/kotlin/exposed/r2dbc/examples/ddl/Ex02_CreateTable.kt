@@ -18,7 +18,6 @@ import org.jetbrains.exposed.v1.core.dao.id.IdTable
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.exists
-import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import kotlin.test.assertFails
@@ -169,7 +168,6 @@ class Ex02_CreateTable: R2dbcExposedTestBase() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `컬럼이 하나이고, PRIMARY KEY로 지정된 테이블을 생성합니다`(testDB: TestDB) = runTest {
-        Assumptions.assumeTrue { testDB != TestDB.MYSQL_V5 }
         withDb(testDB) {
             val ddl = BookTable.ddl.single()
             log.debug { "DDL: $ddl" }
@@ -193,8 +191,6 @@ class Ex02_CreateTable: R2dbcExposedTestBase() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `2개의 컬럼이 PRIMARY KEY로 지정된 테이블을 생성합니다`(testDB: TestDB) = runTest {
-        Assumptions.assumeTrue { testDB != TestDB.MYSQL_V5 }
-
         withDb(testDB) {
             val ddl = PersonTable.ddl.single()
             log.debug { "DDL: $ddl" }
@@ -229,8 +225,6 @@ class Ex02_CreateTable: R2dbcExposedTestBase() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `2개의 컬럼이 Foreign Key 로 지정된 테이블을 생성합니다 - 01`(testDB: TestDB) = runTest {
-        Assumptions.assumeTrue { testDB != TestDB.MYSQL_V5 }
-
         val fkName = "MyForeignKey1"
         val parent = object: Table("parent1") {
             val idA = integer("id_a")
@@ -288,8 +282,6 @@ class Ex02_CreateTable: R2dbcExposedTestBase() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `2개의 컬럼이 Foreign Key 로 지정된 테이블을 생성합니다 - 02`(testDB: TestDB) = runTest {
-        Assumptions.assumeTrue { testDB != TestDB.MYSQL_V5 }
-
         val fkName = "MyForeignKey1"
         val parent = object: Table("parent2") {
             val idA = integer("id_a")
