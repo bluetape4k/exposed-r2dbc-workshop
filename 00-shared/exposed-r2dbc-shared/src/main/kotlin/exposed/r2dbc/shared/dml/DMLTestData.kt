@@ -5,6 +5,9 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.idgenerators.uuid.TimebasedUuid
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
@@ -115,6 +118,9 @@ object DMLTestData {
 
     fun Iterable<ResultRow>.toCityNameList(): List<String> =
         map { it[Cities.name] }
+
+    suspend fun Flow<ResultRow>.toCityNameList(): List<String> =
+        map { it[Cities.name] }.toList()
 
 
     @Suppress("UnusedReceiverParameter")
