@@ -241,7 +241,7 @@ class Ex10_DDL_Examples: R2dbcExposedTestBase() {
             val q = db.identifierManager.quoteString
 
             // MySQL 테이블 명에는 back-quote(`) 를 사용하지 않네요.
-            val tableName = if (currentDialectTest.needsQuotesWhenSymbolsInNames && testDB !in TestDB.ALL_MYSQL) {
+            val tableName = if (currentDialectTest.needsQuotesWhenSymbolsInNames) {
                 "$q${"unnamedTable$1".inProperCase()}$q"
             } else {
                 "unnamedTable$1".inProperCase()

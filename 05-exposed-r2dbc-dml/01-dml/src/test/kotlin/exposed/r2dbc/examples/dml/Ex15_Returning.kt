@@ -3,7 +3,7 @@ package exposed.r2dbc.examples.dml
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
@@ -41,7 +41,7 @@ import kotlin.test.assertIs
  */
 class Ex15_Returning: R2dbcExposedTestBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     private val updateReturningSupportedDb = TestDB.ALL_POSTGRES
     private val returningSupportedDb = updateReturningSupportedDb + TestDB.ALL_MARIADB
