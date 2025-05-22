@@ -3,7 +3,7 @@ package exposed.r2dbc.examles.dml
 import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
@@ -30,7 +30,7 @@ import java.math.BigDecimal
  */
 class Ex12_InsertInto_Select: R2dbcExposedTestBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     /**
      * Users 테이블에서 일부 컬럼을 선택하여 Cities 테이블에 추가하는 예제

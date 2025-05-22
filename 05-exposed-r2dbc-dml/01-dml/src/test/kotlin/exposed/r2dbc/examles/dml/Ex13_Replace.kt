@@ -7,6 +7,7 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.idgenerators.uuid.TimebasedUuid.Epoch
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.toList
@@ -34,6 +35,8 @@ import org.junit.jupiter.params.provider.MethodSource
  * **`REPLACE INTO` 문은 MySQL, MariaDB 에서만 지원한다.**
  */
 class Ex13_Replace: R2dbcExposedTestBase() {
+
+    companion object: KLoggingChannel()
 
     private val replaceSupported = TestDB.ALL_MYSQL_LIKE + TestDB.ALL_MARIADB_LIKE
 
