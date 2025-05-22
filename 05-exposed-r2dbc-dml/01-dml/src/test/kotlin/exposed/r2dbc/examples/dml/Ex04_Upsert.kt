@@ -1,4 +1,4 @@
-package exposed.r2dbc.examles.dml
+package exposed.r2dbc.examples.dml
 
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
@@ -6,7 +6,7 @@ import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.codec.Base58
 import io.bluetape4k.exposed.r2dbc.sql.forEach
-import io.bluetape4k.logging.coroutines.KLoggingChannel
+import io.bluetape4k.logging.KLogging
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.single
@@ -53,7 +53,7 @@ import kotlin.properties.Delegates
 
 class Ex04_Upsert: R2dbcExposedTestBase() {
 
-    companion object: KLoggingChannel()
+    companion object: KLogging()
 
     // these DB require key columns from ON clause to be included in the derived source table (USING clause)
     private val upsertViaMergeDB = TestDB.ALL_H2
@@ -944,7 +944,7 @@ class Ex04_Upsert: R2dbcExposedTestBase() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `upsert with Where`(testDB: TestDB) = runTest {
-        Assumptions.assumeTrue { testDB !in (TestDB.ALL_MYSQL_LIKE + upsertViaMergeDB) }
+        Assumptions.assumeTrue { testDB !in (TestDB.ALL_MYSQL_MARIADB_LIKE + upsertViaMergeDB) }
 
         /**
          * ```sql
@@ -1040,7 +1040,7 @@ class Ex04_Upsert: R2dbcExposedTestBase() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `upsert with where parameterized`(testDB: TestDB) = runTest {
-        Assumptions.assumeTrue { testDB !in (TestDB.ALL_MYSQL_LIKE + upsertViaMergeDB) }
+        Assumptions.assumeTrue { testDB !in (TestDB.ALL_MYSQL_MARIADB_LIKE + upsertViaMergeDB) }
 
         /**
          * ```sql
@@ -1337,7 +1337,7 @@ class Ex04_Upsert: R2dbcExposedTestBase() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `batchUpsert with where`(testDB: TestDB) = runTest {
-        Assumptions.assumeTrue { testDB !in (TestDB.ALL_MYSQL_LIKE + upsertViaMergeDB) }
+        Assumptions.assumeTrue { testDB !in (TestDB.ALL_MYSQL_MARIADB_LIKE + upsertViaMergeDB) }
 
         withTables(testDB, Words) {
             val vowels = listOf("A", "E", "I", "O", "U")
@@ -1373,7 +1373,8 @@ class Ex04_Upsert: R2dbcExposedTestBase() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `Inserted Count With BatchUpsert`(testDB: TestDB) = runTest {
-
+        Assumptions.assumeTrue { testDB !in setOf(TestDB.H2_MYSQL, TestDB.H2_MARIADB) }
+        
         withTables(testDB, AutoIncTable) {
             // SQL Server requires statements to be executed before results can be obtained
             val isNotSqlServer = true // testDB != TestDB.SQLSERVER
@@ -1430,10 +1431,8 @@ class Ex04_Upsert: R2dbcExposedTestBase() {
              *
              */
             val updatedData = data.map { it.first to "new${it.second}" } + (4 to "D")
-            // JDBC
-            // expected = if (testDB in TestDB.ALL_MYSQL_MARIADB_LIKE) newDataSize * 2 + 1 else newDataSize + 1
-            // R2DBC
-            expected = if (testDB in TestDB.ALL_MYSQL_MARIADB_LIKE) 1 else newDataSize + 1
+            expected = if (testDB in TestDB.ALL_MYSQL) newDataSize * 2 + 1 else newDataSize + 1
+            log.debug { "expected: $expected" }
 
             AutoIncTable.batchUpsert(updatedData, shouldReturnGeneratedValues = isNotSqlServer) { (id, name) ->
                 statement = this

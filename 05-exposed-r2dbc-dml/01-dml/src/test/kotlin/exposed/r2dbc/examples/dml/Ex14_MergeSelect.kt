@@ -1,4 +1,4 @@
-package exposed.r2dbc.examles.dml
+package exposed.r2dbc.examples.dml
 
 import exposed.r2dbc.shared.tests.TestDB
 import io.bluetape4k.logging.coroutines.KLoggingChannel

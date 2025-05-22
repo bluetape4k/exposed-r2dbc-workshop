@@ -1,4 +1,4 @@
-package exposed.r2dbc.examles.dml
+package exposed.r2dbc.examples.dml
 
 import exposed.r2dbc.shared.dml.DMLTestData.Cities
 import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
@@ -903,7 +903,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `batch insert number of inserted rows`(testDB: TestDB) = runSuspendIO {
-        Assumptions.assumeTrue { testDB in TestDB.ALL_MYSQL_MARIADB + TestDB.ALL_POSTGRES_LIKE }
+        Assumptions.assumeTrue { testDB in (TestDB.ALL_MYSQL + TestDB.ALL_POSTGRES_LIKE) }
 
         val tester = object: Table("tester") {
             val id = varchar("id", 10).uniqueIndex()

@@ -1,4 +1,4 @@
-package exposed.r2dbc.examles.dml
+package exposed.r2dbc.examples.dml
 
 import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
@@ -21,8 +21,8 @@ import org.jetbrains.exposed.v1.core.innerJoin
 import org.jetbrains.exposed.v1.core.joinQuery
 import org.jetbrains.exposed.v1.core.lastQueryAlias
 import org.jetbrains.exposed.v1.core.vendors.MysqlDialect
-import org.jetbrains.exposed.v1.exceptions.ExposedSQLException
 import org.jetbrains.exposed.v1.exceptions.UnsupportedByDialectException
+import org.jetbrains.exposed.v1.r2dbc.ExposedR2dbcException
 import org.jetbrains.exposed.v1.r2dbc.delete
 import org.jetbrains.exposed.v1.r2dbc.deleteAll
 import org.jetbrains.exposed.v1.r2dbc.deleteIgnoreWhere
@@ -63,7 +63,7 @@ class Ex05_Delete: R2dbcExposedTestBase() {
             if (currentDialectTest is MysqlDialect) {
                 val cityOne = cities.id eq 1
                 cities.selectAll().where(cityOne).count().toInt() shouldBeEqualTo 1
-                expectException<ExposedSQLException> {
+                expectException<ExposedR2dbcException> {
                     // Users가 Cities를 참조합니다. 해당 City를 참조하는 User를 먼저 삭제해야 City를 삭제할 수 있습니다.
                     cities.deleteWhere { cityOne }
                 }
@@ -309,7 +309,7 @@ class Ex05_Delete: R2dbcExposedTestBase() {
             val query = join.selectAll().where { userData.userId eq "smth" }
             query.count() shouldBeGreaterThan 0L
 
-            expectException<ExposedSQLException> {
+            expectException<ExposedR2dbcException> {
                 // UserData 테이블은 Users 테이블을 참조하고 있기 때문에, Users 테이블을 먼저 삭제할 수 없습니다.
                 join.delete(users, userData) { users.id eq "smth" }
             }

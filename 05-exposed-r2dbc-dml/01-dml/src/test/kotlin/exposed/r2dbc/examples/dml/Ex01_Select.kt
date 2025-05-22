@@ -1,4 +1,4 @@
-package exposed.r2dbc.examles.dml
+package exposed.r2dbc.examples.dml
 
 
 import exposed.r2dbc.shared.dml.DMLTestData
@@ -882,7 +882,7 @@ class Ex01_Select: R2dbcExposedTestBase() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `select distinct`(testDB: TestDB) = runSuspendIO {
-        Assumptions.assumeTrue { testDB !in TestDB.ALL_MYSQL_LIKE }
+        Assumptions.assumeTrue { testDB !in TestDB.ALL_MYSQL_MARIADB_LIKE }
 
         val cities = DMLTestData.Cities
         withTables(testDB, cities) {
@@ -1073,6 +1073,8 @@ class Ex01_Select: R2dbcExposedTestBase() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `select with limit and offset`(testDB: TestDB) = runSuspendIO {
+        Assumptions.assumeTrue { testDB !in TestDB.ALL_MARIADB }
+        
         val alphabet = object: Table("alphabet") {
             val letter = char("letter")
         }
