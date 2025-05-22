@@ -12,7 +12,7 @@ private val R2dbcTransaction.failedOn: String
     get() = currentTestDB?.name ?: currentDialectTest.name
 
 fun R2dbcTransaction.assertTrue(actual: Boolean) = assertTrue(actual, "Failed on $failedOn")
-fun R2dbcTransaction.assertFalse(actual: Boolean) = assertFalse(!actual, "Failed on $failedOn")
+fun R2dbcTransaction.assertFalse(actual: Boolean) = assertFalse(actual, "Failed on $failedOn")
 fun <T> R2dbcTransaction.assertEquals(exp: T, act: T) = assertEquals(exp, act, "Failed on $failedOn")
 fun <T> R2dbcTransaction.assertEquals(exp: T, act: Collection<T>) =
     assertEquals(exp, act.single(), "Failed on $failedOn")
