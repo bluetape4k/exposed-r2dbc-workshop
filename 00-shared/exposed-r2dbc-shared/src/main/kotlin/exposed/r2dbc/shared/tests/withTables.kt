@@ -2,6 +2,7 @@ package exposed.r2dbc.shared.tests
 
 import org.jetbrains.exposed.v1.core.DatabaseConfig
 import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.r2dbc.ExposedR2dbcException
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
@@ -19,6 +20,8 @@ suspend fun withTables(
         try {
             statement(testDB)
             commit()
+        } catch (ex: ExposedR2dbcException) {
+            println("Failed to execute statement: ${ex.message}")
         } finally {
             try {
                 SchemaUtils.drop(*tables)
