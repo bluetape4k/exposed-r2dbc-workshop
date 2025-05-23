@@ -501,9 +501,9 @@ object Libs {
     // https://github.com/JCTools/JCTools
     const val jctools_core = "org.jctools:jctools-core:${Versions.jctools}"
 
-    const val kryo = "com.esotericsoftware:kryo:5.6.0" // https://mvnrepository.com/artifact/com.esotericsoftware/kryo
-    const val kryo5 = "com.esotericsoftware:kryo:5.6.0" // https://mvnrepository.com/artifact/com.esotericsoftware/kryo
-    const val fury_kotlin = "org.apache.fury:fury-kotlin:0.9.0" // https://mvnrepository.com/artifact/org.apache.fury
+    const val kryo = "com.esotericsoftware:kryo:5.6.2" // https://mvnrepository.com/artifact/com.esotericsoftware/kryo
+    const val kryo5 = "com.esotericsoftware:kryo:5.6.2" // https://mvnrepository.com/artifact/com.esotericsoftware/kryo
+    const val fury_kotlin = "org.apache.fury:fury-kotlin:0.10.2" // https://mvnrepository.com/artifact/org.apache.fury
 
 
     // Spring Boot
