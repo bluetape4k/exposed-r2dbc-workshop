@@ -1,5 +1,6 @@
 package exposed.r2dbc.shared.tests
 
+import kotlinx.coroutines.delay
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.core.vendors.DatabaseDialect
@@ -36,5 +37,5 @@ fun <T> Column<T>.constraintNamePart() = (currentDialectTest as? SQLServerDialec
 suspend fun Table.insertAndWait(duration: Long) {
     this.insert { }
     TransactionManager.current().commit()
-    Thread.sleep(duration)
+    delay(duration)
 }
