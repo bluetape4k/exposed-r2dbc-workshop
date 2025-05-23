@@ -9,14 +9,17 @@ dependencies {
 
     // Exposed
     implementation(Libs.exposed_core)
+    implementation(Libs.exposed_jdbc)
     implementation(Libs.exposed_r2dbc)
 
-    // Identifier 자동 생성
-    implementation(Libs.bluetape4k_idgenerators)
-    implementation(Libs.java_uuid_generator)
+    implementation(Libs.bluetape4k_io)
 
     // bluetape4k_exposed 가 사용하는 exposed_core 의 버전 및 namespace 가 다르므로, 참조하면 안됩니다.
     // implementation(Libs.bluetape4k_exposed)
+    implementation(Libs.bluetape4k_jackson)
+    api(Libs.jackson_module_kotlin)
+    implementation(Libs.jackson_module_blackbird)
+
     implementation(Libs.bluetape4k_junit5)
 
     implementation(Libs.h2_v2)
