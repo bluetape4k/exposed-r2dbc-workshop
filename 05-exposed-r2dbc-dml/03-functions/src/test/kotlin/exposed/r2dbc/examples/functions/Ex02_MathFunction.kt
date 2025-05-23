@@ -225,6 +225,9 @@ class Ex02_MathFunction: Ex00_FunctionBase() {
 
             SqrtFunction(decimalLiteral(BigDecimal("125.44"))) shouldExpressionEqualTo "11.2".toBigDecimal()
 
+            // Postgres 에서는 SQRT(-100) 시 예외가 발생하지만, rollback 되어버려서, withTables 함수 자체에서 에러가 발생한다.
+            Assumptions.assumeTrue { testDB !in TestDB.ALL_POSTGRES }
+
             when (testDB) {
                 in TestDB.ALL_MYSQL_MARIADB ->
                     SqrtFunction(intLiteral(-100)) shouldExpressionEqualTo null

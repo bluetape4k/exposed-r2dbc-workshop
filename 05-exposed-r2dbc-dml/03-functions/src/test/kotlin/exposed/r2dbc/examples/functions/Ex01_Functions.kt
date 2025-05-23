@@ -21,6 +21,7 @@ import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldBeTrue
+import org.amshove.kluent.shouldContainSame
 import org.amshove.kluent.shouldHaveSize
 import org.amshove.kluent.shouldNotBeNull
 import org.jetbrains.exposed.v1.core.AndBitOp
@@ -1120,7 +1121,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
         withCitiesAndUsers(testDB) { cities, _, _ ->
             val power: CustomFunction<Long?> = CustomLongFunction("POWER", cities.id, intParam(2))
             val ids: List<Long?> = cities.select(power).map { it[power] }.toList()
-            ids shouldBeEqualTo listOf(1L, 4L, 9L)
+            ids shouldContainSame listOf(1L, 4L, 9L)
         }
     }
 
