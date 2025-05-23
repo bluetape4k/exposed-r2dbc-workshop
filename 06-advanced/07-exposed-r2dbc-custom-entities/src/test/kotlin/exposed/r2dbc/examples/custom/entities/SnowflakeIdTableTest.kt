@@ -6,7 +6,6 @@ import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.jetbrains.exposed.v1.r2dbc.batchInsert
 import org.jetbrains.exposed.v1.r2dbc.insert
@@ -39,7 +38,7 @@ class SnowflakeIdTableTest: AbstractCustomIdTableTest() {
 
     @ParameterizedTest(name = "{0} - {1}개 레코드")
     @MethodSource(GET_TESTDB_AND_ENTITY_COUNT)
-    fun `Snowflake id를 가진 레코드를 생성한다`(testDB: TestDB, recordCount: Int) = runTest {
+    fun `Snowflake id를 가진 레코드를 생성한다`(testDB: TestDB, recordCount: Int) = runSuspendIO {
         withTables(testDB, T1) {
             List(recordCount) {
                 T1.insert {
@@ -55,7 +54,7 @@ class SnowflakeIdTableTest: AbstractCustomIdTableTest() {
 
     @ParameterizedTest(name = "{0} - {1}개 레코드")
     @MethodSource(GET_TESTDB_AND_ENTITY_COUNT)
-    fun `Snowflake id를 가진 레코드를 배치로 생성한다`(testDB: TestDB, recordCount: Int) = runTest {
+    fun `Snowflake id를 가진 레코드를 배치로 생성한다`(testDB: TestDB, recordCount: Int) = runSuspendIO {
         withTables(testDB, T1) {
             val records = List(recordCount) {
                 Record(

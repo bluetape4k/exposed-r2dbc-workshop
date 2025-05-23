@@ -6,7 +6,6 @@ import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.KLogging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.jetbrains.exposed.v1.dao.entityCache
 import org.jetbrains.exposed.v1.r2dbc.batchInsert
@@ -40,7 +39,7 @@ class TimebasedUUIDTableTest: AbstractCustomIdTableTest() {
 
     @ParameterizedTest(name = "{0} - {1}개 레코드")
     @MethodSource(GET_TESTDB_AND_ENTITY_COUNT)
-    fun `TimebasedUUID id를 가진 레코드를 생성한다`(testDB: TestDB, recordCount: Int) = runTest {
+    fun `TimebasedUUID id를 가진 레코드를 생성한다`(testDB: TestDB, recordCount: Int) = runSuspendIO {
         withTables(testDB, T1) {
             repeat(recordCount) {
                 T1.insert {
@@ -57,7 +56,7 @@ class TimebasedUUIDTableTest: AbstractCustomIdTableTest() {
 
     @ParameterizedTest(name = "{0} - {1}개 레코드")
     @MethodSource(GET_TESTDB_AND_ENTITY_COUNT)
-    fun `TimebasedUUID id를 가진 레코드를 배치로 생성한다`(testDB: TestDB, recordCount: Int) = runTest {
+    fun `TimebasedUUID id를 가진 레코드를 배치로 생성한다`(testDB: TestDB, recordCount: Int) = runSuspendIO {
         withTables(testDB, T1) {
             val records = List(recordCount) {
                 Record(
