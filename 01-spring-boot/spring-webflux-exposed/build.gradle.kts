@@ -1,12 +1,13 @@
 plugins {
     kotlin("plugin.spring")
     id(Plugins.spring_boot)
+    id("org.graalvm.buildtools.native") version "0.10.6"
     id(Plugins.gatling) version Plugins.Versions.gatling
 }
 
 
 springBoot {
-    mainClass.set("exposed.workshop.springwebflux.SpringWebfluxApplicationKt")
+    mainClass.set("exposed.r2dbc.workshop.springwebflux.SpringWebfluxApplicationKt")
 
     buildInfo {
         properties {
