@@ -1,7 +1,7 @@
 plugins {
     kotlin("plugin.spring")
     id(Plugins.spring_boot)
-    id("org.graalvm.buildtools.native") version "0.10.6"
+    id(Plugins.graalvm_native)
     id(Plugins.gatling) version Plugins.Versions.gatling
 }
 
