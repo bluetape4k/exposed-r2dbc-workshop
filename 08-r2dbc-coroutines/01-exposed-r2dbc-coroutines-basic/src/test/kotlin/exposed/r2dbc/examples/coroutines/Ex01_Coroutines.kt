@@ -23,8 +23,6 @@ import org.amshove.kluent.shouldNotBeEmpty
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
-import org.jetbrains.exposed.v1.dao.entityCache
-import org.jetbrains.exposed.v1.dao.flushCache
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.insert
@@ -96,7 +94,6 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
             // 새로운 트랜잭션을 만들고, 코루틴 환경에서 내부 코드를 실행한다
             suspendTransaction(context = singleThreadDispatcher) {
                 val id = Tester.insertAndGetId { }
-                entityCache.clear()
                 // 내부적으로 새로운 트랜잭션을 생성하여 코루틴 작업을 수행한다
                 getTesterById(id.value)!![Tester.id].value shouldBeEqualTo id.value
             }
@@ -106,7 +103,6 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
                 getTesterById(1)!![Tester.id].value
             }.await()
             result shouldBeEqualTo 1
-            entityCache.clear()
 
             getTesterById(1)!![Tester.id].value shouldBeEqualTo 1
         }
@@ -124,9 +120,6 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
                 TesterUnique.insert {
                     it[TesterUnique.id] = originId
                 }
-                flushCache()
-                entityCache.clear()
-
                 TesterUnique.selectAll().single()[TesterUnique.id] shouldBeEqualTo originId
             }
 
@@ -141,9 +134,6 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
                 TesterUnique.insert {
                     it[TesterUnique.id] = originId
                 }
-
-                flushCache()
-                entityCache.clear()
                 TesterUnique.selectAll().count() shouldBeEqualTo 2L  // 1, 99
             }
 
@@ -155,10 +145,6 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
                 TesterUnique.update({ TesterUnique.id eq originId }) {
                     it[TesterUnique.id] = updatedId
                 }
-
-                flushCache()
-                entityCache.clear()
-
                 TesterUnique.selectAll().single()[TesterUnique.id] shouldBeEqualTo updatedId
             }
 
@@ -190,9 +176,6 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
                 TesterUnique.insert {
                     it[TesterUnique.id] = originId
                 }
-                flushCache()
-                entityCache.clear()
-
                 TesterUnique.selectAll().single()[TesterUnique.id] shouldBeEqualTo originId
             }
 
