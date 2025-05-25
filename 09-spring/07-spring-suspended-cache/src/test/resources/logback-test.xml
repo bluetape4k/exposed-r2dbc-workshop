@@ -12,7 +12,7 @@
     </appender>
 
     <logger name="exposed.r2dbc.examples.suspendedcache" level="DEBUG"/>
-    <logger name="Exposed" level="DEBUG"/>
+    <!--    <logger name="Exposed" level="DEBUG"/>-->
     <!--    <logger name="io.lettuce.core.RedisChannelHandler" level="DEBUG"/>-->
 
     <root level="INFO">
