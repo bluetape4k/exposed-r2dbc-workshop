@@ -3,13 +3,12 @@ package exposed.r2dbc.examples.suspendedcache.controller
 import exposed.r2dbc.examples.suspendedcache.AbstractSpringSuspendedCacheApplicationTest
 import exposed.r2dbc.examples.suspendedcache.domain.CountryDTO
 import exposed.r2dbc.examples.suspendedcache.utils.DataPopulator
+import io.bluetape4k.coroutines.flow.async
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.spring.tests.httpGet
 import io.bluetape4k.support.uninitialized
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.flatMapMerge
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.reactive.awaitSingle
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.jupiter.api.RepeatedTest
@@ -42,13 +41,13 @@ abstract class AbstractCountryControllerTest: AbstractSpringSuspendedCacheApplic
     @RepeatedTest(REPEAT_SIZE)
     fun `find country by code as parallel`() = runSuspendIO {
         DataPopulator.COUNTRY_CODES.asFlow()
-            .flatMapMerge { code ->
+            .async { code ->
                 val country = client
                     .httpGet("/$basePath/countries/$code")
                     .returnResult<CountryDTO>().responseBody
                     .awaitSingle()
 
-                flowOf(code to country)
+                code to country
             }
             .collect { (code, country) ->
                 country.code shouldBeEqualTo code
