@@ -11,7 +11,6 @@ import io.bluetape4k.r2dbc.support.uuidOrNull
 import io.r2dbc.spi.Row
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectIndexed
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.toList
 import org.jetbrains.exposed.v1.core.ResultRow
@@ -63,4 +62,5 @@ suspend fun <T> Flow<T>.any(): Boolean {
 
 suspend fun <T: Comparable<T>> Flow<T>.sorted(): List<T> = toList().sorted()
 
-suspend fun <T> Flow<T>.distinct(): List<T> = distinctUntilChanged().toList()
+// 이건 뭔가 잘 못 되었다.
+// suspend fun <T> Flow<T>.distinct(): List<T> = distinctUntilChanged().toList()

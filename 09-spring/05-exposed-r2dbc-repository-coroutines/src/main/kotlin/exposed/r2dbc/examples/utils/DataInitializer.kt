@@ -1,18 +1,17 @@
-package exposed.r2dbc.workshop.springwebflux.utils
+package exposed.r2dbc.examples.utils
 
-import exposed.r2dbc.workshop.springwebflux.domain.ActorDTO
-import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.ActorInMovieTable
-import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.ActorTable
-import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.MovieTable
-import exposed.r2dbc.workshop.springwebflux.domain.MovieWithActorDTO
-import io.bluetape4k.logging.KLogging
+import exposed.r2dbc.examples.domain.model.MovieSchema.ActorInMovieTable
+import exposed.r2dbc.examples.domain.model.MovieSchema.ActorTable
+import exposed.r2dbc.examples.domain.model.MovieSchema.MovieTable
+import exposed.r2dbc.examples.dto.ActorDTO
+import exposed.r2dbc.examples.dto.MovieWithActorDTO
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.info
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import org.jetbrains.exposed.v1.core.and
-import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
+import org.jetbrains.exposed.v1.r2dbc.andWhere
 import org.jetbrains.exposed.v1.r2dbc.batchInsert
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.select
@@ -24,30 +23,30 @@ import org.springframework.stereotype.Component
 import java.time.LocalDate
 
 @Component
-class DataInitializer(private val database: R2dbcDatabase): ApplicationListener<ApplicationReadyEvent> {
+class DataInitializer: ApplicationListener<ApplicationReadyEvent> {
 
-    companion object: KLogging()
-
+    companion object: KLoggingChannel()
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
-        log.info { "샘플 데이터 추가" }
-
         runBlocking(Dispatchers.IO) {
             suspendTransaction {
-                createSchema()
+                createTables()
                 populateData()
             }
         }
     }
 
-    private suspend fun createSchema() {
-        log.info { "Creating schema ..." }
-        SchemaUtils.create(ActorTable, MovieTable, ActorInMovieTable)
-        log.info { "Schema created!" }
+    private suspend fun createTables() {
+        log.info { "Creating tables ..." }
+        SchemaUtils.create(
+            MovieTable,
+            ActorTable,
+            ActorInMovieTable
+        )
+        log.info { "Tables created!" }
     }
 
     private suspend fun populateData() {
-
         val totalActors = ActorTable.selectAll().count()
 
         if (totalActors > 0) {
@@ -55,17 +54,17 @@ class DataInitializer(private val database: R2dbcDatabase): ApplicationListener<
             return
         }
 
-        log.info { "Inserting sample actors and movies ..." }
+        log.info { "Inserting sample movies and actors ..." }
 
-        val johnnyDepp = ActorDTO("Johnny", "Depp", "1979-10-28")
-        val bradPitt = ActorDTO("Brad", "Pitt", "1982-05-16")
-        val angelinaJolie = ActorDTO("Angelina", "Jolie", "1983-11-10")
-        val jenniferAniston = ActorDTO("Jennifer", "Aniston", "1975-07-23")
-        val angelinaGrace = ActorDTO("Angelina", "Grace", "1988-09-02")
-        val craigDaniel = ActorDTO("Craig", "Daniel", "1970-11-12")
-        val ellenPaige = ActorDTO("Ellen", "Paige", "1981-12-20")
-        val russellCrowe = ActorDTO("Russell", "Crowe", "1970-01-20")
-        val edwardNorton = ActorDTO("Edward", "Norton", "1975-04-03")
+        val johnnyDepp = ActorDTO(0, "Johnny", "Depp", "1979-10-28")
+        val bradPitt = ActorDTO(0, "Brad", "Pitt", "1982-05-16")
+        val angelinaJolie = ActorDTO(0, "Angelina", "Jolie", "1983-11-10")
+        val jenniferAniston = ActorDTO(0, "Jennifer", "Aniston", "1975-07-23")
+        val angelinaGrace = ActorDTO(0, "Angelina", "Grace", "1988-09-02")
+        val craigDaniel = ActorDTO(0, "Craig", "Daniel", "1970-11-12")
+        val ellenPaige = ActorDTO(0, "Ellen", "Paige", "1981-12-20")
+        val russellCrowe = ActorDTO(0, "Russell", "Crowe", "1970-01-20")
+        val edwardNorton = ActorDTO(0, "Edward", "Norton", "1975-04-03")
 
         val actors = listOf(
             johnnyDepp,
@@ -81,24 +80,28 @@ class DataInitializer(private val database: R2dbcDatabase): ApplicationListener<
 
         val movies = listOf(
             MovieWithActorDTO(
+                0,
                 "Gladiator",
                 johnnyDepp.firstName,
                 "2000-05-01",
                 mutableListOf(russellCrowe, ellenPaige, craigDaniel)
             ),
             MovieWithActorDTO(
+                0,
                 "Guardians of the galaxy",
                 johnnyDepp.firstName,
                 "2014-07-21",
                 mutableListOf(angelinaGrace, bradPitt, ellenPaige, angelinaJolie, johnnyDepp)
             ),
             MovieWithActorDTO(
+                0,
                 "Fight club",
                 craigDaniel.firstName,
                 "1999-09-13",
                 mutableListOf(bradPitt, jenniferAniston, edwardNorton)
             ),
             MovieWithActorDTO(
+                0,
                 "13 Reasons Why",
                 "Suzuki",
                 "2016-01-01",
@@ -117,7 +120,7 @@ class DataInitializer(private val database: R2dbcDatabase): ApplicationListener<
         MovieTable.batchInsert(movies) {
             this[MovieTable.name] = it.name
             this[MovieTable.producerName] = it.producerName
-            this[MovieTable.releaseDate] = LocalDate.parse(it.releaseDate).atTime(0, 0)
+            this[MovieTable.releaseDate] = LocalDate.parse(it.releaseDate)
         }
 
         movies.forEach { movie ->
@@ -129,7 +132,8 @@ class DataInitializer(private val database: R2dbcDatabase): ApplicationListener<
             movie.actors.forEach { actor ->
                 val actorId = ActorTable
                     .select(ActorTable.id)
-                    .where { (ActorTable.firstName eq actor.firstName) and (ActorTable.lastName eq actor.lastName) }
+                    .where { ActorTable.firstName eq actor.firstName }
+                    .andWhere { ActorTable.lastName eq actor.lastName }
                     .first()[ActorTable.id]
 
                 ActorInMovieTable.insert {

@@ -35,7 +35,7 @@ class ActorRepositoryTest: R2dbcExposedTestBase() {
         )
     }
 
-    private val repository = ActorRepository()
+    private val repository = ActorR2dbcRepository()
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)

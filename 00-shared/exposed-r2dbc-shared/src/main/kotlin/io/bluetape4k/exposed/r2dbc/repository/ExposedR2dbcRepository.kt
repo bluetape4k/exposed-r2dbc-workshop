@@ -38,7 +38,7 @@ import org.jetbrains.exposed.v1.r2dbc.update
  * }
  * ```
  */
-interface R2dbcExposedRepository<T: HasIdentifier<ID>, ID: Any> {
+interface ExposedR2dbcRepository<T: HasIdentifier<ID>, ID: Any> {
 
     val table: IdTable<ID>
 

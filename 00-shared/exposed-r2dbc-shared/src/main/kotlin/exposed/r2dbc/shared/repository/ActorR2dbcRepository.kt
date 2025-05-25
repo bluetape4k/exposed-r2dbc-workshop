@@ -1,7 +1,7 @@
 package exposed.r2dbc.shared.repository
 
 import exposed.r2dbc.shared.repository.MovieSchema.ActorTable
-import io.bluetape4k.exposed.r2dbc.repository.R2dbcExposedRepository
+import io.bluetape4k.exposed.r2dbc.repository.ExposedR2dbcRepository
 import io.bluetape4k.logging.KLogging
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.Flow
@@ -12,7 +12,7 @@ import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import java.time.LocalDate
 
-class ActorRepository: R2dbcExposedRepository<ActorDTO, Long> {
+class ActorR2dbcRepository: ExposedR2dbcRepository<ActorDTO, Long> {
 
     companion object: KLogging()
 
