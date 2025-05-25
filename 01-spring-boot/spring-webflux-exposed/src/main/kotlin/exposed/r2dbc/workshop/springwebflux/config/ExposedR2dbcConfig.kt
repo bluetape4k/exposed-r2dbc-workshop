@@ -12,7 +12,7 @@ import io.r2dbc.spi.ConnectionFactories
 import io.r2dbc.spi.ConnectionFactoryOptions
 import io.r2dbc.spi.Option
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabaseConfig
 import org.springframework.context.annotation.Bean
@@ -20,7 +20,6 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.context.annotation.Profile
 import java.time.Duration
-import java.util.concurrent.Executors
 import kotlin.math.max
 
 @Configuration
@@ -34,7 +33,8 @@ class ExposedR2dbcConfig {
      */
     @Bean
     fun databaseCoroutineDispatcher(): CoroutineDispatcher {
-        return Executors.newVirtualThreadPerTaskExecutor().asCoroutineDispatcher()
+        return Dispatchers.IO // 기본적으로 IO 디스패처를 사용합니다.
+        // return Executors.newVirtualThreadPerTaskExecutor().asCoroutineDispatcher()
     }
 
     /**
