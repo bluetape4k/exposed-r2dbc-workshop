@@ -124,7 +124,7 @@ class MovieR2dbcRepository: ExposedR2dbcRepository<MovieDTO, Long> {
     suspend fun getMovieWithActors(movieId: Long): MovieWithActorDTO? {
         log.debug { "Get movie with actors. movieId: $movieId" }
 
-        val row = MovieActorJoin
+        return MovieActorJoin
             .select(
                 MovieTable.id,
                 MovieTable.name,
@@ -135,13 +135,21 @@ class MovieR2dbcRepository: ExposedR2dbcRepository<MovieDTO, Long> {
                 ActorTable.lastName,
                 ActorTable.birthday
             )
-            .andWhere { MovieTable.id eq movieId }
-            .firstOrNull() ?: return null
+            .where { MovieTable.id eq movieId }
+            .map { row ->
+                val movie = row.toMovieDTO()
+                val actor = row.toActorDTO()
+                log.debug { "Add actor in movie[${movie.id}]. actor=$actor" }
 
-        val movie = row.toMovieDTO()
-        val actor = row.toActorDTO()
-
-        return movie.toMovieWithActorDTO(mutableSetOf(actor))
+                movie to actor
+            }
+            .bufferUntilChanged { it.first.id }
+            .mapNotNull { pairs ->
+                val movie = pairs.first().first
+                val actors = pairs.map { it.second }
+                movie.toMovieWithActorDTO(actors)
+            }
+            .firstOrNull()
     }
 
     fun getMovieActorsCount(): Flow<MovieActorCountDTO> {

@@ -10,6 +10,7 @@ import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldHaveSize
 import org.amshove.kluent.shouldNotBeEmpty
+import org.amshove.kluent.shouldNotBeNull
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -106,6 +107,20 @@ class MovieR2dbcRepositoryTest(
                     log.debug { "  actor: ${actor.firstName} ${actor.lastName}" }
                 }
             }
+        }
+    }
+
+    @Test
+    fun `get movie by id with actors`() = runSuspendIO {
+        suspendTransaction(readOnly = true) {
+            val movieId = 1L
+            val movieWithActors = movieRepository.getMovieWithActors(movieId)
+
+            log.debug { "movieWithActors: $movieWithActors" }
+
+            movieWithActors.shouldNotBeNull()
+            movieWithActors.id shouldBeEqualTo movieId
+            movieWithActors.actors shouldHaveSize 3
         }
     }
 
