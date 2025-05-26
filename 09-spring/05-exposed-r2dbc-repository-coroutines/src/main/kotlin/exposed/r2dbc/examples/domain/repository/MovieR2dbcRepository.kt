@@ -7,7 +7,6 @@ import exposed.r2dbc.examples.domain.model.toActorDTO
 import exposed.r2dbc.examples.domain.model.toMovieDTO
 import exposed.r2dbc.examples.domain.model.toMovieWithActorDTO
 import exposed.r2dbc.examples.domain.model.toMovieWithProducingActorDTO
-import exposed.r2dbc.examples.dto.ActorDTO
 import exposed.r2dbc.examples.dto.MovieActorCountDTO
 import exposed.r2dbc.examples.dto.MovieDTO
 import exposed.r2dbc.examples.dto.MovieWithActorDTO
@@ -20,7 +19,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
-import org.eclipse.collections.impl.factory.Multimaps
 import org.jetbrains.exposed.v1.core.Join
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.alias
@@ -94,10 +92,8 @@ class MovieR2dbcRepository: ExposedR2dbcRepository<MovieDTO, Long> {
         return query.map { it.toEntity() }
     }
 
-    suspend fun getAllMoviesWithActors(): Flow<MovieWithActorDTO> {
+    fun getAllMoviesWithActors(): Flow<MovieWithActorDTO> {
         log.debug { "Get all movies with actors" }
-
-        val actorsInMovie = Multimaps.mutable.set.of<Long, ActorDTO>()
 
         return MovieActorJoin
             .select(
@@ -114,13 +110,14 @@ class MovieR2dbcRepository: ExposedR2dbcRepository<MovieDTO, Long> {
                 val movie = row.toMovieDTO()
                 val actor = row.toActorDTO()
                 log.debug { "Add actor in movie[${movie.id}]. actor=$actor" }
-                actorsInMovie.put(movie.id, actor)
-                movie
+
+                movie to actor
             }
-            .bufferUntilChanged { it.id }
-            .mapNotNull {
-                val movie = it.first()
-                movie.toMovieWithActorDTO(actors = actorsInMovie.get(movie.id)?.toMutableSet() ?: mutableSetOf())
+            .bufferUntilChanged { it.first.id }
+            .mapNotNull { pairs ->
+                val movie = pairs.first().first
+                val actors = pairs.map { it.second }
+                movie.toMovieWithActorDTO(actors)
             }
     }
 
