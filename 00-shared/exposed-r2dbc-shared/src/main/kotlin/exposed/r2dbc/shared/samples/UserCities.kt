@@ -1,15 +1,8 @@
 package exposed.r2dbc.shared.samples
 
-import io.bluetape4k.exposed.dao.idEquals
-import io.bluetape4k.exposed.dao.idHashCode
-import io.bluetape4k.exposed.dao.toStringBuilder
 import org.jetbrains.exposed.v1.core.ReferenceOption
 import org.jetbrains.exposed.v1.core.Table
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
-import org.jetbrains.exposed.v1.dao.IntEntity
-import org.jetbrains.exposed.v1.dao.IntEntityClass
-import org.jetbrains.exposed.v1.jdbc.SizedIterable
 
 /**
  * ```sql
@@ -88,47 +81,4 @@ object UserTable: IntIdTable() {
 object UserToCityTable: Table() {
     val userId = reference("user_id", UserTable, onDelete = ReferenceOption.CASCADE)
     val cityId = reference("city_id", CityTable, onDelete = ReferenceOption.CASCADE)
-}
-
-class Country(id: EntityID<Int>): IntEntity(id) {
-    companion object: IntEntityClass<Country>(CountryTable)
-
-    var name by CountryTable.name
-    val cities: SizedIterable<City> by City referrersOn CityTable.countryId   // one-to-many
-
-    override fun equals(other: Any?): Boolean = idEquals(other)
-    override fun hashCode(): Int = idHashCode()
-    override fun toString(): String = toStringBuilder()
-        .add("name", name)
-        .toString()
-}
-
-class City(id: EntityID<Int>): IntEntity(id) {
-    companion object: IntEntityClass<City>(CityTable)
-
-    var name by CityTable.name
-    var country: Country by Country referencedOn CityTable.countryId   // many-to-one
-    var users: SizedIterable<User> by User via UserToCityTable       // many-to-many
-
-    override fun equals(other: Any?): Boolean = idEquals(other)
-    override fun hashCode(): Int = idHashCode()
-    override fun toString(): String = toStringBuilder()
-        .add("name", name)
-        .add("country", country)
-        .toString()
-}
-
-class User(id: EntityID<Int>): IntEntity(id) {
-    companion object: IntEntityClass<User>(UserTable)
-
-    var name by UserTable.name
-    var age by UserTable.age
-    var cities: SizedIterable<City> by City via UserToCityTable      // many-to-many
-
-    override fun equals(other: Any?): Boolean = idEquals(other)
-    override fun hashCode(): Int = idHashCode()
-    override fun toString(): String = toStringBuilder()
-        .add("name", name)
-        .add("age", age)
-        .toString()
 }

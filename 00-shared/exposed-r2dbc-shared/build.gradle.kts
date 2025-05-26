@@ -20,6 +20,8 @@ dependencies {
     implementation(Libs.exposed_migration)
     implementation(Libs.exposed_money)
 
+    // bluetape4k
+    api(Libs.bluetape4k_exposed)
     api(Libs.bluetape4k_jdbc)
     api(Libs.bluetape4k_r2dbc)
     api(Libs.bluetape4k_junit5)

@@ -1,21 +1,17 @@
 package exposed.r2dbc.shared.samples
 
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase.Companion.faker
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.exposed.dao.idEquals
-import io.bluetape4k.exposed.dao.idHashCode
-import io.bluetape4k.exposed.dao.toStringBuilder
+import io.bluetape4k.junit5.faker.Fakers
+import kotlinx.coroutines.flow.singleOrNull
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
-import org.jetbrains.exposed.v1.dao.IntEntity
-import org.jetbrains.exposed.v1.dao.IntEntityClass
-import org.jetbrains.exposed.v1.dao.entityCache
-import org.jetbrains.exposed.v1.jdbc.SizedIterable
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.insert
+import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
+import org.jetbrains.exposed.v1.r2dbc.selectAll
 
 /**
  * 은행 계좌 - 계좌 소유자에 대한 Many-to-Many 관계를 나타내는 스키마
@@ -23,6 +19,8 @@ import org.jetbrains.exposed.v1.r2dbc.insert
 object BankSchema {
 
     val allTables = arrayOf(BankAccountTable, AccountOwnerTable, OwnerAccountMapTable)
+
+    private val faker = Fakers.faker
 
     /**
      * 은행 계좌 테이블
@@ -88,80 +86,75 @@ object BankSchema {
         }
     }
 
-    /**
-     * 은행 계좌
-     */
-    class BankAccount(id: EntityID<Int>): IntEntity(id) {
-        companion object: IntEntityClass<BankAccount>(BankAccountTable)
+    data class BankAccountRecord(
+        val id: Int,
+        val number: String,
+    )
 
-        var number: String by BankAccountTable.number
+    data class AccountOwnerRecord(
+        val id: Int,
+        val ssn: String,
+    )
 
-        // many to many with via
-        val owners: SizedIterable<AccountOwner> by AccountOwner via OwnerAccountMapTable
-
-        override fun equals(other: Any?): Boolean = idEquals(other)
-        override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
-            .add("number", number)
-            .toString()
-    }
-
-    /**
-     * 계좌 소유자
-     */
-    class AccountOwner(id: EntityID<Int>): IntEntity(id) {
-        companion object: IntEntityClass<AccountOwner>(AccountOwnerTable)
-
-        var ssn: String by AccountOwnerTable.ssn
-
-        // many to many with via
-        val accounts: SizedIterable<BankAccount> by BankAccount via OwnerAccountMapTable
-
-        override fun equals(other: Any?): Boolean = idEquals(other)
-        override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
-            .add("ssn", ssn)
-            .toString()
-    }
-
+    @Suppress("UnusedReceiverParameter")
     suspend fun R2dbcExposedTestBase.withBankTables(
         testDB: TestDB,
         block: suspend R2dbcTransaction.(accounts: BankAccountTable, owners: AccountOwnerTable) -> Unit,
     ) {
         withTables(testDB, *allTables) {
-            val owner1 = AccountOwner.new { ssn = faker.idNumber().ssnValid() }
-            val owner2 = AccountOwner.new { ssn = faker.idNumber().ssnValid() }
-            val account1 = BankAccount.new { number = faker.finance().creditCard() }
-            val account2 = BankAccount.new { number = faker.finance().creditCard() }
-            val account3 = BankAccount.new { number = faker.finance().creditCard() }
-            val account4 = BankAccount.new { number = faker.finance().creditCard() }
+            val owner1 = createAccountOwner(faker.idNumber().ssnValid())
+            val owner2 = createAccountOwner(faker.idNumber().ssnValid())
+            val account1 = createBankAccount(faker.finance().creditCard())
+            val account2 = createBankAccount(faker.finance().creditCard())
+            val account3 = createBankAccount(faker.finance().creditCard())
+            val account4 = createBankAccount(faker.finance().creditCard())
 
-            OwnerAccountMapTable.insert {
-                it[ownerId] = owner1.id
-                it[accountId] = account1.id
-            }
-            OwnerAccountMapTable.insert {
-                it[ownerId] = owner1.id
-                it[accountId] = account2.id
-            }
-            OwnerAccountMapTable.insert {
-                it[ownerId] = owner2.id
-                it[accountId] = account1.id
-            }
-            OwnerAccountMapTable.insert {
-                it[ownerId] = owner2.id
-                it[accountId] = account3.id
-            }
-            OwnerAccountMapTable.insert {
-                it[ownerId] = owner2.id
-                it[accountId] = account4.id
-            }
-            entityCache.clear()
+            createOwnerAccountMap(owner1, account1)
+            createOwnerAccountMap(owner1, account2)
+            createOwnerAccountMap(owner2, account1)
+            createOwnerAccountMap(owner2, account3)
+            createOwnerAccountMap(owner2, account4)
 
             block(BankAccountTable, AccountOwnerTable)
         }
     }
 
-    suspend fun R2dbcTransaction.getAccount(accountId: Int): BankAccount = BankAccount.findById(accountId)!!
-    suspend fun R2dbcTransaction.getOwner(ownerId: Int): AccountOwner = AccountOwner.findById(ownerId)!!
+    private suspend fun createAccountOwner(ssn: String): EntityID<Int> =
+        AccountOwnerTable.insertAndGetId { it[AccountOwnerTable.ssn] = ssn }
+
+    private suspend fun createBankAccount(number: String): EntityID<Int> =
+        BankAccountTable.insertAndGetId { it[BankAccountTable.number] = number }
+
+    private suspend fun createOwnerAccountMap(ownerId: EntityID<Int>, accountId: EntityID<Int>) {
+        OwnerAccountMapTable.insert {
+            it[OwnerAccountMapTable.ownerId] = ownerId
+            it[OwnerAccountMapTable.accountId] = accountId
+        }
+    }
+
+    @Suppress("UnusedReceiverParameter")
+    suspend fun R2dbcTransaction.getAccount(accountId: Int): BankAccountRecord? =
+        BankAccountTable
+            .selectAll()
+            .where { BankAccountTable.id eq accountId }
+            .singleOrNull()
+            ?.let {
+                BankAccountRecord(
+                    id = it[BankAccountTable.id].value,
+                    number = it[BankAccountTable.number]
+                )
+            }
+
+    @Suppress("UnusedReceiverParameter")
+    suspend fun R2dbcTransaction.getOwner(ownerId: Int): AccountOwnerRecord? =
+        AccountOwnerTable
+            .selectAll()
+            .where { AccountOwnerTable.id eq ownerId }
+            .singleOrNull()
+            ?.let {
+                AccountOwnerRecord(
+                    id = it[AccountOwnerTable.id].value,
+                    ssn = it[AccountOwnerTable.ssn]
+                )
+            }
 }

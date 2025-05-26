@@ -3,6 +3,7 @@ package io.bluetape4k.exposed.r2dbc.repository
 import io.bluetape4k.exposed.r2dbc.HasIdentifier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.lastOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
@@ -125,7 +126,7 @@ interface ExposedR2dbcRepository<T: HasIdentifier<ID>, ID: Any> {
             .apply {
                 offset?.run { offset(offset) }
             }
-            .firstOrNull()?.toEntity()
+            .lastOrNull()?.toEntity()
 
     fun <V> findByField(field: Column<V>, value: V): Flow<T> = table.selectAll()
         .where { field eq value }

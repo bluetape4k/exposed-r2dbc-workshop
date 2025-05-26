@@ -3,17 +3,12 @@ package exposed.r2dbc.shared.mapping
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.exposed.dao.idEquals
-import io.bluetape4k.exposed.dao.idHashCode
-import io.bluetape4k.exposed.dao.toStringBuilder
 import org.jetbrains.exposed.v1.core.Table
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
-import org.jetbrains.exposed.v1.dao.LongEntity
-import org.jetbrains.exposed.v1.dao.LongEntityClass
-import org.jetbrains.exposed.v1.dao.flushCache
 import org.jetbrains.exposed.v1.javatime.date
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
+import org.jetbrains.exposed.v1.r2dbc.insert
+import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 import java.io.Serializable
 import java.time.LocalDate
 
@@ -96,46 +91,6 @@ object PersonSchema {
         override val primaryKey = PrimaryKey(id)
     }
 
-    class Address(id: EntityID<Long>): LongEntity(id), Serializable {
-        companion object: LongEntityClass<Address>(AddressTable)
-
-        var street by AddressTable.street
-        var city by AddressTable.city
-        var state by AddressTable.state
-        var zip by AddressTable.zip
-
-        override fun equals(other: Any?): Boolean = idEquals(other)
-        override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
-            .add("street", street)
-            .add("city", city)
-            .add("state", state)
-            .add("zip", zip)
-            .toString()
-    }
-
-    class Person(id: EntityID<Long>): LongEntity(id), Serializable {
-        companion object: LongEntityClass<Person>(PersonTable)
-
-        var firstName by PersonTable.firstName
-        var lastName by PersonTable.lastName
-        var birthDate by PersonTable.birthDate
-        var employeed by PersonTable.employeed
-        var occupation by PersonTable.occupation
-        var address by Address referencedOn PersonTable.addressId
-
-        override fun equals(other: Any?): Boolean = idEquals(other)
-        override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
-            .add("firstName", firstName)
-            .add("lastName", lastName)
-            .add("birthDate", birthDate)
-            .add("employeed", employeed)
-            .add("occupation", occupation)
-            .add("address", address)
-            .toString()
-    }
-
     data class PersonRecord(
         val id: Long? = null,
         val firstName: String? = null,
@@ -153,9 +108,18 @@ object PersonSchema {
         var birthDate: LocalDate? = null,
         var employeed: Boolean? = null,
         var occupation: String? = null,
-        var address: Address? = null,
+        var address: AddressRecord? = null,
     ): Serializable
 
+    data class AddressRecord(
+        val id: Long? = null,
+        val street: String? = null,
+        val city: String? = null,
+        val state: String? = null,
+        val zip: String? = null,
+    ): Serializable
+
+    @Suppress("UnusedReceiverParameter")
     suspend fun R2dbcExposedTestBase.withPersons(
         testDB: TestDB,
         block: suspend R2dbcTransaction.(PersonTable, AddressTable) -> Unit,
@@ -164,110 +128,106 @@ object PersonSchema {
             block(PersonTable, AddressTable)
         }
     }
-}
 
+    @Suppress("UnusedReceiverParameter")
+    suspend fun R2dbcExposedTestBase.withPersonsAndAddress(
+        testDB: TestDB,
+        statement: suspend R2dbcTransaction.(
+            persons: PersonSchema.PersonTable,
+            addresses: PersonSchema.AddressTable,
+        ) -> Unit,
+    ) {
+        val persons = PersonSchema.PersonTable
+        val addresses = PersonSchema.AddressTable
 
-@Suppress("UnusedReceiverParameter")
-suspend fun R2dbcExposedTestBase.withPersonsAndAddress(
-    testDB: TestDB,
-    statement: suspend R2dbcTransaction.(
-        persons: PersonSchema.PersonTable,
-        addresses: PersonSchema.AddressTable,
-    ) -> Unit,
-) {
-    val persons = PersonSchema.PersonTable
-    val addresses = PersonSchema.AddressTable
+        withTables(testDB, *PersonSchema.allPersonTables) {
 
-    withTables(testDB, *PersonSchema.allPersonTables) {
+            val addr1 = AddressTable.insertAndGetId {
+                it[street] = "123 Main St"
+                it[city] = "Bedrock"
+                it[state] = "IN"
+                it[zip] = "12345"
+            }
+            val addr2 = AddressTable.insertAndGetId {
+                it[street] = "456 Elm St"
+                it[city] = "Bedrock"
+                it[state] = "IN"
+                it[zip] = "12345"
+            }
 
-        val addr1 = PersonSchema.Address.new {
-            street = "123 Main St"
-            city = "Bedrock"
-            state = "IN"
-            zip = "12345"
-        }
-        val addr2 = PersonSchema.Address.new {
-            street = "456 Elm St"
-            city = "Bedrock"
-            state = "IN"
-            zip = "12345"
-        }
+            val addr3 = AddressTable.insertAndGetId {
+                it[street] = "165 Kangnam-daero"
+                it[city] = "Seoul"
+                it[state] = "Seoul"
+                it[zip] = "11111"
+            }
 
-        val addr3 = PersonSchema.Address.new {
-            street = "165 Kangnam-daero"
-            city = "Seoul"
-            state = "Seoul"
-            zip = "11111"
-        }
-        flushCache()
+            PersonTable.insert {
+                it[firstName] = "Fred"
+                it[lastName] = "Flintstone"
+                it[birthDate] = LocalDate.of(1935, 2, 1)
+                it[employeed] = true
+                it[occupation] = "Brontosaurus Operator"
+                it[addressId] = addr1
+            }
+            PersonTable.insert {
+                it[firstName] = "Wilma"
+                it[lastName] = "Flintstone"
+                it[birthDate] = LocalDate.of(1940, 2, 1)
+                it[employeed] = false
+                it[occupation] = "Accountant"
+                it[addressId] = addr1
+            }
+            PersonTable.insert {
+                it[firstName] = "Pebbles"
+                it[lastName] = "Flintstone"
+                it[birthDate] = LocalDate.of(1960, 5, 6)
+                it[employeed] = false
+                it[addressId] = addr1
+            }
 
-        PersonSchema.Person.new {
-            firstName = "Fred"
-            lastName = "Flintstone"
-            birthDate = LocalDate.of(1935, 2, 1)
-            employeed = true
-            occupation = "Brontosaurus Operator"
-            address = addr1
-        }
-        PersonSchema.Person.new {
-            firstName = "Wilma"
-            lastName = "Flintstone"
-            birthDate = LocalDate.of(1940, 2, 1)
-            employeed = false
-            occupation = "Accountant"
-            address = addr1
-        }
-        PersonSchema.Person.new {
-            firstName = "Pebbles"
-            lastName = "Flintstone"
-            birthDate = LocalDate.of(1960, 5, 6)
-            employeed = false
-            address = addr1
-        }
-        flushCache()
-        PersonSchema.Person.new {
-            firstName = "Barney"
-            lastName = "Rubble"
-            birthDate = LocalDate.of(1937, 2, 1)
-            employeed = true
-            occupation = "Brontosaurus Operator"
-            address = addr2
-        }
-        PersonSchema.Person.new {
-            firstName = "Betty"
-            lastName = "Rubble"
-            birthDate = LocalDate.of(1943, 2, 1)
-            employeed = false
-            occupation = "Engineer"
-            address = addr2
-        }
-        PersonSchema.Person.new {
-            firstName = "Bamm Bamm"
-            lastName = "Rubble"
-            birthDate = LocalDate.of(1963, 7, 8)
-            employeed = false
-            address = addr2
-        }
+            PersonTable.insert {
+                it[firstName] = "Barney"
+                it[lastName] = "Rubble"
+                it[birthDate] = LocalDate.of(1937, 2, 1)
+                it[employeed] = true
+                it[occupation] = "Brontosaurus Operator"
+                it[addressId] = addr2
+            }
+            PersonTable.insert {
+                it[firstName] = "Betty"
+                it[lastName] = "Rubble"
+                it[birthDate] = LocalDate.of(1943, 2, 1)
+                it[employeed] = false
+                it[occupation] = "Engineer"
+                it[addressId] = addr2
+            }
+            PersonTable.insert {
+                it[firstName] = "Bamm Bamm"
+                it[lastName] = "Rubble"
+                it[birthDate] = LocalDate.of(1963, 7, 8)
+                it[employeed] = false
+                it[addressId] = addr2
+            }
 
-        PersonSchema.Person.new {
-            firstName = "Sunghyouk"
-            lastName = "Bae"
-            birthDate = LocalDate.of(1968, 10, 14)
-            employeed = false
-            address = addr3
+            PersonTable.insert {
+                it[firstName] = "Sunghyouk"
+                it[lastName] = "Bae"
+                it[birthDate] = LocalDate.of(1968, 10, 14)
+                it[employeed] = false
+                it[addressId] = addr3
+            }
+
+            PersonTable.insert {
+                it[firstName] = "Jehyoung"
+                it[lastName] = "Bae"
+                it[birthDate] = LocalDate.of(1996, 5, 22)
+                it[employeed] = false
+                it[addressId] = addr3
+            }
+
+            statement(persons, addresses)
         }
-
-        PersonSchema.Person.new {
-            firstName = "Jehyoung"
-            lastName = "Bae"
-            birthDate = LocalDate.of(1996, 5, 22)
-            employeed = false
-            address = addr3
-        }
-
-
-        flushCache()
-
-        statement(persons, addresses)
     }
+
 }

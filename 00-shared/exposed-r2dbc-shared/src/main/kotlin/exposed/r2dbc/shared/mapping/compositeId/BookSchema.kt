@@ -1,19 +1,7 @@
 package exposed.r2dbc.shared.mapping.compositeId
 
-import io.bluetape4k.exposed.dao.idEquals
-import io.bluetape4k.exposed.dao.idHashCode
-import io.bluetape4k.exposed.dao.idValue
-import io.bluetape4k.exposed.dao.toStringBuilder
-import org.jetbrains.exposed.v1.core.dao.id.CompositeID
 import org.jetbrains.exposed.v1.core.dao.id.CompositeIdTable
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
-import org.jetbrains.exposed.v1.dao.CompositeEntity
-import org.jetbrains.exposed.v1.dao.CompositeEntityClass
-import org.jetbrains.exposed.v1.dao.IntEntity
-import org.jetbrains.exposed.v1.dao.IntEntityClass
-import java.util.*
-
 
 /**
  * Composite Id 를 가지는 Entity를 표현하는 ERD 입니다.
@@ -34,7 +22,6 @@ object BookSchema {
      *      CONSTRAINT pk_publishers PRIMARY KEY (pub_id, isbn_code)
      * )
      * ```
-     * @see [Publisher]
      */
     object Publishers: CompositeIdTable("publishers") {
         val pubId = integer("pub_id").autoIncrement().entityId()
@@ -155,93 +142,4 @@ object BookSchema {
             foreignKey(publisherId, publisherIsbn, target = Publishers.primaryKey)
         }
     }
-
-    class Publisher(id: EntityID<CompositeID>): CompositeEntity(id) {
-        companion object: CompositeEntityClass<Publisher>(Publishers) {
-            // CompositeID 중 pubId 는 자동증가이므로, isbn 은 사용자에게 입력받거나 자동 생성하는 UUID 를 사용
-            fun new(isbn: UUID, init: Publisher.() -> Unit): Publisher {
-                // pubId 는 autoIncrement 이므로, isbn 만으로 CompositeID 를 생성
-                val compositeId = CompositeID {
-                    it[Publishers.isbn] = isbn
-                }
-                return Publisher.new(compositeId) {
-                    init()
-                }
-            }
-        }
-
-        val pubId: Int
-            get() = id.value[Publishers.pubId].value // CompositeID 의 pubId 컬럼
-        val isbn: UUID
-            get() = id.value[Publishers.isbn].value // CompositeID 의 isbn 컬럼
-
-        var name: String by Publishers.name
-
-        val authors by Author referrersOn Authors                // one-to-many
-        val office by Office optionalBackReferencedOn Offices                  // one-to-one
-        val allOffices by Office optionalReferrersOn Offices     // one-to-many
-
-        override fun equals(other: Any?): Boolean = idEquals(other)
-        override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
-            .add("name", name)
-            .toString()
-    }
-
-    class Author(id: EntityID<Int>): IntEntity(id) {
-        companion object: IntEntityClass<Author>(Authors)
-
-        var publisher by Publisher referencedOn Authors     // many-to-one
-        var penName by Authors.penName
-
-        override fun equals(other: Any?): Boolean = idEquals(other)
-        override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
-            .add("pen name", penName)
-            .add("publisher id", publisher.idValue)
-            .toString()
-    }
-
-    class Book(id: EntityID<CompositeID>): CompositeEntity(id) {
-        companion object: CompositeEntityClass<Book>(Books)
-
-        var title by Books.title
-        var author by Author optionalReferencedOn Books.author  // many-to-one
-        val review by Review backReferencedOn Reviews            // many-to-one
-
-        override fun equals(other: Any?): Boolean = idEquals(other)
-        override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
-            .add("title", title)
-            .add("author id", author?.idValue)
-            .add("review id", review.idValue)
-            .toString()
-    }
-
-    class Review(id: EntityID<CompositeID>): CompositeEntity(id) {
-        companion object: CompositeEntityClass<Review>(Reviews)
-
-        var book by Book referencedOn Reviews       // many-to-one
-
-        override fun equals(other: Any?): Boolean = idEquals(other)
-        override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
-            .add("book id", book.idValue)
-            .toString()
-    }
-
-    class Office(id: EntityID<CompositeID>): CompositeEntity(id) {
-        companion object: CompositeEntityClass<Office>(Offices)
-
-        var staff by Offices.staff
-        var publisher by Publisher optionalReferencedOn Offices     // many-to-one
-
-        override fun equals(other: Any?): Boolean = idEquals(other)
-        override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
-            .add("staff", staff)
-            .add("publisher id", publisher?.idValue)
-            .toString()
-    }
-
 }
