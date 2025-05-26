@@ -1,6 +1,5 @@
 package exposed.r2dbc.multitenant.webflux.domain.repository
 
-import exposed.r2dbc.multitenant.webflux.domain.dto.ActorDTO
 import exposed.r2dbc.multitenant.webflux.domain.dto.MovieActorCountDTO
 import exposed.r2dbc.multitenant.webflux.domain.dto.MovieDTO
 import exposed.r2dbc.multitenant.webflux.domain.dto.MovieWithActorDTO
@@ -20,7 +19,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
-import org.eclipse.collections.impl.factory.Multimaps
 import org.jetbrains.exposed.v1.core.Join
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.alias
@@ -98,8 +96,6 @@ class MovieR2dbcRepository: ExposedR2dbcRepository<MovieDTO, Long> {
     suspend fun getAllMoviesWithActors(): Flow<MovieWithActorDTO> {
         log.debug { "Get all movies with actors" }
 
-        val actorsInMovie = Multimaps.mutable.set.of<Long, ActorDTO>()
-
         return MovieActorJoin
             .select(
                 MovieTable.id,
@@ -114,14 +110,14 @@ class MovieR2dbcRepository: ExposedR2dbcRepository<MovieDTO, Long> {
             .map { row ->
                 val movie = row.toMovieDTO()
                 val actor = row.toActorDTO()
-                log.debug { "Add actor in movie[${movie.id}]. actor=$actor" }
-                actorsInMovie.put(movie.id, actor)
-                movie
+
+                movie to actor
             }
-            .bufferUntilChanged { it.id }
-            .mapNotNull {
-                val movie = it.first()
-                movie.toMovieWithActorDTO(actors = actorsInMovie.get(movie.id)?.toMutableSet() ?: mutableSetOf())
+            .bufferUntilChanged { it.first.id }
+            .mapNotNull { pairs ->
+                val movie = pairs.first().first
+                val actors = pairs.map { it.second }
+                movie.toMovieWithActorDTO(actors)
             }
     }
 
