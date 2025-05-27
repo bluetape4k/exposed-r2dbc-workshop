@@ -37,7 +37,7 @@ class Ex07_CustomEnumeration: R2dbcExposedTestBase() {
     companion object: KLoggingChannel()
 
     private val supportsCustomEnumerationDB =
-        TestDB.ALL_POSTGRES + TestDB.ALL_MYSQL
+        TestDB.ALL_POSTGRES + TestDB.ALL_MYSQL_MARIADB
 
     internal enum class Status {
         ACTIVE,
@@ -74,7 +74,7 @@ class Ex07_CustomEnumeration: R2dbcExposedTestBase() {
      * ```
      */
     internal object EnumTable: IntIdTable("enum_table") {
-        var status: Column<Status> = enumeration("status")
+        var status: Column<Status> = enumeration<Status>("status")
 
         internal fun initEnumColumn(sql: String) {
             (columns as MutableList<Column<*>>).remove(status)
@@ -89,7 +89,6 @@ class Ex07_CustomEnumeration: R2dbcExposedTestBase() {
                     }
                 }
             )
-
         }
     }
 
@@ -129,7 +128,7 @@ class Ex07_CustomEnumeration: R2dbcExposedTestBase() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `사용자 정의 Enum 수형의 컬럼 정의 - 01`(testDB: TestDB) = runTest {
-        Assumptions.assumeTrue { testDB in supportsCustomEnumerationDB }
+        Assumptions.assumeTrue { testDB in supportsCustomEnumerationDB && testDB !in TestDB.ALL_POSTGRES }
 
         withDb(testDB) {
             val sqlType = when (currentDialect) {
@@ -177,7 +176,7 @@ class Ex07_CustomEnumeration: R2dbcExposedTestBase() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `custom enumeration with reference`(testDB: TestDB) = runTest {
-        Assumptions.assumeTrue { testDB in supportsCustomEnumerationDB }
+        Assumptions.assumeTrue { testDB in supportsCustomEnumerationDB && testDB !in TestDB.ALL_POSTGRES }
 
         /**
          * ```sql

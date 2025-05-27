@@ -48,6 +48,7 @@ class Ex01_VritualThreads: R2dbcExposedTestBase() {
         override val primaryKey = PrimaryKey(id)
     }
 
+    @Suppress("UnusedReceiverParameter")
     suspend fun R2dbcTransaction.getTesterById(id: Int): ResultRow? =
         virtualThreadTransaction {
             VTester.selectAll()
