@@ -124,9 +124,18 @@ class Ex04_ColumnDefinition: R2dbcExposedTestBase() {
              *  WHERE TESTER.AMOUNT > 100
              * ```
              */
+            // HINT: 이렇게 Statement.execute(R2dbcTransaction) 을 수행하면 org.jetbrains.exposed.v1.r2dbc.statements.api.R2dbcResult 를 반환합니다.
             val result1 = tester.selectImplicitAll()
                 .where { tester.amount greater 100 }
-                .execute(this) as R2dbcResult // HINT: 이렇게 Statement.execute(transaction) 을 수행하면 java.sql.ResultSet 를 반환합니다.
+                .execute(this) as R2dbcResult
+
+            // 전체 컬럼 수와 INVISIBLE 컬럼을 제외한 컬럼 수가 달라서 [ResultRow] 로 변환하는데 문제가 생깁니다.
+            // 그래서 위와 같이 execute() 를 사용하여 [R2dbcResult] 를 반환받아야 합니다.
+//            tester.selectImplicitAll()
+//                .where { tester.amount greater 100 }
+//                .collect {
+//                    it[tester.amount] shouldBeEqualTo 999
+//                }
 
             result1.mapRows { row ->
                 row.origin.getInt(tester.amount.name) shouldBeEqualTo 999
@@ -155,9 +164,10 @@ class Ex04_ColumnDefinition: R2dbcExposedTestBase() {
              *  WHERE TESTER.AMOUNT > 100
              * ```
              */
+            // HINT: 이렇게 Statement.execute(R2dbcTransaction) 을 수행하면 org.jetbrains.exposed.v1.r2dbc.statements.api.R2dbcResult 를 반환합니다.
             val result2 = tester.selectAll()
                 .where { tester.amount greater 100 }
-                .execute(this) as R2dbcResult // HINT: 이렇게 Statement.execute(transaction) 을 수행하면 java.sql.ResultSet 를 반환합니다.
+                .execute(this) as R2dbcResult
 
             result2
                 .mapRows { row ->
