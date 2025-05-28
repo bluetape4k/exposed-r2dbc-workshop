@@ -5,7 +5,6 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.exposed.r2dbc.sql.forEach
 import io.bluetape4k.logging.KLogging
 import kotlinx.coroutines.flow.all
 import kotlinx.coroutines.flow.first
@@ -146,7 +145,7 @@ class Ex03_Update: R2dbcExposedTestBase() {
                 it[userData.value] = 123
             }
 
-            join.selectAll().forEach {
+            join.selectAll().collect {
                 it[userData.comment] shouldBeEqualTo it[users.name]
                 it[userData.value] shouldBeEqualTo 123
             }
@@ -173,7 +172,7 @@ class Ex03_Update: R2dbcExposedTestBase() {
                 it[userData.value] = 0
             }
 
-            joinWithConstraint.selectAll().forEach {
+            joinWithConstraint.selectAll().collect {
                 it[userData.comment] shouldBeEqualTo it[users.name]
                 it[userData.value] shouldBeEqualTo 0
             }
@@ -254,7 +253,7 @@ class Ex03_Update: R2dbcExposedTestBase() {
                 it[userData.value] = 123
             }
 
-            join.selectAll().forEach {
+            join.selectAll().collect {
                 it[userData.comment] shouldBeEqualTo it[users.name]
                 it[userData.value] shouldBeEqualTo 123
             }
@@ -396,7 +395,7 @@ class Ex03_Update: R2dbcExposedTestBase() {
                 it[userData.value] = 42
             }
 
-            joinWithSubQuery.selectAll().forEach {
+            joinWithSubQuery.selectAll().collect {
                 it[userData.value] shouldBeEqualTo 42
             }
 
@@ -454,7 +453,7 @@ class Ex03_Update: R2dbcExposedTestBase() {
                 it[userData.value] = 99
             }
 
-            doubleJoinQuery.selectAll().forEach {
+            doubleJoinQuery.selectAll().collect {
                 it[userData.value] shouldBeEqualTo 99
             }
         }

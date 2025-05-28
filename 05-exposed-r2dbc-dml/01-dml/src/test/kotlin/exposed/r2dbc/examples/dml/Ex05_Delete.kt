@@ -5,7 +5,7 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
-import io.bluetape4k.exposed.r2dbc.sql.any
+import io.bluetape4k.exposed.r2dbc.any
 import io.bluetape4k.logging.KLogging
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.toList

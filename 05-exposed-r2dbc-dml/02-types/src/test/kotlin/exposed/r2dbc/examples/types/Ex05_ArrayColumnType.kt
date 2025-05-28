@@ -596,7 +596,6 @@ class Ex05_ArrayColumnType: R2dbcExposedTestBase() {
         // Recheck on our side when the issue is resolved.
         Assumptions.assumeTrue { testDB in arrayTypeSupportedDB }
         withArrayTestTable(testDB) {
-
             /**
              * ```sql
              * -- Postgres

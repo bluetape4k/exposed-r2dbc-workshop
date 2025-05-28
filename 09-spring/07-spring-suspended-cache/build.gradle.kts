@@ -28,6 +28,7 @@ dependencies {
     implementation(project(":exposed-r2dbc-shared"))
 
     // bluetape4k
+    implementation(Libs.bluetape4k_exposed_r2dbc)
     implementation(Libs.bluetape4k_redis)
     implementation(Libs.bluetape4k_grpc)
     implementation(Libs.bluetape4k_testcontainers)

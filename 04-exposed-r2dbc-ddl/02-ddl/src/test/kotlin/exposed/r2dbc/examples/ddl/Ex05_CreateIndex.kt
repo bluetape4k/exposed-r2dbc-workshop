@@ -1,11 +1,10 @@
 package exposed.r2dbc.examples.ddl
 
-
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.exposed.r2dbc.sql.suspendIndexes
+import io.bluetape4k.exposed.r2dbc.suspendIndexes
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.info
 import kotlinx.coroutines.test.runTest

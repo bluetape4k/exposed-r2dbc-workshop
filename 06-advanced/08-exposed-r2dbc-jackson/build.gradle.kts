@@ -14,8 +14,7 @@ dependencies {
 
     implementation(Libs.bluetape4k_io)
 
-    // bluetape4k_exposed 가 사용하는 exposed_core 의 버전 및 namespace 가 다르므로, 참조하면 안됩니다.
-    // implementation(Libs.bluetape4k_exposed)
+    implementation(Libs.bluetape4k_exposed_r2dbc)
     implementation(Libs.bluetape4k_jackson)
     api(Libs.jackson_module_kotlin)
     implementation(Libs.jackson_module_blackbird)

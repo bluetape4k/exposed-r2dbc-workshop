@@ -13,10 +13,8 @@ dependencies {
     implementation(Libs.exposed_r2dbc)
 
     // bluetape4k_exposed 가 사용하는 exposed_core 의 버전 및 namespace 가 다르므로, 참조하면 안됩니다.
-    // implementation(Libs.bluetape4k_exposed)
-    api(Libs.bluetape4k_crypto)
-    api(Libs.jasypt)
-
+    implementation(Libs.bluetape4k_exposed_r2dbc)
+    implementation(Libs.bluetape4k_crypto)
     implementation(Libs.bluetape4k_junit5)
 
     implementation(Libs.h2_v2)

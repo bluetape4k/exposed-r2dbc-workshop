@@ -9,8 +9,8 @@ import exposed.r2dbc.shared.tests.inProperCase
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.codec.Base58
-import io.bluetape4k.exposed.r2dbc.sql.BatchInsertOnConflictDoNothing
-import io.bluetape4k.exposed.r2dbc.sql.BatchInsertOnConflictDoNothingExecutable
+import io.bluetape4k.exposed.r2dbc.statements.BatchInsertOnConflictDoNothing
+import io.bluetape4k.exposed.r2dbc.statements.BatchInsertOnConflictDoNothingExecutable
 import io.bluetape4k.idgenerators.uuid.TimebasedUuid
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel

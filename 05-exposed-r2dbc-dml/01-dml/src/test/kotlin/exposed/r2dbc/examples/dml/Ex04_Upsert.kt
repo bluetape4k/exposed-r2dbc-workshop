@@ -5,7 +5,6 @@ import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.codec.Base58
-import io.bluetape4k.exposed.r2dbc.sql.forEach
 import io.bluetape4k.logging.KLogging
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.first
@@ -101,7 +100,7 @@ class Ex04_Upsert: R2dbcExposedTestBase() {
                 it[name] = "C"
             }
 
-            AutoIncTable.selectAll().forEach {
+            AutoIncTable.selectAll().collect {
                 log.debug { "id: ${it[AutoIncTable.id]}, name: ${it[AutoIncTable.name]}" }
             }
             AutoIncTable.selectAll().count().toInt() shouldBeEqualTo 2
@@ -181,7 +180,7 @@ class Ex04_Upsert: R2dbcExposedTestBase() {
 
             tester
                 .selectAll()
-                .forEach {
+                .collect {
                     log.debug { "idA: ${it[tester.idA]}, idB: ${it[tester.idB]}, name: ${it[tester.name]}" }
                 }
             tester.selectAll().count() shouldBeEqualTo 3L
@@ -243,7 +242,7 @@ class Ex04_Upsert: R2dbcExposedTestBase() {
             // 기존 컬럼을 `update`
             upsertOnlyKeyColumns(primaryKeyValues)
 
-            tester.selectAll().forEach {
+            tester.selectAll().collect {
                 log.debug { "userId: ${it[tester.userId]}, keyId: ${it[tester.keyId]}" }
             }
             val result = tester.selectAll().singleOrNull()
@@ -302,7 +301,7 @@ class Ex04_Upsert: R2dbcExposedTestBase() {
                 it[count] = 9
             }
 
-            Words.selectAll().forEach {
+            Words.selectAll().collect {
                 log.debug { "word: ${it[Words.word]}, count: ${it[Words.count]}" }
             }
             Words.selectAll().count() shouldBeEqualTo 2L   // A, B
@@ -382,7 +381,7 @@ class Ex04_Upsert: R2dbcExposedTestBase() {
             } get tester.idA        // 99
 
             // idA: 99, idB: 2, name: C
-            tester.selectAll().forEach {
+            tester.selectAll().collect {
                 log.debug { "idA: ${it[tester.idA]}, idB: ${it[tester.idB]}, name: ${it[tester.name]}" }
             }
             tester.selectAll().single()[tester.name] shouldBeEqualTo "C"
@@ -830,7 +829,7 @@ class Ex04_Upsert: R2dbcExposedTestBase() {
                 this[tester.count] = count
             }
             tester.selectAll().count().toInt() shouldBeEqualTo 3
-            tester.selectAll().forEach {
+            tester.selectAll().collect {
                 log.debug { "id: ${it[tester.id]}, word: ${it[tester.word]}, count: ${it[tester.count]}" }
             }
 
@@ -1100,7 +1099,7 @@ class Ex04_Upsert: R2dbcExposedTestBase() {
                 it[age] = updatedAge
             }
 
-            tester.selectAll().forEach {
+            tester.selectAll().collect {
                 log.debug { "id: ${it[tester.id]}, name: ${it[tester.name]}, age: ${it[tester.age]}" }
             }
             tester.selectAll().count() shouldBeEqualTo 2L
@@ -1278,7 +1277,7 @@ class Ex04_Upsert: R2dbcExposedTestBase() {
             }
 
             Words.selectAll().count().toInt() shouldBeEqualTo alphabet.size
-            Words.selectAll().forEach {
+            Words.selectAll().collect {
                 val expectedCount = if (it[Words.word] in vowels) 2 else 1
                 it[Words.count] shouldBeEqualTo expectedCount
             }
@@ -1360,7 +1359,7 @@ class Ex04_Upsert: R2dbcExposedTestBase() {
             // 중복된 것은 update 되기 때문에 alphabet 숫자만큼만 존재한다.
             Words.selectAll().count().toInt() shouldBeEqualTo alphabet.size
 
-            Words.selectAll().forEach {
+            Words.selectAll().collect {
                 val expectedCount = if (it[Words.word] in firstThreeVowels) 2 else 1
                 it[Words.count] shouldBeEqualTo expectedCount
             }

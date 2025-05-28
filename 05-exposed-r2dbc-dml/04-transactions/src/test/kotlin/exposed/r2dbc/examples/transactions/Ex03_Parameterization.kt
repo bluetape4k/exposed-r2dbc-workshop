@@ -4,7 +4,7 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.inProperCase
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.exposed.r2dbc.sql.getInt
+import io.bluetape4k.exposed.r2dbc.getIntOrNull
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.r2dbc.spi.Row
@@ -133,7 +133,7 @@ class Ex03_Parameterization: R2dbcExposedTestBase() {
                     ),
                     explicitStatementType = StatementType.MULTI
                 ) { row: Row ->
-                    row.getInt(1)
+                    row.getIntOrNull(0)
                 }?.singleOrNull()
 
                 result shouldBeEqualTo 1
@@ -211,7 +211,7 @@ class Ex03_Parameterization: R2dbcExposedTestBase() {
                     ),
                     explicitStatementType = StatementType.MULTI
                 ) { row: Row ->
-                    row.getInt(1)
+                    row.getIntOrNull(0)
                 }?.singleOrNull()
                 result shouldBeEqualTo 1
 

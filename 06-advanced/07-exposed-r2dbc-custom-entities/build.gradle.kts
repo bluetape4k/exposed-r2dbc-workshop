@@ -15,8 +15,7 @@ dependencies {
     implementation(Libs.bluetape4k_idgenerators)
     implementation(Libs.java_uuid_generator)
 
-    // bluetape4k_exposed 가 사용하는 exposed_core 의 버전 및 namespace 가 다르므로, 참조하면 안됩니다.
-    // implementation(Libs.bluetape4k_exposed)
+    implementation(Libs.bluetape4k_exposed_r2dbc)
     implementation(Libs.bluetape4k_junit5)
 
     implementation(Libs.h2_v2)

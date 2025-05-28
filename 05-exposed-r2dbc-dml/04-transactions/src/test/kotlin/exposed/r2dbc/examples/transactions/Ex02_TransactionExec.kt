@@ -4,8 +4,8 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.inProperCase
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.exposed.r2dbc.sql.getInt
-import io.bluetape4k.exposed.r2dbc.sql.getString
+import io.bluetape4k.exposed.r2dbc.getInt
+import io.bluetape4k.exposed.r2dbc.getStringOrNull
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.singleOrNull
@@ -184,7 +184,7 @@ class Ex02_TransactionExec: R2dbcExposedTestBase() {
             val stringResult = exec(
                 """SELECT $title FROM $table WHERE $id = 1;"""
             ) { row ->
-                row.getString(title)
+                row.getStringOrNull(title)
             }?.singleOrNull()
             stringResult shouldBeEqualTo "Exposed"
 
@@ -192,7 +192,7 @@ class Ex02_TransactionExec: R2dbcExposedTestBase() {
             val nullColumnResult = exec(
                 """SELECT (SELECT $title FROM $table WHERE $id = 999) AS sub;"""
             ) { row ->
-                row.getString("sub")
+                row.getStringOrNull("sub")
             }?.singleOrNull()
             nullColumnResult.shouldBeNull()
 
@@ -200,7 +200,7 @@ class Ex02_TransactionExec: R2dbcExposedTestBase() {
             val nullTransformResult = exec(
                 """SELECT $title FROM $table WHERE $id = 999;"""
             ) { row ->
-                row.getString(title)
+                row.getStringOrNull(title)
             }?.singleOrNull()
             nullTransformResult.shouldBeNull()
         }

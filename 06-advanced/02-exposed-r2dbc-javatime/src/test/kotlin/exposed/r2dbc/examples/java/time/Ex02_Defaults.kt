@@ -8,7 +8,7 @@ import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.inProperCase
 import exposed.r2dbc.shared.tests.insertAndWait
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.exposed.r2dbc.sql.sorted
+import io.bluetape4k.exposed.r2dbc.sorted
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug

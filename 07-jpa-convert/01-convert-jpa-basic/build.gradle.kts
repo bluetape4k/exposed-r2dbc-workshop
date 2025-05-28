@@ -17,6 +17,7 @@ dependencies {
     implementation(Libs.exposed_r2dbc)
     implementation(Libs.exposed_java_time)
 
+    implementation(Libs.bluetape4k_exposed_r2dbc)
     testImplementation(Libs.bluetape4k_junit5)
 
     implementation(Libs.h2_v2)

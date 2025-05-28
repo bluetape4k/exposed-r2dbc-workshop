@@ -3,7 +3,7 @@ package exposed.r2dbc.examples.connection.h2
 import exposed.r2dbc.shared.dml.DMLTestData
 import exposed.r2dbc.shared.samples.CountryTable
 import exposed.r2dbc.shared.tests.TestDB
-import io.bluetape4k.exposed.r2dbc.sql.getInt
+import io.bluetape4k.exposed.r2dbc.getInt
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.r2dbc.spi.IsolationLevel
@@ -289,14 +289,14 @@ class Ex02_H2_MultiDatabase {
             // when running all tests together, this one usually fails
             // `Dual.select(intLiteral(1))`
             TransactionManager.current().exec("SELECT 1") { row ->
-                row.getInt(1) shouldBeEqualTo 1
+                row.getInt(0) shouldBeEqualTo 1
             }
         }
         TransactionManager.defaultDatabase = db2
         suspendTransaction(coroutineDispatcher1) {
             TransactionManager.current().db.name shouldBeEqualTo db2.name // fails??
             TransactionManager.current().exec("SELECT 1") { row ->
-                row.getInt(1) shouldBeEqualTo 1
+                row.getInt(0) shouldBeEqualTo 1
             }
         }
         TransactionManager.defaultDatabase = null
@@ -310,7 +310,7 @@ class Ex02_H2_MultiDatabase {
             suspendTransaction {
                 TransactionManager.current().db.name shouldBeEqualTo db1.name
                 TransactionManager.current().exec("SELECT 1") { row ->
-                    row.getInt(1) shouldBeEqualTo 1
+                    row.getInt(0) shouldBeEqualTo 1
                 }
             }
         }
@@ -320,7 +320,7 @@ class Ex02_H2_MultiDatabase {
             suspendTransaction {
                 TransactionManager.current().db.name shouldBeEqualTo db2.name
                 TransactionManager.current().exec("SELECT 1") { row ->
-                    row.getInt(1) shouldBeEqualTo 1
+                    row.getInt(0) shouldBeEqualTo 1
                 }
             }
         }

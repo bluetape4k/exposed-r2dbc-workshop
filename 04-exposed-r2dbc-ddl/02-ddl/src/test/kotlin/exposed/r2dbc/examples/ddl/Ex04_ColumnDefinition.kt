@@ -3,9 +3,9 @@ package exposed.r2dbc.examples.ddl
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.exposed.r2dbc.getBoolean
+import io.bluetape4k.exposed.r2dbc.getInt
 import io.bluetape4k.exposed.r2dbc.selectImplicitAll
-import io.bluetape4k.exposed.r2dbc.sql.getBoolean
-import io.bluetape4k.exposed.r2dbc.sql.getInt
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.info
 import kotlinx.coroutines.flow.single
@@ -172,7 +172,7 @@ class Ex04_ColumnDefinition: R2dbcExposedTestBase() {
             result2
                 .mapRows { row ->
                     row.origin.getInt(tester.amount.name) shouldBeEqualTo 999
-                    row.origin.getBoolean(tester.active.name)!!.shouldBeTrue()
+                    row.origin.getBoolean(tester.active.name).shouldBeTrue()
                 }
                 .single()
         }

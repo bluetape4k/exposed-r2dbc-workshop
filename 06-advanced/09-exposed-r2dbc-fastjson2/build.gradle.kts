@@ -10,11 +10,9 @@ dependencies {
     // Exposed
     implementation(Libs.exposed_core)
     implementation(Libs.exposed_jdbc)
-    api(Libs.exposed_r2dbc)
+    implementation(Libs.exposed_r2dbc)
 
-
-    // bluetape4k_exposed 가 사용하는 exposed_core 의 버전 및 namespace 가 다르므로, 참조하면 안됩니다.
-    // implementation(Libs.bluetape4k_exposed)
+    implementation(Libs.bluetape4k_exposed_r2dbc)
     api(Libs.bluetape4k_fastjson2)
     api(Libs.fastjson2_kotlin)
 

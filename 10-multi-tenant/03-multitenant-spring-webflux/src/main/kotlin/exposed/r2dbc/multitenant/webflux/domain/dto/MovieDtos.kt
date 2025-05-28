@@ -1,7 +1,6 @@
 package exposed.r2dbc.multitenant.webflux.domain.dto
 
-import io.bluetape4k.exposed.r2dbc.HasIdentifier
-
+import io.bluetape4k.exposed.core.HasIdentifier
 import java.io.Serializable
 
 /**
