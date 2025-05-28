@@ -1,4 +1,4 @@
-package exposed.r2dbc.multitenant.webflux.config
+package exposed.r2dbc.examples.cache.config
 
 import io.bluetape4k.support.uninitialized
 import io.bluetape4k.support.unsafeLazy
@@ -27,7 +27,7 @@ class SwaggerConfig {
 
     private val info by unsafeLazy {
         Info().title(buildProps.name)
-            .description("Spring Webflux 에서 Exposed R2dbc 를 사용하는 멀티 테넌트 예제")
+            .description("Spring Webflux 에서 Exposed R2dbc + Redisson Cache 를 이용한 고성능 애플리케이션 개발 워크샵")
             .version(buildProps.version)
             .contact(contact)
             .license(license)

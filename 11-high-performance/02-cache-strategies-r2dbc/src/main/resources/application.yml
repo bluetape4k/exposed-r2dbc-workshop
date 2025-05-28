@@ -1,0 +1,16 @@
+server:
+    port: 8080
+    compression:
+        enabled: true
+
+    shutdown: graceful  # WebServer Graceful shutdown (https://www.baeldung.com/spring-boot-web-server-shutdown)
+
+spring:
+    profiles:
+        active: h2  # h2 | mysql | postgres 를 사용할 수 있습니다.
+    aot:
+        enabled: true  # Enable AOT processing for Spring Boot applications
+    data:
+        redis:
+            host: ${testcontainers.redis.host}
+            port: ${testcontainers.redis.port}

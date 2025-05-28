@@ -22,6 +22,7 @@ dependencies {
 
     // bluetape4k
     api(Libs.bluetape4k_exposed)
+    api(Libs.bluetape4k_exposed_r2dbc)
     api(Libs.bluetape4k_jdbc)
     api(Libs.bluetape4k_r2dbc)
     api(Libs.bluetape4k_junit5)

@@ -282,6 +282,8 @@ object Libs {
     val bluetape4k_exposed_fastjson2 = bluetape4k("exposed-fastjson2")
     val bluetape4k_exposed_jackson = bluetape4k("exposed-jackson")
     val bluetape4k_exposed_jasypt = bluetape4k("exposed-jasypt")
+    val bluetape4k_exposed_r2dbc = bluetape4k("exposed-r2dbc")
+    val bluetape4k_exposed_r2dbc_redisson = bluetape4k("exposed-r2dbc-redisson")
     val bluetape4k_exposed_redisson = bluetape4k("exposed-redisson")
     val bluetape4k_exposed_tests = bluetape4k("exposed-tests")
     val bluetape4k_hibernate = bluetape4k("hibernate")
