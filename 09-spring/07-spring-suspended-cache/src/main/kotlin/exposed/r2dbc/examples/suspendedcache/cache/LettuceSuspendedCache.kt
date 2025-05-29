@@ -1,9 +1,9 @@
 package exposed.r2dbc.examples.suspendedcache.cache
 
+import io.bluetape4k.coroutines.flow.extensions.chunked
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.lettuce.core.ExperimentalLettuceCoroutinesApi
 import io.lettuce.core.api.coroutines.RedisCoroutinesCommands
-import kotlinx.coroutines.flow.chunked
 
 @OptIn(ExperimentalLettuceCoroutinesApi::class)
 class LettuceSuspendedCache<K: Any, V: Any>(
@@ -31,7 +31,7 @@ class LettuceSuspendedCache<K: Any, V: Any>(
 
     suspend fun clear() {
         commands.keys("$name:*")
-            .chunked(100)
+            .chunked(100, true)
             .collect { keys ->
                 commands.del(*keys.toTypedArray())
             }

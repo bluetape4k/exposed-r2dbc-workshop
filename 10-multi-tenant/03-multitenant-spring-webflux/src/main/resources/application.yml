@@ -15,7 +15,7 @@ spring:
         name: Spring Webflux with Multi-Tenant
 
     profiles:
-        default: "postgres"    # NOTE: R2dbc 에서는 mysql, h2 가 schema 를 지원하지 않는다. (JDBC 에서는 지원함)
+        default: "h2"    # NOTE: R2dbc 에서는 mysql 은 schema 생성을 위한 권한 문제가 있다.
 
     jackson:
         serialization:

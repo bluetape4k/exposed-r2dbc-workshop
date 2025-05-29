@@ -594,7 +594,7 @@ class Ex05_ArrayColumnType: R2dbcExposedTestBase() {
         // POSTGRESQLNG is excluded because the problem may be on their side.
         // Related issue: https://github.com/impossibl/pgjdbc-ng/issues/600
         // Recheck on our side when the issue is resolved.
-        Assumptions.assumeTrue { testDB in arrayTypeSupportedDB }
+        Assumptions.assumeTrue { testDB in (arrayTypeSupportedDB - TestDB.POSTGRESQL) }
         withArrayTestTable(testDB) {
             /**
              * ```sql

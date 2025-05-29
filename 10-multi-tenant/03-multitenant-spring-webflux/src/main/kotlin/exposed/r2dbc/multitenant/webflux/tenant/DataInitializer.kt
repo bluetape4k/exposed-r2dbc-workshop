@@ -16,6 +16,7 @@ import org.jetbrains.exposed.v1.r2dbc.batchInsert
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.select
 import org.jetbrains.exposed.v1.r2dbc.selectAll
+import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 
@@ -38,13 +39,15 @@ class DataInitializer {
     private suspend fun createSchema(tenant: Tenant) {
         log.debug { "Creating schema and test data ..." }
 
-        suspendTransactionWithTenant {
+        suspendTransaction {
             val currentSchema = getSchemaDefinition(tenant)
             SchemaUtils.createSchema(currentSchema)
             SchemaUtils.setSchema(currentSchema)
 
-            @Suppress("DEPRECATION")
-            SchemaUtils.createMissingTablesAndColumns(ActorTable, MovieTable, ActorInMovieTable)
+
+            SchemaUtils.create(ActorTable, MovieTable, ActorInMovieTable)
+            // @Suppress("DEPRECATION")
+            // SchemaUtils.createMissingTablesAndColumns()
         }
     }
 

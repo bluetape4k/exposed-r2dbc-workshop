@@ -25,14 +25,17 @@ class LettuceSuspendedCacheManager(
         ttlSeconds: Long? = null,
         codec: LettuceBinaryCodec<V>? = null,
     ): LettuceSuspendedCache<K, V> {
+        val ttl = ttlSeconds ?: this.ttlSeconds
+        val redisCodec = codec ?: this.codec
+
         return caches.computeIfAbsent(name) {
-            val conn = redisClient.connect(codec ?: this@LettuceSuspendedCacheManager.codec)
+            val conn = redisClient.connect(redisCodec)
             val commands = conn.coroutines() as RedisCoroutinesCommands<String, V>
 
             LettuceSuspendedCache<K, V>(
                 name = name,
                 commands = commands,
-                ttlSeconds = ttlSeconds ?: this@LettuceSuspendedCacheManager.ttlSeconds,
+                ttlSeconds = ttl,
             )
         } as LettuceSuspendedCache<K, V>
     }

@@ -3,7 +3,7 @@ package exposed.r2dbc.workshop.springwebflux.controller
 import exposed.r2dbc.workshop.springwebflux.AbstractSpringWebfluxTest
 import exposed.r2dbc.workshop.springwebflux.domain.ActorDTO
 import io.bluetape4k.junit5.coroutines.runSuspendTest
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.spring.tests.httpDelete
 import io.bluetape4k.spring.tests.httpGet
@@ -23,7 +23,7 @@ class ActorControllerTest(
     @Autowired private val client: WebTestClient,
 ): AbstractSpringWebfluxTest() {
 
-    companion object: KLogging() {
+    companion object: KLoggingChannel() {
         private fun newActorDTO(): ActorDTO = ActorDTO(
             firstName = faker.name().firstName(),
             lastName = faker.name().lastName(),

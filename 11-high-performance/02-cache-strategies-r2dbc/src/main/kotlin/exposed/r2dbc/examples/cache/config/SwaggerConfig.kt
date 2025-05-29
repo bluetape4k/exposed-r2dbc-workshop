@@ -27,7 +27,7 @@ class SwaggerConfig {
 
     private val info by unsafeLazy {
         Info().title(buildProps.name)
-            .description("Spring Webflux 에서 Exposed R2dbc + Redisson Cache 를 이용한 고성능 애플리케이션 개발 워크샵")
+            .description("Spring Webflux 에서 Exposed R2dbc + Redisson Cache 를 이용한 다양한 캐시 전략 예제")
             .version(buildProps.version)
             .contact(contact)
             .license(license)

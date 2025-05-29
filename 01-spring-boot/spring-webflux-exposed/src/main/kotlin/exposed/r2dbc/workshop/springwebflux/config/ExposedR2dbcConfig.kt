@@ -118,9 +118,10 @@ class ExposedR2dbcConfig {
         val poolConfig = ConnectionPoolConfiguration.builder(connectionFactory)
             .maxIdleTime(Duration.ofMinutes(30))
             .initialSize(5)
-            .maxSize(max(Runtimex.availableProcessors * 2, 10))
+            .minIdle(5)
+            .maxSize(max(Runtimex.availableProcessors * 8, 100))
             .acquireRetry(3)
-            .maxAcquireTime(Duration.ofSeconds(5))
+            .maxAcquireTime(Duration.ofSeconds(3))
             .validationQuery("SELECT 1")
             .build()
 

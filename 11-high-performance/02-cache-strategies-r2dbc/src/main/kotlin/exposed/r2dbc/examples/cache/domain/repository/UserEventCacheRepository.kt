@@ -35,7 +35,7 @@ class UserEventCacheRepository(
         statement: BatchInsertStatement,
         entity: UserEventDTO,
     ) {
-        log.debug { "Insert entity: $entity" }
+        log.debug { "Insert entity to DB: $entity" }
 
         if (entity.id != 0L) {
             statement[UserEventTable.id] = entity.id
@@ -52,7 +52,7 @@ class UserEventCacheRepository(
         statement: UpdateStatement,
         entity: UserEventDTO,
     ) {
-        log.debug { "Update entity: $entity" }
+        log.debug { "Update entity to DB: $entity" }
 
         statement[UserEventTable.username] = entity.username
         statement[UserEventTable.eventSource] = entity.eventSource
