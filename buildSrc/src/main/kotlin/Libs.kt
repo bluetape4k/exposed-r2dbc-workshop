@@ -1381,7 +1381,9 @@ object Libs {
     val javers_spring_boot_starter_sql = javers("spring-boot-starter-sql")
 
     // MyBatis Mapping 에 사용한다
-    const val byte_buddy = "net.bytebuddy:byte-buddy:1.17.3"   // https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy-agent
+    // MyBatis Mapping 에 사용한다
+    const val byte_buddy = "net.bytebuddy:byte-buddy:1.17.5"   // https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy
+    const val byte_buddy_agent = "net.bytebuddy:byte-buddy-agent:1.17.5"   // https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy-agent
 
     const val hikaricp = "com.zaxxer:HikariCP:6.3.0"                    // https://mvnrepository.com/artifact/com.zaxxer/HikariCP
     const val tomcat_jdbc = "org.apache.tomcat:tomcat-jdbc:10.1.28"      // https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-jdbc
