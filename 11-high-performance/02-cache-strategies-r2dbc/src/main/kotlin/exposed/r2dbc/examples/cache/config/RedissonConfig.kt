@@ -18,8 +18,6 @@ class RedissonConfig {
 
     @Bean
     fun redissonClient(): RedissonClient {
-        // val env = System.getenv()
-
         val config = Config().apply {
             useSingleServer()
                 .setAddress(redis.url)

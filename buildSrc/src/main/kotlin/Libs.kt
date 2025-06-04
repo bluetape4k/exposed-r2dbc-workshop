@@ -24,7 +24,7 @@ object Plugins {
         const val docker_compose = "0.17.12"  // https://plugins.gradle.org/plugin/com.avast.gradle.docker-compose
 
         // 참고: https://docs.gatling.io/reference/integrations/build-tools/gradle-plugin/
-        const val gatling = "3.14.1"  // https://plugins.gradle.org/plugin/io.gatling.gradle
+        const val gatling = "3.14.3"  // https://plugins.gradle.org/plugin/io.gatling.gradle
 
         const val graalvm_native = "0.10.6" // https://mvnrepository.com/artifact/org.graalvm.buildtools.native/org.graalvm.buildtools.native.gradle.plugin
     }

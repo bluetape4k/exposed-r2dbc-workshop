@@ -30,9 +30,8 @@ class UserEventCacheRepositoryTest(
     @BeforeEach
     fun setup() {
         runBlocking {
-            repository.invalidateAll()
-
             suspendTransaction {
+                repository.invalidateAll()
                 UserEventTable.deleteAll()
             }
         }
