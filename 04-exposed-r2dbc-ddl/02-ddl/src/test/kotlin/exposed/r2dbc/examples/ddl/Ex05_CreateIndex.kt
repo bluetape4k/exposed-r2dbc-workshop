@@ -210,7 +210,7 @@ class Ex05_CreateIndex: R2dbcExposedTestBase() {
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `functional index 생성`(testDB: TestDB) = runTest {
         // H2 does not support functional indexes
-        Assumptions.assumeTrue { testDB !in TestDB.ALL_H2 && testDB != TestDB.MYSQL_V5 && testDB != TestDB.MARIADB }
+        Assumptions.assumeTrue { testDB in setOf(TestDB.POSTGRESQL, TestDB.MYSQL_V8) }
 
         val tester = object: IntIdTable("tester") {
             val amount = integer("amount")
