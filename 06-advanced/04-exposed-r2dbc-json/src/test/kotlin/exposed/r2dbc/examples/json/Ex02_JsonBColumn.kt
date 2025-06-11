@@ -63,6 +63,7 @@ import org.junit.jupiter.params.provider.MethodSource
 /**
  * `jsonb` 컬럼 사용 예제
  */
+@Suppress("DEPRECATION")
 class Ex02_JsonBColumn: R2dbcExposedJsonTest() {
 
     companion object: KLoggingChannel()

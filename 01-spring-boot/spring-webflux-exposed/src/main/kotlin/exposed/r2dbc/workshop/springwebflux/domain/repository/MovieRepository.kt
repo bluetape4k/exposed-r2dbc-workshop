@@ -1,6 +1,5 @@
 package exposed.r2dbc.workshop.springwebflux.domain.repository
 
-import exposed.r2dbc.workshop.springwebflux.domain.ActorDTO
 import exposed.r2dbc.workshop.springwebflux.domain.MovieActorCountDTO
 import exposed.r2dbc.workshop.springwebflux.domain.MovieDTO
 import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.ActorInMovieTable
@@ -12,12 +11,13 @@ import exposed.r2dbc.workshop.springwebflux.domain.toActorDTO
 import exposed.r2dbc.workshop.springwebflux.domain.toMovieDTO
 import exposed.r2dbc.workshop.springwebflux.domain.toMovieWithActorDTO
 import exposed.r2dbc.workshop.springwebflux.domain.toMovieWithProducingActorDTO
+import io.bluetape4k.coroutines.flow.extensions.bufferUntilChanged
 import io.bluetape4k.logging.KLogging
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.toList
-import org.eclipse.collections.impl.factory.Multimaps
 import org.jetbrains.exposed.v1.core.Join
 import org.jetbrains.exposed.v1.core.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.v1.core.count
@@ -126,8 +126,7 @@ class MovieRepository {
     suspend fun getAllMoviesWithActors(): List<MovieWithActorDTO> {
         log.debug { "Get all movies with actors." }
 
-        val join = MovieTable.innerJoin(ActorInMovieTable).innerJoin(ActorTable)
-        val movies = join
+        return MovieActorJoin
             .select(
                 MovieTable.id,
                 MovieTable.name,
@@ -137,23 +136,20 @@ class MovieRepository {
                 ActorTable.firstName,
                 ActorTable.lastName,
                 ActorTable.birthday
-            ).toList()
+            )
+            .map { row ->
+                val movie = row.toMovieDTO()
+                val actor = row.toActorDTO()
 
-        val movieDtos = hashMapOf<Long, MovieDTO>()
-        val actorDtos = Multimaps.mutable.set.of<Long, ActorDTO>()
-
-        movies.forEach { row ->
-            val movieId = row[MovieTable.id].value
-
-            if (!movieDtos.containsKey(movieId)) {
-                movieDtos[movieId] = row.toMovieDTO()
+                movie to actor
             }
-            actorDtos.getIfAbsentPutAll(movieId, mutableSetOf(row.toActorDTO()))
-        }
-
-        return movieDtos.map { (id, movie) ->
-            movie.toMovieWithActorDTO(actorDtos.get(id) ?: emptySet())
-        }
+            .bufferUntilChanged { it.first.id }
+            .mapNotNull { pairs ->
+                val movie = pairs.first().first
+                val actors = pairs.map { it.second }
+                movie.toMovieWithActorDTO(actors)
+            }
+            .toList()
     }
 
     /**

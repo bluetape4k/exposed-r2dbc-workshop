@@ -53,6 +53,7 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+@Suppress("DEPRECATION")
 class Ex05_ArrayColumnType: R2dbcExposedTestBase() {
 
     companion object: KLoggingChannel()

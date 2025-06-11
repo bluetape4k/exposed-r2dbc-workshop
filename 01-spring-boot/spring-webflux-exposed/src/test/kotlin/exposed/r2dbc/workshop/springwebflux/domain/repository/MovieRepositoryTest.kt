@@ -96,7 +96,7 @@ class MovieRepositoryTest(
     @Test
     fun `get all movies and actors`() = runSuspendIO {
         val movieWithActors = suspendTransaction(readOnly = true) {
-            movieRepository.getAllMoviesWithActors()
+            movieRepository.getAllMoviesWithActors().toList()
         }
         movieWithActors.shouldNotBeEmpty()
         movieWithActors.forEach { movie ->

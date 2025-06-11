@@ -1,7 +1,6 @@
 package exposed.r2dbc.examples.jackson
 
 import io.bluetape4k.jackson.JacksonSerializer
-import io.bluetape4k.jackson.deserializeFromString
 import org.jetbrains.exposed.v1.core.Expression
 import org.jetbrains.exposed.v1.core.ExpressionWithColumnType
 import org.jetbrains.exposed.v1.core.Function
