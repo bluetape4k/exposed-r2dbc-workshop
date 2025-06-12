@@ -44,6 +44,7 @@ allprojects {
     repositories {
         mavenCentral()
         google()
+        mavenLocal()
         maven {
             name = "bluetape4k"
             url = uri("https://maven.pkg.github.com/bluetape4k/bluetape4k-projects")
@@ -175,10 +176,10 @@ subprojects {
             }
         }
 
-        dokkaHtml.configure {
-            val dokkaDir = layout.buildDirectory.asFile.get().resolve("dokka")
-            outputDirectory.set(dokkaDir)
-            // outputDirectory.set(layout.buildDirectory.asFile.get().resolve("dokka"))
+        dokka {
+            dokkaPublications.html {
+                outputDirectory.set(project.file("docs/api"))
+            }
         }
 
         clean {
