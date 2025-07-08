@@ -19,7 +19,6 @@ plugins {
 
     id(Plugins.dependency_management) version Plugins.Versions.dependency_management
     id(Plugins.spring_boot) version Plugins.Versions.spring_boot apply false
-    id(Plugins.quarkus) version Plugins.Versions.quarkus apply false
 
     id(Plugins.dokka) version Plugins.Versions.dokka
     id(Plugins.testLogger) version Plugins.Versions.testLogger
@@ -55,7 +54,7 @@ allprojects {
         }
     }
     configurations.all {
-        resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.DAYS)
+        resolutionStrategy.cacheChangingModulesFor(1, TimeUnit.DAYS)
     }
 }
 
@@ -217,8 +216,6 @@ subprojects {
             mavenBom(Libs.okhttp3_bom)
             mavenBom(Libs.grpc_bom)
             mavenBom(Libs.protobuf_bom)
-            mavenBom(Libs.metrics_bom)
-            mavenBom(Libs.fabric8_kubernetes_client_bom)
             mavenBom(Libs.resilience4j_bom)
             mavenBom(Libs.netty_bom)
             mavenBom(Libs.jackson_bom)
