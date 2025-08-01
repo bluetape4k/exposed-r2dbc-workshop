@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalTime::class)
+
 package exposed.r2dbc.examples.kotlin.datetime
 
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
@@ -6,7 +8,6 @@ import exposed.r2dbc.shared.tests.withTables
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import org.amshove.kluent.shouldBeEqualTo
@@ -23,6 +24,8 @@ import org.jetbrains.exposed.v1.r2dbc.select
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 /**
  * DATE, DATEIME 컬럼을 [dateLiteral], [dateTimeLiteral] 으로 사용하는 예

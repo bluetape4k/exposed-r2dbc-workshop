@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalTime::class)
+
 package exposed.r2dbc.examples.kotlin.datetime
 
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
@@ -16,9 +18,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
@@ -83,7 +83,9 @@ import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.time.Clock
 import kotlin.time.DurationUnit
+import kotlin.time.ExperimentalTime
 import kotlin.time.toDuration
 
 class Ex02_Defaults: R2dbcExposedTestBase() {
@@ -833,7 +835,7 @@ class Ex02_Defaults: R2dbcExposedTestBase() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun testTimestampDefaultDoesNotTriggerAlterStatement(testDB: TestDB) = runTest {
-        val instant = Instant.parse("2023-05-04T05:04:00.700Z") // In UTC
+        val instant = kotlin.time.Instant.parse("2023-05-04T05:04:00.700Z") // In UTC
 
         val tester = object: Table("tester") {
             val timestampWithDefault = timestamp("timestampWithDefault").default(instant)

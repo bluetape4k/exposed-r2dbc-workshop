@@ -16,7 +16,6 @@ import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldBeTrue
 import org.jetbrains.exposed.v1.core.Case
-import org.jetbrains.exposed.v1.core.CaseWhenElse
 import org.jetbrains.exposed.v1.core.Coalesce
 import org.jetbrains.exposed.v1.core.Op
 import org.jetbrains.exposed.v1.core.SqlExpressionBuilder
@@ -455,10 +454,9 @@ class Ex23_Conditions: R2dbcExposedTestBase() {
                 .Else(Op.nullOp())
 
             // Case().When().Else() invokes CaseWhenElse() so the 2 formats should be interchangeable as arguments
-            val caseCondition2 = CaseWhenElse(
-                Case().When(condition, stringLiteral(original)),
-                Op.nullOp()
-            )
+            val caseCondition2 = Case()
+                .When(condition, stringLiteral(original))
+                .Else(Op.nullOp())
 
             val function1 = Coalesce(caseCondition1, stringLiteral(copy))
             val function2 = Coalesce(caseCondition2, stringLiteral(copy))

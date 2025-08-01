@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalTime::class)
+
 package exposed.r2dbc.examples.kotlin.datetime
 
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
@@ -13,15 +15,14 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
 import kotlinx.datetime.minus
+import kotlinx.datetime.number
 import kotlinx.datetime.plus
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toKotlinLocalDate
@@ -87,7 +88,10 @@ import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit.MILLIS
+import kotlin.time.Clock
 import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 class Ex01_KotlinDateTime: R2dbcExposedTestBase() {
 
@@ -160,8 +164,8 @@ class Ex01_KotlinDateTime: R2dbcExposedTestBase() {
                 .single()[CitiesTime.local_time.second()]
 
 
-            insertedMonth shouldBeEqualTo now.month.value
-            insertedDay shouldBeEqualTo now.dayOfMonth
+            insertedMonth shouldBeEqualTo now.month.number
+            insertedDay shouldBeEqualTo now.day
             insertedHour shouldBeEqualTo now.hour
             insertedMinute shouldBeEqualTo now.minute
             insertedSecond shouldBeEqualTo now.second
