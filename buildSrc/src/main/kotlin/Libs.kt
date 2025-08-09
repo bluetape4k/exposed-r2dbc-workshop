@@ -90,22 +90,22 @@ object Versions {
     const val springfox_swagger = "3.0.0"
     const val problem = "0.29.1"              // https://mvnrepository.com/artifact/org.zalando/problem-spring-web
 
-    const val bucket4j = "8.10.1"       // https://mvnrepository.com/artifact/com.bucket4j/bucket4j-core
+    const val bucket4j = "8.14.0"       // https://mvnrepository.com/artifact/com.bucket4j/bucket4j-core
     const val resilience4j = "2.3.0"   // https://mvnrepository.com/artifact/io.github.resilience4j/resilience4j-bom
     const val netty = "4.2.3.Final"  // https://mvnrepository.com/artifact/io.netty/netty-all
 
     const val aws = "1.12.772"          // https://mvnrepository.com/artifact/com.amazonaws
-    const val aws2 = "2.31.47"              // https://mvnrepository.com/artifact/software.amazon.awssdk/aws-sdk-java
-    const val aws2_crt = "0.38.3"           // https://mvnrepository.com/artifact/software.amazon.awssdk.crt/aws-crt
-    const val aws_kotlin = "1.4.89"        // https://mvnrepository.com/artifact/aws.sdk.kotlin/aws-http-jvm
-    const val aws_smithy_kotlin = "1.4.16" // https://mvnrepository.com/artifact/aws.smithy.kotlin/http-client-engine-crt-jvm
+    const val aws2 = "2.32.18"              // https://mvnrepository.com/artifact/software.amazon.awssdk/aws-sdk-java
+    const val aws2_crt = "0.38.8"           // https://mvnrepository.com/artifact/software.amazon.awssdk.crt/aws-crt
+    const val aws_kotlin = "1.5.13"        // https://mvnrepository.com/artifact/aws.sdk.kotlin/aws-http-jvm
+    const val aws_smithy_kotlin = "1.5.4" // https://mvnrepository.com/artifact/aws.smithy.kotlin/http-client-engine-crt-jvm
 
     const val aws_spring_cloud = "3.4.0"  // https://mvnrepository.com/artifact/io.awspring.cloud/spring-cloud-aws-starter
 
-    const val grpc = "1.68.2"       // https://mvnrepository.com/artifact/io.grpc/grpc-stub
-    const val grpc_kotlin = "1.4.1" // https://mvnrepository.com/artifact/io.grpc/grpc-kotlin-stub
-    const val protobuf = "4.29.1"   // https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java
-    const val grpc_google_common_protos = "2.50.0" // https://mvnrepository.com/artifact/com.google.api.grpc/proto-google-common-protos
+    const val grpc = "1.74.0"       // https://mvnrepository.com/artifact/io.grpc/grpc-stub
+    const val grpc_kotlin = "1.4.3" // https://mvnrepository.com/artifact/io.grpc/grpc-kotlin-stub
+    const val protobuf = "4.31.1"   // https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java
+    const val grpc_google_common_protos = "2.60.0" // https://mvnrepository.com/artifact/com.google.api.grpc/proto-google-common-protos
     const val avro = "1.12.0"       // https://mvnrepository.com/artifact/org.apache.avro/avro
 
     const val feign = "13.6"        // https://mvnrepository.com/artifact/io.github.openfeign/feign-core
@@ -131,35 +131,35 @@ object Versions {
     // NOTE: 이 경우 기존 javax 를 사용하는 버전과 충돌이 생길 수 있으니 조심하세요
     // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
 
-    const val hibernate = "6.6.14.Final"           // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
+    const val hibernate = "6.6.24.Final"           // https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
     const val hibernate_reactive = "2.4.7.Final"  // https://mvnrepository.com/artifact/org.hibernate.reactive/hibernate-reactive-core
     const val hibernate_validator = "8.0.3.Final" // https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator
     const val querydsl = "5.1.0"                  // https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa
 
     const val exposed = "1.0.0-beta-5"       // https://mvnrepository.com/artifact/org.jetbrains.exposed/exposed-core
 
-    const val agroal = "2.6"          // https://mvnrepository.com/artifact/io.agroal/agroal-api
+    const val agroal = "2.7.1"          // https://mvnrepository.com/artifact/io.agroal/agroal-api
 
     const val blaze_persistence = "3.22.2" // https://mvnrepository.com/artifact/io.quarkus.platform/quarkus-blaze-persistence-bom
     const val javers = "7.8.0"             // https://mvnrepository.com/artifact/org.javers/javers-core
 
     const val slf4j = "2.0.17"      // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     const val logback = "1.5.18"     // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
-    const val log4j = "2.24.3"      // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+    const val log4j = "2.25.1"      // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
 
     const val prometheus = "0.16.0"     // https://mvnrepository.com/artifact/io.prometheus/simpleclient
 
-    const val micrometer = "1.14.4"         // https://mvnrepository.com/artifact/io.micrometer/micrometer-core
-    const val micrometerTracing = "1.4.3"   // https://mvnrepository.com/artifact/io.micrometer/micrometer-tracing
-    const val micrometerContextPropagation = "1.1.2" // https://mvnrepository.com/artifact/io.micrometer/context-propagation
+    const val micrometer = "1.15.2"         // https://mvnrepository.com/artifact/io.micrometer/micrometer-core
+    const val micrometerTracing = "1.5.2"   // https://mvnrepository.com/artifact/io.micrometer/micrometer-tracing
+    const val micrometerContextPropagation = "1.1.3" // https://mvnrepository.com/artifact/io.micrometer/context-propagation
 
-    const val opentelemetry = "1.48.0" // https://mvnrepository.com/artifact/io.opentelemetry/opentelemetry-bom
+    const val opentelemetry = "1.52.0" // https://mvnrepository.com/artifact/io.opentelemetry/opentelemetry-bom
     const val opentelemetryAlpha = "$opentelemetry-alpha" // https://mvnrepository.com/artifact/io.opentelemetry/opentelemetry-bom-alpha
 
-    const val opentelemetryJavaAgent = "2.13.3" // https://mvnrepository.com/artifact/io.opentelemetry.javaagent/opentelemetry-javaagent
+    const val opentelemetryJavaAgent = "2.18.1" // https://mvnrepository.com/artifact/io.opentelemetry.javaagent/opentelemetry-javaagent
     const val opentelemetryInstrumentationAlpha = "$opentelemetryJavaAgent-alpha" // https://mvnrepository.com/artifact/io.opentelemetry.instrumentation/opentelemetry-instrumentation-bom-alpha
 
-    const val caffeine = "3.2.0"        // https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
+    const val caffeine = "3.2.2"        // https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
     const val ehcache = "3.10.8"        // https://mvnrepository.com/artifact/org.ehcache/ehcache
     const val cache2k = "2.6.1.Final"   // https://mvnrepository.com/artifact/org.cache2k/cache2k-core
 
@@ -638,7 +638,7 @@ object Libs {
     val resilience4j_vertx = resilience4j("vertx")
 
     // Bucket4j
-    fun bucket4j(module: String) = "com.bucket4j:bucket4j-$module:${Versions.bucket4j}"
+    fun bucket4j(module: String) = "com.bucket4j:bucket4j_jdk17-$module:${Versions.bucket4j}"
     val bucket4j_caffeine = bucket4j("caffeine")
     val bucket4j_core = bucket4j("core")
     val bucket4j_jcache = bucket4j("jcache")
@@ -646,11 +646,12 @@ object Libs {
     val bucket4j_hazelcast_all = bucket4j("hazelcast-all")
     val bucket4j_ignite = bucket4j("ignite")
     val bucket4j_infinispan_all = bucket4j("infinispan-all")
-    val bucket4j_redis = bucket4j("redis")
+    val bucket4j_redisson = bucket4j("redisson")
+    val bucket4j_lettuce = bucket4j("lettuce")
 
     // Bucket4j Spring Boot
     // https://mvnrepository.com/artifact/com.giffing.bucket4j.spring.boot.starter/bucket4j-spring-boot-starter
-    const val bucket4j_spring_boot_starter = "com.giffing.bucket4j.spring.boot.starter:bucket4j-spring-boot-starter:0.12.8"
+    const val bucket4j_spring_boot_starter = "com.giffing.bucket4j.spring.boot.starter:bucket4j-spring-boot-starter:0.12.9"
 
     // Netty
     fun netty(module: String, version: String = Versions.netty) = "io.netty:netty-$module:$version"
@@ -1413,8 +1414,8 @@ object Libs {
     // https://github.com/j-easy/easy-random 으로 Upgrade 하기
     const val random_beans = "io.github.benas:random-beans:${Versions.random_beans}"
 
-    const val mockserver_netty = "org.mock-server:mockserver-netty:5.10.0"
-    const val mockserver_client_java = "org.mock-server:mockserver-client-java:5.10.0"
+    const val mockserver_netty = "org.mock-server:mockserver-netty:5.15.0"      // https://mvnrepository.com/artifact/org.mock-server/mockserver-netty
+    const val mockserver_client_java = "org.mock-server:mockserver-client-java:5.15.0"
 
     const val system_rules = "com.github.stefanbirkner:system-rules:1.19.0"
 
@@ -1494,7 +1495,7 @@ object Libs {
     const val wiremock_jre8 = "com.github.tomakehurst:wiremock-jre8:2.33.2"
 
     // OpenSearch Testcontainers
-    const val testcontainers_opensearch = "org.opensearch:opensearch-testcontainers:2.1.3"  // https://mvnrepository.com/artifact/org.opensearch/opensearch-testcontainers
+    const val testcontainers_opensearch = "org.opensearch:opensearch-testcontainers:3.0.2"  // https://mvnrepository.com/artifact/org.opensearch/opensearch-testcontainers
 
     // rest-assured
     fun restAssured(module: String) = "io.rest-assured:$module:${Versions.rest_assured}"
