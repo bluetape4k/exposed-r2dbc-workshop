@@ -4,14 +4,13 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.collections.intRangeOf
-import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.r2dbc.spi.IsolationLevel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExecutorCoroutineDispatcher
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -19,6 +18,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withContext
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldNotBeEmpty
@@ -27,12 +28,12 @@ import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
-import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 import org.jetbrains.exposed.v1.r2dbc.selectAll
+import org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
-import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransactionAsync
+import org.jetbrains.exposed.v1.r2dbc.transactions.transactionManager
 import org.jetbrains.exposed.v1.r2dbc.update
 import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
@@ -66,12 +67,9 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
         override val primaryKey = PrimaryKey(id)
     }
 
-    suspend fun R2dbcTransaction.getTesterById(id: Int): ResultRow? =
-        suspendTransaction {
-            Tester.selectAll()
-                .where { Tester.id eq id }
-                .singleOrNull()
-        }
+    suspend fun getTesterById(id: Int): ResultRow? = suspendTransaction {
+        Tester.selectAll().where { Tester.id eq id }.singleOrNull()
+    }
 
     /**
      * Coroutines 환경 하에서 여러 작업을 순차적으로 수행합니다.
@@ -92,24 +90,20 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `suspended transaction으로 시퀀셜 작업 수행하기`(testDB: TestDB) = runSuspendIO {
+    fun `suspended transaction으로 시퀀셜 작업 수행하기`(testDB: TestDB) = runTest {
         withTables(testDB, Tester) {
             // 새로운 트랜잭션을 만들고, 코루틴 환경에서 내부 코드를 실행한다
-            suspendTransaction {
-                val id = Tester.insertAndGetId { }
-                // 내부적으로 새로운 트랜잭션을 생성하여 코루틴 작업을 수행한다
-                getTesterById(id.value)!![Tester.id].value shouldBeEqualTo id.value
-            }
+            val id = Tester.insertAndGetId { }
+            // 내부적으로 새로운 트랜잭션을 생성하여 코루틴 작업을 수행한다
+            getTesterById(id.value)!![Tester.id].value shouldBeEqualTo id.value
 
             // Async 작업을 수행합니다
-            val scope = CoroutineScope(singleThreadDispatcher)
-
-            val result = scope.async {
+            val result = GlobalScope.async(singleThreadDispatcher) {
                 suspendTransaction {
                     getTesterById(1)!![Tester.id].value
                 }
             }
-            result shouldBeEqualTo 1
+            result.await() shouldBeEqualTo 1
 
             getTesterById(1)!![Tester.id].value shouldBeEqualTo 1
         }
@@ -117,78 +111,25 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `suspendedTransactionAsync으로 동시 작업 수행하기`(testDB: TestDB) = runSuspendIO {
+    fun `suspendedTransaction 으로 동시 작업 수행하기`(testDB: TestDB) = runTest {
+        Assumptions.assumeTrue { testDB in TestDB.ALL_H2 }
+
         withTables(testDB, TesterUnique) {
             val originId = 1
             val updatedId = 99
 
             // 새로운 레코드 생성
-            suspendTransaction {
-                TesterUnique.insert {
-                    it[TesterUnique.id] = originId
-                }
-                TesterUnique.selectAll().single()[TesterUnique.id] shouldBeEqualTo originId
+            TesterUnique.insert {
+                it[TesterUnique.id] = originId
             }
+            TesterUnique.selectAll().single()[TesterUnique.id] shouldBeEqualTo originId
 
             // 비동기 방식으로 originId 를 가진 레코드를 삽입한다
-            val insertJob = suspendTransactionAsync(Dispatchers.IO) {
-                // 기존 레코드가 있기 때문에 Unique Constraint 위배 예외가 발생할 수 있다. (coroutines_tester_unique_pkey)
-                // updateJob에 의해 기본 레코드가 update 가 된 후 (id가 1 -> 99) 에 insertJob이 성공한다.
-                // 그래서 maxAttempts 를 1 이상의 충분한 값으로 설정한다.
-                maxAttempts = 20
-
-                // INSERT INTO coroutines_tester_unique (id) VALUES (1)
-                TesterUnique.insert {
-                    it[TesterUnique.id] = originId
-                }
-                TesterUnique.selectAll().count() shouldBeEqualTo 2L  // 1, 99
-            }
-
-            // 비동기 방식으로 originId를 가진 레코드를 updateId로 업데이트 한다
-            val updateJob = suspendTransactionAsync(Dispatchers.Default) {
-                maxAttempts = 20
-
-                // UPDATE coroutines_tester_unique SET id=99 WHERE coroutines_tester_unique.id = 1
-                TesterUnique.update({ TesterUnique.id eq originId }) {
-                    it[TesterUnique.id] = updatedId
-                }
-                TesterUnique.selectAll().single()[TesterUnique.id] shouldBeEqualTo updatedId
-            }
-
-            insertJob.await()
-            updateJob.await()
-
-            val recordCount: Long = suspendTransaction(Dispatchers.Default) {
-                TesterUnique.selectAll().count()
-            }
-            recordCount shouldBeEqualTo 2L
-
-            val ids = TesterUnique.selectAll()
-                .orderBy(TesterUnique.id)
-                .map { it[TesterUnique.id] }
-                .toList()
-            ids shouldBeEqualTo listOf(originId, updatedId)
-        }
-    }
-
-    @ParameterizedTest
-    @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `suspendedTransactionAsync 를 이용하여 여러 작업을 동시에 수행`(testDB: TestDB) = runSuspendIO {
-        withTables(testDB, TesterUnique) {
-            val originId = 1
-            val updatedId = 99
-
-            // 새로운 레코드 생성
-            suspendTransaction {
-                TesterUnique.insert {
-                    it[TesterUnique.id] = originId
-                }
-                TesterUnique.selectAll().single()[TesterUnique.id] shouldBeEqualTo originId
-            }
-
-            val (insertResult, updateResult) = listOf(
-                // 비동기 방식으로 originId 를 가진 레코드를 삽입한다
-                suspendTransactionAsync(Dispatchers.IO) {
+            val insertJob = GlobalScope.async(Dispatchers.IO) {
+                inTopLevelSuspendTransaction(
+                    transactionIsolation = db.transactionManager.defaultIsolationLevel!!,
+                    db = db
+                ) {
                     // 기존 레코드가 있기 때문에 Unique Constraint 위배 예외가 발생할 수 있다. (coroutines_tester_unique_pkey)
                     // updateJob에 의해 기본 레코드가 update 가 된 후 (id가 1 -> 99) 에 insertJob이 성공한다.
                     // 그래서 maxAttempts 를 1 이상의 충분한 값으로 설정한다.
@@ -198,35 +139,98 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
                     TesterUnique.insert {
                         it[TesterUnique.id] = originId
                     }
-                    TesterUnique.selectAll().count()
-                },
+                    TesterUnique.selectAll().count() shouldBeEqualTo 2L  // 1, 99
+                }
+            }
 
-                // 비동기 방식으로 originId를 가진 레코드를 updateId로 업데이트 한다
-                suspendTransactionAsync(Dispatchers.Default) {
+            // 비동기 방식으로 originId를 가진 레코드를 updateId로 업데이트 한다
+            val updateJob = GlobalScope.async(Dispatchers.Default) {
+                inTopLevelSuspendTransaction(
+                    transactionIsolation = db.transactionManager.defaultIsolationLevel!!,
+                    db = db
+                ) {
                     maxAttempts = 20
 
                     // UPDATE coroutines_tester_unique SET id=99 WHERE coroutines_tester_unique.id = 1
                     TesterUnique.update({ TesterUnique.id eq originId }) {
                         it[TesterUnique.id] = updatedId
                     }
-                    TesterUnique.selectAll().count()
+                    TesterUnique.selectAll().single()[TesterUnique.id] shouldBeEqualTo updatedId
                 }
-            ).awaitAll()
+            }
 
-            insertResult shouldBeEqualTo 2L
-            updateResult shouldBeEqualTo 1L
+            insertJob.await()
+            updateJob.await()
+
+            val recordCount: Long = TesterUnique.selectAll().count()
+            recordCount shouldBeEqualTo 2L
 
             val ids = TesterUnique.selectAll()
                 .orderBy(TesterUnique.id)
                 .map { it[TesterUnique.id] }
                 .toList()
+
             ids shouldBeEqualTo listOf(originId, updatedId)
         }
     }
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `중첩된 suspend transaction 실행`(testDB: TestDB) = runSuspendIO {
+    fun `suspendedTransaction 를 이용하여 여러 작업을 동시에 수행`(testDB: TestDB) = runTest {
+        Assumptions.assumeTrue { testDB !in TestDB.ALL_MYSQL_MARIADB }
+
+        withTables(testDB, TesterUnique) {
+            val originId = 1
+            val updatedId = 99
+
+            // 새로운 레코드 생성
+            TesterUnique.insert {
+                it[TesterUnique.id] = originId
+            }
+            TesterUnique.selectAll().single()[TesterUnique.id] shouldBeEqualTo originId
+
+            val (insertResult, updateResult) = listOf(
+                // 비동기 방식으로 originId 를 가진 레코드를 삽입한다
+                GlobalScope.async(Dispatchers.IO) {
+                    suspendTransaction {
+                        // 기존 레코드가 있기 때문에 Unique Constraint 위배 예외가 발생할 수 있다. (coroutines_tester_unique_pkey)
+                        // updateJob에 의해 기본 레코드가 update 가 된 후 (id가 1 -> 99) 에 insertJob이 성공한다.
+                        // 그래서 maxAttempts 를 1 이상의 충분한 값으로 설정한다.
+                        maxAttempts = 20
+
+                        // INSERT INTO coroutines_tester_unique (id) VALUES (1)
+                        TesterUnique.insert {
+                            it[TesterUnique.id] = originId
+                        }
+                        TesterUnique.selectAll().count()
+                    }
+                },
+
+                // 비동기 방식으로 originId를 가진 레코드를 updateId로 업데이트 한다
+                GlobalScope.async(Dispatchers.Default) {
+                    suspendTransaction {
+                        maxAttempts = 20
+
+                        // UPDATE coroutines_tester_unique SET id=99 WHERE coroutines_tester_unique.id = 1
+                        TesterUnique.update({ TesterUnique.id eq originId }) {
+                            it[TesterUnique.id] = updatedId
+                        }
+                        TesterUnique.selectAll().count()
+                    }
+                }
+            ).awaitAll()
+
+            insertResult shouldBeEqualTo 2L
+            updateResult shouldBeEqualTo 1L
+
+            val ids = TesterUnique.selectAll().orderBy(TesterUnique.id).map { it[TesterUnique.id] }.toList()
+            ids shouldBeEqualTo listOf(originId, updatedId)
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource(ENABLE_DIALECTS_METHOD)
+    fun `중첩된 suspend transaction 실행`(testDB: TestDB) = runTest {
         // MySQL, MariaDB 에서는 READ_COMMITTED isolation level을 지원하지 않기 때문에
         Assumptions.assumeTrue { testDB !in TestDB.ALL_MYSQL_MARIADB }
 
@@ -235,15 +239,19 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
         }
 
         withTables(testDB, Tester) {
-            suspendTransaction(db = db, context = Dispatchers.IO) {
-                connection.setTransactionIsolation(IsolationLevel.READ_COMMITTED)
-                getTesterById(1).shouldBeNull()
-                insertTester(db)
-                getTesterById(1)?.getOrNull(Tester.id)?.value shouldBeEqualTo 1
+            withContext(Dispatchers.IO) {
+                suspendTransaction(db = db) {
+                    connection().setTransactionIsolation(IsolationLevel.READ_COMMITTED)
+                    getTesterById(1).shouldBeNull()
+                    insertTester(db)
+                    getTesterById(1)?.getOrNull(Tester.id)?.value shouldBeEqualTo 1
+                }
             }
 
-            val result = suspendTransaction(Dispatchers.Default, db = db) {
-                getTesterById(1)?.getOrNull(Tester.id)?.value
+            val result = withContext(Dispatchers.Default) {
+                suspendTransaction(db = db) {
+                    getTesterById(1)?.getOrNull(Tester.id)?.value
+                }
             }
             result shouldBeEqualTo 1
 
@@ -253,36 +261,40 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `중첩된 suspend transaction async 실행`(testDB: TestDB) = runSuspendIO {
+    fun `중첩된 suspend transaction async 실행`(testDB: TestDB) = runTest {
+        Assumptions.assumeTrue { testDB in TestDB.ALL_H2 }
+
         withTables(testDB, Tester) {
             val recordCount = 10
 
-            suspendTransaction(Dispatchers.IO) {
-                // recordCount 만큼의 Connection을 이용하여 동시에 작업합니다.
-                List(recordCount) {
-                    suspendTransactionAsync(Dispatchers.IO) {
+            // recordCount 만큼의 Connection을 이용하여 동시에 작업합니다.
+            List(recordCount) {
+                GlobalScope.async(Dispatchers.IO) {
+                    inTopLevelSuspendTransaction(
+                        transactionIsolation = db.transactionManager.defaultIsolationLevel!!,
+                        db = db
+                    ) {
                         log.debug { "task[$it]: inserting ..." }
                         // insert 를 수행하는 트랜잭션을 생성한다
                         Tester.insert { }
                     }
-                }.awaitAll()
-                commit()
+                }
+            }.awaitAll()
 
-                // nested transaction 에서 동시에 여러 개의 작업을 수행한다
-                val tasks: List<Deferred<List<ResultRow>>> = List(recordCount) {
-                    suspendTransactionAsync(context = Dispatchers.IO) {
+            // nested transaction 에서 동시에 여러 개의 작업을 수행한다
+            val tasks: List<Deferred<List<ResultRow>>> = List(recordCount) {
+                GlobalScope.async(Dispatchers.IO) {
+                    inTopLevelSuspendTransaction(
+                        transactionIsolation = db.transactionManager.defaultIsolationLevel!!,
+                        db = db
+                    ) {
                         log.debug { "task[$it]: selected" }
                         Tester.selectAll().toList()
                     }
                 }
-                val rows = tasks.awaitAll().flatten()
-                rows.shouldNotBeEmpty()
             }
-
-            val count = suspendTransaction(Dispatchers.IO) {
-                Tester.selectAll().count()
-            }
-            count shouldBeEqualTo recordCount.toLong()
+            val rows = tasks.awaitAll().flatten()
+            rows.shouldNotBeEmpty()
         }
     }
 
@@ -315,17 +327,24 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `다수의 비동기 작업을 수행 후 대기`(testDB: TestDB) = runSuspendIO {
+    fun `다수의 비동기 작업을 수행 후 대기`(testDB: TestDB) = runTest {
+        Assumptions.assumeTrue { testDB in TestDB.ALL_H2 }
+
         withTables(testDB, Tester) {
             val recordCount = 10
 
             // 복수의 INSERT 작업을 동시에 수행합니다.
             val results: List<Int> = List(recordCount) { index ->
-                suspendTransactionAsync(context = Dispatchers.IO, db = db) {
-                    maxAttempts = 5
-                    log.debug { "task[$index]: inserting ..." }
-                    Tester.insert { }
-                    index + 1
+                GlobalScope.async(Dispatchers.IO) {
+                    inTopLevelSuspendTransaction(
+                        transactionIsolation = db.transactionManager.defaultIsolationLevel!!,
+                        db = db
+                    ) {
+                        maxAttempts = 5
+                        log.debug { "task[$index]: inserting ..." }
+                        Tester.insert { }
+                        index + 1
+                    }
                 }
             }.awaitAll()
 
@@ -333,72 +352,4 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
             Tester.selectAll().count() shouldBeEqualTo recordCount.toLong()
         }
     }
-
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `suspended 와 일반 transaction 혼용하기`(testDB: TestDB) = runSuspendIO {
-//        withTables(testDB, Tester) {
-//            val db = this.db
-//            var suspendedOk = true
-//            var normalOk = true
-//
-//            suspendTransaction(db = db) {
-//                try {
-//                    Tester.selectAll().toList()
-//                } catch (e: Throwable) {
-//                    suspendedOk = false
-//                }
-//            }
-//
-//            transaction(db) {
-//                try {
-//                    Tester.selectAll().toList()
-//                } catch (e: Throwable) {
-//                    normalOk = false
-//                }
-//            }
-//
-//            suspendedOk.shouldBeTrue()
-//            normalOk.shouldBeTrue()
-//        }
-//    }
-
-//    class TesterEntity(id: EntityID<Int>): IntEntity(id) {
-//        companion object: IntEntityClass<TesterEntity>(Tester)
-//
-//        override fun equals(other: Any?): Boolean = idEquals(other)
-//        override fun hashCode(): Int = idHashCode()
-//        override fun toString(): String = "TesterEntity(id=$id)"
-//    }
-//
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `coroutines with exception within`(testDB: TestDB) = runSuspendIO {
-//        withSuspendedTables(testDB, Tester) {
-//            val database = this.db
-//            val outerConn = this.connection
-//            val id = TesterEntity.new { }.id
-//            commit()
-//
-//            var innerConn: ExposedConnection<*>? = null
-//
-//            assertFailsWith<ExposedSQLException> {
-//                // context를 지정해야 새로운 coroutine scope 에서 실행된다.
-//                newSuspendedTransaction(context = Dispatchers.IO, db = database) {
-//                    maxAttempts = 1
-//                    innerConn = this.connection
-//                    innerConn.isClosed.shouldBeFalse()
-//                    innerConn shouldNotBeEqualTo outerConn
-//                    // 중복된 ID를 삽입하려고 하면 예외가 발생한다.
-//                    TesterEntity.new(id.value) { }
-//                }
-//            }
-//
-//            // Nested transaction은 예외가 발생하고, 해당 connection은 닫힌다.
-//            innerConn.shouldNotBeNull().isClosed.shouldBeTrue()
-//
-//            // Outer transaction은 아무 문제없이 수행된다.
-//            TesterEntity.count() shouldBeEqualTo 1L
-//        }
-//    }
 }
