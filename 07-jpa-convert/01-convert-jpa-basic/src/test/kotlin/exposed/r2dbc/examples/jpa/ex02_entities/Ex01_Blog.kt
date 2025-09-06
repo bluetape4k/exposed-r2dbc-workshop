@@ -7,12 +7,13 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.KLogging
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeTrue
+import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.exists
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
@@ -27,7 +28,7 @@ class Ex01_Blog: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `create blog entities`(testDB: TestDB) = runSuspendIO {
+    fun `create blog entities`(testDB: TestDB) = runTest {
         withDb(testDB) {
             SchemaUtils.create(*blogTables)
             try {
@@ -63,7 +64,7 @@ class Ex01_Blog: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `create post by DAO`(testDB: TestDB) = runSuspendIO {
+    fun `create post by DAO`(testDB: TestDB) = runTest {
         withTables(testDB, *blogTables) {
 
             val postId = PostTable.insertAndGetId {

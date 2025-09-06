@@ -5,7 +5,6 @@ import exposed.r2dbc.examples.jpa.ex01_simple.SimpleSchema.toSimpleDTOs
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.KLogging
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.map
@@ -13,6 +12,7 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
+import org.jetbrains.exposed.v1.core.inList
 import org.jetbrains.exposed.v1.dao.flushCache
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.batchInsert
@@ -42,7 +42,7 @@ class Ex01_Simple_DSL: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `find by names`(testDB: TestDB) = runSuspendIO {
+    fun `find by names`(testDB: TestDB) = runTest {
         withTables(testDB, SimpleTable) {
 
             persistSimpleEntities()

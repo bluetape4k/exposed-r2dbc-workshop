@@ -4,23 +4,24 @@ import exposed.r2dbc.examples.jpa.ex02_entities.PersonSchema.PersonRecord
 import exposed.r2dbc.examples.jpa.ex02_entities.PersonSchema.withPersonAndAddress
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
-import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.KLogging
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeTrue
 import org.amshove.kluent.shouldHaveSize
 import org.jetbrains.exposed.v1.core.Op
-import org.jetbrains.exposed.v1.core.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.v1.core.SqlExpressionBuilder.greaterEq
-import org.jetbrains.exposed.v1.core.SqlExpressionBuilder.isNotNull
-import org.jetbrains.exposed.v1.core.SqlExpressionBuilder.isNull
-import org.jetbrains.exposed.v1.core.SqlExpressionBuilder.less
-import org.jetbrains.exposed.v1.core.SqlExpressionBuilder.plus
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.count
 import org.jetbrains.exposed.v1.core.countDistinct
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.greaterEq
+import org.jetbrains.exposed.v1.core.isNotNull
+import org.jetbrains.exposed.v1.core.isNull
+import org.jetbrains.exposed.v1.core.less
+import org.jetbrains.exposed.v1.core.like
 import org.jetbrains.exposed.v1.core.or
+import org.jetbrains.exposed.v1.core.plus
 import org.jetbrains.exposed.v1.dao.entityCache
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.batchInsert
@@ -51,7 +52,7 @@ class Ex02_Person: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `count with where clause`(testDB: TestDB) = runSuspendIO {
+    fun `count with where clause`(testDB: TestDB) = runTest {
         withPersonAndAddress(testDB) { persons, _ ->
             // DSL 사용한 방법
             persons.selectAll().where { persons.id less 3L }.count() shouldBeEqualTo 2L
@@ -75,7 +76,7 @@ class Ex02_Person: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `count all records`(testDB: TestDB) = runSuspendIO {
+    fun `count all records`(testDB: TestDB) = runTest {
         withPersonAndAddress(testDB) { persons, _ ->
 
             // SQL DSL 이용
@@ -94,7 +95,7 @@ class Ex02_Person: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `count lastName`(testDB: TestDB) = runSuspendIO {
+    fun `count lastName`(testDB: TestDB) = runTest {
         withPersonAndAddress(testDB) { persons, _ ->
             persons.select(persons.lastName.count()).single()[persons.lastName.count()] shouldBeEqualTo 6L
         }
@@ -109,7 +110,7 @@ class Ex02_Person: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `count distinct lastName`(testDB: TestDB) = runSuspendIO {
+    fun `count distinct lastName`(testDB: TestDB) = runTest {
         withPersonAndAddress(testDB) { persons, _ ->
 
             // COUNT(DISTINCT persons.last_name)
@@ -137,7 +138,7 @@ class Ex02_Person: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `delete by id`(testDB: TestDB) = runSuspendIO {
+    fun `delete by id`(testDB: TestDB) = runTest {
         withPersonAndAddress(testDB) { persons, _ ->
             val pId: Long = insertPerson()
 
@@ -158,7 +159,7 @@ class Ex02_Person: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `delete by where and`(testDB: TestDB) = runSuspendIO {
+    fun `delete by where and`(testDB: TestDB) = runTest {
         withPersonAndAddress(testDB) { persons, _ ->
             val id1 = insertPerson()
             val id2 = insertPerson()
@@ -182,7 +183,7 @@ class Ex02_Person: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `delete by where or`(testDB: TestDB) = runSuspendIO {
+    fun `delete by where or`(testDB: TestDB) = runTest {
         withPersonAndAddress(testDB) { persons, _ ->
             val id1 = insertPerson()
             val id2 = insertPerson()
@@ -206,7 +207,7 @@ class Ex02_Person: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `delete by where or and`(testDB: TestDB) = runSuspendIO {
+    fun `delete by where or and`(testDB: TestDB) = runTest {
         withPersonAndAddress(testDB) { persons, _ ->
             val id1 = insertPerson()
             val id2 = insertPerson()
@@ -229,7 +230,7 @@ class Ex02_Person: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `delete by where and or`(testDB: TestDB) = runSuspendIO {
+    fun `delete by where and or`(testDB: TestDB) = runTest {
         withPersonAndAddress(testDB) { persons, _ ->
             val id1 = insertPerson()
             val id2 = insertPerson()
@@ -251,7 +252,7 @@ class Ex02_Person: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `delete by where with limit`(testDB: TestDB) = runSuspendIO {
+    fun `delete by where with limit`(testDB: TestDB) = runTest {
         // PostgreSQL doesn't support LIMIT in DELETE clause
         Assumptions.assumeTrue { testDB !in TestDB.ALL_POSTGRES_LIKE }
 
@@ -282,7 +283,7 @@ class Ex02_Person: R2dbcExposedTestBase() {
      */
 //    @ParameterizedTest
 //    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `insert entity`(testDB: TestDB) = runSuspendIO {
+//    fun `insert entity`(testDB: TestDB) = runTest {
 //        withPersonAndAddress(testDB) { persons, _ ->
 //            val person = Person.new(100) {
 //                firstName = "John"
@@ -318,7 +319,7 @@ class Ex02_Person: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `insert record`(testDB: TestDB) = runSuspendIO {
+    fun `insert record`(testDB: TestDB) = runTest {
         withPersonAndAddress(testDB) { persons, _ ->
             val personId = persons.insertAndGetId {
                 it[firstName] = "John"
@@ -345,7 +346,7 @@ class Ex02_Person: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `batchInsert 01`(testDB: TestDB) = runSuspendIO {
+    fun `batchInsert 01`(testDB: TestDB) = runTest {
 
         withPersonAndAddress(testDB) { persons, _ ->
             val record1 = PersonRecord(null, "Joe", "Jones", LocalDate.now(), true, "Developer", 1L)
@@ -382,7 +383,7 @@ class Ex02_Person: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `insert select example 01`(testDB: TestDB) = runSuspendIO {
+    fun `insert select example 01`(testDB: TestDB) = runTest {
         withPersonAndAddress(testDB) { persons, _ ->
             persons.selectAll().count() shouldBeEqualTo 6L
 
@@ -421,7 +422,7 @@ class Ex02_Person: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `insert select example 02`(testDB: TestDB) = runSuspendIO {
+    fun `insert select example 02`(testDB: TestDB) = runTest {
         withPersonAndAddress(testDB) { persons, _ ->
             persons.selectAll().count() shouldBeEqualTo 6L
 

@@ -6,12 +6,13 @@ import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.exposed.dao.idEquals
 import io.bluetape4k.exposed.dao.idHashCode
 import io.bluetape4k.exposed.dao.toStringBuilder
-import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.KLogging
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
+import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.dao.LongEntity
 import org.jetbrains.exposed.v1.dao.LongEntityClass
 import org.jetbrains.exposed.v1.javatime.date
@@ -69,7 +70,7 @@ class Ex03_Task: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `create task entity with enum as string`(testDB: TestDB) = runSuspendIO {
+    fun `create task entity with enum as string`(testDB: TestDB) = runTest {
         withTables(testDB, TaskTable) {
             val taskId = TaskTable.insertAndGetId {
                 it[status] = TaskStatusType.TO_DO

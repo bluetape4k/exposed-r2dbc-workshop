@@ -4,15 +4,16 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.KLogging
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeTrue
 import org.amshove.kluent.shouldNotBeNull
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IdTable
+import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.exists
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
@@ -85,7 +86,7 @@ class Ex01_CustomId: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `create schema`(testDB: TestDB) = runSuspendIO {
+    fun `create schema`(testDB: TestDB) = runTest {
         withDb(testDB) {
             SchemaUtils.create(CustomIdTable)
             CustomIdTable.exists().shouldBeTrue()
@@ -110,7 +111,7 @@ class Ex01_CustomId: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `DSL - save record`(testDB: TestDB) = runSuspendIO {
+    fun `DSL - save record`(testDB: TestDB) = runTest {
         withTables(testDB, CustomIdTable) {
             val entityId = CustomIdTable.insertAndGetId { row ->
                 row[CustomIdTable.id] = Email(faker.internet().emailAddress())
