@@ -11,12 +11,11 @@ import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.jetbrains.exposed.v1.core.DivideOp
 import org.jetbrains.exposed.v1.core.DivideOp.Companion.withScale
-import org.jetbrains.exposed.v1.core.Expression
-import org.jetbrains.exposed.v1.core.SqlExpressionBuilder.div
-import org.jetbrains.exposed.v1.core.SqlExpressionBuilder.minus
-import org.jetbrains.exposed.v1.core.SqlExpressionBuilder.times
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.core.decimalLiteral
+import org.jetbrains.exposed.v1.core.div
+import org.jetbrains.exposed.v1.core.minus
+import org.jetbrains.exposed.v1.core.times
 import org.jetbrains.exposed.v1.r2dbc.select
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
@@ -76,7 +75,7 @@ class Ex21_Arithmetic: R2dbcExposedTestBase() {
             val three = decimalLiteral(3.toBigDecimal())
 
             // SELECT (10 / 3)
-            val divTenToThreeWithoutScale: DivideOp<BigDecimal, BigDecimal> = Expression.build { ten / three }
+            val divTenToThreeWithoutScale: DivideOp<BigDecimal, BigDecimal> = ten / three
             val resultWithoutScale = Table.Dual
                 .select(divTenToThreeWithoutScale)
                 .single()[divTenToThreeWithoutScale]

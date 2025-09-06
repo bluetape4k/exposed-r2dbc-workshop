@@ -56,7 +56,7 @@ class Ex02_TransactionExec: R2dbcExposedTestBase() {
     }
 
     /**
-     * Exposed [Transaction.exec] method에 대한 한 줄의 SQL을 전달하여 실행하는 방법에 대한 테스트 코드입니다.
+     * Exposed [R2dbcTransaction.exec] method에 대한 한 줄의 SQL을 전달하여 실행하는 방법에 대한 테스트 코드입니다.
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
@@ -162,7 +162,7 @@ class Ex02_TransactionExec: R2dbcExposedTestBase() {
     }
 
     /**
-     * [Transaction.exec] 메서드 실행의 결과인 [ResultSet]에서 결과물을 가져오는 방법에 대한 테스트 코드입니다.
+     * [R2dbcTransaction.exec] 메서드 실행의 결과인 [ResultSet]에서 결과물을 가져오는 방법에 대한 테스트 코드입니다.
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)

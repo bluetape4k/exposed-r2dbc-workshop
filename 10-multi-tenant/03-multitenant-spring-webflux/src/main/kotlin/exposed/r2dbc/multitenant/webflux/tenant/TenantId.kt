@@ -1,13 +1,13 @@
 package exposed.r2dbc.multitenant.webflux.tenant
 
 import io.r2dbc.spi.IsolationLevel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.reactor.ReactorContext
 import org.jetbrains.exposed.v1.jdbc.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
+import org.jetbrains.exposed.v1.r2dbc.transactions.transactionManager
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.coroutineContext
 
@@ -51,13 +51,14 @@ suspend fun <T> suspendTransactionWithTenant(
     tenant: Tenants.Tenant? = null,
     db: R2dbcDatabase? = null,
     transactionIsolation: IsolationLevel? = null,
-    readOnly: Boolean? = null,
+    readOnly: Boolean = false,
     statement: suspend R2dbcTransaction.() -> T,
 ): T {
-    val currentTenant = tenant ?: currentTenant()
-    val context = Dispatchers.IO + TenantId(currentTenant)
+    // val context = Dispatchers.IO + TenantId(currentTenant)
+    val isolationLevel = transactionIsolation ?: db.transactionManager.defaultIsolationLevel!!
 
-    return suspendTransaction(context, db = db, transactionIsolation = transactionIsolation, readOnly = readOnly) {
+    return suspendTransaction(transactionIsolation = isolationLevel, db = db, readOnly = readOnly) {
+        val currentTenant = tenant ?: currentTenant()
         SchemaUtils.setSchema(getSchemaDefinition(currentTenant))
         statement()
     }
@@ -69,7 +70,7 @@ suspend fun <T> suspendTransactionWithTenant(
 suspend fun <T> suspendTransactionWithCurrentTenant(
     db: R2dbcDatabase? = null,
     transactionIsolation: IsolationLevel? = null,
-    readOnly: Boolean? = null,
+    readOnly: Boolean = false,
     statement: suspend R2dbcTransaction.() -> T,
 ): T = suspendTransactionWithTenant(
     tenant = currentReactorTenant(),

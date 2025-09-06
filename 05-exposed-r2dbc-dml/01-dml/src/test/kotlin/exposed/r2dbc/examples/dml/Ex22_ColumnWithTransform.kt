@@ -20,6 +20,7 @@ import org.jetbrains.exposed.v1.core.ColumnWithTransform
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IdTable
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
+import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.batchInsert
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
@@ -241,7 +242,7 @@ class Ex22_ColumnWithTransform: R2dbcExposedTestBase() {
     }
 
     /**
-     * [InsertStatement] 에서 transform 된 값을 읽어오는 예제
+     * [org.jetbrains.exposed.v1.core.statements.InsertStatement] 에서 transform 된 값을 읽어오는 예제
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)

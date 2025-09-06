@@ -44,8 +44,8 @@ suspend fun withDb(
     }
     val database = testDB.db!!
     suspendTransaction(
-        transactionIsolation = database.transactionManager.defaultIsolationLevel,
-        db = database
+        transactionIsolation = database.transactionManager.defaultIsolationLevel!!,
+        db = database,
     ) {
         maxAttempts = 1
         registerInterceptor(CurrentTestDBInterceptor)

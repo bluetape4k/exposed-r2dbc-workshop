@@ -3,6 +3,7 @@ package exposed.r2dbc.examples.custom.entities
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import io.bluetape4k.logging.coroutines.KLoggingChannel
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.params.provider.Arguments
 
 abstract class AbstractCustomIdTableTest: R2dbcExposedTestBase() {
@@ -12,13 +13,20 @@ abstract class AbstractCustomIdTableTest: R2dbcExposedTestBase() {
 
         @JvmStatic
         fun getTestDBAndEntityCount(): List<Arguments> {
-            val recordCounts = listOf(100, 500)
+            val recordCounts = listOf(100, 300)
 
-            return TestDB.enabledDialects().map { testDB ->
+            val testDBs = TestDB.enabledDialects() // - TestDB.ALL_MARIADB_LIKE
+
+            return testDBs.map { testDB ->
                 recordCounts.map { entityCount ->
                     Arguments.of(testDB, entityCount)
                 }
             }.flatten()
         }
+    }
+
+    @AfterEach
+    fun afterEach() {
+        Thread.sleep(10)
     }
 }

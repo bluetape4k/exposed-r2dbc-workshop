@@ -2,9 +2,9 @@ package exposed.r2dbc.workshop.springwebflux.domain.repository
 
 import exposed.r2dbc.workshop.springwebflux.AbstractSpringWebfluxTest
 import exposed.r2dbc.workshop.springwebflux.domain.MovieDTO
-import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
 import org.amshove.kluent.shouldNotBeEmpty
@@ -26,10 +26,10 @@ class MovieRepositoryTest(
     }
 
     @Test
-    fun `find movie by id`() = runSuspendIO {
+    fun `find movie by id`() = runTest {
         val movieId = 1L
 
-        val movie = suspendTransaction(readOnly = true) {
+        val movie = suspendTransaction {
             movieRepository.findById(movieId)
         }
 
@@ -50,10 +50,10 @@ class MovieRepositoryTest(
      * ```
      */
     @Test
-    fun `search movies`() = runSuspendIO {
+    fun `search movies`() = runTest {
         val params = mapOf("producerName" to "Johnny")
 
-        val movies = suspendTransaction(readOnly = true) {
+        val movies = suspendTransaction {
             movieRepository.searchMovie(params)
         }
 
@@ -64,7 +64,7 @@ class MovieRepositoryTest(
     }
 
     @Test
-    fun `create movie`() = runSuspendIO {
+    fun `create movie`() = runTest {
         suspendTransaction {
             val prevCount = movieRepository.count()
 
@@ -79,7 +79,7 @@ class MovieRepositoryTest(
     }
 
     @Test
-    fun `delete movie`() = runSuspendIO {
+    fun `delete movie`() = runTest {
         suspendTransaction {
             val newMovie = newMovieDTO()
             val saved = movieRepository.create(newMovie)
@@ -94,8 +94,8 @@ class MovieRepositoryTest(
     }
 
     @Test
-    fun `get all movies and actors`() = runSuspendIO {
-        val movieWithActors = suspendTransaction(readOnly = true) {
+    fun `get all movies and actors`() = runTest {
+        val movieWithActors = suspendTransaction {
             movieRepository.getAllMoviesWithActors().toList()
         }
         movieWithActors.shouldNotBeEmpty()
@@ -109,10 +109,10 @@ class MovieRepositoryTest(
     }
 
     @Test
-    fun `get movie and actors`() = runSuspendIO {
+    fun `get movie and actors`() = runTest {
         val movieId = 1L
 
-        val movieWithActors = suspendTransaction(readOnly = true) {
+        val movieWithActors = suspendTransaction {
             movieRepository.getMovieWithActors(movieId)
         }
         log.debug { "movieWithActors: $movieWithActors" }
@@ -123,8 +123,8 @@ class MovieRepositoryTest(
     }
 
     @Test
-    fun `get movie and actors count`() = runSuspendIO {
-        val movieActorsCount = suspendTransaction(readOnly = true) {
+    fun `get movie and actors count`() = runTest {
+        val movieActorsCount = suspendTransaction {
             movieRepository.getMovieActorsCount()
         }
         movieActorsCount.shouldNotBeEmpty()
@@ -134,8 +134,8 @@ class MovieRepositoryTest(
     }
 
     @Test
-    fun `find movies with acting producers`() = runSuspendIO {
-        val movies = suspendTransaction(readOnly = true) {
+    fun `find movies with acting producers`() = runTest {
+        val movies = suspendTransaction {
             movieRepository.findMoviesWithActingProducers()
         }
 

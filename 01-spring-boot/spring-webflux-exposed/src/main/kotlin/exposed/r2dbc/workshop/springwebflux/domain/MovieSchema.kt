@@ -38,39 +38,4 @@ object MovieSchema {
         override val primaryKey = PrimaryKey(movieId, actorId)
     }
 
-//    class MovieEntity(id: EntityID<Long>): LongEntity(id) {
-//        companion object: LongEntityClass<MovieEntity>(MovieTable)
-//
-//        var name by MovieTable.name
-//        var producerName by MovieTable.producerName
-//        var releaseDate by MovieTable.releaseDate
-//
-//        val actors: SizedIterable<ActorEntity> by ActorEntity via ActorInMovieTable
-//
-//        override fun equals(other: Any?): Boolean = idEquals(other)
-//        override fun hashCode(): Int = idHashCode()
-//        override fun toString(): String = toStringBuilder()
-//            .add("name", name)
-//            .add("producerName", producerName)
-//            .add("releaseDate", releaseDate)
-//            .toString()
-//    }
-//
-//    class ActorEntity(id: EntityID<Long>): LongEntity(id) {
-//        companion object: LongEntityClass<ActorEntity>(ActorTable)
-//
-//        var firstName by ActorTable.firstName
-//        var lastName by ActorTable.lastName
-//        var birthday by ActorTable.birthday
-//
-//        val movies by MovieEntity via ActorInMovieTable
-//
-//        override fun equals(other: Any?): Boolean = idEquals(other)
-//        override fun hashCode(): Int = idHashCode()
-//        override fun toString(): String = toStringBuilder()
-//            .add("firstName", firstName)
-//            .add("lastName", lastName)
-//            .add("birthday", birthday)
-//            .toString()
-//    }
 }

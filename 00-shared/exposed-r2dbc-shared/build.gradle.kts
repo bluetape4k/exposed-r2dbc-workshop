@@ -17,8 +17,8 @@ dependencies {
     implementation(Libs.exposed_java_time)
     implementation(Libs.exposed_crypt)
     implementation(Libs.exposed_json)
-    implementation(Libs.exposed_migration)
     implementation(Libs.exposed_money)
+    implementation(Libs.exposed_migration_r2dbc)
 
     // bluetape4k
     api(Libs.bluetape4k_exposed)

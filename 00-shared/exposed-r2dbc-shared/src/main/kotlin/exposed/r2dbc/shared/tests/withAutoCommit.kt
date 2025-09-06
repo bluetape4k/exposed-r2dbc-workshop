@@ -9,11 +9,12 @@ suspend fun R2dbcTransaction.withAutoCommit(
     autoCommit: Boolean = true,
     statement: suspend R2dbcTransaction.() -> Unit,
 ) {
-    val originalAutoCommit = connection.getAutoCommit()
-    connection.setAutoCommit(autoCommit)
+    val conn = connection()
+    val originalAutoCommit = conn.getAutoCommit()
     try {
+        conn.setAutoCommit(autoCommit)
         statement()
     } finally {
-        connection.setAutoCommit(originalAutoCommit)
+        conn.setAutoCommit(originalAutoCommit)
     }
 }

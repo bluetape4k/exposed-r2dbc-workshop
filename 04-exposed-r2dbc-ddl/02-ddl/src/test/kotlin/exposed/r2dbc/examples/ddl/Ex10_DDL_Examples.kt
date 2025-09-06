@@ -35,19 +35,25 @@ import org.jetbrains.exposed.v1.core.LowerCase
 import org.jetbrains.exposed.v1.core.Op
 import org.jetbrains.exposed.v1.core.ReferenceOption
 import org.jetbrains.exposed.v1.core.ResultRow
-import org.jetbrains.exposed.v1.core.SqlExpressionBuilder
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.core.TextColumnType
 import org.jetbrains.exposed.v1.core.UpperCase
 import org.jetbrains.exposed.v1.core.VarCharColumnType
 import org.jetbrains.exposed.v1.core.and
+import org.jetbrains.exposed.v1.core.concat
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IdTable
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.greaterEq
+import org.jetbrains.exposed.v1.core.isNotNull
+import org.jetbrains.exposed.v1.core.less
+import org.jetbrains.exposed.v1.core.neq
 import org.jetbrains.exposed.v1.core.vendors.H2Dialect
 import org.jetbrains.exposed.v1.core.vendors.MysqlDialect
 import org.jetbrains.exposed.v1.exceptions.ExposedSQLException
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
+import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabaseConfig
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.SizedIterable
 import org.jetbrains.exposed.v1.r2dbc.deleteAll
@@ -143,7 +149,7 @@ class Ex10_DDL_Examples: R2dbcExposedTestBase() {
     private val keywordFlagDB by lazy {
         R2dbcDatabase.connect(
             "r2dbc:h2:mem:///db1;USER=root;DB_CLOSE_DELAY=-1;",
-            databaseConfig = {
+            databaseConfig = R2dbcDatabaseConfig {
                 defaultR2dbcIsolationLevel = IsolationLevel.READ_COMMITTED
                 @OptIn(ExperimentalKeywordApi::class)
                 preserveKeywordCasing = false
@@ -1094,7 +1100,7 @@ class Ex10_DDL_Examples: R2dbcExposedTestBase() {
                 it[txtLong] = "1TxtLong"
             }
 
-            val concat = SqlExpressionBuilder.concat(
+            val concat = concat(
                 separator = " ",
                 listOf(LowerCase(testTable.txt), UpperCase(testTable.txtMed), LowerCase(testTable.txtLong))
             )

@@ -2,9 +2,9 @@ package exposed.r2dbc.workshop.springwebflux.domain.repository
 
 import exposed.r2dbc.workshop.springwebflux.AbstractSpringWebfluxTest
 import exposed.r2dbc.workshop.springwebflux.domain.ActorDTO
-import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldNotBeEmpty
 import org.amshove.kluent.shouldNotBeNull
@@ -25,8 +25,8 @@ class ActorRepositoryTest(
     }
 
     @Test
-    fun `find actor by id`() = runSuspendIO {
-        suspendTransaction(readOnly = true) {
+    fun `find actor by id`() = runTest {
+        suspendTransaction {
             val actorId = 1L
 
             val actor = actorRepository.findById(actorId)
@@ -45,8 +45,8 @@ class ActorRepositoryTest(
      * ```
      */
     @Test
-    fun `search actors by lastName`() = runSuspendIO {
-        suspendTransaction(readOnly = true) {
+    fun `search actors by lastName`() = runTest {
+        suspendTransaction {
             val params = mapOf("lastName" to "Depp")
             val actors = actorRepository.searchActor(params).toList()
 
@@ -65,8 +65,8 @@ class ActorRepositoryTest(
      * ```
      */
     @Test
-    fun `search actors by firstName`() = runSuspendIO {
-        suspendTransaction(readOnly = true) {
+    fun `search actors by firstName`() = runTest {
+        suspendTransaction {
             val params = mapOf("firstName" to "Angelina")
             val actors = actorRepository.searchActor(params).toList()
 
@@ -78,7 +78,7 @@ class ActorRepositoryTest(
     }
 
     @Test
-    fun `create new actor`() = runSuspendIO {
+    fun `create new actor`() = runTest {
         suspendTransaction {
             val prevCount = actorRepository.count()
 
@@ -95,7 +95,7 @@ class ActorRepositoryTest(
     }
 
     @Test
-    fun `delete actor by id`() = runSuspendIO {
+    fun `delete actor by id`() = runTest {
         suspendTransaction {
             val actor = newActorDTO()
             val savedActor = actorRepository.create(actor)

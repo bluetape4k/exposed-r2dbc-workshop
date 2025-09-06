@@ -28,7 +28,7 @@ class MovieController(
 
     @GetMapping("/{id}")
     suspend fun getMovieWithActors(@PathVariable("id") id: Long): MovieWithActorDTO? =
-        suspendTransaction(readOnly = true) {
+        suspendTransaction {
             movieRepository.getMovieWithActors(id)
         }
 
@@ -37,7 +37,7 @@ class MovieController(
         val params = request.queryParams.map { it.key to it.value.firstOrNull() }.toMap()
         return when {
             params.isEmpty() -> emptyList()
-            else -> suspendTransaction(readOnly = true) {
+            else -> suspendTransaction {
                 movieRepository.searchMovies(params).toList()
             }
         }

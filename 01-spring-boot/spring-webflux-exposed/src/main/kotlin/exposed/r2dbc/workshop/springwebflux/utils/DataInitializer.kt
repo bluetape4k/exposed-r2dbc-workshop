@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.v1.core.and
+import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.batchInsert
@@ -33,7 +34,7 @@ class DataInitializer(private val database: R2dbcDatabase): ApplicationListener<
         log.info { "샘플 데이터 추가" }
 
         runBlocking(Dispatchers.IO) {
-            suspendTransaction {
+            suspendTransaction(db = database) {
                 createSchema()
                 populateData()
             }

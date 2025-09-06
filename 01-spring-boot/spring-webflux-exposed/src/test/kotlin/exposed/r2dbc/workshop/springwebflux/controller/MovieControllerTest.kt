@@ -2,7 +2,6 @@ package exposed.r2dbc.workshop.springwebflux.controller
 
 import exposed.r2dbc.workshop.springwebflux.AbstractSpringWebfluxTest
 import exposed.r2dbc.workshop.springwebflux.domain.MovieDTO
-import io.bluetape4k.junit5.coroutines.runSuspendTest
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.spring.tests.httpDelete
@@ -11,6 +10,7 @@ import io.bluetape4k.spring.tests.httpPost
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitSingle
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldNotBeNull
 import org.junit.jupiter.api.Test
@@ -32,7 +32,7 @@ class MovieControllerTest(
     }
 
     @Test
-    fun `get movie by id`() = runSuspendTest {
+    fun `get movie by id`() = runTest {
         val id = 1L
 
         val movie = client
@@ -47,7 +47,7 @@ class MovieControllerTest(
     }
 
     @Test
-    fun `search movies by producer name`() = runSuspendTest {
+    fun `search movies by producer name`() = runTest {
         val producerName = "Johnny"
 
         val movies = client.httpGet("/movies?producerName=$producerName")
@@ -59,7 +59,7 @@ class MovieControllerTest(
     }
 
     @Test
-    fun `create new movie`() = runSuspendTest {
+    fun `create new movie`() = runTest {
         val newMovie = newMovieDTO()
 
         val saved = client
@@ -72,7 +72,7 @@ class MovieControllerTest(
     }
 
     @Test
-    fun `delete movie`() = runSuspendTest {
+    fun `delete movie`() = runTest {
         val newMovie = newMovieDTO()
 
         val saved = client

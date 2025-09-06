@@ -4,13 +4,13 @@ import exposed.r2dbc.workshop.springwebflux.AbstractSpringWebfluxTest
 import exposed.r2dbc.workshop.springwebflux.domain.MovieActorCountDTO
 import exposed.r2dbc.workshop.springwebflux.domain.MovieWithActorDTO
 import exposed.r2dbc.workshop.springwebflux.domain.MovieWithProducingActorDTO
-import io.bluetape4k.junit5.coroutines.runSuspendTest
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.spring.tests.httpGet
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitSingle
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
 import org.amshove.kluent.shouldNotBeNull
@@ -26,7 +26,7 @@ class MovieActorsControllerTest(
     companion object: KLoggingChannel()
 
     @Test
-    fun `get movie with actors`() = runSuspendTest {
+    fun `get movie with actors`() = runTest {
         val movieId = 1L
 
         val movieWithActors = client
@@ -41,7 +41,7 @@ class MovieActorsControllerTest(
     }
 
     @Test
-    fun `get movie and actor count group by movie name`() = runSuspendTest {
+    fun `get movie and actor count group by movie name`() = runTest {
         val movieActorCounts = client
             .httpGet("/movie-actors/count")
             .returnResult<MovieActorCountDTO>().responseBody
@@ -55,7 +55,7 @@ class MovieActorsControllerTest(
     }
 
     @Test
-    fun `get movie and acting producer`() = runSuspendTest {
+    fun `get movie and acting producer`() = runTest {
         val movieWithProducers = client
             .httpGet("/movie-actors/acting-producers")
             .returnResult<MovieWithProducingActorDTO>().responseBody

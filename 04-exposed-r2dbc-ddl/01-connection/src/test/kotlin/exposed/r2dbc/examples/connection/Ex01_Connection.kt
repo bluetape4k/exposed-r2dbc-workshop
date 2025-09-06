@@ -45,7 +45,7 @@ class Ex01_Connection: R2dbcExposedTestBase() {
     @Test
     fun `getting column metadata`() = runTest {
         withTables(TestDB.H2, People) {
-            val columnMetadata = connection.metadata {
+            val columnMetadata = connection().metadata {
                 columns(People)[People].shouldNotBeNull()
             }.toSet()
 
@@ -88,7 +88,16 @@ class Ex01_Connection: R2dbcExposedTestBase() {
                     false,
                     "Doe"
                 ),
-                ColumnMetadata(People.age.nameInDatabaseCase(), Types.INTEGER, ageType, false, 32, null, false, "18"),
+                ColumnMetadata(
+                    People.age.nameInDatabaseCase(),
+                    Types.INTEGER,
+                    ageType,
+                    false,
+                    32,
+                    null,
+                    false,
+                    "18"
+                ),
             )
 
             columnMetadata shouldContainSame expected
@@ -137,7 +146,7 @@ class Ex01_Connection: R2dbcExposedTestBase() {
              * key: child, constraint: [ForeignKeyConstraint(fkName='fk_child_scale__scale')]
              * ```
              */
-            val constraints = connection.metadata {
+            val constraints = connection().metadata {
                 tableConstraints(listOf(child))
             }
 

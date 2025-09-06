@@ -27,7 +27,7 @@ class ActorController(
 
     @GetMapping("/{id}")
     suspend fun getActorById(@PathVariable("id") actorId: Long): ActorDTO? =
-        suspendTransaction(readOnly = true) {
+        suspendTransaction {
             actorRepository.findById(actorId)
         }
 
@@ -40,7 +40,7 @@ class ActorController(
 
         return when {
             params.isEmpty() -> emptyList()
-            else -> suspendTransaction(readOnly = true) {
+            else -> suspendTransaction {
                 actorRepository.searchActors(params).toList()
             }
         }

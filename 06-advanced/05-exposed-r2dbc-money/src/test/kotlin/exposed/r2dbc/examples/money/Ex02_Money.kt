@@ -12,6 +12,9 @@ import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.javamoney.moneta.Money
 import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.isNotNull
+import org.jetbrains.exposed.v1.core.isNull
 import org.jetbrains.exposed.v1.money.compositeMoney
 import org.jetbrains.exposed.v1.money.currency
 import org.jetbrains.exposed.v1.r2dbc.ExposedR2dbcException

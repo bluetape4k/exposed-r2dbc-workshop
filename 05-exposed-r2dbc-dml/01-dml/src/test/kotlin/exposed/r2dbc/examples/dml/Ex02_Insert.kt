@@ -12,7 +12,6 @@ import io.bluetape4k.codec.Base58
 import io.bluetape4k.exposed.r2dbc.statements.BatchInsertOnConflictDoNothing
 import io.bluetape4k.exposed.r2dbc.statements.BatchInsertOnConflictDoNothingExecutable
 import io.bluetape4k.idgenerators.uuid.TimebasedUuid
-import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.r2dbc.spi.R2dbcException
@@ -22,6 +21,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import org.amshove.kluent.fail
 import org.amshove.kluent.shouldBeEqualTo
@@ -32,12 +32,18 @@ import org.amshove.kluent.shouldNotBeNull
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.CustomFunction
 import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.Sequence
 import org.jetbrains.exposed.v1.core.SortOrder
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.core.UUIDColumnType
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IdTable
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.greater
+import org.jetbrains.exposed.v1.core.inList
+import org.jetbrains.exposed.v1.core.isNull
+import org.jetbrains.exposed.v1.core.like
 import org.jetbrains.exposed.v1.core.statements.InsertStatement
 import org.jetbrains.exposed.v1.core.stringLiteral
 import org.jetbrains.exposed.v1.core.substring
@@ -76,7 +82,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `insert and get id 01`(testDB: TestDB) = runSuspendIO {
+    fun `insert and get id 01`(testDB: TestDB) = runTest {
         val idTable = object: IntIdTable("tmp") {
             val name = varchar("foo", 10).uniqueIndex()
         }
@@ -120,7 +126,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `insert ignore and get id 01`(testDB: TestDB) = runSuspendIO {
+    fun `insert ignore and get id 01`(testDB: TestDB) = runTest {
         Assumptions.assumeTrue { testDB in TestDB.ALL_POSTGRES_LIKE + TestDB.MYSQL_V8 }
 
         val idTable = object: IntIdTable("tmp") {
@@ -158,7 +164,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `insert and get id when column has different name and get value by id column`(testDB: TestDB) = runSuspendIO {
+    fun `insert and get id when column has different name and get value by id column`(testDB: TestDB) = runTest {
         /**
          * code 컬럼은 Identity 컬럼으로도 사용된다.
          *
@@ -208,7 +214,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `id and column have different names and get value by original column`(testDB: TestDB) = runSuspendIO {
+    fun `id and column have different names and get value by original column`(testDB: TestDB) = runTest {
         val exampleTable = object: IdTable<String>("test_id_and_column_table") {
             val exampleColumn = varchar("example_column", 200)
             override val id: Column<EntityID<String>> = exampleColumn.entityId()
@@ -243,7 +249,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `insertIgnore with predefined id`(testDB: TestDB) = runSuspendIO {
+    fun `insertIgnore with predefined id`(testDB: TestDB) = runTest {
         Assumptions.assumeTrue { testDB in TestDB.ALL_POSTGRES_LIKE + TestDB.H2_MYSQL + TestDB.MYSQL_V8 }
 
         val idTable = object: IntIdTable("tmp") {
@@ -274,7 +280,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `batch insert 01`(testDB: TestDB) = runSuspendIO {
+    fun `batch insert 01`(testDB: TestDB) = runTest {
         withCitiesAndUsers(testDB) { cities, users, _ ->
             val cityNames = listOf("Paris", "Moscow", "Helsinki")
 
@@ -321,7 +327,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `batch insert with sequence`(testDB: TestDB) = runSuspendIO {
+    fun `batch insert with sequence`(testDB: TestDB) = runTest {
         val cities = Cities
 
         withTables(testDB, cities) {
@@ -355,7 +361,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `insert and get generted key 01`(testDB: TestDB) = runSuspendIO {
+    fun `insert and get generted key 01`(testDB: TestDB) = runTest {
 
         withTables(testDB, Cities) {
             val id: Int = Cities.insert {
@@ -392,7 +398,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `insert and get generated key 02`(testDB: TestDB) = runSuspendIO {
+    fun `insert and get generated key 02`(testDB: TestDB) = runTest {
         withTables(testDB, TestLongIdTable) {
             val id: Long = TestLongIdTable.insert {
                 it[name] = "Foo"
@@ -425,7 +431,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `insert and get generated key 03`(testDB: TestDB) = runSuspendIO {
+    fun `insert and get generated key 03`(testDB: TestDB) = runTest {
         withTables(testDB, IntIdTestTable) {
             val id: EntityID<Int> = IntIdTestTable.insertAndGetId {
                 it[name] = "Foo"
@@ -452,7 +458,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `insert with predefined id`(testDB: TestDB) = runSuspendIO {
+    fun `insert with predefined id`(testDB: TestDB) = runTest {
 
         val stringTable = object: IdTable<String>("stringTable") {
             override val id: Column<EntityID<String>> = varchar("id", 15).entityId()
@@ -504,7 +510,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `insert with foreign id`(testDB: TestDB) = runSuspendIO {
+    fun `insert with foreign id`(testDB: TestDB) = runTest {
         val idTable = object: IntIdTable("idTable") {}
         val standardTable = object: Table("standardTable") {
             val externalId: Column<EntityID<Int>> = reference("externalId", idTable.id)
@@ -530,7 +536,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `insert with expression`(testDB: TestDB) = runSuspendIO {
+    fun `insert with expression`(testDB: TestDB) = runTest {
         val tbl = object: IntIdTable("testInsert") {
             val nullableInt = integer("nullableInt").nullable()
             val string = varchar("stringCol", 255)
@@ -597,7 +603,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `insert with column expression`(testDB: TestDB) = runSuspendIO {
+    fun `insert with column expression`(testDB: TestDB) = runTest {
         val tbl1 = object: IntIdTable("testInsert1") {
             val string1 = varchar("stringCol", 20)
         }
@@ -678,7 +684,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `insert with column named with keyword`(testDB: TestDB) = runSuspendIO {
+    fun `insert with column named with keyword`(testDB: TestDB) = runTest {
         withTables(testDB, OrderedDataTable) {
             val foo = OrderedDataTable.insertAndGetId {
                 it[OrderedDataTable.name] = "foo"
@@ -721,7 +727,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `subquery in an insert or update statement`(testDB: TestDB) = runSuspendIO {
+    fun `subquery in an insert or update statement`(testDB: TestDB) = runTest {
         val tbl1 = object: Table("tab1") {
             val id = varchar("id", 10)
         }
@@ -765,7 +771,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `generated key 04`(testDB: TestDB) = runSuspendIO {
+    fun `generated key 04`(testDB: TestDB) = runTest {
         val charIdTable = object: IdTable<String>("charIdTable") {
             override val id = varchar("id", 50)
                 .clientDefault { Base58.randomString(24) }
@@ -804,7 +810,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `rollback on constraint exception with normal transactions`(testDB: TestDB) = runSuspendIO {
+    fun `rollback on constraint exception with normal transactions`(testDB: TestDB) = runTest {
         Assumptions.assumeTrue { testDB in rollbackSupportDbs() }
 
         val testTable = object: IntIdTable("TestRollback") {
@@ -851,7 +857,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `rollback on constraint exception with suspend transactions`(testDB: TestDB) = runSuspendIO {
+    fun `rollback on constraint exception with suspend transactions`(testDB: TestDB) = runTest {
         Assumptions.assumeTrue { testDB in rollbackSupportDbs() }
 
         val testTable = object: IntIdTable("TestRollback") {
@@ -902,7 +908,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `batch insert number of inserted rows`(testDB: TestDB) = runSuspendIO {
+    fun `batch insert number of inserted rows`(testDB: TestDB) = runTest {
         Assumptions.assumeTrue { testDB in (TestDB.ALL_MYSQL + TestDB.ALL_POSTGRES_LIKE) }
 
         val tester = object: Table("tester") {
@@ -947,7 +953,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `insert into nullable generated column`(testDB: TestDB) = runSuspendIO {
+    fun `insert into nullable generated column`(testDB: TestDB) = runTest {
         withDb(testDB) {
             val generatedTable = object: IntIdTable("generatedTable") {
                 val amount = integer("amount").nullable()
@@ -1024,7 +1030,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `insert returns values from default expression`(testDB: TestDB) = runSuspendIO {
+    fun `insert returns values from default expression`(testDB: TestDB) = runTest {
 
         Assumptions.assumeTrue(testDB in TestDB.ALL_POSTGRES)
 
@@ -1055,7 +1061,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `database generated uuid as primary key`(testDB: TestDB) = runSuspendIO {
+    fun `database generated uuid as primary key`(testDB: TestDB) = runTest {
         // Postgres 만 지원됩니다.
         Assumptions.assumeTrue(testDB in TestDB.ALL_POSTGRES)
 

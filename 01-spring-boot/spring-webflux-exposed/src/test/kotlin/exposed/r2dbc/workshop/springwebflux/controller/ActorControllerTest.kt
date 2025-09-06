@@ -2,7 +2,6 @@ package exposed.r2dbc.workshop.springwebflux.controller
 
 import exposed.r2dbc.workshop.springwebflux.AbstractSpringWebfluxTest
 import exposed.r2dbc.workshop.springwebflux.domain.ActorDTO
-import io.bluetape4k.junit5.coroutines.runSuspendTest
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.spring.tests.httpDelete
@@ -11,6 +10,7 @@ import io.bluetape4k.spring.tests.httpPost
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitSingle
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
 import org.amshove.kluent.shouldNotBeNull
@@ -32,7 +32,7 @@ class ActorControllerTest(
     }
 
     @Test
-    fun `get actor by id`() = runSuspendTest {
+    fun `get actor by id`() = runTest {
         val id = 1L
 
         val actor = client
@@ -47,7 +47,7 @@ class ActorControllerTest(
     }
 
     @Test
-    fun `find actors by lastName`() = runSuspendTest {
+    fun `find actors by lastName`() = runTest {
         val lastName = "Depp"
 
         val depp = client.httpGet("/actors?lastName=$lastName")
@@ -60,7 +60,7 @@ class ActorControllerTest(
     }
 
     @Test
-    fun `find actors by firstName`() = runSuspendTest {
+    fun `find actors by firstName`() = runTest {
         val firstName = "Angelina"
 
         val angelinas = client.httpGet("/actors?firstName=$firstName")
@@ -73,7 +73,7 @@ class ActorControllerTest(
     }
 
     @Test
-    fun `create new actor`() = runSuspendTest {
+    fun `create new actor`() = runTest {
         val actor = newActorDTO()
 
         val newActor = client
@@ -88,7 +88,7 @@ class ActorControllerTest(
     }
 
     @Test
-    fun `delete actor`() = runSuspendTest {
+    fun `delete actor`() = runTest {
         val actor = newActorDTO()
 
         val newActor = client

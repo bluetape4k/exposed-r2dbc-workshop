@@ -8,10 +8,12 @@ import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.r2dbc.spi.IsolationLevel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExecutorCoroutineDispatcher
 import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
@@ -23,6 +25,7 @@ import org.amshove.kluent.shouldNotBeEmpty
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
+import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.insert
@@ -92,16 +95,20 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
     fun `suspended transaction으로 시퀀셜 작업 수행하기`(testDB: TestDB) = runSuspendIO {
         withTables(testDB, Tester) {
             // 새로운 트랜잭션을 만들고, 코루틴 환경에서 내부 코드를 실행한다
-            suspendTransaction(context = singleThreadDispatcher) {
+            suspendTransaction {
                 val id = Tester.insertAndGetId { }
                 // 내부적으로 새로운 트랜잭션을 생성하여 코루틴 작업을 수행한다
                 getTesterById(id.value)!![Tester.id].value shouldBeEqualTo id.value
             }
 
             // Async 작업을 수행합니다
-            val result = suspendTransactionAsync(context = singleThreadDispatcher) {
-                getTesterById(1)!![Tester.id].value
-            }.await()
+            val scope = CoroutineScope(singleThreadDispatcher)
+
+            val result = scope.async {
+                suspendTransaction {
+                    getTesterById(1)!![Tester.id].value
+                }
+            }
             result shouldBeEqualTo 1
 
             getTesterById(1)!![Tester.id].value shouldBeEqualTo 1

@@ -10,12 +10,12 @@ import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.KLogging
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
@@ -25,12 +25,12 @@ import org.jetbrains.exposed.v1.core.ComparisonOp
 import org.jetbrains.exposed.v1.core.Expression
 import org.jetbrains.exposed.v1.core.ExpressionWithColumnType
 import org.jetbrains.exposed.v1.core.IntegerColumnType
-import org.jetbrains.exposed.v1.core.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.v1.core.SqlExpressionBuilder.greaterEq
 import org.jetbrains.exposed.v1.core.StdOutSqlLogger
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.core.castTo
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.greaterEq
 import org.jetbrains.exposed.v1.core.stringParam
 import org.jetbrains.exposed.v1.core.vendors.PostgreSQLDialect
 import org.jetbrains.exposed.v1.exceptions.UnsupportedByDialectException
@@ -64,7 +64,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `insert and select with jacksonb`(testDB: TestDB) = runSuspendIO {
+    fun `insert and select with jacksonb`(testDB: TestDB) = runTest {
         withJacksonBTable(testDB) { tester, _, _ ->
             val newData = DataHolder(User("Pro", "Alpha"), 999, true, "A")
             val newId = tester.insertAndGetId {
@@ -89,7 +89,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `update jacksonb column`(testDB: TestDB) = runSuspendIO {
+    fun `update jacksonb column`(testDB: TestDB) = runTest {
         withJacksonBTable(testDB) { tester, _, data1 ->
             tester.selectAll().single()[tester.jacksonBColumn] shouldBeEqualTo data1
 
@@ -117,7 +117,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `select with slice extract`(testDB: TestDB) = runSuspendIO {
+    fun `select with slice extract`(testDB: TestDB) = runTest {
         Assumptions.assumeTrue { testDB !in TestDB.ALL_H2 }
 
         withJacksonBTable(testDB) { tester, user1, data1 ->
@@ -155,7 +155,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `select where with extract`(testDB: TestDB) = runSuspendIO {
+    fun `select where with extract`(testDB: TestDB) = runTest {
         Assumptions.assumeTrue { testDB !in TestDB.ALL_H2 }
 
         withJacksonBTable(testDB) { tester, _, data1 ->
@@ -201,7 +201,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
      */
 //    @ParameterizedTest
 //    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `DAO 함수로 JacksonB 컬럼 사용하기`(testDB: TestDB) = runSuspendIO {
+//    fun `DAO 함수로 JacksonB 컬럼 사용하기`(testDB: TestDB) = runTest {
 //        val dataTable = JacksonSchema.JacksonBTable
 //        val dataEntity = JacksonSchema.JacksonBEntity
 //
@@ -252,7 +252,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `jacksonb contains`(testDB: TestDB) = runSuspendIO {
+    fun `jacksonb contains`(testDB: TestDB) = runTest {
         Assumptions.assumeTrue { testDB !in TestDB.ALL_H2 }
 
         withJacksonBTable(testDB) { tester, user1, data1 ->
@@ -279,7 +279,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `jacksonb exists 함수 사용하기`(testDB: TestDB) = runSuspendIO {
+    fun `jacksonb exists 함수 사용하기`(testDB: TestDB) = runTest {
         Assumptions.assumeTrue { testDB !in TestDB.ALL_H2 }
 
         withJacksonBTable(testDB) { tester, _, data1 ->
@@ -344,7 +344,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `jacksonb 컬럼 배열 값에 extract 사용하기`(testDB: TestDB) = runSuspendIO {
+    fun `jacksonb 컬럼 배열 값에 extract 사용하기`(testDB: TestDB) = runTest {
         Assumptions.assumeTrue { testDB !in TestDB.ALL_H2 }
 
         withJacksonBArrays(testDB) { tester, singleId, tripleId ->
@@ -387,7 +387,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `배열 수형의 jacksonb 컬럼에서 contains 사용하기`(testDB: TestDB) = runSuspendIO {
+    fun `배열 수형의 jacksonb 컬럼에서 contains 사용하기`(testDB: TestDB) = runTest {
         Assumptions.assumeTrue { testDB !in TestDB.ALL_H2 }
 
         withJacksonBArrays(testDB) { tester, _, tripleId ->
@@ -424,7 +424,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `배열 수형의 jacksonb 컬럼에 exists 사용하기`(testDB: TestDB) = runSuspendIO {
+    fun `배열 수형의 jacksonb 컬럼에 exists 사용하기`(testDB: TestDB) = runTest {
         Assumptions.assumeTrue { testDB !in TestDB.ALL_H2 }
 
         withJacksonBArrays(testDB) { tester, _, tripleId ->
@@ -440,7 +440,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `jacksonb 컬럼의 default 값 사용하기`(testDB: TestDB) = runSuspendIO {
+    fun `jacksonb 컬럼의 default 값 사용하기`(testDB: TestDB) = runTest {
         val defaultUser = User("UNKNOWN", "UNASSIGNED")
         val defaultTester = object: Table("default_tester") {
             val user1 = jacksonb<User>("user_1").default(defaultUser)
@@ -477,7 +477,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `logging with jacksonb collections`(testDB: TestDB) = runSuspendIO {
+    fun `logging with jacksonb collections`(testDB: TestDB) = runTest {
         val iterables = object: Table("iterables_tester") {
             val userList = jacksonb<List<User>>("user_list")
             val intList = jacksonb<List<Int>>("int_list")
@@ -511,7 +511,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `nullable jacksonb column`(testDB: TestDB) = runSuspendIO {
+    fun `nullable jacksonb column`(testDB: TestDB) = runTest {
         val tester = object: IntIdTable("nullable_tester") {
             val user = jacksonb<User>("user").nullable()
         }
@@ -535,7 +535,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `jacksonb column with upsert`(testDB: TestDB) = runSuspendIO {
+    fun `jacksonb column with upsert`(testDB: TestDB) = runTest {
         // Assumptions.assumeTrue(testDB !in TestDB.ALL_H2_V1)
 
         withJacksonBTable(testDB) { tester, _, _ ->
@@ -557,7 +557,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `jacksonb with transformer`(testDB: TestDB) = runSuspendIO {
+    fun `jacksonb with transformer`(testDB: TestDB) = runTest {
         val tester = object: Table("tester") {
             val numbers: Column<DoubleArray> = jacksonb<IntArray>("numbers").transform(
                 wrap = { DoubleArray(it.size) { i -> 1.0 * it[i] } },
@@ -576,7 +576,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `jacksonb column with databaseGenerated`(testDB: TestDB) = runSuspendIO {
+    fun `jacksonb column with databaseGenerated`(testDB: TestDB) = runTest {
 
         val defaultUser = User("name", "team")
 
@@ -616,7 +616,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `escaped placeholder in custom operator`(testDB: TestDB) = runSuspendIO {
+    fun `escaped placeholder in custom operator`(testDB: TestDB) = runTest {
         Assumptions.assumeTrue(testDB in TestDB.ALL_POSTGRES)
 
         withJacksonBTable(testDB) { tester, _, data1 ->

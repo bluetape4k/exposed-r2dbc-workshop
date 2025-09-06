@@ -49,7 +49,7 @@ class ExposedR2dbcConfig {
             .option(ConnectionFactoryOptions.DATABASE, "test")
             .option(Option.valueOf("DB_CLOSE_DELAY"), "-1")
             .option(Option.valueOf("DB_CLOSE_ON_EXIT"), "FALSE")
-            .option(Option.valueOf("MODE"), "PostgreSQL")
+            //.option(Option.valueOf("MODE"), "PostgreSQL") // R2DBC 에서는 Mode 옵션이 제대로 동작하지 않음
             .build()
 
         log.info { "H2 연결 설정: ${options.toString().replace(Regex("password=.*?,"), "password=****,")}" }

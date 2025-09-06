@@ -9,7 +9,9 @@ import io.r2dbc.spi.IsolationLevel
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
+import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabaseConfig
 import org.jetbrains.exposed.v1.r2dbc.transactions.TransactionManager
+import org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
@@ -45,7 +47,7 @@ class Ex01_TransactionIsolation: R2dbcExposedTestBase() {
         withDb(testDB) {
             isolations.forEach { isolation ->
                 log.debug { "db: ${testDB.name}, isolation: $isolation" }
-                suspendTransaction(transactionIsolation = isolation) {
+                inTopLevelSuspendTransaction(transactionIsolation = isolation) {
                     maxAttempts = 1
                     this.transactionIsolation shouldBeEqualTo isolation
                 }
@@ -63,7 +65,9 @@ class Ex01_TransactionIsolation: R2dbcExposedTestBase() {
 
         val db = R2dbcDatabase.connect(
             url = testDB.connection(),
-            databaseConfig = { defaultR2dbcIsolationLevel = IsolationLevel.REPEATABLE_READ },
+            databaseConfig = R2dbcDatabaseConfig {
+                defaultR2dbcIsolationLevel = IsolationLevel.REPEATABLE_READ
+            },
         )
         val manager: TransactionManager = TransactionManager.managerFor(db)!!
 
@@ -101,7 +105,9 @@ class Ex01_TransactionIsolation: R2dbcExposedTestBase() {
 
         val db = R2dbcDatabase.connect(
             url = testDB.connection(),
-            databaseConfig = { defaultR2dbcIsolationLevel = IsolationLevel.READ_COMMITTED }
+            databaseConfig = R2dbcDatabaseConfig {
+                defaultR2dbcIsolationLevel = IsolationLevel.READ_COMMITTED
+            }
         )
 
         val manager = TransactionManager.managerFor(db)!!

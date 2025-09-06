@@ -15,7 +15,7 @@ dependencies {
     implementation(Libs.exposed_core)
     implementation(Libs.exposed_r2dbc)
     implementation(Libs.exposed_json)
-    implementation(Libs.exposed_migration)
+    implementation(Libs.exposed_migration_r2dbc)
 
     // java time 지원 라이브러리
     implementation(Libs.exposed_kotlin_datetime)

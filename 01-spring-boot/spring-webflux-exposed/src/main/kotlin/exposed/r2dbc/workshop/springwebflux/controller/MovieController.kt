@@ -26,7 +26,7 @@ class MovieController(
 
     @GetMapping("/{id}")
     suspend fun getMovieById(@PathVariable("id") movieId: Long): MovieDTO? =
-        suspendTransaction(readOnly = true) {
+        suspendTransaction {
             movieRepository.findById(movieId)
         }
 
@@ -34,10 +34,10 @@ class MovieController(
     suspend fun searchMovies(request: ServerHttpRequest): List<MovieDTO> {
         val params = request.queryParams.map { it.key to it.value.first() }.toMap()
         return when {
-            params.isEmpty() -> suspendTransaction(readOnly = true) {
+            params.isEmpty() -> suspendTransaction {
                 movieRepository.findAll()
             }
-            else -> suspendTransaction(readOnly = true) {
+            else -> suspendTransaction {
                 movieRepository.searchMovie(params)
             }
         }

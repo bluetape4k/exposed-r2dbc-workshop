@@ -25,19 +25,19 @@ class MovieActorsController(
 
     @GetMapping("/{movieId}")
     suspend fun getMovieWithActors(@PathVariable movieId: Long): MovieWithActorDTO? =
-        suspendTransaction(readOnly = true) {
+        suspendTransaction {
             movieRepository.getMovieWithActors(movieId)
         }
 
     @GetMapping("/count")
     suspend fun getMovieActorsCount(): List<MovieActorCountDTO> =
-        suspendTransaction(readOnly = true) {
+        suspendTransaction {
             movieRepository.getMovieActorsCount().toList()
         }
 
     @GetMapping("/acting-producers")
     suspend fun findMoviesWithActingProducers(): List<MovieWithProducingActorDTO> =
-        suspendTransaction(readOnly = true) {
+        suspendTransaction {
             movieRepository.findMoviesWithActingProducers().toList()
         }
 }

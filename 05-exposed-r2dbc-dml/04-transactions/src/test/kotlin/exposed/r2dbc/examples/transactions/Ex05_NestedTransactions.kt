@@ -12,6 +12,7 @@ import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
+import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabaseConfig
 import org.jetbrains.exposed.v1.r2dbc.deleteAll
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.selectAll
@@ -26,7 +27,7 @@ class Ex05_NestedTransactions: R2dbcExposedTestBase() {
     private val db by lazy {
         R2dbcDatabase.connect(
             url = "r2dbc:h2:mem:///db1;DB_CLOSE_DELAY=-1;",
-            databaseConfig = {
+            databaseConfig = R2dbcDatabaseConfig {
                 useNestedTransactions = true
                 defaultMaxAttempts = 1
             }

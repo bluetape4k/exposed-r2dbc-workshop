@@ -2,11 +2,11 @@ package exposed.r2dbc.examples.connection.h2
 
 
 import exposed.r2dbc.shared.tests.TestDB
-import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
@@ -14,7 +14,6 @@ import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
-import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransactionAsync
 import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.api.Test
 
@@ -29,8 +28,8 @@ class Ex01_H2_ConnectionPool {
     }
 
     @Test
-    fun `suspend transactions exceeding pool size`() = runSuspendIO {
-        Assumptions.assumeTrue(TestDB.H2 in TestDB.enabledDialects())
+    fun `suspend transactions exceeding pool size`() = runTest {
+        Assumptions.assumeTrue { TestDB.H2 in TestDB.enabledDialects() }
 
         suspendTransaction(db = h2PoolDB1) {
             SchemaUtils.create(TestTable)
@@ -41,14 +40,15 @@ class Ex01_H2_ConnectionPool {
         log.debug { "Exceeds pool size: $exceedsPoolSize" }
 
         val tasks = List(exceedsPoolSize) { index ->
-            suspendTransactionAsync(db = h2PoolDB1) {
-                delay(100)
-                val entity = TestTable.insert { it[TestTable.testValue] = "test$index" }
-                log.debug { "Created test entity: $entity" }
+            launch {
+                suspendTransaction(db = h2PoolDB1) {
+                    delay(100)
+                    val entity = TestTable.insert { it[TestTable.testValue] = "test$index" }
+                    log.debug { "Created test entity: $entity" }
+                }
             }
+            testScheduler.advanceUntilIdle()
         }
-        tasks.awaitAll()
-
 
         // 실제 생성된 엔티티 수는 exceedsPoolSize 만큼이다. (즉 Connection 이 재활용되었다는 뜻)
         suspendTransaction(db = h2PoolDB1) {

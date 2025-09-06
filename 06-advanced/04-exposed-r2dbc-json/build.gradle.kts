@@ -15,7 +15,7 @@ dependencies {
     implementation(Libs.exposed_core)
     implementation(Libs.exposed_r2dbc)
     implementation(Libs.exposed_json)
-    implementation(Libs.exposed_migration)
+    implementation(Libs.exposed_migration_r2dbc)
 
     // Kotlin Serialization Json
     implementation(platform(Libs.kotlinx_serialization_bom))

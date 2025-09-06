@@ -27,7 +27,7 @@ class ActorController(
 
     @GetMapping("/{id}")
     suspend fun getActorById(@PathVariable("id") actorId: Long): ActorDTO? {
-        return suspendTransaction(readOnly = true) {
+        return suspendTransaction {
             log.debug { "current transaction=$this" }
             actorRepository.findById(actorId)
         }
@@ -37,10 +37,10 @@ class ActorController(
     suspend fun searchActors(request: ServerHttpRequest): List<ActorDTO> {
         val params = request.queryParams.map { it.key to it.value.first() }.toMap()
         return when {
-            params.isEmpty() -> suspendTransaction(readOnly = true) {
+            params.isEmpty() -> suspendTransaction {
                 actorRepository.findAll()
             }
-            else -> suspendTransaction(readOnly = true) {
+            else -> suspendTransaction {
                 actorRepository.searchActor(params)
             }
         }

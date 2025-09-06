@@ -5,16 +5,16 @@ import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.exposed.dao.idEquals
 import io.bluetape4k.exposed.dao.idHashCode
 import io.bluetape4k.exposed.dao.toStringBuilder
-import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
-import org.jetbrains.exposed.v1.dao.entityCache
 import org.jetbrains.exposed.v1.r2dbc.batchInsert
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.selectAll
-import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransactionAsync
+import org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction
+import org.jetbrains.exposed.v1.r2dbc.transactions.transactionManager
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import kotlin.random.Random
@@ -56,7 +56,7 @@ class TimebasedUUIDBase62TableTest: AbstractCustomIdTableTest() {
 
     @ParameterizedTest(name = "{0} - {1}개 레코드")
     @MethodSource(GET_TESTDB_AND_ENTITY_COUNT)
-    fun `TimebasedUUID Base62 id를 가진 레코드를 생성한다`(testDB: TestDB, recordCount: Int) = runSuspendIO {
+    fun `TimebasedUUID Base62 id를 가진 레코드를 낱개로 생성한다`(testDB: TestDB, recordCount: Int) = runTest {
         withTables(testDB, T1) {
             List(recordCount) {
                 T1.insert {
@@ -64,8 +64,6 @@ class TimebasedUUIDBase62TableTest: AbstractCustomIdTableTest() {
                     it[T1.age] = Random.nextInt(10, 80)
                 }
             }
-            entityCache.clear()
-            commit()
 
             T1.selectAll().count() shouldBeEqualTo recordCount.toLong()
         }
@@ -73,7 +71,7 @@ class TimebasedUUIDBase62TableTest: AbstractCustomIdTableTest() {
 
     @ParameterizedTest(name = "{0} - {1}개 레코드")
     @MethodSource(GET_TESTDB_AND_ENTITY_COUNT)
-    fun `TimebasedUUID Base62 id를 가진 레코드를 배치로 생성한다`(testDB: TestDB, recordCount: Int) = runSuspendIO {
+    fun `TimebasedUUID Base62 id를 가진 레코드를 배치로 생성한다`(testDB: TestDB, recordCount: Int) = runTest {
         withTables(testDB, T1) {
             val records = List(recordCount) {
                 Record(
@@ -81,13 +79,12 @@ class TimebasedUUIDBase62TableTest: AbstractCustomIdTableTest() {
                     age = Random.nextInt(10, 80)
                 )
             }
-            records.chunked(100).forEach { chunk ->
+            records.chunked(30).forEach { chunk ->
                 T1.batchInsert(chunk, shouldReturnGeneratedValues = false) {
                     this[T1.name] = it.name
                     this[T1.age] = it.age
                 }
             }
-            commit()
 
             T1.selectAll().count() shouldBeEqualTo recordCount.toLong()
         }
@@ -95,7 +92,7 @@ class TimebasedUUIDBase62TableTest: AbstractCustomIdTableTest() {
 
     @ParameterizedTest(name = "{0} - {1}개 레코드")
     @MethodSource(GET_TESTDB_AND_ENTITY_COUNT)
-    fun `코루틴 환경에서 레코드를 배치로 생성한다`(testDB: TestDB, recordCount: Int) = runSuspendIO {
+    fun `코루틴 환경에서 레코드를 배치로 생성한다`(testDB: TestDB, recordCount: Int) = runTest {
         withTables(testDB, T1) {
             val records = List(recordCount) {
                 Record(
@@ -103,15 +100,20 @@ class TimebasedUUIDBase62TableTest: AbstractCustomIdTableTest() {
                     age = Random.nextInt(10, 80)
                 )
             }
+
             records.chunked(100).map { chunk ->
-                suspendTransactionAsync(Dispatchers.IO) {
-                    T1.batchInsert(chunk, shouldReturnGeneratedValues = false) {
-                        this[T1.name] = it.name
-                        this[T1.age] = it.age
+                launch {
+                    inTopLevelSuspendTransaction(
+                        transactionIsolation = testDB.db.transactionManager.defaultIsolationLevel!!,
+                        db = testDB.db
+                    ) {
+                        T1.batchInsert(chunk, shouldReturnGeneratedValues = false) {
+                            this[T1.name] = it.name
+                            this[T1.age] = it.age
+                        }
                     }
                 }
-            }.awaitAll()
-            commit()
+            }.joinAll()
 
             T1.selectAll().count() shouldBeEqualTo recordCount.toLong()
         }

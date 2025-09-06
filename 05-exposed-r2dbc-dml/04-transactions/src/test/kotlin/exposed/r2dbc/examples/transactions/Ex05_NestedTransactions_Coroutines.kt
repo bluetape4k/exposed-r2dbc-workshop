@@ -18,6 +18,7 @@ import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeInstanceOf
 import org.amshove.kluent.shouldNotBeNull
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
+import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabaseConfig
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.deleteAll
 import org.jetbrains.exposed.v1.r2dbc.insert
@@ -38,7 +39,7 @@ suspend fun <T> runWithSavepoint(
 ): T? = withContext(Dispatchers.IO) {
     val tx = TransactionManager.currentOrNull() ?: error("No active transaction")
 
-    val connection = tx.connection
+    val connection = tx.connection()
     val savepoint = connection.setSavepoint(name)
 
     try {
@@ -60,7 +61,7 @@ suspend fun <T> runWithSavepointOrNewTransaction(
     context: CoroutineContext? = null,
     db: R2dbcDatabase? = null,
     transactionIsolation: IsolationLevel? = null,
-    readOnly: Boolean? = null,
+    readOnly: Boolean = false,
     block: suspend R2dbcTransaction.() -> T,
 ): T? {
     val currentTx = TransactionManager.currentOrNull()
@@ -68,7 +69,7 @@ suspend fun <T> runWithSavepointOrNewTransaction(
     return if (currentTx != null) {
         runWithSavepoint(name, rollback, block)
     } else {
-        suspendTransaction(context, db = db, transactionIsolation = transactionIsolation, readOnly = readOnly) {
+        suspendTransaction(transactionIsolation = transactionIsolation!!, readOnly = readOnly, db = db) {
             try {
                 block(this)
             } catch (e: Exception) {
@@ -91,7 +92,7 @@ class Ex05_NestedTransactions_Coroutines: R2dbcExposedTestBase() {
     private val db by lazy {
         R2dbcDatabase.connect(
             url = "r2dbc:h2:mem:///db1;DB_CLOSE_DELAY=-1;",
-            databaseConfig = {
+            databaseConfig = R2dbcDatabaseConfig {
                 useNestedTransactions = true
                 defaultMaxAttempts = 1
             }

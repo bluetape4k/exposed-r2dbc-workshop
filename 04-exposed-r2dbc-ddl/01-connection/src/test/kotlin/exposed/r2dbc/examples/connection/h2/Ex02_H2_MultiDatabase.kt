@@ -4,11 +4,9 @@ import exposed.r2dbc.shared.dml.DMLTestData
 import exposed.r2dbc.shared.samples.CountryTable
 import exposed.r2dbc.shared.tests.TestDB
 import io.bluetape4k.exposed.r2dbc.getInt
-import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.r2dbc.spi.IsolationLevel
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.last
@@ -18,17 +16,21 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.invoke
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withContext
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
+import org.amshove.kluent.shouldNotBeEqualTo
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
+import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabaseConfig
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.exists
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.name
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.TransactionManager
+import org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.transactionManager
 import org.junit.jupiter.api.AfterEach
@@ -45,8 +47,8 @@ class Ex02_H2_MultiDatabase {
 
     private val db1 by lazy {
         R2dbcDatabase.connect(
-            "r2dbc:h2:mem:///db1;USER=root;DB_CLOSE_DELAY=-1;",
-            databaseConfig = {
+            url = "r2dbc:h2:mem:///db1;USER=root;DB_CLOSE_DELAY=-1;",
+            databaseConfig = R2dbcDatabaseConfig {
                 defaultR2dbcIsolationLevel = IsolationLevel.READ_COMMITTED
             }
         )
@@ -54,7 +56,7 @@ class Ex02_H2_MultiDatabase {
     private val db2 by lazy {
         R2dbcDatabase.connect(
             "r2dbc:h2:mem:///db2;USER=root;DB_CLOSE_DELAY=-1;",
-            databaseConfig = {
+            databaseConfig = R2dbcDatabaseConfig {
                 defaultR2dbcIsolationLevel = IsolationLevel.READ_COMMITTED
             }
         )
@@ -96,6 +98,7 @@ class Ex02_H2_MultiDatabase {
 
     @Test
     fun `simple insert in different databases`() = runTest {
+
         suspendTransaction(db = db1) {
             SchemaUtils.create(CountryTable)
             CountryTable.selectAll().empty().shouldBeTrue()
@@ -128,6 +131,7 @@ class Ex02_H2_MultiDatabase {
     @Test
     fun `Embedded Inserts In Different Database`() = runTest {
         suspendTransaction(db = db1) {
+            SchemaUtils.drop(DMLTestData.Cities)
             SchemaUtils.create(DMLTestData.Cities)
             DMLTestData.Cities.selectAll().toList().shouldBeEmpty()
             DMLTestData.Cities.insert {
@@ -157,6 +161,7 @@ class Ex02_H2_MultiDatabase {
     @Test
     fun `Embedded Inserts In Different Database Depth2`() = runTest {
         suspendTransaction(db = db1) {
+            SchemaUtils.drop(DMLTestData.Cities)
             SchemaUtils.create(DMLTestData.Cities)
             DMLTestData.Cities.selectAll().empty().shouldBeTrue()
             DMLTestData.Cities.insert {
@@ -202,16 +207,20 @@ class Ex02_H2_MultiDatabase {
     }
 
     @Test
-    fun `Coroutines With Multi Db`() = runSuspendIO {
-        suspendTransaction(Dispatchers.IO, db = db1) {
-            val tr1 = this
+    fun `Coroutines With Multi Db`() = runTest {
+        suspendTransaction(db = db1) {
+            val trOuterId = this
             SchemaUtils.create(DMLTestData.Cities)
             DMLTestData.Cities.selectAll().empty().shouldBeTrue()
             DMLTestData.Cities.insert {
                 it[DMLTestData.Cities.name] = "city1"
             }
 
-            suspendTransaction(Dispatchers.IO, db = db2) {
+            inTopLevelSuspendTransaction(
+                transactionIsolation = db2.transactionManager.defaultIsolationLevel!!,
+                db = db2
+            ) {
+                this.id shouldNotBeEqualTo trOuterId
                 DMLTestData.Cities.exists().shouldBeFalse()
                 SchemaUtils.create(DMLTestData.Cities)
                 DMLTestData.Cities.insert {
@@ -223,7 +232,7 @@ class Ex02_H2_MultiDatabase {
                 DMLTestData.Cities.selectAll().count().toInt() shouldBeEqualTo 2
                 DMLTestData.Cities.selectAll().last()[DMLTestData.Cities.name] shouldBeEqualTo "city3"
 
-                tr1.suspendTransaction {
+                suspendTransaction(db1) {
                     DMLTestData.Cities.selectAll().count() shouldBeEqualTo 1L
                     DMLTestData.Cities.insert {
                         it[DMLTestData.Cities.name] = "city4"
@@ -278,25 +287,29 @@ class Ex02_H2_MultiDatabase {
 
     @OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
     @Test // this test always fails for one reason or another
-    fun `when the default database is changed, coroutines should respect that`(): Unit = runSuspendIO {
+    fun `when the default database is changed, coroutines should respect that`(): Unit = runTest {
 //        db1.name shouldBeEqualTo "jdbc:h2:mem:db1" // These two asserts fail sometimes for reasons that escape me
 //        db2.name shouldBeEqualTo "jdbc:h2:mem:db2" // but if you run just these tests one at a time, they pass.
 
         val coroutineDispatcher1 = newSingleThreadContext("first")
         TransactionManager.defaultDatabase = db1
-        suspendTransaction(coroutineDispatcher1) {
-            TransactionManager.current().db.name shouldBeEqualTo db1.name
-            // when running all tests together, this one usually fails
-            // `Dual.select(intLiteral(1))`
-            TransactionManager.current().exec("SELECT 1") { row ->
-                row.getInt(0) shouldBeEqualTo 1
+        withContext(coroutineDispatcher1) {
+            suspendTransaction {
+                TransactionManager.current().db.name shouldBeEqualTo db1.name
+                // when running all tests together, this one usually fails
+                // `Dual.select(intLiteral(1))`
+                TransactionManager.current().exec("SELECT 1") { row ->
+                    row.getInt(0) shouldBeEqualTo 1
+                }
             }
         }
         TransactionManager.defaultDatabase = db2
-        suspendTransaction(coroutineDispatcher1) {
-            TransactionManager.current().db.name shouldBeEqualTo db2.name // fails??
-            TransactionManager.current().exec("SELECT 1") { row ->
-                row.getInt(0) shouldBeEqualTo 1
+        withContext(coroutineDispatcher1) {
+            suspendTransaction {
+                TransactionManager.current().db.name shouldBeEqualTo db2.name // fails??
+                TransactionManager.current().exec("SELECT 1") { row ->
+                    row.getInt(0) shouldBeEqualTo 1
+                }
             }
         }
         TransactionManager.defaultDatabase = null

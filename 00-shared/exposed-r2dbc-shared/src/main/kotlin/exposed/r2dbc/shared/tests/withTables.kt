@@ -5,7 +5,7 @@ import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.r2dbc.ExposedR2dbcException
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
-import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
+import org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.transactionManager
 
 suspend fun withTables(
@@ -17,6 +17,7 @@ suspend fun withTables(
     withDb(testDB, configure = configure) {
         runCatching { SchemaUtils.drop(*tables) }
         SchemaUtils.create(*tables)
+
         try {
             statement(testDB)
             commit()
@@ -28,12 +29,12 @@ suspend fun withTables(
                 commit()
             } catch (ex: Exception) {
                 val database = testDB.db!!
-                suspendTransaction(
+                inTopLevelSuspendTransaction(
+                    transactionIsolation = database.transactionManager.defaultIsolationLevel!!,
                     db = database,
-                    transactionIsolation = database.transactionManager.defaultIsolationLevel,
                 ) {
                     maxAttempts = 1
-                    SchemaUtils.drop(*tables)
+                    runCatching { SchemaUtils.drop(*tables) }
                 }
             }
         }

@@ -4,7 +4,6 @@ import exposed.r2dbc.shared.repository.MovieSchema.ActorTable
 import exposed.r2dbc.shared.repository.MovieSchema.withMovieAndActors
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
-import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.KLogging
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.toList
@@ -16,8 +15,8 @@ import org.amshove.kluent.shouldBeTrue
 import org.amshove.kluent.shouldHaveSize
 import org.amshove.kluent.shouldNotBeEmpty
 import org.amshove.kluent.shouldNotBeNull
-import org.jetbrains.exposed.v1.core.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.v1.core.SqlExpressionBuilder.greaterEq
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.greaterEq
 import org.jetbrains.exposed.v1.r2dbc.select
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.junit.jupiter.api.Assumptions
@@ -39,7 +38,7 @@ class ActorRepositoryTest: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `find actor by id`(testDB: TestDB) = runSuspendIO {
+    fun `find actor by id`(testDB: TestDB) = runTest {
         withMovieAndActors(testDB) {
             val actorId = 1L
             val actor = repository.findById(actorId)
@@ -80,7 +79,7 @@ class ActorRepositoryTest: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `delete actor by id`(testDB: TestDB) = runSuspendIO {
+    fun `delete actor by id`(testDB: TestDB) = runTest {
         withMovieAndActors(testDB) {
             val actor = newActorDTO()
             val savedActor = repository.save(actor)
