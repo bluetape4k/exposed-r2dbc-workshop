@@ -2,14 +2,18 @@ package exposed.r2dbc.examples.cache.domain.repository
 
 import exposed.r2dbc.examples.cache.AbstractCacheStrategyTest
 import exposed.r2dbc.examples.cache.domain.model.UserCredentialsTable
-import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
+import org.amshove.kluent.shouldNotBeEmpty
 import org.amshove.kluent.shouldNotBeNull
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.inList
 import org.jetbrains.exposed.v1.r2dbc.deleteAll
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 import org.jetbrains.exposed.v1.r2dbc.selectAll
@@ -29,13 +33,12 @@ class UserCredentialsCacheRepositoryTest(
 
     @BeforeEach
     fun setup() {
-        runBlocking {
+        runBlocking(Dispatchers.IO) {
             repository.invalidateAll()
             idsInDB.clear()
 
             suspendTransaction {
                 UserCredentialsTable.deleteAll()
-
                 repeat(10) {
                     idsInDB.add(insertUserCredentials())
                 }
@@ -52,13 +55,14 @@ class UserCredentialsCacheRepositoryTest(
     }
 
     @Test
-    fun `Read Through 로 기존 DB정보를 캐시에서 읽어오기`() = runSuspendIO {
-        suspendTransaction(readOnly = true) {
-            idsInDB.forEach { ucId ->
-                val userCredentialsFromCache = repository.get(ucId)
-                log.debug { "Loaded user credentials from cache. id=$ucId, $userCredentialsFromCache" }
-                userCredentialsFromCache.shouldNotBeNull()
-                userCredentialsFromCache.id shouldBeEqualTo ucId
+    fun `Read Through 로 기존 DB정보를 캐시에서 읽어오기`() = runTest {
+        idsInDB.forEach { ucId ->
+            val userCredentialsFromCache = repository.get(ucId)
+            log.debug { "Loaded user credentials from cache. id=$ucId, $userCredentialsFromCache" }
+            userCredentialsFromCache.shouldNotBeNull()
+            userCredentialsFromCache.id shouldBeEqualTo ucId
+
+            suspendTransaction {
                 userCredentialsFromCache.username shouldBeEqualTo UserCredentialsTable.selectAll()
                     .where { UserCredentialsTable.id eq ucId }
                     .single()[UserCredentialsTable.username]
@@ -67,20 +71,19 @@ class UserCredentialsCacheRepositoryTest(
     }
 
     @Test
-    fun `Read Through 로 검색해서 가져오기`() = runSuspendIO {
-        suspendTransaction(readOnly = true) {
-            val userCredentialsFromCache = repository.findAll {
+    fun `Read Through 로 검색해서 가져오기`() = runTest {
+        val userCredentialsFromCache = repository
+            .findAll {
                 UserCredentialsTable.id inList idsInDB
-            }.toList()
-            userCredentialsFromCache shouldHaveSize idsInDB.size
-        }
+            }
+            .toList()
+        userCredentialsFromCache shouldHaveSize idsInDB.size
     }
 
     @Test
-    fun `Read Through 로 모든 ID 가져오기`() = runSuspendIO {
-        suspendTransaction(readOnly = true) {
-            val userCredentialsFromCache = repository.getAll(idsInDB)
-            userCredentialsFromCache shouldHaveSize idsInDB.size
-        }
+    fun `Read Through 로 모든 ID 가져오기`() = runTest {
+        val userCredentialsFromCache = repository.getAll(idsInDB, 1)
+        userCredentialsFromCache.shouldNotBeEmpty()
+        userCredentialsFromCache shouldHaveSize idsInDB.size
     }
 }

@@ -26,7 +26,7 @@ class UserEventControllerTest(
     companion object: KLoggingChannel()
 
     private suspend fun getCountOfUserEvents(): Long =
-        suspendTransaction(readOnly = true) {
+        suspendTransaction {
             UserEventTable.selectAll().count()
         }
 

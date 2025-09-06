@@ -30,7 +30,7 @@ class UserController(
     @GetMapping
     suspend fun findAll(@RequestParam(name = "limit") limit: Int? = null): List<UserDTO> {
         log.debug { "Finding all users with limit: $limit" }
-        return suspendTransaction(readOnly = true) {
+        return suspendTransaction {
             repository.findAll(limit = limit, where = { Op.TRUE }).toList()
         }
     }
@@ -38,7 +38,7 @@ class UserController(
     @GetMapping("/{id}")
     suspend fun get(@PathVariable(name = "id") id: Long): UserDTO? {
         log.debug { "Getting user with id: $id" }
-        return suspendTransaction(readOnly = true) {
+        return suspendTransaction {
             repository.get(id)
         }
     }
@@ -46,7 +46,7 @@ class UserController(
     @GetMapping("/all")
     suspend fun getAll(@RequestParam(name = "ids") ids: List<Long>): List<UserDTO> {
         log.debug { "Getting all users with ids: $ids" }
-        return suspendTransaction(readOnly = true) {
+        return suspendTransaction {
             repository.getAll(ids)
         }
     }
