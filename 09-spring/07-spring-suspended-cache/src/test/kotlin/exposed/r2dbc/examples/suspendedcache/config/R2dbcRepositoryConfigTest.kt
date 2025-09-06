@@ -2,8 +2,8 @@ package exposed.r2dbc.examples.suspendedcache.config
 
 import exposed.r2dbc.examples.suspendedcache.AbstractSpringSuspendedCacheApplicationTest
 import exposed.r2dbc.examples.suspendedcache.domain.repository.CountryR2dbcRepository
-import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldNotBeNull
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,13 +19,13 @@ class R2dbcRepositoryConfigTest(
     companion object: KLoggingChannel()
 
     @Test
-    fun `defaultCountrySuspendedRepository가 생성되어야 한다`() = runSuspendIO {
+    fun `defaultCountrySuspendedRepository가 생성되어야 한다`() = runTest {
         defaultCountryRepository.shouldNotBeNull()
         defaultCountryRepository.findByCode("KR").shouldNotBeNull()
     }
 
     @Test
-    fun `cachedCountrySuspendedRepository가 생성되어야 한다`() = runSuspendIO {
+    fun `cachedCountrySuspendedRepository가 생성되어야 한다`() = runTest {
         cachedCountryRepository.shouldNotBeNull()
         cachedCountryRepository.findByCode("KR").shouldNotBeNull()
     }

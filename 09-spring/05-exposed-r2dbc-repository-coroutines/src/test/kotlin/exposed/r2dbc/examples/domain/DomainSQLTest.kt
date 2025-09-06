@@ -7,14 +7,20 @@ import io.bluetape4k.junit5.coroutines.SuspendedJobTester
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
+import io.bluetape4k.support.uninitialized
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.launch
 import org.amshove.kluent.shouldNotBeEmpty
+import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.selectAll
+import org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
-import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransactionAsync
+import org.jetbrains.exposed.v1.r2dbc.transactions.transactionManager
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 
 class DomainSQLTest: AbstractExposedR2dbcRepositoryTest() {
 
@@ -22,9 +28,12 @@ class DomainSQLTest: AbstractExposedR2dbcRepositoryTest() {
         private const val REPEAT_SIZE = 5
     }
 
+    @Autowired
+    private val database: R2dbcDatabase = uninitialized()
+
     @Test
     fun `get all actors`() = runSuspendIO {
-        suspendTransaction(Dispatchers.IO, readOnly = true) {
+        suspendTransaction {
             val actors = ActorTable.selectAll().map { it.toActorDTO() }.toList()
 
             actors.forEach { actor ->
@@ -36,17 +45,20 @@ class DomainSQLTest: AbstractExposedR2dbcRepositoryTest() {
 
     @Test
     fun `get all actors in multiple platform threads`() = runSuspendIO {
-        suspendTransaction(Dispatchers.IO, readOnly = true) {
-            SuspendedJobTester()
-                .numThreads(Runtime.getRuntime().availableProcessors() * 2)
-                .roundsPerJob(Runtime.getRuntime().availableProcessors() * 2 * 4)
-                .add {
-                    suspendTransactionAsync(Dispatchers.IO, readOnly = true) {
+        SuspendedJobTester()
+            .numThreads(Runtime.getRuntime().availableProcessors())
+            .roundsPerJob(Runtime.getRuntime().availableProcessors() * 4)
+            .add {
+                GlobalScope.launch(Dispatchers.IO) {
+                    inTopLevelSuspendTransaction(
+                        transactionIsolation = database.transactionManager.defaultIsolationLevel!!,
+                        db = database
+                    ) {
                         val actors = ActorTable.selectAll().map { it.toActorDTO() }.toList()
                         actors.shouldNotBeEmpty()
                     }
-                }
-                .run()
-        }
+                }.join()
+            }
+            .run()
     }
 }

@@ -45,13 +45,12 @@ class DomainSQLTest: AbstractSpringWebfluxTest() {
             actors.shouldNotBeEmpty()
         }
 
-        // FIXME: SuspendedJobTester 를 이용하여 Coroutine Context 가 변환이 되는 경우에는 Transaction이 유실된다.
         @Test
         fun `get all actors in multiple platform threads`() = runSuspendIO {
             val availableProcessors = Runtime.getRuntime().availableProcessors()
             SuspendedJobTester()
                 .numThreads(availableProcessors)
-                .roundsPerJob(availableProcessors * 2)
+                .roundsPerJob(availableProcessors * 4)
                 .add {
                     val scope = CoroutineScope(Dispatchers.IO)
                     scope.launch {

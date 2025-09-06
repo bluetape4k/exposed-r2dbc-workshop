@@ -5,6 +5,7 @@ import exposed.r2dbc.examples.suspendedcache.domain.CountryTable
 import exposed.r2dbc.examples.suspendedcache.domain.toCountryDTO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.singleOrNull
+import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.update

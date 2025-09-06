@@ -3,8 +3,8 @@ package exposed.r2dbc.examples.suspendedcache.domain.repository
 import exposed.r2dbc.examples.suspendedcache.cache.LettuceSuspendedCacheManager
 import exposed.r2dbc.examples.suspendedcache.domain.CountryDTO
 import exposed.r2dbc.examples.suspendedcache.utils.DataPopulator
-import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.support.uninitialized
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,7 +19,7 @@ class CachedCountryR2dbcRepositoryTest(
     override val countryRepository: CountryR2dbcRepository = uninitialized()
 
     @Test
-    fun `모든 캐시를 삭제한다`() = runSuspendIO {
+    fun `모든 캐시를 삭제한다`() = runTest {
         val countryCache =
             cacheManager.getOrCreate<String, CountryDTO>(CachedCountryR2dbcRepository.CACHE_NAME)
 
