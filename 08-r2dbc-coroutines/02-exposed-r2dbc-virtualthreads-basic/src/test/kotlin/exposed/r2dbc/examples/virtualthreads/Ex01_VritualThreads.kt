@@ -28,6 +28,7 @@ import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import java.util.concurrent.CopyOnWriteArrayList
 
 class Ex01_VritualThreads: R2dbcExposedTestBase() {
 
@@ -89,6 +90,7 @@ class Ex01_VritualThreads: R2dbcExposedTestBase() {
                         log.debug { "Task[$index] inserting ..." }
                         // insert 를 수행하는 트랜잭션을 생성한다
                         VTester.insert { }
+                        commit()
                     }
                 }
             }.awaitAll()
@@ -118,20 +120,22 @@ class Ex01_VritualThreads: R2dbcExposedTestBase() {
     fun `다수의 비동기 작업을 수행 후 대기`(testDB: TestDB) = runTest {
         withTables(testDB, VTester) {
             val recordCount = 10
+            val results = CopyOnWriteArrayList<Int>()
 
-            val results: List<Int> = List(recordCount) { index ->
+            List(recordCount) { index ->
                 GlobalScope.async(Dispatchers.VT) {
                     suspendTransaction {
                         maxAttempts = 5
                         log.debug { "Task[$index] inserting ..." }
                         // insert 를 수행하는 트랜잭션을 생성한다
                         VTester.insert { }
-                        index + 1
+                        commit()
+                        results.add(index + 1)
                     }
                 }
             }.awaitAll()
 
-            results shouldBeEqualTo intRangeOf(1, recordCount)
+            results.sorted() shouldBeEqualTo intRangeOf(1, recordCount)
 
             VTester.selectAll().count() shouldBeEqualTo recordCount.toLong()
         }

@@ -20,7 +20,7 @@ class DataInitializer: ApplicationListener<ApplicationReadyEvent> {
     companion object: KLoggingChannel()
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
-        runBlocking(Dispatchers.IO) {
+        runBlocking(Dispatchers.Default) {
             suspendTransaction {
                 this.createTables()
             }

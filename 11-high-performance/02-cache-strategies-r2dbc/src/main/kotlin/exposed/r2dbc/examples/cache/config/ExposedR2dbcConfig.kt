@@ -48,7 +48,7 @@ class ExposedR2dbcConfig {
             .option(ConnectionFactoryOptions.PROTOCOL, "mem")
             .option(ConnectionFactoryOptions.DATABASE, "test")
             .option(Option.valueOf("DB_CLOSE_DELAY"), "-1")
-            .option(Option.valueOf("DB_CLOSE_ON_EXIT"), "FALSE")
+            //.option(Option.valueOf("DB_CLOSE_ON_EXIT"), "FALSE")
             .build()
 
         log.info { "H2 연결 설정: ${options.toString().replace(Regex("password=.*?,"), "password=****,")}" }

@@ -17,19 +17,20 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldContainSame
 import org.amshove.kluent.shouldHaveSize
 import org.amshove.kluent.shouldNotBeNull
+import org.jetbrains.exposed.v1.r2dbc.batchInsert
 import org.jetbrains.exposed.v1.r2dbc.deleteAll
-import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.returnResult
-import java.time.LocalDate
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.random.Random
 
@@ -42,7 +43,7 @@ class UserControllerTest(
         private const val REPEAT_SIZE = 5
     }
 
-    private val idsInDB = mutableListOf<Long>()
+    private val idsInDB = CopyOnWriteArrayList<Long>()
     private val lastUserId = AtomicLong(0L)
 
     @BeforeEach
@@ -53,27 +54,27 @@ class UserControllerTest(
 
             suspendTransaction {
                 UserTable.deleteAll()
-                repeat(10) {
-                    idsInDB.add(insertUser())
-                }
+                insertUsers(10)
             }
         }
     }
 
-    private suspend fun insertUser(): Long {
-        return UserTable.insertAndGetId {
-            it[username] = faker.internet().username()
-            it[firstName] = faker.name().firstName()
-            it[lastName] = faker.name().lastName()
-            it[address] = faker.address().fullAddress()
-            it[zipcode] = faker.address().zipCode()
-            it[birthDate] = LocalDate.now()
-            it[avatar] = faker.image().base64JPG().toByteArray().toExposedBlob()
-        }.value
+    private suspend fun insertUsers(size: Int) {
+        val users = List(size) { newUserDTO() }
+        val rows = UserTable.batchInsert(users) {
+            this[UserTable.username] = it.username
+            this[UserTable.firstName] = it.firstName
+            this[UserTable.lastName] = it.lastName
+            this[UserTable.address] = it.address
+            this[UserTable.zipcode] = it.zipcode
+            this[UserTable.birthDate] = it.birthDate
+            this[UserTable.avatar] = it.avatar!!.toExposedBlob()
+        }
+        idsInDB.addAll(rows.map { it[UserTable.id].value }.sorted())
     }
 
     @Test
-    fun `모든 사용자를 조회`() = runSuspendIO {
+    fun `모든 사용자를 조회`() = runTest {
         val users = client
             .httpGet("/users")
             .returnResult<UserDTO>().responseBody

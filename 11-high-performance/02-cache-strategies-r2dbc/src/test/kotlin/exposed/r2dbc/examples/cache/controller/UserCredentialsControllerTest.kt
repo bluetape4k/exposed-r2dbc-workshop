@@ -55,11 +55,13 @@ class UserCredentialsControllerTest(
     }
 
     private suspend fun insertUserCredentials(): String {
-        return UserCredentialsTable.insertAndGetId {
-            it[UserCredentialsTable.username] = faker.internet().username()
-            it[UserCredentialsTable.email] = faker.internet().emailAddress()
-            it[UserCredentialsTable.lastLoginAt] = Instant.now()
-        }.value
+        return suspendTransaction {
+            UserCredentialsTable.insertAndGetId {
+                it[UserCredentialsTable.username] = faker.internet().username()
+                it[UserCredentialsTable.email] = faker.internet().emailAddress()
+                it[UserCredentialsTable.lastLoginAt] = Instant.now()
+            }.value
+        }
     }
 
     @Test

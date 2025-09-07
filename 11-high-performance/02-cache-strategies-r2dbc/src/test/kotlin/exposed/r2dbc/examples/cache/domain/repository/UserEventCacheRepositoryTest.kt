@@ -4,12 +4,12 @@ import exposed.r2dbc.examples.cache.AbstractCacheStrategyTest
 import exposed.r2dbc.examples.cache.domain.model.UserEventTable
 import exposed.r2dbc.examples.cache.domain.model.newUserEventDTO
 import io.bluetape4k.junit5.awaitility.suspendUntil
+import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.chunked
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.withPollInterval
@@ -38,7 +38,7 @@ class UserEventCacheRepositoryTest(
     }
 
     @Test
-    fun `write behind 로 대량의 데이테를 추가한다`() = runTest {
+    fun `write behind 로 대량의 데이테를 추가한다`() = runSuspendIO {
         val totalCount = 1000
 
         flow {

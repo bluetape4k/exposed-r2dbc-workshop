@@ -7,7 +7,6 @@ import io.bluetape4k.logging.debug
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.springframework.transaction.TransactionManager
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -28,25 +27,19 @@ class UserCredentialsController(
     @GetMapping
     suspend fun findAll(@RequestParam(name = "limit") limit: Int? = null): List<UserCredentialsDTO> {
         log.debug { "Finding all user credentials with limit: $limit" }
-        return suspendTransaction {
-            repository.findAll(limit = limit).toList()
-        }
+        return repository.findAll(limit = limit).toList()
     }
 
     @GetMapping("/{id}")
     suspend fun get(@PathVariable(name = "id") id: String): UserCredentialsDTO? {
         log.debug { "Getting user credentials with id: $id" }
-        return suspendTransaction {
-            repository.get(id)
-        }
+        return repository.get(id)
     }
 
     @GetMapping("/all")
     suspend fun getAll(@RequestParam(name = "ids") ids: List<String>): List<UserCredentialsDTO> {
         log.debug { "Getting all user credentials with ids: $ids" }
-        return suspendTransaction {
-            repository.getAll(ids)
-        }
+        return repository.getAll(ids)
     }
 
     @DeleteMapping("/invalidate")
@@ -55,17 +48,13 @@ class UserCredentialsController(
             return 0
         }
         log.debug { "Invalidating cache for ids: $ids" }
-        return suspendTransaction {
-            repository.invalidate(*ids.toTypedArray())
-        }
+        return repository.invalidate(*ids.toTypedArray())
     }
 
     @DeleteMapping("/invalidate/all")
     suspend fun invalidateAll() {
-        suspendTransaction {
-            log.debug { "Invalidating all user credentials cache" }
-            repository.invalidateAll()
-        }
+        log.debug { "Invalidating all user credentials cache" }
+        repository.invalidateAll()
 
     }
 
@@ -75,9 +64,6 @@ class UserCredentialsController(
             return 0
         }
         log.debug { "Invalidating cache for pattern: $pattern" }
-        return suspendTransaction {
-            repository.invalidateByPattern(pattern)
-        }
+        return repository.invalidateByPattern(pattern)
     }
-
 }

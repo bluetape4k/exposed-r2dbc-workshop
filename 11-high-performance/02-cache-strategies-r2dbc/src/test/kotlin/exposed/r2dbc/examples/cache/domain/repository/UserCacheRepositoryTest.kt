@@ -2,7 +2,9 @@ package exposed.r2dbc.examples.cache.domain.repository
 
 import exposed.r2dbc.examples.cache.AbstractCacheStrategyTest
 import exposed.r2dbc.examples.cache.domain.model.UserTable
+import exposed.r2dbc.examples.cache.domain.model.newUserDTO
 import io.bluetape4k.exposed.core.statements.api.toExposedBlob
+import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.Dispatchers
@@ -13,14 +15,14 @@ import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeLessOrEqualTo
 import org.amshove.kluent.shouldHaveSize
 import org.jetbrains.exposed.v1.core.inList
+import org.jetbrains.exposed.v1.r2dbc.batchInsert
 import org.jetbrains.exposed.v1.r2dbc.deleteAll
-import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.testcontainers.utility.Base58
-import java.time.LocalDate
+import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.system.measureTimeMillis
 
 class UserCacheRepositoryTest(
@@ -29,7 +31,7 @@ class UserCacheRepositoryTest(
 
     companion object: KLoggingChannel()
 
-    private val idsInDB = mutableListOf<Long>()
+    private val idsInDB = CopyOnWriteArrayList<Long>()
 
     @BeforeEach
     fun beforeEach() {
@@ -39,27 +41,27 @@ class UserCacheRepositoryTest(
 
             suspendTransaction {
                 UserTable.deleteAll()
-                repeat(10) {
-                    idsInDB.add(insertUser())
-                }
+                insertUsers(10)
             }
         }
     }
 
-    private suspend fun insertUser(): Long {
-        return UserTable.insertAndGetId {
-            it[username] = faker.internet().username()
-            it[firstName] = faker.name().firstName()
-            it[lastName] = faker.name().lastName()
-            it[address] = faker.address().fullAddress()
-            it[zipcode] = faker.address().zipCode()
-            it[birthDate] = LocalDate.now()
-            it[avatar] = faker.image().base64JPG().toByteArray().toExposedBlob()
-        }.value
+    private suspend fun insertUsers(size: Int) {
+        val users = List(size) { newUserDTO() }
+        val rows = UserTable.batchInsert(users) {
+            this[UserTable.username] = it.username
+            this[UserTable.firstName] = it.firstName
+            this[UserTable.lastName] = it.lastName
+            this[UserTable.address] = it.address
+            this[UserTable.zipcode] = it.zipcode
+            this[UserTable.birthDate] = it.birthDate
+            this[UserTable.avatar] = it.avatar!!.toExposedBlob()
+        }
+        idsInDB.addAll(rows.map { it[UserTable.id].value }.sorted())
     }
 
     @Test
-    fun `Read Through 로 기존 DB정보를 캐시에서 읽어오기`() = runTest {
+    fun `Read Through 로 기존 DB정보를 캐시에서 읽어오기`() = runSuspendIO {
         suspendTransaction {
             val userId = idsInDB.random()
 
@@ -84,7 +86,7 @@ class UserCacheRepositoryTest(
     }
 
     @Test
-    fun `Read Through 로 복수의 User를 캐시에서 읽어오기`() = runTest {
+    fun `Read Through 로 복수의 User를 캐시에서 읽어오기`() = runSuspendIO {
         val userIdToSearch = idsInDB.shuffled().take(5)
 
         // DB에 있는 User를 검색
@@ -109,28 +111,28 @@ class UserCacheRepositoryTest(
     }
 
     @Test
-    fun `Read Through 로 검색한 User가 없을 때에는 빈 리스트 반환`() = runTest {
+    fun `Read Through 로 검색한 User가 없을 때에는 빈 리스트 반환`() = runSuspendIO {
         val userIdToSearch = listOf(-1L, -3L, -5L, -7L, -9L)
         val users = repository.findAll { UserTable.id inList userIdToSearch }.toList()
         users.shouldBeEmpty()
     }
 
     @Test
-    fun `Read Through 로 읽은 엔티티를 갱신하여 Write Through로 DB에 저장하기`() = runTest {
-            val userId = idsInDB.random()
+    fun `Read Through 로 읽은 엔티티를 갱신하여 Write Through로 DB에 저장하기`() = runSuspendIO {
+        val userId = idsInDB.random()
 
-            val cachedUser = repository.get(userId)!!
-            val updatedUser = cachedUser.copy(
-                firstName = "updatedFirstName-${Base58.randomString(8)}",
-                lastName = "updatedLastName-${Base58.randomString(8)}",
-                address = "updatedAddress",
-                zipcode = "updatedZipcode",
-            ).also {
-                it.avatar = faker.image().base64JPG().toByteArray()
-            }
-            repository.put(updatedUser)
+        val cachedUser = repository.get(userId)!!
+        val updatedUser = cachedUser.copy(
+            firstName = "updatedFirstName-${Base58.randomString(8)}",
+            lastName = "updatedLastName-${Base58.randomString(8)}",
+            address = "updatedAddress",
+            zipcode = "updatedZipcode",
+        ).also {
+            it.avatar = faker.image().base64JPG().toByteArray()
+        }
+        repository.put(updatedUser)
 
         val userFromDB = suspendTransaction { repository.findFreshById(userId) }
-            userFromDB shouldBeEqualTo updatedUser.copy(updatedAt = userFromDB!!.updatedAt)
+        userFromDB shouldBeEqualTo updatedUser.copy(updatedAt = userFromDB!!.updatedAt)
     }
 }

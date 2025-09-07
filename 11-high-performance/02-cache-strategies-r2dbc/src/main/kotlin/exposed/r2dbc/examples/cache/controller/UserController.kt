@@ -9,7 +9,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import org.jetbrains.exposed.v1.core.Op
-import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -30,25 +29,19 @@ class UserController(
     @GetMapping
     suspend fun findAll(@RequestParam(name = "limit") limit: Int? = null): List<UserDTO> {
         log.debug { "Finding all users with limit: $limit" }
-        return suspendTransaction {
-            repository.findAll(limit = limit, where = { Op.TRUE }).toList()
-        }
+        return repository.findAll(limit = limit, where = { Op.TRUE }).toList()
     }
 
     @GetMapping("/{id}")
     suspend fun get(@PathVariable(name = "id") id: Long): UserDTO? {
         log.debug { "Getting user with id: $id" }
-        return suspendTransaction {
-            repository.get(id)
-        }
+        return repository.get(id)
     }
 
     @GetMapping("/all")
     suspend fun getAll(@RequestParam(name = "ids") ids: List<Long>): List<UserDTO> {
         log.debug { "Getting all users with ids: $ids" }
-        return suspendTransaction {
-            repository.getAll(ids)
-        }
+        return repository.getAll(ids)
     }
 
     @DeleteMapping("/invalidate")
@@ -57,29 +50,23 @@ class UserController(
             return 0
         }
         log.debug { "Invalidating cache for ids: $ids" }
-        return suspendTransaction {
-            repository.invalidate(*ids.toTypedArray())
-        }
+        return repository.invalidate(*ids.toTypedArray())
     }
 
     @DeleteMapping("/invalidate/all")
     suspend fun invalidateAll() {
-        suspendTransaction {
-            repository.invalidateAll()
-        }
+        repository.invalidateAll()
     }
 
     @DeleteMapping("/invalidate/pattern")
     suspend fun invalidateByPattern(@RequestParam(name = "patterns") pattern: String): Long {
-        return suspendTransaction {
-            repository.invalidateByPattern(pattern)
-        }
+        return repository.invalidateByPattern(pattern)
     }
 
     @PostMapping
     suspend fun put(@RequestBody userDTO: UserDTO): UserDTO {
         log.debug { "Updating user with id: ${userDTO.id}" }
-        suspendTransaction { repository.put(userDTO) }
+        repository.put(userDTO)
         return userDTO
     }
 }
