@@ -4,9 +4,6 @@ import exposed.r2dbc.examples.cache.domain.model.UserCredentialsDTO
 import exposed.r2dbc.examples.cache.domain.repository.UserCredentialsCacheRepository
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import org.springframework.transaction.TransactionManager
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -20,8 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 class UserCredentialsController(
     private val repository: UserCredentialsCacheRepository,
     private val transactionManager: TransactionManager,
-): CoroutineScope by CoroutineScope(Dispatchers.IO + SupervisorJob()) {
-
+) {
     companion object: KLoggingChannel()
 
     @GetMapping

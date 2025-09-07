@@ -5,9 +5,6 @@ import exposed.r2dbc.examples.cache.domain.model.UserDTO
 import exposed.r2dbc.examples.cache.domain.repository.UserCacheRepository
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import org.jetbrains.exposed.v1.core.Op
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -22,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/users")
 class UserController(
     private val repository: UserCacheRepository,
-): CoroutineScope by CoroutineScope(Dispatchers.IO + SupervisorJob()) {
+) {
 
     companion object: KLoggingChannel()
 
