@@ -12,10 +12,14 @@ import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.transactionManager
+import org.junit.jupiter.api.MethodOrderer
+import org.junit.jupiter.api.Order
+import org.junit.jupiter.api.TestMethodOrder
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import kotlin.random.Random
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 class KsuidMillisTableTest: AbstractCustomIdTableTest() {
 
     companion object: KLoggingChannel()
@@ -37,6 +41,7 @@ class KsuidMillisTableTest: AbstractCustomIdTableTest() {
 
     data class Record(val name: String, val age: Int)
 
+    @Order(0)
     @ParameterizedTest(name = "{0} - {1}개 레코드")
     @MethodSource(GET_TESTDB_AND_ENTITY_COUNT)
     fun `KsuidMillis id를 가진 레코드를 낱개로 생성한다`(testDB: TestDB, recordCount: Int) = runTest {
@@ -52,6 +57,7 @@ class KsuidMillisTableTest: AbstractCustomIdTableTest() {
         }
     }
 
+    @Order(1)
     @ParameterizedTest(name = "{0} - {1}개 레코드")
     @MethodSource(GET_TESTDB_AND_ENTITY_COUNT)
     fun `KsuidMillis id를 가진 레코드를 배치로 생성한다`(testDB: TestDB, recordCount: Int) = runTest {
@@ -74,6 +80,7 @@ class KsuidMillisTableTest: AbstractCustomIdTableTest() {
         }
     }
 
+    @Order(2)
     @ParameterizedTest(name = "{0} - {1}개 레코드")
     @MethodSource(GET_TESTDB_AND_ENTITY_COUNT)
     fun `코루틴 환경에서 레코드를 배치로 생성한다`(testDB: TestDB, recordCount: Int) = runTest {
