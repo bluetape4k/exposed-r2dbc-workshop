@@ -8,12 +8,14 @@ import io.bluetape4k.concurrent.virtualthread.VT
 import io.bluetape4k.exposed.r2dbc.virtualThreadTransaction
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldNotBeEmpty
@@ -25,7 +27,9 @@ import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 import org.jetbrains.exposed.v1.r2dbc.selectAll
+import org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
+import org.jetbrains.exposed.v1.r2dbc.transactions.transactionManager
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.concurrent.CopyOnWriteArrayList
@@ -84,25 +88,23 @@ class Ex01_VritualThreads: R2dbcExposedTestBase() {
         withTables(testDB, VTester) {
             val recordCount = 10
 
+            val vtScope = CoroutineScope(Dispatchers.VT)
             List(recordCount) { index ->
-                GlobalScope.async(Dispatchers.VT) {
+                vtScope.async {
                     suspendTransaction {
                         log.debug { "Task[$index] inserting ..." }
                         // insert 를 수행하는 트랜잭션을 생성한다
                         VTester.insert { }
-                        commit()
                     }
                 }
             }.awaitAll()
 
-            commit()
-
             // 중첩 트랜잭션에서 virtual threads 를 이용하여 동시에 여러 작업을 수행한다.
             val rows = List(recordCount) { index ->
-                GlobalScope.async(Dispatchers.VT) {
+                vtScope.async {
                     suspendTransaction {
                         log.debug { "Task[$index] selecting ..." }
-                        VTester.selectAll().toList()
+                        VTester.selectAll().toList(CopyOnWriteArrayList())
                     }
                 }
             }.awaitAll().flatten()
@@ -122,21 +124,24 @@ class Ex01_VritualThreads: R2dbcExposedTestBase() {
             val recordCount = 10
             val results = CopyOnWriteArrayList<Int>()
 
+            val vtScope = CoroutineScope(Dispatchers.VT)
+
             List(recordCount) { index ->
-                GlobalScope.async(Dispatchers.VT) {
-                    suspendTransaction {
+                vtScope.launch {
+                    inTopLevelSuspendTransaction(
+                        transactionIsolation = db.transactionManager.defaultIsolationLevel!!,
+                        db = db
+                    ) {
                         maxAttempts = 5
                         log.debug { "Task[$index] inserting ..." }
                         // insert 를 수행하는 트랜잭션을 생성한다
                         VTester.insert { }
-                        commit()
                         results.add(index + 1)
                     }
                 }
-            }.awaitAll()
+            }.joinAll()
 
             results.sorted() shouldBeEqualTo intRangeOf(1, recordCount)
-
             VTester.selectAll().count() shouldBeEqualTo recordCount.toLong()
         }
     }
