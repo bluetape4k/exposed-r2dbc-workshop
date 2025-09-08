@@ -83,7 +83,6 @@ class ActorRepositoryTest(
             val prevCount = actorRepository.count()
 
             val actor = newActorDTO()
-
             val savedActor = actorRepository.create(actor)
             savedActor shouldBeEqualTo actor.copy(id = savedActor.id)
 
@@ -99,6 +98,7 @@ class ActorRepositoryTest(
         suspendTransaction {
             val actor = newActorDTO()
             val savedActor = actorRepository.create(actor)
+            commit()
             savedActor.shouldNotBeNull()
             savedActor.id.shouldNotBeNull()
 

@@ -14,9 +14,7 @@ import kotlinx.coroutines.launch
 import org.amshove.kluent.shouldNotBeEmpty
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.selectAll
-import org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
-import org.jetbrains.exposed.v1.r2dbc.transactions.transactionManager
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
@@ -48,17 +46,14 @@ class DomainSQLTest: AbstractSpringWebfluxTest() {
         @Test
         fun `get all actors in multiple platform threads`() = runSuspendIO {
             val availableProcessors = Runtime.getRuntime().availableProcessors()
+            val scope = CoroutineScope(Dispatchers.IO)
+
             SuspendedJobTester()
                 .numThreads(availableProcessors)
                 .roundsPerJob(availableProcessors * 4)
                 .add {
-                    val scope = CoroutineScope(Dispatchers.IO)
                     scope.launch {
-                        inTopLevelSuspendTransaction(
-                            transactionIsolation = database.transactionManager.defaultIsolationLevel!!,
-                            readOnly = true,
-                            db = database
-                        ) {
+                        suspendTransaction(db = database) {
                             val actors = ActorTable.selectAll().map { it.toActorDTO() }.toList()
                             actors.shouldNotBeEmpty()
                         }

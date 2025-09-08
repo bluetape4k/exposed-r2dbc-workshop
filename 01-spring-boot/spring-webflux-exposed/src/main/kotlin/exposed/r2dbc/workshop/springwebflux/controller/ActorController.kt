@@ -26,12 +26,11 @@ class ActorController(
     companion object: KLoggingChannel()
 
     @GetMapping("/{id}")
-    suspend fun getActorById(@PathVariable("id") actorId: Long): ActorDTO? {
-        return suspendTransaction {
+    suspend fun getActorById(@PathVariable("id") actorId: Long): ActorDTO? =
+        suspendTransaction {
             log.debug { "current transaction=$this" }
             actorRepository.findById(actorId)
         }
-    }
 
     @GetMapping
     suspend fun searchActors(request: ServerHttpRequest): List<ActorDTO> {
