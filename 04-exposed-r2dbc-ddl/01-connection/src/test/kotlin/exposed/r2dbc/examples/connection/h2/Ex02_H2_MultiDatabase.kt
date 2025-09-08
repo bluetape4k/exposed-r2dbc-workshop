@@ -4,6 +4,7 @@ import exposed.r2dbc.shared.dml.DMLTestData
 import exposed.r2dbc.shared.samples.CountryTable
 import exposed.r2dbc.shared.tests.TestDB
 import io.bluetape4k.exposed.r2dbc.getInt
+import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.r2dbc.spi.IsolationLevel
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -15,7 +16,6 @@ import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.invoke
 import kotlinx.coroutines.newSingleThreadContext
-import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
@@ -80,7 +80,7 @@ class Ex02_H2_MultiDatabase {
     }
 
     @Test
-    fun `transaction with database`() = runTest {
+    fun `transaction with database`() = runSuspendIO {
         suspendTransaction(db = db1) {
             CountryTable.exists().shouldBeFalse()
             SchemaUtils.create(CountryTable)
@@ -97,8 +97,7 @@ class Ex02_H2_MultiDatabase {
     }
 
     @Test
-    fun `simple insert in different databases`() = runTest {
-
+    fun `simple insert in different databases`() = runSuspendIO {
         suspendTransaction(db = db1) {
             SchemaUtils.create(CountryTable)
             CountryTable.selectAll().empty().shouldBeTrue()
@@ -129,9 +128,8 @@ class Ex02_H2_MultiDatabase {
     }
 
     @Test
-    fun `Embedded Inserts In Different Database`() = runTest {
+    fun `Embedded Inserts In Different Database`() = runSuspendIO {
         suspendTransaction(db = db1) {
-            SchemaUtils.drop(DMLTestData.Cities)
             SchemaUtils.create(DMLTestData.Cities)
             DMLTestData.Cities.selectAll().toList().shouldBeEmpty()
             DMLTestData.Cities.insert {
@@ -159,7 +157,7 @@ class Ex02_H2_MultiDatabase {
     }
 
     @Test
-    fun `Embedded Inserts In Different Database Depth2`() = runTest {
+    fun `Embedded Inserts In Different Database Depth2`() = runSuspendIO {
         suspendTransaction(db = db1) {
             SchemaUtils.drop(DMLTestData.Cities)
             SchemaUtils.create(DMLTestData.Cities)
@@ -207,7 +205,7 @@ class Ex02_H2_MultiDatabase {
     }
 
     @Test
-    fun `Coroutines With Multi Db`() = runTest {
+    fun `Coroutines With Multi Db`() = runSuspendIO {
         suspendTransaction(db = db1) {
             val trOuterId = this
             SchemaUtils.create(DMLTestData.Cities)
@@ -287,7 +285,7 @@ class Ex02_H2_MultiDatabase {
 
     @OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
     @Test // this test always fails for one reason or another
-    fun `when the default database is changed, coroutines should respect that`(): Unit = runTest {
+    fun `when the default database is changed, coroutines should respect that`(): Unit = runSuspendIO {
 //        db1.name shouldBeEqualTo "jdbc:h2:mem:db1" // These two asserts fail sometimes for reasons that escape me
 //        db2.name shouldBeEqualTo "jdbc:h2:mem:db2" // but if you run just these tests one at a time, they pass.
 
@@ -316,8 +314,12 @@ class Ex02_H2_MultiDatabase {
     }
 
     @Test // If the first two assertions pass, the entire test passes
-    fun `when the default database is changed, threads should respect that`() = runTest {
+    fun `when the default database is changed, threads should respect that`() = runSuspendIO {
+        db1.name shouldBeEqualTo "db1"
+        db2.name shouldBeEqualTo "db2"
+
         val threadpool = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+
         TransactionManager.defaultDatabase = db1
         threadpool.invoke {
             suspendTransaction {

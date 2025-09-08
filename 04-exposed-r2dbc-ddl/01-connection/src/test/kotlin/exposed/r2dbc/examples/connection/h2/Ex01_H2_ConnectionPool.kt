@@ -39,9 +39,9 @@ class Ex01_H2_ConnectionPool {
         val exceedsPoolSize = (maximumPoolSize * 2 + 1).coerceAtMost(50)
         log.debug { "Exceeds pool size: $exceedsPoolSize" }
 
-        val tasks = List(exceedsPoolSize) { index ->
+        repeat(exceedsPoolSize) { index ->
             launch {
-                suspendTransaction(db = h2PoolDB1) {
+                suspendTransaction {
                     delay(100)
                     val entity = TestTable.insert { it[TestTable.testValue] = "test$index" }
                     log.debug { "Created test entity: $entity" }
