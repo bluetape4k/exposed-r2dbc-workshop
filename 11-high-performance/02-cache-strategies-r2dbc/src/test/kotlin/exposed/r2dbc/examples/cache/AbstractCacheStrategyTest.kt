@@ -2,6 +2,7 @@ package exposed.r2dbc.examples.cache
 
 import io.bluetape4k.junit5.faker.Fakers
 import io.bluetape4k.logging.coroutines.KLoggingChannel
+import org.junit.jupiter.api.BeforeAll
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
@@ -16,4 +17,10 @@ abstract class AbstractCacheStrategyTest {
         @JvmStatic
         val faker = Fakers.faker
     }
+
+    @BeforeAll
+    fun beforeAll() {
+        Thread.sleep(100)
+    }
+
 }

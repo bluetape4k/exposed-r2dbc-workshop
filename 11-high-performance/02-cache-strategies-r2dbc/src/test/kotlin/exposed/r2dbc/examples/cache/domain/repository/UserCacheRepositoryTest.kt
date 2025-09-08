@@ -9,7 +9,6 @@ import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeLessOrEqualTo
@@ -102,7 +101,7 @@ class UserCacheRepositoryTest(
     }
 
     @Test
-    fun `Read Through로 User를 검색한다`() = runTest {
+    fun `Read Through로 User를 검색한다`() = runSuspendIO {
         val users = repository.findAll().toList()
         users shouldHaveSize idsInDB.size
         users.forEach {
