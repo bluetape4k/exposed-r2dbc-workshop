@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 
 class CachedCountryR2dbcRepositoryTest(
-    @Autowired private val cacheManager: LettuceSuspendedCacheManager,
+    @param:Autowired private val cacheManager: LettuceSuspendedCacheManager,
 ): AbstractCountryR2dbcRepositoryTest() {
 
     @Autowired

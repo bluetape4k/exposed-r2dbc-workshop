@@ -25,7 +25,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.system.measureTimeMillis
 
 class UserCacheRepositoryTest(
-    @Autowired private val repository: UserCacheRepository,
+    @param:Autowired private val repository: UserCacheRepository,
 ): AbstractCacheStrategyTest() {
 
     companion object: KLoggingChannel()

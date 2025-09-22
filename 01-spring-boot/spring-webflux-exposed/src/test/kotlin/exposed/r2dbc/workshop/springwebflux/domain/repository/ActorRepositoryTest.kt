@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 class ActorRepositoryTest(
-    @Autowired private val actorRepository: ActorRepository,
+    @param:Autowired private val actorRepository: ActorRepository,
 ): AbstractSpringWebfluxTest() {
 
     companion object: KLoggingChannel() {

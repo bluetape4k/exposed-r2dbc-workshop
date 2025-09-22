@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 class MovieRepositoryTest(
-    @Autowired private val movieRepository: MovieRepository,
+    @param:Autowired private val movieRepository: MovieRepository,
 ): AbstractSpringWebfluxTest() {
 
     companion object: KLoggingChannel() {

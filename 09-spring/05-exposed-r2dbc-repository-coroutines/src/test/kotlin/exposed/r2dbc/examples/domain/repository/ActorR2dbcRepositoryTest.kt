@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 class ActorR2dbcRepositoryTest(
-    @Autowired private val actorRepository: ActorR2dbcRepository,
+    @param:Autowired private val actorRepository: ActorR2dbcRepository,
 ): AbstractExposedR2dbcRepositoryTest() {
 
     companion object: KLoggingChannel() {

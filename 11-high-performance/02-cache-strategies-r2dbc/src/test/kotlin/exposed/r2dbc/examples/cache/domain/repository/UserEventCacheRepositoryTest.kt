@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import java.time.Duration
 
 class UserEventCacheRepositoryTest(
-    @Autowired private val repository: UserEventCacheRepository,
+    @param:Autowired private val repository: UserEventCacheRepository,
 ): AbstractCacheStrategyTest() {
 
     companion object: KLoggingChannel()
