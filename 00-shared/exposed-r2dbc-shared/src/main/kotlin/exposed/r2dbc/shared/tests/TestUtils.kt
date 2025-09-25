@@ -36,6 +36,6 @@ fun <T> Column<T>.constraintNamePart() = (currentDialectTest as? SQLServerDialec
 
 suspend fun Table.insertAndWait(duration: Long) {
     this.insert { }
-    TransactionManager.current().commit()
+    // TransactionManager.current().commit()
     delay(duration)
 }
