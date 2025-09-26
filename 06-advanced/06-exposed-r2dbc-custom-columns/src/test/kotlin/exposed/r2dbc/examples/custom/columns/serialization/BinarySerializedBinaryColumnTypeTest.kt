@@ -51,7 +51,7 @@ class BinarySerializedBinaryColumnTypeTest: R2dbcExposedTestBase() {
         val lz4Fury = binarySerializedBinary<Embeddable>(
             "lz4_fury",
             4096,
-            BinarySerializers.LZ4Fury
+            BinarySerializers.LZ4Fory
         ).nullable()
 
         val lz4Kryo = binarySerializedBinary<Embeddable>(
@@ -63,7 +63,7 @@ class BinarySerializedBinaryColumnTypeTest: R2dbcExposedTestBase() {
         val zstdFury = binarySerializedBinary<Embeddable2>(
             "zstd_fury",
             4096,
-            BinarySerializers.ZstdFury
+            BinarySerializers.ZstdFory
         ).nullable()
 
         val zstdKryo = binarySerializedBinary<Embeddable2>(

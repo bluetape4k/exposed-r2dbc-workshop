@@ -82,7 +82,7 @@ dependencies {
     implementation(Libs.commons_pool2)
 
     // Codecs
-    implementation(Libs.fury_kotlin)
+    implementation(Libs.fory_kotlin)
     // Compressor
     implementation(Libs.lz4_java)
 

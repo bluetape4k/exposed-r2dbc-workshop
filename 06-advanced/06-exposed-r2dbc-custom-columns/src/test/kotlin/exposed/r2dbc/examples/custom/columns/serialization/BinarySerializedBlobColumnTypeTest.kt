@@ -52,9 +52,9 @@ class BinarySerializedBlobColumnTypeTest: R2dbcExposedTestBase() {
     private object T1: IntIdTable() {
         val name = varchar("name", 50)
 
-        val lz4Fury = binarySerializedBlob<Embeddable>("lz4_fury", BinarySerializers.LZ4Fury).nullable()
+        val lz4Fory = binarySerializedBlob<Embeddable>("lz4_fury", BinarySerializers.LZ4Fory).nullable()
         val lz4Kryo = binarySerializedBlob<Embeddable>("lz4_kryo", BinarySerializers.LZ4Kryo).nullable()
-        val zstdFury = binarySerializedBlob<Embeddable2>("zstd_fury", BinarySerializers.ZstdFury).nullable()
+        val zstdFory = binarySerializedBlob<Embeddable2>("zstd_fury", BinarySerializers.ZstdFory).nullable()
         val zstdKryo = binarySerializedBlob<Embeddable2>("zstd_kryo", BinarySerializers.ZstdKryo).nullable()
     }
 
@@ -63,10 +63,10 @@ class BinarySerializedBlobColumnTypeTest: R2dbcExposedTestBase() {
 
         var name by T1.name
 
-        var lz4Fury by T1.lz4Fury
+        var lz4Fory by T1.lz4Fory
         var lz4Kryo by T1.lz4Kryo
 
-        var zstdFury by T1.zstdFury
+        var zstdFory by T1.zstdFory
         var zstdKryo by T1.zstdKryo
 
         override fun equals(other: Any?): Boolean = idEquals(other)
@@ -98,9 +98,9 @@ class BinarySerializedBlobColumnTypeTest: R2dbcExposedTestBase() {
             val id = T1.insertAndGetId {
                 it[T1.name] = "Alice"
 
-                it[lz4Fury] = embedded
+                it[lz4Fory] = embedded
                 it[lz4Kryo] = embedded
-                it[zstdFury] = embedded2
+                it[zstdFory] = embedded2
                 it[zstdKryo] = embedded2
             }
 
@@ -110,9 +110,9 @@ class BinarySerializedBlobColumnTypeTest: R2dbcExposedTestBase() {
 
             row[T1.id] shouldBeEqualTo id
 
-            row[T1.lz4Fury] shouldBeEqualTo embedded
+            row[T1.lz4Fory] shouldBeEqualTo embedded
             row[T1.lz4Kryo] shouldBeEqualTo embedded
-            row[T1.zstdFury] shouldBeEqualTo embedded2
+            row[T1.zstdFory] shouldBeEqualTo embedded2
             row[T1.zstdKryo] shouldBeEqualTo embedded2
         }
     }
