@@ -55,9 +55,9 @@ suspend fun <T> suspendTransactionWithTenant(
     statement: suspend R2dbcTransaction.() -> T,
 ): T {
     // val context = Dispatchers.IO + TenantId(currentTenant)
-    val isolationLevel = transactionIsolation ?: db.transactionManager.defaultIsolationLevel!!
+    val isolationLevel = transactionIsolation ?: db?.transactionManager?.defaultIsolationLevel
 
-    return suspendTransaction(transactionIsolation = isolationLevel, db = db, readOnly = readOnly) {
+    return suspendTransaction(db = db, transactionIsolation = isolationLevel, readOnly = readOnly) {
         val currentTenant = tenant ?: currentTenant()
         SchemaUtils.setSchema(getSchemaDefinition(currentTenant))
         statement()

@@ -113,6 +113,9 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `suspendedTransaction 으로 동시 작업 수행하기`(testDB: TestDB) = runTest {
+        // MySQL, MariaDB 에서는 READ_COMMITTED isolation level을 지원하지 않기 때문에
+        Assumptions.assumeTrue { testDB !in TestDB.ALL_MYSQL_MARIADB }
+        
         withTables(testDB, TesterUnique) {
             val originId = 1
             val updatedId = 99
@@ -178,6 +181,7 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `suspendedTransaction 를 이용하여 여러 작업을 동시에 수행`(testDB: TestDB) = runTest {
+        // MySQL, MariaDB 에서는 READ_COMMITTED isolation level을 지원하지 않기 때문에
         Assumptions.assumeTrue { testDB !in TestDB.ALL_MYSQL_MARIADB }
 
         withTables(testDB, TesterUnique) {

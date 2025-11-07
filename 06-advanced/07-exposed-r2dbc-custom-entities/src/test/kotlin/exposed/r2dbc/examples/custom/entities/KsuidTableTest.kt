@@ -95,8 +95,8 @@ class KsuidTableTest: AbstractCustomIdTableTest() {
             records.chunked(100).map { chunk ->
                 launch {
                     inTopLevelSuspendTransaction(
-                        transactionIsolation = testDB.db.transactionManager.defaultIsolationLevel!!,
-                        db = testDB.db
+                        db = testDB.db,
+                        transactionIsolation = testDB.db?.transactionManager?.defaultIsolationLevel,
                     ) {
                         T1.batchInsert(chunk, shouldReturnGeneratedValues = false) {
                             this[T1.name] = it.name

@@ -57,7 +57,7 @@ class UserCredentialsControllerTest(
     private suspend fun insertUserCredentials(): String {
         return suspendTransaction {
             UserCredentialsTable.insertAndGetId {
-                it[UserCredentialsTable.username] = faker.internet().username()
+                it[UserCredentialsTable.username] = faker.credentials().username()
                 it[UserCredentialsTable.email] = faker.internet().emailAddress()
                 it[UserCredentialsTable.lastLoginAt] = Instant.now()
             }.value

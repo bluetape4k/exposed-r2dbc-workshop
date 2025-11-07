@@ -20,6 +20,7 @@ import kotlinx.coroutines.withContext
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeFalse
+import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldBeTrue
 import org.amshove.kluent.shouldNotBeEqualTo
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
@@ -33,7 +34,6 @@ import org.jetbrains.exposed.v1.r2dbc.transactions.TransactionManager
 import org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.transactionManager
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -67,16 +67,7 @@ class Ex02_H2_MultiDatabase {
     @BeforeEach
     fun beforeEach() {
         Assumptions.assumeTrue { TestDB.H2 in TestDB.enabledDialects() }
-
-        if (TransactionManager.isInitialized()) {
-            currentDB = TransactionManager.currentOrNull()?.db
-        }
-    }
-
-    @AfterEach
-    fun afterEach() {
-        // Assumptions.assumeTrue { TestDB.H2 in TestDB.enabledDialects() }
-        TransactionManager.resetCurrent(currentDB?.transactionManager)
+        currentDB = TransactionManager.currentOrNull()?.db
     }
 
     @Test
@@ -261,7 +252,8 @@ class Ex02_H2_MultiDatabase {
     fun `when default database is not explicitly set - should return the latest connection`() {
         db1
         db2
-        db2 shouldBeEqualTo TransactionManager.defaultDatabase
+        TransactionManager.defaultDatabase.shouldBeNull()
+        TransactionManager.primaryDatabase shouldBeEqualTo db2
     }
 
     @Test
@@ -279,7 +271,8 @@ class Ex02_H2_MultiDatabase {
         db2
         TransactionManager.defaultDatabase = db1
         TransactionManager.closeAndUnregister(db1)
-        db2 shouldBeEqualTo TransactionManager.defaultDatabase
+        TransactionManager.defaultDatabase.shouldBeNull()
+        TransactionManager.primaryDatabase shouldBeEqualTo db2
         TransactionManager.defaultDatabase = null
     }
 
