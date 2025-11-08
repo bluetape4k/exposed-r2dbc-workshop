@@ -22,7 +22,7 @@ object Plugins {
         const val docker_compose = "0.17.19"  // https://plugins.gradle.org/plugin/com.avast.gradle.docker-compose
 
         // 참고: https://docs.gatling.io/reference/integrations/build-tools/gradle-plugin/
-        const val gatling = "3.14.7"  // https://plugins.gradle.org/plugin/io.gatling.gradle
+        const val gatling = "3.14.9"  // https://plugins.gradle.org/plugin/io.gatling.gradle
 
         const val graalvm_native = "0.11.2" // https://mvnrepository.com/artifact/org.graalvm.buildtools.native/org.graalvm.buildtools.native.gradle.plugin
     }
@@ -149,14 +149,14 @@ object Versions {
 
     const val prometheus = "0.16.0"     // https://mvnrepository.com/artifact/io.prometheus/simpleclient
 
-    const val micrometer = "1.15.4"         // https://mvnrepository.com/artifact/io.micrometer/micrometer-core
-    const val micrometerTracing = "1.5.4"   // https://mvnrepository.com/artifact/io.micrometer/micrometer-tracing
+    const val micrometer = "1.16.0"         // https://mvnrepository.com/artifact/io.micrometer/micrometer-core
+    const val micrometerTracing = "1.6.0"   // https://mvnrepository.com/artifact/io.micrometer/micrometer-tracing
     const val micrometerContextPropagation = "1.1.3" // https://mvnrepository.com/artifact/io.micrometer/context-propagation
 
-    const val opentelemetry = "1.54.0" // https://mvnrepository.com/artifact/io.opentelemetry/opentelemetry-bom
+    const val opentelemetry = "1.55.0" // https://mvnrepository.com/artifact/io.opentelemetry/opentelemetry-bom
     const val opentelemetryAlpha = "$opentelemetry-alpha" // https://mvnrepository.com/artifact/io.opentelemetry/opentelemetry-bom-alpha
 
-    const val opentelemetryJavaAgent = "2.20.0" // https://mvnrepository.com/artifact/io.opentelemetry.javaagent/opentelemetry-javaagent
+    const val opentelemetryJavaAgent = "2.21.0" // https://mvnrepository.com/artifact/io.opentelemetry.javaagent/opentelemetry-javaagent
     const val opentelemetryInstrumentationAlpha = "$opentelemetryJavaAgent-alpha" // https://mvnrepository.com/artifact/io.opentelemetry.instrumentation/opentelemetry-instrumentation-bom-alpha
 
     const val caffeine = "3.2.3"        // https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
@@ -202,7 +202,7 @@ object Versions {
     const val scrimage = "4.3.5"  // https://mvnrepository.com/artifact/com.sksamuel.scrimage/scrimage-core
 
     // Gatling
-    const val gatling = "3.14.7" // https://mvnrepository.com/artifact/io.gatling/gatling-core
+    const val gatling = "3.14.9" // https://mvnrepository.com/artifact/io.gatling/gatling-core
 }
 
 object Libs {
