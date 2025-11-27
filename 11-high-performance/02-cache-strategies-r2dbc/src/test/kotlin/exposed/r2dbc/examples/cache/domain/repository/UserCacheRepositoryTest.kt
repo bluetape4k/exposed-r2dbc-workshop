@@ -31,6 +31,7 @@ class UserCacheRepositoryTest(
     companion object: KLoggingChannel()
 
     private val idsInDB = CopyOnWriteArrayList<Long>()
+    private val idSize = 100
 
     @BeforeEach
     fun beforeEach() {
@@ -40,7 +41,7 @@ class UserCacheRepositoryTest(
 
             suspendTransaction {
                 UserTable.deleteAll()
-                insertUsers(10)
+                insertUsers(idSize)
             }
         }
     }

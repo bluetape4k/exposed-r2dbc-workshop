@@ -31,6 +31,7 @@ class UserCredentialsCacheRepositoryTest(
     companion object: KLoggingChannel()
 
     private val idsInDB = CopyOnWriteArrayList<String>()
+    private val idSize = 100
 
     @BeforeEach
     fun setup() {
@@ -40,7 +41,7 @@ class UserCredentialsCacheRepositoryTest(
 
             suspendTransaction {
                 UserCredentialsTable.deleteAll()
-                repeat(10) {
+                repeat(idSize) {
                     idsInDB.add(insertUserCredentials())
                 }
             }
