@@ -137,7 +137,7 @@ object Versions {
     const val querydsl = "5.1.0"                  // https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa
 
     const val exposed = "1.0.0-rc-4"       // https://mvnrepository.com/artifact/org.jetbrains.exposed/exposed-core
-
+    const val r2dbc = "1.0.0.RELEASE"        // https://mvnrepository.com/artifact/io.r2dbc/r2dbc-spi
     const val agroal = "2.8"          // https://mvnrepository.com/artifact/io.agroal/agroal-api
 
     const val blaze_persistence = "3.29.3" // https://mvnrepository.com/artifact/io.quarkus.platform/quarkus-blaze-persistence-bom
@@ -1226,11 +1226,11 @@ object Libs {
     const val exposed_spring_transaction = "org.jetbrains.exposed:spring-transaction:${Versions.exposed}"
 
     // R2DBC (버전은 spring-data 버전을 사용한다)
-    fun r2dbc(module: String): String = "io.r2dbc:r2dbc-$module"
-    val r2dbc_pool = r2dbc("pool")
+    fun r2dbc(module: String, version: String = Versions.r2dbc): String = "io.r2dbc:r2dbc-$module:$version"
     val r2dbc_spi = r2dbc("spi")
-
-    const val r2dbc_h2 = "io.r2dbc:r2dbc-h2:1.1.0.RELEASE"  // https://mvnrepository.com/artifact/io.r2dbc/r2dbc-h2
+    val r2dbc_h2 = r2dbc("h2", "1.1.0.RELEASE")
+    val r2dbc_pool = r2dbc("pool", "1.0.2.RELEASE")
+    val r2dbc_proxy = r2dbc("spi", "1.1.6.RELEASE")
 
     // 참고 : https://github.com/asyncer-io/r2dbc-mysql
     const val r2dbc_mysql = "io.asyncer:r2dbc-mysql:1.4.1"  // https://mvnrepository.com/artifact/io.asyncer/r2dbc-mysql
