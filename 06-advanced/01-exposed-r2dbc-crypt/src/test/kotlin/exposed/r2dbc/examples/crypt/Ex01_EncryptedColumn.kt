@@ -157,7 +157,6 @@ class Ex01_EncryptedColumn: R2dbcExposedTestBase() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `update encrypted column type`(testDB: TestDB) = runTest {
-
         /**
          * ```sql
          * -- Postgres
