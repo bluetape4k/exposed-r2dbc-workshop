@@ -2,10 +2,10 @@ package exposed.r2dbc.examples.domain.repository
 
 import exposed.r2dbc.examples.AbstractExposedR2dbcRepositoryTest
 import exposed.r2dbc.examples.dto.ActorDTO
+import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldNotBeEmpty
 import org.amshove.kluent.shouldNotBeNull
@@ -27,7 +27,7 @@ class ActorR2dbcRepositoryTest(
     }
 
     @Test
-    fun `find actor by id`() = runTest {
+    fun `find actor by id`() = runSuspendIO {
         suspendTransaction {
             val actorId = 1L
 
@@ -40,7 +40,7 @@ class ActorR2dbcRepositoryTest(
     }
 
     @Test
-    fun `search actors by lastName`() = runTest {
+    fun `search actors by lastName`() = runSuspendIO {
         suspendTransaction {
             val params = mapOf("lastName" to "Depp")
             val actors = actorRepository.searchActors(params).toList()
@@ -53,7 +53,7 @@ class ActorR2dbcRepositoryTest(
     }
 
     @Test
-    fun `search actors by firstName`() = runTest {
+    fun `search actors by firstName`() = runSuspendIO {
         suspendTransaction {
             val params = mapOf("firstName" to "Angelina")
             val actors = actorRepository.searchActors(params).toList()
@@ -66,7 +66,7 @@ class ActorR2dbcRepositoryTest(
     }
 
     @Test
-    fun `save new actor`() = runTest {
+    fun `save new actor`() = runSuspendIO {
         suspendTransaction {
             val prevCount = actorRepository.count()
 
@@ -81,7 +81,7 @@ class ActorR2dbcRepositoryTest(
     }
 
     @Test
-    fun `delete actor by id`() = runTest {
+    fun `delete actor by id`() = runSuspendIO {
         suspendTransaction {
             val actor = newActorDTO()
             val savedActor = actorRepository.save(actor)

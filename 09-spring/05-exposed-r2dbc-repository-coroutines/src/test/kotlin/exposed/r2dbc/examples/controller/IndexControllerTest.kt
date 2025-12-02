@@ -1,12 +1,12 @@
 package exposed.r2dbc.examples.controller
 
 import exposed.r2dbc.examples.AbstractExposedR2dbcRepositoryTest
+import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.spring.tests.httpGet
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.asFlow
-import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldNotBeEmpty
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,7 +20,7 @@ class IndexControllerTest(
     companion object: KLoggingChannel()
 
     @Test
-    fun `get index`() = runTest {
+    fun `get index`() = runSuspendIO {
         client.httpGet("/")
             .returnResult<String>().responseBody
             .asFlow()

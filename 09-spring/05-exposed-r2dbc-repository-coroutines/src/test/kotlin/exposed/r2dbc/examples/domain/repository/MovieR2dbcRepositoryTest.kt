@@ -2,10 +2,10 @@ package exposed.r2dbc.examples.domain.repository
 
 import exposed.r2dbc.examples.AbstractExposedR2dbcRepositoryTest
 import exposed.r2dbc.examples.dto.MovieDTO
+import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldHaveSize
@@ -30,7 +30,7 @@ class MovieR2dbcRepositoryTest(
     }
 
     @Test
-    fun `find movie by id`() = runTest {
+    fun `find movie by id`() = runSuspendIO {
         val movieId = 1L
 
         val movie = suspendTransaction {
@@ -49,7 +49,7 @@ class MovieR2dbcRepositoryTest(
      * ```
      */
     @Test
-    fun `search movies`() = runTest {
+    fun `search movies`() = runSuspendIO {
         val params = mapOf("producerName" to "Johnny")
 
         val movies = suspendTransaction {
@@ -63,7 +63,7 @@ class MovieR2dbcRepositoryTest(
     }
 
     @Test
-    fun `save new movie`() = runTest {
+    fun `save new movie`() = runSuspendIO {
         val movie = newMovieDTO()
 
         val savedMovie = suspendTransaction {
@@ -75,7 +75,7 @@ class MovieR2dbcRepositoryTest(
     }
 
     @Test
-    fun `delete movie`() = runTest {
+    fun `delete movie`() = runSuspendIO {
         val movie = newMovieDTO()
         val movieDto = suspendTransaction {
             movieRepository.save(movie)
@@ -95,7 +95,7 @@ class MovieR2dbcRepositoryTest(
     }
 
     @Test
-    fun `get all movies and actors`() = runTest {
+    fun `get all movies and actors`() = runSuspendIO {
         suspendTransaction {
             val movies = movieRepository.getAllMoviesWithActors().toList()
             movies.shouldNotBeEmpty()
@@ -111,7 +111,7 @@ class MovieR2dbcRepositoryTest(
     }
 
     @Test
-    fun `get movie by id with actors`() = runTest {
+    fun `get movie by id with actors`() = runSuspendIO {
         suspendTransaction {
             val movieId = 1L
             val movieWithActors = movieRepository.getMovieWithActors(movieId)
@@ -125,7 +125,7 @@ class MovieR2dbcRepositoryTest(
     }
 
     @Test
-    fun `get movie and actors count`() = runTest {
+    fun `get movie and actors count`() = runSuspendIO {
         suspendTransaction {
             val movieActorsCount = movieRepository.getMovieActorsCount().toList()
             movieActorsCount.shouldNotBeEmpty()
@@ -136,7 +136,7 @@ class MovieR2dbcRepositoryTest(
     }
 
     @Test
-    fun `find movies with acting producers`() = runTest {
+    fun `find movies with acting producers`() = runSuspendIO {
         suspendTransaction {
             val movies = movieRepository.findMoviesWithActingProducers().toList()
 
