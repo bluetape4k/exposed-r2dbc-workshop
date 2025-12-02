@@ -4,6 +4,7 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.collections.intRangeOf
+import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.r2dbc.spi.IsolationLevel
@@ -19,7 +20,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
@@ -91,7 +91,7 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `suspended transaction으로 시퀀셜 작업 수행하기`(testDB: TestDB) = runTest {
+    fun `suspended transaction으로 시퀀셜 작업 수행하기`(testDB: TestDB) = runSuspendIO {
         withTables(testDB, Tester) {
             // 새로운 트랜잭션을 만들고, 코루틴 환경에서 내부 코드를 실행한다
             val id = Tester.insertAndGetId { }
@@ -112,7 +112,7 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `suspendedTransaction 으로 동시 작업 수행하기`(testDB: TestDB) = runTest {
+    fun `suspendedTransaction 으로 동시 작업 수행하기`(testDB: TestDB) = runSuspendIO {
         // MySQL, MariaDB 에서는 READ_COMMITTED isolation level을 지원하지 않기 때문에
         Assumptions.assumeTrue { testDB !in TestDB.ALL_MYSQL_MARIADB }
         
@@ -180,7 +180,7 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `suspendedTransaction 를 이용하여 여러 작업을 동시에 수행`(testDB: TestDB) = runTest {
+    fun `suspendedTransaction 를 이용하여 여러 작업을 동시에 수행`(testDB: TestDB) = runSuspendIO {
         // MySQL, MariaDB 에서는 READ_COMMITTED isolation level을 지원하지 않기 때문에
         Assumptions.assumeTrue { testDB !in TestDB.ALL_MYSQL_MARIADB }
 
@@ -238,7 +238,7 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `중첩된 suspend transaction 실행`(testDB: TestDB) = runTest {
+    fun `중첩된 suspend transaction 실행`(testDB: TestDB) = runSuspendIO {
         // MySQL, MariaDB 에서는 READ_COMMITTED isolation level을 지원하지 않기 때문에
         Assumptions.assumeTrue { testDB !in TestDB.ALL_MYSQL_MARIADB }
 
@@ -269,7 +269,7 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `중첩된 suspend transaction async 실행`(testDB: TestDB) = runTest {
+    fun `중첩된 suspend transaction async 실행`(testDB: TestDB) = runSuspendIO {
         withTables(testDB, Tester) {
             val recordCount = 10
 
@@ -333,7 +333,7 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `다수의 비동기 작업을 수행 후 대기`(testDB: TestDB) = runTest {
+    fun `다수의 비동기 작업을 수행 후 대기`(testDB: TestDB) = runSuspendIO {
         withTables(testDB, Tester) {
             val recordCount = 10
 
