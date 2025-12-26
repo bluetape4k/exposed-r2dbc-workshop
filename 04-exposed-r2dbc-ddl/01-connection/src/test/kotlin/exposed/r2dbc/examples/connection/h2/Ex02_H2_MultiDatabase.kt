@@ -209,7 +209,7 @@ class Ex02_H2_MultiDatabase {
                 transactionIsolation = db2.transactionManager.defaultIsolationLevel!!,
                 db = db2
             ) {
-                this.id shouldNotBeEqualTo trOuterId
+                this.transactionId shouldNotBeEqualTo trOuterId
                 DMLTestData.Cities.exists().shouldBeFalse()
                 SchemaUtils.create(DMLTestData.Cities)
                 DMLTestData.Cities.insert {

@@ -85,7 +85,7 @@ object Versions {
 
     const val vertx = "4.5.22"               // https://mvnrepository.com/artifact/io.vertx/vertx-core
 
-    const val swagger = "2.2.30"              // https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations
+    const val swagger = "2.2.41"              // https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations
     const val springdoc_openapi = "2.8.14"     // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
     const val springfox_swagger = "3.0.0"
     const val problem = "0.29.1"              // https://mvnrepository.com/artifact/org.zalando/problem-spring-web
@@ -178,8 +178,8 @@ object Versions {
 
     const val ow2_asm = "9.9"               // https://mvnrepository.com/artifact/org.ow2.asm/asm
 
-    const val junit_jupiter = "5.14.1"      // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
-    const val junit_platform = "1.14.1"     // https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher
+    const val junit_jupiter = "6.0.1"      // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+    const val junit_platform = "6.0.1"     // https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher
     const val assertj_core = "3.27.3"       // https://mvnrepository.com/artifact/org.assertj/assertj-core
     const val kluent = "1.73"               // https://mvnrepository.com/artifact/org.amshove.kluent/kluent
     const val mockk = "1.14.7"              // https://mvnrepository.com/artifact/io.mockk/mockk
