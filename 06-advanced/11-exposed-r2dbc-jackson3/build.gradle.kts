@@ -15,10 +15,10 @@ dependencies {
     implementation(Libs.bluetape4k_io)
 
     implementation(Libs.bluetape4k_exposed_r2dbc)
-    implementation(Libs.bluetape4k_exposed_jackson)
-    implementation(Libs.bluetape4k_jackson)
-    implementation(Libs.jackson_module_kotlin)
-    implementation(Libs.jackson_module_blackbird)
+    implementation(Libs.bluetape4k_exposed_jackson3)
+    implementation(Libs.bluetape4k_jackson3)
+    implementation(Libs.jackson3_module_kotlin)
+    implementation(Libs.jackson3_module_blackbird)
 
     implementation(Libs.bluetape4k_junit5)
 
