@@ -22,33 +22,34 @@ dependencies {
     implementation(Libs.kotlinx_serialization_json)
 
     implementation(Libs.bluetape4k_exposed)
-    implementation(Libs.bluetape4k_junit5)
+    implementation(Libs.bluetape4k_exposed_r2dbc)
+    testImplementation(Libs.bluetape4k_junit5)
 
-    implementation(Libs.h2_v2)
+    testImplementation(Libs.h2_v2)
 
-    implementation(Libs.r2dbc_spi)
-    implementation(Libs.r2dbc_pool)
-    implementation(Libs.r2dbc_h2)
-    implementation(Libs.r2dbc_mariadb)
-    implementation(Libs.r2dbc_mysql)
-    implementation(Libs.r2dbc_postgresql)
+    testImplementation(Libs.r2dbc_spi)
+    testImplementation(Libs.r2dbc_pool)
+    testImplementation(Libs.r2dbc_h2)
+    testImplementation(Libs.r2dbc_mariadb)
+    testImplementation(Libs.r2dbc_mysql)
+    testImplementation(Libs.r2dbc_postgresql)
 
-    implementation(Libs.bluetape4k_testcontainers)
-    implementation(Libs.testcontainers)
-    implementation(Libs.testcontainers_junit_jupiter)
-    implementation(Libs.testcontainers_mariadb)
-    implementation(Libs.testcontainers_mysql)
-    implementation(Libs.testcontainers_postgresql)
+    testImplementation(Libs.bluetape4k_testcontainers)
+    testImplementation(Libs.testcontainers)
+    testImplementation(Libs.testcontainers_junit_jupiter)
+    testImplementation(Libs.testcontainers_mariadb)
+    testImplementation(Libs.testcontainers_mysql)
+    testImplementation(Libs.testcontainers_postgresql)
 
     // Testcontainers 를 위한 DB 드라이버
-    implementation(Libs.mariadb_java_client)
-    implementation(Libs.mysql_connector_j)
-    implementation(Libs.postgresql_driver)
+    testImplementation(Libs.mariadb_java_client)
+    testImplementation(Libs.mysql_connector_j)
+    testImplementation(Libs.postgresql_driver)
 
     // Coroutines
     implementation(Libs.bluetape4k_coroutines)
     implementation(Libs.kotlinx_coroutines_core)
     implementation(Libs.kotlinx_coroutines_reactive)
-    implementation(Libs.kotlinx_coroutines_debug)
-    implementation(Libs.kotlinx_coroutines_test)
+    testImplementation(Libs.kotlinx_coroutines_debug)
+    testImplementation(Libs.kotlinx_coroutines_test)
 }

@@ -10,6 +10,10 @@ import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.exposed.core.fastjson2.contains
+import io.bluetape4k.exposed.core.fastjson2.exists
+import io.bluetape4k.exposed.core.fastjson2.extract
+import io.bluetape4k.exposed.core.fastjson2.fastjsonb
 import io.bluetape4k.fastjson2.FastjsonSerializer
 import io.bluetape4k.logging.KLogging
 import kotlinx.coroutines.flow.map

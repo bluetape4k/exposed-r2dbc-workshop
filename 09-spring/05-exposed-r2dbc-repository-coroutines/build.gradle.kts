@@ -28,10 +28,13 @@ dependencies {
     implementation(project(":exposed-r2dbc-shared"))
 
     // bluetape4k
+    implementation(Libs.bluetape4k_exposed)
     implementation(Libs.bluetape4k_exposed_r2dbc)
     implementation(Libs.bluetape4k_io)
     implementation(Libs.bluetape4k_jdbc)
     testImplementation(Libs.bluetape4k_spring_tests)
+    implementation(Libs.bluetape4k_junit5)
+    implementation(Libs.bluetape4k_testcontainers)
 
     // Exposed
     implementation(Libs.exposed_core)
@@ -48,12 +51,10 @@ dependencies {
     implementation(Libs.r2dbc_postgresql)
 
     // MySQL
-    implementation(Libs.bluetape4k_testcontainers)
     implementation(Libs.testcontainers_mysql)
     implementation(Libs.mysql_connector_j)
 
     // PostgreSQL
-    implementation(Libs.bluetape4k_testcontainers)
     implementation(Libs.testcontainers_postgresql)
     implementation(Libs.postgresql_driver)
 
@@ -63,10 +64,10 @@ dependencies {
     annotationProcessor(Libs.springBoot("configuration-processor"))
     runtimeOnly(Libs.springBoot("devtools"))
 
-    implementation(Libs.springBootStarter("webflux"))
-    implementation(Libs.springBootStarter("aop"))
     implementation(Libs.springBootStarter("actuator"))
+    implementation(Libs.springBootStarter("aop"))
     implementation(Libs.springBootStarter("validation"))
+    implementation(Libs.springBootStarter("webflux"))
 
     testImplementation(Libs.bluetape4k_spring_tests)
     testImplementation(Libs.springBootStarter("test")) {

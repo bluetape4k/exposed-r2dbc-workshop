@@ -3,6 +3,8 @@ package exposed.r2dbc.examples.fastjson2
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.exposed.core.fastjson2.fastjson
+import io.bluetape4k.exposed.core.fastjson2.fastjsonb
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 import org.jetbrains.exposed.v1.dao.IntEntity

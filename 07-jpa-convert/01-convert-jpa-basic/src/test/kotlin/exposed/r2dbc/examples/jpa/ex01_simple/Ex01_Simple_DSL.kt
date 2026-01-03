@@ -13,7 +13,6 @@ import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
 import org.jetbrains.exposed.v1.core.inList
-import org.jetbrains.exposed.v1.dao.flushCache
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.batchInsert
 import org.jetbrains.exposed.v1.r2dbc.select
@@ -37,7 +36,6 @@ class Ex01_Simple_DSL: R2dbcExposedTestBase() {
             this[SimpleTable.name] = name
             this[SimpleTable.description] = faker.lorem().sentence()
         }
-        flushCache()
     }
 
     @ParameterizedTest

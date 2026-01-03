@@ -29,10 +29,12 @@ dependencies {
     implementation(project(":exposed-r2dbc-shared"))
 
     // bluetape4k
+    implementation(Libs.bluetape4k_exposed)
     implementation(Libs.bluetape4k_exposed_r2dbc)
     implementation(Libs.bluetape4k_redis)
     implementation(Libs.bluetape4k_testcontainers)
     testImplementation(Libs.bluetape4k_junit5)
+    implementation(Libs.bluetape4k_testcontainers)
     testImplementation(Libs.bluetape4k_spring_tests)
 
     // Exposed
@@ -50,12 +52,10 @@ dependencies {
     implementation(Libs.r2dbc_postgresql)
 
     // MySQL
-    implementation(Libs.bluetape4k_testcontainers)
     implementation(Libs.testcontainers_mysql)
     implementation(Libs.mysql_connector_j)
 
     // PostgreSQL
-    implementation(Libs.bluetape4k_testcontainers)
     implementation(Libs.testcontainers_postgresql)
     implementation(Libs.postgresql_driver)
 
@@ -65,11 +65,11 @@ dependencies {
     annotationProcessor(Libs.springBoot("configuration-processor"))
     runtimeOnly(Libs.springBoot("devtools"))
 
-    implementation(Libs.springBootStarter("webflux"))
-    implementation(Libs.springBootStarter("aop"))
     implementation(Libs.springBootStarter("actuator"))
-    implementation(Libs.springBootStarter("validation"))
+    implementation(Libs.springBootStarter("aop"))
     implementation(Libs.springBootStarter("data-r2dbc"))
+    implementation(Libs.springBootStarter("validation"))
+    implementation(Libs.springBootStarter("webflux"))
 
     testImplementation(Libs.bluetape4k_spring_tests)
     testImplementation(Libs.springBootStarter("test")) {
@@ -84,8 +84,12 @@ dependencies {
 
     // Codecs
     implementation(Libs.fory_kotlin)
+    implementation(Libs.kryo5)
+
     // Compressor
     implementation(Libs.lz4_java)
+    implementation(Libs.snappy_java)
+    implementation(Libs.zstd_jni)
 
     // Coroutines
     implementation(Libs.bluetape4k_coroutines)
