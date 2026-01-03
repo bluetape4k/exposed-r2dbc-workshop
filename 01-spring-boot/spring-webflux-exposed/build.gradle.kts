@@ -31,12 +31,9 @@ dependencies {
 
     // bluetape4k
     implementation(Libs.bluetape4k_exposed_r2dbc)
-    implementation(Libs.bluetape4k_io)
-    implementation(Libs.bluetape4k_r2dbc)
-    testImplementation(Libs.bluetape4k_spring_tests)
-
     testImplementation(Libs.bluetape4k_junit5)
     implementation(Libs.bluetape4k_testcontainers)
+    testImplementation(Libs.bluetape4k_spring_tests)
 
     // Exposed
     implementation(Libs.exposed_r2dbc)

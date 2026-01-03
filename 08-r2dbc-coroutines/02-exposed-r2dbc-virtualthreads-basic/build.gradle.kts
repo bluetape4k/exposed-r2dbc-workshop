@@ -8,13 +8,9 @@ dependencies {
     implementation(project(":exposed-r2dbc-shared"))
 
     // Exposed
-    implementation(Libs.exposed_core)
     implementation(Libs.exposed_r2dbc)
-    implementation(Libs.exposed_migration_r2dbc)
-    implementation(Libs.exposed_java_time)
-
     implementation(Libs.bluetape4k_exposed_r2dbc)
-    implementation(Libs.bluetape4k_r2dbc)
+
     testImplementation(Libs.bluetape4k_junit5)
 
     testImplementation(Libs.h2_v2)
@@ -28,7 +24,6 @@ dependencies {
 
     testImplementation(Libs.bluetape4k_testcontainers)
     testImplementation(Libs.testcontainers)
-    testImplementation(Libs.testcontainers_junit_jupiter)
     testImplementation(Libs.testcontainers_mariadb)
     testImplementation(Libs.testcontainers_mysql)
     testImplementation(Libs.testcontainers_postgresql)
@@ -41,7 +36,6 @@ dependencies {
     // Coroutines
     implementation(Libs.bluetape4k_coroutines)
     implementation(Libs.kotlinx_coroutines_core)
-    implementation(Libs.kotlinx_coroutines_reactive)
     testImplementation(Libs.kotlinx_coroutines_debug)
     testImplementation(Libs.kotlinx_coroutines_test)
 }

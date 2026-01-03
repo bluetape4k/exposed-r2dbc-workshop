@@ -21,7 +21,6 @@ dependencies {
     implementation(Libs.exposed_migration_r2dbc)
 
     // bluetape4k
-    implementation(Libs.bluetape4k_exposed)
     implementation(Libs.bluetape4k_exposed_r2dbc)
     implementation(Libs.bluetape4k_jdbc)
     implementation(Libs.bluetape4k_r2dbc)

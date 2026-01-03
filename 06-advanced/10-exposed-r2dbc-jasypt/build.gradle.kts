@@ -8,11 +8,10 @@ dependencies {
     implementation(project(":exposed-r2dbc-shared"))
 
     // Exposed
-    implementation(Libs.exposed_core)
     implementation(Libs.exposed_r2dbc)
-
-    // bluetape4k_exposed 가 사용하는 exposed_core 의 버전 및 namespace 가 다르므로, 참조하면 안됩니다.
     implementation(Libs.bluetape4k_exposed_r2dbc)
+
+    // Crypto
     implementation(Libs.bluetape4k_crypto)
     testImplementation(Libs.bluetape4k_junit5)
 
@@ -27,7 +26,6 @@ dependencies {
 
     testImplementation(Libs.bluetape4k_testcontainers)
     testImplementation(Libs.testcontainers)
-    testImplementation(Libs.testcontainers_junit_jupiter)
     testImplementation(Libs.testcontainers_mariadb)
     testImplementation(Libs.testcontainers_mysql)
     testImplementation(Libs.testcontainers_postgresql)
@@ -40,7 +38,6 @@ dependencies {
     // Coroutines
     implementation(Libs.bluetape4k_coroutines)
     implementation(Libs.kotlinx_coroutines_core)
-    implementation(Libs.kotlinx_coroutines_reactive)
     testImplementation(Libs.kotlinx_coroutines_debug)
     testImplementation(Libs.kotlinx_coroutines_test)
 }

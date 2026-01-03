@@ -28,18 +28,15 @@ dependencies {
     implementation(project(":exposed-r2dbc-shared"))
 
     // Exposed
-    implementation(Libs.exposed_core)
     implementation(Libs.exposed_r2dbc)
     implementation(Libs.exposed_java_time)
 
     // bluetape4k
-    implementation(Libs.bluetape4k_exposed)
     implementation(Libs.bluetape4k_exposed_r2dbc)
     implementation(Libs.bluetape4k_redis)
     implementation(Libs.bluetape4k_grpc)
     implementation(Libs.bluetape4k_testcontainers)
     testImplementation(Libs.bluetape4k_junit5)
-    testImplementation(Libs.bluetape4k_spring_tests)
 
     // R2DBC Drivers
     implementation(Libs.h2_v2)
@@ -66,6 +63,7 @@ dependencies {
 
     implementation(Libs.springBootStarter("actuator"))
     implementation(Libs.springBootStarter("aop"))
+    implementation(Libs.springBootStarter("data-r2dbc"))
     implementation(Libs.springBootStarter("validation"))
     implementation(Libs.springBootStarter("webflux"))
 
@@ -92,8 +90,6 @@ dependencies {
     // Coroutines
     implementation(Libs.bluetape4k_coroutines)
     implementation(Libs.kotlinx_coroutines_core)
-    implementation(Libs.kotlinx_coroutines_reactive)
-    implementation(Libs.kotlinx_coroutines_reactor)
     testImplementation(Libs.kotlinx_coroutines_test)
 
     // Reactor

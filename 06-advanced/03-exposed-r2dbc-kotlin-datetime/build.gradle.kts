@@ -24,7 +24,6 @@ dependencies {
     implementation(platform(Libs.kotlinx_serialization_bom))
     implementation(Libs.kotlinx_serialization_json)
 
-    implementation(Libs.bluetape4k_exposed)
     implementation(Libs.bluetape4k_exposed_r2dbc)
     testImplementation(Libs.bluetape4k_junit5)
 
@@ -39,7 +38,6 @@ dependencies {
 
     testImplementation(Libs.bluetape4k_testcontainers)
     testImplementation(Libs.testcontainers)
-    testImplementation(Libs.testcontainers_junit_jupiter)
     testImplementation(Libs.testcontainers_mariadb)
     testImplementation(Libs.testcontainers_mysql)
     testImplementation(Libs.testcontainers_postgresql)
@@ -52,7 +50,6 @@ dependencies {
     // Coroutines
     implementation(Libs.bluetape4k_coroutines)
     implementation(Libs.kotlinx_coroutines_core)
-    implementation(Libs.kotlinx_coroutines_reactive)
     testImplementation(Libs.kotlinx_coroutines_debug)
     testImplementation(Libs.kotlinx_coroutines_test)
 }
