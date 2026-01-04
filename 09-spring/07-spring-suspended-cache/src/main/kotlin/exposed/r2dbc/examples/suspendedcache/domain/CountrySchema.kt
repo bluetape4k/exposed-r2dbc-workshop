@@ -4,9 +4,9 @@ import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 
 object CountryTable: IntIdTable("countries") {
-    val code = char("code", 2).uniqueIndex()
+    val code = varchar("code", 2).uniqueIndex()
     val name = varchar("name", 255)
-    val description = text("description").nullable()
+    val description = text("description", eagerLoading = true).nullable()
 }
 
 data class CountryDTO(
@@ -17,8 +17,8 @@ data class CountryDTO(
 
 fun ResultRow.toCountryDTO(): CountryDTO {
     return CountryDTO(
-        code = this[CountryTable.code],
+        code = this[CountryTable.code].uppercase(),
         name = this[CountryTable.name],
-        description = this[CountryTable.description],
+        description = this[CountryTable.description]?.takeIf { it.isNotBlank() },
     )
 }
