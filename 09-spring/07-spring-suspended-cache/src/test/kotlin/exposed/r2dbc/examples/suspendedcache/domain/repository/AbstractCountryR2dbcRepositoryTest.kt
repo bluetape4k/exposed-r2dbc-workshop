@@ -4,20 +4,29 @@ import exposed.r2dbc.examples.suspendedcache.AbstractSpringSuspendedCacheApplica
 import exposed.r2dbc.examples.suspendedcache.utils.DataPopulator
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeTrue
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.RepeatedTest
 
 abstract class AbstractCountryR2dbcRepositoryTest: AbstractSpringSuspendedCacheApplicationTest() {
 
-    companion object: KLoggingChannel()
+    companion object: KLoggingChannel() {
+        private const val REPEAT_SIZE = 3
+    }
 
     abstract val countryRepository: CountryR2dbcRepository
 
-    @Test
-    fun `모든 국가 정보를 로드합니다`() = runTest {
-        countryRepository.evictCacheAll()
+    @BeforeAll
+    fun beforeAll() {
+        runBlocking {
+            countryRepository.evictCacheAll()
+        }
+    }
 
+    @RepeatedTest(REPEAT_SIZE)
+    fun `모든 국가 정보를 로드합니다`() = runTest {
         log.debug { "1. 모든 국가 정보를 로드합니다..." }
         val countries = DataPopulator.COUNTRY_CODES.map { code ->
             countryRepository.findByCode(code)
@@ -32,10 +41,8 @@ abstract class AbstractCountryR2dbcRepositoryTest: AbstractSpringSuspendedCacheA
         countries2.all { it != null }.shouldBeTrue()
     }
 
-    @Test
+    @RepeatedTest(REPEAT_SIZE)
     fun `국가 정보를 Update 합니다`() = runTest {
-        countryRepository.evictCacheAll()
-
         log.debug { "1. 모든 국가 정보를 로드합니다..." }
         val countries = DataPopulator.COUNTRY_CODES.map { code ->
             countryRepository.findByCode(code)

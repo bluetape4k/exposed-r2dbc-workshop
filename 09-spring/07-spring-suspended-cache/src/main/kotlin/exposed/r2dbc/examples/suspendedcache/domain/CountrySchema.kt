@@ -5,7 +5,7 @@ import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 
 object CountryTable: IntIdTable("countries") {
     val code = char("code", 2).uniqueIndex()
-    val name = varchar("name", 50)
+    val name = varchar("name", 255)
     val description = text("description").nullable()
 }
 
