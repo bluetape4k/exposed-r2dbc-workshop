@@ -21,9 +21,9 @@ class R2dbcRepositoryConfig(
     }
 
     @Bean(name = ["cachedCountryR2dbcRepository"])
-    fun cachedCountryR2dbcRepository(countryR2dbcRepository: CountryR2dbcRepository): CountryR2dbcRepository {
+    fun cachedCountryR2dbcRepository(): CountryR2dbcRepository {
         return CachedCountryR2dbcRepository(
-            delegate = countryR2dbcRepository,
+            DefaultCountryR2dbcRepository(),
             cacheManager = suspendedCacheManager,
         )
     }
