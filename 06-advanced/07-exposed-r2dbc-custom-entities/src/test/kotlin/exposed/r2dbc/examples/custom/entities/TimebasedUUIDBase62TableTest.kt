@@ -2,9 +2,6 @@ package exposed.r2dbc.examples.custom.entities
 
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.exposed.dao.idEquals
-import io.bluetape4k.exposed.dao.idHashCode
-import io.bluetape4k.exposed.dao.toStringBuilder
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
@@ -39,20 +36,6 @@ class TimebasedUUIDBase62TableTest: AbstractCustomIdTableTest() {
     object T1: TimebasedUUIDBase62Table("t_timebased_uuid_base62") {
         val name = varchar("name", 255)
         val age = integer("age")
-    }
-
-    class E1(id: TimebasedUUIDBase62EntityID): TimebasedUUIDBase62Entity(id) {
-        companion object: TimebasedUUIDBase62EntityClass<E1>(T1)
-
-        var name by T1.name
-        var age by T1.age
-
-        override fun equals(other: Any?): Boolean = idEquals(other)
-        override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
-            .add("name", name)
-            .add("age", age)
-            .toString()
     }
 
     data class Record(val name: String, val age: Int)

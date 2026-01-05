@@ -43,4 +43,6 @@ dependencies {
     implementation(Libs.kotlinx_coroutines_reactive)
     testImplementation(Libs.kotlinx_coroutines_debug)
     testImplementation(Libs.kotlinx_coroutines_test)
+
+    testImplementation(Libs.bluetape4k_idgenerators)
 }

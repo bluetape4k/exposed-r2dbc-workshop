@@ -10,7 +10,6 @@ import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 import org.jetbrains.exposed.v1.core.eq
-import org.jetbrains.exposed.v1.dao.flushCache
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.junit.jupiter.params.ParameterizedTest
@@ -117,7 +116,6 @@ class BinarySerializedBinaryColumnTypeTest: R2dbcExposedTestBase() {
                 it[lz4Kryo] = embedded
                 it[zstdKryo] = embedded2
             }
-            flushCache()
 
             val row = T1.selectAll().where { T1.id eq id }.single()
 

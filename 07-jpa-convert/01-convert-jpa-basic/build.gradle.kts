@@ -12,9 +12,13 @@ dependencies {
     implementation(Libs.hibernate_validator)
 
     // Exposed
+    implementation(Libs.exposed_dao)
+    implementation(Libs.exposed_jdbc)
     implementation(Libs.exposed_r2dbc)
     implementation(Libs.exposed_java_time)
+    implementation(Libs.bluetape4k_exposed)
     implementation(Libs.bluetape4k_exposed_r2dbc)
+    implementation(Libs.bluetape4k_idgenerators)
 
     testImplementation(Libs.bluetape4k_junit5)
 

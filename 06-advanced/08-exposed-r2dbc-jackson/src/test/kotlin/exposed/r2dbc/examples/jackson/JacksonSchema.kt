@@ -8,8 +8,6 @@ import io.bluetape4k.exposed.core.jackson.jackson
 import io.bluetape4k.exposed.core.jackson.jacksonb
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
-import org.jetbrains.exposed.v1.dao.IntEntity
-import org.jetbrains.exposed.v1.dao.IntEntityClass
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
@@ -41,18 +39,6 @@ object JacksonSchema {
      */
     object JacksonBTable: IntIdTable("jackson_b_table") {
         val jacksonBColumn = jacksonb<DataHolder>("jackson_b_column")
-    }
-
-    class JacksonEntity(id: EntityID<Int>): IntEntity(id) {
-        companion object: IntEntityClass<JacksonEntity>(JacksonTable)
-
-        var jacksonColumn by JacksonTable.jacksonColumn
-    }
-
-    class JacksonBEntity(id: EntityID<Int>): IntEntity(id) {
-        companion object: IntEntityClass<JacksonBEntity>(JacksonBTable)
-
-        var jacksonBColumn by JacksonBTable.jacksonBColumn
     }
 
     /**

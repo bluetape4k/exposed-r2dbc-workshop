@@ -6,7 +6,6 @@ import exposed.r2dbc.examples.custom.columns.compress.CompressedBlobColumnTypeTe
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.exposed.dao.idEquals
 import io.bluetape4k.io.compressor.Compressors
 import io.bluetape4k.junit5.faker.Fakers
 import io.bluetape4k.logging.KLogging
@@ -16,11 +15,8 @@ import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
 import org.jetbrains.exposed.v1.core.Column
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 import org.jetbrains.exposed.v1.core.eq
-import org.jetbrains.exposed.v1.dao.IntEntity
-import org.jetbrains.exposed.v1.dao.IntEntityClass
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.junit.jupiter.params.ParameterizedTest
@@ -53,18 +49,6 @@ class CompressedBlobColumnTypeTest: R2dbcExposedTestBase() {
         val lzData: Column<ByteArray?> = compressedBlob("lz4_blob", Compressors.LZ4).nullable()
         val snappyData: Column<ByteArray?> = compressedBlob("snappy_blob", Compressors.Snappy).nullable()
         val zstdData: Column<ByteArray?> = compressedBlob("zstd_blob", Compressors.Zstd).nullable()
-    }
-
-    class E1(id: EntityID<Int>): IntEntity(id) {
-        companion object: IntEntityClass<E1>(T1)
-
-        var lz4Data by T1.lzData
-        var snappyData by T1.snappyData
-        var zstdData by T1.zstdData
-
-        override fun equals(other: Any?): Boolean = idEquals(other)
-        override fun hashCode(): Int = id.hashCode()
-        override fun toString(): String = "E1(id=$id)"
     }
 
     @ParameterizedTest

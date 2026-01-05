@@ -3,18 +3,13 @@ package exposed.r2dbc.examples.custom.columns.serialization
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.exposed.dao.idEquals
 import io.bluetape4k.io.serializer.BinarySerializers
 import io.bluetape4k.logging.KLogging
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 import org.jetbrains.exposed.v1.core.eq
-import org.jetbrains.exposed.v1.dao.IntEntity
-import org.jetbrains.exposed.v1.dao.IntEntityClass
-import org.jetbrains.exposed.v1.dao.entityCache
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.junit.jupiter.params.ParameterizedTest
@@ -58,22 +53,6 @@ class BinarySerializedBlobColumnTypeTest: R2dbcExposedTestBase() {
         val zstdKryo = binarySerializedBlob<Embeddable2>("zstd_kryo", BinarySerializers.ZstdKryo).nullable()
     }
 
-    class E1(id: EntityID<Int>): IntEntity(id) {
-        companion object: IntEntityClass<E1>(T1)
-
-        var name by T1.name
-
-        var lz4Fory by T1.lz4Fory
-        var lz4Kryo by T1.lz4Kryo
-
-        var zstdFory by T1.zstdFory
-        var zstdKryo by T1.zstdKryo
-
-        override fun equals(other: Any?): Boolean = idEquals(other)
-        override fun hashCode(): Int = id.hashCode()
-        override fun toString(): String = "E1(id=$id)"
-    }
-
     data class Embeddable(
         val name: String,
         val age: Int,
@@ -103,8 +82,6 @@ class BinarySerializedBlobColumnTypeTest: R2dbcExposedTestBase() {
                 it[zstdFory] = embedded2
                 it[zstdKryo] = embedded2
             }
-
-            entityCache.clear()
 
             val row = T1.selectAll().where { T1.id eq id }.single()
 

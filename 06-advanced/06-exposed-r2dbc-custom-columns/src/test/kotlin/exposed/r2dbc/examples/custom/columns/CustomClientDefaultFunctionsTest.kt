@@ -3,19 +3,12 @@ package exposed.r2dbc.examples.custom.columns
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.exposed.dao.idEquals
-import io.bluetape4k.exposed.dao.toStringBuilder
 import io.bluetape4k.logging.KLogging
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldHaveSize
 import org.jetbrains.exposed.v1.core.Column
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
-import org.jetbrains.exposed.v1.dao.IntEntity
-import org.jetbrains.exposed.v1.dao.IntEntityClass
-import org.jetbrains.exposed.v1.dao.entityCache
-import org.jetbrains.exposed.v1.dao.flushCache
 import org.jetbrains.exposed.v1.r2dbc.batchInsert
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.junit.jupiter.params.ParameterizedTest
@@ -47,26 +40,6 @@ class CustomClientDefaultFunctionsTest: R2dbcExposedTestBase() {
         val ksuidMillis: Column<String> = varchar("ksuid_millis", 27).ksuidMillsGenerated()
     }
 
-    class ClientGeneratedEntity(id: EntityID<Int>): IntEntity(id) {
-        companion object: IntEntityClass<ClientGeneratedEntity>(ClientGenerated)
-
-        var timebasedUuid by ClientGenerated.timebasedUuid
-        var timebasedUuidString by ClientGenerated.timebasedUuidString
-        var snowflake by ClientGenerated.snowflake
-        var ksuid by ClientGenerated.ksuid
-        var ksuidMillis by ClientGenerated.ksuidMillis
-
-        override fun equals(other: Any?): Boolean = idEquals(other)
-        override fun hashCode(): Int = id.hashCode()
-        override fun toString(): String = toStringBuilder()
-            .add("timebasedUuid", timebasedUuid)
-            .add("timebasedUuidString", timebasedUuidString)
-            .add("snowflake", snowflake)
-            .add("ksuid", ksuid)
-            .add("ksuidMillis", ksuidMillis)
-            .toString()
-    }
-
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `DSL - 클라이언트에서 기본값으로 생성하는 함수`(testDB: TestDB) = runTest {
@@ -74,8 +47,6 @@ class CustomClientDefaultFunctionsTest: R2dbcExposedTestBase() {
             val entityCount = 100
             val values = List(entityCount) { it + 1 }
             ClientGenerated.batchInsert(values) {}
-            flushCache()
-            entityCache.clear()
 
             val rows = ClientGenerated.selectAll().toList()
 

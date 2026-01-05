@@ -6,9 +6,6 @@ import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.exposed.dao.idEquals
-import io.bluetape4k.exposed.dao.idHashCode
-import io.bluetape4k.exposed.dao.toStringBuilder
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.single
@@ -28,7 +25,6 @@ import org.jetbrains.exposed.v1.core.alias
 import org.jetbrains.exposed.v1.core.allFrom
 import org.jetbrains.exposed.v1.core.anyFrom
 import org.jetbrains.exposed.v1.core.arrayParam
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.get
@@ -40,8 +36,6 @@ import org.jetbrains.exposed.v1.core.slice
 import org.jetbrains.exposed.v1.core.vendors.H2Dialect
 import org.jetbrains.exposed.v1.core.vendors.PostgreSQLDialect
 import org.jetbrains.exposed.v1.core.vendors.currentDialect
-import org.jetbrains.exposed.v1.dao.IntEntity
-import org.jetbrains.exposed.v1.dao.IntEntityClass
 import org.jetbrains.exposed.v1.r2dbc.ExposedR2dbcException
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
@@ -463,24 +457,6 @@ class Ex05_ArrayColumnType: R2dbcExposedTestBase() {
             result2[ArrayTestTable.numbers] shouldBeEqualTo numbers
             result2[ArrayTestTable.strings] shouldBeEqualTo updatedString
         }
-    }
-
-    class ArrayTestEntity(id: EntityID<Int>): IntEntity(id) {
-        companion object: IntEntityClass<ArrayTestEntity>(ArrayTestTable)
-
-        var numbers: List<Int> by ArrayTestTable.numbers
-        var strings: List<String?> by ArrayTestTable.strings
-        var doubles: List<Double>? by ArrayTestTable.doubles
-        var byteArray: List<ByteArray>? by ArrayTestTable.byteArray
-
-        override fun equals(other: Any?): Boolean = idEquals(other)
-        override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
-            .add("numbers", numbers)
-            .add("strings", strings)
-            .add("doubles", doubles)
-            .add("byteArray", byteArray)
-            .toString()
     }
 
     /**

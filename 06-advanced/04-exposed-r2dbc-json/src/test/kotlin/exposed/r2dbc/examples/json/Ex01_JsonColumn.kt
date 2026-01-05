@@ -38,8 +38,6 @@ import org.jetbrains.exposed.v1.core.stringLiteral
 import org.jetbrains.exposed.v1.core.vendors.OracleDialect
 import org.jetbrains.exposed.v1.core.vendors.PostgreSQLDialect
 import org.jetbrains.exposed.v1.core.vendors.SQLServerDialect
-import org.jetbrains.exposed.v1.dao.entityCache
-import org.jetbrains.exposed.v1.dao.flushCache
 import org.jetbrains.exposed.v1.exceptions.UnsupportedByDialectException
 import org.jetbrains.exposed.v1.json.Exists
 import org.jetbrains.exposed.v1.json.contains
@@ -122,8 +120,6 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
             tester.update {
                 it[jsonColumn] = updatedData
             }
-
-            entityCache.clear()
 
             tester.selectAll().single()[JsonTable.jsonColumn] shouldBeEqualTo updatedData
         }
@@ -864,8 +860,6 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
             val nonNullId = tester.insertAndGetId {
                 it[user] = User("A", "Team A")
             }
-
-            flushCache()
 
             val result1 = tester.select(tester.user).where { tester.id eq nullId }.single()
             result1[tester.user].shouldBeNull()

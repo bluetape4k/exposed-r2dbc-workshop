@@ -4,20 +4,14 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.crypto.encrypt.Encryptors
-import io.bluetape4k.exposed.dao.idEquals
-import io.bluetape4k.exposed.dao.idHashCode
-import io.bluetape4k.exposed.dao.toStringBuilder
 import io.bluetape4k.junit5.faker.Fakers
 import io.bluetape4k.logging.KLogging
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.jetbrains.exposed.v1.core.Column
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 import org.jetbrains.exposed.v1.core.eq
-import org.jetbrains.exposed.v1.dao.IntEntity
-import org.jetbrains.exposed.v1.dao.IntEntityClass
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.junit.jupiter.params.ParameterizedTest
@@ -57,25 +51,6 @@ class BluetapeEncryptedVarCharColumnTypeTest: R2dbcExposedTestBase() {
         val rc4String: Column<String?> = bluetapeEncryptedVarChar("rc4_str", 1024, Encryptors.RC4).nullable()
         val tripleDesString: Column<String?> =
             bluetapeEncryptedVarChar("triple_des_str", 1024, Encryptors.TripleDES).nullable()
-    }
-
-    class E1(id: EntityID<Int>): IntEntity(id) {
-        companion object: IntEntityClass<E1>(T1)
-
-        var name by T1.name
-
-        var aesString: String? by T1.aesString
-        var rc4String: String? by T1.rc4String
-        var tripleDesString: String? by T1.tripleDesString
-
-        override fun equals(other: Any?): Boolean = idEquals(other)
-        override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
-            .add("name", name)
-            .add("aesString", aesString)
-            .add("rc4String", rc4String)
-            .add("tripleDesString", tripleDesString)
-            .toString()
     }
 
     @ParameterizedTest

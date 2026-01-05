@@ -4,9 +4,6 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.crypto.encrypt.Encryptors
-import io.bluetape4k.exposed.dao.idEquals
-import io.bluetape4k.exposed.dao.idHashCode
-import io.bluetape4k.exposed.dao.toStringBuilder
 import io.bluetape4k.junit5.faker.Fakers
 import io.bluetape4k.logging.KLogging
 import io.bluetape4k.support.toUtf8Bytes
@@ -15,12 +12,8 @@ import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.jetbrains.exposed.v1.core.Column
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 import org.jetbrains.exposed.v1.core.eq
-import org.jetbrains.exposed.v1.dao.IntEntity
-import org.jetbrains.exposed.v1.dao.IntEntityClass
-import org.jetbrains.exposed.v1.dao.entityCache
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 import org.jetbrains.exposed.v1.r2dbc.selectAll
@@ -63,25 +56,6 @@ class BluetapeEncryptedBinaryColumnTypeTest: R2dbcExposedTestBase() {
             bluetapeEncryptedBinary("triple_des_binary", 1024, Encryptors.TripleDES).nullable()
     }
 
-    class E1(id: EntityID<Int>): IntEntity(id) {
-        companion object: IntEntityClass<E1>(T1)
-
-        var name by T1.name
-
-        var aesBinary: ByteArray? by T1.aesBinary
-        var rc4Binary: ByteArray? by T1.rc4Binary
-        var tripleDesBinary: ByteArray? by T1.tripleDesBinary
-
-        override fun equals(other: Any?): Boolean = idEquals(other)
-        override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
-            .add("name", name)
-            .add("aesBinary", aesBinary?.toUtf8String())
-            .add("rc4Binary", rc4Binary?.toUtf8String())
-            .add("tripleDesBinary", tripleDesBinary?.toUtf8String())
-            .toString()
-    }
-
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `필드 값을을 암호화하여 Binary 컬럼에 저장합니다`(testDB: TestDB) = runTest {
@@ -96,8 +70,6 @@ class BluetapeEncryptedBinaryColumnTypeTest: R2dbcExposedTestBase() {
                 it[rc4Binary] = bytes
                 it[tripleDesBinary] = bytes
             }
-
-            entityCache.clear()
 
             val row = T1.selectAll().where { T1.id eq id }.single()
 
@@ -132,8 +104,6 @@ class BluetapeEncryptedBinaryColumnTypeTest: R2dbcExposedTestBase() {
                 it[rc4Binary] = bytes
                 it[tripleDesBinary] = bytes
             }
-
-            entityCache.clear()
 
             val row = T1.selectAll().where { T1.aesBinary eq bytes }.single()
 

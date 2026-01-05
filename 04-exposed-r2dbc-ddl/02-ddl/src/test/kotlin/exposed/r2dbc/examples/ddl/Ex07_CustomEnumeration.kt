@@ -18,7 +18,6 @@ import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.vendors.MysqlDialect
 import org.jetbrains.exposed.v1.core.vendors.PostgreSQLDialect
 import org.jetbrains.exposed.v1.core.vendors.currentDialect
-import org.jetbrains.exposed.v1.dao.flushCache
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.deleteAll
 import org.jetbrains.exposed.v1.r2dbc.insert
@@ -122,7 +121,6 @@ class Ex07_CustomEnumeration: R2dbcExposedTestBase() {
             tester.selectAll().single()[tester.statusName] shouldBeEqualTo Status.INACTIVE
 
             tester.deleteAll()
-            flushCache()
         }
     }
 

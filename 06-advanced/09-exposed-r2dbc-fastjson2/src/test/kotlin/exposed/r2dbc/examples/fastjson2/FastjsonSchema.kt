@@ -7,8 +7,6 @@ import io.bluetape4k.exposed.core.fastjson2.fastjson
 import io.bluetape4k.exposed.core.fastjson2.fastjsonb
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
-import org.jetbrains.exposed.v1.dao.IntEntity
-import org.jetbrains.exposed.v1.dao.IntEntityClass
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
@@ -40,18 +38,6 @@ object FastjsonSchema {
      */
     object FastjsonBTable: IntIdTable("fastjson_b_table") {
         val fastjsonBColumn = fastjsonb<DataHolder>("fastjson_b_column")
-    }
-
-    class FastjsonEntity(id: EntityID<Int>): IntEntity(id) {
-        companion object: IntEntityClass<FastjsonEntity>(FastjsonTable)
-
-        var fastjsonColumn by FastjsonTable.fastjsonColumn
-    }
-
-    class FastjsonBEntity(id: EntityID<Int>): IntEntity(id) {
-        companion object: IntEntityClass<FastjsonBEntity>(FastjsonBTable)
-
-        var fastjsonBColumn by FastjsonBTable.fastjsonBColumn
     }
 
     /**

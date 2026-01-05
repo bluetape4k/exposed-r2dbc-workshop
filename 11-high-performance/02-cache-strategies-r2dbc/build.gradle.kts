@@ -17,7 +17,6 @@ springBoot {
     }
 }
 
-@Suppress("UnstableApiUsage")
 configurations {
     testImplementation.get().extendsFrom(compileOnly.get(), runtimeOnly.get())
 }
@@ -31,8 +30,10 @@ dependencies {
     implementation(Libs.exposed_java_time)
 
     // bluetape4k
+    implementation(Libs.bluetape4k_exposed)
     implementation(Libs.bluetape4k_exposed_r2dbc)
     implementation(Libs.bluetape4k_exposed_r2dbc_redisson)
+    implementation(Libs.bluetape4k_idgenerators)
     implementation(Libs.bluetape4k_redis)
     implementation(Libs.bluetape4k_testcontainers)
     testImplementation(Libs.bluetape4k_junit5)

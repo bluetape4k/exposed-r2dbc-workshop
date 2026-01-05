@@ -2,15 +2,9 @@ package exposed.r2dbc.examples.cache.domain.model
 
 import exposed.r2dbc.examples.cache.utils.faker
 import io.bluetape4k.exposed.core.HasIdentifier
-import io.bluetape4k.exposed.dao.idEquals
-import io.bluetape4k.exposed.dao.idHashCode
-import io.bluetape4k.exposed.dao.toStringBuilder
 import io.bluetape4k.idgenerators.snowflake.Snowflakers
 import org.jetbrains.exposed.v1.core.ResultRow
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
-import org.jetbrains.exposed.v1.dao.LongEntity
-import org.jetbrains.exposed.v1.dao.LongEntityClass
 import org.jetbrains.exposed.v1.javatime.timestamp
 import java.time.Instant
 
@@ -44,26 +38,6 @@ object UserEventTable: LongIdTable("user_action") {
     init {
         index("idx_user_events", isUnique = false, username, eventTime)
     }
-}
-
-class UserEventEntity(id: EntityID<Long>): LongEntity(id) {
-    companion object: LongEntityClass<UserEventEntity>(UserEventTable)
-
-    var username by UserEventTable.username
-    var eventSource by UserEventTable.eventSource
-    var eventType by UserEventTable.eventType
-    var eventDetails by UserEventTable.eventDetails
-    var eventTime by UserEventTable.eventTime
-
-    override fun equals(other: Any?): Boolean = idEquals(other)
-    override fun hashCode(): Int = idHashCode()
-    override fun toString(): String = toStringBuilder()
-        .add("username", username)
-        .add("eventSource", eventSource)
-        .add("eventType", eventType)
-        .add("eventDetails", eventDetails)
-        .add("eventTime", eventTime)
-        .toString()
 }
 
 data class UserEventDTO(

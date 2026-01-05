@@ -2,7 +2,6 @@ package exposed.r2dbc.multitenant.webflux.tenant
 
 import io.r2dbc.spi.IsolationLevel
 import kotlinx.coroutines.reactor.ReactorContext
-import org.jetbrains.exposed.v1.jdbc.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
