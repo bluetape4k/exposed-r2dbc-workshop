@@ -2,6 +2,7 @@ package exposed.r2dbc.examples.custom.entities
 
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.exposed.dao.id.TimebasedUUIDTable
 import io.bluetape4k.logging.KLogging
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
