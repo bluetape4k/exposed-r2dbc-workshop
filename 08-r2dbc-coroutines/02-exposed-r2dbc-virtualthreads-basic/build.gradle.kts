@@ -5,22 +5,22 @@ configurations {
 dependencies {
     implementation(platform(Libs.exposed_bom))
 
-    implementation(project(":exposed-r2dbc-shared"))
+    testImplementation(project(":exposed-r2dbc-shared"))
 
     // Exposed
-    implementation(Libs.exposed_r2dbc)
-    implementation(Libs.bluetape4k_exposed_r2dbc)
+    testImplementation(Libs.exposed_r2dbc)
+    testImplementation(Libs.bluetape4k_exposed_r2dbc)
 
     testImplementation(Libs.bluetape4k_junit5)
 
-    testImplementation(Libs.h2_v2)
+    testRuntimeOnly(Libs.h2_v2)
 
-    testImplementation(Libs.r2dbc_spi)
-    testImplementation(Libs.r2dbc_pool)
-    testImplementation(Libs.r2dbc_h2)
-    testImplementation(Libs.r2dbc_mariadb)
-    testImplementation(Libs.r2dbc_mysql)
-    testImplementation(Libs.r2dbc_postgresql)
+    testRuntimeOnly(Libs.r2dbc_spi)
+    testRuntimeOnly(Libs.r2dbc_pool)
+    testRuntimeOnly(Libs.r2dbc_h2)
+    testRuntimeOnly(Libs.r2dbc_mariadb)
+    testRuntimeOnly(Libs.r2dbc_mysql)
+    testRuntimeOnly(Libs.r2dbc_postgresql)
 
     testImplementation(Libs.bluetape4k_testcontainers)
     testImplementation(Libs.testcontainers)

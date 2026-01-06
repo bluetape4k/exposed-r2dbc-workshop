@@ -18,14 +18,14 @@ dependencies {
 
     testImplementation(Libs.bluetape4k_junit5)
 
-    testImplementation(Libs.h2_v2)
+    testRuntimeOnly(Libs.h2_v2)
 
-    testImplementation(Libs.r2dbc_spi)
-    testImplementation(Libs.r2dbc_pool)
-    testImplementation(Libs.r2dbc_h2)
-    testImplementation(Libs.r2dbc_mariadb)
-    testImplementation(Libs.r2dbc_mysql)
-    testImplementation(Libs.r2dbc_postgresql)
+    testRuntimeOnly(Libs.r2dbc_spi)
+    testRuntimeOnly(Libs.r2dbc_pool)
+    testRuntimeOnly(Libs.r2dbc_h2)
+    testRuntimeOnly(Libs.r2dbc_mariadb)
+    testRuntimeOnly(Libs.r2dbc_mysql)
+    testRuntimeOnly(Libs.r2dbc_postgresql)
 
     testImplementation(Libs.bluetape4k_testcontainers)
     testImplementation(Libs.testcontainers)
@@ -34,9 +34,9 @@ dependencies {
     testImplementation(Libs.testcontainers_postgresql)
 
     // Testcontainers 를 위한 DB 드라이버
-    testImplementation(Libs.mariadb_java_client)
-    testImplementation(Libs.mysql_connector_j)
-    testImplementation(Libs.postgresql_driver)
+    testRuntimeOnly(Libs.mariadb_java_client)
+    testRuntimeOnly(Libs.mysql_connector_j)
+    testRuntimeOnly(Libs.postgresql_driver)
 
     // Coroutines
     implementation(Libs.bluetape4k_coroutines)

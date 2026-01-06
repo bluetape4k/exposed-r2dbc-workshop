@@ -8,28 +8,28 @@ dependencies {
     testImplementation(project(":exposed-r2dbc-shared"))
 
     // Validator
-    implementation(Libs.jakarta_validation_api)
-    implementation(Libs.hibernate_validator)
+    testImplementation(Libs.jakarta_validation_api)
+    testImplementation(Libs.hibernate_validator)
 
     // Exposed
-    implementation(Libs.exposed_dao)
-    implementation(Libs.exposed_jdbc)
-    implementation(Libs.exposed_r2dbc)
-    implementation(Libs.exposed_java_time)
-    implementation(Libs.bluetape4k_exposed)
-    implementation(Libs.bluetape4k_exposed_r2dbc)
-    implementation(Libs.bluetape4k_idgenerators)
+    testImplementation(Libs.exposed_dao)
+    testImplementation(Libs.exposed_jdbc)
+    testImplementation(Libs.exposed_r2dbc)
+    testImplementation(Libs.exposed_java_time)
+
+    testImplementation(Libs.bluetape4k_exposed_r2dbc)
+    testImplementation(Libs.bluetape4k_idgenerators)
 
     testImplementation(Libs.bluetape4k_junit5)
 
-    testImplementation(Libs.h2_v2)
+    testRuntimeOnly(Libs.h2_v2)
 
-    testImplementation(Libs.r2dbc_spi)
-    testImplementation(Libs.r2dbc_pool)
-    testImplementation(Libs.r2dbc_h2)
-    testImplementation(Libs.r2dbc_mariadb)
-    testImplementation(Libs.r2dbc_mysql)
-    testImplementation(Libs.r2dbc_postgresql)
+    testRuntimeOnly(Libs.r2dbc_spi)
+    testRuntimeOnly(Libs.r2dbc_pool)
+    testRuntimeOnly(Libs.r2dbc_h2)
+    testRuntimeOnly(Libs.r2dbc_mariadb)
+    testRuntimeOnly(Libs.r2dbc_mysql)
+    testRuntimeOnly(Libs.r2dbc_postgresql)
 
     testImplementation(Libs.bluetape4k_testcontainers)
     testImplementation(Libs.testcontainers)
@@ -43,8 +43,8 @@ dependencies {
     testImplementation(Libs.postgresql_driver)
 
     // Coroutines
-    implementation(Libs.bluetape4k_coroutines)
-    implementation(Libs.kotlinx_coroutines_core)
+    testImplementation(Libs.bluetape4k_coroutines)
+    testImplementation(Libs.kotlinx_coroutines_core)
     testImplementation(Libs.kotlinx_coroutines_debug)
     testImplementation(Libs.kotlinx_coroutines_test)
 }

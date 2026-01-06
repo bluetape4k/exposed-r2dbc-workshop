@@ -39,21 +39,21 @@ dependencies {
     testImplementation(Libs.bluetape4k_junit5)
 
     // R2DBC Drivers
-    implementation(Libs.h2_v2)
+    runtimeOnly(Libs.h2_v2)
 
-    implementation(Libs.r2dbc_spi)
-    implementation(Libs.r2dbc_pool)
-    implementation(Libs.r2dbc_h2)
-    implementation(Libs.r2dbc_mysql)
+    runtimeOnly(Libs.r2dbc_spi)
+    runtimeOnly(Libs.r2dbc_pool)
+    runtimeOnly(Libs.r2dbc_h2)
+    runtimeOnly(Libs.r2dbc_mysql)
     implementation(Libs.r2dbc_postgresql)
 
     // MySQL
     implementation(Libs.testcontainers_mysql)
-    implementation(Libs.mysql_connector_j)
+    runtimeOnly(Libs.mysql_connector_j)
 
     // PostgreSQL
     implementation(Libs.testcontainers_postgresql)
-    implementation(Libs.postgresql_driver)
+    runtimeOnly(Libs.postgresql_driver)
 
     // Spring Boot
     implementation(Libs.springBoot("autoconfigure"))
@@ -76,16 +76,16 @@ dependencies {
 
     // Redis Cache
     implementation(Libs.lettuce_core)
-    implementation(Libs.commons_pool2)
+    runtimeOnly(Libs.commons_pool2)
 
     // Codecs
-    implementation(Libs.fory_kotlin)
-    implementation(Libs.kryo5)
+    runtimeOnly(Libs.fory_kotlin)
+    runtimeOnly(Libs.kryo5)
 
     // Compressor
-    implementation(Libs.lz4_java)
-    implementation(Libs.snappy_java)
-    implementation(Libs.zstd_jni)
+    runtimeOnly(Libs.lz4_java)
+    runtimeOnly(Libs.snappy_java)
+    runtimeOnly(Libs.zstd_jni)
 
     // Coroutines
     implementation(Libs.bluetape4k_coroutines)

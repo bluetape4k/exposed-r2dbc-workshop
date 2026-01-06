@@ -40,13 +40,13 @@ dependencies {
     implementation(Libs.exposed_core)
     implementation(Libs.exposed_java_time)
 
-    implementation(Libs.h2_v2)
+    runtimeOnly(Libs.h2_v2)
 
-    implementation(Libs.r2dbc_spi)
-    implementation(Libs.r2dbc_pool)
-    implementation(Libs.r2dbc_h2)
-    implementation(Libs.r2dbc_mariadb)
-    implementation(Libs.r2dbc_mysql)
+    runtimeOnly(Libs.r2dbc_spi)
+    runtimeOnly(Libs.r2dbc_pool)
+    runtimeOnly(Libs.r2dbc_h2)
+    runtimeOnly(Libs.r2dbc_mariadb)
+    runtimeOnly(Libs.r2dbc_mysql)
     implementation(Libs.r2dbc_postgresql)
 
     // MySQL
