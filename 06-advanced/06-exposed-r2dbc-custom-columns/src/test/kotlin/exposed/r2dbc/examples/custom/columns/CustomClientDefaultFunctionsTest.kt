@@ -3,6 +3,10 @@ package exposed.r2dbc.examples.custom.columns
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.exposed.core.ksuidGenerated
+import io.bluetape4k.exposed.core.ksuidMillisGenerated
+import io.bluetape4k.exposed.core.snowflakeGenerated
+import io.bluetape4k.exposed.core.timebasedGenerated
 import io.bluetape4k.logging.KLogging
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
@@ -33,11 +37,11 @@ class CustomClientDefaultFunctionsTest: R2dbcExposedTestBase() {
      * ```
      */
     object ClientGenerated: IntIdTable() {
-        val timebasedUuid: Column<UUID> = uuid("timebased_uuid").timebasedUUIDGenerated()
-        val timebasedUuidString: Column<String> = varchar("timebased_uuid_string", 36).timebasedUUIDGenerated()
+        val timebasedUuid: Column<UUID> = uuid("timebased_uuid").timebasedGenerated()
+        val timebasedUuidString: Column<String> = varchar("timebased_uuid_string", 36).timebasedGenerated()
         val snowflake: Column<Long> = long("snowflake").snowflakeGenerated()
         val ksuid: Column<String> = varchar("ksuid", 27).ksuidGenerated()
-        val ksuidMillis: Column<String> = varchar("ksuid_millis", 27).ksuidMillsGenerated()
+        val ksuidMillis: Column<String> = varchar("ksuid_millis", 27).ksuidMillisGenerated()
     }
 
     @ParameterizedTest
@@ -57,25 +61,4 @@ class CustomClientDefaultFunctionsTest: R2dbcExposedTestBase() {
             rows.map { it[ClientGenerated.ksuidMillis] }.distinct() shouldHaveSize entityCount
         }
     }
-
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `DAO - 클라이언트에서 기본값으로 생성하는 함수`(testDB: TestDB) = runTest {
-//        withTables(testDB, ClientGenerated) {
-//            val entityCount = 100
-//            val entities = List(entityCount) {
-//                ClientGeneratedEntity.new {}
-//            }
-//            flushCache()
-//            entityCache.clear()
-//
-//            val loaded = ClientGeneratedEntity.all().toList()
-//
-//            loaded.map { it.timebasedUuid }.distinct() shouldHaveSize entityCount
-//            loaded.map { it.timebasedUuidString }.distinct() shouldHaveSize entityCount
-//            loaded.map { it.snowflake }.distinct() shouldHaveSize entityCount
-//            loaded.map { it.ksuid }.distinct() shouldHaveSize entityCount
-//            loaded.map { it.ksuidMillis }.distinct() shouldHaveSize entityCount
-//        }
-//    }
 }

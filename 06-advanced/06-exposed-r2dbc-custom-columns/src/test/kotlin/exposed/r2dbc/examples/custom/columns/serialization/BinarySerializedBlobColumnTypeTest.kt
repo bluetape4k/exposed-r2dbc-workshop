@@ -3,6 +3,7 @@ package exposed.r2dbc.examples.custom.columns.serialization
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.exposed.core.serializable.binarySerializedBlob
 import io.bluetape4k.io.serializer.BinarySerializers
 import io.bluetape4k.logging.KLogging
 import kotlinx.coroutines.flow.single
@@ -93,32 +94,4 @@ class BinarySerializedBlobColumnTypeTest: R2dbcExposedTestBase() {
             row[T1.zstdKryo] shouldBeEqualTo embedded2
         }
     }
-
-
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `DAO 방식으로 Object 를 Binary Serializer를 이용해 DB Blob에 저장한다`(testDB: TestDB) {
-//        withTables(testDB, T1) {
-//            val embedded = Embeddable("Alice", 20, "Seoul")
-//            val embedded2 = Embeddable2("John", 30, "Seoul", "12914")
-//            val e1 = E1.new {
-//                name = "Alice"
-//
-//                lz4Fury = embedded
-//                lz4Kryo = embedded
-//                zstdFury = embedded2
-//                zstdKryo = embedded2
-//            }
-//            entityCache.clear()
-//
-//            val loaded = E1.findById(e1.id)!!
-//
-//            loaded shouldBeEqualTo e1
-//
-//            loaded.lz4Fury shouldBeEqualTo embedded
-//            loaded.lz4Kryo shouldBeEqualTo embedded
-//            loaded.zstdFury shouldBeEqualTo embedded2
-//            loaded.zstdKryo shouldBeEqualTo embedded2
-//        }
-//    }
 }

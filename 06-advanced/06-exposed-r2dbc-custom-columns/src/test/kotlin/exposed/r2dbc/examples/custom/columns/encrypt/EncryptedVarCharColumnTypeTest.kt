@@ -4,6 +4,7 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.crypto.encrypt.Encryptors
+import io.bluetape4k.exposed.core.encrypt.encryptedVarChar
 import io.bluetape4k.junit5.faker.Fakers
 import io.bluetape4k.logging.KLogging
 import kotlinx.coroutines.flow.single
@@ -17,7 +18,7 @@ import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-class BluetapeEncryptedVarCharColumnTypeTest: R2dbcExposedTestBase() {
+class EncryptedVarCharColumnTypeTest: R2dbcExposedTestBase() {
 
     companion object: KLogging()
 
@@ -47,10 +48,10 @@ class BluetapeEncryptedVarCharColumnTypeTest: R2dbcExposedTestBase() {
     private object T1: IntIdTable("T1") {
         val name = varchar("name", 50)
 
-        val aesString: Column<String?> = bluetapeEncryptedVarChar("aes_str", 1024, Encryptors.AES).nullable()
-        val rc4String: Column<String?> = bluetapeEncryptedVarChar("rc4_str", 1024, Encryptors.RC4).nullable()
+        val aesString: Column<String?> = encryptedVarChar("aes_str", 1024, Encryptors.AES).nullable()
+        val rc4String: Column<String?> = encryptedVarChar("rc4_str", 1024, Encryptors.RC4).nullable()
         val tripleDesString: Column<String?> =
-            bluetapeEncryptedVarChar("triple_des_str", 1024, Encryptors.TripleDES).nullable()
+            encryptedVarChar("triple_des_str", 1024, Encryptors.TripleDES).nullable()
     }
 
     @ParameterizedTest

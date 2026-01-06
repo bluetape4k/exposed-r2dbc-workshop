@@ -9,36 +9,37 @@ dependencies {
 
     // Exposed
     implementation(Libs.exposed_r2dbc)
+    implementation(Libs.bluetape4k_exposed)
     implementation(Libs.bluetape4k_exposed_r2dbc)
     testImplementation(Libs.bluetape4k_junit5)
 
-    implementation(Libs.bluetape4k_io)
+    testImplementation(Libs.bluetape4k_io)
 
     // Compression
-    implementation(Libs.lz4_java)
-    implementation(Libs.snappy_java)
-    implementation(Libs.zstd_jni)
+    testImplementation(Libs.lz4_java)
+    testImplementation(Libs.snappy_java)
+    testImplementation(Libs.zstd_jni)
 
     // Serialization
-    implementation(Libs.fory_kotlin)
-    implementation(Libs.kryo5)
+    testImplementation(Libs.fory_kotlin)
+    testImplementation(Libs.kryo5)
 
     // Encryption
-    implementation(Libs.bluetape4k_crypto)
-    implementation(Libs.jasypt)
+    testImplementation(Libs.bluetape4k_crypto)
+    testImplementation(Libs.jasypt)
 
     // Identifier 자동 생성
     implementation(Libs.bluetape4k_idgenerators)
     implementation(Libs.java_uuid_generator)
 
-    testImplementation(Libs.h2_v2)
+    testRuntimeOnly(Libs.h2_v2)
 
-    testImplementation(Libs.r2dbc_spi)
-    testImplementation(Libs.r2dbc_pool)
-    testImplementation(Libs.r2dbc_h2)
-    testImplementation(Libs.r2dbc_mariadb)
-    testImplementation(Libs.r2dbc_mysql)
-    testImplementation(Libs.r2dbc_postgresql)
+    testRuntimeOnly(Libs.r2dbc_spi)
+    testRuntimeOnly(Libs.r2dbc_pool)
+    testRuntimeOnly(Libs.r2dbc_h2)
+    testRuntimeOnly(Libs.r2dbc_mariadb)
+    testRuntimeOnly(Libs.r2dbc_mysql)
+    testRuntimeOnly(Libs.r2dbc_postgresql)
 
     testImplementation(Libs.bluetape4k_testcontainers)
     testImplementation(Libs.testcontainers)
@@ -47,13 +48,13 @@ dependencies {
     testImplementation(Libs.testcontainers_postgresql)
 
     // Testcontainers 를 위한 DB 드라이버
-    testImplementation(Libs.mariadb_java_client)
-    testImplementation(Libs.mysql_connector_j)
-    testImplementation(Libs.postgresql_driver)
+    testRuntimeOnly(Libs.mariadb_java_client)
+    testRuntimeOnly(Libs.mysql_connector_j)
+    testRuntimeOnly(Libs.postgresql_driver)
 
     // Coroutines
-    implementation(Libs.bluetape4k_coroutines)
-    implementation(Libs.kotlinx_coroutines_core)
+    testImplementation(Libs.bluetape4k_coroutines)
+    testImplementation(Libs.kotlinx_coroutines_core)
     testImplementation(Libs.kotlinx_coroutines_debug)
     testImplementation(Libs.kotlinx_coroutines_test)
 }

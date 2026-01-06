@@ -6,6 +6,7 @@ import exposed.r2dbc.examples.custom.columns.compress.CompressedBlobColumnTypeTe
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.exposed.core.compress.compressedBlob
 import io.bluetape4k.io.compressor.Compressors
 import io.bluetape4k.junit5.faker.Fakers
 import io.bluetape4k.logging.KLogging
@@ -87,27 +88,4 @@ class CompressedBlobColumnTypeTest: R2dbcExposedTestBase() {
             row[zstdData].shouldBeNull()
         }
     }
-
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `DAO 방식으로 속성을 압축하여 blob 컬럼에 저장합니다`(testDB: TestDB) = runTest {
-//        val text = Fakers.randomString(2048, 4096)
-//        val bytes = text.toByteArray()
-//
-//        withTables(testDB, T1) {
-//            val e1 = E1.new {
-//                lz4Data = bytes
-//                snappyData = bytes
-//                zstdData = bytes
-//            }
-//            flushCache()
-//            entityCache.clear()
-//
-//            val loaded = E1.findById(e1.id)!!
-//            loaded shouldBeEqualTo e1
-//            loaded.lz4Data!!.toUtf8String() shouldBeEqualTo text
-//            loaded.snappyData!!.toUtf8String() shouldBeEqualTo text
-//            loaded.zstdData!!.toUtf8String() shouldBeEqualTo text
-//        }
-//    }
 }

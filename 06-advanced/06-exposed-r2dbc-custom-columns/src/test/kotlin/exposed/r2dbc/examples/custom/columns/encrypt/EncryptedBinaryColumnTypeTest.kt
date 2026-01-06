@@ -4,6 +4,7 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.crypto.encrypt.Encryptors
+import io.bluetape4k.exposed.core.encrypt.encryptedBinary
 import io.bluetape4k.junit5.faker.Fakers
 import io.bluetape4k.logging.KLogging
 import io.bluetape4k.support.toUtf8Bytes
@@ -20,7 +21,7 @@ import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-class BluetapeEncryptedBinaryColumnTypeTest: R2dbcExposedTestBase() {
+class EncryptedBinaryColumnTypeTest: R2dbcExposedTestBase() {
 
     companion object: KLogging()
 
@@ -50,10 +51,10 @@ class BluetapeEncryptedBinaryColumnTypeTest: R2dbcExposedTestBase() {
     private object T1: IntIdTable("T1") {
         val name = varchar("name", 50)
 
-        val aesBinary: Column<ByteArray?> = bluetapeEncryptedBinary("aes_binary", 1024, Encryptors.AES).nullable()
-        val rc4Binary: Column<ByteArray?> = bluetapeEncryptedBinary("rc4_binary", 1024, Encryptors.RC4).nullable()
+        val aesBinary: Column<ByteArray?> = encryptedBinary("aes_binary", 1024, Encryptors.AES).nullable()
+        val rc4Binary: Column<ByteArray?> = encryptedBinary("rc4_binary", 1024, Encryptors.RC4).nullable()
         val tripleDesBinary: Column<ByteArray?> =
-            bluetapeEncryptedBinary("triple_des_binary", 1024, Encryptors.TripleDES).nullable()
+            encryptedBinary("triple_des_binary", 1024, Encryptors.TripleDES).nullable()
     }
 
     @ParameterizedTest

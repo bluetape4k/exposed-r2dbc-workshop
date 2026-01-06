@@ -3,6 +3,7 @@ package exposed.r2dbc.examples.custom.columns.serialization
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.exposed.core.serializable.binarySerializedBinary
 import io.bluetape4k.io.serializer.BinarySerializers
 import io.bluetape4k.logging.KLogging
 import kotlinx.coroutines.flow.single
@@ -72,22 +73,6 @@ class BinarySerializedBinaryColumnTypeTest: R2dbcExposedTestBase() {
         ).nullable()
     }
 
-//    class E1(id: EntityID<Int>): IntEntity(id) {
-//        companion object: IntEntityClass<E1>(T1)
-//
-//        var name by T1.name
-//
-//        var lz4Fury by T1.lz4Fury
-//        var lz4Kryo by T1.lz4Kryo
-//
-//        var zstdFury by T1.zstdFury
-//        var zstdKryo by T1.zstdKryo
-//
-//        override fun equals(other: Any?): Boolean = idEquals(other)
-//        override fun hashCode(): Int = id.hashCode()
-//        override fun toString(): String = "E1(id=$id)"
-//    }
-
     data class Embeddable(
         val name: String,
         val age: Int,
@@ -128,34 +113,4 @@ class BinarySerializedBinaryColumnTypeTest: R2dbcExposedTestBase() {
             row[T1.zstdKryo] shouldBeEqualTo embedded2
         }
     }
-
-
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `DAO 방식으로 Object 를 Binary Serializer를 이용해 DB에 저장한다`(testDB: TestDB) {
-//        withTables(testDB, T1) {
-//            val embedded = Embeddable("Alice", 20, "Seoul")
-//            val embedded2 = Embeddable2("John", 30, "Seoul", "12914")
-//            val e1 = E1.new {
-//                name = "Alice"
-//
-//                lz4Fury = embedded
-//                zstdFury = embedded2
-//
-//                lz4Kryo = embedded
-//                zstdKryo = embedded2
-//            }
-//            entityCache.clear()
-//
-//            val loaded = E1.findById(e1.id)!!
-//
-//            loaded shouldBeEqualTo e1
-//
-//            loaded.lz4Fury shouldBeEqualTo embedded
-//            loaded.zstdFury shouldBeEqualTo embedded2
-//
-//            loaded.lz4Kryo shouldBeEqualTo embedded
-//            loaded.zstdKryo shouldBeEqualTo embedded2
-//        }
-//    }
 }
