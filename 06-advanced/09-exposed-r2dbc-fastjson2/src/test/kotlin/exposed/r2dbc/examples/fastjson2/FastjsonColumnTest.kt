@@ -10,6 +10,9 @@ import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.exposed.core.fastjson2.Contains
+import io.bluetape4k.exposed.core.fastjson2.Exists
+import io.bluetape4k.exposed.core.fastjson2.Extract
 import io.bluetape4k.exposed.core.fastjson2.contains
 import io.bluetape4k.exposed.core.fastjson2.exists
 import io.bluetape4k.exposed.core.fastjson2.extract
@@ -28,6 +31,7 @@ import org.amshove.kluent.shouldBeTrue
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.IntegerColumnType
 import org.jetbrains.exposed.v1.core.Op
+import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.StdOutSqlLogger
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.core.castTo
@@ -40,6 +44,7 @@ import org.jetbrains.exposed.v1.core.vendors.OracleDialect
 import org.jetbrains.exposed.v1.core.vendors.PostgreSQLDialect
 import org.jetbrains.exposed.v1.core.vendors.SQLServerDialect
 import org.jetbrains.exposed.v1.exceptions.UnsupportedByDialectException
+import org.jetbrains.exposed.v1.r2dbc.Query
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.exists
 import org.jetbrains.exposed.v1.r2dbc.insert
@@ -135,7 +140,7 @@ class FastjsonColumnTest: R2dbcExposedTestBase() {
             val row = tester.select(isActive).singleOrNull()
             row?.get(isActive) shouldBeEqualTo data1.active
 
-            val storedUser = tester.fastjsonColumn.extract<User>("${pathPrefix}user", toScalar = false)
+            val storedUser: Extract<User> = tester.fastjsonColumn.extract<User>("${pathPrefix}user", toScalar = false)
             val row2 = tester.select(storedUser).singleOrNull()
             row2?.get(storedUser) shouldBeEqualTo user1
 
@@ -143,7 +148,7 @@ class FastjsonColumnTest: R2dbcExposedTestBase() {
                 is PostgreSQLDialect -> arrayOf("user", "name")
                 else -> arrayOf(".user.name")
             }
-            val username = tester.fastjsonColumn.extract<String>(*path)
+            val username: Extract<String> = tester.fastjsonColumn.extract<String>(*path)
             val row3 = tester.select(username).singleOrNull()
             row3?.get(username) shouldBeEqualTo user1.name
         }
@@ -203,46 +208,6 @@ class FastjsonColumnTest: R2dbcExposedTestBase() {
         }
     }
 
-    /**
-     * ```sql
-     * -- Postgres
-     * INSERT INTO fastjson_table (fastjson_column)
-     * VALUES ({"user":{"name":"Admin","team":"Alpha"},"logins":10,"active":true,"team":null});
-     *
-     * UPDATE fastjson_table
-     *    SET fastjson_column={"user":{"name":"Lead","team":"Beta"},"logins":10,"active":true,"team":null}
-     *  WHERE fastjson_table.id = 1;
-     *
-     * -- MySQL V8
-     * INSERT INTO fastjson_table (fastjson_column)
-     * VALUES ({"user":{"name":"Admin","team":"Alpha"},"logins":10,"active":true,"team":null});
-     *
-     * UPDATE fastjson_table
-     *    SET fastjson_column={"user":{"name":"Lead","team":"Beta"},"logins":10,"active":true,"team":null}
-     *  WHERE fastjson_table.id = 1;
-     * ```
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `DAO 함수로 Jackson 컬럼 사용하기`(testDB: TestDB) = runTest {
-//        val dataTable = FastjsonSchema.FastjsonTable
-//        val dataEntity = FastjsonSchema.FastjsonEntity
-//
-//        withTables(testDB, dataTable) {
-//            val dataA = DataHolder(User("Admin", "Alpha"), 10, true, null)
-//            val newUser = dataEntity.new {
-//                fastjsonColumn = dataA
-//            }
-//            dataEntity.findById(newUser.id)?.fastjsonColumn shouldBeEqualTo dataA
-//
-//            val updatedUser = dataA.copy(user = User("Lead", "Beta"))
-//            dataTable.update({ dataTable.id eq newUser.id }) {
-//                it[fastjsonColumn] = updatedUser
-//            }
-//            dataEntity.all().single().fastjsonColumn shouldBeEqualTo updatedUser
-//        }
-//    }
-
     private val supportsJsonContains = TestDB.ALL_POSTGRES + TestDB.ALL_MYSQL_MARIADB
 
     /**
@@ -281,18 +246,18 @@ class FastjsonColumnTest: R2dbcExposedTestBase() {
                 it[fastjsonColumn] = data1.copy(user = alphaTeamUser)
             }
 
-            val userIsInactive = tester.fastjsonColumn.contains("""{"active":false}""")
+            val userIsInactive: Contains = tester.fastjsonColumn.contains("""{"active":false}""")
             val rows = tester.selectAll().where { userIsInactive }.toList()
             rows.shouldBeEmpty()
 
             val alphaTeamUserAsJson = """{"user":${FastjsonSerializer.Default.serializeAsString(alphaTeamUser)}}"""
-            var userIsInAlphaTeam = tester.fastjsonColumn.contains(stringLiteral(alphaTeamUserAsJson))
+            var userIsInAlphaTeam: Contains = tester.fastjsonColumn.contains(stringLiteral(alphaTeamUserAsJson))
             tester.selectAll().where { userIsInAlphaTeam }.count() shouldBeEqualTo 1L
 
             // test target contains candidate at specified path
             if (testDB in TestDB.ALL_MYSQL_MARIADB_LIKE) {
                 userIsInAlphaTeam = tester.fastjsonColumn.contains("\"Alpha\"", ".user.team")
-                val alphaTeamUsers = tester.select(tester.id).where { userIsInAlphaTeam }
+                val alphaTeamUsers: Query = tester.select(tester.id).where { userIsInAlphaTeam }
                 alphaTeamUsers.single()[tester.id] shouldBeEqualTo newId
             }
         }
@@ -352,16 +317,16 @@ class FastjsonColumnTest: R2dbcExposedTestBase() {
                     is OracleDialect -> "?(@.logins == $maximumLogins)"
                     else -> ".logins ? (@ == $maximumLogins)"
                 }
-                val hasMaxLogins = tester.fastjsonColumn.exists(filterPath)
-                val usersWithMaxLogins = tester.select(tester.id).where { hasMaxLogins }
+                val hasMaxLogins: Exists = tester.fastjsonColumn.exists(filterPath)
+                val usersWithMaxLogins: Query = tester.select(tester.id).where { hasMaxLogins }
                 usersWithMaxLogins.single()[tester.id] shouldBeEqualTo newId
 
                 val (jsonPath, optionalArg) = when (testDialect) {
                     is OracleDialect -> "?(@.user.team == \$team)" to "PASSING '$teamA' AS \"team\""
                     else -> ".user.team ? (@ == \$team)" to "{\"team\":\"$teamA\"}"
                 }
-                val isOnTeamA = tester.fastjsonColumn.exists(jsonPath, optional = optionalArg)
-                val usersOnTeamA = tester.select(tester.id).where { isOnTeamA }
+                val isOnTeamA: Exists = tester.fastjsonColumn.exists(jsonPath, optional = optionalArg)
+                val usersOnTeamA: Query = tester.select(tester.id).where { isOnTeamA }
                 usersOnTeamA.single()[tester.id] shouldBeEqualTo newId
             }
         }
@@ -396,7 +361,7 @@ class FastjsonColumnTest: R2dbcExposedTestBase() {
                 is PostgreSQLDialect -> arrayOf("users", "0", "team")
                 else -> arrayOf(".users[0].team")
             }
-            val firstIsOnTeamA = tester.groups.extract<String>(*path1) eq "Team A"
+            val firstIsOnTeamA: Op<Boolean> = tester.groups.extract<String>(*path1) eq "Team A"
             tester.selectAll().where { firstIsOnTeamA }.single()[tester.id] shouldBeEqualTo singleId
 
             // older MySQL and MariaDB versions require non-scalar extracted value from JSON Array
@@ -405,10 +370,8 @@ class FastjsonColumnTest: R2dbcExposedTestBase() {
                 is PostgreSQLDialect -> "0"
                 else -> "[0]"
             }
-            val firstNumber = tester.numbers.extract<Int>(path2, toScalar = toScalar)
-            tester.select(firstNumber)
-                .map { it[firstNumber] }
-                .toList() shouldBeEqualTo listOf(100, 3)
+            val firstNumber: Extract<Int> = tester.numbers.extract<Int>(path2, toScalar = toScalar)
+            tester.select(firstNumber).map { it[firstNumber] }.toList() shouldBeEqualTo listOf(100, 3)
         }
     }
 
@@ -474,10 +437,10 @@ class FastjsonColumnTest: R2dbcExposedTestBase() {
         withFastjsonArrays(testDB) { tester, _, tripleId ->
             val optional = if (testDB in TestDB.ALL_MYSQL_MARIADB_LIKE) "one" else null
 
-            val hasMultipleUsers = tester.groups.exists(".users[1]", optional = optional)
+            val hasMultipleUsers: Exists = tester.groups.exists(".users[1]", optional = optional)
             tester.selectAll().where { hasMultipleUsers }.single()[tester.id] shouldBeEqualTo tripleId
 
-            val hasAtLeast3Numbers = tester.numbers.exists("[2]", optional = optional)
+            val hasAtLeast3Numbers: Exists = tester.numbers.exists("[2]", optional = optional)
             tester.selectAll().where { hasAtLeast3Numbers }.single()[tester.id] shouldBeEqualTo tripleId
         }
     }
@@ -644,10 +607,10 @@ class FastjsonColumnTest: R2dbcExposedTestBase() {
                 it[user] = User("A", "Team A")
             }
 
-            val row1 = tester.select(tester.user).where { tester.id eq nullId }.single()
+            val row1: ResultRow = tester.select(tester.user).where { tester.id eq nullId }.single()
             row1[tester.user].shouldBeNull()
 
-            val row2 = tester.select(tester.user).where { tester.id eq nonNullId }.single()
+            val row2: ResultRow = tester.select(tester.user).where { tester.id eq nonNullId }.single()
             row2[tester.user] shouldBeEqualTo User("A", "Team A")
         }
     }
@@ -669,7 +632,7 @@ class FastjsonColumnTest: R2dbcExposedTestBase() {
                 it[fastjsonColumn] = newData2
             }
 
-            val newRow = tester.selectAll().where { tester.id eq newId }.single()
+            val newRow: ResultRow = tester.selectAll().where { tester.id eq newId }.single()
             newRow[tester.fastjsonColumn] shouldBeEqualTo newData2
         }
     }
@@ -688,8 +651,7 @@ class FastjsonColumnTest: R2dbcExposedTestBase() {
         val tester = object: Table("tester") {
             val numbers: Column<DoubleArray> = fastjson<IntArray>("numbers").transform(
                 wrap = { DoubleArray(it.size) { i -> 1.0 * it[i] } },
-                unwrap = { IntArray(it.size) { i -> it[i].toInt() } }
-            )
+                unwrap = { IntArray(it.size) { i -> it[i].toInt() } })
         }
         withTables(testDB, tester) {
             val data = doubleArrayOf(1.0, 2.0, 3.0)
@@ -732,12 +694,13 @@ class FastjsonColumnTest: R2dbcExposedTestBase() {
 
         // MySQL versions prior to 8.0.13 do not accept default values on JSON columns
         Assumptions.assumeTrue { testDB != TestDB.MYSQL_V5 }
+
         withTables(testDB, tester) {
             testerDatabaseGenerated.insert { }
 
-            val value = testerDatabaseGenerated.selectAll().single()[tester.value]
+            val value: User = testerDatabaseGenerated.selectAll().single()[tester.value]
+
             value shouldBeEqualTo defaultUser
         }
-
     }
 }

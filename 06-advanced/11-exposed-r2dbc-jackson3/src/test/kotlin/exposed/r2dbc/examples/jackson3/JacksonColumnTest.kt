@@ -11,6 +11,7 @@ import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.exposed.core.jackson3.DefaultJacksonSerializer
+import io.bluetape4k.exposed.core.jackson3.Exists
 import io.bluetape4k.exposed.core.jackson3.contains
 import io.bluetape4k.exposed.core.jackson3.exists
 import io.bluetape4k.exposed.core.jackson3.extract
@@ -28,6 +29,7 @@ import org.amshove.kluent.shouldBeTrue
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.IntegerColumnType
 import org.jetbrains.exposed.v1.core.Op
+import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.StdOutSqlLogger
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.core.castTo
@@ -40,6 +42,7 @@ import org.jetbrains.exposed.v1.core.vendors.OracleDialect
 import org.jetbrains.exposed.v1.core.vendors.PostgreSQLDialect
 import org.jetbrains.exposed.v1.core.vendors.SQLServerDialect
 import org.jetbrains.exposed.v1.exceptions.UnsupportedByDialectException
+import org.jetbrains.exposed.v1.r2dbc.Query
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.exists
 import org.jetbrains.exposed.v1.r2dbc.insert
@@ -202,46 +205,6 @@ class JacksonColumnTest: R2dbcExposedTestBase() {
             SchemaUtils.create(tester)
         }
     }
-
-    /**
-     * ```sql
-     * -- Postgres
-     * INSERT INTO jackson_table (jackson_column)
-     * VALUES ({"user":{"name":"Admin","team":"Alpha"},"logins":10,"active":true,"team":null});
-     *
-     * UPDATE jackson_table
-     *    SET jackson_column={"user":{"name":"Lead","team":"Beta"},"logins":10,"active":true,"team":null}
-     *  WHERE jackson_table.id = 1;
-     *
-     * -- MySQL V8
-     * INSERT INTO jackson_table (jackson_column)
-     * VALUES ({"user":{"name":"Admin","team":"Alpha"},"logins":10,"active":true,"team":null});
-     *
-     * UPDATE jackson_table
-     *    SET jackson_column={"user":{"name":"Lead","team":"Beta"},"logins":10,"active":true,"team":null}
-     *  WHERE jackson_table.id = 1;
-     * ```
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `DAO 함수로 Jackson 컬럼 사용하기`(testDB: TestDB) = runTest {
-//        val dataTable = JacksonSchema.JacksonTable
-//        val dataEntity = JacksonSchema.JacksonEntity
-//
-//        withTables(testDB, dataTable) {
-//            val dataA = DataHolder(User("Admin", "Alpha"), 10, true, null)
-//            val newUser = dataEntity.new {
-//                jacksonColumn = dataA
-//            }
-//            dataEntity.findById(newUser.id)?.jacksonColumn shouldBeEqualTo dataA
-//
-//            val updatedUser = dataA.copy(user = User("Lead", "Beta"))
-//            dataTable.update({ dataTable.id eq newUser.id }) {
-//                it[jacksonColumn] = updatedUser
-//            }
-//            dataEntity.all().single().jacksonColumn shouldBeEqualTo updatedUser
-//        }
-//    }
 
     private val supportsJsonContains = TestDB.ALL_POSTGRES + TestDB.ALL_MYSQL_MARIADB
 
@@ -440,7 +403,10 @@ class JacksonColumnTest: R2dbcExposedTestBase() {
 
             if (testDB in TestDB.ALL_MYSQL_LIKE) {
                 val hasUserNamB = tester.groups.contains("\"B\"", ".users[0].name")
-                tester.selectAll().where { hasUserNamB }.single()[tester.id] shouldBeEqualTo tripleId
+                tester
+                    .selectAll()
+                    .where { hasUserNamB }
+                    .single()[tester.id] shouldBeEqualTo tripleId
             }
         }
     }
@@ -474,11 +440,17 @@ class JacksonColumnTest: R2dbcExposedTestBase() {
         withJacksonArrays(testDB) { tester, _, tripleId ->
             val optional = if (testDB in TestDB.ALL_MYSQL_MARIADB_LIKE) "one" else null
 
-            val hasMultipleUsers = tester.groups.exists(".users[1]", optional = optional)
-            tester.selectAll().where { hasMultipleUsers }.single()[tester.id] shouldBeEqualTo tripleId
+            val hasMultipleUsers: Exists = tester.groups.exists(".users[1]", optional = optional)
+            tester
+                .selectAll()
+                .where { hasMultipleUsers }
+                .single()[tester.id] shouldBeEqualTo tripleId
 
-            val hasAtLeast3Numbers = tester.numbers.exists("[2]", optional = optional)
-            tester.selectAll().where { hasAtLeast3Numbers }.single()[tester.id] shouldBeEqualTo tripleId
+            val hasAtLeast3Numbers: Exists = tester.numbers.exists("[2]", optional = optional)
+            tester
+                .selectAll()
+                .where { hasAtLeast3Numbers }
+                .single()[tester.id] shouldBeEqualTo tripleId
         }
     }
 
@@ -517,7 +489,9 @@ class JacksonColumnTest: R2dbcExposedTestBase() {
         }
 
         suspend fun selectIdWhere(condition: () -> Op<Boolean>): List<EntityID<Int>> {
-            val query = iterables.select(iterables.id).where(condition())
+            val query: Query = iterables
+                .select(iterables.id)
+                .where(condition())
             return query.map { it[iterables.id] }.toList()
         }
 
@@ -620,7 +594,7 @@ class JacksonColumnTest: R2dbcExposedTestBase() {
                 it[intArray] = integerArray
             }
 
-            val row = iterables.selectAll().single()
+            val row: ResultRow = iterables.selectAll().single()
             row[iterables.userList] shouldBeEqualTo listOf(user1, user2)
             row[iterables.intList] shouldBeEqualTo integerList
             row[iterables.userArray] shouldBeEqualTo arrayOf(user1, user2)
@@ -644,10 +618,16 @@ class JacksonColumnTest: R2dbcExposedTestBase() {
                 it[user] = User("A", "Team A")
             }
 
-            val row1 = tester.select(tester.user).where { tester.id eq nullId }.single()
+            val row1 = tester
+                .select(tester.user)
+                .where { tester.id eq nullId }
+                .single()
             row1[tester.user].shouldBeNull()
 
-            val row2 = tester.select(tester.user).where { tester.id eq nonNullId }.single()
+            val row2 = tester
+                .select(tester.user)
+                .where { tester.id eq nonNullId }
+                .single()
             row2[tester.user] shouldBeEqualTo User("A", "Team A")
         }
     }
@@ -669,7 +649,10 @@ class JacksonColumnTest: R2dbcExposedTestBase() {
                 it[jacksonColumn] = newData2
             }
 
-            val newRow = tester.selectAll().where { tester.id eq newId }.single()
+            val newRow = tester
+                .selectAll()
+                .where { tester.id eq newId }
+                .single()
             newRow[tester.jacksonColumn] shouldBeEqualTo newData2
         }
     }
@@ -697,7 +680,9 @@ class JacksonColumnTest: R2dbcExposedTestBase() {
                 it[numbers] = data
             }
 
-            tester.selectAll().single()[tester.numbers] shouldBeEqualTo data
+            tester
+                .selectAll()
+                .single()[tester.numbers] shouldBeEqualTo data
         }
     }
 
@@ -735,7 +720,10 @@ class JacksonColumnTest: R2dbcExposedTestBase() {
         withTables(testDB, tester) {
             testerDatabaseGenerated.insert { }
 
-            val value = testerDatabaseGenerated.selectAll().single()[tester.value]
+            val value = testerDatabaseGenerated
+                .selectAll()
+                .single()[tester.value]
+
             value shouldBeEqualTo defaultUser
         }
 

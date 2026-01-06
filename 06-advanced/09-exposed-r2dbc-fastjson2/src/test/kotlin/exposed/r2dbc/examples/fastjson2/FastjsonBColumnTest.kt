@@ -10,6 +10,8 @@ import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.exposed.core.fastjson2.Exists
+import io.bluetape4k.exposed.core.fastjson2.Extract
 import io.bluetape4k.exposed.core.fastjson2.contains
 import io.bluetape4k.exposed.core.fastjson2.exists
 import io.bluetape4k.exposed.core.fastjson2.extract
@@ -30,6 +32,7 @@ import org.jetbrains.exposed.v1.core.ComparisonOp
 import org.jetbrains.exposed.v1.core.Expression
 import org.jetbrains.exposed.v1.core.ExpressionWithColumnType
 import org.jetbrains.exposed.v1.core.IntegerColumnType
+import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.StdOutSqlLogger
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.core.castTo
@@ -39,6 +42,7 @@ import org.jetbrains.exposed.v1.core.greaterEq
 import org.jetbrains.exposed.v1.core.stringParam
 import org.jetbrains.exposed.v1.core.vendors.PostgreSQLDialect
 import org.jetbrains.exposed.v1.exceptions.UnsupportedByDialectException
+import org.jetbrains.exposed.v1.r2dbc.Query
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.exists
 import org.jetbrains.exposed.v1.r2dbc.insert
@@ -103,7 +107,9 @@ class FastjsonBColumnTest: R2dbcExposedTestBase() {
                 it[fastjsonBColumn] = updatedData
             }
 
-            tester.selectAll().single()[tester.fastjsonBColumn] shouldBeEqualTo updatedData
+            tester
+                .selectAll()
+                .single()[tester.fastjsonBColumn] shouldBeEqualTo updatedData
         }
     }
 
@@ -139,8 +145,8 @@ class FastjsonBColumnTest: R2dbcExposedTestBase() {
                 is PostgreSQLDialect -> arrayOf("user", "name")
                 else -> arrayOf(".user.name")
             }
-            val username = tester.fastjsonBColumn.extract<String>(*path)
-            val row3 = tester.select(username).singleOrNull()
+            val username: Extract<String> = tester.fastjsonBColumn.extract<String>(*path)
+            val row3: ResultRow? = tester.select(username).singleOrNull()
             row3?.get(username) shouldBeEqualTo user1.name
         }
     }
@@ -177,63 +183,13 @@ class FastjsonBColumnTest: R2dbcExposedTestBase() {
             }
             val tooManyLogins = logins greaterEq 1000
 
-            val row = tester.select(tester.id).where { tooManyLogins }.singleOrNull()
+            val row: ResultRow? = tester
+                .select(tester.id)
+                .where { tooManyLogins }
+                .singleOrNull()
             row?.get(tester.id) shouldBeEqualTo newId
         }
     }
-
-    /**
-     * ```sql
-     * -- Postgres
-     * UPDATE fastjson_b_table
-     *   SET fastjson_b_column={"user":{"name":"Admin","team":"Alpha"},"logins":99,"active":true,"team":null}
-     * WHERE fastjson_b_table.id = 1;
-     *
-     * SELECT fastjson_b_table.id, fastjson_b_table.fastjson_b_column
-     *   FROM fastjson_b_table
-     *  WHERE CAST(JSONB_EXTRACT_PATH_TEXT(fastjson_b_table.fastjson_b_column, 'logins') AS INT) >= 50;
-     *
-     * -- MySQL V8
-     * UPDATE fastjson_b_table
-     *    SET fastjson_b_column={"user":{"name":"Admin","team":"Alpha"},"logins":99,"active":true,"team":null}
-     *  WHERE fastjson_b_table.id = 1;
-     *
-     * SELECT fastjson_b_table.id, fastjson_b_table.fastjson_b_column
-     *   FROM fastjson_b_table
-     *  WHERE JSON_UNQUOTE(JSON_EXTRACT(fastjson_b_table.fastjson_b_column, "$.logins")) >= 50;
-     * ```
-     *
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `DAO 함수로 JacksonB 컬럼 사용하기`(testDB: TestDB) = runTest {
-//        val dataTable = FastjsonSchema.FastjsonBTable
-//        val dataEntity = FastjsonSchema.FastjsonBEntity
-//
-//        withTables(testDB, dataTable) {
-//            val dataA = DataHolder(User("Admin", "Alpha"), 10, true, null)
-//            val newUser = dataEntity.new {
-//                fastjsonBColumn = dataA
-//            }
-//            dataEntity.findById(newUser.id)?.fastjsonBColumn shouldBeEqualTo dataA
-//
-//            val updatedUser = dataA.copy(logins = 99)
-//            dataTable.update({ dataTable.id eq newUser.id }) {
-//                it[fastjsonBColumn] = updatedUser
-//            }
-//            dataEntity.all().single().fastjsonBColumn shouldBeEqualTo updatedUser
-//
-//            if (testDB !in TestDB.ALL_H2) {
-//                dataEntity.new { fastjsonBColumn = dataA }
-//                val loginCount = when (currentDialectTest) {
-//                    is PostgreSQLDialect -> dataTable.fastjsonBColumn.extract<Int>("logins").castTo(IntegerColumnType())
-//                    else -> dataTable.fastjsonBColumn.extract<Int>(".logins")
-//                }
-//                val frequentUser = dataEntity.find { loginCount greaterEq 50 }.single()
-//                frequentUser.fastjsonBColumn shouldBeEqualTo updatedUser
-//            }
-//        }
-//    }
 
     /**
      * ```sql
@@ -276,7 +232,9 @@ class FastjsonBColumnTest: R2dbcExposedTestBase() {
             // test target contains candidate at specified path
             if (testDB in TestDB.ALL_MYSQL_MARIADB) {
                 val userIsInAlphaTeam2 = tester.fastjsonBColumn.contains("\"Alpha\"", ".user.team")
-                val alphaTeamUsers = tester.select(tester.id).where { userIsInAlphaTeam2 }
+                val alphaTeamUsers: Query = tester
+                    .select(tester.id)
+                    .where { userIsInAlphaTeam2 }
                 alphaTeamUsers.single()[tester.id] shouldBeEqualTo newId
             }
         }
@@ -298,16 +256,22 @@ class FastjsonBColumnTest: R2dbcExposedTestBase() {
 
             // test data at path root '$' exists by providing no path arguments
             // SELECT COUNT(*) FROM fastjson_b_table WHERE JSONB_PATH_EXISTS(fastjson_b_table.fastjson_b_column, '$')
-            val hasAnyData = tester.fastjsonBColumn.exists(optional = optional)
-            tester.selectAll().where { hasAnyData }.count() shouldBeEqualTo 2L
+            val hasAnyData: Exists = tester.fastjsonBColumn.exists(optional = optional)
+            tester.selectAll()
+                .where { hasAnyData }
+                .count() shouldBeEqualTo 2L
 
             // SELECT COUNT(*) FROM fastjson_b_table WHERE JSONB_PATH_EXISTS(fastjson_b_table.fastjson_b_column, '$.fakeKey')
-            val hasFakeKey = tester.fastjsonBColumn.exists(".fakeKey", optional = optional)
-            tester.selectAll().where { hasFakeKey }.count() shouldBeEqualTo 0L
+            val hasFakeKey: Exists = tester.fastjsonBColumn.exists(".fakeKey", optional = optional)
+            tester.selectAll()
+                .where { hasFakeKey }
+                .count() shouldBeEqualTo 0L
 
             // SELECT COUNT(*) FROM fastjson_b_table WHERE JSONB_PATH_EXISTS(fastjson_b_table.fastjson_b_column, '$.logins')
             val hasLogins = tester.fastjsonBColumn.exists(".logins", optional = optional)
-            tester.selectAll().where { hasLogins }.count() shouldBeEqualTo 2L
+            tester.selectAll()
+                .where { hasLogins }
+                .count() shouldBeEqualTo 2L
 
             // test data at path exists with filter condition & optional arguments
             if (currentDialectTest is PostgreSQLDialect) {
@@ -321,8 +285,10 @@ class FastjsonBColumnTest: R2dbcExposedTestBase() {
                 // SELECT fastjson_b_table.id FROM fastjson_b_table
                 //  WHERE JSONB_PATH_EXISTS(fastjson_b_table.fastjson_b_column, '$.user.team ? (@ == $team)', '{"team":"A"}')
                 val (jsonPath, optionalArg) = ".user.team ? (@ == \$team)" to "{\"team\":\"$teamA\"}"
-                val isOnTeamA = tester.fastjsonBColumn.exists(jsonPath, optional = optionalArg)
-                val usersOnTeamA = tester.select(tester.id).where { isOnTeamA }
+                val isOnTeamA: Exists = tester.fastjsonBColumn.exists(jsonPath, optional = optionalArg)
+                val usersOnTeamA: Query = tester
+                    .select(tester.id)
+                    .where { isOnTeamA }
                 usersOnTeamA.single()[tester.id] shouldBeEqualTo newId
             }
         }
@@ -367,7 +333,8 @@ class FastjsonBColumnTest: R2dbcExposedTestBase() {
                 else -> "[0]"
             }
             val firstNumber = tester.numbers.extract<Int>(path2, toScalar = toScalar)
-            tester.select(firstNumber)
+            tester
+                .select(firstNumber)
                 .map { it[firstNumber] }
                 .toList() shouldBeEqualTo listOf(100, 3)
         }
@@ -401,7 +368,10 @@ class FastjsonBColumnTest: R2dbcExposedTestBase() {
 
             if (testDB in TestDB.ALL_MYSQL_LIKE) {
                 val hasUserNamB = tester.groups.contains("\"B\"", ".users[0].name")
-                tester.selectAll().where { hasUserNamB }.single()[tester.id] shouldBeEqualTo tripleId
+                tester
+                    .selectAll()
+                    .where { hasUserNamB }
+                    .single()[tester.id] shouldBeEqualTo tripleId
             }
         }
     }
@@ -436,10 +406,16 @@ class FastjsonBColumnTest: R2dbcExposedTestBase() {
             val optional = if (testDB in TestDB.ALL_MYSQL_MARIADB_LIKE) "one" else null
 
             val hasMultipleUsers = tester.groups.exists(".users[1]", optional = optional)
-            tester.selectAll().where { hasMultipleUsers }.single()[tester.id] shouldBeEqualTo tripleId
+            tester
+                .selectAll()
+                .where { hasMultipleUsers }
+                .single()[tester.id] shouldBeEqualTo tripleId
 
             val hasAtLeast3Numbers = tester.numbers.exists("[2]", optional = optional)
-            tester.selectAll().where { hasAtLeast3Numbers }.single()[tester.id] shouldBeEqualTo tripleId
+            tester
+                .selectAll()
+                .where { hasAtLeast3Numbers }
+                .single()[tester.id] shouldBeEqualTo tripleId
         }
     }
 
@@ -530,10 +506,16 @@ class FastjsonBColumnTest: R2dbcExposedTestBase() {
                 it[user] = User("A", "Team A")
             }
 
-            val row1 = tester.select(tester.user).where { tester.id eq nullId }.single()
+            val row1 = tester
+                .select(tester.user)
+                .where { tester.id eq nullId }
+                .single()
             row1[tester.user].shouldBeNull()
 
-            val row2 = tester.select(tester.user).where { tester.id eq nonNullId }.single()
+            val row2 = tester
+                .select(tester.user)
+                .where { tester.id eq nonNullId }
+                .single()
             row2[tester.user] shouldBeEqualTo User("A", "Team A")
         }
     }
@@ -555,7 +537,10 @@ class FastjsonBColumnTest: R2dbcExposedTestBase() {
                 it[fastjsonBColumn] = newData2
             }
 
-            val newRow = tester.selectAll().where { tester.id eq newId }.single()
+            val newRow = tester
+                .selectAll()
+                .where { tester.id eq newId }
+                .single()
             newRow[tester.fastjsonBColumn] shouldBeEqualTo newData2
         }
     }
@@ -575,7 +560,9 @@ class FastjsonBColumnTest: R2dbcExposedTestBase() {
                 it[numbers] = data
             }
 
-            tester.selectAll().single()[tester.numbers] shouldBeEqualTo data
+            tester
+                .selectAll()
+                .single()[tester.numbers] shouldBeEqualTo data
         }
     }
 
@@ -625,10 +612,16 @@ class FastjsonBColumnTest: R2dbcExposedTestBase() {
         Assumptions.assumeTrue(testDB in TestDB.ALL_POSTGRES)
 
         withFastjsonBTable(testDB) { tester, _, data1 ->
-            val topLevelKeyResult = tester.selectAll().where { tester.fastjsonBColumn keyExists "logins" }.single()
+            val topLevelKeyResult = tester
+                .selectAll()
+                .where { tester.fastjsonBColumn keyExists "logins" }
+                .single()
             topLevelKeyResult[tester.fastjsonBColumn] shouldBeEqualTo data1
 
-            val nestedKeyResult = tester.selectAll().where { tester.fastjsonBColumn keyExists "name" }.toList()
+            val nestedKeyResult = tester
+                .selectAll()
+                .where { tester.fastjsonBColumn keyExists "name" }
+                .toList()
             nestedKeyResult.shouldBeEmpty()
         }
     }
