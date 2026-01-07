@@ -13,6 +13,7 @@ import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitSingle
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
+import org.amshove.kluent.shouldNotBeEmpty
 import org.amshove.kluent.shouldNotBeNull
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -30,6 +31,20 @@ class MovieControllerTest(
             producerName = faker.name().fullName(),
             releaseDate = faker.timeAndDate().birthday(20, 80).toString()
         )
+    }
+
+    @Test
+    fun `get all movies`() = runSuspendIO {
+        val movies = client
+            .httpGet("/movies")
+            .returnResult<MovieDTO>().responseBody
+            .asFlow()
+            .toList()
+
+        movies.forEach {
+            log.debug { it }
+        }
+        movies.shouldNotBeEmpty()
     }
 
     @Test
@@ -51,7 +66,7 @@ class MovieControllerTest(
     fun `search movies by producer name`() = runSuspendIO {
         val producerName = "Johnny"
 
-        val movies = client.httpGet("/movies?producerName=$producerName")
+        val movies = client.httpGet("/search/movies?producerName=$producerName")
             .returnResult<MovieDTO>().responseBody
             .asFlow()
             .toList()

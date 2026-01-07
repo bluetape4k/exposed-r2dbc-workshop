@@ -13,6 +13,7 @@ import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitSingle
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
+import org.amshove.kluent.shouldNotBeEmpty
 import org.amshove.kluent.shouldNotBeNull
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -33,6 +34,18 @@ class ActorControllerTest(
     }
 
     @Test
+    fun `find all actors`() = runSuspendIO {
+        val actors = client.httpGet("/actors")
+            .returnResult<ActorDTO>().responseBody
+            .asFlow()
+            .toList()
+        actors.forEach {
+            log.debug { it }
+        }
+        actors.shouldNotBeEmpty()
+    }
+
+    @Test
     fun `find actor by id`() = runSuspendIO {
         val actorId = 1L
 
@@ -49,7 +62,7 @@ class ActorControllerTest(
     fun `find actors by firstName`() = runSuspendIO {
         val firstName = "Angelina"
 
-        val angelinas = client.httpGet("/actors?firstName=$firstName")
+        val angelinas = client.httpGet("/search/actors?firstName=$firstName")
             .returnResult<ActorDTO>().responseBody
             .asFlow()
             .toList()

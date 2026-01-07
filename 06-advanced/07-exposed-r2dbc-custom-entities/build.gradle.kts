@@ -5,7 +5,7 @@ configurations {
 dependencies {
     implementation(platform(Libs.exposed_bom))
 
-    implementation(project(":exposed-r2dbc-shared"))
+    testImplementation(project(":exposed-r2dbc-shared"))
 
     // Exposed
     testImplementation(Libs.exposed_r2dbc)
@@ -15,8 +15,8 @@ dependencies {
     testImplementation(Libs.bluetape4k_junit5)
 
     // Identifier 자동 생성
-    implementation(Libs.bluetape4k_idgenerators)
-    implementation(Libs.java_uuid_generator)
+    testImplementation(Libs.bluetape4k_idgenerators)
+    testImplementation(Libs.java_uuid_generator)
 
     testRuntimeOnly(Libs.h2_v2)
 
@@ -39,8 +39,8 @@ dependencies {
     testRuntimeOnly(Libs.postgresql_driver)
 
     // Coroutines
-    implementation(Libs.bluetape4k_coroutines)
-    implementation(Libs.kotlinx_coroutines_core)
+    testImplementation(Libs.bluetape4k_coroutines)
+    testImplementation(Libs.kotlinx_coroutines_core)
     testImplementation(Libs.kotlinx_coroutines_debug)
     testImplementation(Libs.kotlinx_coroutines_test)
 }

@@ -26,13 +26,19 @@ class MovieController(
 
     companion object: KLoggingChannel()
 
+    @GetMapping
+    suspend fun getMoviews(): List<MovieDTO> =
+        suspendTransaction {
+            movieRepository.findAll().toList()
+        }
+
     @GetMapping("/{id}")
     suspend fun getMovieWithActors(@PathVariable("id") id: Long): MovieWithActorDTO? =
         suspendTransaction {
             movieRepository.getMovieWithActors(id)
         }
 
-    @GetMapping
+    @GetMapping("/search")
     suspend fun searchMovies(request: ServerHttpRequest): List<MovieDTO> {
         val params = request.queryParams.map { it.key to it.value.firstOrNull() }.toMap()
         return when {

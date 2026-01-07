@@ -5,12 +5,12 @@ configurations {
 dependencies {
     implementation(platform(Libs.exposed_bom))
 
-    implementation(project(":exposed-r2dbc-shared"))
+    testImplementation(project(":exposed-r2dbc-shared"))
 
     // Exposed
-    implementation(Libs.exposed_r2dbc)
-    implementation(Libs.bluetape4k_exposed)
-    implementation(Libs.bluetape4k_exposed_r2dbc)
+    testImplementation(Libs.exposed_r2dbc)
+    testImplementation(Libs.bluetape4k_exposed)
+    testImplementation(Libs.bluetape4k_exposed_r2dbc)
     testImplementation(Libs.bluetape4k_junit5)
 
     testImplementation(Libs.bluetape4k_io)
@@ -29,8 +29,8 @@ dependencies {
     testImplementation(Libs.jasypt)
 
     // Identifier 자동 생성
-    implementation(Libs.bluetape4k_idgenerators)
-    implementation(Libs.java_uuid_generator)
+    testImplementation(Libs.bluetape4k_idgenerators)
+    testImplementation(Libs.java_uuid_generator)
 
     testRuntimeOnly(Libs.h2_v2)
 

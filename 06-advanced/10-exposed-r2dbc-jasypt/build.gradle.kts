@@ -5,14 +5,15 @@ configurations {
 dependencies {
     implementation(platform(Libs.exposed_bom))
 
-    implementation(project(":exposed-r2dbc-shared"))
+    testImplementation(project(":exposed-r2dbc-shared"))
 
     // Exposed
-    implementation(Libs.exposed_r2dbc)
-    implementation(Libs.bluetape4k_exposed_r2dbc)
+    testImplementation(Libs.exposed_r2dbc)
+    testImplementation(Libs.bluetape4k_exposed_r2dbc)
+    testImplementation(Libs.bluetape4k_exposed_jasypt)
 
     // Crypto
-    implementation(Libs.bluetape4k_crypto)
+    testImplementation(Libs.bluetape4k_crypto)
     testImplementation(Libs.bluetape4k_junit5)
 
     testRuntimeOnly(Libs.h2_v2)
@@ -36,8 +37,8 @@ dependencies {
     testRuntimeOnly(Libs.postgresql_driver)
 
     // Coroutines
-    implementation(Libs.bluetape4k_coroutines)
-    implementation(Libs.kotlinx_coroutines_core)
+    testImplementation(Libs.bluetape4k_coroutines)
+    testImplementation(Libs.kotlinx_coroutines_core)
     testImplementation(Libs.kotlinx_coroutines_debug)
     testImplementation(Libs.kotlinx_coroutines_test)
 }

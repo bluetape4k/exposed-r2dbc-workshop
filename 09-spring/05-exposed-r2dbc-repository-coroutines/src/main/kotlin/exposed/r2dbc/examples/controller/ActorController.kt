@@ -25,6 +25,12 @@ class ActorController(
 
     companion object: KLoggingChannel()
 
+    @GetMapping
+    suspend fun getActors(): List<ActorDTO> =
+        suspendTransaction {
+            actorRepository.findAll().toList()
+        }
+
     @GetMapping("/{id}")
     suspend fun getActorById(@PathVariable("id") actorId: Long): ActorDTO? =
         suspendTransaction {
@@ -34,7 +40,7 @@ class ActorController(
     /**
      * `Flow<ActorDTO>` 를 반환할 수는 없다. Transaction Context의 범위를 넘어서기 때문이다.
      */
-    @GetMapping
+    @GetMapping("/search")
     suspend fun searchActors(request: ServerHttpRequest): List<ActorDTO> {
         val params = request.queryParams.map { it.key to it.value.firstOrNull() }.toMap()
 
