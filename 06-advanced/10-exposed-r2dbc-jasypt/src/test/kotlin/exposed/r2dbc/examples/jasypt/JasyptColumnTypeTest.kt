@@ -4,8 +4,8 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.crypto.encrypt.Encryptors
-import io.bluetape4k.exposed.core.encrypt.encryptedBinary
-import io.bluetape4k.exposed.core.encrypt.encryptedVarChar
+import io.bluetape4k.exposed.core.jasypt.jasyptBinary
+import io.bluetape4k.exposed.core.jasypt.jasyptVarChar
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.support.toUtf8Bytes
@@ -28,10 +28,10 @@ class JasyptColumnTypeTest: R2dbcExposedTestBase() {
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `문자열에 대해 암호화,복호화 하기`(testDB: TestDB) = runSuspendIO {
         val stringTable = object: IntIdTable("string_table") {
-            val name = encryptedVarChar("name", 255, Encryptors.AES).nullable().index()
-            val city = encryptedVarChar("city", 255, Encryptors.RC4).nullable().index()
-            val address = encryptedBinary("address", 255, Encryptors.TripleDES).nullable()
-            val age = encryptedVarChar("age", 255, Encryptors.RC2).nullable()
+            val name = jasyptVarChar("name", 255, Encryptors.AES).nullable().index()
+            val city = jasyptVarChar("city", 255, Encryptors.RC4).nullable().index()
+            val address = jasyptBinary("address", 255, Encryptors.TripleDES).nullable()
+            val age = jasyptVarChar("age", 255, Encryptors.RC2).nullable()
         }
 
         withTables(testDB, stringTable) {
@@ -89,9 +89,9 @@ class JasyptColumnTypeTest: R2dbcExposedTestBase() {
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `암호화된 컬럼을 Update 하기`(testDB: TestDB) = runSuspendIO {
         val stringTable = object: IntIdTable("string_table") {
-            val name = encryptedVarChar("name", 255, Encryptors.AES).index()
-            val city = encryptedVarChar("city", 255, Encryptors.RC4).index()
-            val address = encryptedBinary("address", 255, Encryptors.TripleDES).nullable()
+            val name = jasyptVarChar("name", 255, Encryptors.AES).index()
+            val city = jasyptVarChar("city", 255, Encryptors.RC4).index()
+            val address = jasyptBinary("address", 255, Encryptors.TripleDES).nullable()
         }
 
         withTables(testDB, stringTable) {
