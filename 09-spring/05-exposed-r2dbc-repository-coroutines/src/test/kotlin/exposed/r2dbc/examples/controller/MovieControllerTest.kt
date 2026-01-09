@@ -66,7 +66,7 @@ class MovieControllerTest(
     fun `search movies by producer name`() = runSuspendIO {
         val producerName = "Johnny"
 
-        val movies = client.httpGet("/search/movies?producerName=$producerName")
+        val movies = client.httpGet("/movies/search?producerName=$producerName")
             .returnResult<MovieDTO>().responseBody
             .asFlow()
             .toList()

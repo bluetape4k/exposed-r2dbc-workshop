@@ -26,10 +26,13 @@ dependencies {
     implementation(project(":exposed-r2dbc-shared"))
 
     // Exposed
+    implementation(Libs.exposed_core)
     implementation(Libs.exposed_r2dbc)
     implementation(Libs.exposed_java_time)
+    implementation(Libs.exposed_kotlin_datetime)
 
     // bluetape4k
+    implementation(Libs.bluetape4k_exposed)
     implementation(Libs.bluetape4k_exposed_r2dbc)
     implementation(Libs.bluetape4k_exposed_r2dbc_redisson)
     implementation(Libs.bluetape4k_idgenerators)

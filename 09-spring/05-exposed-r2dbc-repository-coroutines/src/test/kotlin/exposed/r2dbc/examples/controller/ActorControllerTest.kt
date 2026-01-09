@@ -62,7 +62,7 @@ class ActorControllerTest(
     fun `find actors by firstName`() = runSuspendIO {
         val firstName = "Angelina"
 
-        val angelinas = client.httpGet("/search/actors?firstName=$firstName")
+        val angelinas = client.httpGet("/actors/search?firstName=$firstName")
             .returnResult<ActorDTO>().responseBody
             .asFlow()
             .toList()
