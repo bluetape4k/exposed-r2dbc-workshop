@@ -29,6 +29,7 @@ class Ex01_Simple_DSL: R2dbcExposedTestBase() {
         private const val ENTITY_COUNT = 10
     }
 
+    @Suppress("UnusedReceiverParameter")
     private suspend fun R2dbcTransaction.persistSimpleEntities() {
         val names = List(ENTITY_COUNT) { faker.name().name() }
 

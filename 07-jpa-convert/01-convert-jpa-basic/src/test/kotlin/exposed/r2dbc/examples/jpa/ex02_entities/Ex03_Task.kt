@@ -3,18 +3,12 @@ package exposed.r2dbc.examples.jpa.ex02_entities
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.exposed.dao.idEquals
-import io.bluetape4k.exposed.dao.idHashCode
-import io.bluetape4k.exposed.dao.toStringBuilder
 import io.bluetape4k.logging.KLogging
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
 import org.jetbrains.exposed.v1.core.eq
-import org.jetbrains.exposed.v1.dao.LongEntity
-import org.jetbrains.exposed.v1.dao.LongEntityClass
 import org.jetbrains.exposed.v1.javatime.date
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 import org.jetbrains.exposed.v1.r2dbc.selectAll
@@ -42,22 +36,6 @@ class Ex03_Task: R2dbcExposedTestBase() {
         val status = enumerationByName("status", 10, TaskStatusType::class)
         val changedOn = date("changed_on")
         val changedBy = varchar("changed_by", 255)
-    }
-
-    class Task(id: EntityID<Long>): LongEntity(id) {
-        companion object: LongEntityClass<Task>(TaskTable)
-
-        var status by TaskTable.status
-        var changedOn by TaskTable.changedOn
-        var changedBy by TaskTable.changedBy
-
-        override fun hashCode(): Int = idHashCode()
-        override fun equals(other: Any?): Boolean = idEquals(other)
-        override fun toString(): String = toStringBuilder()
-            .add("status", status)
-            .add("changedOn", changedOn)
-            .add("changedBy", changedBy)
-            .toString()
     }
 
     enum class TaskStatusType {

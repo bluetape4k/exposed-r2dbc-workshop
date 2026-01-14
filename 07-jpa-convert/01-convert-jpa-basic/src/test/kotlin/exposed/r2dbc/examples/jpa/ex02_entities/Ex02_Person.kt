@@ -57,12 +57,10 @@ class Ex02_Person: R2dbcExposedTestBase() {
             // DSL 사용한 방법
             persons.selectAll().where { persons.id less 3L }.count() shouldBeEqualTo 2L
 
-            persons.select(persons.id.count()).where { persons.id less 3L }
+            persons
+                .select(persons.id.count())
+                .where { persons.id less 3L }
                 .single()[persons.id.count()] shouldBeEqualTo 2L
-
-            // DAO 사용한 방법
-//            Person.find { persons.id less 3L }.count() shouldBeEqualTo 2L
-//            Person.count(persons.id less 3L) shouldBeEqualTo 2L
         }
     }
 
@@ -81,9 +79,6 @@ class Ex02_Person: R2dbcExposedTestBase() {
 
             // SQL DSL 이용
             persons.selectAll().count() shouldBeEqualTo 6L
-
-            // DAO 이용
-            // Person.all().count() shouldBeEqualTo 6L
         }
     }
 
@@ -121,6 +116,7 @@ class Ex02_Person: R2dbcExposedTestBase() {
         }
     }
 
+    @Suppress("UnusedReceiverParameter")
     private suspend fun R2dbcTransaction.insertPerson(): Long {
         return PersonSchema.PersonTable.insertAndGetId {
             it[firstName] = faker.name().firstName()
@@ -267,39 +263,6 @@ class Ex02_Person: R2dbcExposedTestBase() {
             } shouldBeEqualTo 1
         }
     }
-
-    /**
-     * ```sql
-     * SELECT persons.id,
-     *        persons.first_name,
-     *        persons.last_name,
-     *        persons.birth_date,
-     *        persons.employeed,
-     *        persons.occupation,
-     *        persons.address_id
-     *   FROM persons
-     *  WHERE persons.id = 100
-     * ```
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `insert entity`(testDB: TestDB) = runTest {
-//        withPersonAndAddress(testDB) { persons, _ ->
-//            val person = Person.new(100) {
-//                firstName = "John"
-//                lastName = "Doe"
-//                birthDate = LocalDate.now()
-//                employeed = true
-//                occupation = "Software Engineer"
-//                address = Address[1L]
-//            }
-//
-//            entityCache.clear()
-//
-//            val saved = Person.findById(person.id)!!
-//            saved shouldBeEqualTo person
-//        }
-//    }
 
     /**
      * ```sql

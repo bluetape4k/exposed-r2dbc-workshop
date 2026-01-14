@@ -480,6 +480,8 @@ object Libs {
     val log4j_slf4j_impl = log4j("slf4j-impl")
     val log4j_web = log4j("web")
 
+    const val logcaptor = "io.github.hakky54:logcaptor:2.12.1"  // https://mvnrepository.com/artifact/io.github.hakky54/logcaptor
+
     const val findbugs = "com.google.code.findbugs:jsr305:3.0.2"
     const val guava = "com.google.guava:guava:33.2.0-jre"
 
