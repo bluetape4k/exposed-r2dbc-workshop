@@ -4,7 +4,7 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.assertFailAndRollback
 import exposed.r2dbc.shared.tests.withDb
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
@@ -21,7 +21,7 @@ import java.util.*
 
 class Ex03_CreateMissingTableAndColumns: R2dbcExposedTestBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     /**
      * 현재 DB에서 누락된 테이블과 컬럼을 생성 - 01

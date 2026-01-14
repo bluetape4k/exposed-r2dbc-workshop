@@ -167,7 +167,8 @@ class Ex04_ColumnDefinition: R2dbcExposedTestBase() {
              * ```
              */
             // HINT: 이렇게 Statement.execute(R2dbcTransaction) 을 수행하면 org.jetbrains.exposed.v1.r2dbc.statements.api.R2dbcResult 를 반환합니다.
-            val result2 = tester.selectAll()
+            val result2 = tester
+                .selectAll()
                 .where { tester.amount greater 100 }
                 .execute(this) as R2dbcResult
 

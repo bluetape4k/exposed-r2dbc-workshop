@@ -195,7 +195,10 @@ class Ex10_DDL_Examples: R2dbcExposedTestBase() {
             }
 
             val expectedCreate =
-                "CREATE TABLE ${addIfNotExistsIfSupported()}$tableName (" + "$publicName ${keywordTable.public.columnType.sqlType()} NOT NULL, " + "$dataName ${keywordTable.data.columnType.sqlType()} NOT NULL, " + "$constraintName ${keywordTable.constraint.columnType.sqlType()} NOT NULL)"
+                "CREATE TABLE ${addIfNotExistsIfSupported()}$tableName (" +
+                        "$publicName ${keywordTable.public.columnType.sqlType()} NOT NULL, " +
+                        "$dataName ${keywordTable.data.columnType.sqlType()} NOT NULL, " +
+                        "$constraintName ${keywordTable.constraint.columnType.sqlType()} NOT NULL)"
 
             keywordTable.ddl.single() shouldBeEqualTo expectedCreate
 
@@ -259,7 +262,8 @@ class Ex10_DDL_Examples: R2dbcExposedTestBase() {
 
             val expectedDDL =
                 "CREATE TABLE " + addIfNotExistsIfSupported() + "$tableName " +
-                        "(${"id".inProperCase()} $integerType PRIMARY KEY," + " $q${"name".inProperCase()}$q $varCharType NOT NULL)"
+                        "(${"id".inProperCase()} $integerType PRIMARY KEY," +
+                        " $q${"name".inProperCase()}$q $varCharType NOT NULL)"
 
             val unnamedTableDDL = unnamedTable.ddl.single()
             log.debug { "Expected DDL: $expectedDDL" }
@@ -1315,32 +1319,6 @@ class Ex10_DDL_Examples: R2dbcExposedTestBase() {
 
     /**
      * ```sql
-     * CREATE TABLE IF NOT EXISTS keywords (
-     *      id SERIAL PRIMARY KEY,
-     *      bool BOOLEAN NOT NULL
-     * );
-     *
-     * INSERT INTO keywords (bool) VALUES (TRUE);
-     *
-     * DROP TABLE IF EXISTS keywords;
-     * ```
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `drop table flushes cache`(testDB: TestDB) = runTest {
-//        class Keyword(id: EntityID<Int>): IntEntity(id) {
-//            var bool by KeyWordTable.bool
-//        }
-//
-//        val keywordEntityClass = object: IntEntityClass<Keyword>(KeyWordTable, Keyword::class.java) {}
-//
-//        withTables(testDB, KeyWordTable) {
-//            keywordEntityClass.new { bool = true }
-//        }
-//    }
-
-    /**
-     * ```sql
      * CREATE TABLE IF NOT EXISTS users (
      *      id SERIAL PRIMARY KEY
      * );
@@ -1723,5 +1701,4 @@ class Ex10_DDL_Examples: R2dbcExposedTestBase() {
             tableB.selectAll().count() shouldBeEqualTo 1L
         }
     }
-
 }
