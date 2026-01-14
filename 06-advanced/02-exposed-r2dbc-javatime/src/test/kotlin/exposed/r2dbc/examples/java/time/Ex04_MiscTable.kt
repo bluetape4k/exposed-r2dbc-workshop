@@ -7,6 +7,7 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
@@ -102,6 +103,8 @@ object Misc: MiscTable() {
 
 
 class Ex04_MiscTable: R2dbcExposedTestBase() {
+
+    companion object: KLoggingChannel()
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)

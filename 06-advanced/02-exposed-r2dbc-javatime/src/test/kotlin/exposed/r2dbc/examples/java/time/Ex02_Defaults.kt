@@ -117,22 +117,6 @@ class Ex02_Defaults: R2dbcExposedTestBase() {
         }
     }
 
-//    class DBDefault(id: EntityID<Int>): IntEntity(id) {
-//        companion object: IntEntityClass<DBDefault>(TableWithDBDefault)
-//
-//        var field by TableWithDBDefault.field
-//        var t1 by TableWithDBDefault.t1
-//        var clientDefault by TableWithDBDefault.clientDefault
-//
-//        override fun equals(other: Any?): Boolean = idEquals(other)
-//        override fun hashCode(): Int = id.value.hashCode()
-//        override fun toString(): String = toStringBuilder()
-//            .add("field", field)
-//            .add("t1", t1)
-//            .add("clientDefault", clientDefault)
-//            .toString()
-//    }
-
     /**
      * nullable 컬럼에 Client 기본값 (`clientDefault`) 을 설정할 수 없다.
      */
@@ -168,127 +152,6 @@ class Ex02_Defaults: R2dbcExposedTestBase() {
         table.clientDefault.defaultValueFun.shouldNotBeNull()
         returnedDefault shouldBeEqualTo defaultValue
     }
-
-    /**
-     * [TableWithDBDefault] 테이블에 기본값을 설정하고, 생성된 엔티티를 조회한다.
-     *
-     * ```sql
-     * INSERT INTO t_db_default (field, "clientDefault") VALUES ('1', 8);
-     *
-     * INSERT INTO t_db_default (field, t1, "clientDefault")
-     * VALUES ('2', '2025-01-30T08:42:03.129272', 9);
-     * ```
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `defaults with explicit 01`(testDB: TestDB) = runTest {
-//        Assumptions.assumeTrue { testDB !in TestDB.ALL_MARIADB + TestDB.MYSQL_V5 }
-//
-//        withTables(testDB, TableWithDBDefault) {
-//            val created = listOf(
-//                DBDefault.new { field = "1" },
-//                DBDefault.new {
-//                    field = "2"
-//                    t1 = LocalDateTime.now().minusDays(5)
-//                }
-//            )
-//            commit()
-//            created.forEach {
-//                DBDefault.removeFromCache(it)
-//            }
-//
-//            val entities = DBDefault.all().toList()
-//            entities shouldBeEqualTo created
-//        }
-//    }
-
-    /**
-     * 기본 값으로 저장되는지 확인한다.
-     *
-     * ```sql
-     * INSERT INTO t_db_default (field, t1, "clientDefault") VALUES ('2', '2025-01-30T08:42:03.182995', 18)
-     * INSERT INTO t_db_default (field, "clientDefault") VALUES ('1', 19)
-     * ```
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `defaults with explicit 02`(testDB: TestDB) = runTest {
-//        Assumptions.assumeTrue { testDB !in TestDB.ALL_MARIADB + TestDB.MYSQL_V5 }
-//
-//        withTables(testDB, TableWithDBDefault) {
-//            val created = listOf(
-//                DBDefault.new {
-//                    field = "2"
-//                    t1 = LocalDateTime.now().minusDays(5)
-//                },
-//                DBDefault.new { field = "1" }
-//            )
-//            flushCache()
-//            created.forEach {
-//                DBDefault.removeFromCache(it)
-//            }
-//
-//            val entities = DBDefault.all().toList()
-//            entities shouldBeEqualTo created
-//        }
-//    }
-
-    /**
-     * 기본값 설정을 위해 `clientDefault` 를 사용할 때, 기본값 초기화는 한번만 이루어져야 한다.
-     *
-     * ```sql
-     * INSERT INTO t_db_default (field, "clientDefault") VALUES ('1', 0);
-     * INSERT INTO t_db_default (field, "clientDefault") VALUES ('2', 1);
-     * ```
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `defaults invoked only once per entity`(testDB: TestDB) {
-//        Assumptions.assumeTrue { testDB !in TestDB.ALL_MARIADB + TestDB.MYSQL_V5 }
-//
-//        withTables(testDB, TableWithDBDefault) {
-//            TableWithDBDefault.cIndex.set(0)
-//            val db1 = DBDefault.new { field = "1" }
-//            val db2 = DBDefault.new { field = "2" }
-//            flushCache()
-//
-//            db1.clientDefault shouldBeEqualTo 0
-//            db2.clientDefault shouldBeEqualTo 1
-//            TableWithDBDefault.cIndex.get() shouldBeEqualTo 2
-//        }
-//    }
-
-    /**
-     * 엔티티의 Client Default 값은 재정의할 수 있습니다.
-     *
-     * ```sql
-     * INSERT INTO t_db_default (field, "clientDefault") VALUES ('1', 12345);
-     * INSERT INTO t_db_default (field, "clientDefault") VALUES ('2', 1);
-     * ```
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `defaults can be overriden`(testDB: TestDB) {
-//        Assumptions.assumeTrue { testDB !in TestDB.ALL_MARIADB + TestDB.MYSQL_V5 }
-//
-//        withTables(testDB, TableWithDBDefault) {
-//            TableWithDBDefault.cIndex.set(0)
-//
-//            val db1 = DBDefault.new { field = "1" }
-//            val db2 = DBDefault.new { field = "2" }
-//            db1.clientDefault = 12345
-//
-//            flushCache()
-//
-//            db1.clientDefault shouldBeEqualTo 12345
-//            db2.clientDefault shouldBeEqualTo 1
-//            TableWithDBDefault.cIndex.get() shouldBeEqualTo 2
-//
-//            flushCache()
-//
-//            db1.clientDefault shouldBeEqualTo 12345
-//        }
-//    }
 
     private val initBatch = listOf<(BatchInsertStatement) -> Unit>(
         {
@@ -639,33 +502,6 @@ class Ex02_Defaults: R2dbcExposedTestBase() {
     }
 
     /**
-     * 기본 표현식으로 `CurrentDate`, `CurrentDateTime`, `CurrentTimestamp` 사용하기
-     * ```sql
-     * CREATE TABLE IF NOT EXISTS tester (
-     *      id SERIAL PRIMARY KEY,
-     *      "name" TEXT NOT NULL,
-     *      "defaultDate" DATE DEFAULT CURRENT_DATE NOT NULL,
-     *      "defaultDateTime" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-     *      "defaultTimestamp" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
-     * )
-     * ```
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `Consistent Scheme With Function As Default Expression`(testDB: TestDB) = runTest {
-//        val tester = object: IntIdTable("tester") {
-//            val name = text("name")
-//            val defaultDate = date("defaultDate").defaultExpression(CurrentDate)
-//            val defaultDateTime = datetime("defaultDateTime").defaultExpression(CurrentDateTime)
-//            val defaultTimestamp = timestamp("defaultTimestamp").defaultExpression(CurrentTimestamp)
-//        }
-//        withTables(testDB, tester) {
-//            val actual = MigrationUtils.statementsRequiredForDatabaseMigration(tester)
-//            actual.shouldBeEmpty()
-//        }
-//    }
-
-    /**
      * Timestamp 에 Time Zone 을 포함한 컬럼을 사용할 때 (`TIMESTAMP WITH TIME ZONE DEFAULT`)
      *
      * ```sql
@@ -943,33 +779,6 @@ class Ex02_Defaults: R2dbcExposedTestBase() {
         val timestamp: Column<OffsetDateTime> =
             timestampWithTimeZone("timestamp").defaultExpression(dbTimestampNow)
     }
-
-//    class DefaultTimestampEntity(id: EntityID<Int>): Entity<Int>(id) {
-//        companion object: EntityClass<Int, DefaultTimestampEntity>(DefaultTimestampTable)
-//
-//        var timestamp: OffsetDateTime by DefaultTimestampTable.timestamp
-//    }
-
-    /**
-     * 엔티티 생성 시 사용한 사용자 정의 Timestamp 함수를 기본값으로 사용하는 경우에도 작동한다.
-     *
-     * ```sql
-     * INSERT INTO test_table  DEFAULT VALUES;
-     * ```
-     *
-     * @see [DefaultTimestampTable]
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun testCustomDefaultTimestampFunctionWithEntity(testDB: TestDB) {
-//        Assumptions.assumeTrue { testDB in (TestDB.ALL_POSTGRES + TestDB.MYSQL_V8 + TestDB.ALL_H2) }
-//
-//        withTables(testDB, DefaultTimestampTable) {
-//            val entity = DefaultTimestampEntity.new {}
-//            val timestamp = DefaultTimestampTable.selectAll().first()[DefaultTimestampTable.timestamp]
-//            timestamp shouldBeEqualTo entity.timestamp
-//        }
-//    }
 
     /**
      * 사용자 정의 Timestamp 함수를 기본값으로 사용하는 경우에도 INSERT 문에서는 제외된다.
