@@ -6,7 +6,7 @@ import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.codec.Base58
 import io.bluetape4k.junit5.coroutines.runSuspendIO
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.r2dbc.spi.IsolationLevel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
@@ -87,7 +87,7 @@ suspend fun <T> runWithSavepointOrNewTransaction(
 
 class Ex05_NestedTransactions_Coroutines: R2dbcExposedTestBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     private val db by lazy {
         R2dbcDatabase.connect(
@@ -154,201 +154,6 @@ class Ex05_NestedTransactions_Coroutines: R2dbcExposedTestBase() {
             TransactionManager.currentOrNull().shouldNotBeNull()
         }
     }
-
-//    @Test
-//    fun `DB 예외 시 중첩 트랜잭션은 commit 되지 않습니다`() = runSuspendIO {
-//        Assumptions.assumeTrue { TestDB.H2 in TestDB.enabledDialects() }
-//
-//        val fakeSQLString = "BROKEN_SQL_THAT_CAUSES_EXCEPTION"
-//
-//        suspendTransaction(db = db) {
-//            SchemaUtils.create(cities)
-//        }
-//
-//        suspendTransaction(db = db) {
-//            val outerTxId = this.id
-//
-//            cities.insert { it[name] = "City A" }
-//            cityCounts() shouldBeEqualTo 1
-//
-//            try {
-//                suspendTransaction(transactionIsolation = db.transactionManager.defaultIsolationLevel, db = db) {
-//                    val innerTxId = this.id
-//                    innerTxId shouldNotBeEqualTo outerTxId
-//
-//                    cities.insert { it[name] = "City B" }           // 이 작업는 롤백됩니다.
-//                    exec("${fakeSQLString}();")
-//                }
-//                kotlin.test.fail("Should not reach here")
-//            } catch (cause: SQLException) {
-//                cause.toString() shouldContain fakeSQLString
-//            }
-//        }
-//
-//        assertSingleRecordInNewTransactionAndReset()
-//
-//        suspendTransaction(db = db) {
-//            val outerTxId = this.id
-//
-//            cities.insert { it[name] = "City A" }
-//            cityCounts() shouldBeEqualTo 1
-//
-//            suspendTransaction(db = db) {
-//                try {
-//                    val innerTxId = this.id
-//                    innerTxId shouldNotBeEqualTo outerTxId
-//
-//                    cities.insert { it[name] = "City B" }           // 이 작업는 롤백됩니다.
-//                    exec("SELECT * FROM non_existent_table")
-//                    fail("Should not reach here")
-//                } catch (cause: SQLException) {
-//                    try {
-//                        rollback()
-//                    } catch (e: Exception) {
-//                        exposedLogger.warn(
-//                            "Transaction rollback failed: ${cause.message}. Statement: $currentStatement",
-//                            cause
-//                        )
-//                    }
-//                    cause.toString() shouldContain "non_existent_table"
-//                }
-//            }
-//        }
-//
-//        assertSingleRecordInNewTransactionAndReset()
-//
-//        suspendTransaction(db = db) {
-//            SchemaUtils.drop(cities)
-//        }
-//    }
-
-//    @Test
-//    fun `일반 예외 시 중첩 트랜잭션은 commit 되지 않습니다`() = runSuspendIO {
-//        Assumptions.assumeTrue { TestDB.H2 in TestDB.enabledDialects() }
-//
-//        val exceptionMessage = "Failure!"
-//
-//        suspendTransaction(db = db) {
-//            SchemaUtils.create(cities)
-//        }
-//
-//        suspendTransaction(db = db) {
-//            val outerTxId = this.id
-//
-//            cities.insert { it[name] = "City A" }
-//            cityCounts() shouldBeEqualTo 1
-//
-//            try {
-//                suspendTransaction(transactionIsolation = db.transactionManager.defaultIsolationLevel, db = db) {
-//                    val innerTxId = this.id
-//                    innerTxId shouldNotBeEqualTo outerTxId
-//
-//                    cities.insert { it[name] = "City B" }           // 이 작업는 롤백됩니다.
-//                    error(exceptionMessage)
-//                }
-//            } catch (cause: Exception) {
-//                cause.toString() shouldContain exceptionMessage
-//            }
-//        }
-//
-//        assertSingleRecordInNewTransactionAndReset()
-//
-//        suspendTransaction(db = db) {
-//            val outerTxId = this.id
-//
-//            cities.insert { it[name] = "City A" }
-//            cityCounts() shouldBeEqualTo 1
-//
-//            suspendTransaction(db = db) {
-//                try {
-//                    val innerTxId = this.id
-//                    innerTxId shouldNotBeEqualTo outerTxId
-//
-//                    cities.insert { it[name] = "City B" }           // 이 작업는 롤백됩니다.
-//                    error(exceptionMessage)
-//                } catch (cause: Exception) {
-//                    rollback()
-//                    cause.toString() shouldContain exceptionMessage
-//                }
-//            }
-//        }
-//
-//        assertSingleRecordInNewTransactionAndReset()
-//
-//        suspendTransaction(db = db) {
-//            SchemaUtils.drop(cities)
-//        }
-//    }
-
-//    @Test
-//    fun `외부는 코루틴용, 내부는 일반 transaction 인 경우에도 rollback 된다`() = runSuspendIO {
-//        Assumptions.assumeTrue { TestDB.H2 in TestDB.enabledDialects() }
-//
-//        suspendTransaction(db = db) {
-//            SchemaUtils.create(cities)
-//        }
-//
-//        suspendTransaction(db = db) {
-//            val outerTxId = this.id
-//
-//            cities.insert { it[name] = "City A" }
-//            cityCounts() shouldBeEqualTo 1
-//
-//            transaction(db = db) {
-//                try {
-//                    val innerTxId = this.id
-//                    innerTxId shouldNotBeEqualTo outerTxId
-//
-//                    cities.insert { it[name] = "City B" }           // 이 작업는 롤백됩니다.
-//                    exec("SELECT * FROM non_existent_table")
-//                } catch (cause: SQLException) {
-//                    rollback()
-//                }
-//            }
-//        }
-//
-//        assertSingleRecordInNewTransactionAndReset()
-//
-//        suspendTransaction(db = db) {
-//            SchemaUtils.drop(cities)
-//        }
-//    }
-
-//    @Test
-//    fun `외부는 일반 트랜잭션, 내부는 코루틴용 트랜잭션`() = runSuspendIO {
-//        Assumptions.assumeTrue { TestDB.H2 in TestDB.enabledDialects() }
-//
-//        suspendTransaction(db = db) {
-//            SchemaUtils.create(cities)
-//        }
-//
-//        suspendTransaction(db = db) {
-//            val outerTxId = this.id
-//
-//            cities.insert { it[name] = "City A" }
-//            cityCounts() shouldBeEqualTo 1
-//
-//            runBlocking {
-//                suspendTransaction(db = db) {
-//                    try {
-//                        val innerTxId = this.id
-//                        innerTxId shouldNotBeEqualTo outerTxId
-//
-//                        cities.insert { it[name] = "City B" }           // 이 작업는 롤백됩니다.
-//                        exec("SELECT * FROM non_existent_table")
-//                    } catch (cause: SQLException) {
-//                        rollback()
-//                    }
-//                }
-//            }
-//        }
-//
-//        assertSingleRecordInNewTransactionAndReset()
-//
-//        suspendTransaction(db = db) {
-//            SchemaUtils.drop(cities)
-//        }
-//    }
 
     private suspend fun assertSingleRecordInNewTransactionAndReset() =
         suspendTransaction(db = db) {
