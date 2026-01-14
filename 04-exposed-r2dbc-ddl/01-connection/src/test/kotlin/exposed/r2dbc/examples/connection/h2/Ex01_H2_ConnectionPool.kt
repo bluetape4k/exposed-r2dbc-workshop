@@ -61,16 +61,4 @@ class Ex01_H2_ConnectionPool {
     object TestTable: IntIdTable("HIKARI_TESTER") {
         val testValue = varchar("test_value", 32)
     }
-
-//    class TestEntity(id: EntityID<Int>): IntEntity(id) {
-//        companion object: IntEntityClass<TestEntity>(TestTable)
-//
-//        var testValue: String by TestTable.testValue
-//
-//        override fun equals(other: Any?): Boolean = idEquals(other)
-//        override fun hashCode(): Int = idHashCode()
-//        override fun toString(): String = toStringBuilder()
-//            .add("testValue", testValue)
-//            .toString()
-//    }
 }
