@@ -179,7 +179,8 @@ class Ex05_ArrayColumnType: R2dbcExposedTestBase() {
          * ```
          */
         val sizedTester = object: Table("sized_test_table") {
-            val numbers: Column<List<Int>> = array("numbers", IntegerColumnType(), maxArraySize).default(emptyList())
+            val numbers: Column<List<Int>> = array("numbers", IntegerColumnType(), maxArraySize)
+                .default(emptyList())
         }
 
         withArrayTestTable(testDB, sizedTester) {
@@ -460,48 +461,6 @@ class Ex05_ArrayColumnType: R2dbcExposedTestBase() {
     }
 
     /**
-     * array column 을 가진 엔티티 [ArrayTestEntity] 를 사용하는 예
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `array column with DAO functions`(testDB: TestDB) = runTest {
-//        withArrayTestTable(testDB) {
-//            /**
-//             * ```sql
-//             * -- Postgres
-//             * INSERT INTO array_test_table (numbers, strings)
-//             * VALUES (ARRAY[1,2,3], ARRAY[])
-//             * ```
-//             */
-//            val numInput = listOf(1, 2, 3)
-//            val entity1 = ArrayTestEntity.new {
-//                numbers = numInput
-//                doubles = null
-//            }
-//
-//            entityCache.clear()
-//
-//            entity1.numbers shouldBeEqualTo numInput
-//            entity1.strings.shouldBeEmpty()
-//
-//            /**
-//             * ```sql
-//             * -- Postgres
-//             * UPDATE array_test_table
-//             *    SET doubles=ARRAY[9.0]
-//             *  WHERE id = 1
-//             * ```
-//             */
-//            val doublesInput = listOf(9.0)
-//            entity1.doubles = doublesInput
-//
-//            entityCache.clear()
-//
-//            ArrayTestEntity.findById(entity1.id)?.doubles shouldBeEqualTo doublesInput
-//        }
-//    }
-
-    /**
      * [anyFrom], [allFrom] 함수를 이용하여 array column 을 비교할 수 있다.
      */
     @ParameterizedTest
@@ -648,6 +607,6 @@ class Ex05_ArrayColumnType: R2dbcExposedTestBase() {
             statement(testDB)
         }
     }
-}
 
-private fun ByteArray.toUByteString(): String = joinToString { it.toUByte().toString() }
+    private fun ByteArray.toUByteString(): String = joinToString { it.toUByte().toString() }
+}
