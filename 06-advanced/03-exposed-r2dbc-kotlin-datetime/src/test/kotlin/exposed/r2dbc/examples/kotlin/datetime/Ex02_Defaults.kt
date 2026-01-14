@@ -11,7 +11,7 @@ import exposed.r2dbc.shared.tests.inProperCase
 import exposed.r2dbc.shared.tests.insertAndWait
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.junit5.coroutines.runSuspendIO
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -93,7 +93,7 @@ import kotlin.time.toDuration
 
 class Ex02_Defaults: R2dbcExposedTestBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     private fun localDateTimeNowMinusUnit(value: Int, unit: DurationUnit) =
         Clock.System.now().minus(value.toDuration(unit)).toLocalDateTime(TimeZone.currentSystemDefault())
@@ -128,25 +128,6 @@ class Ex02_Defaults: R2dbcExposedTestBase() {
         val clientDefault = integer("clientDefault").clientDefault { cIndex.getAndIncrement() }
     }
 
-//    class DBDefault(id: EntityID<Int>): IntEntity(id) {
-//        companion object: IntEntityClass<DBDefault>(TableWithDBDefault)
-//
-//        var field by TableWithDBDefault.field
-//        var t1 by TableWithDBDefault.t1
-//        var t2 by TableWithDBDefault.t2
-//        val clientDefault by TableWithDBDefault.clientDefault
-//
-//        override fun equals(other: Any?): Boolean = idEquals(other)
-//        override fun hashCode(): Int = idHashCode()
-//        override fun toString(): String =
-//            toStringBuilder()
-//                .add("field", field)
-//                .add("t1", t1)
-//                .add("t2", t2)
-//                .add("clientDefault", clientDefault)
-//                .toString()
-//    }
-
     @Test
     fun testCanUseClientDefaultOnNullableColumn() {
         val defaultValue: Int? = null
@@ -172,92 +153,6 @@ class Ex02_Defaults: R2dbcExposedTestBase() {
         table.clientDefault.defaultValueFun.shouldNotBeNull()
         returnedDefault shouldBeEqualTo defaultValue
     }
-
-    /**
-     * 기본값 적용, 기본값이 정의된 컬럼에 직접 값 입력하는 예
-     *
-     * ```sql
-     * INSERT INTO tablewithdbdefault (field, "clientDefault")
-     * VALUES ('1', 6);
-     *
-     * INSERT INTO tablewithdbdefault (field, t1, "clientDefault")
-     * VALUES ('2', '2025-01-30T14:45:36.7796', 7);
-     * ```
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun testDefaultsWithExplicit01(testDB: TestDB) = runTest {
-//        withTables(testDB, TableWithDBDefault) {
-//            val created = listOf(
-//                DBDefault.new { field = "1" },
-//                DBDefault.new {
-//                    field = "2"
-//                    t1 = localDateTimeNowMinusUnit(5, DAYS)
-//                }
-//            )
-//            commit()
-//            created.forEach {
-//                DBDefault.removeFromCache(it)
-//            }
-//
-//            val entities = DBDefault.all().toList()
-//            entities shouldBeEqualTo created
-//        }
-//    }
-
-    /**
-     * 기본값이 제공되는 컬럼에 값 제공하기
-     *
-     * ```sql
-     * -- Postgres
-     * INSERT INTO tablewithdbdefault (field, t1, "clientDefault")
-     * VALUES ('2', '2025-01-30T14:45:36.85006', 16);
-     *
-     * INSERT INTO tablewithdbdefault (field, "clientDefault")
-     * VALUES ('1', 17);
-     * ```
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun testDefaultsWithExplicit02(testDB: TestDB)= runTest {
-//        // MySql 5 is excluded because it does not support `CURRENT_DATE()` as a default value
-//        Assumptions.assumeTrue { testDB != TestDB.MYSQL_V5 }
-//        withTables(testDB, TableWithDBDefault) {
-//            val created = listOf(
-//                DBDefault.new {
-//                    field = "2"
-//                    t1 = localDateTimeNowMinusUnit(5, DAYS)
-//                },
-//                DBDefault.new { field = "1" }
-//            )
-//
-//            flushCache()
-//            created.forEach {
-//                DBDefault.removeFromCache(it)
-//            }
-//            val entities = DBDefault.all().toList()
-//            entities shouldBeEqualTo created
-//        }
-//    }
-
-    /**
-     * Client Default 설정 초기화는 한번만 수행됩니다.
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun testDefaultsInvokedOnlyOncePerEntity(testDB: TestDB) {
-//        withTables(testDB, TableWithDBDefault) {
-//            TableWithDBDefault.cIndex.set(0)
-//            val db1 = DBDefault.new { field = "1" }
-//            val db2 = DBDefault.new { field = "2" }
-//
-//            flushCache()
-//
-//            db1.clientDefault shouldBeEqualTo 0
-//            db2.clientDefault shouldBeEqualTo 1
-//            TableWithDBDefault.cIndex.get() shouldBeEqualTo 2
-//        }
-//    }
 
     private val initBatch = listOf<(BatchInsertStatement) -> Unit>(
         {
@@ -952,34 +847,6 @@ class Ex02_Defaults: R2dbcExposedTestBase() {
         val timestamp: Column<OffsetDateTime> =
             timestampWithTimeZone("timestamp").defaultExpression(dbTimestampNow)
     }
-
-//    class DefaultTimestampEntity(id: EntityID<Int>): Entity<Int>(id) {
-//        companion object: EntityClass<Int, DefaultTimestampEntity>(DefaultTimestampTable)
-//
-//        var timestamp: OffsetDateTime by DefaultTimestampTable.timestamp
-//
-//        override fun equals(other: Any?): Boolean = idEquals(other)
-//        override fun hashCode(): Int = idHashCode()
-//        override fun toString(): String =
-//            toStringBuilder()
-//                .add("timestamp", timestamp)
-//                .toString()
-//    }
-
-    /**
-     * 컬럼의 기본값 정의를 custom expression 함수를 사용해도, Entity 생성 시에는 기본값이 적용됩니다.
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun testCustomDefaultTimestampFunctionWithEntity(testDB: TestDB) {
-//        Assumptions.assumeTrue { testDB in TestDB.ALL_POSTGRES + TestDB.MYSQL_V8 + TestDB.ALL_H2 }
-//
-//        withTables(testDB, DefaultTimestampTable) {
-//            val entity = DefaultTimestampEntity.new {}
-//            val timestamp = DefaultTimestampTable.selectAll().first()[DefaultTimestampTable.timestamp]
-//            timestamp shouldBeEqualTo entity.timestamp
-//        }
-//    }
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)

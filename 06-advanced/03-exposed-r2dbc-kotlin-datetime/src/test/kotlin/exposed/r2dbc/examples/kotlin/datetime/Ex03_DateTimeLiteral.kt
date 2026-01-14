@@ -5,6 +5,7 @@ package exposed.r2dbc.examples.kotlin.datetime
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
@@ -33,6 +34,8 @@ import kotlin.time.Instant
  * DATE, DATEIME 컬럼을 [dateLiteral], [dateTimeLiteral] 으로 사용하는 예
  */
 class Ex03_DateTimeLiteral: R2dbcExposedTestBase() {
+
+    companion object: KLoggingChannel()
 
     private val defaultDate = LocalDate(2000, 1, 1)
     private val futureDate = LocalDate(3000, 1, 1)
