@@ -6,7 +6,7 @@ import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.crypto.encrypt.Encryptors
 import io.bluetape4k.exposed.core.encrypt.encryptedVarChar
 import io.bluetape4k.junit5.faker.Fakers
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
@@ -20,7 +20,7 @@ import org.junit.jupiter.params.provider.MethodSource
 
 class EncryptedVarCharColumnTypeTest: R2dbcExposedTestBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     /**
      * ```sql
@@ -110,64 +110,4 @@ class EncryptedVarCharColumnTypeTest: R2dbcExposedTestBase() {
             row[T1.tripleDesString] shouldBeEqualTo text
         }
     }
-
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `엔티티 속성 값을을 암호화하여 VarChar 컬럼에 저장합니다`(testDB: TestDB) {
-//        withTables(testDB, T1) {
-//            val text = Fakers.randomString(255, 512)
-//
-//            val e1 = E1.new {
-//                name = "Encryption"
-//
-//                aesString = text
-//                rc4String = text
-//                tripleDesString = text
-//            }
-//
-//            entityCache.clear()
-//
-//            val loaded = E1.findById(e1.id)!!
-//
-//            loaded.name shouldBeEqualTo "Encryption"
-//            loaded.aesString shouldBeEqualTo text
-//            loaded.rc4String shouldBeEqualTo text
-//            loaded.tripleDesString shouldBeEqualTo text
-//        }
-//    }
-
-    /**
-     * exposed-crypt 랑 달리 암호화된 값을 그대로 비교합니다.
-     *
-     * ```sql
-     * -- Postgres
-     * SELECT t1.id, t1."name", t1.aes_str, t1.rc4_str, t1.triple_des_str
-     *   FROM t1
-     *  WHERE t1.aes_str = t05Obf7QpRrKyocCsapQzpvYwQ_btvMx0YwC8nWYr_w=
-     * ```
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `암호화한 컬럼 값을 기준으로 검색합니다`(testDB: TestDB) {
-//        withTables(testDB, T1) {
-//            val text = "동해물과 백두산이 마르고 닳도록"
-//
-//            val e1 = E1.new {
-//                name = "Encryption"
-//
-//                aesString = text
-//                rc4String = text
-//                tripleDesString = text
-//            }
-//
-//            entityCache.clear()
-//
-//            val loaded = E1.find { T1.aesString eq e1.aesString }.single()
-//
-//            loaded.name shouldBeEqualTo "Encryption"
-//            loaded.aesString shouldBeEqualTo text
-//            loaded.rc4String shouldBeEqualTo text
-//            loaded.tripleDesString shouldBeEqualTo text
-//        }
-//    }
 }

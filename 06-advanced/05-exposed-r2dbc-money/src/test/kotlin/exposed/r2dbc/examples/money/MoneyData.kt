@@ -44,19 +44,3 @@ internal object AccountTable: IntIdTable("Accounts") {
         index("ix_money_amount", false, composite_money.amount)
     }
 }
-
-//internal class AccountEntity(id: EntityID<Int>): IntEntity(id) {
-//    companion object: EntityClass<Int, AccountEntity>(AccountTable)
-//
-//    var money: MonetaryAmount? by AccountTable.composite_money
-//
-//    // `money` 의 2가지 속성을 따로 접근하게 합니다.
-//    val amount: BigDecimal? by AccountTable.composite_money.amount
-//    val currency: CurrencyUnit? by AccountTable.composite_money.currency
-//
-//    override fun equals(other: Any?): Boolean = idEquals(other)
-//    override fun hashCode(): Int = idHashCode()
-//    override fun toString(): String = toStringBuilder()
-//        .add("money", money)
-//        .toString()
-//}

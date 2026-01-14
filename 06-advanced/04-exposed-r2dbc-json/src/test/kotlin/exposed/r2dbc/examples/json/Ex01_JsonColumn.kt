@@ -7,7 +7,7 @@ import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
@@ -63,7 +63,7 @@ import org.junit.jupiter.params.provider.MethodSource
 @Suppress("DEPRECATION")
 class Ex01_JsonColumn: R2dbcExposedJsonTest() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     /**
      * Insert and Select JSON data
@@ -247,86 +247,6 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
             }
         }
     }
-
-    /**
-     * DAO Entity 에서 JSON 컬럼을 사용 하는 예제
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `DAO Functions with Json Column`(testDB: TestDB) {
-//        val dataTable = JsonTable
-//        val dataEntity = JsonEntity
-//
-//        withTables(testDB, dataTable) {
-//            val jsonA = DataHolder(User("Admin", "Alpha"), 10, true, null)
-//
-//            /**
-//             * ```sql
-//             * INSERT INTO j_table (j_column)
-//             * VALUES ({"user":{"name":"Admin","team":"Alpha"},"logins":10,"active":true,"team":null})
-//             * ```
-//             */
-//            val newUser = dataEntity.new {
-//                jsonColumn = jsonA
-//            }
-//
-//            entityCache.clear()
-//
-//            /**
-//             * ```sql
-//             * SELECT j_table.id, j_table.j_column
-//             *   FROM j_table
-//             *  WHERE j_table.id = 1
-//             * ```
-//             */
-//            dataEntity.findById(newUser.id)?.jsonColumn shouldBeEqualTo jsonA
-//
-//            /**
-//             * ```sql
-//             * UPDATE j_table
-//             *    SET j_column={"user":{"name":"Lead","team":"Beta"},"logins":10,"active":true,"team":null}
-//             * ```
-//             */
-//            val updatedJson = jsonA.copy(user = User("Lead", "Beta"))
-//            dataTable.update {
-//                it[jsonColumn] = updatedJson
-//            }
-//
-//            dataEntity.all().single().jsonColumn shouldBeEqualTo updatedJson
-//
-//            // Json Path
-//            Assumptions.assumeTrue { testDB !in TestDB.ALL_H2 }
-//
-//            /**
-//             * Insert new entity
-//             *
-//             * ```sql
-//             * INSERT INTO j_table (j_column)
-//             * VALUES ({"user":{"name":"Admin","team":"Alpha"},"logins":10,"active":true,"team":null})
-//             * ```
-//             */
-//            dataEntity.new { jsonColumn = jsonA }
-//
-//            /**
-//             * JSON_EXTRACT_PATH_TEXT 를 이용하여 특정 필드를 비교할 수 있습니다.
-//             *
-//             * ```sql
-//             * -- Postgres
-//             * SELECT j_table.id, j_table.j_column
-//             *   FROM j_table
-//             *  WHERE JSON_EXTRACT_PATH_TEXT(j_table.j_column, 'user', 'team') LIKE 'B%'
-//             * ```
-//             */
-//            val path = when (currentDialectTest) {
-//                is PostgreSQLDialect -> arrayOf("user", "team")
-//                else -> arrayOf(".user.team")
-//            }
-//            val userTeam = JsonTable.jsonColumn.extract<String>(*path)
-//            val userInTeamB = dataEntity.find { userTeam like "B%" }.single()
-//
-//            userInTeamB.jsonColumn shouldBeEqualTo updatedJson
-//        }
-//    }
 
     private val jsonContainsSupported = TestDB.ALL_POSTGRES + TestDB.MYSQL_V5 + TestDB.MYSQL_V8
 

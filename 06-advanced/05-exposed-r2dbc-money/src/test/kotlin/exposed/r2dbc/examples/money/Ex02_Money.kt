@@ -4,7 +4,7 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.money.currencyUnitOf
 import io.bluetape4k.money.moneyOf
 import kotlinx.coroutines.flow.single
@@ -34,7 +34,7 @@ import javax.money.MonetaryAmount
 
 class Ex02_Money: R2dbcExposedTestBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     /**
      * Money 를 사용하는 테스트를 실행합니다.
@@ -130,61 +130,6 @@ class Ex02_Money: R2dbcExposedTestBase() {
             }
         }
     }
-
-    /**
-     * Money 컬럼으로 조회하기
-     *
-     * ```sql
-     * -- Postgres
-     * SELECT accounts.id,
-     *        accounts.composite_money,
-     *        accounts."composite_money_C"
-     *   FROM accounts
-     *  WHERE (accounts.composite_money = 10)
-     *    AND (accounts."composite_money_C" = 'USD');
-     * ```
-     * ```sql
-     * SELECT accounts.id,
-     *        accounts.composite_money,
-     *        accounts."composite_money_C"
-     *   FROM accounts
-     *  WHERE accounts."composite_money_C" = 'USD';
-     * ```
-     * ```sql
-     * SELECT accounts.id,
-     *        accounts.composite_money,
-     *        accounts."composite_money_C"
-     *   FROM accounts
-     *  WHERE accounts.composite_money = 1E+1
-     * ```
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `search by composite column`(testDB: TestDB) {
-//        withTables(testDB, AccountTable) {
-//            // val money: Money = moneyOf(BigDecimal.TEN, "USD")
-//            val money = BigDecimal.TEN.inUSD()
-//
-//            AccountTable.insertAndGetId {
-//                it[composite_money] = money
-//            }
-//
-//            val predicates = listOf(
-//                AccountTable.composite_money eq money,
-//                AccountTable.composite_money.currency eq money.currency,
-//                AccountTable.composite_money.amount eq money.numberStripped
-//            )
-//
-//            predicates.forEach { predicate ->
-//                val found = AccountEntity.find { predicate }
-//                found.count() shouldBeEqualTo 1L
-//                val next = found.iterator().next()
-//                next.money shouldBeEqualTo money
-//                next.currency shouldBeEqualTo money.currency
-//                next.amount shouldBeEqualTo money.numberStripped.setScale(AMOUNT_SCALE)
-//            }
-//        }
-//    }
 
     /**
      * [compositeMoney] 함수를 이용하여 직접 `Money` 컬럼을 정의하고 사용합니다.

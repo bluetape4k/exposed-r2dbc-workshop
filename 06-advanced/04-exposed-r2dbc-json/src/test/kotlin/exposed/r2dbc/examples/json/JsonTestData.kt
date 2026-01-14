@@ -40,30 +40,6 @@ object JsonTestData {
         val jsonBColumn = jsonb<DataHolder>("j_b_column", Json.Default)
     }
 
-//    class JsonEntity(id: EntityID<Int>): IntEntity(id) {
-//        companion object: IntEntityClass<JsonEntity>(JsonTable)
-//
-//        var jsonColumn: DataHolder by JsonTable.jsonColumn
-//
-//        override fun equals(other: Any?): Boolean = idEquals(other)
-//        override fun hashCode(): Int = idHashCode()
-//        override fun toString(): String = toStringBuilder()
-//            .add("jsonColumn", jsonColumn)
-//            .toString()
-//    }
-//
-//    class JsonBEntity(id: EntityID<Int>): IntEntity(id) {
-//        companion object: IntEntityClass<JsonBEntity>(JsonBTable)
-//
-//        var jsonBColumn: DataHolder by JsonBTable.jsonBColumn
-//
-//        override fun equals(other: Any?): Boolean = idEquals(other)
-//        override fun hashCode(): Int = idHashCode()
-//        override fun toString(): String = toStringBuilder()
-//            .add("jsonBColumn", jsonBColumn)
-//            .toString()
-//    }
-
     /**
      * Array 수형을 JSON으로 저장합니다.
      *

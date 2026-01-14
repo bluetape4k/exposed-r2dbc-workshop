@@ -4,7 +4,7 @@ package exposed.r2dbc.examples.json
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.insert
@@ -13,8 +13,7 @@ import org.junit.jupiter.api.Assumptions
 
 abstract class R2dbcExposedJsonTest: R2dbcExposedTestBase() {
 
-    companion object: KLogging()
-
+    companion object: KLoggingChannel()
 
     protected suspend fun withJsonTable(
         testDB: TestDB,

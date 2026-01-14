@@ -9,7 +9,7 @@ import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.exposed.core.compress.compressedBlob
 import io.bluetape4k.io.compressor.Compressors
 import io.bluetape4k.junit5.faker.Fakers
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.support.toUtf8String
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
@@ -25,7 +25,7 @@ import org.junit.jupiter.params.provider.MethodSource
 
 class CompressedBlobColumnTypeTest: R2dbcExposedTestBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     /**
      * ```sql

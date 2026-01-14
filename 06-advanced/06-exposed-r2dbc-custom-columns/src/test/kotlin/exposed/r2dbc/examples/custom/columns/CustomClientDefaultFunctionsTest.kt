@@ -7,7 +7,7 @@ import io.bluetape4k.exposed.core.ksuidGenerated
 import io.bluetape4k.exposed.core.ksuidMillisGenerated
 import io.bluetape4k.exposed.core.snowflakeGenerated
 import io.bluetape4k.exposed.core.timebasedGenerated
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldHaveSize
@@ -21,7 +21,7 @@ import java.util.*
 
 class CustomClientDefaultFunctionsTest: R2dbcExposedTestBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     /**
      * ```sql

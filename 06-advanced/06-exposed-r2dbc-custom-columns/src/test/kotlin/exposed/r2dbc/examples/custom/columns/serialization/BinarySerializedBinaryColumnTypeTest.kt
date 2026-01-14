@@ -5,7 +5,7 @@ import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.exposed.core.serializable.binarySerializedBinary
 import io.bluetape4k.io.serializer.BinarySerializers
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
@@ -19,7 +19,7 @@ import java.io.Serializable
 
 class BinarySerializedBinaryColumnTypeTest: R2dbcExposedTestBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     /**
      * ```sql

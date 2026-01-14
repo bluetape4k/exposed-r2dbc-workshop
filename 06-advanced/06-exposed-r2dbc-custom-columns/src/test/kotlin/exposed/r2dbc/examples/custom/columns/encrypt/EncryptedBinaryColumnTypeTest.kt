@@ -6,7 +6,7 @@ import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.crypto.encrypt.Encryptors
 import io.bluetape4k.exposed.core.encrypt.encryptedBinary
 import io.bluetape4k.junit5.faker.Fakers
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.support.toUtf8Bytes
 import io.bluetape4k.support.toUtf8String
 import kotlinx.coroutines.flow.single
@@ -23,7 +23,7 @@ import org.junit.jupiter.params.provider.MethodSource
 
 class EncryptedBinaryColumnTypeTest: R2dbcExposedTestBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     /**
      * ```sql
@@ -114,64 +114,4 @@ class EncryptedBinaryColumnTypeTest: R2dbcExposedTestBase() {
             row[T1.tripleDesBinary]?.toUtf8String() shouldBeEqualTo text
         }
     }
-
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `엔티티 속성 값을을 암호화하여 Binary 컬럼에 저장합니다`(testDB: TestDB) {
-//        withTables(testDB, T1) {
-//            val text = Fakers.randomString(255, 512)
-//            val bytes = text.toUtf8Bytes()
-//
-//            val e1 = E1.new {
-//                name = "Encryption"
-//
-//                aesBinary = bytes
-//                rc4Binary = bytes
-//                tripleDesBinary = bytes
-//            }
-//            flushCache()
-//
-//            val loaded = E1.findById(e1.id)!!
-//
-//            loaded.name shouldBeEqualTo "Encryption"
-//            loaded.aesBinary?.toUtf8String() shouldBeEqualTo text
-//            loaded.rc4Binary?.toUtf8String() shouldBeEqualTo text
-//            loaded.tripleDesBinary?.toUtf8String() shouldBeEqualTo text
-//        }
-//    }
-
-    /**
-     * exposed-crypt 랑 달리 암호화된 값을 그대로 비교합니다.
-     *
-     * ```sql
-     * -- Postgres
-     * SELECT t1.id, t1."name", t1.aes_binary, t1.rc4_binary, t1.triple_des_binary
-     *   FROM t1
-     *  WHERE t1.aes_binary = [B@18ac4af6
-     * ```
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `DAO 방식 - 암호화된 속성값으로 검색합니다`(testDB: TestDB) {
-//        withTables(testDB, T1) {
-//            val text = Fakers.randomString(8, 16)
-//            val bytes = text.toUtf8Bytes()
-//
-//            val e1 = E1.new {
-//                name = "Encryption"
-//
-//                aesBinary = bytes
-//                rc4Binary = bytes
-//                tripleDesBinary = bytes
-//            }
-//            flushCache()
-//
-//            val loaded = E1.find { T1.aesBinary eq e1.aesBinary }.single()
-//
-//            loaded.name shouldBeEqualTo "Encryption"
-//            loaded.aesBinary?.toUtf8String() shouldBeEqualTo text
-//            loaded.rc4Binary?.toUtf8String() shouldBeEqualTo text
-//            loaded.tripleDesBinary?.toUtf8String() shouldBeEqualTo text
-//        }
-//    }
 }
