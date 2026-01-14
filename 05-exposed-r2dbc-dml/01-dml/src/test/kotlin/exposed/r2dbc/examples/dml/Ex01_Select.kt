@@ -1,6 +1,5 @@
 package exposed.r2dbc.examples.dml
 
-
 import exposed.r2dbc.shared.dml.DMLTestData
 import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
 import exposed.r2dbc.shared.dml.DMLTestData.withSales
@@ -269,79 +268,6 @@ class Ex01_Select: R2dbcExposedTestBase() {
             rows[1][users.name] shouldBeEqualTo "Sergey"
         }
     }
-
-    /**
-     * `EntityID` 에 `inList`, `notInList` 사용하기
-     */
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `inList with entityID columns`(testDB: TestDB) = runTest {
-//        withTables(testDB, Boards, Posts, Categories) {
-//            val board1 = Board.new {
-//                name = "board1"
-//            }
-//            val post1 = Post.new {
-//                board = board1
-//            }
-//            Post.new {
-//                category = Category.new { title = "category1" }
-//            }
-//
-//            /**
-//             * inList의 항목이 한개라면 `eq` 로 대체 가능
-//             *
-//             * ```sql
-//             * -- Postgres
-//             * SELECT posts.id,
-//             *        posts.board,
-//             *        posts.parent,
-//             *        posts.category,
-//             *        posts."optCategory"
-//             *   FROM posts
-//             *  WHERE posts.board = 1
-//             * ```
-//             */
-//            val result1 = Posts
-//                .selectAll()
-//                .where {
-//                    Posts.boardId inList listOf(board1.id)
-//                }
-//                .singleOrNull()
-//                ?.get(Posts.id)
-//
-//            result1 shouldBeEqualTo post1.id
-//
-//            /**
-//             * `inList` with `EntityID` columns
-//             *
-//             * ```sql
-//             * -- Postgres
-//             * SELECT board.id, board."name"
-//             *   FROM board
-//             *  WHERE board.id IN (1, 2, 3, 4, 5)
-//             * ```
-//             */
-//            val result2 = Board.find {
-//                Boards.id inList listOf(1, 2, 3, 4, 5)
-//            }.singleOrNull()
-//            result2 shouldBeEqualTo board1
-//
-//            /**
-//             * `notInList` with entityID columns
-//             *
-//             * ```sql
-//             * -- Postgres
-//             * SELECT board.id, board."name"
-//             *   FROM board
-//             *  WHERE board.id  NOT IN (1, 2, 3, 4, 5)
-//             * ```
-//             */
-//            val result3 = Board.find {
-//                Boards.id notInList listOf(1, 2, 3, 4, 5)
-//            }.singleOrNull()
-//            result3.shouldBeNull()
-//        }
-//    }
 
     /**
      * `inSubQuery` 연산자 예제

@@ -5,7 +5,7 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.idgenerators.uuid.TimebasedUuid
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
@@ -37,7 +37,7 @@ import java.util.*
  */
 class Ex22_ColumnWithTransform: R2dbcExposedTestBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     @JvmInline
     value class Holder(val value: Int): Serializable
@@ -287,54 +287,6 @@ class Ex22_ColumnWithTransform: R2dbcExposedTestBase() {
             .transform(HolderTransformer())
             .default(Holder(2))
     }
-
-//    class TransformEntity(id: EntityID<Int>): IntEntity(id) {
-//        companion object: IntEntityClass<TransformEntity>(TransformTable)
-//
-//        var simple: Holder by TransformTable.simple
-//        var chained: Holder by TransformTable.chained
-//
-//        override fun equals(other: Any?): Boolean = idEquals(other)
-//        override fun hashCode(): Int = idHashCode()
-//        override fun toString(): String = toStringBuilder()
-//            .add("simple", simple)
-//            .add("chained", chained)
-//            .toString()
-//    }
-
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `transformed values with DAO`(testDB: TestDB) = runTest {
-//        withTables(testDB, TransformTable) {
-//            // DAO 방식
-//            val entity = TransformEntity.new {
-//                simple = Holder(120)
-//                chained = Holder(240)
-//            }
-//            log.debug { "entity: $entity" }
-//            entity.simple shouldBeEqualTo Holder(120)
-//            entity.chained shouldBeEqualTo Holder(240)
-//
-//            // SQL DSL 방식
-//            val row = TransformTable.selectAll().first()
-//            row[TransformTable.simple] shouldBeEqualTo Holder(120)
-//            row[TransformTable.chained] shouldBeEqualTo Holder(240)
-//        }
-//    }
-//
-//    @ParameterizedTest
-//    @MethodSource(ENABLE_DIALECTS_METHOD)
-//    fun `entity with default value`(testDB: TestDB) = runTest {
-//        withTables(testDB, TransformTable) {
-//            val entity = TransformEntity.new { }
-//            entity.simple shouldBeEqualTo Holder(1)
-//            entity.chained shouldBeEqualTo Holder(2)
-//
-//            val row = TransformTable.selectAll().first()
-//            row[TransformTable.simple] shouldBeEqualTo Holder(1)
-//            row[TransformTable.chained] shouldBeEqualTo Holder(2)
-//        }
-//    }
 
     @JvmInline
     value class CustomId(val id: UUID): Serializable

@@ -6,7 +6,7 @@ import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
 import io.bluetape4k.exposed.r2dbc.any
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
@@ -35,7 +35,7 @@ import org.junit.jupiter.params.provider.MethodSource
 
 class Ex05_Delete: R2dbcExposedTestBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     private val limitNotSupported = TestDB.ALL_POSTGRES
 

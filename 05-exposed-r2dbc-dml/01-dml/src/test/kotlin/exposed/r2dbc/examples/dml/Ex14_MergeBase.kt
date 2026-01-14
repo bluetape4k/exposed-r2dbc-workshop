@@ -4,7 +4,7 @@ package exposed.r2dbc.examples.dml
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
 import org.jetbrains.exposed.v1.core.ResultRow
@@ -34,8 +34,7 @@ val TEST_DEFAULT_DATE_TIME: LocalDateTime = LocalDateTime.of(
  */
 abstract class Ex14_MergeBase: R2dbcExposedTestBase() {
 
-
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     protected fun allDbExcept(includeSettings: Collection<TestDB>) = TestDB.ALL - includeSettings.toSet()
 

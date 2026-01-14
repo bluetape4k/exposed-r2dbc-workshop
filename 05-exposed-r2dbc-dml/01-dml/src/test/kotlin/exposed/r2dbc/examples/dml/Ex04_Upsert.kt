@@ -5,7 +5,7 @@ import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.codec.Base58
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.single
@@ -54,7 +54,7 @@ import kotlin.properties.Delegates
 
 class Ex04_Upsert: R2dbcExposedTestBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     // these DB require key columns from ON clause to be included in the derived source table (USING clause)
     private val upsertViaMergeDB = TestDB.ALL_H2

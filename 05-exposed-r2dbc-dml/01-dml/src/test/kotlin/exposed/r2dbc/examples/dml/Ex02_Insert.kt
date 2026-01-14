@@ -659,21 +659,6 @@ class Ex02_Insert: R2dbcExposedTestBase() {
         val order = integer("order").default(0)
     }
 
-//    class OrderedData(id: EntityID<Int>): IntEntity(id) {
-//        companion object: IntEntityClass<OrderedData>(OrderedDataTable)
-//
-//        var name by OrderedDataTable.name
-//        var order by OrderedDataTable.order
-//
-//        override fun equals(other: Any?): Boolean = idEquals(other)
-//        override fun hashCode(): Int = idHashCode()
-//        override fun toString(): String =
-//            toStringBuilder()
-//                .add("name", name)
-//                .add("order", order)
-//                .toString()
-//    }
-
     /**
      * DAO 를 사용하여 INSERT 합니다.
      *
