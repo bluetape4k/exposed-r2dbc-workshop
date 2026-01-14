@@ -17,7 +17,7 @@ import io.bluetape4k.exposed.core.fastjson2.exists
 import io.bluetape4k.exposed.core.fastjson2.extract
 import io.bluetape4k.exposed.core.fastjson2.fastjsonb
 import io.bluetape4k.fastjson2.FastjsonSerializer
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
@@ -58,7 +58,7 @@ import org.junit.jupiter.params.provider.MethodSource
 @Suppress("DEPRECATION")
 class FastjsonBColumnTest: R2dbcExposedTestBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     /**
      * ```sql
