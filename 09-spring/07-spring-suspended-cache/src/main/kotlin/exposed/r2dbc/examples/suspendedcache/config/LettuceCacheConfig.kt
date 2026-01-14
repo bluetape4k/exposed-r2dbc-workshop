@@ -1,6 +1,7 @@
 package exposed.r2dbc.examples.suspendedcache.config
 
 import exposed.r2dbc.examples.suspendedcache.cache.LettuceSuspendedCacheManager
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.redis.lettuce.codec.LettuceBinaryCodecs
 import io.bluetape4k.testcontainers.storage.RedisServer
 import io.lettuce.core.RedisClient
@@ -10,6 +11,8 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class LettuceCacheConfig {
+
+    companion object: KLoggingChannel()
 
     private val redisServer = RedisServer.Launcher.redis
 

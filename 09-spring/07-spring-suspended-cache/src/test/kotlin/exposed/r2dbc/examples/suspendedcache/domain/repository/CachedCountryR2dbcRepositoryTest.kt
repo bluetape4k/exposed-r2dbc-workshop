@@ -3,6 +3,7 @@ package exposed.r2dbc.examples.suspendedcache.domain.repository
 import exposed.r2dbc.examples.suspendedcache.cache.LettuceSuspendedCacheManager
 import exposed.r2dbc.examples.suspendedcache.domain.CountryDTO
 import exposed.r2dbc.examples.suspendedcache.utils.DataPopulator
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.support.uninitialized
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeTrue
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Qualifier
 class CachedCountryR2dbcRepositoryTest(
     @param:Autowired private val cacheManager: LettuceSuspendedCacheManager,
 ): AbstractCountryR2dbcRepositoryTest() {
+
+    companion object: KLoggingChannel()
 
     @Autowired
     @Qualifier("cachedCountryR2dbcRepository")
