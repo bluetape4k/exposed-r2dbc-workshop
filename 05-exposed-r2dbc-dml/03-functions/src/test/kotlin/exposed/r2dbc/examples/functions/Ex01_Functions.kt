@@ -6,7 +6,7 @@ import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.support.asBigDecimal
 import io.bluetape4k.support.toBigDecimal
@@ -90,7 +90,7 @@ import java.math.BigDecimal
 
 class Ex01_Functions: Ex00_FunctionBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     @Suppress("UNCHECKED_CAST")
     fun ExpressionWithColumnType<Int>.sumToLong(): Sum<Long> =

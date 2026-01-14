@@ -3,7 +3,7 @@ package exposed.r2dbc.examples.functions
 import exposed.r2dbc.shared.dml.DMLTestData
 import exposed.r2dbc.shared.dml.DMLTestData.withSales
 import exposed.r2dbc.shared.tests.TestDB
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -48,7 +48,7 @@ import java.math.RoundingMode
 
 class Ex05_WindowFunction: Ex00_FunctionBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     private val supportsCountDistinctAsWindowFunction = TestDB.ALL_H2
     private val supportsStatisticsAggregateFunctions = TestDB.ALL

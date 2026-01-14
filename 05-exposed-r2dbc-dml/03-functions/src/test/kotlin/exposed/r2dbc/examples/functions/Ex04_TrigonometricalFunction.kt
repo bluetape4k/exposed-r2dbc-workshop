@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.functions
 
 import exposed.r2dbc.shared.tests.TestDB
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.test.runTest
 import org.jetbrains.exposed.v1.core.decimalLiteral
 import org.jetbrains.exposed.v1.core.doubleLiteral
@@ -25,7 +25,7 @@ import java.math.BigDecimal
  */
 class Ex04_TrigonometricalFunction: Ex00_FunctionBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     /**
      * ```sql
@@ -163,7 +163,6 @@ class Ex04_TrigonometricalFunction: Ex00_FunctionBase() {
         withTable(testDB) {
             when (testDB) {
                 in TestDB.ALL_MYSQL_MARIADB -> PiFunction shouldExpressionEqualTo "3.141593".toBigDecimal()
-
                 else -> PiFunction shouldExpressionEqualTo "3.141592653589793".toBigDecimal()
             }
         }
@@ -184,8 +183,6 @@ class Ex04_TrigonometricalFunction: Ex00_FunctionBase() {
     fun `RadiansFunction test`(testDB: TestDB) = runTest {
         withTable(testDB) {
             RadiansFunction(intLiteral(0)) shouldExpressionEqualTo "0".toBigDecimal()
-
-
             RadiansFunction(intLiteral(180)) shouldExpressionEqualTo "3.141592653589793".toBigDecimal()
             RadiansFunction(doubleLiteral(0.25)) shouldExpressionEqualTo "0.004363323129985824".toBigDecimal()
             RadiansFunction(decimalLiteral(BigDecimal("0.25"))) shouldExpressionEqualTo "0.004363323129985824".toBigDecimal()
