@@ -1,6 +1,6 @@
 package exposed.r2dbc.workshop.springwebflux.controller
 
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.support.uninitialized
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.info.BuildProperties
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/")
 class IndexController {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     @Autowired
     private val buildProperties: BuildProperties = uninitialized()

@@ -4,7 +4,7 @@ package exposed.r2dbc.workshop.springwebflux.domain.repository
 import exposed.r2dbc.shared.repository.MovieSchema.ActorTable
 import exposed.r2dbc.workshop.springwebflux.domain.ActorDTO
 import exposed.r2dbc.workshop.springwebflux.domain.toActorDTO
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
@@ -20,7 +20,7 @@ import java.time.LocalDate
 @Repository
 class ActorRepository {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     suspend fun count(): Long =
         ActorTable.selectAll().count()

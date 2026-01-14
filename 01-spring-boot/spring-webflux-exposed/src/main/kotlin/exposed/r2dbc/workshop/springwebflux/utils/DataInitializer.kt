@@ -5,7 +5,7 @@ import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.ActorInMovieTable
 import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.ActorTable
 import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.MovieTable
 import exposed.r2dbc.workshop.springwebflux.domain.MovieWithActorDTO
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.info
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -27,7 +27,7 @@ import java.time.LocalDate
 @Component
 class DataInitializer(private val database: R2dbcDatabase): ApplicationListener<ApplicationReadyEvent> {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {

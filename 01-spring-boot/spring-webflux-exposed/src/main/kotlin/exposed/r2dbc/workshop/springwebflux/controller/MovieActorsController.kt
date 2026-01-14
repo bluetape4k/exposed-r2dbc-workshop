@@ -4,7 +4,7 @@ import exposed.r2dbc.workshop.springwebflux.domain.MovieActorCountDTO
 import exposed.r2dbc.workshop.springwebflux.domain.MovieWithActorDTO
 import exposed.r2dbc.workshop.springwebflux.domain.MovieWithProducingActorDTO
 import exposed.r2dbc.workshop.springwebflux.domain.repository.MovieRepository
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -20,7 +20,7 @@ class MovieActorsController(
     private val movieRepository: MovieRepository,
 ): CoroutineScope by CoroutineScope(Dispatchers.IO + SupervisorJob()) {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     @GetMapping("/{movieId}")
     suspend fun getMovieWithActors(@PathVariable movieId: Long): MovieWithActorDTO? =

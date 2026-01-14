@@ -12,7 +12,7 @@ import exposed.r2dbc.workshop.springwebflux.domain.toMovieDTO
 import exposed.r2dbc.workshop.springwebflux.domain.toMovieWithActorDTO
 import exposed.r2dbc.workshop.springwebflux.domain.toMovieWithProducingActorDTO
 import io.bluetape4k.coroutines.flow.extensions.bufferUntilChanged
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
@@ -33,7 +33,7 @@ import java.time.LocalDateTime
 @Repository
 class MovieRepository {
 
-    companion object: KLogging() {
+    companion object: KLoggingChannel() {
         private val MovieActorJoin by lazy {
             MovieTable
                 .innerJoin(ActorInMovieTable)
@@ -59,7 +59,8 @@ class MovieRepository {
     suspend fun findById(movieId: Long): MovieDTO? {
         log.debug { "Find Movie by id. id: $movieId" }
 
-        return MovieTable.selectAll()
+        return MovieTable
+            .selectAll()
             .where { MovieTable.id eq movieId }
             .firstOrNull()
             ?.toMovieDTO()
