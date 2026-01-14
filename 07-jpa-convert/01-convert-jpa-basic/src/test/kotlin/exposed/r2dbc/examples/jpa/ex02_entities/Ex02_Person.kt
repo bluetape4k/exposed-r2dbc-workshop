@@ -4,7 +4,7 @@ import exposed.r2dbc.examples.jpa.ex02_entities.PersonSchema.PersonRecord
 import exposed.r2dbc.examples.jpa.ex02_entities.PersonSchema.withPersonAndAddress
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
@@ -37,7 +37,7 @@ import java.time.LocalDate
 
 class Ex02_Person: R2dbcExposedTestBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     /**
      * ```sql

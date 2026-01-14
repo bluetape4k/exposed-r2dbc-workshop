@@ -5,7 +5,7 @@ import exposed.r2dbc.examples.jpa.ex01_simple.SimpleSchema.toSimpleDTOs
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
@@ -25,7 +25,7 @@ import org.junit.jupiter.params.provider.MethodSource
  */
 class Ex01_Simple_DSL: R2dbcExposedTestBase() {
 
-    companion object: KLogging() {
+    companion object: KLoggingChannel() {
         private const val ENTITY_COUNT = 10
     }
 

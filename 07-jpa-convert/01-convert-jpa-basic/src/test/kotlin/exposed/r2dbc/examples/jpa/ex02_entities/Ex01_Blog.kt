@@ -7,7 +7,7 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
@@ -24,7 +24,7 @@ import java.time.LocalDate
 
 class Ex01_Blog: R2dbcExposedTestBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
