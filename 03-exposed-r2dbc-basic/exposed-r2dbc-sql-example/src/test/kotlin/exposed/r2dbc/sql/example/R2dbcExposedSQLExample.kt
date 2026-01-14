@@ -6,7 +6,7 @@ import exposed.r2dbc.sql.example.Schema.CityTable
 import exposed.r2dbc.sql.example.Schema.UserTable
 import exposed.r2dbc.sql.example.Schema.withCityUsers
 import io.bluetape4k.junit5.coroutines.runSuspendIO
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.info
 import kotlinx.coroutines.flow.single
 import org.amshove.kluent.shouldBeEqualTo
@@ -26,7 +26,7 @@ import org.junit.jupiter.params.provider.MethodSource
 
 class R2dbcExposedSQLExample: R2dbcExposedTestBase() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     /**
      * 특정 조건에 맞는 행을 UPDATE 합니다.
