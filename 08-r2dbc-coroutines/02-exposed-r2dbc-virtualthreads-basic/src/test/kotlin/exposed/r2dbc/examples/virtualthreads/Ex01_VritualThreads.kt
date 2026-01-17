@@ -6,17 +6,18 @@ import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.collections.intRangeOf
 import io.bluetape4k.concurrent.virtualthread.VT
 import io.bluetape4k.exposed.r2dbc.virtualThreadTransaction
-import io.bluetape4k.junit5.coroutines.runSuspendVT
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldNotBeEmpty
 import org.jetbrains.exposed.v1.core.ResultRow
@@ -69,7 +70,7 @@ class Ex01_VritualThreads: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `virtual threads 를 이용하여 순차 작업 수행하기`(testDB: TestDB) = runSuspendVT {
+    fun `virtual threads 를 이용하여 순차 작업 수행하기`(testDB: TestDB) = runTest {
         withTables(testDB, VTester) {
             val id = VTester.insertAndGetId { }
             commit()
@@ -84,9 +85,10 @@ class Ex01_VritualThreads: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `중첩된 virtual thread 용 트랜잭션을 async로 실행`(testDB: TestDB) = runSuspendVT {
+    fun `중첩된 virtual thread 용 트랜잭션을 async로 실행`(testDB: TestDB) = runTest {
         withTables(testDB, VTester) {
             val recordCount = 10
+            delay(10)
 
             val vtScope = CoroutineScope(Dispatchers.VT)
             List(recordCount) { index ->
@@ -119,7 +121,7 @@ class Ex01_VritualThreads: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `다수의 비동기 작업을 수행 후 대기`(testDB: TestDB) = runSuspendVT {
+    fun `다수의 비동기 작업을 수행 후 대기`(testDB: TestDB) = runTest {
         withTables(testDB, VTester) {
             val recordCount = 10
             val results = CopyOnWriteArrayList<Int>()

@@ -20,14 +20,8 @@ plugins {
     id(Plugins.dependency_management) version Plugins.Versions.dependency_management
     id(Plugins.spring_boot) version Plugins.Versions.spring_boot apply false
 
-    id(Plugins.dokka) version Plugins.Versions.dokka
     id(Plugins.testLogger) version Plugins.Versions.testLogger
-    id(Plugins.shadow) version Plugins.Versions.shadow apply false
-
     id(Plugins.graalvm_native) version Plugins.Versions.graalvm_native apply false
-
-    // for JMolecules
-    id("net.bytebuddy.byte-buddy-gradle-plugin") version "1.15.10" apply false
 }
 
 // NOTE: Github 에 등록된 Package 를 다운받기 위해서 사용합니다.
@@ -59,22 +53,12 @@ allprojects {
 }
 
 subprojects {
-    if (name == "bluetape4k-bom") {
-        return@subprojects
-    }
-
     apply {
         plugin<JavaLibraryPlugin>()
 
         // Kotlin 1.9.20 부터는 pluginId 를 지정해줘야 합니다.
         plugin("org.jetbrains.kotlin.jvm")
-
-        // plugin("jacoco")
-        plugin("maven-publish")
-
         plugin(Plugins.dependency_management)
-
-        plugin(Plugins.dokka)
         plugin(Plugins.testLogger)
     }
 
@@ -89,8 +73,8 @@ subprojects {
             languageVersion.set(JavaLanguageVersion.of(21))
         }
         compilerOptions {
-            languageVersion.set(KotlinVersion.KOTLIN_2_2)
-            apiVersion.set(KotlinVersion.KOTLIN_2_2)
+            languageVersion.set(KotlinVersion.KOTLIN_2_3)
+            apiVersion.set(KotlinVersion.KOTLIN_2_3)
             freeCompilerArgs = listOf(
                 "-Xjsr305=strict",
                 "-jvm-default=enable",
@@ -170,24 +154,6 @@ subprojects {
             finalizedBy(reportMerge)
             reportMerge.configure {
                 input.from(this@detekt.xmlReportFile)
-            }
-        }
-
-        // https://kotlin.github.io/dokka/1.6.0/user_guide/gradle/usage/
-        withType<org.jetbrains.dokka.gradle.DokkaTask>().configureEach {
-            val javadocDir = layout.buildDirectory.asFile.get().resolve("javadoc")
-            outputDirectory.set(javadocDir)
-            // outputDirectory.set(layout.buildDirectory.asFile.get().resolve("javadoc"))
-            dokkaSourceSets {
-                configureEach {
-                    includes.from("README.md")
-                }
-            }
-        }
-
-        dokka {
-            dokkaPublications.html {
-                outputDirectory.set(project.file("docs/api"))
             }
         }
 

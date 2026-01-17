@@ -69,7 +69,7 @@ class Ex01_TransactionIsolation: R2dbcExposedTestBase() {
                 defaultR2dbcIsolationLevel = IsolationLevel.REPEATABLE_READ
             },
         )
-        val manager: TransactionManager = TransactionManager.managerFor(db)!!
+        val manager: TransactionManager = TransactionManager.managerFor(db)
 
         suspendTransaction(db = db) {
             manager.defaultIsolationLevel shouldBeEqualTo IsolationLevel.REPEATABLE_READ
@@ -110,7 +110,7 @@ class Ex01_TransactionIsolation: R2dbcExposedTestBase() {
             }
         )
 
-        val manager = TransactionManager.managerFor(db)!!
+        val manager = TransactionManager.managerFor(db)
 
         suspendTransaction(db = db) {
             manager.defaultIsolationLevel shouldBeEqualTo IsolationLevel.READ_COMMITTED
