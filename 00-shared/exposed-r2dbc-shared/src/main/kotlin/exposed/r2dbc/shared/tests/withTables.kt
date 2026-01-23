@@ -17,6 +17,7 @@ suspend fun withTables(
     withDb(testDB, configure = configure) {
         runCatching { SchemaUtils.drop(*tables) }
         SchemaUtils.create(*tables)
+        commit()
 
         try {
             statement(testDB)
@@ -27,7 +28,8 @@ suspend fun withTables(
             try {
                 SchemaUtils.drop(*tables)
                 commit()
-            } catch (ex: Exception) {
+            } catch (ex: Throwable) {
+                println("Failed to drop tables: ${ex.message}")
                 val database = testDB.db!!
                 inTopLevelSuspendTransaction(
                     transactionIsolation = database.transactionManager.defaultIsolationLevel!!,

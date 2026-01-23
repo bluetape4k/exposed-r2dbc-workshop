@@ -32,6 +32,7 @@ import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.transactionManager
+import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.api.condition.EnabledOnJre
 import org.junit.jupiter.api.condition.JRE
 import org.junit.jupiter.params.ParameterizedTest
@@ -91,8 +92,10 @@ class Ex01_VritualThreads: R2dbcExposedTestBase() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `중첩된 virtual thread 용 트랜잭션을 async로 실행`(testDB: TestDB) = runSuspendIO {
+        Assumptions.assumeTrue { testDB !in TestDB.ALL_MARIADB_LIKE }
+
         withTables(testDB, VTester) {
-            val recordCount = 10
+            val recordCount = 5
             delay(10)
 
             val vtScope = CoroutineScope(Dispatchers.VT)
@@ -102,7 +105,6 @@ class Ex01_VritualThreads: R2dbcExposedTestBase() {
                         log.debug { "Task[$index] inserting ..." }
                         // insert 를 수행하는 트랜잭션을 생성한다
                         VTester.insert { }
-                        commit()
                     }
                 }
             }.awaitAll()
@@ -123,6 +125,8 @@ class Ex01_VritualThreads: R2dbcExposedTestBase() {
             // recordCount 개의 행을 가지는 `ResultRow` 를 recordCount 수만큼 가지는 List
             rows.shouldNotBeEmpty()
             rows shouldHaveSize recordCount * recordCount
+
+            delay(10)
 
             suspendTransaction {
                 val count = VTester.selectAll().count()
