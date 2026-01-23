@@ -35,7 +35,6 @@ import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.Sequence
 import org.jetbrains.exposed.v1.core.SortOrder
 import org.jetbrains.exposed.v1.core.Table
-import org.jetbrains.exposed.v1.core.UUIDColumnType
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IdTable
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
@@ -43,6 +42,8 @@ import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.greater
 import org.jetbrains.exposed.v1.core.inList
 import org.jetbrains.exposed.v1.core.isNull
+import org.jetbrains.exposed.v1.core.java.UUIDColumnType
+import org.jetbrains.exposed.v1.core.java.javaUUID
 import org.jetbrains.exposed.v1.core.like
 import org.jetbrains.exposed.v1.core.statements.InsertStatement
 import org.jetbrains.exposed.v1.core.stringLiteral
@@ -104,6 +105,8 @@ class Ex02_Insert: R2dbcExposedTestBase() {
                 it[name] = "name-4"
             }[idTable.id]
 
+            log.debug { "id1=$id1, id2=$id2, id3=$id3, id4=$id4" }
+            
             assertFailAndRollback("Unique constraint failed") {
                 idTable.insertAndGetId { it[name] = "name-1" }
             }
@@ -1053,7 +1056,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
         val randomPGUUID = object: CustomFunction<UUID>("gen_random_uuid", UUIDColumnType()) {}
 
         val tester = object: IdTable<UUID>("test_uuid_table") {
-            override val id: Column<EntityID<UUID>> = uuid("id").defaultExpression(randomPGUUID).entityId()
+            override val id: Column<EntityID<UUID>> = javaUUID("id").defaultExpression(randomPGUUID).entityId()
             override val primaryKey = PrimaryKey(id)
         }
 

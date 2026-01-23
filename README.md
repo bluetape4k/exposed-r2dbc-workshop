@@ -1,2 +1,3 @@
 # exposed-r2dbc-workshop
-Kotlin Exposed for R2dbc examples
+
+Examples for Kotlin Exposed 1.0.0 for R2DBC

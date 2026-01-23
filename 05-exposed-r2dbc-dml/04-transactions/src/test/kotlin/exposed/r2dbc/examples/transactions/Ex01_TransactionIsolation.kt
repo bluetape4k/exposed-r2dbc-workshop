@@ -10,6 +10,7 @@ import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabaseConfig
+import org.jetbrains.exposed.v1.r2dbc.transactions.R2dbcTransactionManager
 import org.jetbrains.exposed.v1.r2dbc.transactions.TransactionManager
 import org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
@@ -69,7 +70,7 @@ class Ex01_TransactionIsolation: R2dbcExposedTestBase() {
                 defaultR2dbcIsolationLevel = IsolationLevel.REPEATABLE_READ
             },
         )
-        val manager: TransactionManager = TransactionManager.managerFor(db)
+        val manager: R2dbcTransactionManager = TransactionManager.managerFor(db)
 
         suspendTransaction(db = db) {
             manager.defaultIsolationLevel shouldBeEqualTo IsolationLevel.REPEATABLE_READ

@@ -21,6 +21,7 @@ import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IdTable
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.java.javaUUID
 import org.jetbrains.exposed.v1.r2dbc.batchInsert
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
@@ -306,7 +307,7 @@ class Ex22_ColumnWithTransform: R2dbcExposedTestBase() {
          * ```
          */
         val tester = object: IdTable<CustomId>("tester") {
-            override val id: Column<EntityID<CustomId>> = uuid("id")
+            override val id: Column<EntityID<CustomId>> = javaUUID("id")
                 .transform(wrap = { CustomId(it) }, unwrap = { it.id })  // value class 는 이렇게 사용하면 된다.
                 .entityId()
 

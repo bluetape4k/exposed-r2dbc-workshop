@@ -47,6 +47,7 @@ import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.greaterEq
 import org.jetbrains.exposed.v1.core.isNotNull
+import org.jetbrains.exposed.v1.core.java.javaUUID
 import org.jetbrains.exposed.v1.core.less
 import org.jetbrains.exposed.v1.core.neq
 import org.jetbrains.exposed.v1.core.vendors.H2Dialect
@@ -250,7 +251,9 @@ class Ex10_DDL_Examples: R2dbcExposedTestBase() {
             val q = db.identifierManager.quoteString
 
             // MySQL 테이블 명에는 back-quote(`) 를 사용하지 않네요.
-            val tableName = if (currentDialectTest.needsQuotesWhenSymbolsInNames) {
+            val shouldBeQuoted = currentDialectTest.needsQuotesWhenSymbolsInNames &&
+                    db.identifierManager.needQuotes("unnamedTable$1")
+            val tableName = if (shouldBeQuoted) {
                 "$q${"unnamedTable$1".inProperCase()}$q"
             } else {
                 "unnamedTable$1".inProperCase()
@@ -1023,7 +1026,7 @@ class Ex10_DDL_Examples: R2dbcExposedTestBase() {
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `uuid column type`(testDB: TestDB) = runTest {
         val node = object: IntIdTable("node") {
-            val uuid = uuid("uuid")
+            val uuid = javaUUID("uuid")
         }
 
         withTables(testDB, node) {
