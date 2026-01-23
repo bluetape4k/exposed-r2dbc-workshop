@@ -6,6 +6,7 @@ import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.collections.intRangeOf
 import io.bluetape4k.concurrent.virtualthread.VT
 import io.bluetape4k.exposed.r2dbc.virtualThreadTransaction
+import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.CoroutineScope
@@ -17,8 +18,8 @@ import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldHaveSize
 import org.amshove.kluent.shouldNotBeEmpty
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.Table
@@ -31,10 +32,14 @@ import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.transactionManager
+import org.junit.jupiter.api.condition.EnabledOnJre
+import org.junit.jupiter.api.condition.JRE
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.collections.flatten
 
+@EnabledOnJre(JRE.JAVA_21)
 class Ex01_VritualThreads: R2dbcExposedTestBase() {
 
     companion object: KLoggingChannel()
@@ -70,7 +75,7 @@ class Ex01_VritualThreads: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `virtual threads 를 이용하여 순차 작업 수행하기`(testDB: TestDB) = runTest {
+    fun `virtual threads 를 이용하여 순차 작업 수행하기`(testDB: TestDB) = runSuspendIO {
         withTables(testDB, VTester) {
             val id = VTester.insertAndGetId { }
             commit()
@@ -85,7 +90,7 @@ class Ex01_VritualThreads: R2dbcExposedTestBase() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `중첩된 virtual thread 용 트랜잭션을 async로 실행`(testDB: TestDB) = runTest {
+    fun `중첩된 virtual thread 용 트랜잭션을 async로 실행`(testDB: TestDB) = runSuspendIO {
         withTables(testDB, VTester) {
             val recordCount = 10
             delay(10)
@@ -97,13 +102,17 @@ class Ex01_VritualThreads: R2dbcExposedTestBase() {
                         log.debug { "Task[$index] inserting ..." }
                         // insert 를 수행하는 트랜잭션을 생성한다
                         VTester.insert { }
+                        commit()
                     }
                 }
             }.awaitAll()
 
+            delay(10)
+            
             // 중첩 트랜잭션에서 virtual threads 를 이용하여 동시에 여러 작업을 수행한다.
+            val vtScope2 = CoroutineScope(Dispatchers.VT)
             val rows = List(recordCount) { index ->
-                vtScope.async {
+                vtScope2.async {
                     suspendTransaction {
                         log.debug { "Task[$index] selecting ..." }
                         VTester.selectAll().toList(CopyOnWriteArrayList())
@@ -113,21 +122,23 @@ class Ex01_VritualThreads: R2dbcExposedTestBase() {
 
             // recordCount 개의 행을 가지는 `ResultRow` 를 recordCount 수만큼 가지는 List
             rows.shouldNotBeEmpty()
+            rows shouldHaveSize recordCount * recordCount
 
-            val count = VTester.selectAll().count()
-            count shouldBeEqualTo recordCount.toLong()
+            suspendTransaction {
+                val count = VTester.selectAll().count()
+                count shouldBeEqualTo recordCount.toLong()
+            }
         }
     }
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `다수의 비동기 작업을 수행 후 대기`(testDB: TestDB) = runTest {
+    fun `다수의 비동기 작업을 수행 후 대기`(testDB: TestDB) = runSuspendIO {
         withTables(testDB, VTester) {
             val recordCount = 10
             val results = CopyOnWriteArrayList<Int>()
 
             val vtScope = CoroutineScope(Dispatchers.VT)
-
             List(recordCount) { index ->
                 vtScope.launch {
                     inTopLevelSuspendTransaction(
@@ -144,6 +155,7 @@ class Ex01_VritualThreads: R2dbcExposedTestBase() {
             }.joinAll()
 
             results.sorted() shouldBeEqualTo intRangeOf(1, recordCount)
+            results.count() shouldBeEqualTo recordCount
             VTester.selectAll().count() shouldBeEqualTo recordCount.toLong()
         }
     }
