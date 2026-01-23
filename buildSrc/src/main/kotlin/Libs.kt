@@ -314,6 +314,7 @@ object Libs {
     val bluetape4k_geoip2 = bluetape4k("geoip2")
     val bluetape4k_idgenerators = bluetape4k("idgenerators")
     val bluetape4k_images = bluetape4k("images")
+    val bluetape4k_javatimes = bluetape4k("javatimes")
     val bluetape4k_jwt = bluetape4k("jwt")
     val bluetape4k_math = bluetape4k("math")
     val bluetape4k_mutiny = bluetape4k("mutiny")
