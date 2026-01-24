@@ -141,7 +141,6 @@ class MovieRepository {
             .map { row ->
                 val movie = row.toMovieDTO()
                 val actor = row.toActorDTO()
-
                 movie to actor
             }
             .bufferUntilChanged { it.first.id }
