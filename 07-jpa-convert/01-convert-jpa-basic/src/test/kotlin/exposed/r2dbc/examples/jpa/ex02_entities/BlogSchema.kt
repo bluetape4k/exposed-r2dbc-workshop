@@ -1,9 +1,10 @@
 package exposed.r2dbc.examples.jpa.ex02_entities
 
+import io.bluetape4k.exposed.dao.entityToStringBuilder
 import io.bluetape4k.exposed.dao.idEquals
 import io.bluetape4k.exposed.dao.idHashCode
 import io.bluetape4k.exposed.dao.idValue
-import io.bluetape4k.exposed.dao.toStringBuilder
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.ReferenceOption
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
@@ -15,7 +16,7 @@ import org.jetbrains.exposed.v1.javatime.date
 import org.jetbrains.exposed.v1.jdbc.SizedIterable
 
 
-object BlogSchema {
+object BlogSchema: KLoggingChannel() {
 
     val blogTables = arrayOf(
         PostTable, PostDetailTable, PostCommentTable, PostTagTable, TagTable
@@ -122,7 +123,7 @@ object BlogSchema {
 
         override fun equals(other: Any?): Boolean = idEquals(other)
         override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
+        override fun toString(): String = entityToStringBuilder()
             .add("title", title)
             .toString()
     }
@@ -136,7 +137,7 @@ object BlogSchema {
 
         override fun equals(other: Any?): Boolean = idEquals(other)
         override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
+        override fun toString(): String = entityToStringBuilder()
             .add("post id", post.idValue)
             .add("createdOn", createdOn)
             .add("createdBy", createdBy)
@@ -152,7 +153,7 @@ object BlogSchema {
 
         override fun equals(other: Any?): Boolean = idEquals(other)
         override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
+        override fun toString(): String = entityToStringBuilder()
             .add("post id", post.idValue)
             .add("review", review)
             .toString()
@@ -166,7 +167,7 @@ object BlogSchema {
 
         override fun equals(other: Any?): Boolean = idEquals(other)
         override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
+        override fun toString(): String = entityToStringBuilder()
             .add("name", name)
             .toString()
     }

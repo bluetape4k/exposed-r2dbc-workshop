@@ -1,9 +1,10 @@
 package exposed.r2dbc.shared.entities
 
+import io.bluetape4k.exposed.dao.entityToStringBuilder
 import io.bluetape4k.exposed.dao.idEquals
 import io.bluetape4k.exposed.dao.idHashCode
-import io.bluetape4k.exposed.dao.toStringBuilder
 import io.bluetape4k.idgenerators.uuid.TimebasedUuid
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
@@ -13,7 +14,7 @@ import org.jetbrains.exposed.v1.dao.LongEntity
 import org.jetbrains.exposed.v1.dao.LongEntityClass
 
 
-class BoardSchema {
+class BoardSchema: KLoggingChannel() {
 
     /**
      * ```sql
@@ -88,7 +89,7 @@ class BoardSchema {
 
         override fun equals(other: Any?): Boolean = idEquals(other)
         override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
+        override fun toString(): String = entityToStringBuilder()
             .add("name", name)
             .toString()
     }
@@ -104,7 +105,7 @@ class BoardSchema {
 
         override fun equals(other: Any?): Boolean = idEquals(other)
         override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder().toString()
+        override fun toString(): String = entityToStringBuilder().toString()
     }
 
     class Category(id: EntityID<Int>): IntEntity(id) {
@@ -116,7 +117,7 @@ class BoardSchema {
 
         override fun equals(other: Any?): Boolean = idEquals(other)
         override fun hashCode(): Int = idHashCode()
-        override fun toString(): String = toStringBuilder()
+        override fun toString(): String = entityToStringBuilder()
             .add("uniqueId", uniqueId)
             .add("title", title)
             .toString()
