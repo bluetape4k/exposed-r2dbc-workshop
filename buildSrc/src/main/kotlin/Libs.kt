@@ -162,15 +162,6 @@ object Versions {
     const val ehcache = "3.11.1"        // https://mvnrepository.com/artifact/org.ehcache/ehcache
     const val cache2k = "2.6.1.Final"   // https://mvnrepository.com/artifact/org.cache2k/cache2k-core
 
-    const val ignite = "2.17.0"             // https://mvnrepository.com/artifact/org.apache.ignite/ignite-core
-    const val hazelcast = "5.6.0"           // https://mvnrepository.com/artifact/com.hazelcast/hazelcast
-
-    const val cassandra = "4.19.1"          // https://mvnrepository.com/artifact/org.apache.cassandra/java-driver-core
-    const val elasticsearch = "8.17.3"       // https://mvnrepository.com/artifact/org.elasticsearch.client/elasticsearch-rest-client
-
-    const val kafka = "3.8.1"           // https://mvnrepository.com/artifact/org.apache.kafka/kafka
-    const val spring_kafka = "3.3.10"    // https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka
-
     const val pods4k = "0.7.0"              // https://mvnrepository.com/artifact/com.danrusu.pods4k/bom
     const val eclipse_collections = "13.0.0"  // https://mvnrepository.com/artifact/org.eclipse.collections/eclipse-collections
     const val jctools = "4.0.5"             // https://mvnrepository.com/artifact/org.jctools/jctools-core
@@ -364,9 +355,6 @@ object Libs {
     val kotlinx_coroutines_core_common = kotlinxCoroutines("core-common")
     val kotlinx_coroutines_core_jvm = kotlinxCoroutines("core-jvm")
     val kotlinx_coroutines_debug = kotlinxCoroutines("debug")
-    val kotlinx_coroutines_jdk7 = kotlinxCoroutines("jdk7")
-    val kotlinx_coroutines_jdk8 = kotlinxCoroutines("jdk8")
-    val kotlinx_coroutines_jdk9 = kotlinxCoroutines("jdk9")
     val kotlinx_coroutines_reactive = kotlinxCoroutines("reactive")
     val kotlinx_coroutines_reactor = kotlinxCoroutines("reactor")
     val kotlinx_coroutines_rx2 = kotlinxCoroutines("rx2")
@@ -377,8 +365,8 @@ object Libs {
 
     // Coroutines Flow를 Reactor처럼 테스트 할 수 있도록 해줍니다.
     // 참고: https://github.com/cashapp/turbine/
-    const val turbine = "app.cash.turbine:turbine:1.1.0"
-    const val turbine_jvm = "app.cash.turbine:turbine-jvm:1.1.0"
+    const val turbine = "app.cash.turbine:turbine:1.2.1"
+    const val turbine_jvm = "app.cash.turbine:turbine-jvm:1.2.1"
 
     fun kotlinxSerialization(module: String, version: String = Versions.kotlinx_serialization) =
         "org.jetbrains.kotlinx:kotlinx-serialization-$module:$version"
@@ -1175,64 +1163,6 @@ object Libs {
     val redisson_spring_data_31 = redisson("redisson-spring-data-31")
     val redisson_spring_data_32 = redisson("redisson-spring-data-32")
 
-    // Cassandra
-    fun cassandra(module: String, version: String = Versions.cassandra): String =
-        "org.apache.cassandra:java-driver-$module:$version"
-
-    val cassandra_java_driver_core = cassandra("core")
-    val cassandra_java_driver_core_shaded = cassandra("core-shaded")
-    val cassandra_java_driver_mapper_processor = cassandra("mapper-processor")
-    val cassandra_java_driver_mapper_runtime = cassandra("mapper-runtime")
-    val cassandra_java_driver_metrics_micrometer = cassandra("metrics-micrometer")
-    val cassandra_java_driver_metrics_microprofile = cassandra("metrics-microprofile")
-    val cassandra_java_driver_query_builder = cassandra("query-builder")
-    val cassandra_java_driver_test_infra = cassandra("test-infra")
-
-    // ElasticSearch
-    fun elasticsearch(module: String) = "org.elasticsearch.client:elasticsearch-$module:${Versions.elasticsearch}"
-    val elasticsearch_rest_high_level_client = elasticsearch("rest-high-level-client")
-    val elasticsearch_rest_client = elasticsearch("rest-client")
-    val elasticsearch_rest_client_sniffer = elasticsearch("rest-client-sniffer")
-
-    // InfluxDB
-    const val influxdb_java = "org.influxdb:influxdb-java:2.24"  // https://mvnrepository.com/artifact/org.influxdb/influxdb-java
-    const val influxdb_spring_data = "com.github.miwurster:spring-data-influxdb:1.8"  // https://mvnrepository.com/artifact/com.github.miwurster/spring-data-influxdb
-
-    // RabbitMQ
-    const val amqp_client = "com.rabbitmq:amqp-client:5.23.0"  // https://mvnrepository.com/artifact/com.rabbitmq/amqp-client
-
-    // Kafka
-    fun kafka(module: String) = "org.apache.kafka:$module:${Versions.kafka}"
-    val kafka_clients = kafka("kafka-clients")
-    val kafka_generator = kafka("generator")
-    val kafka_metadata = kafka("kafka-metadata")
-    val kafka_raft = kafka("kafka-raft")
-    val kafka_server_common = kafka("kafka-server-common")
-    val kafka_storage = kafka("kafka-storage")
-    val kafka_storage_api = kafka("kafka-storage-api")
-    val kafka_streams = kafka("kafka-streams")
-    val kafka_streams_test_utils = kafka("kafka-streams-test-utils")
-    val kafka_2_13 = kafka("kafka_2.13")
-
-    // Spring Kafka
-    const val spring_kafka = "org.springframework.kafka:spring-kafka:${Versions.spring_kafka}"
-    const val spring_kafka_test = "org.springframework.kafka:spring-kafka-test:${Versions.spring_kafka}"
-
-    // Pulsar
-    const val pulsar_client = "org.apache.pulsar:pulsar-client:4.0.1"  // https://mvnrepository.com/artifact/org.apache.pulsar/pulsar-client
-
-    // Nats
-    const val jnats = "io.nats:jnats:2.20.5"     // https://mvnrepository.com/artifact/io.nats/jnats
-    const val nats_spring = "io.nats:nats-spring:0.6.0-3.1"  // https://mvnrepository.com/artifact/io.nats/nats-spring
-    const val nats_spring_cloud_stream_binder = "io.nats:nats-spring-cloud-stream-binder:0.6.0-3.1" //https://mvnrepository.com/artifact/io.nats/nats-spring-cloud-stream-binder
-
-    // Zipkin
-    const val zipkin_brave = "io.zipkin.brave:brave:6.0.3"              // https://mvnrepository.com/artifact/io.zipkin.brave/brave
-    const val zipkin_brave_tests = "io.zipkin.brave:brave-tests:6.0.3"  // https://mvnrepository.com/artifact/io.zipkin.brave/brave-tests
-
-    // Hashicorp Vault
-    const val vault_java_driver = "com.bettercloud:vault-java-driver:5.1.0"
-
     // Hibernate
     fun hibernate(module: String) = "org.hibernate.orm:hibernate-$module:${Versions.hibernate}"
     val hibernate_core = hibernate("core")
@@ -1380,37 +1310,6 @@ object Libs {
     const val ehcache = "org.ehcache:ehcache:${Versions.ehcache}"
     const val ehcache_clustered = "org.ehcache:ehcache-clustered:${Versions.ehcache}"
     const val ehcache_transactions = "org.ehcache:ehcache-transactions:${Versions.ehcache}"
-
-    // Apache Ignite
-    fun ignite(module: String, version: String = Versions.ignite) = "org.apache.ignite:ignite-$module:$version"
-
-    val ignite_aop = ignite("aop")
-    val ignite_aws = ignite("aws")
-    val ignite_cassandra_store = ignite("cassandra-store")
-    val ignite_clients = ignite("client")
-    val ignite_compress = ignite("compress")
-    val ignite_core = ignite("core")
-    val ignite_direct_io = ignite("direct-io")
-    val ignite_hibernate_core = ignite("hibernate-core")
-    val ignite_indexing = ignite("indexing")
-    val ignite_jta = ignite("jta")
-    val ignite_kafka = ignite("kafka")
-    val ignite_kubenetes = ignite("kubenetes")
-    val ignite_rest_http = ignite("rest-http")
-    val ignite_slf4j = ignite("slf4j")
-    val ignite_spring = ignite("spring")
-    val ignite_tools = ignite("tools")
-    val ignite_web = ignite("web")
-    val ignite_zookeeper = ignite("zookeeper")
-
-    // https://ignite.apache.org/docs/latest/extensions-and-integrations/spring/spring-data
-    val ignite_spring_data_2_2_ext = ignite("spring-data-2.2-ext", "2.0.0")
-
-    // https://ignite.apache.org/docs/latest/extensions-and-integrations/spring/spring-caching
-    val ignite_spring_cache_ext = ignite("spring-cache-ext", "2.0.0")
-
-    const val hazelcast = "com.hazelcast:hazelcast:${Versions.hazelcast}"
-    const val hazelcast_spring = "com.hazelcast:hazelcast-spring:${Versions.hazelcast}"
 
     // CSV parsers
     const val univocity_parsers = "com.univocity:univocity-parsers:2.9.1" // https://mvnrepository.com/artifact/com.univocity/univocity-parsers
