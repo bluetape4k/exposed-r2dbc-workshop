@@ -35,6 +35,9 @@ dependencies {
     implementation(Libs.bluetape4k_testcontainers)
     testImplementation(Libs.bluetape4k_spring_tests)
 
+    // Jackson
+    implementation(Libs.bluetape4k_jackson)
+
     // Exposed
     implementation(Libs.exposed_r2dbc)
     implementation(Libs.exposed_core)
@@ -86,10 +89,6 @@ dependencies {
     implementation(Libs.reactor_netty)
     implementation(Libs.reactor_kotlin_extensions)
     testImplementation(Libs.reactor_test)
-
-    // Monitoring
-    implementation(Libs.micrometer_core)
-    implementation(Libs.micrometer_registry_prometheus)
 
     // SpringDoc - OpenAPI 3.0
     implementation(Libs.springdoc_openapi_starter_webflux_ui)

@@ -76,6 +76,12 @@ dependencies {
         exclude(module = "mockito-core")
     }
 
+    // Jackson
+    implementation(Libs.bluetape4k_jackson)
+    implementation(Libs.jackson_core)
+    implementation(Libs.jackson_module_kotlin)
+    implementation(Libs.jackson_module_blackbird)
+
     // Redisson Cache
     implementation(Libs.redisson)
 
@@ -102,10 +108,6 @@ dependencies {
     implementation(Libs.reactor_netty)
     implementation(Libs.reactor_kotlin_extensions)
     testImplementation(Libs.reactor_test)
-
-    // Monitoring
-    implementation(Libs.micrometer_core)
-    implementation(Libs.micrometer_registry_prometheus)
 
     // SpringDoc - OpenAPI 3.0
     implementation(Libs.springdoc_openapi_starter_webflux_ui)

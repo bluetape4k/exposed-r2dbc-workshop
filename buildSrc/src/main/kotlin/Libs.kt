@@ -72,9 +72,9 @@ object Versions {
     const val kotlinx_benchmark = Plugins.Versions.kotlinx_benchmark
 
     const val spring_boot = Plugins.Versions.spring_boot
-    const val spring_cloud = "2024.0.3"     // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-dependencies
+    const val spring_cloud = "2025.0.1"     // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-dependencies
     const val spring_integration = "6.4.5"  // https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-core
-    const val reactor_bom = "2024.0.13"      // https://mvnrepository.com/artifact/io.projectreactor/reactor-bom
+    const val reactor_bom = "2024.0.14"      // https://mvnrepository.com/artifact/io.projectreactor/reactor-bom
     const val spring_statemachine = "4.0.1" // https://mvnrepository.com/artifact/org.springframework.statemachine/spring-statemachine-core
     const val spring_modulith = "1.4.5"     // https://mvnrepository.com/artifact/org.springframework.modulith/spring-modulith-bom
 
@@ -114,13 +114,9 @@ object Versions {
     const val okio = "3.16.1"         // https://mvnrepository.com/artifact/com.squareup.okio/okio
     const val asynchttpclient = "2.12.4"  // https://mvnrepository.com/artifact/org.asynchttpclient/async-http-client
 
-    const val jackson = "2.20.0" // https://mvnrepository.com/artifact/com.fasterxml.jackson/jackson-bom
-    const val jackson3 = "3.0.3" // https://mvnrepository.com/artifact/tools.jackson/jackson-bom
+    const val jackson = "2.20.2" // https://mvnrepository.com/artifact/com.fasterxml.jackson/jackson-bom
+    const val jackson3 = "3.0.4" // https://mvnrepository.com/artifact/tools.jackson/jackson-bom
     const val fastjson2 = "2.0.60" // https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2
-    const val jjwt = "0.11.5"    // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api
-
-    const val mapstruct = "1.6.3" // https://mvnrepository.com/artifact/org.mapstruct/mapstruct
-    const val reflectasm = "1.11.9"     // https://mvnrepository.com/artifact/com.esotericsoftware/reflectasm
 
     const val mongo_driver = "5.5.1"   // https://mvnrepository.com/artifact/org.mongodb/mongodb-driver-sync
     const val lettuce = "6.8.1.RELEASE" // https://mvnrepository.com/artifact/io.lettuce/lettuce-core
@@ -139,24 +135,9 @@ object Versions {
     const val r2dbc = "1.0.0.RELEASE"        // https://mvnrepository.com/artifact/io.r2dbc/r2dbc-spi
     const val agroal = "2.8"          // https://mvnrepository.com/artifact/io.agroal/agroal-api
 
-    const val blaze_persistence = "3.29.3" // https://mvnrepository.com/artifact/io.quarkus.platform/quarkus-blaze-persistence-bom
-    const val javers = "7.9.0"             // https://mvnrepository.com/artifact/org.javers/javers-core
-
     const val slf4j = "2.0.17"      // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     const val logback = "1.5.18"     // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
     const val log4j = "2.25.1"      // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
-
-    const val prometheus = "0.16.0"     // https://mvnrepository.com/artifact/io.prometheus/simpleclient
-
-    const val micrometer = "1.16.1"         // https://mvnrepository.com/artifact/io.micrometer/micrometer-core
-    const val micrometerTracing = "1.6.1"   // https://mvnrepository.com/artifact/io.micrometer/micrometer-tracing
-    const val micrometerContextPropagation = "1.2.0" // https://mvnrepository.com/artifact/io.micrometer/context-propagation
-
-    const val opentelemetry = "1.57.0" // https://mvnrepository.com/artifact/io.opentelemetry/opentelemetry-bom
-    const val opentelemetryAlpha = "$opentelemetry-alpha" // https://mvnrepository.com/artifact/io.opentelemetry/opentelemetry-bom-alpha
-
-    const val opentelemetryJavaAgent = "2.23.0" // https://mvnrepository.com/artifact/io.opentelemetry.javaagent/opentelemetry-javaagent
-    const val opentelemetryInstrumentationAlpha = "$opentelemetryJavaAgent-alpha" // https://mvnrepository.com/artifact/io.opentelemetry.instrumentation/opentelemetry-instrumentation-bom-alpha
 
     const val caffeine = "3.2.3"        // https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
     const val ehcache = "3.11.1"        // https://mvnrepository.com/artifact/org.ehcache/ehcache
@@ -364,8 +345,7 @@ object Libs {
     val kotlinx_coroutines_test_jvm = kotlinxCoroutines("test-jvm")
 
     // Coroutines Flow를 Reactor처럼 테스트 할 수 있도록 해줍니다.
-    // 참고: https://github.com/cashapp/turbine/
-    const val turbine = "app.cash.turbine:turbine:1.2.1"
+    const val turbine = "app.cash.turbine:turbine:1.2.1"  // 참고: https://github.com/cashapp/turbine/
     const val turbine_jvm = "app.cash.turbine:turbine-jvm:1.2.1"
 
     fun kotlinxSerialization(module: String, version: String = Versions.kotlinx_serialization) =
@@ -884,11 +864,6 @@ object Libs {
     const val okio = "com.squareup.okio:okio:${Versions.okio}"
     const val okio_fakefilesystem = "com.squareup.okio:okio-fakefilesystem:${Versions.okio}"
 
-
-    // MapStruct
-    const val mapstruct = "org.mapstruct:mapstruct:${Versions.mapstruct}"
-    const val mapstruct_processor = "org.mapstruct:mapstruct-processor:${Versions.mapstruct}"
-
     // Jackson
     const val jackson_bom = "com.fasterxml.jackson:jackson-bom:${Versions.jackson}"
 
@@ -899,6 +874,7 @@ object Libs {
 
     fun jacksonCore(module: String, version: String = Versions.jackson) = jackson("core", module, version)
 
+    val jackson_annotations = jacksonCore("annotations", "2.10")
     val jackson_core = jacksonCore("core")
     val jackson_databind = jacksonCore("databind")
 
@@ -981,21 +957,9 @@ object Libs {
     val fastjson2_kotlin = fastjson2("fastjson2-kotlin")
     val fastjson2_extension_spring6 = fastjson2("fastjson2-extension-spring6")
 
-
     // Json assertions
-    const val jsonpath = "com.jayway.jsonpath:json-path:2.9.0"  // https://mvnrepository.com/artifact/com.jayway.jsonpath/json-path
+    const val jsonpath = "com.jayway.jsonpath:json-path:2.10.0"  // https://mvnrepository.com/artifact/com.jayway.jsonpath/json-path
     const val jsonassert = "org.skyscreamer:jsonassert:1.5.3"   // https://mvnrepository.com/artifact/org.skyscreamer/jsonassert
-
-    // GSON
-    const val gson = "com.google.code.gson:gson:2.11.0"    // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    const val gson_javatime_serializers = "com.fatboyindustrial.gson-javatime-serialisers:gson-javatime-serialisers:1.1.2"
-
-    // JWT
-    fun jjwt(module: String) = "io.jsonwebtoken:jjwt-$module:${Versions.jjwt}"
-    val jjwt_api = jjwt("api")
-    val jjwt_impl = jjwt("impl")
-    val jjwt_jackson = jjwt("jackson")
-    val jjwt_extensions = jjwt("extensions")
 
     // Compression
     const val snappy_java = "org.xerial.snappy:snappy-java:1.1.10.8"  // https://mvnrepository.com/artifact/org.xerial.snappy/snappy-java
@@ -1040,103 +1004,6 @@ object Libs {
     const val reactor_addons_reactor_extra = "io.projectreactor.addons:reactor-extra"
     const val reactor_addons_reactor_pool = "io.projectreactor.addons:reactor-pool"
     const val reactor_addons_reactor_pool_micrometer = "io.projectreactor.addons:reactor-pool-micrometer"
-
-    const val blockhound = "io.projectreactor.tools:blockhound:${Versions.blockhound}"
-    const val blockhound_junit_platform = "io.projectreactor.tools:blockhound-junit-platform:${Versions.blockhound}"
-    
-    // Prometheus
-    fun prometheusSimple(module: String) = "io.prometheus:simpleclient_$module:${Versions.prometheus}"
-    const val prometheus_simpleclient = "io.prometheus:simpleclient:${Versions.prometheus}"
-    val prometheus_simpleclient_common = prometheusSimple("common")
-    val prometheus_simpleclient_dropwizard = prometheusSimple("dropwizard")
-    val prometheus_simpleclient_httpserver = prometheusSimple("httpserver")
-    val prometheus_simpleclient_pushgateway = prometheusSimple("pushgateway")
-    val prometheus_simpleclient_spring_boot = prometheusSimple("spring_boot")
-
-    val prometheus_simpleclient_tracer_common = prometheusSimple("tracer_common")
-    val prometheus_simpleclient_tracer_otel = prometheusSimple("tracer_otel")
-    val prometheus_simpleclient_tracer_otel_agent = prometheusSimple("tracer_otel_agent")
-
-    // Micrometer
-    fun micrometer(module: String) = "io.micrometer:micrometer-$module"
-    val micrometer_bom = micrometer("bom" + ":" + Versions.micrometer)
-    val micrometer_commons = micrometer("commons")
-    val micrometer_core = micrometer("core")
-    val micrometer_observation = micrometer("observation")
-    val micrometer_observation_test = micrometer("observation-test")
-    val micrometer_test = micrometer("test")
-    val micrometer_registry_cloudwatch = micrometer("registry-cloudwatch")
-    val micrometer_registry_datadog = micrometer("registry-datadog")
-    val micrometer_registry_elastic = micrometer("registry-elastic")
-    val micrometer_registry_graphite = micrometer("registry-graphite")
-    val micrometer_registry_new_relic = micrometer("registry-new-relic")
-    val micrometer_registry_prometheus = micrometer("registry-prometheus")
-    val micrometer_registry_jmx = micrometer("registry-jmx")
-
-    // Micrometer Tracing
-    fun micrometerTracing(module: String) = "io.micrometer:micrometer-tracing-$module:${Versions.micrometerTracing}"
-    val micrometer_tracing_bom = micrometerTracing("bom")
-    const val micrometer_tracing = "io.micrometer:micrometer-tracing:${Versions.micrometerTracing}"
-    val micrometer_tracing_bridge_brave = micrometerTracing("bridge-brave")
-    val micrometer_tracing_bridge_otel = micrometerTracing("bridge-otel")
-    val micrometer_tracing_integeration_test = micrometerTracing("integration-test")
-    val micrometer_tracing_test = micrometerTracing("test")
-
-    // Micrometer Context Propagation
-    const val micrometer_context_propagation =
-        "io.micrometer:context-propagation:${Versions.micrometerContextPropagation}"
-
-
-    // OpenTelemetry
-    fun opentelemetry(module: String): String = "io.opentelemetry:opentelemetry-$module"
-
-    fun opentelemetryInstrumentation(module: String): String = "io.opentelemetry.instrumentation:opentelemetry-$module"
-
-    val opentelemetry_bom = opentelemetry("bom:${Versions.opentelemetry}")
-    val opentelemetry_alpha_bom = opentelemetry("bom-alpha:${Versions.opentelemetryAlpha}")
-    val opentelemetry_instrumentation_bom_alpha =
-        opentelemetryInstrumentation("instrumentation-bom-alpha:${Versions.opentelemetryInstrumentationAlpha}")
-
-    const val opentelemetry_javaagent_remote_path = "https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v${Versions.opentelemetryJavaAgent}/opentelemetry-javaagent.jar"
-    const val opentelemetry_javaagent_local_path = "otel/opentelemetry-javaagent.jar"
-
-    val opentelemetry_api = opentelemetry("api")
-    val opentelemetry_extension_aws = opentelemetry("extension-aws")
-    val opentelemetry_extension_kotlin = opentelemetry("extension-kotlin")
-    val opentelemetry_extension_annotations = opentelemetry("extension-annotations")
-
-    val opentelemetry_exporter_logging = opentelemetry("exporter-logging")
-    val opentelemetry_exporter_otlp = opentelemetry("exporter-otlp")
-    val opentelemetry_exporter_otlp_metrics = opentelemetry("exporter-otlp-metrics")
-    val opentelemetry_exporter_otlp_trace = opentelemetry("exporter-otlp-trace")
-    val opentelemetry_exporter_otlp_http_metrics = opentelemetry("exporter-otlp-http-metrics")
-    val opentelemetry_exporter_otlp_http_trace = opentelemetry("exporter-otlp-http-trace")
-    val opentelemetry_exporter_prometheus = opentelemetry("exporter-prometheus")
-    val opentelemetry_exporter_zipkin = opentelemetry("exporter-zipkin")
-
-    val opentelemetry_sdk = opentelemetry("sdk")
-    val opentelemetry_sdk_metrics = opentelemetry("sdk-metrics")
-    val opentelemetry_sdk_logs = opentelemetry("sdk-logs")
-    val opentelemetry_sdk_trace = opentelemetry("sdk-trace")
-    val opentelemetry_sdk_testing = opentelemetry("sdk-testing")
-    val opentelemetry_sdk_extensions_aws = opentelemetry("sdk-extension-aws")
-    val opentelemetry_sdk_extensions_resources = opentelemetry("sdk-extension-resources")
-    val opentelemetry_sdk_extensions_autoconfigure = opentelemetry("sdk-extension-autoconfigure")
-
-    // Opentelemetry Instrumentation
-    //
-    // https://mvnrepository.com/artifact/io.opentelemetry.instrumentation/opentelemetry-logback-appender-1.0
-    val opentelemetry_logback_appender_1_0 = opentelemetryInstrumentation("logback-appender-1.0")
-
-    // https://mvnrepository.com/artifact/io.opentelemetry.instrumentation/opentelemetry-logback-mdc-1.0
-    val opentelemetry_logback_mdc_1_0 = opentelemetryInstrumentation("logback-mdc-1.0")
-
-    val opentelemetry_spring_boot_starter = opentelemetryInstrumentation("spring-boot-starter")
-
-    const val latencyUtils = "org.latencyutils:LatencyUtils:2.0.3"
-    const val hdrHistogram = "org.hdrhistogram:HdrHistogram:2.1.11"
-
-    const val reflectasm = "com.esotericsoftware:reflectasm:${Versions.reflectasm}"
 
     // mongodb 4.x
     fun mongo(module: String, version: String = Versions.mongo_driver) = "org.mongodb:$module:$version"
@@ -1231,36 +1098,6 @@ object Libs {
     const val mybatis_spring = "org.mybatis:mybatis-spring:3.0.4"   // https://mvnrepository.com/artifact/org.mybatis/mybatis-spring
     const val mybatis_dynamic_sql = "org.mybatis.dynamic-sql:mybatis-dynamic-sql:1.5.2"  // https://mvnrepository.com/artifact/org.mybatis.dynamic-sql/mybatis-dynamic-sql
 
-    // blaze-persistence
-    fun blazePersistence(module: String, version: String = Versions.blaze_persistence): String =
-        "com.blazebit:blaze-persistence-$module:$version"
-
-    val blaze_persistence_core_api = blazePersistence("core-api")
-    val blaze_persistence_core_impl = blazePersistence("core-impl")
-    val blaze_persistence_entity_view_processor = blazePersistence("entity-view-processor")
-    val blaze_persistence_jpa_criteria_api = blazePersistence("jpa-criteria-api")
-    val blaze_persistence_jpa_criteria_impl = blazePersistence("jpa-criteria-impl")
-
-    fun blazePersistenceIntegration(module: String) = blazePersistence("integration-$module")
-
-    val blaze_persistence_integration_quarkus = blazePersistenceIntegration("quarkus")
-    val blaze_persistence_integration_hibernate_5 = blazePersistenceIntegration("hibernate-5")
-    val blaze_persistence_integration_hibernate_5_6 = blazePersistenceIntegration("hibernate-5.6")
-    val blaze_persistence_integration_jackson = blazePersistenceIntegration("jackson")
-    val blaze_persistence_integration_jaxrs_jackson = blazePersistenceIntegration("jaxrs-jackson")
-    val blaze_persistence_integration_entity_view_spring = blazePersistenceIntegration("entity-view-spring")
-
-    // Javers (https://javers.org - Java Audit library)
-    fun javers(module: String) = "org.javers:javers-$module:${Versions.javers}"
-    val javers_core = javers("core")
-    val javers_spring = javers("spring")
-    val javers_spring_jpa = javers("spring-jpa")
-    val javers_spring_mongo = javers("spring-mongo")
-    val javers_persistence_mongo = javers("persistence-mongo")
-    val javers_persistence_sql = javers("persistence-sql")
-    val javers_spring_boot_starter_sql = javers("spring-boot-starter-sql")
-
-    // MyBatis Mapping 에 사용한다
     // MyBatis Mapping 에 사용한다
     const val byte_buddy = "net.bytebuddy:byte-buddy:1.17.8"   // https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy
     const val byte_buddy_agent = "net.bytebuddy:byte-buddy-agent:1.17.8"   // https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy-agent
@@ -1276,13 +1113,12 @@ object Libs {
     val agroal_spring_boot_starter = agroal("spring-boot-starter")
 
     const val mysql_connector_j = "com.mysql:mysql-connector-j:9.5.0"  // https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
-    const val mariadb_java_client = "org.mariadb.jdbc:mariadb-java-client:3.5.6"  // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
-    const val postgresql_driver = "org.postgresql:postgresql:42.7.8"  // https://mvnrepository.com/artifact/org.postgresql/postgresql
+    const val mariadb_java_client = "org.mariadb.jdbc:mariadb-java-client:3.5.7"  // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
+    const val postgresql_driver = "org.postgresql:postgresql:42.7.9"  // https://mvnrepository.com/artifact/org.postgresql/postgresql
     const val pgjdbc_ng = "com.impossibl.pgjdbc-ng:pgjdbc-ng:0.8.9"  // https://mvnrepository.com/artifact/com.impossibl.pgjdbc-ng/pgjdbc-ng
     const val oracle_ojdbc8 = "com.oracle.ojdbc:ojdbc8:19.3.0.0"
-    const val clickhouse_jdbc = "com.clickhouse:clickhouse-jdbc:0.9.4" // https://mvnrepository.com/artifact/com.clickhouse/clickhouse-jdbc
-
-    // NOTE: Apache Ignite 에서는 꼭 1.4.197 를 써야 합니다.
+    const val clickhouse_jdbc = "com.clickhouse:clickhouse-jdbc:0.9.6" // https://mvnrepository.com/artifact/com.clickhouse/clickhouse-jdbc
+    
     const val h2 = "com.h2database:h2:1.4.197"
 
     // MyBatis 테스트 시에 h2 v2 를 사용한다

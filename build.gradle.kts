@@ -176,11 +176,6 @@ subprojects {
             mavenBom(Libs.spring_modulith_bom)
 
             mavenBom(Libs.feign_bom)
-            mavenBom(Libs.micrometer_bom)
-            mavenBom(Libs.micrometer_tracing_bom)
-            mavenBom(Libs.opentelemetry_bom)
-            mavenBom(Libs.opentelemetry_alpha_bom)
-            mavenBom(Libs.opentelemetry_instrumentation_bom_alpha)
             mavenBom(Libs.log4j_bom)
             mavenBom(Libs.testcontainers_bom)
             mavenBom(Libs.junit_bom)
@@ -346,8 +341,6 @@ subprojects {
             dependency(Libs.objenesis)
             dependency(Libs.ow2_asm)
 
-            dependency(Libs.reflectasm)
-
             dependency(Libs.junit_bom)
             dependency(Libs.junit_jupiter)
             dependency(Libs.junit_jupiter_api)
@@ -371,16 +364,6 @@ subprojects {
 
             dependency(Libs.bouncycastle_bcpkix)
             dependency(Libs.bouncycastle_bcprov)
-
-            // Prometheus
-            dependency(Libs.prometheus_simpleclient)
-            dependency(Libs.prometheus_simpleclient_common)
-            dependency(Libs.prometheus_simpleclient_httpserver)
-            dependency(Libs.prometheus_simpleclient_pushgateway)
-            dependency(Libs.prometheus_simpleclient_spring_boot)
-            dependency(Libs.prometheus_simpleclient_tracer_common)
-            dependency(Libs.prometheus_simpleclient_tracer_otel)
-            dependency(Libs.prometheus_simpleclient_tracer_otel_agent)
 
             // OW2 ASM
             dependency(Libs.ow2_asm)
