@@ -9,6 +9,7 @@ import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldContainSame
 import org.amshove.kluent.shouldHaveSize
 import org.amshove.kluent.shouldNotBeNull
+import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
 import org.jetbrains.exposed.v1.core.vendors.ColumnMetadata
 import org.jetbrains.exposed.v1.core.vendors.H2Dialect
@@ -34,9 +35,9 @@ class Ex01_Connection: R2dbcExposedTestBase() {
      * ```
      */
     object People: LongIdTable() {
-        val firstName = varchar("firstname", 80).nullable()
-        val lastName = varchar("lastname", 42).default("Doe")
-        val age = integer("age").default(18)
+        val firstName: Column<String?> = varchar("firstname", 80).nullable()
+        val lastName: Column<String> = varchar("lastname", 42).default("Doe")
+        val age: Column<Int> = integer("age").default(18)
     }
 
     /**
@@ -150,8 +151,8 @@ class Ex01_Connection: R2dbcExposedTestBase() {
                 tableConstraints(listOf(child))
             }
 
-            constraints.forEach { (key, constraint) ->
-                log.debug { "key: $key, constraint: $constraint" }
+            constraints.forEach { (key, constraints) ->
+                log.debug { "key: $key, constraints: $constraints" }
             }
             constraints.keys shouldHaveSize 2   // parent, child
         }

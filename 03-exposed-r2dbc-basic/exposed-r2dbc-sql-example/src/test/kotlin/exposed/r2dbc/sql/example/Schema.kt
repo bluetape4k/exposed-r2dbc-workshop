@@ -2,6 +2,7 @@ package exposed.r2dbc.sql.example
 
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.single
 import org.amshove.kluent.shouldBeEqualTo
 import org.jetbrains.exposed.v1.core.Table
@@ -13,7 +14,7 @@ import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 
-object Schema {
+object Schema: KLoggingChannel() {
 
     /**
      * 도시 정보를 저장하는 테이블

@@ -71,7 +71,7 @@ class Ex02_H2_MultiDatabase {
     }
 
     @Test
-    fun `transaction with database`() = runSuspendIO {
+    fun `transaction with separated database`() = runSuspendIO {
         suspendTransaction(db = db1) {
             CountryTable.exists().shouldBeFalse()
             SchemaUtils.create(CountryTable)
@@ -148,7 +148,7 @@ class Ex02_H2_MultiDatabase {
     }
 
     @Test
-    fun `Embedded Inserts In Different Database Depth2`() = runSuspendIO {
+    fun `Embedded Inserts In Different Database Depth 2`() = runSuspendIO {
         suspendTransaction(db = db1) {
             SchemaUtils.drop(DMLTestData.Cities)
             SchemaUtils.create(DMLTestData.Cities)
@@ -279,10 +279,9 @@ class Ex02_H2_MultiDatabase {
     @OptIn(ExperimentalCoroutinesApi::class, DelicateCoroutinesApi::class)
     @Test // this test always fails for one reason or another
     fun `when the default database is changed, coroutines should respect that`(): Unit = runSuspendIO {
-//        db1.name shouldBeEqualTo "jdbc:h2:mem:db1" // These two asserts fail sometimes for reasons that escape me
-//        db2.name shouldBeEqualTo "jdbc:h2:mem:db2" // but if you run just these tests one at a time, they pass.
 
         val coroutineDispatcher1 = newSingleThreadContext("first")
+
         TransactionManager.defaultDatabase = db1
         withContext(coroutineDispatcher1) {
             suspendTransaction {
@@ -294,6 +293,7 @@ class Ex02_H2_MultiDatabase {
                 }
             }
         }
+
         TransactionManager.defaultDatabase = db2
         withContext(coroutineDispatcher1) {
             suspendTransaction {

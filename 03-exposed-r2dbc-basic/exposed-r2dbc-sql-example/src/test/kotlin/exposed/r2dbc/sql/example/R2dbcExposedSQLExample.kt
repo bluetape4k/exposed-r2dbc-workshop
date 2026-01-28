@@ -103,6 +103,8 @@ class R2dbcExposedSQLExample: R2dbcExposedTestBase() {
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `manual inner join`(testDB: TestDB) = runSuspendIO {
         withCityUsers(testDB) {
+            var userCount = 0
+            
             UserTable
                 .innerJoin(CityTable)
                 .select(UserTable.name, CityTable.name)
@@ -110,8 +112,11 @@ class R2dbcExposedSQLExample: R2dbcExposedTestBase() {
                 .andWhere { UserTable.id eq "jane" }
                 .andWhere { UserTable.cityId eq CityTable.id }  // manual join (굳이 할 필요 없음)
                 .collect {
+                    userCount++
                     log.info { "${it[UserTable.name]} lives in ${it[CityTable.name]}" }
                 }
+
+            userCount shouldBeEqualTo 1
         }
     }
 
@@ -165,6 +170,7 @@ class R2dbcExposedSQLExample: R2dbcExposedTestBase() {
             val query = CityTable.innerJoin(UserTable)
                 .select(CityTable.name, UserTable.id.count())
                 .groupBy(CityTable.name)
+                .orderBy(CityTable.name)
 
             query.collect {
                 val cityName = it[CityTable.name]

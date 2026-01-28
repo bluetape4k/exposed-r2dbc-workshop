@@ -7,8 +7,6 @@ import io.bluetape4k.logging.debug
 import io.bluetape4k.spring.tests.httpDelete
 import io.bluetape4k.spring.tests.httpGet
 import io.bluetape4k.spring.tests.httpPost
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
@@ -17,6 +15,8 @@ import org.amshove.kluent.shouldNotBeNull
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.reactive.server.expectBody
+import org.springframework.test.web.reactive.server.expectBodyList
 import org.springframework.test.web.reactive.server.returnResult
 
 class ActorControllerTest(
@@ -51,9 +51,8 @@ class ActorControllerTest(
         val lastName = "Depp"
 
         val depp = client.httpGet("/actors?lastName=$lastName")
-            .returnResult<ActorDTO>().responseBody
-            .asFlow()
-            .toList()
+            .expectBodyList<ActorDTO>()
+            .returnResult().responseBody!!
 
         log.debug { "actors=$depp" }
         depp.shouldNotBeNull() shouldHaveSize 1
@@ -64,9 +63,8 @@ class ActorControllerTest(
         val firstName = "Angelina"
 
         val angelinas = client.httpGet("/actors?firstName=$firstName")
-            .returnResult<ActorDTO>().responseBody
-            .asFlow()
-            .toList()
+            .expectBodyList<ActorDTO>()
+            .returnResult().responseBody!!
 
         log.debug { "actors=$angelinas" }
         angelinas.shouldNotBeNull() shouldHaveSize 2
@@ -78,8 +76,8 @@ class ActorControllerTest(
 
         val newActor = client
             .httpPost("/actors", actor)
-            .returnResult<ActorDTO>().responseBody
-            .awaitSingle()
+            .expectBody<ActorDTO>()
+            .returnResult().responseBody!!
 
         log.debug { "newActor=$newActor" }
 
@@ -101,8 +99,9 @@ class ActorControllerTest(
 
         val deletedCount = client
             .httpDelete("/actors/${newActor.id}")
-            .returnResult<Int>().responseBody
-            .awaitSingle()
+            .expectBody<Int>()
+            .returnResult().responseBody
+            .shouldNotBeNull()
 
         log.debug { "deletedCount=$deletedCount" }
 

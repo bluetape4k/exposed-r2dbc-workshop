@@ -2,15 +2,12 @@ package exposed.r2dbc.workshop.springwebflux.domain
 
 import exposed.r2dbc.workshop.springwebflux.AbstractSpringWebfluxTest
 import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.ActorTable
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.junit5.coroutines.SuspendedJobTester
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.support.uninitialized
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
 import org.amshove.kluent.shouldNotBeEmpty
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.selectAll
@@ -37,7 +34,7 @@ class DomainSQLTest: AbstractSpringWebfluxTest() {
             val actors = suspendTransaction {
                 ActorTable.selectAll()
                     .map { it.toActorDTO() }
-                    .toList()
+                    .toFastList()
             }
 
             actors.shouldNotBeEmpty()
@@ -46,18 +43,16 @@ class DomainSQLTest: AbstractSpringWebfluxTest() {
         @Test
         fun `get all actors in multiple platform threads`() = runSuspendIO {
             val availableProcessors = Runtime.getRuntime().availableProcessors()
-            val scope = CoroutineScope(Dispatchers.IO)
-
             SuspendedJobTester()
                 .numThreads(availableProcessors)
                 .roundsPerJob(availableProcessors * 4)
                 .add {
-                    scope.launch {
-                        suspendTransaction(db = database) {
-                            val actors = ActorTable.selectAll().map { it.toActorDTO() }.toList()
-                            actors.shouldNotBeEmpty()
-                        }
-                    }.join()
+                    suspendTransaction(db = database) {
+                        val actors = ActorTable.selectAll()
+                            .map { it.toActorDTO() }
+                            .toFastList()
+                        actors.shouldNotBeEmpty()
+                    }
                 }
                 .run()
         }

@@ -37,6 +37,8 @@ dependencies {
 
     // Jackson
     implementation(Libs.bluetape4k_jackson)
+    implementation(Libs.jackson_module_kotlin)
+    implementation(Libs.jackson_module_blackbird)
 
     // Exposed
     implementation(Libs.exposed_r2dbc)
@@ -54,11 +56,11 @@ dependencies {
 
     // MySQL
     implementation(Libs.testcontainers_mysql)
-    implementation(Libs.mysql_connector_j)
+    runtimeOnly(Libs.mysql_connector_j)
 
     // PostgreSQL
     implementation(Libs.testcontainers_postgresql)
-    implementation(Libs.postgresql_driver)
+    runtimeOnly(Libs.postgresql_driver)
 
     // Spring Boot
     implementation(Libs.springBoot("autoconfigure"))

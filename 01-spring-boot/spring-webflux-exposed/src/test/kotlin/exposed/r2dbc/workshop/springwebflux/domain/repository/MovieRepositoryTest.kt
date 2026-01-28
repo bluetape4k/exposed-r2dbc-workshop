@@ -60,7 +60,7 @@ class MovieRepositoryTest(
         movies.forEach {
             log.debug { "movie: $it" }
         }
-        movies.shouldNotBeEmpty() shouldHaveSize 2
+        movies shouldHaveSize 2
     }
 
     @Test
@@ -70,6 +70,7 @@ class MovieRepositoryTest(
 
             val newMovie = newMovieDTO()
             val saved = movieRepository.create(newMovie)
+            log.debug { "Saved movie: $saved" }
 
             saved.shouldNotBeNull()
             saved shouldBeEqualTo newMovie.copy(id = saved.id)
@@ -83,6 +84,7 @@ class MovieRepositoryTest(
         suspendTransaction {
             val newMovie = newMovieDTO()
             val saved = movieRepository.create(newMovie)
+            log.debug { "Saved movie: $saved" }
 
             val prevCount = movieRepository.count()
 
@@ -96,7 +98,7 @@ class MovieRepositoryTest(
     @Test
     fun `get all movies and actors`() = runTest {
         val movieWithActors = suspendTransaction {
-            movieRepository.getAllMoviesWithActors().toList()
+            movieRepository.getAllMoviesWithActors()
         }
         movieWithActors.shouldNotBeEmpty()
         movieWithActors.forEach { movie ->
@@ -142,6 +144,6 @@ class MovieRepositoryTest(
         movies.forEach {
             log.debug { "movie: ${it.movieName}, actor: ${it.producerActorName}" }
         }
-        movies.shouldNotBeEmpty() shouldHaveSize 1
+        movies shouldHaveSize 1
     }
 }

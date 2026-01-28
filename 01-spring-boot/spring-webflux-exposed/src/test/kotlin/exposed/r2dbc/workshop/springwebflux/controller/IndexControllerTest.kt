@@ -3,14 +3,13 @@ package exposed.r2dbc.workshop.springwebflux.controller
 import exposed.r2dbc.workshop.springwebflux.AbstractSpringWebfluxTest
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.spring.tests.httpGet
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldNotBeEmpty
+import org.amshove.kluent.shouldNotBeNull
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.web.reactive.server.WebTestClient
-import org.springframework.test.web.reactive.server.returnResult
+import org.springframework.test.web.reactive.server.expectBody
 
 class IndexControllerTest(
     @param:Autowired private val client: WebTestClient,
@@ -21,11 +20,10 @@ class IndexControllerTest(
     @Test
     fun `get index`() = runTest {
         client.httpGet("/")
-            .expectStatus().isOk
-            .returnResult<String>().responseBody
-            .asFlow()
-            .toList()
-            .joinToString(separator = "")
+            .expectStatus().is2xxSuccessful
+            .expectBody<String>()
+            .returnResult().responseBody
+            .shouldNotBeNull()
             .shouldNotBeEmpty()
     }
 }

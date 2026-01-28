@@ -9,7 +9,6 @@ dependencies {
 
     // Exposed
     testImplementation(Libs.exposed_r2dbc)
-    testImplementation(Libs.exposed_migration_r2dbc)
     testImplementation(Libs.exposed_java_time)
 
     testImplementation(Libs.bluetape4k_exposed_r2dbc)
@@ -32,9 +31,9 @@ dependencies {
     testImplementation(Libs.testcontainers_postgresql)
 
     // Testcontainers 를 위한 DB 드라이버
-    testImplementation(Libs.mariadb_java_client)
-    testImplementation(Libs.mysql_connector_j)
-    testImplementation(Libs.postgresql_driver)
+    testRuntimeOnly(Libs.mariadb_java_client)
+    testRuntimeOnly(Libs.mysql_connector_j)
+    testRuntimeOnly(Libs.postgresql_driver)
 
     // Coroutines
     testImplementation(Libs.bluetape4k_coroutines)
@@ -42,5 +41,6 @@ dependencies {
     testImplementation(Libs.kotlinx_coroutines_debug)
     testImplementation(Libs.kotlinx_coroutines_test)
 
+    // Id Generator
     testImplementation(Libs.bluetape4k_idgenerators)
 }

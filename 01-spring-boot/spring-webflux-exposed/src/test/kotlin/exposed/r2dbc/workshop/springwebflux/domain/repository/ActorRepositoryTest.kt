@@ -48,7 +48,7 @@ class ActorRepositoryTest(
     fun `search actors by lastName`() = runTest {
         suspendTransaction {
             val params = mapOf("lastName" to "Depp")
-            val actors = actorRepository.searchActor(params).toList()
+            val actors = actorRepository.searchActor(params)
 
             actors.shouldNotBeEmpty()
             actors.forEach {
@@ -68,7 +68,7 @@ class ActorRepositoryTest(
     fun `search actors by firstName`() = runTest {
         suspendTransaction {
             val params = mapOf("firstName" to "Angelina")
-            val actors = actorRepository.searchActor(params).toList()
+            val actors = actorRepository.searchActor(params)
 
             actors.shouldNotBeEmpty()
             actors.forEach {
@@ -98,7 +98,7 @@ class ActorRepositoryTest(
         suspendTransaction {
             val actor = newActorDTO()
             val savedActor = actorRepository.create(actor)
-            commit()
+            log.debug { "Saved actor: $savedActor" }
             savedActor.shouldNotBeNull()
             savedActor.id.shouldNotBeNull()
 
