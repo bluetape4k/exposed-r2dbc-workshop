@@ -35,7 +35,9 @@ class UserEventControllerTest(
         val prevCount = getCountOfUserEvents()
 
         val userEvent = newUserEventDTO()
-        val response = client.httpPost("/user-events", userEvent)
+        val response = client
+            .httpPost("/user-events", userEvent)
+            .expectStatus().is2xxSuccessful
             .returnResult<Boolean>().responseBody
             .awaitSingle()
 
@@ -58,7 +60,9 @@ class UserEventControllerTest(
         val prevCount = getCountOfUserEvents()
 
         val userEvents = List(insertCount) { newUserEventDTO() }
-        val response = client.httpPost("/user-events/bulk", userEvents)
+        val response = client
+            .httpPost("/user-events/bulk", userEvents)
+            .expectStatus().is2xxSuccessful
             .returnResult<Boolean>().responseBody
             .awaitSingle()
 

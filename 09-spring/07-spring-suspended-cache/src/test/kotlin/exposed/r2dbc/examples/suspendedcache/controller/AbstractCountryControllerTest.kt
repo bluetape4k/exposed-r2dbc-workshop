@@ -32,6 +32,7 @@ abstract class AbstractCountryControllerTest: AbstractSpringSuspendedCacheApplic
         DataPopulator.COUNTRY_CODES.forEach { code ->
             val country = client
                 .httpGet("/$basePath/countries/$code")
+                .expectStatus().is2xxSuccessful
                 .returnResult<CountryDTO>().responseBody
                 .awaitSingle()
             country.code shouldBeEqualTo code
@@ -44,6 +45,7 @@ abstract class AbstractCountryControllerTest: AbstractSpringSuspendedCacheApplic
             .async { code ->
                 val country = client
                     .httpGet("/$basePath/countries/$code")
+                    .expectStatus().is2xxSuccessful
                     .returnResult<CountryDTO>().responseBody
                     .awaitSingle()
 

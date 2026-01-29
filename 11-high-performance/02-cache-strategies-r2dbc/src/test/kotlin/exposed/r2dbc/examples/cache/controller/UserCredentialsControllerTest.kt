@@ -10,13 +10,12 @@ import io.bluetape4k.logging.debug
 import io.bluetape4k.spring.tests.httpDelete
 import io.bluetape4k.spring.tests.httpGet
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldContainSame
 import org.amshove.kluent.shouldHaveSize
+import org.amshove.kluent.shouldNotBeNull
 import org.jetbrains.exposed.v1.r2dbc.deleteAll
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
@@ -24,6 +23,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.reactive.server.expectBodyList
 import org.springframework.test.web.reactive.server.returnResult
 import java.time.Instant
 
@@ -68,9 +68,9 @@ class UserCredentialsControllerTest(
     fun `findAll user credentials`() = runSuspendIO {
         val ucs = client
             .httpGet("/user-credentials")
-            .returnResult<UserCredentialsDTO>().responseBody
-            .asFlow()
-            .toList()
+            .expectBodyList<UserCredentialsDTO>()
+            .returnResult().responseBody
+            .shouldNotBeNull()
 
         ucs shouldHaveSize idsInDB.size
     }
@@ -94,9 +94,9 @@ class UserCredentialsControllerTest(
 
         val ucs = client
             .httpGet("/user-credentials/all?ids=${ids.joinToString(",")}")
-            .returnResult<UserCredentialsDTO>().responseBody
-            .asFlow()
-            .toList()
+            .expectBodyList<UserCredentialsDTO>()
+            .returnResult().responseBody
+            .shouldNotBeNull()
 
         ucs shouldHaveSize ids.size
         ucs.map { it.id } shouldContainSame ids

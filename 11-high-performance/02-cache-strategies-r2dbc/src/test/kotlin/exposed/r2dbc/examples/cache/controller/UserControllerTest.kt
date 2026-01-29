@@ -13,8 +13,6 @@ import io.bluetape4k.spring.tests.httpDelete
 import io.bluetape4k.spring.tests.httpGet
 import io.bluetape4k.spring.tests.httpPost
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
@@ -29,9 +27,9 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.reactive.server.expectBodyList
 import org.springframework.test.web.reactive.server.returnResult
 import java.util.concurrent.CopyOnWriteArrayList
-import java.util.concurrent.atomic.AtomicLong
 import kotlin.random.Random
 
 class UserControllerTest(
@@ -44,7 +42,6 @@ class UserControllerTest(
     }
 
     private val idsInDB = CopyOnWriteArrayList<Long>()
-    private val lastUserId = AtomicLong(0L)
 
     @BeforeEach
     fun beforeEach() {
@@ -77,9 +74,9 @@ class UserControllerTest(
     fun `모든 사용자를 조회`() = runTest {
         val users = client
             .httpGet("/users")
-            .returnResult<UserDTO>().responseBody
-            .asFlow()
-            .toList()
+            .expectStatus().is2xxSuccessful
+            .expectBodyList<UserDTO>()
+            .returnResult().responseBody
 
         users.shouldNotBeNull() shouldHaveSize idsInDB.size
     }
@@ -89,6 +86,7 @@ class UserControllerTest(
         idsInDB.forEach { userId ->
             val user = client
                 .httpGet("/users/$userId")
+                .expectStatus().is2xxSuccessful
                 .returnResult<UserDTO>().responseBody
                 .awaitSingle()
 
@@ -103,9 +101,10 @@ class UserControllerTest(
 
         val users = client
             .httpGet("/users/all?ids=${userIds.joinToString(",")}")
-            .returnResult<UserDTO>().responseBody
-            .asFlow()
-            .toList()
+            .expectStatus().is2xxSuccessful
+            .expectBodyList<UserDTO>()
+            .returnResult().responseBody
+            .shouldNotBeNull()
 
         users shouldHaveSize userIds.size
         users.map { it.id } shouldContainSame userIds
@@ -116,6 +115,7 @@ class UserControllerTest(
         val userDTO = newUserDTO(Random.nextLong(1000L, 9999L))
         val user = client
             .httpPost("/users", userDTO)
+            .expectStatus().is2xxSuccessful
             .returnResult<UserDTO>().responseBody
             .awaitSingle()
 
@@ -129,6 +129,7 @@ class UserControllerTest(
         val invalidatedId = idsInDB.shuffled().take(3)
         val invalidedCount = client
             .httpDelete("/users/invalidate?ids=${invalidatedId.joinToString(",")}")
+            .expectStatus().is2xxSuccessful
             .returnResult<Long>().responseBody
             .awaitSingle()
 

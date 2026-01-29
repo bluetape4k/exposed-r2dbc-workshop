@@ -13,6 +13,7 @@ plugins {
     kotlin("plugin.jpa") version Versions.kotlin apply false
     kotlin("plugin.serialization") version Versions.kotlin apply false
     kotlin("kapt") version Versions.kotlin apply false
+    id("org.jetbrains.kotlinx.atomicfu") version Versions.kotlinx_atomicfu
 
     id(Plugins.detekt) version Plugins.Versions.detekt
 
@@ -57,6 +58,8 @@ subprojects {
 
         // Kotlin 1.9.20 부터는 pluginId 를 지정해줘야 합니다.
         plugin("org.jetbrains.kotlin.jvm")
+        // Atomicfu
+        plugin("org.jetbrains.kotlinx.atomicfu")
         plugin(Plugins.dependency_management)
         plugin(Plugins.testLogger)
     }
@@ -101,6 +104,11 @@ subprojects {
             "-XX:+UseStringDeduplication",
             "-XX:+EnableDynamicAgentLoading"
         )
+    }
+
+    atomicfu {
+        transformJvm = true
+        jvmVariant = "VH"     //  FU, VH, BOTH
     }
 
     tasks {
@@ -390,11 +398,13 @@ subprojects {
         compileOnly(platform(Libs.jackson_bom))
         compileOnly(platform(Libs.kotlinx_coroutines_bom))
 
-        api(Libs.kotlin_stdlib)
+        implementation(Libs.kotlin_stdlib)
+        implementation(Libs.kotlin_reflect)
         testImplementation(Libs.kotlin_test)
         testImplementation(Libs.kotlin_test_junit5)
 
-        compileOnly(Libs.kotlinx_coroutines_core)
+        implementation(Libs.kotlinx_coroutines_core)
+        implementation(Libs.kotlinx_atomicfu)
 
         // 개발 시에는 logback 이 검증하기에 더 좋고, Production에서 비동기 로깅은 log4j2 가 성능이 좋다고 합니다.
         api(Libs.slf4j_api)

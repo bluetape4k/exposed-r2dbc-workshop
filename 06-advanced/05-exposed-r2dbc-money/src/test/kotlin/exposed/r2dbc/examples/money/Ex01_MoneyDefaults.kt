@@ -3,10 +3,10 @@ package exposed.r2dbc.examples.money
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.money.moneyOf
+import kotlinx.atomicfu.atomic
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 import org.jetbrains.exposed.v1.money.compositeMoney
 import java.math.BigDecimal
-import java.util.concurrent.atomic.AtomicInteger
 
 class Ex01_MoneyDefaults: R2dbcExposedTestBase() {
 
@@ -28,12 +28,17 @@ class Ex01_MoneyDefaults: R2dbcExposedTestBase() {
      */
     object TableWithDBDefault: IntIdTable("TableWithDBDefault") {
         internal val defaultValue = moneyOf(BigDecimal.ONE, "USD") // 컬럼이 아닙니다.
-        internal val cIndex = AtomicInteger(0)  // 컬럼이 아닙니다.
+        private val cIndex = atomic(0)  // 컬럼이 아닙니다.
+        internal var index by cIndex
+
 
         val field = varchar("field", 100)
         val t1 = compositeMoney(10, 0, "t1").default(defaultValue)
         val t2 = compositeMoney(10, 0, "t2").nullable()
         val clientDefault = integer("clientDefault").clientDefault { cIndex.getAndIncrement() }
-    }
 
+        internal fun resetIndex(value: Int = 0) {
+            cIndex.lazySet(value)
+        }
+    }
 }

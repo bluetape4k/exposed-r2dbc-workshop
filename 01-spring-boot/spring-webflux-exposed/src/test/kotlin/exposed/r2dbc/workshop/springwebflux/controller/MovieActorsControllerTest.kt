@@ -30,6 +30,7 @@ class MovieActorsControllerTest(
 
         val movieWithActors = client
             .httpGet("/movie-actors/$movieId")
+            .expectStatus().is2xxSuccessful
             .returnResult<MovieWithActorDTO>().responseBody
             .awaitSingle()
 
@@ -43,6 +44,7 @@ class MovieActorsControllerTest(
     fun `retrieve movie and actor count group by movie name`() = runTest {
         val movieActorCounts = client
             .httpGet("/movie-actors/count")
+            .expectStatus().is2xxSuccessful
             .expectBodyList<MovieActorCountDTO>()
             .returnResult().responseBody
             .shouldNotBeNull()
@@ -57,6 +59,7 @@ class MovieActorsControllerTest(
     fun `retrieves movie with producing actor`() = runTest {
         val movieWithProducers = client
             .httpGet("/movie-actors/acting-producers")
+            .expectStatus().is2xxSuccessful
             .expectBodyList<MovieWithProducingActorDTO>()
             .returnResult().responseBody
             .shouldNotBeNull()

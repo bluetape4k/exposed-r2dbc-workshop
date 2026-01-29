@@ -12,6 +12,7 @@ import exposed.r2dbc.shared.tests.insertAndWait
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
+import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -85,7 +86,6 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.time.Clock
 import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
@@ -121,11 +121,17 @@ class Ex02_Defaults: R2dbcExposedTestBase() {
      * ```
      */
     object TableWithDBDefault: IntIdTable() {
-        val cIndex = AtomicInteger(0)
+        private val cIndex = atomic(0)
+        internal var index by cIndex
+
         val field = varchar("field", 100)
         val t1 = datetime("t1").defaultExpression(CurrentDateTime)
         val t2 = date("t2").defaultExpression(CurrentDate)
         val clientDefault = integer("clientDefault").clientDefault { cIndex.getAndIncrement() }
+
+        internal fun resetIndex(value: Int = 0) {
+            cIndex.lazySet(value)
+        }
     }
 
     @Test

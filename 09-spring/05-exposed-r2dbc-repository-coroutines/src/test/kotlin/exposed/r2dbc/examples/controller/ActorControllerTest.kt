@@ -8,8 +8,6 @@ import io.bluetape4k.logging.debug
 import io.bluetape4k.spring.tests.httpDelete
 import io.bluetape4k.spring.tests.httpGet
 import io.bluetape4k.spring.tests.httpPost
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitSingle
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
@@ -18,6 +16,7 @@ import org.amshove.kluent.shouldNotBeNull
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.reactive.server.expectBodyList
 import org.springframework.test.web.reactive.server.returnResult
 
 class ActorControllerTest(
@@ -35,10 +34,13 @@ class ActorControllerTest(
 
     @Test
     fun `find all actors`() = runSuspendIO {
-        val actors = client.httpGet("/actors")
-            .returnResult<ActorDTO>().responseBody
-            .asFlow()
-            .toList()
+        val actors = client
+            .httpGet("/actors")
+            .expectStatus().is2xxSuccessful
+            .expectBodyList<ActorDTO>()
+            .returnResult().responseBody
+            .shouldNotBeNull()
+        
         actors.forEach {
             log.debug { it }
         }
@@ -49,7 +51,9 @@ class ActorControllerTest(
     fun `find actor by id`() = runSuspendIO {
         val actorId = 1L
 
-        val actor = client.httpGet("/actors/$actorId")
+        val actor = client
+            .httpGet("/actors/$actorId")
+            .expectStatus().is2xxSuccessful
             .returnResult<ActorDTO>().responseBody
             .awaitSingle()
 
@@ -62,10 +66,11 @@ class ActorControllerTest(
     fun `find actors by firstName`() = runSuspendIO {
         val firstName = "Angelina"
 
-        val angelinas = client.httpGet("/actors/search?firstName=$firstName")
-            .returnResult<ActorDTO>().responseBody
-            .asFlow()
-            .toList()
+        val angelinas = client
+            .httpGet("/actors/search?firstName=$firstName")
+            .expectStatus().is2xxSuccessful
+            .expectBodyList<ActorDTO>()
+            .returnResult().responseBody
 
         log.debug { "actors=$angelinas" }
         angelinas.shouldNotBeNull() shouldHaveSize 2
@@ -77,6 +82,7 @@ class ActorControllerTest(
 
         val newActor = client
             .httpPost("/actors", actor)
+            .expectStatus().is2xxSuccessful
             .returnResult<ActorDTO>().responseBody
             .awaitSingle()
 
@@ -92,6 +98,7 @@ class ActorControllerTest(
 
         val newActor = client
             .httpPost("/actors", actor)
+            .expectStatus().is2xxSuccessful
             .returnResult<ActorDTO>().responseBody
             .awaitSingle()
 
@@ -100,6 +107,7 @@ class ActorControllerTest(
 
         val deletedCount = client
             .httpDelete("/actors/${newActor.id}")
+            .expectStatus().is2xxSuccessful
             .returnResult<Int>().responseBody
             .awaitSingle()
 
