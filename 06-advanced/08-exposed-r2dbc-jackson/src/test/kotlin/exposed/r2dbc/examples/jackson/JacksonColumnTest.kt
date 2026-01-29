@@ -10,6 +10,7 @@ import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.exposed.core.jackson.Contains
 import io.bluetape4k.exposed.core.jackson.DefaultJacksonSerializer
 import io.bluetape4k.exposed.core.jackson.Exists
@@ -22,7 +23,6 @@ import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
@@ -257,7 +257,7 @@ class JacksonColumnTest: R2dbcExposedTestBase() {
             tester
                 .selectAll()
                 .where { userIsInactive }
-                .toList().shouldBeEmpty()
+                .toFastList().shouldBeEmpty()
 
             val alphaTeamUserAsJson = """{"user":${DefaultJacksonSerializer.serializeAsString(alphaTeamUser)}}"""
             var userIsInAlphaTeam = tester.jacksonColumn.contains(stringLiteral(alphaTeamUserAsJson))
@@ -404,7 +404,7 @@ class JacksonColumnTest: R2dbcExposedTestBase() {
             tester
                 .select(firstNumber)
                 .map { it[firstNumber] }
-                .toList() shouldBeEqualTo listOf(100, 3)
+                .toFastList() shouldBeEqualTo listOf(100, 3)
         }
     }
 
@@ -528,7 +528,7 @@ class JacksonColumnTest: R2dbcExposedTestBase() {
             val query: Query = iterables
                 .select(iterables.id)
                 .where(condition())
-            return query.map { it[iterables.id] }.toList()
+            return query.map { it[iterables.id] }.toFastList()
         }
 
         withTables(testDB, iterables) {

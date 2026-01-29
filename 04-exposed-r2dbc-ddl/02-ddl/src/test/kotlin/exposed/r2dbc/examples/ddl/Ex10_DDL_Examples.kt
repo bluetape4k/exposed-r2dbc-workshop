@@ -12,13 +12,13 @@ import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withSchemas
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.codec.Base58
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.support.toUtf8String
 import io.r2dbc.spi.IsolationLevel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
@@ -437,7 +437,7 @@ class Ex10_DDL_Examples: R2dbcExposedTestBase() {
                 it[bar] = 2
             }
 
-            val result = foo.selectAll().map { it[foo.id] to it[foo.bar] }.toList()
+            val result = foo.selectAll().map { it[foo.id] to it[foo.bar] }.toFastList()
             result shouldHaveSize 2
             result[0].second shouldBeEqualTo 1
             result[1].second shouldBeEqualTo 2
@@ -789,7 +789,7 @@ class Ex10_DDL_Examples: R2dbcExposedTestBase() {
         }
 
         suspend fun SizedIterable<ResultRow>.readAsString() =
-            map { kotlin.text.String(it[tableWithBinary.binaryColumn]) }.toList()
+            map { kotlin.text.String(it[tableWithBinary.binaryColumn]) }.toFastList()
 
         val exposedBytes = "Exposed".toByteArray()
         val kotlinBytes = "Kotlin".toByteArray()
@@ -835,7 +835,7 @@ class Ex10_DDL_Examples: R2dbcExposedTestBase() {
         }
 
         suspend fun SizedIterable<ResultRow>.readAsString() =
-            map { row -> row[t.binary]?.toUtf8String() }.toList()
+            map { row -> row[t.binary]?.toUtf8String() }.toFastList()
 
         withTables(testDB, t) {
             t.insert { it[t.binary] = "Hello!".toByteArray() }
@@ -1054,7 +1054,7 @@ class Ex10_DDL_Examples: R2dbcExposedTestBase() {
                 it[boolTable.bool] = true
             }
 
-            val result = boolTable.selectAll().toList()
+            val result = boolTable.selectAll().toFastList()
             result shouldHaveSize 1
             result.single()[boolTable.bool].shouldBeTrue()
         }

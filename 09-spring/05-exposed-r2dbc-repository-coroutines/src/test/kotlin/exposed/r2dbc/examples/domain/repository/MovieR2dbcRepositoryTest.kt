@@ -2,10 +2,10 @@ package exposed.r2dbc.examples.domain.repository
 
 import exposed.r2dbc.examples.AbstractExposedR2dbcRepositoryTest
 import exposed.r2dbc.examples.dto.MovieDTO
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
-import kotlinx.coroutines.flow.toList
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldHaveSize
@@ -53,7 +53,7 @@ class MovieR2dbcRepositoryTest(
         val params = mapOf("producerName" to "Johnny")
 
         val movies = suspendTransaction {
-            movieRepository.searchMovies(params).toList()
+            movieRepository.searchMovies(params).toFastList()
         }
 
         movies.forEach {
@@ -97,7 +97,7 @@ class MovieR2dbcRepositoryTest(
     @Test
     fun `get all movies and actors`() = runSuspendIO {
         suspendTransaction {
-            val movies = movieRepository.getAllMoviesWithActors().toList()
+            val movies = movieRepository.getAllMoviesWithActors().toFastList()
             movies.shouldNotBeEmpty()
 
             movies.forEach { movie ->
@@ -127,7 +127,7 @@ class MovieR2dbcRepositoryTest(
     @Test
     fun `get movie and actors count`() = runSuspendIO {
         suspendTransaction {
-            val movieActorsCount = movieRepository.getMovieActorsCount().toList()
+            val movieActorsCount = movieRepository.getMovieActorsCount().toFastList()
             movieActorsCount.shouldNotBeEmpty()
             movieActorsCount.forEach {
                 log.debug { "movie: ${it.movieName}, actors count: ${it.actorCount}" }
@@ -138,7 +138,7 @@ class MovieR2dbcRepositoryTest(
     @Test
     fun `find movies with acting producers`() = runSuspendIO {
         suspendTransaction {
-            val movies = movieRepository.findMoviesWithActingProducers().toList()
+            val movies = movieRepository.findMoviesWithActingProducers().toFastList()
 
             movies.forEach {
                 log.debug { "movie: ${it.movieName}, producer: ${it.producerActorName}" }

@@ -4,12 +4,13 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.inProperCase
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.collections.eclipse.toFastList
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.exposed.r2dbc.getInt
 import io.bluetape4k.exposed.r2dbc.getStringOrNull
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.singleOrNull
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
@@ -62,7 +63,7 @@ class Ex02_TransactionExec: R2dbcExposedTestBase() {
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `exec with single statement query`(testDB: TestDB) = runTest {
         withTables(testDB, ExecTable) {
-            val amounts = (90..99).toList()
+            val amounts = (90..99).toFastList()
 
             ExecTable.batchInsert(amounts, shouldReturnGeneratedValues = false) { amount ->
                 this[ExecTable.id] = (amount % 10 + 1)  // autoIncrement 이지만, custom 으로 설정 
@@ -82,7 +83,7 @@ class Ex02_TransactionExec: R2dbcExposedTestBase() {
                 val loadedAmount = row.getInt("amount")
                 log.debug { "Loaded id=$id, amount: $loadedAmount" }
                 loadedAmount
-            }!!.toList()
+            }!!.toFastList()
 
             results shouldBeEqualTo amounts
         }

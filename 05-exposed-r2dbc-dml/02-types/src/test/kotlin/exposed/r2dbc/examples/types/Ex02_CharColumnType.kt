@@ -3,10 +3,10 @@ package exposed.r2dbc.examples.types
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.singleOrNull
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.jetbrains.exposed.v1.core.Column
@@ -101,7 +101,7 @@ class Ex02_CharColumnType: R2dbcExposedTestBase() {
                 .select(tester.letter)
                 .orderBy(tester.letter)
                 .map { it[tester.letter] }
-                .toList()
+                .toFastList()
 
             actual shouldBeEqualTo expected // [A, B, a, b]
         }

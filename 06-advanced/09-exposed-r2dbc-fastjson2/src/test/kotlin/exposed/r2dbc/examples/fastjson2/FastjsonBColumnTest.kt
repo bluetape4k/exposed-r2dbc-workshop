@@ -10,6 +10,7 @@ import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.exposed.core.fastjson2.Exists
 import io.bluetape4k.exposed.core.fastjson2.Extract
 import io.bluetape4k.exposed.core.fastjson2.contains
@@ -21,7 +22,6 @@ import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
@@ -336,7 +336,7 @@ class FastjsonBColumnTest: R2dbcExposedTestBase() {
             tester
                 .select(firstNumber)
                 .map { it[firstNumber] }
-                .toList() shouldBeEqualTo listOf(100, 3)
+                .toFastList() shouldBeEqualTo listOf(100, 3)
         }
     }
 
@@ -621,7 +621,7 @@ class FastjsonBColumnTest: R2dbcExposedTestBase() {
             val nestedKeyResult = tester
                 .selectAll()
                 .where { tester.fastjsonBColumn keyExists "name" }
-                .toList()
+                .toFastList()
             nestedKeyResult.shouldBeEmpty()
         }
     }

@@ -2,11 +2,11 @@ package exposed.r2dbc.examples.controller
 
 import exposed.r2dbc.examples.domain.repository.ActorR2dbcRepository
 import exposed.r2dbc.examples.dto.ActorDTO
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.toList
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -28,7 +28,7 @@ class ActorController(
     @GetMapping
     suspend fun getActors(): List<ActorDTO> =
         suspendTransaction {
-            actorRepository.findAll().toList()
+            actorRepository.findAll().toFastList()
         }
 
     @GetMapping("/{id}")
@@ -47,7 +47,7 @@ class ActorController(
         return when {
             params.isEmpty() -> emptyList()
             else -> suspendTransaction {
-                actorRepository.searchActors(params).toList()
+                actorRepository.searchActors(params).toFastList()
             }
         }
     }

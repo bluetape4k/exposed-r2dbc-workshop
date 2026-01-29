@@ -2,10 +2,10 @@ package exposed.r2dbc.examples.domain.repository
 
 import exposed.r2dbc.examples.AbstractExposedR2dbcRepositoryTest
 import exposed.r2dbc.examples.dto.ActorDTO
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
-import kotlinx.coroutines.flow.toList
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldNotBeEmpty
 import org.amshove.kluent.shouldNotBeNull
@@ -43,7 +43,7 @@ class ActorR2dbcRepositoryTest(
     fun `search actors by lastName`() = runSuspendIO {
         suspendTransaction {
             val params = mapOf("lastName" to "Depp")
-            val actors = actorRepository.searchActors(params).toList()
+            val actors = actorRepository.searchActors(params).toFastList()
 
             actors.forEach {
                 log.debug { "actor: $it" }
@@ -56,7 +56,7 @@ class ActorR2dbcRepositoryTest(
     fun `search actors by firstName`() = runSuspendIO {
         suspendTransaction {
             val params = mapOf("firstName" to "Angelina")
-            val actors = actorRepository.searchActors(params).toList()
+            val actors = actorRepository.searchActors(params).toFastList()
 
             actors.forEach {
                 log.debug { "actor: $it" }

@@ -214,7 +214,7 @@ class Ex08_BlobColumnType: R2dbcExposedTestBase() {
 //                    it[tester.blobCol] = blobParam(defaultBlob, useObjectIdentifier = true)
 //                }
 //
-//                val result2 = tester.selectAll().toList()
+//                val result2 = tester.selectAll().toFastList()
 //                result2 shouldHaveSize 3
 //                result2.all { it[tester.blobCol].bytes.contentEquals(defaultBytes) }.shouldBeTrue()
 //

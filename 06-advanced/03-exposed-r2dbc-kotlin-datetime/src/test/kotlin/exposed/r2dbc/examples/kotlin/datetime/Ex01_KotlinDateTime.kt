@@ -8,12 +8,12 @@ import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.all
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
@@ -217,7 +217,7 @@ class Ex01_KotlinDateTime: R2dbcExposedTestBase() {
                 it[testDate.time] = dateTimeWithManyNanos
             }
 
-            val dateTimesFromDB = testDate.selectAll().map { it[testDate.time] }.toList()
+            val dateTimesFromDB = testDate.selectAll().map { it[testDate.time] }.toFastList()
 
             dateTimesFromDB[0] shouldDateTimeEqualTo dateTimeWithFewNanos
             dateTimesFromDB[1] shouldDateTimeEqualTo dateTimeWithManyNanos
@@ -331,13 +331,13 @@ class Ex01_KotlinDateTime: R2dbcExposedTestBase() {
                 it[deleted] = mayTheFourth.plus(1, DateTimeUnit.DAY)
             }
 
-            val sameDateResult = tester.selectAll().where { tester.created eq tester.deleted }.toList()
+            val sameDateResult = tester.selectAll().where { tester.created eq tester.deleted }.toFastList()
             sameDateResult shouldHaveSize 1
             sameDateResult.single()[tester.deleted] shouldBeEqualTo mayTheFourth
 
             val sameMonthResult = tester.selectAll()
                 .where { tester.created.month() eq tester.deleted.month() }
-                .toList()
+                .toFastList()
             sameMonthResult shouldHaveSize 2
 
             val year2023 = if (currentDialectTest is PostgreSQLDialect) {
@@ -349,7 +349,7 @@ class Ex01_KotlinDateTime: R2dbcExposedTestBase() {
             val createdIn2023 = tester
                 .selectAll()
                 .where { tester.created.year() eq year2023 }
-                .toList()
+                .toFastList()
 
             createdIn2023 shouldHaveSize 2
         }

@@ -10,6 +10,7 @@ import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.inProperCase
 import exposed.r2dbc.shared.tests.insertAndWait
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.atomicfu.atomic
@@ -17,7 +18,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
@@ -655,7 +655,7 @@ class Ex02_Defaults: R2dbcExposedTestBase() {
                 tester.insertAndWait(duration)
             }
 
-            val sortedEntries: List<LocalDateTime> = tester.selectAll().map { it[tester.time] }.toList().sorted()
+            val sortedEntries: List<LocalDateTime> = tester.selectAll().map { it[tester.time] }.toFastList().sorted()
 
             sortedEntries[1].millis() - sortedEntries[0].millis() shouldBeGreaterOrEqualTo 1000
             sortedEntries[2].millis() - sortedEntries[0].millis() shouldBeGreaterOrEqualTo 3000

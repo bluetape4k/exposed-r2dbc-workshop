@@ -9,7 +9,6 @@ import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.andWhere
 import org.jetbrains.exposed.v1.r2dbc.deleteWhere
@@ -35,7 +34,7 @@ class ActorRepository {
     }
 
     suspend fun findAll(): List<ActorDTO> {
-        return ActorTable.selectAll().map { it.toActorDTO() }.toList()
+        return ActorTable.selectAll().map { it.toActorDTO() }.toFastList()
     }
 
     suspend fun searchActor(params: Map<String, String?>): List<ActorDTO> {

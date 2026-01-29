@@ -2,6 +2,7 @@ package exposed.r2dbc.examples.cache.controller
 
 import exposed.r2dbc.examples.cache.domain.model.UserCredentialsDTO
 import exposed.r2dbc.examples.cache.domain.repository.UserCredentialsCacheRepository
+import io.bluetape4k.collections.eclipse.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import org.springframework.transaction.TransactionManager
@@ -23,7 +24,7 @@ class UserCredentialsController(
     @GetMapping
     suspend fun findAll(@RequestParam(name = "limit") limit: Int? = null): List<UserCredentialsDTO> {
         log.debug { "Finding all user credentials with limit: $limit" }
-        return repository.findAll(limit = limit).toList()
+        return repository.findAll(limit = limit).toFastList()
     }
 
     @GetMapping("/{id}")

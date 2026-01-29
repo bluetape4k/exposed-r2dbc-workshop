@@ -3,11 +3,11 @@ package exposed.r2dbc.examples.functions
 import exposed.r2dbc.shared.dml.DMLTestData
 import exposed.r2dbc.shared.dml.DMLTestData.withSales
 import exposed.r2dbc.shared.tests.TestDB
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.jetbrains.exposed.v1.core.SortOrder
@@ -902,7 +902,7 @@ class Ex05_WindowFunction: Ex00_FunctionBase() {
             )
             .onEach { log.debug { "row=${it[year]},${it[month]},${it[product]},${it[amount]},${it[definition]}" } }
             .map { it[definition] }
-            .toList()
+            .toFastList()
 
         result shouldBeEqualTo expectedResult
     }

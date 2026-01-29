@@ -6,6 +6,7 @@ import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.KotlinLogging
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
@@ -14,7 +15,6 @@ import kotlinx.coroutines.flow.all
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -263,7 +263,7 @@ class Ex01_JavaTime: R2dbcExposedTestBase() {
 
             val dateTimesFromDB = testDate.selectAll()
                 .map { it[testDate.time] }
-                .toList()
+                .toFastList()
                 .apply {
                     log.debug { "dateTimesFromDB=$this" }
                 }
@@ -326,7 +326,7 @@ class Ex01_JavaTime: R2dbcExposedTestBase() {
             val sameDateResult = testTable
                 .selectAll()
                 .where { testTable.created eq testTable.deleted }
-                .toList()
+                .toFastList()
             sameDateResult shouldHaveSize 1
             sameDateResult.single()[testTable.deleted] shouldBeEqualTo mayTheFourth
 
@@ -334,7 +334,7 @@ class Ex01_JavaTime: R2dbcExposedTestBase() {
             val sameMonthResult = testTable
                 .selectAll()
                 .where { testTable.created.month() eq testTable.deleted.month() }
-                .toList()
+                .toFastList()
             sameMonthResult shouldHaveSize 2
 
             // Same Year
@@ -348,7 +348,7 @@ class Ex01_JavaTime: R2dbcExposedTestBase() {
             val createdIn2025 = testTable
                 .selectAll()
                 .where { testTable.created.year() eq year2024 }
-                .toList()
+                .toFastList()
             createdIn2025 shouldHaveSize 2
         }
     }

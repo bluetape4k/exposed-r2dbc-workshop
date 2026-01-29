@@ -12,12 +12,12 @@ import exposed.r2dbc.workshop.springwebflux.domain.toMovieDTO
 import exposed.r2dbc.workshop.springwebflux.domain.toMovieWithActorDTO
 import exposed.r2dbc.workshop.springwebflux.domain.toMovieWithProducingActorDTO
 import io.bluetape4k.coroutines.flow.extensions.bufferUntilChanged
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.toList
 import org.jetbrains.exposed.v1.core.Join
 import org.jetbrains.exposed.v1.core.count
 import org.jetbrains.exposed.v1.core.eq
@@ -67,7 +67,7 @@ class MovieRepository {
     }
 
     suspend fun findAll(): List<MovieDTO> {
-        return MovieTable.selectAll().map { it.toMovieDTO() }.toList()
+        return MovieTable.selectAll().map { it.toMovieDTO() }.toFastList()
     }
 
     suspend fun searchMovie(params: Map<String, String?>): List<MovieDTO> {
@@ -88,7 +88,7 @@ class MovieRepository {
             }
         }
 
-        return query.map { it.toMovieDTO() }.toList()
+        return query.map { it.toMovieDTO() }.toFastList()
     }
 
     suspend fun create(movie: MovieDTO): MovieDTO {
@@ -149,7 +149,7 @@ class MovieRepository {
                 val actors = pairs.map { it.second }
                 movie.toMovieWithActorDTO(actors)
             }
-            .toList()
+            .toFastList()
     }
 
     /**
@@ -177,7 +177,7 @@ class MovieRepository {
             .selectAll()
             .where { ActorInMovieTable.movieId eq movieId }
             .map { it.toActorDTO() }
-            .toList()
+            .toFastList()
 
         return MovieTable
             .selectAll()
@@ -209,7 +209,7 @@ class MovieRepository {
                     actorCount = it[ActorTable.id.count()].toInt()
                 )
             }
-            .toList()
+            .toFastList()
     }
 
     /**
@@ -232,6 +232,6 @@ class MovieRepository {
                 ActorTable.lastName
             )
 
-        return query.map { it.toMovieWithProducingActorDTO() }.toList()
+        return query.map { it.toMovieWithProducingActorDTO() }.toFastList()
     }
 }

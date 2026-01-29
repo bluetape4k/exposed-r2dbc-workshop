@@ -3,13 +3,13 @@ package exposed.r2dbc.examples.crypt
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.support.toUtf8Bytes
 import io.bluetape4k.support.toUtf8String
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import nl.altindag.log.LogCaptor
 import org.amshove.kluent.internal.assertFailsWith
@@ -145,7 +145,7 @@ class Ex01_EncryptedColumn: R2dbcExposedTestBase() {
             assertFailsWith<AssertionError> {
                 stringTable.selectAll()
                     .where { stringTable.name eq nameEncryptor.encrypt(insertedName) }
-                    .toList()
+                    .toFastList()
                     .shouldNotBeEmpty()
             }
         }

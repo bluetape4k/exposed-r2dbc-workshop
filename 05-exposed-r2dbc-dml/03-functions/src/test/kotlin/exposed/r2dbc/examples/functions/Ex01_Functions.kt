@@ -6,6 +6,7 @@ import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.support.asBigDecimal
@@ -15,7 +16,6 @@ import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeFalse
@@ -147,7 +147,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
                 .select(users.id, sum)
                 .groupBy(users.id)
                 .orderBy(users.id)
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 2
 
@@ -192,7 +192,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
                 .select(users.id, sum, div, mod, sum2)
                 .groupBy(users.id)
                 .orderBy(users.id)
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 2
 
@@ -239,7 +239,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
                 .select(users.id, sum, div, mod)
                 .groupBy(users.id)
                 .orderBy(users.id)
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 2
 
@@ -379,7 +379,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
             val adminEq: Op<Boolean> = adminAndFlgsExpr eq adminFlag
             val toSlice: List<Expression<out Comparable<*>>> = listOfNotNull(adminAndFlgsExpr, adminEq)
 
-            val rows: List<ResultRow> = users.select(toSlice).orderBy(users.id).toList()
+            val rows: List<ResultRow> = users.select(toSlice).orderBy(users.id).toFastList()
 
             rows shouldHaveSize 5
 
@@ -417,7 +417,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
             val adminEq: Op<Boolean> = adminAndFlgsExpr eq adminFlag
             val toSlice: List<Expression<out Comparable<*>>> = listOfNotNull(adminAndFlgsExpr, adminEq)
 
-            val rows = users.select(toSlice).orderBy(users.id).toList()
+            val rows = users.select(toSlice).orderBy(users.id).toFastList()
 
             rows shouldHaveSize 5
 
@@ -453,7 +453,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
             val extra = 0b10
             val flagsWithExtra = users.flags bitwiseOr extra
 
-            val rows = users.select(users.id, flagsWithExtra).orderBy(users.id).toList()
+            val rows = users.select(users.id, flagsWithExtra).orderBy(users.id).toFastList()
 
             rows shouldHaveSize 5
             rows[0][flagsWithExtra] shouldBeEqualTo 0b0010
@@ -485,7 +485,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
             val rows = users
                 .select(users.id, users.flags, flagsWithExtra)
                 .orderBy(users.id)
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 5
             rows[0][flagsWithExtra] shouldBeEqualTo 0b0010
@@ -523,7 +523,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
             val rows = users
                 .select(users.id, users.flags, flagsWithExtra)
                 .orderBy(users.id)
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 5
             rows[0][flagsWithExtra] shouldBeEqualTo 0b0111
@@ -561,7 +561,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
             val rows = users
                 .select(users.id, users.flags, flagsWithExtra)
                 .orderBy(users.id)
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 5
             rows[0][flagsWithExtra] shouldBeEqualTo 0b0111
@@ -592,7 +592,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
                 .select(users.id)
                 .where { users.flags hasFlag adminFlag }
                 .orderBy(users.id)
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 2
             rows[0][users.id] = "andrey"
@@ -620,7 +620,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
             val rows = users
                 .select(users.id, substring)
                 .orderBy(users.id)
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 5
             rows[0][substring] shouldBeEqualTo "Al"
@@ -644,9 +644,9 @@ class Ex01_Functions: Ex00_FunctionBase() {
     fun `CharLength with Sum`(testDB: TestDB) = runTest {
         withCitiesAndUsers(testDB) { cities, _, _ ->
             val sumOfLength = CharLength(cities.name).sum()
-            val expectedValue = cities.selectAll().toList().sumOf { it[cities.name].length }
+            val expectedValue = cities.selectAll().toFastList().sumOf { it[cities.name].length }
 
-            val rows = cities.select(sumOfLength).toList()
+            val rows = cities.select(sumOfLength).toFastList()
 
             rows shouldHaveSize 1
             rows.single()[sumOfLength] shouldBeEqualTo expectedValue
@@ -723,7 +723,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
                 .select(users.id, field)
                 .orderBy(users.id)
                 .limit(2)
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 2
             rows[0][field] shouldBeEqualTo "11"
@@ -771,7 +771,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
     fun `Locate functions 01`(testDB: TestDB) = runTest {
         withCitiesAndUsers(testDB) { cities, _, _ ->
             val locate = cities.name.locate("e")  // indexOf("e") in the name
-            val rows = cities.select(locate).toList()
+            val rows = cities.select(locate).toFastList()
 
             rows[0][locate] shouldBeEqualTo 6 // St. Petersburg
             rows[1][locate] shouldBeEqualTo 0 // Munich
@@ -795,7 +795,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
     fun `Locate functions 02`(testDB: TestDB) = runTest {
         withCitiesAndUsers(testDB) { cities, _, _ ->
             val locate = cities.name.locate("Peter")  // indexOf("Peter") in the name
-            val rows = cities.select(locate).toList()
+            val rows = cities.select(locate).toFastList()
 
             rows[0][locate] shouldBeEqualTo 5 // St. Petersburg
             rows[1][locate] shouldBeEqualTo 0 // Munich
@@ -820,7 +820,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
             val isNotCaseSensitiveDialect = currentDialectTest is MysqlDialect || currentDialectTest is SQLServerDialect
 
             val locate = cities.name.locate("p")  // indexOf("p") in the name
-            val rows = cities.select(locate).toList()
+            val rows = cities.select(locate).toFastList()
 
             rows[0][locate] shouldBeEqualTo if (isNotCaseSensitiveDialect) 5 else 0 // St. Petersburg
             rows[1][locate] shouldBeEqualTo 0 // Munich
@@ -935,12 +935,12 @@ class Ex01_Functions: Ex00_FunctionBase() {
             result[concatField] shouldBeEqualTo "FooBar"
 
             val concatField2: Concat = concat(
-                    "!",
-                    listOf(
-                        stringLiteral("Foo"),
-                        stringLiteral("Bar")
-                    )
+                "!",
+                listOf(
+                    stringLiteral("Foo"),
+                    stringLiteral("Bar")
                 )
+            )
 
             val result2 = Table.Dual.select(concatField2).single()
             result2[concatField2] shouldBeEqualTo "Foo!Bar"
@@ -1106,7 +1106,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `custom integer function 01`(testDB: TestDB) = runTest {
         withCitiesAndUsers(testDB) { cities, _, _ ->
-            val ids = cities.selectAll().map { it[cities.id] }.toList()
+            val ids = cities.selectAll().map { it[cities.id] }.toFastList()
             ids shouldBeEqualTo listOf(1, 2, 3)
 
             val sqrt: CustomFunction<Int?> = cities.id.function("SQRT")
@@ -1114,7 +1114,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
             val sqrtIds = cities
                 .select(sqrt)
                 .map { it[sqrt] }
-                .toList()
+                .toFastList()
 
             sqrtIds shouldBeEqualTo listOf(1, 1, 1)
         }
@@ -1133,7 +1133,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
     fun `custom integer function 02`(testDB: TestDB) = runTest {
         withCitiesAndUsers(testDB) { cities, _, _ ->
             val power: CustomFunction<Long?> = CustomLongFunction("POWER", cities.id, intParam(2))
-            val ids: List<Long?> = cities.select(power).map { it[power] }.toList()
+            val ids: List<Long?> = cities.select(power).map { it[power] }.toFastList()
             ids shouldContainSame listOf(1L, 4L, 9L)
         }
     }

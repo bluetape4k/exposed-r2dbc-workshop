@@ -3,6 +3,7 @@ package exposed.r2dbc.examples.cache.controller
 
 import exposed.r2dbc.examples.cache.domain.model.UserDTO
 import exposed.r2dbc.examples.cache.domain.repository.UserCacheRepository
+import io.bluetape4k.collections.eclipse.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import org.jetbrains.exposed.v1.core.Op
@@ -26,7 +27,7 @@ class UserController(
     @GetMapping
     suspend fun findAll(@RequestParam(name = "limit") limit: Int? = null): List<UserDTO> {
         log.debug { "Finding all users with limit: $limit" }
-        return repository.findAll(limit = limit, where = { Op.TRUE }).toList()
+        return repository.findAll(limit = limit, where = { Op.TRUE }).toFastList()
     }
 
     @GetMapping("/{id}")

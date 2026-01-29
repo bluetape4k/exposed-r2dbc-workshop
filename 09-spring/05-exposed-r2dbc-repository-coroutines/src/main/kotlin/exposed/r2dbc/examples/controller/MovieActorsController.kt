@@ -4,11 +4,11 @@ import exposed.r2dbc.examples.domain.repository.MovieR2dbcRepository
 import exposed.r2dbc.examples.dto.MovieActorCountDTO
 import exposed.r2dbc.examples.dto.MovieWithActorDTO
 import exposed.r2dbc.examples.dto.MovieWithProducingActorDTO
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.toList
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -32,12 +32,12 @@ class MovieActorsController(
     @GetMapping("/count")
     suspend fun getMovieActorsCount(): List<MovieActorCountDTO> =
         suspendTransaction {
-            movieRepository.getMovieActorsCount().toList()
+            movieRepository.getMovieActorsCount().toFastList()
         }
 
     @GetMapping("/acting-producers")
     suspend fun findMoviesWithActingProducers(): List<MovieWithProducingActorDTO> =
         suspendTransaction {
-            movieRepository.findMoviesWithActingProducers().toList()
+            movieRepository.findMoviesWithActingProducers().toFastList()
         }
 }

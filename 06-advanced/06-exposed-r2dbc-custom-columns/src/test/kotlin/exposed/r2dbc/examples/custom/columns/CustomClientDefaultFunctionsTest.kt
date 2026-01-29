@@ -3,12 +3,12 @@ package exposed.r2dbc.examples.custom.columns
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.exposed.core.ksuidGenerated
 import io.bluetape4k.exposed.core.ksuidMillisGenerated
 import io.bluetape4k.exposed.core.snowflakeGenerated
 import io.bluetape4k.exposed.core.timebasedGenerated
 import io.bluetape4k.logging.coroutines.KLoggingChannel
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldHaveSize
 import org.jetbrains.exposed.v1.core.Column
@@ -53,7 +53,7 @@ class CustomClientDefaultFunctionsTest: R2dbcExposedTestBase() {
             val values = List(entityCount) { it + 1 }
             ClientGenerated.batchInsert(values) {}
 
-            val rows = ClientGenerated.selectAll().toList()
+            val rows = ClientGenerated.selectAll().toFastList()
 
             rows.map { it[ClientGenerated.timebasedUuid] }.distinct() shouldHaveSize entityCount
             rows.map { it[ClientGenerated.timebasedUuidString] }.distinct() shouldHaveSize entityCount

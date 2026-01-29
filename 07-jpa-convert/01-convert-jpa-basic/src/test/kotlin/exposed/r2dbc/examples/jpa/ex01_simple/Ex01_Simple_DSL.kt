@@ -5,10 +5,10 @@ import exposed.r2dbc.examples.jpa.ex01_simple.SimpleSchema.toSimpleDTOs
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
@@ -59,7 +59,7 @@ class Ex01_Simple_DSL: R2dbcExposedTestBase() {
                 .limit(2)
                 .offset(2)
                 .map { it[SimpleTable.name] }
-                .toList()
+                .toFastList()
 
             /**
              * ```sql
