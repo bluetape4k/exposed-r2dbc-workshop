@@ -5,9 +5,9 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
@@ -49,7 +49,7 @@ class Ex10_OrderBy: R2dbcExposedTestBase() {
             val rows = users
                 .selectAll()
                 .orderBy(users.id)
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 5
             rows.map { it[users.id] } shouldBeEqualTo listOf("alex", "andrey", "eugene", "sergey", "smth")
@@ -87,7 +87,7 @@ class Ex10_OrderBy: R2dbcExposedTestBase() {
             val rows = users.selectAll()
                 .orderBy(users.cityId, SortOrder.DESC)
                 .orderBy(users.id)
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 5
             val usersWithoutCities = listOf("alex", "smth")
@@ -118,8 +118,11 @@ class Ex10_OrderBy: R2dbcExposedTestBase() {
     fun `orderBy 03`(testDB: TestDB) = runTest {
         withCitiesAndUsers(testDB) { _, users, _ ->
             val rows = users.selectAll()
-                .orderBy(users.cityId to SortOrder.DESC, users.id to SortOrder.ASC)
-                .toList()
+                .orderBy(
+                    users.cityId to SortOrder.DESC,
+                    users.id to SortOrder.ASC
+                )
+                .toFastList()
 
             rows shouldHaveSize 5
             val usersWithoutCities = listOf("alex", "smth")
@@ -157,7 +160,7 @@ class Ex10_OrderBy: R2dbcExposedTestBase() {
                 )
                 .groupBy(cities.name)
                 .orderBy(cities.name)  // ASC 가 기본값
-                .toList()
+                .toFastList()
 
             r shouldHaveSize 2
             r[0][cities.name] shouldBeEqualTo "Munich"
@@ -184,7 +187,7 @@ class Ex10_OrderBy: R2dbcExposedTestBase() {
             val orderByExpression = users.id.substring(2, 1)
             val rows = users.selectAll()
                 .orderBy(orderByExpression to SortOrder.ASC)
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 5
             rows.map { it[users.id] } shouldBeEqualTo listOf("sergey", "alex", "smth", "andrey", "eugene")
@@ -222,7 +225,7 @@ class Ex10_OrderBy: R2dbcExposedTestBase() {
                 .selectAll()
                 .orderBy(expression, SortOrder.DESC)
                 .map { it[cities.name] }
-                .toList()
+                .toFastList()
 
             // Munich - 2 users
             // St. Petersburg - 1 user
@@ -285,7 +288,7 @@ class Ex10_OrderBy: R2dbcExposedTestBase() {
                         users.cityId to sortOrder,
                         users.id to SortOrder.ASC
                     )
-                    .toList()
+                    .toFastList()
 
                 rows shouldHaveSize 5
                 expected.forEachIndexed { index, expect ->
@@ -354,7 +357,7 @@ class Ex10_OrderBy: R2dbcExposedTestBase() {
                     .select(NullableStrings.id)
                     .orderBy(NullableStrings.name, order)
                     .map { it[NullableStrings.id] }
-                    .toList()
+                    .toFastList()
 
                 ordered shouldBeEqualTo expected
             }

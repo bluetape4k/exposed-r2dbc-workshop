@@ -3,8 +3,8 @@ package exposed.r2dbc.examples.dml
 import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
@@ -63,7 +63,7 @@ class Ex12_InsertInto_Select: R2dbcExposedTestBase() {
                 .select(cities.name)
                 .orderBy(cities.id, SortOrder.DESC)
                 .limit(limit)
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 2
             rows[0][cities.name] shouldBeEqualTo "An"   // Andrey
@@ -96,7 +96,7 @@ class Ex12_InsertInto_Select: R2dbcExposedTestBase() {
             val rows = userData.selectAll()
                 .where { userData.value eq 42 }
                 .orderBy(userData.userId)
-                .toList()
+                .toFastList()
 
             rows.size shouldBeEqualTo allUserData.toInt()
         }
@@ -131,8 +131,10 @@ class Ex12_InsertInto_Select: R2dbcExposedTestBase() {
                     intLiteral(0)
                 )
             )
-            val rows = users.selectAll().where { users.name eq "Foo" }.toList()
-            rows.size.toLong() shouldBeEqualTo userCount
+            val rows = users.selectAll()
+                .where { users.name eq "Foo" }
+                .toFastList()
+            rows.size shouldBeEqualTo userCount.toInt()
         }
     }
 
@@ -160,7 +162,9 @@ class Ex12_InsertInto_Select: R2dbcExposedTestBase() {
                 columns = listOf(users.name, users.id)
             )
 
-            val rows = users.selectAll().where { users.name eq "Foo" }.toList()
+            val rows = users.selectAll()
+                .where { users.name eq "Foo" }
+                .toFastList()
             rows.size shouldBeEqualTo userCount.toInt()
         }
     }

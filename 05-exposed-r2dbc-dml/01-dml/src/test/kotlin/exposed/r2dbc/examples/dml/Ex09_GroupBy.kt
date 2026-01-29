@@ -4,12 +4,12 @@ import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.logging.warn
 import io.bluetape4k.support.toBigDecimal
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
@@ -75,7 +75,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
                     cAlias
                 )
                 .groupBy(cities.name)
-                .toList()
+                .toFastList()
 
             rows.forEach {
                 val cityName = it[cities.name]
@@ -117,7 +117,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
                 .select(cities.name, users.id.count())
                 .groupBy(cities.name)
                 .having { users.id.count() eq 1 }
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 1
             rows[0][cities.name] shouldBeEqualTo "St. Petersburg"
@@ -150,7 +150,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
                 .groupBy(cities.name)
                 .having { users.id.count().eq<Number, Long, Int>(maxExpr) }
                 .orderBy(cities.name)
-                .toList()
+                .toFastList()
 
             rows.forEach { row ->
                 log.debug { "city name=${row[cities.name]}, maxExpr=${row[maxExpr]}" }
@@ -195,7 +195,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
                 .groupBy(cities.name)
                 .having { users.id.count() lessEq 42L }
                 .orderBy(cities.name)
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 2
 
@@ -231,7 +231,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
 
             cities.select(maxNullableId)
                 .map { it[maxNullableId] }
-                .toList()
+                .toFastList()
                 .let { result ->
                     result shouldHaveSize 1
                     result.single().shouldNotBeNull() shouldBeEqualTo 3
@@ -240,7 +240,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
             cities.select(maxNullableId)
                 .where { cities.id.isNull() }
                 .map { it[maxNullableId] }
-                .toList()
+                .toFastList()
                 .let { result ->
                     result shouldHaveSize 1
                     result.single().shouldBeNull()
@@ -269,14 +269,14 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
 
             val avgId = cities.select(cities.id)
                 .map { it[cities.id] }
-                .toList()
+                .toFastList()
                 .average()
                 .toBigDecimal()
                 .setScale(2)
 
             cities.select(avgIdExpr)
                 .map { it[avgIdExpr] }
-                .toList()
+                .toFastList()
                 .let { result ->
                     result shouldHaveSize 1
                     result.single()?.toBigDecimal() shouldBeEqualTo avgId
@@ -285,7 +285,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
             cities.select(avgIdExpr)
                 .where { cities.id.isNull() }
                 .map { it[avgIdExpr] }
-                .toList()
+                .toFastList()
                 .let { result ->
                     result shouldHaveSize 1
                     result.single().shouldBeNull()
@@ -310,7 +310,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
                     val result = cities.leftJoin(users)
                         .select(cities.name, groupConcat)
                         .groupBy(cities.id, cities.name)
-                        .toList()
+                        .toFastList()
                         .associate { it[cities.name] to it[groupConcat] }
                     assert(result)
                 } catch (e: UnsupportedByDialectException) {

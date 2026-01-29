@@ -8,12 +8,13 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.collections.eclipse.toFastList
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.support.toBigDecimal
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.toSet
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEmpty
@@ -164,7 +165,7 @@ class Ex01_Select: R2dbcExposedTestBase() {
         withCitiesAndUsers(testDB) { _, users, _ ->
             val rows = users.selectAll()
                 .where { users.id neq "andrey" }
-                .toList()
+                .toFastList()
 
             rows.map { it[users.id] } shouldNotContain "andrey"
         }
@@ -176,12 +177,13 @@ class Ex01_Select: R2dbcExposedTestBase() {
         withCitiesAndUsers(testDB) { cities, users, _ ->
 
             // SELECT cities.city_id, cities."name" FROM cities
-            cities.selectAll().toList().shouldNotBeEmpty()
+            cities.selectAll().toFastList().shouldNotBeEmpty()
 
             // SELECT cities.city_id, cities."name" FROM cities WHERE cities."name" = 'Qwertt'
             cities.selectAll()
                 .where { cities.name eq "Qwertt" }
-                .toList().shouldBeEmpty()
+                .toFastList()
+                .shouldBeEmpty()
 
             // SELECT COUNT(*) FROM cities WHERE cities."name" = 'Qwertt'
             cities.selectAll()
@@ -220,7 +222,7 @@ class Ex01_Select: R2dbcExposedTestBase() {
                 .selectAll()
                 .where { users.id inList listOf("andrey", "alex") }
                 .orderBy(users.name)
-                .toList()
+                .toFastList()
 
             r1.size shouldBeEqualTo 2
             r1[0][users.name] shouldBeEqualTo "Alex"
@@ -236,7 +238,7 @@ class Ex01_Select: R2dbcExposedTestBase() {
              */
             val r2 = users.selectAll()
                 .where { users.id notInList setOf("ABC", "DEF") }
-                .toList()
+                .toFastList()
 
             users.selectAll().count() shouldBeEqualTo r2.size.toLong()
         }
@@ -261,7 +263,7 @@ class Ex01_Select: R2dbcExposedTestBase() {
                     (users.id to users.name) inList
                             listOf("andrey" to "Andrey", "sergey" to "Sergey")
                 }
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 2
             rows[0][users.name] shouldBeEqualTo "Andrey"
@@ -311,11 +313,11 @@ class Ex01_Select: R2dbcExposedTestBase() {
         withCitiesAndUsers(testDB) { cities, _, _ ->
             val subQuery: Query = cities.select(cities.id)
 
-            val r: Query = cities
+            val query: Query = cities
                 .selectAll()
                 .where { cities.id notInSubQuery subQuery }
 
-            r.count() shouldBeEqualTo 0L
+            query.count() shouldBeEqualTo 0L
         }
     }
 
@@ -465,7 +467,7 @@ class Ex01_Select: R2dbcExposedTestBase() {
                     users.id eq anyFrom(arrayOf("andrey", "alex"))
                 }
                 .orderBy(users.name)
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 2
             rows[0][users.name] shouldBeEqualTo "Alex"
@@ -498,7 +500,7 @@ class Ex01_Select: R2dbcExposedTestBase() {
                     users.id eq anyFrom(listOf("andrey", "alex"))
                 }
                 .orderBy(users.name)
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 2
             rows[0][users.name] shouldBeEqualTo "Alex"
@@ -583,16 +585,16 @@ class Ex01_Select: R2dbcExposedTestBase() {
         withSales(testDB) { _, sales ->
             val amounts = arrayOf(100, 1000).map { it.toBigDecimal() }.toTypedArray()
 
-            val rows = sales.selectAll()
+            val products = sales.selectAll()
                 .where {
                     sales.amount greaterEq anyFrom(amounts)
                 }
                 .orderBy(sales.amount)
                 .map { it[sales.product] }
-                .toList()
+                .toFastList()
 
-            rows.subList(0, 3).forEach { it shouldBeEqualTo "tea" }
-            rows.subList(3, 6).forEach { it shouldBeEqualTo "coffee" }
+            products.subList(0, 3).forEach { it shouldBeEqualTo "tea" }
+            products.subList(3, 6).forEach { it shouldBeEqualTo "coffee" }
         }
     }
 
@@ -615,17 +617,17 @@ class Ex01_Select: R2dbcExposedTestBase() {
         withSales(testDB) { _, sales ->
             val amounts = listOf(100.0, 1000.0).map { it.toBigDecimal() }
 
-            val rows = sales
+            val products = sales
                 .selectAll()
                 .where {
                     sales.amount greaterEq anyFrom(amounts)
                 }
                 .orderBy(sales.amount)
                 .map { it[sales.product] }
-                .toList()
+                .toFastList()
 
-            rows.subList(0, 3).forEach { it shouldBeEqualTo "tea" }
-            rows.subList(3, 6).forEach { it shouldBeEqualTo "coffee" }
+            products.subList(0, 3).forEach { it shouldBeEqualTo "tea" }
+            products.subList(3, 6).forEach { it shouldBeEqualTo "coffee" }
         }
     }
 
@@ -706,18 +708,18 @@ class Ex01_Select: R2dbcExposedTestBase() {
         withSales(testDB) { _, sales ->
             val subquery = sales.select(sales.amount).where { sales.product eq "tea" }
 
-            val rows = sales
+            val products = sales
                 .selectAll()
                 .where {
                     sales.amount greaterEq allFrom(subquery)
                 }
                 .orderBy(sales.amount)
                 .map { it[sales.product] }
-                .toList()
+                .toFastList()
 
-            rows shouldHaveSize 4
-            rows.first() shouldBeEqualTo "tea"
-            rows.drop(1).all { it == "coffee" }.shouldBeTrue()
+            products shouldHaveSize 4
+            products.first() shouldBeEqualTo "tea"
+            products.drop(1).all { it == "coffee" }.shouldBeTrue()
         }
     }
 
@@ -746,7 +748,7 @@ class Ex01_Select: R2dbcExposedTestBase() {
                 .where {
                     sales.amount greaterEq allFrom(amounts)
                 }
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 3
             rows.all { it[sales.product] == "coffee" }.shouldBeTrue()
@@ -778,7 +780,7 @@ class Ex01_Select: R2dbcExposedTestBase() {
                 .where {
                     sales.amount greaterEq allFrom(amounts)
                 }
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 3
             rows.all { it[sales.product] == "coffee" }.shouldBeTrue()
@@ -805,7 +807,7 @@ class Ex01_Select: R2dbcExposedTestBase() {
             val rows = sales
                 .selectAll()
                 .where { sales.amount greaterEq allFrom(someAmounts) }
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 3
             rows.all { it[sales.product] == "coffee" }.shouldBeTrue()
@@ -974,6 +976,7 @@ class Ex01_Select: R2dbcExposedTestBase() {
                 .where { cities.name eq "Munich" }
                 .limit(1)
                 .groupBy(cities.id, cities.name)
+
             val originalQuery = query.copy()
             val originalSql = query.prepareSQL(this, false)
 
@@ -987,7 +990,7 @@ class Ex01_Select: R2dbcExposedTestBase() {
 
             // 이미 query에는 comment가 존재하므로 IllegalStateException 발생
             expectException<IllegalStateException> {
-                query.comment("Testing").toList()
+                query.comment("Testing").toFastList()
             }
 
             val commentedBackSql = query
@@ -1016,7 +1019,7 @@ class Ex01_Select: R2dbcExposedTestBase() {
         }
 
         withTables(testDB, alphabet) {
-            val allLetters = ('A'..'Z').toList()
+            val allLetters = ('A'..'Z').toFastList()
             val amount = 10
             val start = 8L
 
@@ -1029,7 +1032,7 @@ class Ex01_Select: R2dbcExposedTestBase() {
                 .selectAll()
                 .limit(amount)
                 .map { it[alphabet.letter] }
-                .toList()
+                .toFastList()
 
             limitResult shouldBeEqualTo allLetters.take(amount)
 
@@ -1038,7 +1041,7 @@ class Ex01_Select: R2dbcExposedTestBase() {
                 .limit(amount)
                 .offset(start)
                 .map { it[alphabet.letter] }
-                .toList()
+                .toFastList()
 
             limitOffsetResult shouldBeEqualTo allLetters.drop(start.toInt()).take(amount)
 
@@ -1048,7 +1051,7 @@ class Ex01_Select: R2dbcExposedTestBase() {
                     .selectAll()
                     .offset(start)
                     .map { it[alphabet.letter] }
-                    .toList()
+                    .toFastList()
 
                 offsetResult shouldBeEqualTo allLetters.drop(start.toInt())
             }

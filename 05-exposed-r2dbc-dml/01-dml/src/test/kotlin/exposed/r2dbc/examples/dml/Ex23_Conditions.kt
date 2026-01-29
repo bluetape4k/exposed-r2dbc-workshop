@@ -6,11 +6,11 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
@@ -108,7 +108,7 @@ class Ex23_Conditions: R2dbcExposedTestBase() {
             table.selectAll()
                 .where { table.number1 eq table.number2 }
                 .map { it[table.id] }
-                .toList() shouldBeEqualTo listOf(sameNumberId)
+                .toFastList() shouldBeEqualTo listOf(sameNumberId)
 
             /**
              * null == null returns true
@@ -122,13 +122,13 @@ class Ex23_Conditions: R2dbcExposedTestBase() {
             table.selectAll()
                 .where { table.number1 isNotDistinctFrom table.number2 }
                 .map { it[table.id] }
-                .toList() shouldBeEqualTo listOf(sameNumberId, bothNullId)
+                .toFastList() shouldBeEqualTo listOf(sameNumberId, bothNullId)
 
             // null != null return null
             table.selectAll()
                 .where { table.number1 neq table.number2 }
                 .map { it[table.id] }
-                .toList() shouldBeEqualTo listOf(differentNumberId)
+                .toFastList() shouldBeEqualTo listOf(differentNumberId)
 
             /**
              * null != null return false
@@ -142,7 +142,7 @@ class Ex23_Conditions: R2dbcExposedTestBase() {
             table.selectAll()
                 .where { table.number1 isDistinctFrom table.number2 }
                 .map { it[table.id] }
-                .toList() shouldBeEqualTo listOf(differentNumberId, oneNullId)
+                .toFastList() shouldBeEqualTo listOf(differentNumberId, oneNullId)
 
             /**
              * (number1 is not null) != (number2 is null) returns true when both are null or neither is null
@@ -156,7 +156,7 @@ class Ex23_Conditions: R2dbcExposedTestBase() {
             table.selectAll()
                 .where { table.number1.isNotNull() isDistinctFrom table.number2.isNull() }
                 .map { it[table.id] }
-                .toList() shouldBeEqualTo listOf(sameNumberId, differentNumberId, bothNullId)
+                .toFastList() shouldBeEqualTo listOf(sameNumberId, differentNumberId, bothNullId)
 
             /**
              * (number1 is not null) == (number2 is null) returns true when only 1 is null
@@ -170,7 +170,7 @@ class Ex23_Conditions: R2dbcExposedTestBase() {
             table.selectAll()
                 .where { table.number1.isNotNull() isNotDistinctFrom table.number2.isNull() }
                 .map { it[table.id] }
-                .toList() shouldBeEqualTo listOf(oneNullId)
+                .toFastList() shouldBeEqualTo listOf(oneNullId)
         }
     }
 
@@ -186,7 +186,7 @@ class Ex23_Conditions: R2dbcExposedTestBase() {
 
         suspend fun selectIdWhere(condition: suspend () -> Op<Boolean>): List<Long> {
             val query = longTable.select(longTable.id).where(condition())
-            return query.map { it[longTable.id].value }.toList()
+            return query.map { it[longTable.id].value }.toFastList()
         }
 
         withTables(testDB, longTable) {
@@ -258,7 +258,7 @@ class Ex23_Conditions: R2dbcExposedTestBase() {
             val row = cities
                 .select(cities.name, cities.name, cities.id)
                 .where { cities.name eq "Munich" }
-                .toList()
+                .toFastList()
                 .single()
 
             row[cities.id] shouldBeEqualTo 2
@@ -274,7 +274,7 @@ class Ex23_Conditions: R2dbcExposedTestBase() {
     fun `throw when slice with empty list`(testDB: TestDB) = runTest {
         withCitiesAndUsers(testDB) { cities, _, _ ->
             expectException<IllegalArgumentException> {
-                cities.select(emptyList()).toList()
+                cities.select(emptyList()).toFastList()
             }
         }
     }
@@ -298,47 +298,47 @@ class Ex23_Conditions: R2dbcExposedTestBase() {
             table.selectAll()
                 .where { table.c1 less table.c2 }
                 .map { it[table.c1] }
-                .toList() shouldBeEqualTo listOf(1)
+                .toFastList() shouldBeEqualTo listOf(1)
 
             table.selectAll()
                 .where { table.c1 lessEq table.c2 }
                 .orderBy(table.c1)
                 .map { it[table.c1] }
-                .toList() shouldBeEqualTo listOf(0, 1)
+                .toFastList() shouldBeEqualTo listOf(0, 1)
 
             table.selectAll()
                 .where { table.c1 greater table.c2 }
                 .map { it[table.c1] }
-                .toList() shouldBeEqualTo listOf(2)
+                .toFastList() shouldBeEqualTo listOf(2)
 
             table.selectAll()
                 .where { table.c1 greaterEq table.c2 }
                 .orderBy(table.c1)
                 .map { it[table.c1] }
-                .toList() shouldBeEqualTo listOf(0, 2)
+                .toFastList() shouldBeEqualTo listOf(0, 2)
 
 
             table.selectAll()
                 .where { table.c2 less table.c1 }
                 .map { it[table.c1] }
-                .toList() shouldBeEqualTo listOf(2)
+                .toFastList() shouldBeEqualTo listOf(2)
 
             table.selectAll()
                 .where { table.c2 lessEq table.c1 }
                 .orderBy(table.c1)
                 .map { it[table.c1] }
-                .toList() shouldBeEqualTo listOf(0, 2)
+                .toFastList() shouldBeEqualTo listOf(0, 2)
 
             table.selectAll()
                 .where { table.c2 greater table.c1 }
                 .map { it[table.c1] }
-                .toList() shouldBeEqualTo listOf(1)
+                .toFastList() shouldBeEqualTo listOf(1)
 
             table.selectAll()
                 .where { table.c2 greaterEq table.c1 }
                 .orderBy(table.c1)
                 .map { it[table.c1] }
-                .toList() shouldBeEqualTo listOf(0, 1)
+                .toFastList() shouldBeEqualTo listOf(0, 1)
         }
     }
 
@@ -475,7 +475,7 @@ class Ex23_Conditions: R2dbcExposedTestBase() {
             log.debug { "Query: $query1" }
             query1 shouldBeEqualTo query2
 
-            val results1 = cities.select(cities.id, function1).toList()
+            val results1 = cities.select(cities.id, function1).toFastList()
 
             cities
                 .select(cities.id, function2)
@@ -566,7 +566,7 @@ class Ex23_Conditions: R2dbcExposedTestBase() {
             table.select(c1_lt_c2)
                 .orderBy(table.c1)
                 .map { it[c1_lt_c2] }
-                .toList() shouldBeEqualTo listOf(false, true, false)
+                .toFastList() shouldBeEqualTo listOf(false, true, false)
 
             /**
              * ```sql
@@ -579,7 +579,7 @@ class Ex23_Conditions: R2dbcExposedTestBase() {
             table.select(c1_lte_c2)
                 .orderBy(table.c1)
                 .map { it[c1_lte_c2] }
-                .toList() shouldBeEqualTo listOf(true, true, false)
+                .toFastList() shouldBeEqualTo listOf(true, true, false)
 
             /**
              * ```sql
@@ -592,7 +592,7 @@ class Ex23_Conditions: R2dbcExposedTestBase() {
             table.select(c1_gt_c2)
                 .orderBy(table.c1)
                 .map { it[c1_gt_c2] }
-                .toList() shouldBeEqualTo listOf(false, false, true)
+                .toFastList() shouldBeEqualTo listOf(false, false, true)
 
             /**
              * ```sql
@@ -605,7 +605,7 @@ class Ex23_Conditions: R2dbcExposedTestBase() {
             table.select(c1_gte_c2)
                 .orderBy(table.c1)
                 .map { it[c1_gte_c2] }
-                .toList() shouldBeEqualTo listOf(true, false, true)
+                .toFastList() shouldBeEqualTo listOf(true, false, true)
         }
     }
 

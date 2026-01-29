@@ -122,6 +122,9 @@ object DMLTestData {
     suspend fun Flow<ResultRow>.toCityNameList(): List<String> =
         map { it[Cities.name] }.toList()
 
+    fun Flow<ResultRow>.toCityNames(): Flow<String> =
+        map { it[Cities.name] }
+
 
     @Suppress("UnusedReceiverParameter")
     suspend fun R2dbcExposedTestBase.withCitiesAndUsers(

@@ -4,10 +4,10 @@ import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeFalse
@@ -78,7 +78,7 @@ class Ex06_Exists: R2dbcExposedTestBase() {
                             .where { userData.userId eq users.id }
                             .andWhere { userData.comment like "%here%" }
                     )
-                }.toList()
+                }.toFastList()
 
             rows shouldHaveSize 1
             rows.single()[users.name] shouldBeEqualTo "Something"
@@ -197,7 +197,7 @@ class Ex06_Exists: R2dbcExposedTestBase() {
                     )
                 }
                 .orderBy(users.id)
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 2
             rows[0][users.name] shouldBeEqualTo "Sergey"
@@ -248,7 +248,7 @@ class Ex06_Exists: R2dbcExposedTestBase() {
                     )
                 }
                 .orderBy(users.id)
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 2
             rows[0][users.name] shouldBeEqualTo "Sergey"

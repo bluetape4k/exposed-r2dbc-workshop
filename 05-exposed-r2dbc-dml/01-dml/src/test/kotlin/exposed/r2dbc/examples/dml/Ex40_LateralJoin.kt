@@ -4,10 +4,10 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.jetbrains.exposed.v1.core.Join
@@ -85,7 +85,7 @@ class Ex40_LateralJoin: R2dbcExposedTestBase() {
 
             val subqueryAlias = query.lastQueryAlias ?: error("Alias must exist!")
 
-            val rows = query.selectAll().toList()
+            val rows = query.selectAll().toFastList()
             rows.map { it[subqueryAlias[child.value]] } shouldBeEqualTo listOf(30)
             rows.forEach {
                 log.debug {
@@ -169,7 +169,9 @@ class Ex40_LateralJoin: R2dbcExposedTestBase() {
                         lateral = true
                     )
 
-                    join.selectAll().map { it[subqueryAlias[child.value]] }.toList() shouldBeEqualTo listOf(30)
+                    join.selectAll()
+                        .map { it[subqueryAlias[child.value]] }
+                        .toFastList() shouldBeEqualTo listOf(30)
                 }
 
             child.selectAll()
@@ -184,7 +186,9 @@ class Ex40_LateralJoin: R2dbcExposedTestBase() {
                         lateral = true
                     )
 
-                    join.selectAll().map { it[subqueryAlias[child.value]] }.toList() shouldBeEqualTo listOf(30)
+                    join.selectAll()
+                        .map { it[subqueryAlias[child.value]] }
+                        .toFastList() shouldBeEqualTo listOf(30)
                 }
 
             val parentQuery = parent.selectAll().alias("parent1")
@@ -200,7 +204,9 @@ class Ex40_LateralJoin: R2dbcExposedTestBase() {
                         lateral = true
                     )
 
-                    join.selectAll().map { it[subqueryAlias[child.value]] }.toList() shouldBeEqualTo listOf(30)
+                    join.selectAll()
+                        .map { it[subqueryAlias[child.value]] }
+                        .toFastList() shouldBeEqualTo listOf(30)
                 }
         }
     }
@@ -217,12 +223,22 @@ class Ex40_LateralJoin: R2dbcExposedTestBase() {
         withTestTables(dialect) { parent, child ->
             // Lateral 적용 시, 명시적으로 테이블 간의 JOIN 조건의 컬럼을 지정하면 예외가 발생합니다. (쿼리를 사용해야 합니다)
             expectException<IllegalArgumentException> {
-                parent.join(child, JoinType.LEFT, onColumn = parent.id, otherColumn = child.parent, lateral = true)
+                parent
+                    .join(
+                        child,
+                        JoinType.LEFT,
+                        onColumn = parent.id,
+                        otherColumn = child.parent,
+                        lateral = true
+                    )
             }
 
             // Lateral 적용 시, 암묵적인 테이블 간의 JOIN 조건의 컬럼을 지정하면 예외가 발생합니다. (쿼리를 사용해야 합니다)
             expectException<IllegalArgumentException> {
-                parent.join(child, JoinType.LEFT, lateral = true).selectAll().toList()
+                parent
+                    .join(child, JoinType.LEFT, lateral = true)
+                    .selectAll()
+                    .toFastList()
             }
         }
     }

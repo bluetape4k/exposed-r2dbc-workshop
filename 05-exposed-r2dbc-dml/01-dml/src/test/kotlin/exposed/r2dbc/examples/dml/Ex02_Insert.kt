@@ -9,6 +9,7 @@ import exposed.r2dbc.shared.tests.inProperCase
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.codec.Base58
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.exposed.r2dbc.statements.BatchInsertOnConflictDoNothing
 import io.bluetape4k.exposed.r2dbc.statements.BatchInsertOnConflictDoNothingExecutable
 import io.bluetape4k.idgenerators.uuid.TimebasedUuid
@@ -20,7 +21,6 @@ import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import org.amshove.kluent.fail
@@ -84,29 +84,38 @@ class Ex02_Insert: R2dbcExposedTestBase() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `insert and get id 01`(testDB: TestDB) = runTest {
+
         val idTable = object: IntIdTable("tmp") {
             val name = varchar("foo", 10).uniqueIndex()
         }
 
         withTables(testDB, idTable) {
-            val id1 = idTable.insertAndGetId { it[name] = "name-1" }
+            val id1 = idTable.insertAndGetId {
+                it[name] = "name-1"
+            }
             idTable.selectAll().count() shouldBeEqualTo 1L
             id1.value shouldBeEqualTo 1
 
-            val id2 = idTable.insertAndGetId { it[name] = "name-2" }
+            val id2 = idTable.insertAndGetId {
+                it[name] = "name-2"
+            }
             idTable.selectAll().count() shouldBeEqualTo 2L
             id2.value shouldBeEqualTo 2
 
             val id3 = idTable.insert {
                 it[name] = "name-3"
             } get idTable.id
+            idTable.selectAll().count() shouldBeEqualTo 3L
+            id3.value shouldBeEqualTo 3
 
             val id4 = idTable.insert {
                 it[name] = "name-4"
             }[idTable.id]
+            idTable.selectAll().count() shouldBeEqualTo 4L
+            id4.value shouldBeEqualTo 4
 
             log.debug { "id1=$id1, id2=$id2, id3=$id3, id4=$id4" }
-            
+
             assertFailAndRollback("Unique constraint failed") {
                 idTable.insertAndGetId { it[name] = "name-1" }
             }
@@ -528,7 +537,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
             val rows = standardTable
                 .select(externalIdColumn)
                 .map { it[externalIdColumn] }
-                .toList()
+                .toFastList()
 
             rows shouldBeEqualTo listOf(id1)
         }
@@ -683,12 +692,12 @@ class Ex02_Insert: R2dbcExposedTestBase() {
                 it[OrderedDataTable.order] = 10
             }
 
-            val orders = OrderedDataTable.select(OrderedDataTable.id)
+            val orderIds = OrderedDataTable.select(OrderedDataTable.id)
                 .orderBy(OrderedDataTable.order to SortOrder.ASC)
                 .map { it[OrderedDataTable.id] }
-                .toList()
+                .toFastList()
 
-            orders.map { it.value } shouldBeEqualTo listOf(bar.value, foo.value)
+            orderIds.map { it.value } shouldBeEqualTo listOf(bar.value, foo.value)
         }
     }
 

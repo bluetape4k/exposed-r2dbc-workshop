@@ -2,11 +2,11 @@ package exposed.r2dbc.examples.dml
 
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
@@ -534,7 +534,7 @@ class Ex14_MergeTable: Ex14_MergeBase() {
             // source.value > 1 이라 DELETE 된다
             dest.selectAll()
                 .where { dest.key inList listOf("in-source-and-dest-2", "in-source-and-dest-3") }
-                .toList()
+                .toFastList()
                 .shouldBeEmpty()
         }
     }

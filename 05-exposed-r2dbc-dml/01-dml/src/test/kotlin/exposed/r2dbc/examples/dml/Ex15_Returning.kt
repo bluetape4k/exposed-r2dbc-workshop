@@ -3,11 +3,11 @@ package exposed.r2dbc.examples.dml
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
@@ -323,7 +323,7 @@ class Ex15_Returning: R2dbcExposedTestBase() {
             Items.selectAll().count() shouldBeEqualTo 0L
 
             // 삭제될 것이 없으므로, 삭제된 레코드가 없습니다.
-            Items.deleteReturning().toList().shouldBeEmpty()
+            Items.deleteReturning().toFastList().shouldBeEmpty()
         }
     }
 
@@ -369,7 +369,7 @@ class Ex15_Returning: R2dbcExposedTestBase() {
              * DELETE FROM items RETURNING items.id
              * ```
              */
-            val result2 = Items.deleteReturning(listOf(Items.id)).map { it[Items.id].value }.toList()
+            val result2 = Items.deleteReturning(listOf(Items.id)).map { it[Items.id].value }.toFastList()
             result2 shouldBeEqualTo listOf(1, 2)
 
             Items.selectAll().count() shouldBeEqualTo 0L
@@ -427,7 +427,7 @@ class Ex15_Returning: R2dbcExposedTestBase() {
                     it[name] = name.lowerCase()
                 }
                 .map { it[Items.name] }
-                .toList()
+                .toFastList()
             result2.toSet() shouldBeEqualTo input.map { it.first.lowercase() }.toSet()
 
             /**
@@ -445,7 +445,7 @@ class Ex15_Returning: R2dbcExposedTestBase() {
                     it[price] = 0.0
                 }
                 .map { it[newPrice] }
-                .toList()
+                .toFastList()
 
             result3 shouldHaveSize 3
             result3.all { it == 0.0 }.shouldBeTrue()

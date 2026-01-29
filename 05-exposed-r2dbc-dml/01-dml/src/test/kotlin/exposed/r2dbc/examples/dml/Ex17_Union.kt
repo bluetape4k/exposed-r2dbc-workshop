@@ -4,10 +4,10 @@ import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeTrue
@@ -71,7 +71,7 @@ class Ex17_Union: R2dbcExposedTestBase() {
             val rows = andreyQuery.union(sergeyQuery)
                 .limit(1)
                 .map { it[users.id] }
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 1
             rows.single() shouldBeEqualTo "andrey"
@@ -104,7 +104,7 @@ class Ex17_Union: R2dbcExposedTestBase() {
                 .limit(1)
                 .offset(1)
                 .map { it[users.id] }
-                .toList()
+                .toFastList()
 
             rows shouldHaveSize 1
             rows.single() shouldBeEqualTo "sergey"
@@ -173,11 +173,11 @@ class Ex17_Union: R2dbcExposedTestBase() {
             val union: SetOperation = idQuery.union(idQuery).orderBy(idAlias, SortOrder.DESC)
 
             // UNION
-            union.map { it[idAlias] }.toList() shouldBeEqualTo listOf("sergey", "andrey")
+            union.map { it[idAlias] }.toFastList() shouldBeEqualTo listOf("sergey", "andrey")
 
             // UNION ALL
             union.withDistinct(false)
-                .map { it[idAlias] }.toList() shouldBeEqualTo listOf("sergey", "sergey", "andrey", "andrey")
+                .map { it[idAlias] }.toFastList() shouldBeEqualTo listOf("sergey", "sergey", "andrey", "andrey")
         }
     }
 
@@ -203,7 +203,7 @@ class Ex17_Union: R2dbcExposedTestBase() {
             val sergeyQuery = users.selectAll().where { users.id eq "sergey" }
 
 
-            val rows = andreyQuery.union(sergeyQuery).map { it[users.id] }.toList()
+            val rows = andreyQuery.union(sergeyQuery).map { it[users.id] }.toFastList()
 
             rows shouldHaveSize 2
             rows shouldBeEqualTo listOf("andrey", "sergey")
@@ -241,7 +241,7 @@ class Ex17_Union: R2dbcExposedTestBase() {
             val sergeyQuery = users.selectAll().where { users.id eq "sergey" }
 
             // expected users id: [andrey, sergey, eugene, alex, smth, sergey]
-            val expectedUsers = usersQuery.map { it[users.id] }.toList() + "sergey"
+            val expectedUsers = usersQuery.map { it[users.id] }.toFastList() + "sergey"
 
             val intersectAppliedFirst = when (currentDialect) {
                 is PostgreSQLDialect,
@@ -258,7 +258,7 @@ class Ex17_Union: R2dbcExposedTestBase() {
                 .unionAll(usersQuery)
                 .intersect(sergeyQuery)
                 .map { it[users.id] }
-                .toList()
+                .toFastList()
 
             log.debug { "intersected users: $rows" }
 
@@ -295,10 +295,10 @@ class Ex17_Union: R2dbcExposedTestBase() {
 
         withCitiesAndUsers(testDB) { _, users, _ ->
             val usersQuery = users.selectAll()
-            val expectedUsers = usersQuery.map { it[users.id] }.toList() - "sergey"
+            val expectedUsers = usersQuery.map { it[users.id] }.toFastList() - "sergey"
             val sergeyQuery = users.selectAll().where { users.id eq "sergey" }
 
-            val result = usersQuery.except(sergeyQuery).map { it[users.id] }.toList()
+            val result = usersQuery.except(sergeyQuery).map { it[users.id] }.toFastList()
 
             result shouldHaveSize 4
             result shouldContainSame expectedUsers
@@ -332,7 +332,7 @@ class Ex17_Union: R2dbcExposedTestBase() {
 
         withCitiesAndUsers(testDB) { _, users, _ ->
             val usersQuery = users.selectAll()
-            val expectedUsers = usersQuery.map { it[users.id] }.toList() - "sergey"
+            val expectedUsers = usersQuery.map { it[users.id] }.toFastList() - "sergey"
             val sergeyQuery = users.selectAll().where { users.id eq "sergey" }
 
             usersQuery
@@ -347,7 +347,7 @@ class Ex17_Union: R2dbcExposedTestBase() {
                 .union(usersQuery)
                 .except(sergeyQuery)        // `sergey` 를 제외한 모든 사용자
                 .map { it[users.id] }
-                .toList()
+                .toFastList()
 
             result shouldHaveSize 4
             result shouldContainSame expectedUsers
@@ -385,7 +385,7 @@ class Ex17_Union: R2dbcExposedTestBase() {
 
         withCitiesAndUsers(testDB) { _, users, _ ->
             val usersQuery = users.selectAll()
-            val expectedUsers = usersQuery.map { it[users.id] }.toList() - "sergey" - "andrey"
+            val expectedUsers = usersQuery.map { it[users.id] }.toFastList() - "sergey" - "andrey"
             val sergeyQuery = users.selectAll().where { users.id eq "sergey" }
             val andreyQuery = users.selectAll().where { users.id eq "andrey" }
 
@@ -393,7 +393,7 @@ class Ex17_Union: R2dbcExposedTestBase() {
                 .except(sergeyQuery)                   // sergey 를 제외한 모든 사용자
                 .except(andreyQuery)                   // andrey 를 제외한 모든 사용자
                 .map { it[users.id] }
-                .toList()
+                .toFastList()
 
             result shouldHaveSize 3
             result shouldContainSame expectedUsers
@@ -435,7 +435,7 @@ class Ex17_Union: R2dbcExposedTestBase() {
                 .union(sergeyQuery)
                 .union(eugeneQuery)
                 .map { it[users.id] }
-                .toList()
+                .toFastList()
 
             result shouldHaveSize 3
             result shouldContainSame listOf("andrey", "sergey", "eugene")
@@ -476,7 +476,7 @@ class Ex17_Union: R2dbcExposedTestBase() {
                     .union(andreyOrSergeyQuery)
                     .withDistinct(false)
                     .map { it[users.id] }
-                    .toList()
+                    .toFastList()
 
                 result shouldHaveSize 4
                 result.all { it in setOf("andrey", "sergey") }.shouldBeTrue()
@@ -520,7 +520,7 @@ class Ex17_Union: R2dbcExposedTestBase() {
                 val result = andreyOrSergeyQuery
                     .unionAll(andreyOrSergeyQuery)
                     .map { it[users.id] }
-                    .toList()
+                    .toFastList()
 
                 result shouldHaveSize 2
                 result.all { it == "andrey" }.shouldBeTrue()
@@ -568,7 +568,7 @@ class Ex17_Union: R2dbcExposedTestBase() {
                 val result = andreyOrSergeyQuery
                     .unionAll(andreyOrSergeyQuery)
                     .map { it[users.id] }
-                    .toList()
+                    .toFastList()
 
                 result shouldHaveSize 2
                 result.all { it == "sergey" }.shouldBeTrue()
@@ -605,7 +605,7 @@ class Ex17_Union: R2dbcExposedTestBase() {
             val result = andreyQuery
                 .union(andreyQuery)
                 .map { it[users.id] }
-                .toList()
+                .toFastList()
 
             result shouldBeEqualTo listOf("andrey")
         }
@@ -636,7 +636,7 @@ class Ex17_Union: R2dbcExposedTestBase() {
             val result = andreyQuery
                 .unionAll(andreyQuery)
                 .map { it[users.id] }
-                .toList()
+                .toFastList()
 
             result shouldBeEqualTo listOf("andrey", "andrey")
         }
@@ -674,7 +674,7 @@ class Ex17_Union: R2dbcExposedTestBase() {
                 .unionAll(andreyQuery)
                 .unionAll(andreyQuery)
                 .map { it[users.id] }
-                .toList()
+                .toFastList()
 
             result shouldBeEqualTo List(3) { "andrey" }
         }
@@ -710,7 +710,7 @@ class Ex17_Union: R2dbcExposedTestBase() {
             val unionAlias = andreyQuery1.unionAll(andreyQuery2)
             val result = unionAlias
                 .map { Triple(it[users.id], it[exp1a], it[exp2a]) }
-                .toList()
+                .toFastList()
 
             result shouldBeEqualTo listOf(
                 Triple("andrey", 10, "aaa"),
@@ -755,7 +755,7 @@ class Ex17_Union: R2dbcExposedTestBase() {
                 .map {
                     Triple(it[unionAlias[users.id]], it[unionAlias[exp1a]], it[unionAlias[exp2a]])
                 }
-                .toList()
+                .toFastList()
 
             result shouldBeEqualTo listOf(
                 Triple("andrey", 10, "aaa"),
