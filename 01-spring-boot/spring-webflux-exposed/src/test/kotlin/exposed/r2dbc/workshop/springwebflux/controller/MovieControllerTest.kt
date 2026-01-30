@@ -2,13 +2,13 @@ package exposed.r2dbc.workshop.springwebflux.controller
 
 import exposed.r2dbc.workshop.springwebflux.AbstractSpringWebfluxTest
 import exposed.r2dbc.workshop.springwebflux.domain.MovieDTO
+import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.spring.tests.httpDelete
 import io.bluetape4k.spring.tests.httpGet
 import io.bluetape4k.spring.tests.httpPost
 import kotlinx.coroutines.reactive.awaitSingle
-import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
 import org.amshove.kluent.shouldNotBeNull
@@ -32,7 +32,7 @@ class MovieControllerTest(
     }
 
     @Test
-    fun `get movie by id`() = runTest {
+    fun `get movie by id`() = runSuspendIO {
         val id = 1L
 
         val movie = client
@@ -42,13 +42,11 @@ class MovieControllerTest(
             .awaitSingle()
 
         log.debug { "movie=$movie" }
-
-        movie.shouldNotBeNull()
         movie.id shouldBeEqualTo id
     }
 
     @Test
-    fun `search movies by producer name`() = runTest {
+    fun `search movies by producer name`() = runSuspendIO {
         val producerName = "Johnny"
 
         val movies = client
@@ -62,7 +60,7 @@ class MovieControllerTest(
     }
 
     @Test
-    fun `create new movie`() = runTest {
+    fun `create new movie`() = runSuspendIO {
         val newMovie = newMovieDTO()
 
         val saved = client
@@ -72,11 +70,11 @@ class MovieControllerTest(
             .awaitSingle()
 
         log.debug { "saved=$saved" }
-        saved.shouldNotBeNull() shouldBeEqualTo newMovie.copy(id = saved.id)
+        saved shouldBeEqualTo newMovie.copy(id = saved.id)
     }
 
     @Test
-    fun `delete movie`() = runTest {
+    fun `delete movie`() = runSuspendIO {
         val newMovie = newMovieDTO()
 
         val saved = client

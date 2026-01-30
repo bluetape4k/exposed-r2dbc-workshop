@@ -2,20 +2,19 @@ package exposed.r2dbc.workshop.springwebflux.controller
 
 import exposed.r2dbc.workshop.springwebflux.AbstractSpringWebfluxTest
 import exposed.r2dbc.workshop.springwebflux.domain.ActorDTO
+import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.spring.tests.httpDelete
 import io.bluetape4k.spring.tests.httpGet
 import io.bluetape4k.spring.tests.httpPost
 import kotlinx.coroutines.reactive.awaitSingle
-import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
 import org.amshove.kluent.shouldNotBeNull
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.web.reactive.server.WebTestClient
-import org.springframework.test.web.reactive.server.expectBody
 import org.springframework.test.web.reactive.server.expectBodyList
 import org.springframework.test.web.reactive.server.returnResult
 
@@ -32,7 +31,7 @@ class ActorControllerTest(
     }
 
     @Test
-    fun `get actor by id`() = runTest {
+    fun `get actor by id`() = runSuspendIO {
         val id = 1L
 
         val actor = client
@@ -48,51 +47,51 @@ class ActorControllerTest(
     }
 
     @Test
-    fun `find actors by lastName`() = runTest {
+    fun `find actors by lastName`() = runSuspendIO {
         val lastName = "Depp"
 
         val depp = client
             .httpGet("/actors?lastName=$lastName")
             .expectStatus().is2xxSuccessful
             .expectBodyList<ActorDTO>()
-            .returnResult().responseBody!!
+            .returnResult().responseBody
+            .shouldNotBeNull()
 
         log.debug { "actors=$depp" }
-        depp.shouldNotBeNull() shouldHaveSize 1
+        depp shouldHaveSize 1
     }
 
     @Test
-    fun `find actors by firstName`() = runTest {
+    fun `find actors by firstName`() = runSuspendIO {
         val firstName = "Angelina"
 
         val angelinas = client
             .httpGet("/actors?firstName=$firstName")
             .expectStatus().is2xxSuccessful
             .expectBodyList<ActorDTO>()
-            .returnResult().responseBody!!
+            .returnResult().responseBody
+            .shouldNotBeNull()
 
         log.debug { "actors=$angelinas" }
-        angelinas.shouldNotBeNull() shouldHaveSize 2
+        angelinas shouldHaveSize 2
     }
 
     @Test
-    fun `create new actor`() = runTest {
+    fun `create new actor`() = runSuspendIO {
         val actor = newActorDTO()
 
         val newActor = client
             .httpPost("/actors", actor)
             .expectStatus().is2xxSuccessful
-            .expectBody<ActorDTO>()
-            .returnResult().responseBody!!
+            .returnResult<ActorDTO>().responseBody
+            .awaitSingle()
 
         log.debug { "newActor=$newActor" }
-
-        newActor.shouldNotBeNull()
         newActor shouldBeEqualTo actor.copy(id = newActor.id)
     }
 
     @Test
-    fun `delete actor`() = runTest {
+    fun `delete actor`() = runSuspendIO {
         val actor = newActorDTO()
 
         val newActor = client
@@ -111,7 +110,6 @@ class ActorControllerTest(
             .awaitSingle()
 
         log.debug { "deletedCount=$deletedCount" }
-
         deletedCount shouldBeEqualTo 1
     }
 }

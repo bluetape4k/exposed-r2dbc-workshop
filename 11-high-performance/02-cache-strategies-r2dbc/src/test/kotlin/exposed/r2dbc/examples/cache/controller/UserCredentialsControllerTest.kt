@@ -68,6 +68,7 @@ class UserCredentialsControllerTest(
     fun `findAll user credentials`() = runSuspendIO {
         val ucs = client
             .httpGet("/user-credentials")
+            .expectStatus().is2xxSuccessful
             .expectBodyList<UserCredentialsDTO>()
             .returnResult().responseBody
             .shouldNotBeNull()
@@ -80,9 +81,11 @@ class UserCredentialsControllerTest(
         idsInDB.forEach { id ->
             val uc = client
                 .httpGet("/user-credentials/$id")
+                .expectStatus().is2xxSuccessful
                 .returnResult<UserCredentialsDTO>().responseBody
                 .awaitSingle()
 
+            log.debug { "user credentials: $uc" }
             uc.id shouldBeEqualTo id
         }
     }
@@ -94,6 +97,7 @@ class UserCredentialsControllerTest(
 
         val ucs = client
             .httpGet("/user-credentials/all?ids=${ids.joinToString(",")}")
+            .expectStatus().is2xxSuccessful
             .expectBodyList<UserCredentialsDTO>()
             .returnResult().responseBody
             .shouldNotBeNull()
@@ -107,8 +111,11 @@ class UserCredentialsControllerTest(
         repository.getAll(idsInDB)
 
         val invalidatedIds = idsInDB.shuffled().take(3)
+        val ids = invalidatedIds.joinToString(",")
+        
         val invalidateCount = client
-            .httpDelete("/user-credentials/invalidate?ids=${invalidatedIds.joinToString(",")}")
+            .httpDelete("/user-credentials/invalidate?ids=$ids")
+            .expectStatus().is2xxSuccessful
             .returnResult<Long>().responseBody
             .awaitSingle()
 

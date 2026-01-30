@@ -35,8 +35,6 @@ class MovieActorsControllerTest(
             .awaitSingle()
 
         log.debug { "movieWithActors[$movieId]=$movieWithActors" }
-
-        movieWithActors.shouldNotBeNull()
         movieWithActors.id shouldBeEqualTo movieId
     }
 

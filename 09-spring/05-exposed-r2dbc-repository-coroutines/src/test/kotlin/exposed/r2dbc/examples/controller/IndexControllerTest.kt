@@ -24,10 +24,10 @@ class IndexControllerTest(
             .expectStatus().is2xxSuccessful
             .expectBody<String>()
             .returnResult().responseBody
+            .apply {
+                log.debug { "Index: $this" }
+            }
             .shouldNotBeNull()
             .shouldNotBeBlank()
-            .let {
-                log.debug { "Response body: $it" }
-            }
     }
 }

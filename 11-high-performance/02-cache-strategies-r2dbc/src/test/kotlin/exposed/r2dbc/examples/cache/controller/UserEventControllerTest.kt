@@ -6,6 +6,7 @@ import exposed.r2dbc.examples.cache.domain.model.newUserEventDTO
 import io.bluetape4k.junit5.awaitility.suspendUntil
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
+import io.bluetape4k.logging.info
 import io.bluetape4k.spring.tests.httpPost
 import kotlinx.coroutines.reactive.awaitSingle
 import org.amshove.kluent.shouldBeEqualTo
@@ -47,6 +48,7 @@ class UserEventControllerTest(
         await.atMost(Duration.ofSeconds(4))
             .pollInterval(Duration.ofMillis(100))
             .suspendUntil {
+                log.info { "Waiting for insert user events to DB." }
                 getCountOfUserEvents() == prevCount + 1L
             }
 
@@ -72,6 +74,7 @@ class UserEventControllerTest(
         await.atMost(Duration.ofSeconds(10))
             .pollInterval(Duration.ofMillis(100))
             .suspendUntil {
+                log.info { "Waiting for insert user events to DB." }
                 getCountOfUserEvents() == prevCount + insertCount
             }
 

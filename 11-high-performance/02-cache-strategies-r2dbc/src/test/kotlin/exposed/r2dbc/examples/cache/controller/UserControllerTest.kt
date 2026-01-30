@@ -15,7 +15,6 @@ import io.bluetape4k.spring.tests.httpPost
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldContainSame
 import org.amshove.kluent.shouldHaveSize
@@ -71,14 +70,15 @@ class UserControllerTest(
     }
 
     @Test
-    fun `모든 사용자를 조회`() = runTest {
+    fun `모든 사용자를 조회`() = runSuspendIO {
         val users = client
             .httpGet("/users")
             .expectStatus().is2xxSuccessful
             .expectBodyList<UserDTO>()
             .returnResult().responseBody
+            .shouldNotBeNull()
 
-        users.shouldNotBeNull() shouldHaveSize idsInDB.size
+        users shouldHaveSize idsInDB.size
     }
 
     @Test
@@ -127,8 +127,10 @@ class UserControllerTest(
         repository.getAll(idsInDB)
 
         val invalidatedId = idsInDB.shuffled().take(3)
+        val ids = invalidatedId.joinToString(",")
+        
         val invalidedCount = client
-            .httpDelete("/users/invalidate?ids=${invalidatedId.joinToString(",")}")
+            .httpDelete("/users/invalidate?ids=$ids")
             .expectStatus().is2xxSuccessful
             .returnResult<Long>().responseBody
             .awaitSingle()

@@ -58,8 +58,6 @@ class MovieControllerTest(
             .awaitSingle()
 
         log.debug { "movie=$movie" }
-
-        movie.shouldNotBeNull()
         movie.id shouldBeEqualTo id
     }
 
@@ -88,8 +86,7 @@ class MovieControllerTest(
             .awaitSingle()
 
         log.debug { "saved=$saved" }
-
-        saved.shouldNotBeNull() shouldBeEqualTo newMovie.copy(id = saved.id)
+        saved shouldBeEqualTo newMovie.copy(id = saved.id)
     }
 
     @Test

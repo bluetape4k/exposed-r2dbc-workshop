@@ -1,9 +1,10 @@
 package exposed.r2dbc.workshop.springwebflux.controller
 
 import exposed.r2dbc.workshop.springwebflux.AbstractSpringWebfluxTest
+import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
+import io.bluetape4k.logging.debug
 import io.bluetape4k.spring.tests.httpGet
-import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldNotBeEmpty
 import org.amshove.kluent.shouldNotBeNull
 import org.junit.jupiter.api.Test
@@ -18,11 +19,14 @@ class IndexControllerTest(
     companion object: KLoggingChannel()
 
     @Test
-    fun `get index`() = runTest {
+    fun `get index`() = runSuspendIO {
         client.httpGet("/")
             .expectStatus().is2xxSuccessful
             .expectBody<String>()
             .returnResult().responseBody
+            .apply {
+                log.debug { "Index=$this" }
+            }
             .shouldNotBeNull()
             .shouldNotBeEmpty()
     }

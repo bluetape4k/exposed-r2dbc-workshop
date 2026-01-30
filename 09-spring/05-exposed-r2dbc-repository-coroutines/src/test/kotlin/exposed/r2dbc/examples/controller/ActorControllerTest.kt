@@ -40,7 +40,7 @@ class ActorControllerTest(
             .expectBodyList<ActorDTO>()
             .returnResult().responseBody
             .shouldNotBeNull()
-        
+
         actors.forEach {
             log.debug { it }
         }
@@ -58,7 +58,6 @@ class ActorControllerTest(
             .awaitSingle()
 
         log.debug { "Actor: $actor" }
-        actor.shouldNotBeNull()
         actor.id shouldBeEqualTo actorId
     }
 
@@ -71,9 +70,10 @@ class ActorControllerTest(
             .expectStatus().is2xxSuccessful
             .expectBodyList<ActorDTO>()
             .returnResult().responseBody
+            .shouldNotBeNull()
 
         log.debug { "actors=$angelinas" }
-        angelinas.shouldNotBeNull() shouldHaveSize 2
+        angelinas shouldHaveSize 2
     }
 
     @Test
@@ -112,7 +112,6 @@ class ActorControllerTest(
             .awaitSingle()
 
         log.debug { "deletedCount=$deletedCount" }
-
         deletedCount shouldBeEqualTo 1
     }
 }
