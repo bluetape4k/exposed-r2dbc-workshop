@@ -179,8 +179,11 @@ class Ex02_TransactionExec: R2dbcExposedTestBase() {
                 it[title] = "Exposed"
             }
 
-            val (table, id, title) =
-                listOf(tester.tableName, tester.id.name, tester.title.name)
+            val (table, id, title) = listOf(
+                tester.tableName,
+                tester.id.name,
+                tester.title.name
+            )
 
             val stringResult = exec(
                 """SELECT $title FROM $table WHERE $id = 1;"""

@@ -5,6 +5,7 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.collections.eclipse.toUnifiedSet
 import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
@@ -253,7 +254,7 @@ class Ex11_Join: R2dbcExposedTestBase() {
             )
 
             allUsersToStPetersburg.map { it.second }.distinct() shouldBeEqualTo listOf("St. Petersburg")
-            allUsersToStPetersburg.map { it.first }.toSet() shouldBeEqualTo allUsers
+            allUsersToStPetersburg.map { it.first }.toUnifiedSet() shouldBeEqualTo allUsers
         }
     }
 

@@ -3,7 +3,6 @@ package exposed.r2dbc.examples.cache.domain.repository
 import exposed.r2dbc.examples.cache.AbstractCacheStrategyTest
 import exposed.r2dbc.examples.cache.domain.model.UserTable
 import exposed.r2dbc.examples.cache.domain.model.newUserDTO
-import io.bluetape4k.collections.eclipse.toFastList
 import io.bluetape4k.exposed.core.statements.api.toExposedBlob
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -104,7 +103,7 @@ class UserCacheRepositoryTest(
 
     @Test
     fun `Read Through로 User를 검색한다`() = runSuspendIO {
-        val users = repository.findAll().toFastList()
+        val users = repository.findAll()
         users shouldHaveSize idsInDB.size
         users.forEach {
             log.debug { "Found user: $it" }
@@ -114,7 +113,7 @@ class UserCacheRepositoryTest(
     @Test
     fun `Read Through 로 검색한 User가 없을 때에는 빈 리스트 반환`() = runSuspendIO {
         val userIdToSearch = listOf(-1L, -3L, -5L, -7L, -9L)
-        val users = repository.findAll { UserTable.id inList userIdToSearch }.toFastList()
+        val users = repository.findAll { UserTable.id inList userIdToSearch }
         users.shouldBeEmpty()
     }
 

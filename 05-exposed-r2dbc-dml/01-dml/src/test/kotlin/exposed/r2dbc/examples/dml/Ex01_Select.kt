@@ -9,13 +9,14 @@ import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.collections.eclipse.toFastList
+import io.bluetape4k.collections.eclipse.unifiedSetOf
 import io.bluetape4k.coroutines.flow.extensions.toFastList
+import io.bluetape4k.coroutines.flow.extensions.toUnifiedSet
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.support.toBigDecimal
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.flow.toSet
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
@@ -883,7 +884,7 @@ class Ex01_Select: R2dbcExposedTestBase() {
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `compound operations`(testDB: TestDB) = runTest {
         withCitiesAndUsers(testDB) { _, users, _ ->
-            val allUsers = setOf(
+            val allUsers = unifiedSetOf(
                 "Andrey",
                 "Sergey",
                 "Eugene",
@@ -909,7 +910,7 @@ class Ex01_Select: R2dbcExposedTestBase() {
                 .selectAll()
                 .where(orOp)
                 .map { it[users.name] }
-                .toSet()
+                .toUnifiedSet()
             userNameOr shouldBeEqualTo allUsers
 
             /**

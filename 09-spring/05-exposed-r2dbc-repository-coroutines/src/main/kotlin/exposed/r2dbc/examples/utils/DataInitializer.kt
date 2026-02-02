@@ -5,6 +5,7 @@ import exposed.r2dbc.examples.domain.model.MovieSchema.ActorTable
 import exposed.r2dbc.examples.domain.model.MovieSchema.MovieTable
 import exposed.r2dbc.examples.dto.ActorDTO
 import exposed.r2dbc.examples.dto.MovieWithActorDTO
+import io.bluetape4k.collections.eclipse.fastListOf
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.info
 import kotlinx.coroutines.Dispatchers
@@ -68,7 +69,7 @@ class DataInitializer: ApplicationListener<ApplicationReadyEvent> {
         val russellCrowe = ActorDTO(0, "Russell", "Crowe", "1970-01-20")
         val edwardNorton = ActorDTO(0, "Edward", "Norton", "1975-04-03")
 
-        val actors = listOf(
+        val actors = fastListOf(
             johnnyDepp,
             bradPitt,
             angelinaJolie,
@@ -80,34 +81,34 @@ class DataInitializer: ApplicationListener<ApplicationReadyEvent> {
             edwardNorton
         )
 
-        val movies = listOf(
+        val movies = fastListOf(
             MovieWithActorDTO(
                 0,
                 "Gladiator",
                 johnnyDepp.firstName,
                 "2000-05-01",
-                mutableListOf(russellCrowe, ellenPaige, craigDaniel)
+                fastListOf(russellCrowe, ellenPaige, craigDaniel)
             ),
             MovieWithActorDTO(
                 0,
                 "Guardians of the galaxy",
                 johnnyDepp.firstName,
                 "2014-07-21",
-                mutableListOf(angelinaGrace, bradPitt, ellenPaige, angelinaJolie, johnnyDepp)
+                fastListOf(angelinaGrace, bradPitt, ellenPaige, angelinaJolie, johnnyDepp)
             ),
             MovieWithActorDTO(
                 0,
                 "Fight club",
                 craigDaniel.firstName,
                 "1999-09-13",
-                mutableListOf(bradPitt, jenniferAniston, edwardNorton)
+                fastListOf(bradPitt, jenniferAniston, edwardNorton)
             ),
             MovieWithActorDTO(
                 0,
                 "13 Reasons Why",
                 "Suzuki",
                 "2016-01-01",
-                mutableListOf(angelinaJolie, jenniferAniston)
+                fastListOf(angelinaJolie, jenniferAniston)
             )
         )
 

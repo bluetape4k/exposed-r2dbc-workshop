@@ -36,7 +36,8 @@ abstract class Ex14_MergeBase: R2dbcExposedTestBase() {
 
     companion object: KLoggingChannel()
 
-    protected fun allDbExcept(includeSettings: Collection<TestDB>) = TestDB.ALL - includeSettings.toSet()
+    protected fun allDbExcept(includeSettings: Collection<TestDB>) =
+        TestDB.ALL - includeSettings.toSet()
 
     protected val notSupportsMergeInto = TestDB.ALL_MYSQL_MARIADB
 

@@ -3,6 +3,7 @@ package exposed.r2dbc.shared.repository
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.collections.eclipse.fastListOf
 import io.bluetape4k.logging.KLogging
 import io.bluetape4k.logging.info
 import kotlinx.coroutines.flow.first
@@ -66,7 +67,7 @@ object MovieSchema: KLogging() {
         val russellCrowe = ActorDTO(0, "Russell", "Crowe", "1970-01-20")
         val edwardNorton = ActorDTO(0, "Edward", "Norton", "1975-04-03")
 
-        val actors = listOf(
+        val actors = fastListOf(
             johnnyDepp,
             bradPitt,
             angelinaJolie,
@@ -78,30 +79,30 @@ object MovieSchema: KLogging() {
             edwardNorton
         )
 
-        val movies = listOf(
+        val movies = fastListOf(
             MovieWithActorDTO(
                 "Gladiator",
                 johnnyDepp.firstName,
                 "2000-05-01",
-                mutableListOf(russellCrowe, ellenPaige, craigDaniel)
+                fastListOf(russellCrowe, ellenPaige, craigDaniel)
             ),
             MovieWithActorDTO(
                 "Guardians of the galaxy",
                 johnnyDepp.firstName,
                 "2014-07-21",
-                mutableListOf(angelinaGrace, bradPitt, ellenPaige, angelinaJolie, johnnyDepp)
+                fastListOf(angelinaGrace, bradPitt, ellenPaige, angelinaJolie, johnnyDepp)
             ),
             MovieWithActorDTO(
                 "Fight club",
                 craigDaniel.firstName,
                 "1999-09-13",
-                mutableListOf(bradPitt, jenniferAniston, edwardNorton)
+                fastListOf(bradPitt, jenniferAniston, edwardNorton)
             ),
             MovieWithActorDTO(
                 "13 Reasons Why",
                 "Suzuki",
                 "2016-01-01",
-                mutableListOf(angelinaJolie, jenniferAniston)
+                fastListOf(angelinaJolie, jenniferAniston)
             )
         )
 

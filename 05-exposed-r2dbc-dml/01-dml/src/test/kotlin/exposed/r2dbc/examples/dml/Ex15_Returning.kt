@@ -3,6 +3,8 @@ package exposed.r2dbc.examples.dml
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.collections.eclipse.toUnifiedSet
+import io.bluetape4k.collections.eclipse.unifiedMapOf
 import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.map
@@ -387,8 +389,8 @@ class Ex15_Returning: R2dbcExposedTestBase() {
         Assumptions.assumeTrue { testDB in updateReturningSupportedDb }
 
         withTables(testDB, Items) {
-            val input = listOf("A" to 99.0, "B" to 100.0, "C" to 200.0)
-            Items.batchInsert(input) { (n, p) ->
+            val input = unifiedMapOf("A" to 99.0, "B" to 100.0, "C" to 200.0)
+            Items.batchInsert(input.entries) { (n, p) ->
                 this[Items.name] = n
                 this[Items.price] = p
             }
@@ -428,7 +430,7 @@ class Ex15_Returning: R2dbcExposedTestBase() {
                 }
                 .map { it[Items.name] }
                 .toFastList()
-            result2.toSet() shouldBeEqualTo input.map { it.first.lowercase() }.toSet()
+            result2.toUnifiedSet() shouldBeEqualTo input.keys.map { it.lowercase() }.toUnifiedSet()
 
             /**
              * 모든 레코드의 price를 `0.0`으로 변경하고, price 컬럼의 alias 만 반환합니다.

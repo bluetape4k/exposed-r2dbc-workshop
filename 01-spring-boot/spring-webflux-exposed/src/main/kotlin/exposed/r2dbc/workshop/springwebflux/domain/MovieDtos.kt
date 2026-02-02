@@ -1,5 +1,6 @@
 package exposed.r2dbc.workshop.springwebflux.domain
 
+import io.bluetape4k.collections.eclipse.fastListOf
 import java.io.Serializable
 
 /**
@@ -46,7 +47,7 @@ data class MovieWithActorDTO(
     val name: String,
     val producerName: String,
     val releaseDate: String,
-    val actors: MutableList<ActorDTO> = mutableListOf(),
+    val actors: MutableList<ActorDTO> = fastListOf(),
     val id: Long? = null,
 ): Serializable
 

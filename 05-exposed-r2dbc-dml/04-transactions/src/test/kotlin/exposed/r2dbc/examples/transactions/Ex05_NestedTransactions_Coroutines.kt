@@ -101,9 +101,11 @@ class Ex05_NestedTransactions_Coroutines: R2dbcExposedTestBase() {
 
     val cities = DMLTestData.Cities
 
-    private suspend fun cityCounts(): Int = cities.selectAll().count().toInt()
+    private suspend fun cityCounts(): Int =
+        cities.selectAll().count().toInt()
 
-    private suspend fun cityNames(): List<String> = cities.selectAll().map { it[cities.name] }.toFastList()
+    private suspend fun cityNames(): List<String> =
+        cities.selectAll().map { it[cities.name] }.toFastList()
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
