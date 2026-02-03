@@ -2,21 +2,21 @@ package exposed.r2dbc.examples.controller
 
 import exposed.r2dbc.examples.AbstractExposedR2dbcRepositoryTest
 import exposed.r2dbc.examples.dto.MovieDTO
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.spring.tests.httpDelete
 import io.bluetape4k.spring.tests.httpGet
 import io.bluetape4k.spring.tests.httpPost
+import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitSingle
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
 import org.amshove.kluent.shouldNotBeEmpty
-import org.amshove.kluent.shouldNotBeNull
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.web.reactive.server.WebTestClient
-import org.springframework.test.web.reactive.server.expectBodyList
 import org.springframework.test.web.reactive.server.returnResult
 
 class MovieControllerTest(
@@ -37,9 +37,9 @@ class MovieControllerTest(
         val movies = client
             .httpGet("/movies")
             .expectStatus().is2xxSuccessful
-            .expectBodyList<MovieDTO>()
-            .returnResult().responseBody
-            .shouldNotBeNull()
+            .returnResult<MovieDTO>().responseBody
+            .asFlow()
+            .toFastList()
 
         movies.forEach {
             log.debug { it }
@@ -68,9 +68,9 @@ class MovieControllerTest(
         val movies = client
             .httpGet("/movies/search?producerName=$producerName")
             .expectStatus().is2xxSuccessful
-            .expectBodyList<MovieDTO>()
-            .returnResult().responseBody
-            .shouldNotBeNull()
+            .returnResult<MovieDTO>().responseBody
+            .asFlow()
+            .toFastList()
 
         movies shouldHaveSize 2
     }

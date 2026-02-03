@@ -130,6 +130,7 @@ class DataInitializer: ApplicationListener<ApplicationReadyEvent> {
             val movieId = MovieTable
                 .select(MovieTable.id)
                 .where { MovieTable.name eq movie.name }
+                .limit(1)
                 .first()[MovieTable.id]
 
             movie.actors.forEach { actor ->
@@ -137,6 +138,7 @@ class DataInitializer: ApplicationListener<ApplicationReadyEvent> {
                     .select(ActorTable.id)
                     .where { ActorTable.firstName eq actor.firstName }
                     .andWhere { ActorTable.lastName eq actor.lastName }
+                    .limit(1)
                     .first()[ActorTable.id]
 
                 ActorInMovieTable.insert {

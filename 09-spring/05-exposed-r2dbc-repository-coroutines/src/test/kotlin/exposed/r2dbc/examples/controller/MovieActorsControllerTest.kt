@@ -4,18 +4,18 @@ import exposed.r2dbc.examples.AbstractExposedR2dbcRepositoryTest
 import exposed.r2dbc.examples.dto.MovieActorCountDTO
 import exposed.r2dbc.examples.dto.MovieWithActorDTO
 import exposed.r2dbc.examples.dto.MovieWithProducingActorDTO
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.spring.tests.httpGet
+import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitSingle
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
-import org.amshove.kluent.shouldNotBeNull
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.web.reactive.server.WebTestClient
-import org.springframework.test.web.reactive.server.expectBodyList
 import org.springframework.test.web.reactive.server.returnResult
 
 class MovieActorsControllerTest(
@@ -43,9 +43,9 @@ class MovieActorsControllerTest(
         val movieActorCounts = client
             .httpGet("/movie-actors/count")
             .expectStatus().is2xxSuccessful
-            .expectBodyList<MovieActorCountDTO>()
-            .returnResult().responseBody
-            .shouldNotBeNull()
+            .returnResult<MovieActorCountDTO>().responseBody
+            .asFlow()
+            .toFastList()
 
         movieActorCounts.forEach {
             log.debug { "movieActorCount=$it" }
@@ -58,9 +58,9 @@ class MovieActorsControllerTest(
         val movieWithProducers = client
             .httpGet("/movie-actors/acting-producers")
             .expectStatus().is2xxSuccessful
-            .expectBodyList<MovieWithProducingActorDTO>()
-            .returnResult().responseBody
-            .shouldNotBeNull()
+            .returnResult<MovieWithProducingActorDTO>().responseBody
+            .asFlow()
+            .toFastList()
 
         movieWithProducers.forEach {
             log.debug { "movieWithProducer=$it" }

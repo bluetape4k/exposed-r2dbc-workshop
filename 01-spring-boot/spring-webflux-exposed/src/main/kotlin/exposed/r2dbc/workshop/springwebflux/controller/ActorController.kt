@@ -26,15 +26,16 @@ class ActorController(
     companion object: KLoggingChannel()
 
     @GetMapping("/{id}")
-    suspend fun getActorById(@PathVariable("id") actorId: Long): ActorDTO? =
+    suspend fun getActorById(@PathVariable id: Long): ActorDTO? =
         suspendTransaction {
             log.debug { "current transaction=$this" }
-            actorRepository.findById(actorId)
+            actorRepository.findById(id)
         }
 
     @GetMapping
     suspend fun searchActors(request: ServerHttpRequest): List<ActorDTO> {
-        val params = request.queryParams.map { it.key to it.value.first() }.toMap()
+        val params = request.queryParams.map { it.key to it.value.joinToString(",") }.toMap()
+
         return when {
             params.isEmpty() -> suspendTransaction {
                 actorRepository.findAll()

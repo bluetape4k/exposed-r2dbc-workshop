@@ -126,12 +126,14 @@ class DataInitializer(private val database: R2dbcDatabase): ApplicationListener<
             val movieId = MovieTable
                 .select(MovieTable.id)
                 .where { MovieTable.name eq movie.name }
+                .limit(1)
                 .first()[MovieTable.id]
 
             movie.actors.forEach { actor ->
                 val actorId = ActorTable
                     .select(ActorTable.id)
                     .where { (ActorTable.firstName eq actor.firstName) and (ActorTable.lastName eq actor.lastName) }
+                    .limit(1)
                     .first()[ActorTable.id]
 
                 ActorInMovieTable.insert {
