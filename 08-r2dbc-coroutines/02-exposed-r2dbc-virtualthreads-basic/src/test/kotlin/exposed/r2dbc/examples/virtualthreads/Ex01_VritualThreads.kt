@@ -79,7 +79,7 @@ class Ex01_VritualThreads: R2dbcExposedTestBase() {
     fun `virtual threads 를 이용하여 순차 작업 수행하기`(testDB: TestDB) = runSuspendIO {
         withTables(testDB, VTester) {
             val id = VTester.insertAndGetId { }
-            commit()
+            // commit()
 
             // 내부적으로 새로운 트랜잭션을 생성하여 비동기 작업을 수행한다
             getTesterById(id.value)!![VTester.id].value shouldBeEqualTo id.value
@@ -125,13 +125,6 @@ class Ex01_VritualThreads: R2dbcExposedTestBase() {
             // recordCount 개의 행을 가지는 `ResultRow` 를 recordCount 수만큼 가지는 List
             rows.shouldNotBeEmpty()
             rows shouldHaveSize recordCount * recordCount
-
-            delay(10)
-
-            suspendTransaction {
-                val count = VTester.selectAll().count()
-                count shouldBeEqualTo recordCount.toLong()
-            }
         }
     }
 

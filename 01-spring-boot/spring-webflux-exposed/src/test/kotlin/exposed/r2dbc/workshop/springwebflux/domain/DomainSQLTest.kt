@@ -7,7 +7,9 @@ import io.bluetape4k.junit5.coroutines.SuspendedJobTester
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.support.uninitialized
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import org.amshove.kluent.shouldNotBeEmpty
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.selectAll
@@ -41,17 +43,19 @@ class DomainSQLTest: AbstractSpringWebfluxTest() {
         }
 
         @Test
-        fun `get all actors in multiple platform threads`() = runSuspendIO {
+        fun `get all actors in coroutines`() = runSuspendIO {
             val availableProcessors = Runtime.getRuntime().availableProcessors()
             SuspendedJobTester()
                 .numThreads(availableProcessors)
                 .roundsPerJob(availableProcessors * 4)
                 .add {
-                    suspendTransaction(db = database) {
-                        val actors = ActorTable.selectAll()
-                            .map { it.toActorDTO() }
-                            .toFastList()
-                        actors.shouldNotBeEmpty()
+                    withContext(Dispatchers.IO) {
+                        suspendTransaction(db = database) {
+                            val actors = ActorTable.selectAll()
+                                .map { it.toActorDTO() }
+                                .toFastList()
+                            actors.shouldNotBeEmpty()
+                        }
                     }
                 }
                 .run()

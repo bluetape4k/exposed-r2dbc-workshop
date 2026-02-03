@@ -28,7 +28,7 @@ class ActorController(
         }
 
     @GetMapping("/{id}")
-    suspend fun findById(@PathVariable("id") id: Long): ActorDTO? =
+    suspend fun findById(@PathVariable id: Long): ActorDTO? =
         suspendTransactionWithCurrentTenant {
             actorRepository.findByIdOrNull(id)
         }

@@ -26,10 +26,9 @@ class UserEventControllerTest(
 
     companion object: KLoggingChannel()
 
-    private suspend fun getCountOfUserEvents(): Long =
-        suspendTransaction {
-            UserEventTable.selectAll().count()
-        }
+    private suspend fun getCountOfUserEvents(): Long = suspendTransaction {
+        UserEventTable.selectAll().count()
+    }
 
     @Test
     fun `insert user event`() = runSuspendIO {
@@ -75,7 +74,7 @@ class UserEventControllerTest(
             .pollInterval(Duration.ofMillis(100))
             .suspendUntil {
                 log.info { "Waiting for insert user events to DB." }
-                getCountOfUserEvents() == prevCount + insertCount
+                getCountOfUserEvents() == (prevCount + insertCount)
             }
 
         val currCount = getCountOfUserEvents()

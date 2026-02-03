@@ -28,7 +28,7 @@ class UserCredentialsController(
     }
 
     @GetMapping("/{id}")
-    suspend fun get(@PathVariable(name = "id") id: String): UserCredentialsDTO? {
+    suspend fun get(@PathVariable id: String): UserCredentialsDTO? {
         log.debug { "Getting user credentials with id: $id" }
         return repository.get(id)
     }

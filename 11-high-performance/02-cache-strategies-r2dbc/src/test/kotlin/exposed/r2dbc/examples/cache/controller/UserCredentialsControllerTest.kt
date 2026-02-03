@@ -26,6 +26,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.expectBodyList
 import org.springframework.test.web.reactive.server.returnResult
 import java.time.Instant
+import java.util.concurrent.CopyOnWriteArrayList
 
 class UserCredentialsControllerTest(
     @param:Autowired private val client: WebTestClient,
@@ -36,7 +37,7 @@ class UserCredentialsControllerTest(
         private const val REPEAT_SIZE = 5
     }
 
-    private val idsInDB = mutableListOf<String>()
+    private val idsInDB = CopyOnWriteArrayList<String>()
 
     @BeforeEach
     fun beforeEach() {

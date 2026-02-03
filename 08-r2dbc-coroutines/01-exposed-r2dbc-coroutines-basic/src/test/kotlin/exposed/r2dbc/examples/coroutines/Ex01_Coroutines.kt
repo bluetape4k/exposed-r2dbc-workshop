@@ -231,7 +231,10 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
             insertResult shouldBeEqualTo 2L
             updateResult shouldBeEqualTo 1L
 
-            val ids = TesterUnique.selectAll().orderBy(TesterUnique.id).map { it[TesterUnique.id] }.toFastList()
+            val ids = TesterUnique.selectAll()
+                .orderBy(TesterUnique.id)
+                .map { it[TesterUnique.id] }
+                .toFastList()
             ids shouldBeEqualTo listOf(originId, updatedId)
         }
     }

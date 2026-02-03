@@ -20,7 +20,7 @@ abstract class AbstractCacheStrategyTest {
 
     @BeforeAll
     fun beforeAll() {
-        Thread.sleep(100)
+        Thread.sleep(10)
     }
 
 }

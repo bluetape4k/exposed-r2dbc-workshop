@@ -31,7 +31,7 @@ class UserController(
     }
 
     @GetMapping("/{id}")
-    suspend fun get(@PathVariable(name = "id") id: Long): UserDTO? {
+    suspend fun get(@PathVariable id: Long): UserDTO? {
         log.debug { "Getting user with id: $id" }
         return repository.get(id)
     }

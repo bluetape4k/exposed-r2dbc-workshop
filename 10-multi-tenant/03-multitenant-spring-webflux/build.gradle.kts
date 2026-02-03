@@ -30,6 +30,7 @@ dependencies {
     // Exposed
     implementation(Libs.exposed_r2dbc)
     implementation(Libs.exposed_java_time)
+    implementation(Libs.exposed_migration_r2dbc)
 
     // bluetape4k
     implementation(Libs.bluetape4k_exposed_r2dbc)

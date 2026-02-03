@@ -33,7 +33,7 @@ class MovieController(
         }
 
     @GetMapping("/{id}")
-    suspend fun getMovieWithActors(@PathVariable("id") id: Long): MovieWithActorDTO? =
+    suspend fun getMovieWithActors(@PathVariable id: Long): MovieWithActorDTO? =
         suspendTransaction {
             movieRepository.getMovieWithActors(id)
         }

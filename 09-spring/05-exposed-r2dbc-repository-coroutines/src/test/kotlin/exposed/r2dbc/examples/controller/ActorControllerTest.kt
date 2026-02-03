@@ -10,6 +10,7 @@ import io.bluetape4k.spring.tests.httpGet
 import io.bluetape4k.spring.tests.httpPost
 import kotlinx.coroutines.reactive.awaitSingle
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeTrue
 import org.amshove.kluent.shouldHaveSize
 import org.amshove.kluent.shouldNotBeEmpty
 import org.amshove.kluent.shouldNotBeNull
@@ -42,7 +43,7 @@ class ActorControllerTest(
             .shouldNotBeNull()
 
         actors.forEach {
-            log.debug { it }
+            log.debug { "Actor: $it" }
         }
         actors.shouldNotBeEmpty()
     }
@@ -72,8 +73,11 @@ class ActorControllerTest(
             .returnResult().responseBody
             .shouldNotBeNull()
 
-        log.debug { "actors=$angelinas" }
+        angelinas.forEach {
+            log.debug { "Angelians: $it" }
+        }
         angelinas shouldHaveSize 2
+        angelinas.all { it.firstName == firstName }.shouldBeTrue()
     }
 
     @Test

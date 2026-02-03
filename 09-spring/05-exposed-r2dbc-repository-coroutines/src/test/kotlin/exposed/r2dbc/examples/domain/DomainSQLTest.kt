@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.amshove.kluent.shouldNotBeEmpty
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.selectAll
@@ -44,12 +45,12 @@ class DomainSQLTest: AbstractExposedR2dbcRepositoryTest() {
     }
 
     @Test
-    fun `get all actors in multiple platform threads`() = runSuspendIO {
+    fun `get all actors in coroutines`() = runSuspendIO {
         SuspendedJobTester()
             .numThreads(Runtime.getRuntime().availableProcessors())
             .roundsPerJob(Runtime.getRuntime().availableProcessors() * 4)
             .add {
-                GlobalScope.launch(Dispatchers.IO) {
+                withContext(Dispatchers.IO) {
                     inTopLevelSuspendTransaction(
                         transactionIsolation = database.transactionManager.defaultIsolationLevel!!,
                         db = database
@@ -57,7 +58,7 @@ class DomainSQLTest: AbstractExposedR2dbcRepositoryTest() {
                         val actors = ActorTable.selectAll().map { it.toActorDTO() }.toFastList()
                         actors.shouldNotBeEmpty()
                     }
-                }.join()
+                }
             }
             .run()
     }

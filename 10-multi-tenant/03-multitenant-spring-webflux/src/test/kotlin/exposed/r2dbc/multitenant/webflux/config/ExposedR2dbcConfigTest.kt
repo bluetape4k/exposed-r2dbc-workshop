@@ -47,7 +47,11 @@ class ExposedR2dbcConfigTest: AbstractMultitenantTest() {
     @EnumSource(Tenants.Tenant::class)
     fun `load all actors by tenant`(tenant: Tenants.Tenant) = runSuspendIO {
         suspendTransactionWithTenant(tenant) {
-            val actors = MovieSchema.ActorTable.selectAll().map { it.toActorDTO() }.toFastList()
+            val actors = MovieSchema.ActorTable
+                .selectAll()
+                .map { it.toActorDTO() }
+                .toFastList()
+
             actors.shouldNotBeEmpty()
 
             actors.forEach { actor ->
