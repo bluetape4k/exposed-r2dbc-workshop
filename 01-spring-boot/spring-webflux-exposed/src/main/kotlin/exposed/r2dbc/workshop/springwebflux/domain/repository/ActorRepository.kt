@@ -4,9 +4,9 @@ package exposed.r2dbc.workshop.springwebflux.domain.repository
 import exposed.r2dbc.shared.repository.MovieSchema.ActorTable
 import exposed.r2dbc.workshop.springwebflux.domain.ActorDTO
 import exposed.r2dbc.workshop.springwebflux.domain.toActorDTO
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import org.jetbrains.exposed.v1.core.eq
@@ -33,11 +33,11 @@ class ActorRepository {
             ?.toActorDTO()
     }
 
-    suspend fun findAll(): List<ActorDTO> {
-        return ActorTable.selectAll().map { it.toActorDTO() }.toFastList()
+    fun findAll(): Flow<ActorDTO> {
+        return ActorTable.selectAll().map { it.toActorDTO() }
     }
 
-    suspend fun searchActor(params: Map<String, String?>): List<ActorDTO> {
+    fun searchActor(params: Map<String, String?>): Flow<ActorDTO> {
         log.debug { "Search Actor by params. params: $params" }
 
         val query = ActorTable.selectAll()
@@ -52,7 +52,7 @@ class ActorRepository {
                 }
             }
         }
-        return query.map { it.toActorDTO() }.toFastList()
+        return query.map { it.toActorDTO() }
     }
 
     suspend fun create(actor: ActorDTO): ActorDTO {

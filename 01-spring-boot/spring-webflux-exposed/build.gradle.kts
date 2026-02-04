@@ -70,11 +70,9 @@ dependencies {
 
     implementation(Libs.springBootStarter("actuator"))
     implementation(Libs.springBootStarter("aop"))
-    implementation(Libs.springBootStarter("data-r2dbc"))
     implementation(Libs.springBootStarter("validation"))
     implementation(Libs.springBootStarter("webflux"))
 
-    testImplementation(Libs.bluetape4k_spring_tests)
     testImplementation(Libs.springBootStarter("test")) {
         exclude(group = "junit", module = "junit")
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")

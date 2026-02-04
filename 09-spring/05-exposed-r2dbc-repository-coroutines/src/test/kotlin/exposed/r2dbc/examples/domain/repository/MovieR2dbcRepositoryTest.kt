@@ -82,11 +82,8 @@ class MovieR2dbcRepositoryTest(
         }
 
         val movieId = movieDto.id
-        suspendTransaction {
-            movieRepository.deleteById(movieId)
-        }
-
         val deletedMovie = suspendTransaction {
+            movieRepository.deleteById(movieId)
             movieRepository.findByIdOrNull(movieId)
         }
 
@@ -96,54 +93,56 @@ class MovieR2dbcRepositoryTest(
 
     @Test
     fun `get all movies and actors`() = runSuspendIO {
-        suspendTransaction {
-            val movies = movieRepository.getAllMoviesWithActors().toFastList()
-            movies.shouldNotBeEmpty()
+        val movies = suspendTransaction {
+            movieRepository.getAllMoviesWithActors().toFastList()
+        }
+        movies.shouldNotBeEmpty()
 
-            movies.forEach { movie ->
-                log.debug { "movie: ${movie.name}" }
-                movie.actors.shouldNotBeEmpty()
-                movie.actors.forEach { actor ->
-                    log.debug { "  actor: ${actor.firstName} ${actor.lastName}" }
-                }
+        movies.forEach { movie ->
+            log.debug { "movie: ${movie.name}" }
+            movie.actors.shouldNotBeEmpty()
+            movie.actors.forEach { actor ->
+                log.debug { "  actor: ${actor.firstName} ${actor.lastName}" }
             }
         }
     }
 
     @Test
     fun `get movie by id with actors`() = runSuspendIO {
-        suspendTransaction {
-            val movieId = 1L
-            val movieWithActors = movieRepository.getMovieWithActors(movieId)
+        val movieId = 1L
 
-            log.debug { "movieWithActors: $movieWithActors" }
-
-            movieWithActors.shouldNotBeNull()
-            movieWithActors.id shouldBeEqualTo movieId
-            movieWithActors.actors shouldHaveSize 3
+        val movieWithActors = suspendTransaction {
+            movieRepository.getMovieWithActors(movieId)
         }
+
+        log.debug { "movieWithActors: $movieWithActors" }
+
+        movieWithActors.shouldNotBeNull()
+        movieWithActors.id shouldBeEqualTo movieId
+        movieWithActors.actors shouldHaveSize 3
     }
 
     @Test
     fun `get movie and actors count`() = runSuspendIO {
-        suspendTransaction {
-            val movieActorsCount = movieRepository.getMovieActorsCount().toFastList()
-            movieActorsCount.shouldNotBeEmpty()
-            movieActorsCount.forEach {
-                log.debug { "movie: ${it.movieName}, actors count: ${it.actorCount}" }
-            }
+
+        val movieActorsCount = suspendTransaction {
+            movieRepository.getMovieActorsCount().toFastList()
+        }
+        movieActorsCount.shouldNotBeEmpty()
+        movieActorsCount.forEach {
+            log.debug { "movie: ${it.movieName}, actors count: ${it.actorCount}" }
         }
     }
 
     @Test
     fun `find movies with acting producers`() = runSuspendIO {
-        suspendTransaction {
-            val movies = movieRepository.findMoviesWithActingProducers().toFastList()
-
-            movies.forEach {
-                log.debug { "movie: ${it.movieName}, producer: ${it.producerActorName}" }
-            }
-            movies.shouldNotBeEmpty() shouldHaveSize 1
+        val movies = suspendTransaction {
+            movieRepository.findMoviesWithActingProducers().toFastList()
         }
+
+        movies.forEach {
+            log.debug { "movie: ${it.movieName}, producer: ${it.producerActorName}" }
+        }
+        movies.shouldNotBeEmpty() shouldHaveSize 1
     }
 }

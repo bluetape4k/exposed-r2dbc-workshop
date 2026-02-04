@@ -15,6 +15,7 @@ import io.bluetape4k.coroutines.flow.extensions.bufferUntilChanged
 import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
@@ -66,11 +67,11 @@ class MovieRepository {
             ?.toMovieDTO()
     }
 
-    suspend fun findAll(): List<MovieDTO> {
-        return MovieTable.selectAll().map { it.toMovieDTO() }.toFastList()
+    fun findAll(): Flow<MovieDTO> {
+        return MovieTable.selectAll().map { it.toMovieDTO() }
     }
 
-    suspend fun searchMovie(params: Map<String, String?>): List<MovieDTO> {
+    fun searchMovie(params: Map<String, String?>): Flow<MovieDTO> {
         log.debug { "Search Movie by params. params: $params" }
 
         val query = MovieTable.selectAll()
@@ -88,7 +89,7 @@ class MovieRepository {
             }
         }
 
-        return query.map { it.toMovieDTO() }.toFastList()
+        return query.map { it.toMovieDTO() }
     }
 
     suspend fun create(movie: MovieDTO): MovieDTO {
@@ -124,7 +125,7 @@ class MovieRepository {
      *          INNER JOIN ACTORS ON ACTORS.ID = ACTORS_IN_MOVIES.ACTOR_ID
      * ```
      */
-    suspend fun getAllMoviesWithActors(): List<MovieWithActorDTO> {
+    fun getAllMoviesWithActors(): Flow<MovieWithActorDTO> {
         log.debug { "Get all movies with actors." }
 
         return MovieActorJoin
@@ -149,7 +150,6 @@ class MovieRepository {
                 val actors = pairs.map { it.second }
                 movie.toMovieWithActorDTO(actors)
             }
-            .toFastList()
     }
 
     /**
@@ -197,7 +197,7 @@ class MovieRepository {
      *  GROUP BY MOVIES.ID
      * ```
      */
-    suspend fun getMovieActorsCount(): List<MovieActorCountDTO> {
+    fun getMovieActorsCount(): Flow<MovieActorCountDTO> {
         log.debug { "Get Movie actors count." }
 
         return MovieActorJoin
@@ -209,7 +209,6 @@ class MovieRepository {
                     actorCount = it[ActorTable.id.count()].toInt()
                 )
             }
-            .toFastList()
     }
 
     /**
@@ -222,7 +221,7 @@ class MovieRepository {
      *          INNER JOIN ACTORS ON ACTORS.ID = ACTORS_IN_MOVIES.ACTOR_ID AND (MOVIES.PRODUCER_NAME = ACTORS.FIRST_NAME)
      * ```
      */
-    suspend fun findMoviesWithActingProducers(): List<MovieWithProducingActorDTO> {
+    fun findMoviesWithActingProducers(): Flow<MovieWithProducingActorDTO> {
         log.debug { "Find movies with acting producers." }
 
         val query = moviesWithActingProducersJoin
@@ -232,6 +231,6 @@ class MovieRepository {
                 ActorTable.lastName
             )
 
-        return query.map { it.toMovieWithProducingActorDTO() }.toFastList()
+        return query.map { it.toMovieWithProducingActorDTO() }
     }
 }

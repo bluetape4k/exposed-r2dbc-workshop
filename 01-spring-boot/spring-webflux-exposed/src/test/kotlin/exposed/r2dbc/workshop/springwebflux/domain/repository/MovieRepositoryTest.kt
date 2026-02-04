@@ -2,6 +2,7 @@ package exposed.r2dbc.workshop.springwebflux.domain.repository
 
 import exposed.r2dbc.workshop.springwebflux.AbstractSpringWebfluxTest
 import exposed.r2dbc.workshop.springwebflux.domain.MovieDTO
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.test.runTest
@@ -54,7 +55,7 @@ class MovieRepositoryTest(
         val params = mapOf("producerName" to "Johnny")
 
         val movies = suspendTransaction {
-            movieRepository.searchMovie(params)
+            movieRepository.searchMovie(params).toFastList()
         }
 
         movies.forEach {
@@ -98,7 +99,7 @@ class MovieRepositoryTest(
     @Test
     fun `get all movies and actors`() = runTest {
         val movieWithActors = suspendTransaction {
-            movieRepository.getAllMoviesWithActors()
+            movieRepository.getAllMoviesWithActors().toFastList()
         }
         movieWithActors.shouldNotBeEmpty()
         movieWithActors.forEach { movie ->
@@ -127,7 +128,7 @@ class MovieRepositoryTest(
     @Test
     fun `get movie and actors count`() = runTest {
         val movieActorsCount = suspendTransaction {
-            movieRepository.getMovieActorsCount()
+            movieRepository.getMovieActorsCount().toFastList()
         }
         movieActorsCount.shouldNotBeEmpty()
         movieActorsCount.forEach {
@@ -138,7 +139,7 @@ class MovieRepositoryTest(
     @Test
     fun `find movies with acting producers`() = runTest {
         val movies = suspendTransaction {
-            movieRepository.findMoviesWithActingProducers()
+            movieRepository.findMoviesWithActingProducers().toFastList()
         }
 
         movies.forEach {

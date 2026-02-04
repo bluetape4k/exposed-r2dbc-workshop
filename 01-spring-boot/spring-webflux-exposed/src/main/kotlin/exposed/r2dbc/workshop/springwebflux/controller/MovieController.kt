@@ -2,6 +2,7 @@ package exposed.r2dbc.workshop.springwebflux.controller
 
 import exposed.r2dbc.workshop.springwebflux.domain.MovieDTO
 import exposed.r2dbc.workshop.springwebflux.domain.repository.MovieRepository
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,13 +34,9 @@ class MovieController(
     @GetMapping
     suspend fun searchMovies(request: ServerHttpRequest): List<MovieDTO> {
         val params = request.queryParams.map { it.key to it.value.first() }.toMap()
-        return when {
-            params.isEmpty() -> suspendTransaction {
-                movieRepository.findAll()
-            }
-            else -> suspendTransaction {
-                movieRepository.searchMovie(params)
-            }
+        return suspendTransaction {
+            if (params.isEmpty()) movieRepository.findAll().toFastList()
+            else movieRepository.searchMovie(params).toFastList()
         }
     }
 

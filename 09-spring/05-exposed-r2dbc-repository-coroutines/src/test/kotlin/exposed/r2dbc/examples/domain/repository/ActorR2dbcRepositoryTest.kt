@@ -28,47 +28,48 @@ class ActorR2dbcRepositoryTest(
 
     @Test
     fun `find actor by id`() = runSuspendIO {
-        suspendTransaction {
-            val actorId = 1L
+        val actorId = 1L
 
-            val actor = actorRepository.findById(actorId)
-
-            log.debug { "Actor: $actor" }
-            actor.shouldNotBeNull()
-            actor.id shouldBeEqualTo actorId
+        val actor = suspendTransaction {
+            actorRepository.findById(actorId)
         }
+
+        log.debug { "Actor: $actor" }
+        actor.shouldNotBeNull()
+        actor.id shouldBeEqualTo actorId
     }
 
     @Test
     fun `search actors by lastName`() = runSuspendIO {
-        suspendTransaction {
-            val params = mapOf("lastName" to "Depp")
-            val actors = actorRepository.searchActors(params).toFastList()
 
-            actors.forEach {
-                log.debug { "actor: $it" }
-            }
-            actors.shouldNotBeEmpty()
+        val params = mapOf("lastName" to "Depp")
+        val actors = suspendTransaction {
+            actorRepository.searchActors(params).toFastList()
         }
+        actors.forEach {
+            log.debug { "actor: $it" }
+        }
+        actors.shouldNotBeEmpty()
     }
 
     @Test
     fun `search actors by firstName`() = runSuspendIO {
-        suspendTransaction {
-            val params = mapOf("firstName" to "Angelina")
-            val actors = actorRepository.searchActors(params).toFastList()
 
-            actors.forEach {
-                log.debug { "actor: $it" }
-            }
-            actors.shouldNotBeEmpty()
+        val params = mapOf("firstName" to "Angelina")
+        val actors = suspendTransaction {
+            actorRepository.searchActors(params).toFastList()
         }
+
+        actors.forEach {
+            log.debug { "actor: $it" }
+        }
+        actors.shouldNotBeEmpty()
     }
 
     @Test
     fun `save new actor`() = runSuspendIO {
         suspendTransaction {
-            val prevCount = actorRepository.count()
+            val prevCount = suspendTransaction { actorRepository.count() }
 
             val actor = newActorDTO()
             val savedActor = actorRepository.save(actor)
@@ -82,15 +83,17 @@ class ActorR2dbcRepositoryTest(
 
     @Test
     fun `delete actor by id`() = runSuspendIO {
-        suspendTransaction {
-            val actor = newActorDTO()
-            val savedActor = actorRepository.save(actor)
-            savedActor shouldBeEqualTo actor.copy(id = savedActor.id)
-
-            log.debug { "Saved Actor: $savedActor" }
-
-            val deletedCount = actorRepository.deleteById(savedActor.id)
-            deletedCount shouldBeEqualTo 1
+        val actor = newActorDTO()
+        val savedActor = suspendTransaction {
+            actorRepository.save(actor)
         }
+        savedActor shouldBeEqualTo actor.withId(savedActor.id)
+
+        log.debug { "Saved Actor: $savedActor" }
+
+        val deletedCount = suspendTransaction {
+            actorRepository.deleteById(savedActor.id)
+        }
+        deletedCount shouldBeEqualTo 1
     }
 }

@@ -2,6 +2,7 @@ package exposed.r2dbc.workshop.springwebflux.domain.repository
 
 import exposed.r2dbc.workshop.springwebflux.AbstractSpringWebfluxTest
 import exposed.r2dbc.workshop.springwebflux.domain.ActorDTO
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.test.runTest
@@ -48,7 +49,7 @@ class ActorRepositoryTest(
     fun `search actors by lastName`() = runTest {
         suspendTransaction {
             val params = mapOf("lastName" to "Depp")
-            val actors = actorRepository.searchActor(params)
+            val actors = actorRepository.searchActor(params).toFastList()
 
             actors.shouldNotBeEmpty()
             actors.forEach {
@@ -68,7 +69,7 @@ class ActorRepositoryTest(
     fun `search actors by firstName`() = runTest {
         suspendTransaction {
             val params = mapOf("firstName" to "Angelina")
-            val actors = actorRepository.searchActor(params)
+            val actors = actorRepository.searchActor(params).toFastList()
 
             actors.shouldNotBeEmpty()
             actors.forEach {

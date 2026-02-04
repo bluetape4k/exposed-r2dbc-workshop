@@ -65,7 +65,6 @@ dependencies {
 
     implementation(Libs.springBootStarter("actuator"))
     implementation(Libs.springBootStarter("aop"))
-    implementation(Libs.springBootStarter("data-r2dbc"))
     implementation(Libs.springBootStarter("validation"))
     implementation(Libs.springBootStarter("webflux"))
     

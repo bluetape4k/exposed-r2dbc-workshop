@@ -2,6 +2,7 @@ package exposed.r2dbc.workshop.springwebflux.controller
 
 import exposed.r2dbc.workshop.springwebflux.domain.ActorDTO
 import exposed.r2dbc.workshop.springwebflux.domain.repository.ActorRepository
+import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.CoroutineScope
@@ -36,13 +37,9 @@ class ActorController(
     suspend fun searchActors(request: ServerHttpRequest): List<ActorDTO> {
         val params = request.queryParams.map { it.key to it.value.joinToString(",") }.toMap()
 
-        return when {
-            params.isEmpty() -> suspendTransaction {
-                actorRepository.findAll()
-            }
-            else -> suspendTransaction {
-                actorRepository.searchActor(params)
-            }
+        return suspendTransaction {
+            if (params.isEmpty()) actorRepository.findAll().toFastList()
+            else actorRepository.searchActor(params).toFastList()
         }
     }
 

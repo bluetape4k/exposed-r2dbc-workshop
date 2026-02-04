@@ -9,11 +9,7 @@ import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.support.uninitialized
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.amshove.kluent.shouldNotBeEmpty
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.selectAll
@@ -34,14 +30,14 @@ class DomainSQLTest: AbstractExposedR2dbcRepositoryTest() {
 
     @Test
     fun `get all actors`() = runSuspendIO {
-        suspendTransaction {
-            val actors = ActorTable.selectAll().map { it.toActorDTO() }.toFastList()
-
-            actors.forEach { actor ->
-                log.debug { "Actor: $actor" }
-            }
-            actors.shouldNotBeEmpty()
+        val actors = suspendTransaction {
+            ActorTable.selectAll().map { it.toActorDTO() }.toFastList()
         }
+
+        actors.forEach { actor ->
+            log.debug { "Actor: $actor" }
+        }
+        actors.shouldNotBeEmpty()
     }
 
     @Test
@@ -50,14 +46,12 @@ class DomainSQLTest: AbstractExposedR2dbcRepositoryTest() {
             .numThreads(Runtime.getRuntime().availableProcessors())
             .roundsPerJob(Runtime.getRuntime().availableProcessors() * 4)
             .add {
-                withContext(Dispatchers.IO) {
-                    inTopLevelSuspendTransaction(
-                        transactionIsolation = database.transactionManager.defaultIsolationLevel!!,
-                        db = database
-                    ) {
-                        val actors = ActorTable.selectAll().map { it.toActorDTO() }.toFastList()
-                        actors.shouldNotBeEmpty()
-                    }
+                inTopLevelSuspendTransaction(
+                    transactionIsolation = database.transactionManager.defaultIsolationLevel!!,
+                    db = database
+                ) {
+                    val actors = ActorTable.selectAll().map { it.toActorDTO() }.toFastList()
+                    actors.shouldNotBeEmpty()
                 }
             }
             .run()

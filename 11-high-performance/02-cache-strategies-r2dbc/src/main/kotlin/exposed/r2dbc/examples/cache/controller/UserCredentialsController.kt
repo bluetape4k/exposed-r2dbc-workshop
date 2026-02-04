@@ -5,7 +5,6 @@ import exposed.r2dbc.examples.cache.domain.repository.UserCredentialsCacheReposi
 import io.bluetape4k.collections.eclipse.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
-import org.springframework.transaction.TransactionManager
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/user-credentials")
 class UserCredentialsController(
     private val repository: UserCredentialsCacheRepository,
-    private val transactionManager: TransactionManager,
 ) {
     companion object: KLoggingChannel()
 
