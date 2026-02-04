@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.controller
 
 import exposed.r2dbc.examples.AbstractExposedR2dbcRepositoryTest
-import exposed.r2dbc.examples.dto.MovieDTO
+import exposed.r2dbc.examples.domain.model.MovieRecord
 import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -24,7 +24,7 @@ class MovieControllerTest(
 ): AbstractExposedR2dbcRepositoryTest() {
 
     companion object: KLoggingChannel() {
-        private fun newMovieDTO(): MovieDTO = MovieDTO(
+        private fun newMovieRecord(): MovieRecord = MovieRecord(
             id = 0L,
             name = faker.book().title(),
             producerName = faker.name().fullName(),
@@ -37,7 +37,7 @@ class MovieControllerTest(
         val movies = client
             .httpGet("/movies")
             .expectStatus().is2xxSuccessful
-            .returnResult<MovieDTO>().responseBody
+            .returnResult<MovieRecord>().responseBody
             .asFlow()
             .toFastList()
 
@@ -54,7 +54,7 @@ class MovieControllerTest(
         val movie = client
             .httpGet("/movies/$id")
             .expectStatus().is2xxSuccessful
-            .returnResult<MovieDTO>().responseBody
+            .returnResult<MovieRecord>().responseBody
             .awaitSingle()
 
         log.debug { "movie=$movie" }
@@ -68,7 +68,7 @@ class MovieControllerTest(
         val movies = client
             .httpGet("/movies/search?producerName=$producerName")
             .expectStatus().is2xxSuccessful
-            .returnResult<MovieDTO>().responseBody
+            .returnResult<MovieRecord>().responseBody
             .asFlow()
             .toFastList()
 
@@ -77,12 +77,12 @@ class MovieControllerTest(
 
     @Test
     fun `create new movie`() = runSuspendIO {
-        val newMovie = newMovieDTO()
+        val newMovie = newMovieRecord()
 
         val saved = client
             .httpPost("/movies", newMovie)
             .expectStatus().is2xxSuccessful
-            .returnResult<MovieDTO>().responseBody
+            .returnResult<MovieRecord>().responseBody
             .awaitSingle()
 
         log.debug { "saved=$saved" }
@@ -91,12 +91,12 @@ class MovieControllerTest(
 
     @Test
     fun `delete movie`() = runSuspendIO {
-        val newMovie = newMovieDTO()
+        val newMovie = newMovieRecord()
 
         val saved = client
             .httpPost("/movies", newMovie)
             .expectStatus().is2xxSuccessful
-            .returnResult<MovieDTO>().responseBody
+            .returnResult<MovieRecord>().responseBody
             .awaitSingle()
 
         val deletedCount = client

@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.suspendedcache.utils
 
-import exposed.r2dbc.examples.suspendedcache.domain.CountryTable
+import exposed.r2dbc.examples.suspendedcache.domain.model.CountryTable
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.info
 import kotlinx.coroutines.Dispatchers

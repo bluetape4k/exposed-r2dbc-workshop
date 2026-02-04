@@ -1,7 +1,7 @@
 package exposed.r2dbc.workshop.springwebflux.domain.repository
 
 import exposed.r2dbc.workshop.springwebflux.AbstractSpringWebfluxTest
-import exposed.r2dbc.workshop.springwebflux.domain.MovieDTO
+import exposed.r2dbc.workshop.springwebflux.domain.model.MovieRecord
 import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
@@ -19,7 +19,7 @@ class MovieRepositoryTest(
 ): AbstractSpringWebfluxTest() {
 
     companion object: KLoggingChannel() {
-        private fun newMovieDTO() = MovieDTO(
+        private fun newMovieRecord() = MovieRecord(
             name = faker.book().title(),
             producerName = faker.name().fullName(),
             releaseDate = faker.timeAndDate().birthday(20, 80).atTime(0, 0).toString()
@@ -69,7 +69,7 @@ class MovieRepositoryTest(
         suspendTransaction {
             val prevCount = movieRepository.count()
 
-            val newMovie = newMovieDTO()
+            val newMovie = newMovieRecord()
             val saved = movieRepository.create(newMovie)
             log.debug { "Saved movie: $saved" }
 
@@ -83,7 +83,7 @@ class MovieRepositoryTest(
     @Test
     fun `delete movie`() = runTest {
         suspendTransaction {
-            val newMovie = newMovieDTO()
+            val newMovie = newMovieRecord()
             val saved = movieRepository.create(newMovie)
             log.debug { "Saved movie: $saved" }
 

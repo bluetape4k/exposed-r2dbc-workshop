@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.cache.controller
 
-import exposed.r2dbc.examples.cache.domain.model.UserCredentialsDTO
+import exposed.r2dbc.examples.cache.domain.model.UserCredentialsRecord
 import exposed.r2dbc.examples.cache.domain.repository.UserCredentialsCacheRepository
 import io.bluetape4k.collections.eclipse.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -20,19 +20,19 @@ class UserCredentialsController(
     companion object: KLoggingChannel()
 
     @GetMapping
-    suspend fun findAll(@RequestParam(name = "limit") limit: Int? = null): List<UserCredentialsDTO> {
+    suspend fun findAll(@RequestParam(name = "limit") limit: Int? = null): List<UserCredentialsRecord> {
         log.debug { "Finding all user credentials with limit: $limit" }
         return repository.findAll(limit = limit).toFastList()
     }
 
     @GetMapping("/{id}")
-    suspend fun get(@PathVariable id: String): UserCredentialsDTO? {
+    suspend fun get(@PathVariable id: String): UserCredentialsRecord? {
         log.debug { "Getting user credentials with id: $id" }
         return repository.get(id)
     }
 
     @GetMapping("/all")
-    suspend fun getAll(@RequestParam(name = "ids") ids: List<String>): List<UserCredentialsDTO> {
+    suspend fun getAll(@RequestParam(name = "ids") ids: List<String>): List<UserCredentialsRecord> {
         log.debug { "Getting all user credentials with ids: $ids" }
         return repository.getAll(ids)
     }

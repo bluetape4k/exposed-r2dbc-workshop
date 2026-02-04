@@ -1,8 +1,8 @@
 package exposed.r2dbc.examples.controller
 
+import exposed.r2dbc.examples.domain.model.MovieRecord
+import exposed.r2dbc.examples.domain.model.MovieWithActorRecord
 import exposed.r2dbc.examples.domain.repository.MovieR2dbcRepository
-import exposed.r2dbc.examples.dto.MovieDTO
-import exposed.r2dbc.examples.dto.MovieWithActorDTO
 import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.CoroutineScope
@@ -27,19 +27,19 @@ class MovieController(
     companion object: KLoggingChannel()
 
     @GetMapping
-    suspend fun getMoviews(): List<MovieDTO> =
+    suspend fun getMoviews(): List<MovieRecord> =
         suspendTransaction {
             movieRepository.findAll().toFastList()
         }
 
     @GetMapping("/{id}")
-    suspend fun getMovieWithActors(@PathVariable id: Long): MovieWithActorDTO? =
+    suspend fun getMovieWithActors(@PathVariable id: Long): MovieWithActorRecord? =
         suspendTransaction {
             movieRepository.getMovieWithActors(id)
         }
 
     @GetMapping("/search")
-    suspend fun searchMovies(request: ServerHttpRequest): List<MovieDTO> {
+    suspend fun searchMovies(request: ServerHttpRequest): List<MovieRecord> {
         val params = request.queryParams.map { it.key to it.value.firstOrNull() }.toMap()
         return when {
             params.isEmpty() -> emptyList()
@@ -50,7 +50,7 @@ class MovieController(
     }
 
     @PostMapping
-    suspend fun saveMovie(@RequestBody movie: MovieDTO): MovieDTO =
+    suspend fun saveMovie(@RequestBody movie: MovieRecord): MovieRecord =
         suspendTransaction {
             movieRepository.save(movie)
         }

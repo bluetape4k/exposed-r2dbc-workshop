@@ -1,12 +1,12 @@
 package exposed.r2dbc.examples.suspendedcache.domain.repository
 
-import exposed.r2dbc.examples.suspendedcache.domain.CountryDTO
+import exposed.r2dbc.examples.suspendedcache.domain.model.CountryRecord
 
 interface CountryR2dbcRepository {
 
-    suspend fun findByCode(code: String): CountryDTO?
+    suspend fun findByCode(code: String): CountryRecord?
 
-    suspend fun update(countryDTO: CountryDTO): Int
+    suspend fun update(countryRecord: CountryRecord): Int
 
     suspend fun evictCacheAll()
 }

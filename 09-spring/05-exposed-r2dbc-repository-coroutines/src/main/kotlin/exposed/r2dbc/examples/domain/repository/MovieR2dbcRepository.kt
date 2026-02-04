@@ -1,16 +1,16 @@
 package exposed.r2dbc.examples.domain.repository
 
+import exposed.r2dbc.examples.domain.model.MovieActorCountRecord
+import exposed.r2dbc.examples.domain.model.MovieRecord
 import exposed.r2dbc.examples.domain.model.MovieSchema.ActorInMovieTable
 import exposed.r2dbc.examples.domain.model.MovieSchema.ActorTable
 import exposed.r2dbc.examples.domain.model.MovieSchema.MovieTable
-import exposed.r2dbc.examples.domain.model.toActorDTO
-import exposed.r2dbc.examples.domain.model.toMovieDTO
-import exposed.r2dbc.examples.domain.model.toMovieWithActorDTO
-import exposed.r2dbc.examples.domain.model.toMovieWithProducingActorDTO
-import exposed.r2dbc.examples.dto.MovieActorCountDTO
-import exposed.r2dbc.examples.dto.MovieDTO
-import exposed.r2dbc.examples.dto.MovieWithActorDTO
-import exposed.r2dbc.examples.dto.MovieWithProducingActorDTO
+import exposed.r2dbc.examples.domain.model.MovieWithActorRecord
+import exposed.r2dbc.examples.domain.model.MovieWithProducingActorRecord
+import exposed.r2dbc.examples.domain.model.toActorRecord
+import exposed.r2dbc.examples.domain.model.toMovieRecord
+import exposed.r2dbc.examples.domain.model.toMovieWithActorRecord
+import exposed.r2dbc.examples.domain.model.toMovieWithProducingActorRecord
 import io.bluetape4k.coroutines.flow.extensions.bufferUntilChanged
 import io.bluetape4k.exposed.r2dbc.repository.ExposedR2dbcRepository
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -34,7 +34,7 @@ import org.springframework.stereotype.Repository
 import java.time.LocalDate
 
 @Repository
-class MovieR2dbcRepository: ExposedR2dbcRepository<MovieDTO, Long> {
+class MovieR2dbcRepository: ExposedR2dbcRepository<MovieRecord, Long> {
 
     companion object: KLoggingChannel() {
         private val MovieActorJoin: Join by lazy {
@@ -58,9 +58,9 @@ class MovieR2dbcRepository: ExposedR2dbcRepository<MovieDTO, Long> {
 
     override val table: IdTable<Long> = MovieTable
 
-    override suspend fun ResultRow.toEntity(): MovieDTO = toMovieDTO()
+    override suspend fun ResultRow.toEntity(): MovieRecord = toMovieRecord()
 
-    suspend fun save(movie: MovieDTO): MovieDTO {
+    suspend fun save(movie: MovieRecord): MovieRecord {
         log.debug { "Save new movie. movie=$movie" }
 
         val id = MovieTable.insertAndGetId {
@@ -74,7 +74,7 @@ class MovieR2dbcRepository: ExposedR2dbcRepository<MovieDTO, Long> {
         return movie.copy(id = id.value)
     }
 
-    fun searchMovies(params: Map<String, String?>): Flow<MovieDTO> {
+    fun searchMovies(params: Map<String, String?>): Flow<MovieRecord> {
         log.debug { "Search Movie by params. params: $params" }
 
         val query = MovieTable.selectAll()
@@ -93,7 +93,7 @@ class MovieR2dbcRepository: ExposedR2dbcRepository<MovieDTO, Long> {
         return query.map { it.toEntity() }
     }
 
-    fun getAllMoviesWithActors(): Flow<MovieWithActorDTO> {
+    fun getAllMoviesWithActors(): Flow<MovieWithActorRecord> {
         log.debug { "Get all movies with actors" }
 
         return MovieActorJoin
@@ -108,8 +108,8 @@ class MovieR2dbcRepository: ExposedR2dbcRepository<MovieDTO, Long> {
                 ActorTable.birthday
             )
             .map { row ->
-                val movie = row.toMovieDTO()
-                val actor = row.toActorDTO()
+                val movie = row.toMovieRecord()
+                val actor = row.toActorRecord()
                 log.debug { "Add actor in movie[${movie.id}]. actor=$actor" }
 
                 movie to actor
@@ -118,11 +118,11 @@ class MovieR2dbcRepository: ExposedR2dbcRepository<MovieDTO, Long> {
             .mapNotNull { pairs ->
                 val movie = pairs.first().first
                 val actors = pairs.map { it.second }
-                movie.toMovieWithActorDTO(actors)
+                movie.toMovieWithActorRecord(actors)
             }
     }
 
-    suspend fun getMovieWithActors(movieId: Long): MovieWithActorDTO? {
+    suspend fun getMovieWithActors(movieId: Long): MovieWithActorRecord? {
         log.debug { "Get movie with actors. movieId: $movieId" }
 
         return MovieActorJoin
@@ -138,8 +138,8 @@ class MovieR2dbcRepository: ExposedR2dbcRepository<MovieDTO, Long> {
             )
             .where { MovieTable.id eq movieId }
             .map { row ->
-                val movie = row.toMovieDTO()
-                val actor = row.toActorDTO()
+                val movie = row.toMovieRecord()
+                val actor = row.toActorRecord()
                 log.debug { "Add actor in movie[${movie.id}]. actor=$actor" }
 
                 movie to actor
@@ -148,12 +148,12 @@ class MovieR2dbcRepository: ExposedR2dbcRepository<MovieDTO, Long> {
             .mapNotNull { pairs ->
                 val movie = pairs.first().first
                 val actors = pairs.map { it.second }
-                movie.toMovieWithActorDTO(actors)
+                movie.toMovieWithActorRecord(actors)
             }
             .firstOrNull()
     }
 
-    fun getMovieActorsCount(): Flow<MovieActorCountDTO> {
+    fun getMovieActorsCount(): Flow<MovieActorCountRecord> {
         log.debug { "Get movie actors count." }
 
         val actorCountAlias = ActorTable.id.count().alias("actorCount")
@@ -165,14 +165,14 @@ class MovieR2dbcRepository: ExposedR2dbcRepository<MovieDTO, Long> {
             )
             .groupBy(MovieTable.name)
             .map { row ->
-                MovieActorCountDTO(
+                MovieActorCountRecord(
                     movieName = row[MovieTable.name],
                     actorCount = row[actorCountAlias].toInt()
                 )
             }
     }
 
-    fun findMoviesWithActingProducers(): Flow<MovieWithProducingActorDTO> {
+    fun findMoviesWithActingProducers(): Flow<MovieWithProducingActorRecord> {
         log.debug { "Find movies with acting producers." }
 
         return moviesWithActingProducersJoin
@@ -182,7 +182,7 @@ class MovieR2dbcRepository: ExposedR2dbcRepository<MovieDTO, Long> {
                 ActorTable.lastName
             )
             .map {
-                it.toMovieWithProducingActorDTO()
+                it.toMovieWithProducingActorRecord()
             }
     }
 }

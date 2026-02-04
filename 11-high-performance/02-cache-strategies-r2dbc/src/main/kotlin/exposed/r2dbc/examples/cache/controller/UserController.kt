@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.cache.controller
 
 
-import exposed.r2dbc.examples.cache.domain.model.UserDTO
+import exposed.r2dbc.examples.cache.domain.model.UserRecord
 import exposed.r2dbc.examples.cache.domain.repository.UserCacheRepository
 import io.bluetape4k.collections.eclipse.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -25,19 +25,19 @@ class UserController(
     companion object: KLoggingChannel()
 
     @GetMapping
-    suspend fun findAll(@RequestParam(name = "limit") limit: Int? = null): List<UserDTO> {
+    suspend fun findAll(@RequestParam(name = "limit") limit: Int? = null): List<UserRecord> {
         log.debug { "Finding all users with limit: $limit" }
         return repository.findAll(limit = limit, where = { Op.TRUE }).toFastList()
     }
 
     @GetMapping("/{id}")
-    suspend fun get(@PathVariable id: Long): UserDTO? {
+    suspend fun get(@PathVariable id: Long): UserRecord? {
         log.debug { "Getting user with id: $id" }
         return repository.get(id)
     }
 
     @GetMapping("/all")
-    suspend fun getAll(@RequestParam(name = "ids") ids: List<Long>): List<UserDTO> {
+    suspend fun getAll(@RequestParam(name = "ids") ids: List<Long>): List<UserRecord> {
         log.debug { "Getting all users with ids: $ids" }
         return repository.getAll(ids)
     }
@@ -62,9 +62,9 @@ class UserController(
     }
 
     @PostMapping
-    suspend fun put(@RequestBody userDTO: UserDTO): UserDTO {
-        log.debug { "Updating user with id: ${userDTO.id}" }
-        repository.put(userDTO)
-        return userDTO
+    suspend fun put(@RequestBody userRecord: UserRecord): UserRecord {
+        log.debug { "Updating user with id: ${userRecord.id}" }
+        repository.put(userRecord)
+        return userRecord
     }
 }

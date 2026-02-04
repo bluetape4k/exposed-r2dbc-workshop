@@ -1,4 +1,4 @@
-package exposed.r2dbc.workshop.springwebflux.domain
+package exposed.r2dbc.workshop.springwebflux.domain.model
 
 import io.bluetape4k.collections.eclipse.fastListOf
 import java.io.Serializable
@@ -6,27 +6,31 @@ import java.io.Serializable
 /**
  * 영화 정보를 나타내는 DTO
  */
-data class MovieDTO(
+data class MovieRecord(
     val name: String,
     val producerName: String,
     val releaseDate: String,
     val id: Long? = null,
-): Serializable
+): Serializable {
+    fun withId(id: Long) = copy(id = id)
+}
 
 /**
  * 영화 배우 정보를 담는 DTO
  */
-data class ActorDTO(
+data class ActorRecord(
     val firstName: String,
     val lastName: String,
     val birthday: String? = null,
     val id: Long? = null,
-): Serializable
+): Serializable {
+    fun withId(id: Long) = copy(id = id)
+}
 
 /**
  * 영화 배우 정보와 해당 배우가 출연한 영화 정보를 나타내는 DTO
  */
-data class MovieActorDTO(
+data class MovieActorRecord(
     val movieId: Long,
     val actorId: Long,
 ): Serializable
@@ -35,7 +39,7 @@ data class MovieActorDTO(
 /**
  * 영화 제목과 영화에 출연한 배우의 수를 나타내는 DTO
  */
-data class MovieActorCountDTO(
+data class MovieActorCountRecord(
     val movieName: String,
     val actorCount: Int,
 ): Serializable
@@ -43,18 +47,18 @@ data class MovieActorCountDTO(
 /**
  * 영화 정보와 해당 영화에 출연한 배우 정보를 나타내는 DTO
  */
-data class MovieWithActorDTO(
+data class MovieWithActorRecord(
     val name: String,
     val producerName: String,
     val releaseDate: String,
-    val actors: MutableList<ActorDTO> = fastListOf(),
+    val actors: MutableList<ActorRecord> = fastListOf(),
     val id: Long? = null,
 ): Serializable
 
 /**
  * 영화 제목과 영화를 제작한 배우의 이름을 나타내는 DTO
  */
-data class MovieWithProducingActorDTO(
+data class MovieWithProducingActorRecord(
     val movieName: String,
     val producerActorName: String,
 ): Serializable

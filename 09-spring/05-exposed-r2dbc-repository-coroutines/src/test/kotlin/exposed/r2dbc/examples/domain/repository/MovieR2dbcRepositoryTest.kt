@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.domain.repository
 
 import exposed.r2dbc.examples.AbstractExposedR2dbcRepositoryTest
-import exposed.r2dbc.examples.dto.MovieDTO
+import exposed.r2dbc.examples.domain.model.MovieRecord
 import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -21,7 +21,7 @@ class MovieR2dbcRepositoryTest(
 ): AbstractExposedR2dbcRepositoryTest() {
 
     companion object: KLoggingChannel() {
-        private fun newMovieDTO() = MovieDTO(
+        private fun newMovieRecord() = MovieRecord(
             id = 0L,
             name = faker.book().title(),
             producerName = faker.name().fullName(),
@@ -64,7 +64,7 @@ class MovieR2dbcRepositoryTest(
 
     @Test
     fun `save new movie`() = runSuspendIO {
-        val movie = newMovieDTO()
+        val movie = newMovieRecord()
 
         val savedMovie = suspendTransaction {
             movieRepository.save(movie)
@@ -76,7 +76,7 @@ class MovieR2dbcRepositoryTest(
 
     @Test
     fun `delete movie`() = runSuspendIO {
-        val movie = newMovieDTO()
+        val movie = newMovieRecord()
         val movieDto = suspendTransaction {
             movieRepository.save(movie)
         }

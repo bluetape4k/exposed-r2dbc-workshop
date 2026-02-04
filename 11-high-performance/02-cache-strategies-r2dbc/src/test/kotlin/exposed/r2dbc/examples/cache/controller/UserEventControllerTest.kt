@@ -2,7 +2,7 @@ package exposed.r2dbc.examples.cache.controller
 
 import exposed.r2dbc.examples.cache.AbstractCacheStrategyTest
 import exposed.r2dbc.examples.cache.domain.model.UserEventTable
-import exposed.r2dbc.examples.cache.domain.model.newUserEventDTO
+import exposed.r2dbc.examples.cache.domain.model.newUserEventRecord
 import io.bluetape4k.junit5.awaitility.suspendUntil
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -34,7 +34,7 @@ class UserEventControllerTest(
     fun `insert user event`() = runSuspendIO {
         val prevCount = getCountOfUserEvents()
 
-        val userEvent = newUserEventDTO()
+        val userEvent = newUserEventRecord()
         val response = client
             .httpPost("/user-events", userEvent)
             .expectStatus().is2xxSuccessful
@@ -60,7 +60,7 @@ class UserEventControllerTest(
         val insertCount = 500
         val prevCount = getCountOfUserEvents()
 
-        val userEvents = List(insertCount) { newUserEventDTO() }
+        val userEvents = List(insertCount) { newUserEventRecord() }
         val response = client
             .httpPost("/user-events/bulk", userEvents)
             .expectStatus().is2xxSuccessful

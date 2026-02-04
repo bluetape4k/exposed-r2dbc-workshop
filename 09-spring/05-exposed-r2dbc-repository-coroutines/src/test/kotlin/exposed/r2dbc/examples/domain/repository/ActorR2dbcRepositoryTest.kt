@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.domain.repository
 
 import exposed.r2dbc.examples.AbstractExposedR2dbcRepositoryTest
-import exposed.r2dbc.examples.dto.ActorDTO
+import exposed.r2dbc.examples.domain.model.ActorRecord
 import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -18,7 +18,7 @@ class ActorR2dbcRepositoryTest(
 ): AbstractExposedR2dbcRepositoryTest() {
 
     companion object: KLoggingChannel() {
-        private fun newActorDTO() = ActorDTO(
+        private fun newActorRecord() = ActorRecord(
             id = 0L,
             firstName = faker.name().firstName(),
             lastName = faker.name().lastName(),
@@ -71,7 +71,7 @@ class ActorR2dbcRepositoryTest(
         suspendTransaction {
             val prevCount = suspendTransaction { actorRepository.count() }
 
-            val actor = newActorDTO()
+            val actor = newActorRecord()
             val savedActor = actorRepository.save(actor)
             savedActor shouldBeEqualTo actor.copy(id = savedActor.id)
 
@@ -83,7 +83,7 @@ class ActorR2dbcRepositoryTest(
 
     @Test
     fun `delete actor by id`() = runSuspendIO {
-        val actor = newActorDTO()
+        val actor = newActorRecord()
         val savedActor = suspendTransaction {
             actorRepository.save(actor)
         }

@@ -2,7 +2,7 @@ package exposed.r2dbc.examples.cache.domain.repository
 
 import exposed.r2dbc.examples.cache.AbstractCacheStrategyTest
 import exposed.r2dbc.examples.cache.domain.model.UserTable
-import exposed.r2dbc.examples.cache.domain.model.newUserDTO
+import exposed.r2dbc.examples.cache.domain.model.newUserRecord
 import io.bluetape4k.exposed.core.statements.api.toExposedBlob
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -47,7 +47,7 @@ class UserCacheRepositoryTest(
     }
 
     private suspend fun insertUsers(size: Int) {
-        val users = List(size) { newUserDTO() }
+        val users = List(size) { newUserRecord() }
         val rows = UserTable.batchInsert(users) {
             this[UserTable.username] = it.username
             this[UserTable.firstName] = it.firstName

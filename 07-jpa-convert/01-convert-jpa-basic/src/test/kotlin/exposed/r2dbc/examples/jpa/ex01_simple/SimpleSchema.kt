@@ -64,29 +64,31 @@ object SimpleSchema {
     /**
      * DTO
      */
-    data class SimpleDTO(
+    data class SimpleRecord(
         val id: Long,
         val name: String,
         val description: String?,
-    ): Serializable
+    ): Serializable {
+        fun withId(id: Long) = copy(id = id)
+    }
 
-    fun SimpleEntity.toSimpleDTO(): SimpleDTO {
-        return SimpleDTO(
+    fun SimpleEntity.toSimpleRecord(): SimpleRecord {
+        return SimpleRecord(
             id = this.id.value,
             name = this.name,
             description = this.description
         )
     }
 
-    fun ResultRow.toSimpleDTO(): SimpleDTO {
-        return SimpleDTO(
+    fun ResultRow.toSimpleRecord(): SimpleRecord {
+        return SimpleRecord(
             id = this[SimpleTable.id].value,
             name = this[SimpleTable.name],
             description = this[SimpleTable.description]
         )
     }
 
-    suspend fun SizedIterable<ResultRow>.toSimpleDTOs(): List<SimpleDTO> {
-        return this.map { it.toSimpleDTO() }.toFastList()
+    suspend fun SizedIterable<ResultRow>.toSimpleRecords(): List<SimpleRecord> {
+        return this.map { it.toSimpleRecord() }.toFastList()
     }
 }

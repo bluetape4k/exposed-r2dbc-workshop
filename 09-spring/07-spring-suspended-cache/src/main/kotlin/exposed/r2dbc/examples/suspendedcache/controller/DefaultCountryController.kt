@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.suspendedcache.controller
 
-import exposed.r2dbc.examples.suspendedcache.domain.CountryDTO
+import exposed.r2dbc.examples.suspendedcache.domain.model.CountryRecord
 import exposed.r2dbc.examples.suspendedcache.domain.repository.CountryR2dbcRepository
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import org.springframework.beans.factory.annotation.Qualifier
@@ -18,6 +18,6 @@ class DefaultCountryController(
     companion object: KLoggingChannel()
 
     @GetMapping("/{code}")
-    suspend fun getCountryByCode(@PathVariable code: String): CountryDTO? =
+    suspend fun getCountryByCode(@PathVariable code: String): CountryRecord? =
         countryRepository.findByCode(code)
 }

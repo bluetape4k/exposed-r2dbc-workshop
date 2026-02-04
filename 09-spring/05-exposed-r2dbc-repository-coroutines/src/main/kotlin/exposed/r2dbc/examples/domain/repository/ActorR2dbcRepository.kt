@@ -1,8 +1,8 @@
 package exposed.r2dbc.examples.domain.repository
 
+import exposed.r2dbc.examples.domain.model.ActorRecord
 import exposed.r2dbc.examples.domain.model.MovieSchema.ActorTable
-import exposed.r2dbc.examples.domain.model.toActorDTO
-import exposed.r2dbc.examples.dto.ActorDTO
+import exposed.r2dbc.examples.domain.model.toActorRecord
 import io.bluetape4k.exposed.r2dbc.repository.ExposedR2dbcRepository
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
@@ -18,15 +18,15 @@ import org.springframework.stereotype.Repository
 import java.time.LocalDate
 
 @Repository
-class ActorR2dbcRepository: ExposedR2dbcRepository<ActorDTO, Long> {
+class ActorR2dbcRepository: ExposedR2dbcRepository<ActorRecord, Long> {
 
     companion object: KLoggingChannel()
 
     override val table: IdTable<Long> = ActorTable
 
-    override suspend fun ResultRow.toEntity(): ActorDTO = toActorDTO()
+    override suspend fun ResultRow.toEntity(): ActorRecord = toActorRecord()
 
-    fun searchActors(params: Map<String, String?>): Flow<ActorDTO> {
+    fun searchActors(params: Map<String, String?>): Flow<ActorRecord> {
         log.debug { "Search Actors by params. params: $params" }
 
         val query = ActorTable.selectAll()
@@ -45,7 +45,7 @@ class ActorR2dbcRepository: ExposedR2dbcRepository<ActorDTO, Long> {
         return query.map { it.toEntity() }
     }
 
-    suspend fun save(actor: ActorDTO): ActorDTO {
+    suspend fun save(actor: ActorRecord): ActorRecord {
         log.debug { "Save new actor. actor=$actor" }
 
         val id = ActorTable.insertAndGetId {

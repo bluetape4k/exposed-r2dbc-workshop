@@ -40,7 +40,7 @@ object UserEventTable: LongIdTable("user_action") {
     }
 }
 
-data class UserEventDTO(
+data class UserEventRecord(
     override val id: Long = Snowflakers.Global.nextId(),
     val username: String,
     val eventSource: String,
@@ -49,7 +49,7 @@ data class UserEventDTO(
     val eventTime: Instant,
 ): HasIdentifier<Long>
 
-fun ResultRow.toUserEventDTO() = UserEventDTO(
+fun ResultRow.toUserEventRecord() = UserEventRecord(
     id = this[UserEventTable.id].value,
     username = this[UserEventTable.username],
     eventSource = this[UserEventTable.eventSource],
@@ -58,7 +58,7 @@ fun ResultRow.toUserEventDTO() = UserEventDTO(
     eventTime = this[UserEventTable.eventTime],
 )
 
-fun newUserEventDTO() = UserEventDTO(
+fun newUserEventRecord() = UserEventRecord(
     username = faker.credentials().username(),
     eventSource = faker.app().name(),
     eventType = UserEventType.entries.random(),

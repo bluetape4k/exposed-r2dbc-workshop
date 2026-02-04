@@ -1,9 +1,9 @@
 package exposed.r2dbc.examples.controller
 
 import exposed.r2dbc.examples.AbstractExposedR2dbcRepositoryTest
-import exposed.r2dbc.examples.dto.MovieActorCountDTO
-import exposed.r2dbc.examples.dto.MovieWithActorDTO
-import exposed.r2dbc.examples.dto.MovieWithProducingActorDTO
+import exposed.r2dbc.examples.domain.model.MovieActorCountRecord
+import exposed.r2dbc.examples.domain.model.MovieWithActorRecord
+import exposed.r2dbc.examples.domain.model.MovieWithProducingActorRecord
 import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -31,7 +31,7 @@ class MovieActorsControllerTest(
         val movieWithActors = client
             .httpGet("/movie-actors/$movieId")
             .expectStatus().is2xxSuccessful
-            .returnResult<MovieWithActorDTO>().responseBody
+            .returnResult<MovieWithActorRecord>().responseBody
             .awaitSingle()
 
         log.debug { "movieWithActors[$movieId]=$movieWithActors" }
@@ -43,7 +43,7 @@ class MovieActorsControllerTest(
         val movieActorCounts = client
             .httpGet("/movie-actors/count")
             .expectStatus().is2xxSuccessful
-            .returnResult<MovieActorCountDTO>().responseBody
+            .returnResult<MovieActorCountRecord>().responseBody
             .asFlow()
             .toFastList()
 
@@ -58,7 +58,7 @@ class MovieActorsControllerTest(
         val movieWithProducers = client
             .httpGet("/movie-actors/acting-producers")
             .expectStatus().is2xxSuccessful
-            .returnResult<MovieWithProducingActorDTO>().responseBody
+            .returnResult<MovieWithProducingActorRecord>().responseBody
             .asFlow()
             .toFastList()
 

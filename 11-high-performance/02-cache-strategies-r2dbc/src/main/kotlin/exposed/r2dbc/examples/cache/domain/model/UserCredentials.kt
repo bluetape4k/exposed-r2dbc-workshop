@@ -23,7 +23,7 @@ object UserCredentialsTable: TimebasedUUIDBase62Table("user_credentials") {
     val updatedAt = timestamp("updated_at").nullable()
 }
 
-data class UserCredentialsDTO(
+data class UserCredentialsRecord(
     override val id: String,
     val username: String,
     val email: String,
@@ -32,7 +32,7 @@ data class UserCredentialsDTO(
     val updatedAt: Instant? = null,
 ): HasIdentifier<String>
 
-fun ResultRow.toUserCredentialsDTO() = UserCredentialsDTO(
+fun ResultRow.toUserCredentialsRecord() = UserCredentialsRecord(
     id = this[UserCredentialsTable.id].value,
     username = this[UserCredentialsTable.username],
     email = this[UserCredentialsTable.email],
@@ -41,7 +41,7 @@ fun ResultRow.toUserCredentialsDTO() = UserCredentialsDTO(
     updatedAt = this[UserCredentialsTable.updatedAt],
 )
 
-fun newUserCredentialsDTO() = UserCredentialsDTO(
+fun newUserCredentialsRecord() = UserCredentialsRecord(
     id = TimebasedUuid.Reordered.nextIdAsString(),
     username = faker.credentials().username() + "." + Base58.randomString(4),
     email = faker.internet().emailAddress(),

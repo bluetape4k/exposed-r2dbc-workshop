@@ -1,6 +1,6 @@
 package exposed.r2dbc.workshop.springwebflux.controller
 
-import exposed.r2dbc.workshop.springwebflux.domain.ActorDTO
+import exposed.r2dbc.workshop.springwebflux.domain.model.ActorRecord
 import exposed.r2dbc.workshop.springwebflux.domain.repository.ActorRepository
 import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -27,14 +27,14 @@ class ActorController(
     companion object: KLoggingChannel()
 
     @GetMapping("/{id}")
-    suspend fun getActorById(@PathVariable id: Long): ActorDTO? =
+    suspend fun getActorById(@PathVariable id: Long): ActorRecord? =
         suspendTransaction {
             log.debug { "current transaction=$this" }
             actorRepository.findById(id)
         }
 
     @GetMapping
-    suspend fun searchActors(request: ServerHttpRequest): List<ActorDTO> {
+    suspend fun searchActors(request: ServerHttpRequest): List<ActorRecord> {
         val params = request.queryParams.map { it.key to it.value.joinToString(",") }.toMap()
 
         return suspendTransaction {
@@ -44,7 +44,7 @@ class ActorController(
     }
 
     @PostMapping
-    suspend fun createActor(@RequestBody actor: ActorDTO): ActorDTO =
+    suspend fun createActor(@RequestBody actor: ActorRecord): ActorRecord =
         suspendTransaction {
             actorRepository.create(actor)
         }

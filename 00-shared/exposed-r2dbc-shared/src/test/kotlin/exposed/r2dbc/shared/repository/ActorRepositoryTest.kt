@@ -26,7 +26,7 @@ import org.junit.jupiter.params.provider.MethodSource
 class ActorRepositoryTest: R2dbcExposedTestBase() {
 
     companion object: KLogging() {
-        fun newActorDTO(): ActorDTO = ActorDTO(
+        fun newActorRecord(): ActorRecord = ActorRecord(
             id = 0L,
             firstName = faker.name().firstName(),
             lastName = faker.name().lastName(),
@@ -65,7 +65,7 @@ class ActorRepositoryTest: R2dbcExposedTestBase() {
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `create new actor`(testDB: TestDB) = runTest {
         withMovieAndActors(testDB) {
-            val actor = newActorDTO()
+            val actor = newActorRecord()
 
             val currentCount = repository.count()
 
@@ -81,7 +81,7 @@ class ActorRepositoryTest: R2dbcExposedTestBase() {
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `delete actor by id`(testDB: TestDB) = runTest {
         withMovieAndActors(testDB) {
-            val actor = newActorDTO()
+            val actor = newActorRecord()
             val savedActor = repository.save(actor)
             savedActor.id.shouldNotBeNull()
 
@@ -98,7 +98,7 @@ class ActorRepositoryTest: R2dbcExposedTestBase() {
             log.debug { "count: $count" }
             count shouldBeGreaterThan 0L
 
-            repository.save(newActorDTO())
+            repository.save(newActorRecord())
 
             val newCount = repository.count()
             newCount shouldBeEqualTo count + 1L
@@ -171,7 +171,7 @@ class ActorRepositoryTest: R2dbcExposedTestBase() {
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `delete entity`(testDB: TestDB) = runTest {
         withMovieAndActors(testDB) {
-            val actor = newActorDTO()
+            val actor = newActorRecord()
             val savedActor = repository.save(actor)
             savedActor.id.shouldNotBeNull()
 
@@ -186,7 +186,7 @@ class ActorRepositoryTest: R2dbcExposedTestBase() {
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `delete entity by id`(testDB: TestDB) = runTest {
         withMovieAndActors(testDB) {
-            val actor = newActorDTO()
+            val actor = newActorRecord()
             val savedActor = repository.save(actor)
             savedActor.id.shouldNotBeNull()
 

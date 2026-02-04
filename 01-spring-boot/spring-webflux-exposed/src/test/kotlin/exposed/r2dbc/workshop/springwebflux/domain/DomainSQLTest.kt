@@ -1,7 +1,8 @@
 package exposed.r2dbc.workshop.springwebflux.domain
 
 import exposed.r2dbc.workshop.springwebflux.AbstractSpringWebfluxTest
-import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.ActorTable
+import exposed.r2dbc.workshop.springwebflux.domain.model.MovieSchema.ActorTable
+import exposed.r2dbc.workshop.springwebflux.domain.model.toActorRecord
 import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.junit5.coroutines.SuspendedJobTester
 import io.bluetape4k.junit5.coroutines.runSuspendIO
@@ -35,7 +36,7 @@ class DomainSQLTest: AbstractSpringWebfluxTest() {
         open fun `get all actors`() = runSuspendIO {
             val actors = suspendTransaction {
                 ActorTable.selectAll()
-                    .map { it.toActorDTO() }
+                    .map { it.toActorRecord() }
                     .toFastList()
             }
 
@@ -52,7 +53,7 @@ class DomainSQLTest: AbstractSpringWebfluxTest() {
                     withContext(Dispatchers.IO) {
                         suspendTransaction(db = database) {
                             val actors = ActorTable.selectAll()
-                                .map { it.toActorDTO() }
+                                .map { it.toActorRecord() }
                                 .toFastList()
                             actors.shouldNotBeEmpty()
                         }

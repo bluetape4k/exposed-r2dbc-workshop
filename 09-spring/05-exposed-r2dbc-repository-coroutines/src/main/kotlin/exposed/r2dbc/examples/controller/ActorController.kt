@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.controller
 
+import exposed.r2dbc.examples.domain.model.ActorRecord
 import exposed.r2dbc.examples.domain.repository.ActorR2dbcRepository
-import exposed.r2dbc.examples.dto.ActorDTO
 import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.CoroutineScope
@@ -26,13 +26,13 @@ class ActorController(
     companion object: KLoggingChannel()
 
     @GetMapping
-    suspend fun getActors(): List<ActorDTO> =
+    suspend fun getActors(): List<ActorRecord> =
         suspendTransaction {
             actorRepository.findAll().toFastList()
         }
 
     @GetMapping("/{id}")
-    suspend fun getActorById(@PathVariable id: Long): ActorDTO? =
+    suspend fun getActorById(@PathVariable id: Long): ActorRecord? =
         suspendTransaction {
             actorRepository.findById(id)
         }
@@ -41,7 +41,7 @@ class ActorController(
      * `Flow<ActorDTO>` 를 반환할 수는 없다. Transaction Context의 범위를 넘어서기 때문이다.
      */
     @GetMapping("/search")
-    suspend fun searchActors(request: ServerHttpRequest): List<ActorDTO> {
+    suspend fun searchActors(request: ServerHttpRequest): List<ActorRecord> {
         val params = request.queryParams.map { it.key to it.value.firstOrNull() }.toMap()
 
         return when {
@@ -53,7 +53,7 @@ class ActorController(
     }
 
     @PostMapping
-    suspend fun saveActor(@RequestBody actor: ActorDTO): ActorDTO =
+    suspend fun saveActor(@RequestBody actor: ActorRecord): ActorRecord =
         suspendTransaction {
             actorRepository.save(actor)
         }

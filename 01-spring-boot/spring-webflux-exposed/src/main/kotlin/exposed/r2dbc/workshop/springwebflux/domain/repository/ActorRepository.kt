@@ -2,8 +2,8 @@ package exposed.r2dbc.workshop.springwebflux.domain.repository
 
 
 import exposed.r2dbc.shared.repository.MovieSchema.ActorTable
-import exposed.r2dbc.workshop.springwebflux.domain.ActorDTO
-import exposed.r2dbc.workshop.springwebflux.domain.toActorDTO
+import exposed.r2dbc.workshop.springwebflux.domain.model.ActorRecord
+import exposed.r2dbc.workshop.springwebflux.domain.model.toActorRecord
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.Flow
@@ -25,19 +25,19 @@ class ActorRepository {
     suspend fun count(): Long =
         ActorTable.selectAll().count()
 
-    suspend fun findById(id: Long): ActorDTO? {
+    suspend fun findById(id: Long): ActorRecord? {
         log.debug { "Find Actor by id. id: $id" }
         return ActorTable.selectAll()
             .where { ActorTable.id eq id }
             .firstOrNull()
-            ?.toActorDTO()
+            ?.toActorRecord()
     }
 
-    fun findAll(): Flow<ActorDTO> {
-        return ActorTable.selectAll().map { it.toActorDTO() }
+    fun findAll(): Flow<ActorRecord> {
+        return ActorTable.selectAll().map { it.toActorRecord() }
     }
 
-    fun searchActor(params: Map<String, String?>): Flow<ActorDTO> {
+    fun searchActor(params: Map<String, String?>): Flow<ActorRecord> {
         log.debug { "Search Actor by params. params: $params" }
 
         val query = ActorTable.selectAll()
@@ -52,10 +52,10 @@ class ActorRepository {
                 }
             }
         }
-        return query.map { it.toActorDTO() }
+        return query.map { it.toActorRecord() }
     }
 
-    suspend fun create(actor: ActorDTO): ActorDTO {
+    suspend fun create(actor: ActorRecord): ActorRecord {
         log.debug { "Create Actor. actor: $actor" }
 
         val id = ActorTable.insertAndGetId {

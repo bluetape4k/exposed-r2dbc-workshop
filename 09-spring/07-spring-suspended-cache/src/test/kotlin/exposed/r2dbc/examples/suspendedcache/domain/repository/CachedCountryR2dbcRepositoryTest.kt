@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.suspendedcache.domain.repository
 
 import exposed.r2dbc.examples.suspendedcache.cache.LettuceSuspendedCacheManager
-import exposed.r2dbc.examples.suspendedcache.domain.CountryDTO
+import exposed.r2dbc.examples.suspendedcache.domain.model.CountryRecord
 import exposed.r2dbc.examples.suspendedcache.utils.DataPopulator
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.support.uninitialized
@@ -24,7 +24,7 @@ class CachedCountryR2dbcRepositoryTest(
     @Test
     fun `모든 캐시를 삭제한다`() = runTest {
         val countryCache =
-            cacheManager.getOrCreate<String, CountryDTO>(CachedCountryR2dbcRepository.CACHE_NAME)
+            cacheManager.getOrCreate<String, CountryRecord>(CachedCountryR2dbcRepository.CACHE_NAME)
 
 
         // 캐시를 채운다.

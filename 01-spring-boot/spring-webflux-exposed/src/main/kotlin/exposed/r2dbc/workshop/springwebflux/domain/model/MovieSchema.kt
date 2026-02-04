@@ -1,4 +1,4 @@
-package exposed.r2dbc.workshop.springwebflux.domain
+package exposed.r2dbc.workshop.springwebflux.domain.model
 
 import org.jetbrains.exposed.v1.core.ReferenceOption
 import org.jetbrains.exposed.v1.core.Table

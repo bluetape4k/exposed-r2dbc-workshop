@@ -1,7 +1,7 @@
 package exposed.r2dbc.workshop.springwebflux.domain.repository
 
 import exposed.r2dbc.workshop.springwebflux.AbstractSpringWebfluxTest
-import exposed.r2dbc.workshop.springwebflux.domain.ActorDTO
+import exposed.r2dbc.workshop.springwebflux.domain.model.ActorRecord
 import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
@@ -18,7 +18,7 @@ class ActorRepositoryTest(
 ): AbstractSpringWebfluxTest() {
 
     companion object: KLoggingChannel() {
-        fun newActorDTO() = ActorDTO(
+        fun newActorRecord() = ActorRecord(
             firstName = faker.name().firstName(),
             lastName = faker.name().lastName(),
             birthday = faker.timeAndDate().birthday(20, 80).toString()
@@ -83,7 +83,7 @@ class ActorRepositoryTest(
         suspendTransaction {
             val prevCount = actorRepository.count()
 
-            val actor = newActorDTO()
+            val actor = newActorRecord()
             val savedActor = actorRepository.create(actor)
             savedActor shouldBeEqualTo actor.copy(id = savedActor.id)
 
@@ -97,7 +97,7 @@ class ActorRepositoryTest(
     @Test
     fun `delete actor by id`() = runTest {
         suspendTransaction {
-            val actor = newActorDTO()
+            val actor = newActorRecord()
             val savedActor = actorRepository.create(actor)
             log.debug { "Saved actor: $savedActor" }
             savedActor.shouldNotBeNull()

@@ -1,10 +1,10 @@
 package exposed.r2dbc.workshop.springwebflux.utils
 
-import exposed.r2dbc.workshop.springwebflux.domain.ActorDTO
-import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.ActorInMovieTable
-import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.ActorTable
-import exposed.r2dbc.workshop.springwebflux.domain.MovieSchema.MovieTable
-import exposed.r2dbc.workshop.springwebflux.domain.MovieWithActorDTO
+import exposed.r2dbc.workshop.springwebflux.domain.model.ActorRecord
+import exposed.r2dbc.workshop.springwebflux.domain.model.MovieSchema.ActorInMovieTable
+import exposed.r2dbc.workshop.springwebflux.domain.model.MovieSchema.ActorTable
+import exposed.r2dbc.workshop.springwebflux.domain.model.MovieSchema.MovieTable
+import exposed.r2dbc.workshop.springwebflux.domain.model.MovieWithActorRecord
 import io.bluetape4k.collections.eclipse.fastListOf
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.info
@@ -59,15 +59,15 @@ class DataInitializer(private val database: R2dbcDatabase): ApplicationListener<
 
         log.info { "Inserting sample actors and movies ..." }
 
-        val johnnyDepp = ActorDTO("Johnny", "Depp", "1979-10-28")
-        val bradPitt = ActorDTO("Brad", "Pitt", "1982-05-16")
-        val angelinaJolie = ActorDTO("Angelina", "Jolie", "1983-11-10")
-        val jenniferAniston = ActorDTO("Jennifer", "Aniston", "1975-07-23")
-        val angelinaGrace = ActorDTO("Angelina", "Grace", "1988-09-02")
-        val craigDaniel = ActorDTO("Craig", "Daniel", "1970-11-12")
-        val ellenPaige = ActorDTO("Ellen", "Paige", "1981-12-20")
-        val russellCrowe = ActorDTO("Russell", "Crowe", "1970-01-20")
-        val edwardNorton = ActorDTO("Edward", "Norton", "1975-04-03")
+        val johnnyDepp = ActorRecord("Johnny", "Depp", "1979-10-28")
+        val bradPitt = ActorRecord("Brad", "Pitt", "1982-05-16")
+        val angelinaJolie = ActorRecord("Angelina", "Jolie", "1983-11-10")
+        val jenniferAniston = ActorRecord("Jennifer", "Aniston", "1975-07-23")
+        val angelinaGrace = ActorRecord("Angelina", "Grace", "1988-09-02")
+        val craigDaniel = ActorRecord("Craig", "Daniel", "1970-11-12")
+        val ellenPaige = ActorRecord("Ellen", "Paige", "1981-12-20")
+        val russellCrowe = ActorRecord("Russell", "Crowe", "1970-01-20")
+        val edwardNorton = ActorRecord("Edward", "Norton", "1975-04-03")
 
         val actors = fastListOf(
             johnnyDepp,
@@ -82,25 +82,25 @@ class DataInitializer(private val database: R2dbcDatabase): ApplicationListener<
         )
 
         val movies = fastListOf(
-            MovieWithActorDTO(
+            MovieWithActorRecord(
                 "Gladiator",
                 johnnyDepp.firstName,
                 "2000-05-01",
                 fastListOf(russellCrowe, ellenPaige, craigDaniel)
             ),
-            MovieWithActorDTO(
+            MovieWithActorRecord(
                 "Guardians of the galaxy",
                 johnnyDepp.firstName,
                 "2014-07-21",
                 fastListOf(angelinaGrace, bradPitt, ellenPaige, angelinaJolie, johnnyDepp)
             ),
-            MovieWithActorDTO(
+            MovieWithActorRecord(
                 "Fight club",
                 craigDaniel.firstName,
                 "1999-09-13",
                 fastListOf(bradPitt, jenniferAniston, edwardNorton)
             ),
-            MovieWithActorDTO(
+            MovieWithActorRecord(
                 "13 Reasons Why",
                 "Suzuki",
                 "2016-01-01",

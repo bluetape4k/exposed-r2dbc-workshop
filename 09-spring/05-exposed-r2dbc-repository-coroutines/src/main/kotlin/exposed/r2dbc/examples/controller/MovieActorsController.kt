@@ -1,9 +1,9 @@
 package exposed.r2dbc.examples.controller
 
+import exposed.r2dbc.examples.domain.model.MovieActorCountRecord
+import exposed.r2dbc.examples.domain.model.MovieWithActorRecord
+import exposed.r2dbc.examples.domain.model.MovieWithProducingActorRecord
 import exposed.r2dbc.examples.domain.repository.MovieR2dbcRepository
-import exposed.r2dbc.examples.dto.MovieActorCountDTO
-import exposed.r2dbc.examples.dto.MovieWithActorDTO
-import exposed.r2dbc.examples.dto.MovieWithProducingActorDTO
 import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.CoroutineScope
@@ -24,19 +24,19 @@ class MovieActorsController(
     companion object: KLoggingChannel()
 
     @GetMapping("/{movieId}")
-    suspend fun getMovieWithActors(@PathVariable movieId: Long): MovieWithActorDTO? =
+    suspend fun getMovieWithActors(@PathVariable movieId: Long): MovieWithActorRecord? =
         suspendTransaction {
             movieRepository.getMovieWithActors(movieId)
         }
 
     @GetMapping("/count")
-    suspend fun getMovieActorsCount(): List<MovieActorCountDTO> =
+    suspend fun getMovieActorsCount(): List<MovieActorCountRecord> =
         suspendTransaction {
             movieRepository.getMovieActorsCount().toFastList()
         }
 
     @GetMapping("/acting-producers")
-    suspend fun findMoviesWithActingProducers(): List<MovieWithProducingActorDTO> =
+    suspend fun findMoviesWithActingProducers(): List<MovieWithProducingActorRecord> =
         suspendTransaction {
             movieRepository.findMoviesWithActingProducers().toFastList()
         }

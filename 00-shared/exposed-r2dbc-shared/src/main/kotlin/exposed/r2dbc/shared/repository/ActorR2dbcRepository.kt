@@ -13,14 +13,14 @@ import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import java.time.LocalDate
 
-class ActorR2dbcRepository: ExposedR2dbcRepository<ActorDTO, Long> {
+class ActorR2dbcRepository: ExposedR2dbcRepository<ActorRecord, Long> {
 
     companion object: KLogging()
 
     override val table = ActorTable
-    override suspend fun ResultRow.toEntity(): ActorDTO = toActorDTO()
+    override suspend fun ResultRow.toEntity(): ActorRecord = toActorRecord()
 
-    fun searchActors(params: Map<String, String?>): Flow<ActorDTO> {
+    fun searchActors(params: Map<String, String?>): Flow<ActorRecord> {
         val query = ActorTable.selectAll()
 
         params.forEach { (key, value) ->
@@ -35,7 +35,7 @@ class ActorR2dbcRepository: ExposedR2dbcRepository<ActorDTO, Long> {
         return query.map { it.toEntity() }
     }
 
-    suspend fun save(actor: ActorDTO): ActorDTO {
+    suspend fun save(actor: ActorRecord): ActorRecord {
         log.debug { "Create new actor. actor: $actor" }
 
         val id = ActorTable.insertAndGetId {

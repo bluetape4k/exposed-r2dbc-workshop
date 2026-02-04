@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.suspendedcache.controller
 
 import exposed.r2dbc.examples.suspendedcache.AbstractSpringSuspendedCacheApplicationTest
-import exposed.r2dbc.examples.suspendedcache.domain.CountryDTO
+import exposed.r2dbc.examples.suspendedcache.domain.model.CountryRecord
 import exposed.r2dbc.examples.suspendedcache.utils.DataPopulator
 import io.bluetape4k.coroutines.flow.async
 import io.bluetape4k.junit5.coroutines.runSuspendIO
@@ -33,7 +33,7 @@ abstract class AbstractCountryControllerTest: AbstractSpringSuspendedCacheApplic
             val country = client
                 .httpGet("/$basePath/countries/$code")
                 .expectStatus().is2xxSuccessful
-                .returnResult<CountryDTO>().responseBody
+                .returnResult<CountryRecord>().responseBody
                 .awaitSingle()
 
             country.code shouldBeEqualTo code
@@ -48,7 +48,7 @@ abstract class AbstractCountryControllerTest: AbstractSpringSuspendedCacheApplic
                 val country = client
                     .httpGet("/$basePath/countries/$code")
                     .expectStatus().is2xxSuccessful
-                    .returnResult<CountryDTO>().responseBody
+                    .returnResult<CountryRecord>().responseBody
                     .awaitSingle()
 
                 code to country

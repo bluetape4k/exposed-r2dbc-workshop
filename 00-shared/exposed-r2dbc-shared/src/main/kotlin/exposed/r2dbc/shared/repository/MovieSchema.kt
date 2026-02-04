@@ -57,15 +57,15 @@ object MovieSchema: KLogging() {
     private suspend fun R2dbcTransaction.populateSampleData() {
         log.info { "Inserting sample actors and movies ..." }
 
-        val johnnyDepp = ActorDTO(0, "Johnny", "Depp", "1979-10-28")
-        val bradPitt = ActorDTO(0, "Brad", "Pitt", "1982-05-16")
-        val angelinaJolie = ActorDTO(0, "Angelina", "Jolie", "1983-11-10")
-        val jenniferAniston = ActorDTO(0, "Jennifer", "Aniston", "1975-07-23")
-        val angelinaGrace = ActorDTO(0, "Angelina", "Grace", "1988-09-02")
-        val craigDaniel = ActorDTO(0, "Craig", "Daniel", "1970-11-12")
-        val ellenPaige = ActorDTO(0, "Ellen", "Paige", "1981-12-20")
-        val russellCrowe = ActorDTO(0, "Russell", "Crowe", "1970-01-20")
-        val edwardNorton = ActorDTO(0, "Edward", "Norton", "1975-04-03")
+        val johnnyDepp = ActorRecord(0, "Johnny", "Depp", "1979-10-28")
+        val bradPitt = ActorRecord(0, "Brad", "Pitt", "1982-05-16")
+        val angelinaJolie = ActorRecord(0, "Angelina", "Jolie", "1983-11-10")
+        val jenniferAniston = ActorRecord(0, "Jennifer", "Aniston", "1975-07-23")
+        val angelinaGrace = ActorRecord(0, "Angelina", "Grace", "1988-09-02")
+        val craigDaniel = ActorRecord(0, "Craig", "Daniel", "1970-11-12")
+        val ellenPaige = ActorRecord(0, "Ellen", "Paige", "1981-12-20")
+        val russellCrowe = ActorRecord(0, "Russell", "Crowe", "1970-01-20")
+        val edwardNorton = ActorRecord(0, "Edward", "Norton", "1975-04-03")
 
         val actors = fastListOf(
             johnnyDepp,
@@ -80,25 +80,25 @@ object MovieSchema: KLogging() {
         )
 
         val movies = fastListOf(
-            MovieWithActorDTO(
+            MovieWithActorRecord(
                 "Gladiator",
                 johnnyDepp.firstName,
                 "2000-05-01",
                 fastListOf(russellCrowe, ellenPaige, craigDaniel)
             ),
-            MovieWithActorDTO(
+            MovieWithActorRecord(
                 "Guardians of the galaxy",
                 johnnyDepp.firstName,
                 "2014-07-21",
                 fastListOf(angelinaGrace, bradPitt, ellenPaige, angelinaJolie, johnnyDepp)
             ),
-            MovieWithActorDTO(
+            MovieWithActorRecord(
                 "Fight club",
                 craigDaniel.firstName,
                 "1999-09-13",
                 fastListOf(bradPitt, jenniferAniston, edwardNorton)
             ),
-            MovieWithActorDTO(
+            MovieWithActorRecord(
                 "13 Reasons Why",
                 "Suzuki",
                 "2016-01-01",

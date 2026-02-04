@@ -1,7 +1,7 @@
 package exposed.r2dbc.multitenant.webflux.controller
 
 import exposed.r2dbc.multitenant.webflux.AbstractMultitenantTest
-import exposed.r2dbc.multitenant.webflux.domain.dto.ActorDTO
+import exposed.r2dbc.multitenant.webflux.domain.model.ActorRecord
 import exposed.r2dbc.multitenant.webflux.tenant.TenantFilter
 import exposed.r2dbc.multitenant.webflux.tenant.TenantFilter.Companion.TENANT_HEADER
 import exposed.r2dbc.multitenant.webflux.tenant.Tenants.Tenant
@@ -35,7 +35,7 @@ class ActorControllerTest(
             .header(TenantFilter.TENANT_HEADER, tenant.id)
             .exchange()
             .expectStatus().is2xxSuccessful
-            .expectBodyList<ActorDTO>()
+            .expectBodyList<ActorRecord>()
             .returnResult().responseBody
             .shouldNotBeNull()
 
@@ -60,7 +60,7 @@ class ActorControllerTest(
             .header(TENANT_HEADER, tenant.id)
             .exchange()
             .expectStatus().is2xxSuccessful
-            .returnResult<ActorDTO>().responseBody
+            .returnResult<ActorRecord>().responseBody
             .awaitSingle()
 
         log.debug { "Tenant: ${tenant.id}, Actor: $actor" }

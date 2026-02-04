@@ -2,7 +2,7 @@ package exposed.r2dbc.examples.domain
 
 import exposed.r2dbc.examples.AbstractExposedR2dbcRepositoryTest
 import exposed.r2dbc.examples.domain.model.MovieSchema.ActorTable
-import exposed.r2dbc.examples.domain.model.toActorDTO
+import exposed.r2dbc.examples.domain.model.toActorRecord
 import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.junit5.coroutines.SuspendedJobTester
 import io.bluetape4k.junit5.coroutines.runSuspendIO
@@ -31,7 +31,7 @@ class DomainSQLTest: AbstractExposedR2dbcRepositoryTest() {
     @Test
     fun `get all actors`() = runSuspendIO {
         val actors = suspendTransaction {
-            ActorTable.selectAll().map { it.toActorDTO() }.toFastList()
+            ActorTable.selectAll().map { it.toActorRecord() }.toFastList()
         }
 
         actors.forEach { actor ->
@@ -50,7 +50,7 @@ class DomainSQLTest: AbstractExposedR2dbcRepositoryTest() {
                     transactionIsolation = database.transactionManager.defaultIsolationLevel!!,
                     db = database
                 ) {
-                    val actors = ActorTable.selectAll().map { it.toActorDTO() }.toFastList()
+                    val actors = ActorTable.selectAll().map { it.toActorRecord() }.toFastList()
                     actors.shouldNotBeEmpty()
                 }
             }

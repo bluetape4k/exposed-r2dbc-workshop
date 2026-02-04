@@ -1,8 +1,8 @@
 package exposed.r2dbc.examples.cache.domain.repository
 
-import exposed.r2dbc.examples.cache.domain.model.UserEventDTO
+import exposed.r2dbc.examples.cache.domain.model.UserEventRecord
 import exposed.r2dbc.examples.cache.domain.model.UserEventTable
-import exposed.r2dbc.examples.cache.domain.model.toUserEventDTO
+import exposed.r2dbc.examples.cache.domain.model.toUserEventRecord
 import io.bluetape4k.exposed.r2dbc.redisson.repository.AbstractR2dbcCacheRepository
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Repository
 @Repository
 class UserEventCacheRepository(
     redissonClient: RedissonClient,
-): AbstractR2dbcCacheRepository<UserEventDTO, Long>(
+): AbstractR2dbcCacheRepository<UserEventRecord, Long>(
     redissonClient = redissonClient,
     cacheName = "exposed:coroutines:user-events",
     config = RedisCacheConfig.WRITE_BEHIND_WITH_NEAR_CACHE,
@@ -29,11 +29,11 @@ class UserEventCacheRepository(
     companion object: KLoggingChannel()
 
     override val entityTable: IdTable<Long> = UserEventTable
-    override suspend fun ResultRow.toEntity(): UserEventDTO = toUserEventDTO()
+    override suspend fun ResultRow.toEntity(): UserEventRecord = toUserEventRecord()
 
     override fun doInsertEntity(
         statement: BatchInsertStatement,
-        entity: UserEventDTO,
+        entity: UserEventRecord,
     ) {
         log.debug { "Insert entity to DB: $entity" }
 
@@ -50,7 +50,7 @@ class UserEventCacheRepository(
 
     override fun doUpdateEntity(
         statement: UpdateStatement,
-        entity: UserEventDTO,
+        entity: UserEventRecord,
     ) {
         log.debug { "Update entity to DB: $entity" }
 

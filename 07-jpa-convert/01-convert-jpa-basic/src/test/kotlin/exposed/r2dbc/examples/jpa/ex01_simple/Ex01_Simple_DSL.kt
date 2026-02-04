@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.jpa.ex01_simple
 
 import exposed.r2dbc.examples.jpa.ex01_simple.SimpleSchema.SimpleTable
-import exposed.r2dbc.examples.jpa.ex01_simple.SimpleSchema.toSimpleDTOs
+import exposed.r2dbc.examples.jpa.ex01_simple.SimpleSchema.toSimpleRecords
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
@@ -87,9 +87,9 @@ class Ex01_Simple_DSL: R2dbcExposedTestBase() {
             val query = SimpleTable.selectAll()
 
             // ResultRow 를 DTO 로 만든다.
-            val dtos = query.toSimpleDTOs()
+            val dtos = query.toSimpleRecords()
             dtos.forEach { dto ->
-                log.debug { "DTO=$dto" }
+                log.debug { "Record=$dto" }
             }
             dtos shouldHaveSize ENTITY_COUNT
         }

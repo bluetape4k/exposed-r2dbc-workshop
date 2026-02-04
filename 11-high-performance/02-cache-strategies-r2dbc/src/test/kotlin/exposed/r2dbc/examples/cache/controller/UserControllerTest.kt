@@ -1,9 +1,9 @@
 package exposed.r2dbc.examples.cache.controller
 
 import exposed.r2dbc.examples.cache.AbstractCacheStrategyTest
-import exposed.r2dbc.examples.cache.domain.model.UserDTO
+import exposed.r2dbc.examples.cache.domain.model.UserRecord
 import exposed.r2dbc.examples.cache.domain.model.UserTable
-import exposed.r2dbc.examples.cache.domain.model.newUserDTO
+import exposed.r2dbc.examples.cache.domain.model.newUserRecord
 import exposed.r2dbc.examples.cache.domain.repository.UserCacheRepository
 import io.bluetape4k.exposed.core.statements.api.toExposedBlob
 import io.bluetape4k.junit5.coroutines.runSuspendIO
@@ -56,7 +56,7 @@ class UserControllerTest(
     }
 
     private suspend fun insertUsers(size: Int) {
-        val users = List(size) { newUserDTO() }
+        val users = List(size) { newUserRecord() }
         val rows = UserTable.batchInsert(users) {
             this[UserTable.username] = it.username
             this[UserTable.firstName] = it.firstName
@@ -74,7 +74,7 @@ class UserControllerTest(
         val users = client
             .httpGet("/users")
             .expectStatus().is2xxSuccessful
-            .expectBodyList<UserDTO>()
+            .expectBodyList<UserRecord>()
             .returnResult().responseBody
             .shouldNotBeNull()
 
@@ -87,7 +87,7 @@ class UserControllerTest(
             val user = client
                 .httpGet("/users/$userId")
                 .expectStatus().is2xxSuccessful
-                .returnResult<UserDTO>().responseBody
+                .returnResult<UserRecord>().responseBody
                 .awaitSingle()
 
             user.id shouldBeEqualTo userId
@@ -102,7 +102,7 @@ class UserControllerTest(
         val users = client
             .httpGet("/users/all?ids=${userIds.joinToString(",")}")
             .expectStatus().is2xxSuccessful
-            .expectBodyList<UserDTO>()
+            .expectBodyList<UserRecord>()
             .returnResult().responseBody
             .shouldNotBeNull()
 
@@ -112,14 +112,14 @@ class UserControllerTest(
 
     @Test
     fun `새로운 User를 write through 로 저장하기`() = runSuspendIO {
-        val userDTO = newUserDTO(Random.nextLong(1000L, 9999L))
+        val newUser = newUserRecord(Random.nextLong(1000L, 9999L))
         val user = client
-            .httpPost("/users", userDTO)
+            .httpPost("/users", newUser)
             .expectStatus().is2xxSuccessful
-            .returnResult<UserDTO>().responseBody
+            .returnResult<UserRecord>().responseBody
             .awaitSingle()
 
-        user.id shouldBeEqualTo userDTO.id
+        user.id shouldBeEqualTo newUser.id
     }
 
     @Test

@@ -1,6 +1,6 @@
 package exposed.r2dbc.workshop.springwebflux.controller
 
-import exposed.r2dbc.workshop.springwebflux.domain.MovieDTO
+import exposed.r2dbc.workshop.springwebflux.domain.model.MovieRecord
 import exposed.r2dbc.workshop.springwebflux.domain.repository.MovieRepository
 import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -26,13 +26,13 @@ class MovieController(
     companion object: KLoggingChannel()
 
     @GetMapping("/{id}")
-    suspend fun getMovieById(@PathVariable("id") movieId: Long): MovieDTO? =
+    suspend fun getMovieById(@PathVariable("id") movieId: Long): MovieRecord? =
         suspendTransaction {
             movieRepository.findById(movieId)
         }
 
     @GetMapping
-    suspend fun searchMovies(request: ServerHttpRequest): List<MovieDTO> {
+    suspend fun searchMovies(request: ServerHttpRequest): List<MovieRecord> {
         val params = request.queryParams.map { it.key to it.value.first() }.toMap()
         return suspendTransaction {
             if (params.isEmpty()) movieRepository.findAll().toFastList()
@@ -41,7 +41,7 @@ class MovieController(
     }
 
     @PostMapping
-    suspend fun createMovie(@RequestBody movie: MovieDTO): MovieDTO =
+    suspend fun createMovie(@RequestBody movie: MovieRecord): MovieRecord =
         suspendTransaction {
             movieRepository.create(movie)
         }

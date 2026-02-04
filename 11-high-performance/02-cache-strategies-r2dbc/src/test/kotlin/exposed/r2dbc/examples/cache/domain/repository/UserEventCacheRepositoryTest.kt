@@ -2,7 +2,7 @@ package exposed.r2dbc.examples.cache.domain.repository
 
 import exposed.r2dbc.examples.cache.AbstractCacheStrategyTest
 import exposed.r2dbc.examples.cache.domain.model.UserEventTable
-import exposed.r2dbc.examples.cache.domain.model.newUserEventDTO
+import exposed.r2dbc.examples.cache.domain.model.newUserEventRecord
 import io.bluetape4k.junit5.awaitility.suspendUntil
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -43,7 +43,7 @@ class UserEventCacheRepositoryTest(
 
         flow {
             repeat(totalCount) {
-                emit(newUserEventDTO())
+                emit(newUserEventRecord())
             }
         }
             .chunked(100)

@@ -1,6 +1,6 @@
 package exposed.r2dbc.multitenant.webflux.controller
 
-import exposed.r2dbc.multitenant.webflux.domain.dto.ActorDTO
+import exposed.r2dbc.multitenant.webflux.domain.model.ActorRecord
 import exposed.r2dbc.multitenant.webflux.domain.repository.ActorR2dbcRepository
 import exposed.r2dbc.multitenant.webflux.tenant.suspendTransactionWithCurrentTenant
 import io.bluetape4k.coroutines.flow.extensions.toFastList
@@ -22,13 +22,13 @@ class ActorController(
     companion object: KLoggingChannel()
 
     @GetMapping
-    suspend fun getAllActors(): List<ActorDTO> =
+    suspend fun getAllActors(): List<ActorRecord> =
         suspendTransactionWithCurrentTenant {
             actorRepository.findAll().toFastList()
         }
 
     @GetMapping("/{id}")
-    suspend fun findById(@PathVariable id: Long): ActorDTO? =
+    suspend fun findById(@PathVariable id: Long): ActorRecord? =
         suspendTransactionWithCurrentTenant {
             actorRepository.findByIdOrNull(id)
         }
