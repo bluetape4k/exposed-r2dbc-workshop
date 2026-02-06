@@ -13,7 +13,7 @@ abstract class AbstractCustomIdTableTest: R2dbcExposedTestBase() {
 
         @JvmStatic
         fun getTestDBAndEntityCount(): List<Arguments> {
-            val recordCounts = listOf(100, 300)
+            val recordCounts = listOf(50, 500)
 
             val testDBs = TestDB.enabledDialects() - TestDB.ALL_MARIADB_LIKE
 

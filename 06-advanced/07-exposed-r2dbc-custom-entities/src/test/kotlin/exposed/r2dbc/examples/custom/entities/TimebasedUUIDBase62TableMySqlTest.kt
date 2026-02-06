@@ -2,7 +2,7 @@ package exposed.r2dbc.examples.custom.entities
 
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.exposed.dao.id.TimebasedUUIDBase62Table
+import io.bluetape4k.exposed.dao.id.TimebasedUUIDBase62TableMySql
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
@@ -21,7 +21,7 @@ import org.junit.jupiter.params.provider.MethodSource
 import kotlin.random.Random
 
 @TestMethodOrder(MethodOrderer.MethodName::class)
-class TimebasedUUIDBase62TableTest: AbstractCustomIdTableTest() {
+class TimebasedUUIDBase62TableMySqlTest: AbstractCustomIdTableTest() {
 
     companion object: KLoggingChannel()
 
@@ -35,7 +35,7 @@ class TimebasedUUIDBase62TableTest: AbstractCustomIdTableTest() {
      * )
      * ```
      */
-    object T1: TimebasedUUIDBase62Table("t_timebased_uuid_base62") {
+    object T1: TimebasedUUIDBase62TableMySql("t_timebased_uuid_base62") {
         val name = varchar("name", 255)
         val age = integer("age")
     }
@@ -45,7 +45,7 @@ class TimebasedUUIDBase62TableTest: AbstractCustomIdTableTest() {
     @ParameterizedTest(name = "{0} - {1}개 레코드")
     @MethodSource(GET_TESTDB_AND_ENTITY_COUNT)
     fun `TimebasedUUID Base62 id를 가진 레코드를 낱개로 생성한다`(testDB: TestDB, recordCount: Int) = runTest {
-        Assumptions.assumeTrue { testDB !in TestDB.ALL_MYSQL_LIKE }
+        Assumptions.assumeTrue { testDB in TestDB.ALL_MYSQL_LIKE }
 
         withTables(testDB, T1) {
             List(recordCount) {
@@ -62,7 +62,7 @@ class TimebasedUUIDBase62TableTest: AbstractCustomIdTableTest() {
     @ParameterizedTest(name = "{0} - {1}개 레코드")
     @MethodSource(GET_TESTDB_AND_ENTITY_COUNT)
     fun `TimebasedUUID Base62 id를 가진 레코드를 배치로 생성한다`(testDB: TestDB, recordCount: Int) = runTest {
-        Assumptions.assumeTrue { testDB !in TestDB.ALL_MYSQL_LIKE }
+        Assumptions.assumeTrue { testDB in TestDB.ALL_MYSQL_LIKE }
 
         withTables(testDB, T1) {
             val records = List(recordCount) {
@@ -85,8 +85,8 @@ class TimebasedUUIDBase62TableTest: AbstractCustomIdTableTest() {
     @ParameterizedTest(name = "{0} - {1}개 레코드")
     @MethodSource(GET_TESTDB_AND_ENTITY_COUNT)
     fun `코루틴 환경에서 레코드를 배치로 생성한다`(testDB: TestDB, recordCount: Int) = runTest {
-        Assumptions.assumeTrue { testDB !in TestDB.ALL_MYSQL_LIKE }
-        
+        Assumptions.assumeTrue { testDB in TestDB.ALL_MYSQL_LIKE }
+
         withTables(testDB, T1) {
             val records = List(recordCount) {
                 Record(
