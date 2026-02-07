@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.ddl
 
-import exposed.r2dbc.shared.tests.ContainerProvider
+import exposed.r2dbc.shared.tests.Containers
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withDb
@@ -50,7 +50,7 @@ class Ex07_CustomEnumeration: R2dbcExposedTestBase() {
     private val pgOptionsWithEnumCodec by lazy {
         PostgresqlConnectionConfiguration.builder()
             .host("127.0.0.1")
-            .port(ContainerProvider.postgres.port)
+            .port(Containers.Postgres.port)
             .username(TestDB.POSTGRESQL.user)
             .password(TestDB.POSTGRESQL.pass)
             .database("postgres")

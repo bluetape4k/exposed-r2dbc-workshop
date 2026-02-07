@@ -79,7 +79,6 @@ import org.jetbrains.exposed.v1.core.substring
 import org.jetbrains.exposed.v1.core.sum
 import org.jetbrains.exposed.v1.core.times
 import org.jetbrains.exposed.v1.core.upperCase
-import org.jetbrains.exposed.v1.core.vendors.MysqlDialect
 import org.jetbrains.exposed.v1.core.vendors.SQLServerDialect
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.select
@@ -817,7 +816,8 @@ class Ex01_Functions: Ex00_FunctionBase() {
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `Locate functions 03`(testDB: TestDB) = runTest {
         withCitiesAndUsers(testDB) { cities, _, _ ->
-            val isNotCaseSensitiveDialect = currentDialectTest is MysqlDialect || currentDialectTest is SQLServerDialect
+            // MySQL 기본은 case insensitive 이지만, 여기서는 case sensitive 로 동작하도록 했습니다. (Containers.MySql8 참고)
+            val isNotCaseSensitiveDialect = currentDialectTest is SQLServerDialect
 
             val locate = cities.name.locate("p")  // indexOf("p") in the name
             val rows = cities.select(locate).toFastList()

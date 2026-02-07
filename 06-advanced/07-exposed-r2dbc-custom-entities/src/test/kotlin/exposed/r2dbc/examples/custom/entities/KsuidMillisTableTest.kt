@@ -93,19 +93,22 @@ class KsuidMillisTableTest: AbstractCustomIdTableTest() {
                 )
             }
 
-            records.chunked(100).map { chunk ->
-                launch {
-                    inTopLevelSuspendTransaction(
-                        db = testDB.db,
-                        transactionIsolation = testDB.db?.transactionManager?.defaultIsolationLevel,
-                    ) {
-                        T1.batchInsert(chunk, shouldReturnGeneratedValues = false) {
-                            this[T1.name] = it.name
-                            this[T1.age] = it.age
+            records
+                .chunked(100)
+                .map { chunk ->
+                    launch {
+                        inTopLevelSuspendTransaction(
+                            db = testDB.db,
+                            transactionIsolation = testDB.db?.transactionManager?.defaultIsolationLevel,
+                        ) {
+                            T1.batchInsert(chunk, shouldReturnGeneratedValues = false) {
+                                this[T1.name] = it.name
+                                this[T1.age] = it.age
+                            }
                         }
                     }
                 }
-            }.joinAll()
+                .joinAll()
 
             T1.selectAll().count() shouldBeEqualTo recordCount.toLong()
         }
