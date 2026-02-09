@@ -21,6 +21,7 @@ import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import java.io.Serializable
 
 class Ex50_RecursiveCTE: R2dbcExposedTestBase() {
 
@@ -38,7 +39,7 @@ class Ex50_RecursiveCTE: R2dbcExposedTestBase() {
         val parentId: Int?,
         val name: String,
         val path: String,
-    )
+    ): Serializable
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
