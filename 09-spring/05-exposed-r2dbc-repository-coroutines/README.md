@@ -224,3 +224,10 @@ fun r2dbcDatabase(
 - **MovieActorsControllerTest** - 영화-배우 관계 API 통합 테스트
 - **ConfigurationTest** - Spring 설정 로드 검증
 - **DomainSQLTest** - 도메인 SQL 쿼리 테스트
+
+## Further Reading
+
+- [ExposedRepostiroy with Coroutines](https://debop.notion.site/ExposedRepository-with-Coroutines-1c32744526b080a1a6cbe2c86c2cb889)
+- [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
+- [Spring WebFlux](https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html)
+- [Exposed Wiki: Coroutines (if available)](https://github.com/JetBrains/Exposed/wiki/Coroutines)

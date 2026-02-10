@@ -214,3 +214,10 @@ Redis는 Testcontainers를 통해 자동으로 실행됩니다.
 - **R2dbcRepositoryConfigTest** - Repository Bean 등록 검증
 
 테스트는 `@RepeatedTest`로 반복 실행하여 첫 번째(cold) 조회와 이후(warm/cached) 조회의 성능 차이를 확인합니다.
+
+## Further Reading
+
+- [Exppose with Spring Suspended Cache](https://debop.notion.site/Exposed-with-Suspended-Spring-Cache-1db2744526b080769d2ef307e4a3c6c9)
+- [Spring Caching Abstraction](https://docs.spring.io/spring-framework/docs/current/reference/html/integration.html#cache)
+- [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
+- [Spring WebFlux](https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html)
