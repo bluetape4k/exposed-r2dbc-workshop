@@ -115,6 +115,8 @@ val tags: SizedIterable<Tag> by Tag via PostTagTable
 
 **테스트 내용 (Ex01_Blog):**
 
+![Blog ERD](./src/test/kotlin/exposed/r2dbc/examples/jpa/ex02_entities/BlogSchema_ERD_Dark.png)
+
 - 블로그 테이블 생성 및 `exists()` 검증
 - One-to-One 관계 insert (Post + PostDetail 공유 PK)
 
@@ -123,6 +125,8 @@ val tags: SizedIterable<Tag> by Tag via PostTagTable
 Person-Address 관계 CRUD와 다양한 SQL 패턴을 Exposed DSL로 구현합니다.
 
 **테스트 내용 (Ex02_Person):**
+
+![Person ERD](./src/test/kotlin/exposed/r2dbc/examples/jpa/ex02_entities/PersonSchema.png)
 
 - `count` / `countDistinct` - 집계 함수
 - `deleteWhere` - 조건부 삭제 (`AND`, `OR`, `LIMIT` 다양한 조합)

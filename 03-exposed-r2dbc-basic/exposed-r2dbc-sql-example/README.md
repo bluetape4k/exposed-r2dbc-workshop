@@ -7,7 +7,7 @@ Exposed DSL 방식으로 SQL 문을 생성하는 법을 알아보기 위한 예�
 여기에 사용되는 ERD는 다음과 같습니다. 도시에 살고 있는 사용자를 표현하기 위한 ERD를 정의합니다.
 `cities` 와 `users` 는 1:N 관계입니다.
 
-<img src="CityUserSchema.png" width="800x" alt="City And Users ERD" width="500"/>
+![City and Users ERD](CityUserSchema.png)
 
 ## 테이블 정의
 
