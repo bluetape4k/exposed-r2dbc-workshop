@@ -51,7 +51,7 @@ data class MovieWithActorRecord(
     val name: String,
     val producerName: String,
     val releaseDate: String,
-    val actors: MutableList<ActorRecord> = fastListOf(),
+    val actors: MutableList<ActorRecord> = mutableListOf(),
     val id: Long? = null,
 ): Serializable
 

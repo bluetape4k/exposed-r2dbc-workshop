@@ -4,11 +4,11 @@ import exposed.r2dbc.workshop.springwebflux.domain.model.MovieActorCountRecord
 import exposed.r2dbc.workshop.springwebflux.domain.model.MovieWithActorRecord
 import exposed.r2dbc.workshop.springwebflux.domain.model.MovieWithProducingActorRecord
 import exposed.r2dbc.workshop.springwebflux.domain.repository.MovieRepository
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.toList
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -32,12 +32,12 @@ class MovieActorsController(
     @GetMapping("/count")
     suspend fun getMovieActorsCount(): List<MovieActorCountRecord> =
         suspendTransaction {
-            movieRepository.getMovieActorsCount().toFastList()
+            movieRepository.getMovieActorsCount().toList()
         }
 
     @GetMapping("/acting-producers")
     suspend fun findMoviesWithActingProducers(): List<MovieWithProducingActorRecord> =
         suspendTransaction {
-            movieRepository.findMoviesWithActingProducers().toFastList()
+            movieRepository.findMoviesWithActingProducers().toList()
         }
 }

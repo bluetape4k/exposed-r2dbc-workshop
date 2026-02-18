@@ -4,10 +4,10 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.jetbrains.exposed.v1.core.Join
@@ -85,7 +85,7 @@ class Ex40_LateralJoin: R2dbcExposedTestBase() {
 
             val subqueryAlias = query.lastQueryAlias ?: error("Alias must exist!")
 
-            val rows = query.selectAll().toFastList()
+            val rows = query.selectAll().toList()
             rows.map { it[subqueryAlias[child.value]] } shouldBeEqualTo listOf(30)
             rows.forEach {
                 log.debug {
@@ -171,7 +171,7 @@ class Ex40_LateralJoin: R2dbcExposedTestBase() {
 
                     join.selectAll()
                         .map { it[subqueryAlias[child.value]] }
-                        .toFastList() shouldBeEqualTo listOf(30)
+                        .toList() shouldBeEqualTo listOf(30)
                 }
 
             child.selectAll()
@@ -188,7 +188,7 @@ class Ex40_LateralJoin: R2dbcExposedTestBase() {
 
                     join.selectAll()
                         .map { it[subqueryAlias[child.value]] }
-                        .toFastList() shouldBeEqualTo listOf(30)
+                        .toList() shouldBeEqualTo listOf(30)
                 }
 
             val parentQuery = parent.selectAll().alias("parent1")
@@ -206,7 +206,7 @@ class Ex40_LateralJoin: R2dbcExposedTestBase() {
 
                     join.selectAll()
                         .map { it[subqueryAlias[child.value]] }
-                        .toFastList() shouldBeEqualTo listOf(30)
+                        .toList() shouldBeEqualTo listOf(30)
                 }
         }
     }
@@ -238,7 +238,7 @@ class Ex40_LateralJoin: R2dbcExposedTestBase() {
                 parent
                     .join(child, JoinType.LEFT, lateral = true)
                     .selectAll()
-                    .toFastList()
+                    .toList()
             }
         }
     }

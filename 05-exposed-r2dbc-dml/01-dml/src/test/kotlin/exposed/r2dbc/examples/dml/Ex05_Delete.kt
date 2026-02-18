@@ -5,10 +5,10 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.exposed.r2dbc.any
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeFalse
@@ -83,7 +83,7 @@ class Ex05_Delete: R2dbcExposedTestBase() {
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `delete table in context`(testDB: TestDB) = runTest {
         withCitiesAndUsers(testDB) { _, users, userData ->
-            userData.selectAll().toFastList().shouldNotBeEmpty()
+            userData.selectAll().toList().shouldNotBeEmpty()
 
             // DELETE FROM userdata
             userData.deleteAll()

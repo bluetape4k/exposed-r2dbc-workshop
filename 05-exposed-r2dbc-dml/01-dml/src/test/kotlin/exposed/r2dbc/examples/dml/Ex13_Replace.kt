@@ -6,11 +6,11 @@ import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.idgenerators.uuid.TimebasedUuid.Epoch
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
@@ -85,7 +85,7 @@ class Ex13_Replace: R2dbcExposedTestBase() {
                 this[NewAuth.session] = "session".toByteArray()
             }
 
-            val result1 = NewAuth.selectAll().toFastList()
+            val result1 = NewAuth.selectAll().toList()
             result1.all { it[NewAuth.timestamp] == 0L }.shouldBeTrue()
             result1.all { it[NewAuth.serverID].isEmpty() }.shouldBeTrue()
 
@@ -114,7 +114,7 @@ class Ex13_Replace: R2dbcExposedTestBase() {
             val expectedRowCount = if (testDB in TestDB.ALL_MYSQL_MARIADB_LIKE) 4 else 2
             affectedRowCount shouldBeEqualTo expectedRowCount
 
-            val result2 = NewAuth.selectAll().toFastList()
+            val result2 = NewAuth.selectAll().toList()
             result2.all { it[NewAuth.timestamp] == timeNow }.shouldBeTrue()
             result2.all { it[NewAuth.serverID] == specialId }.shouldBeTrue()
         }
@@ -376,7 +376,7 @@ class Ex13_Replace: R2dbcExposedTestBase() {
                 .where { cities.name inList listOf("Munich", "Prague", "St. Petersburg") }
                 .orderBy(cities.name)
                 .map { it[cities.id] }
-                .toFastList()
+                .toList()
 
             // replace is implemented as delete-then-insert on conflict, which breaks foreign key constraints,
             // so this test will only work if those related rows are deleted.

@@ -5,12 +5,12 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.all
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeTrue
@@ -98,7 +98,7 @@ class Ex03_Update: R2dbcExposedTestBase() {
                     .select(users.name)
                     .where { users.id like "a%" }
                     .map { it[users.name] }
-                    .toFastList()
+                    .toList()
                 aNames.size shouldBeEqualTo 2
 
                 users.update({ users.id like "a%" }, limit = 1) {

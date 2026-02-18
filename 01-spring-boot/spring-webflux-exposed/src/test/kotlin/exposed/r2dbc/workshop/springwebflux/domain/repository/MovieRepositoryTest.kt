@@ -2,9 +2,9 @@ package exposed.r2dbc.workshop.springwebflux.domain.repository
 
 import exposed.r2dbc.workshop.springwebflux.AbstractSpringWebfluxTest
 import exposed.r2dbc.workshop.springwebflux.domain.model.MovieRecord
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
@@ -55,7 +55,7 @@ class MovieRepositoryTest(
         val params = mapOf("producerName" to "Johnny")
 
         val movies = suspendTransaction {
-            movieRepository.searchMovie(params).toFastList()
+            movieRepository.searchMovie(params).toList()
         }
 
         movies.forEach {
@@ -99,7 +99,7 @@ class MovieRepositoryTest(
     @Test
     fun `get all movies and actors`() = runTest {
         val movieWithActors = suspendTransaction {
-            movieRepository.getAllMoviesWithActors().toFastList()
+            movieRepository.getAllMoviesWithActors().toList()
         }
         movieWithActors.shouldNotBeEmpty()
         movieWithActors.forEach { movie ->
@@ -128,7 +128,7 @@ class MovieRepositoryTest(
     @Test
     fun `get movie and actors count`() = runTest {
         val movieActorsCount = suspendTransaction {
-            movieRepository.getMovieActorsCount().toFastList()
+            movieRepository.getMovieActorsCount().toList()
         }
         movieActorsCount.shouldNotBeEmpty()
         movieActorsCount.forEach {
@@ -139,7 +139,7 @@ class MovieRepositoryTest(
     @Test
     fun `find movies with acting producers`() = runTest {
         val movies = suspendTransaction {
-            movieRepository.findMoviesWithActingProducers().toFastList()
+            movieRepository.findMoviesWithActingProducers().toList()
         }
 
         movies.forEach {

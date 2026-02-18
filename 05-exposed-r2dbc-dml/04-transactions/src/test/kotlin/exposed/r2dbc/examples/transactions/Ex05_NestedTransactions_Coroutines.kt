@@ -5,13 +5,13 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.codec.Base58
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.r2dbc.spi.IsolationLevel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.withContext
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
@@ -105,14 +105,14 @@ class Ex05_NestedTransactions_Coroutines: R2dbcExposedTestBase() {
         cities.selectAll().count().toInt()
 
     private suspend fun cityNames(): List<String> =
-        cities.selectAll().map { it[cities.name] }.toFastList()
+        cities.selectAll().map { it[cities.name] }.toList()
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `코루틴에서 중첩 트랜잭션 사용하기`(testDB: TestDB) = runSuspendIO {
         withTables(testDB, cities, configure = { useNestedTransactions = true }) {
             // 외부 트랜잭션
-            cities.selectAll().toFastList().shouldBeEmpty()
+            cities.selectAll().toList().shouldBeEmpty()
             cities.insert { it[name] = "city1" }
             cityCounts() shouldBeEqualTo 1
             cityNames() shouldBeEqualTo listOf("city1")

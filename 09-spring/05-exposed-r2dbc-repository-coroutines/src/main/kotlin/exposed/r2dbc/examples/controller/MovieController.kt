@@ -3,11 +3,11 @@ package exposed.r2dbc.examples.controller
 import exposed.r2dbc.examples.domain.model.MovieRecord
 import exposed.r2dbc.examples.domain.model.MovieWithActorRecord
 import exposed.r2dbc.examples.domain.repository.MovieR2dbcRepository
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.toList
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -29,7 +29,7 @@ class MovieController(
     @GetMapping
     suspend fun getMoviews(): List<MovieRecord> =
         suspendTransaction {
-            movieRepository.findAll().toFastList()
+            movieRepository.findAll().toList()
         }
 
     @GetMapping("/{id}")
@@ -44,7 +44,7 @@ class MovieController(
         return when {
             params.isEmpty() -> emptyList()
             else -> suspendTransaction {
-                movieRepository.searchMovies(params).toFastList()
+                movieRepository.searchMovies(params).toList()
             }
         }
     }

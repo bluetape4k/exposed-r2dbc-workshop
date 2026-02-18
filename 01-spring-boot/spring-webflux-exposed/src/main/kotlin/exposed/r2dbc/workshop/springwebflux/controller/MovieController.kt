@@ -2,11 +2,11 @@ package exposed.r2dbc.workshop.springwebflux.controller
 
 import exposed.r2dbc.workshop.springwebflux.domain.model.MovieRecord
 import exposed.r2dbc.workshop.springwebflux.domain.repository.MovieRepository
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.toList
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -35,8 +35,8 @@ class MovieController(
     suspend fun searchMovies(request: ServerHttpRequest): List<MovieRecord> {
         val params = request.queryParams.map { it.key to it.value.first() }.toMap()
         return suspendTransaction {
-            if (params.isEmpty()) movieRepository.findAll().toFastList()
-            else movieRepository.searchMovie(params).toFastList()
+            if (params.isEmpty()) movieRepository.findAll().toList()
+            else movieRepository.searchMovie(params).toList()
         }
     }
 

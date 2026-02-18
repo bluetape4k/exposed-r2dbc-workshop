@@ -2,12 +2,12 @@ package exposed.r2dbc.workshop.springwebflux.controller
 
 import exposed.r2dbc.workshop.springwebflux.domain.model.ActorRecord
 import exposed.r2dbc.workshop.springwebflux.domain.repository.ActorRepository
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.toList
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -38,8 +38,8 @@ class ActorController(
         val params = request.queryParams.map { it.key to it.value.joinToString(",") }.toMap()
 
         return suspendTransaction {
-            if (params.isEmpty()) actorRepository.findAll().toFastList()
-            else actorRepository.searchActor(params).toFastList()
+            if (params.isEmpty()) actorRepository.findAll().toList()
+            else actorRepository.searchActor(params).toList()
         }
     }
 

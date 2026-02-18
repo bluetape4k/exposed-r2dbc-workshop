@@ -3,13 +3,13 @@ package exposed.r2dbc.workshop.springwebflux.domain
 import exposed.r2dbc.workshop.springwebflux.AbstractSpringWebfluxTest
 import exposed.r2dbc.workshop.springwebflux.domain.model.MovieSchema.ActorTable
 import exposed.r2dbc.workshop.springwebflux.domain.model.toActorRecord
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.junit5.coroutines.SuspendedJobTester
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.support.uninitialized
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.withContext
 import org.amshove.kluent.shouldNotBeEmpty
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
@@ -37,7 +37,7 @@ class DomainSQLTest: AbstractSpringWebfluxTest() {
             val actors = suspendTransaction {
                 ActorTable.selectAll()
                     .map { it.toActorRecord() }
-                    .toFastList()
+                    .toList()
             }
 
             actors.shouldNotBeEmpty()
@@ -47,14 +47,14 @@ class DomainSQLTest: AbstractSpringWebfluxTest() {
         fun `get all actors in coroutines`() = runSuspendIO {
             val availableProcessors = Runtime.getRuntime().availableProcessors()
             SuspendedJobTester()
-                .numThreads(availableProcessors)
-                .roundsPerJob(availableProcessors * 4)
+                .workers(availableProcessors)
+                .rounds(availableProcessors * 4)
                 .add {
                     withContext(Dispatchers.IO) {
                         suspendTransaction(db = database) {
                             val actors = ActorTable.selectAll()
                                 .map { it.toActorRecord() }
-                                .toFastList()
+                                .toList()
                             actors.shouldNotBeEmpty()
                         }
                     }

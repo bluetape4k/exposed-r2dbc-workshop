@@ -3,7 +3,6 @@ package exposed.r2dbc.examples.transactions
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withDb
-import io.bluetape4k.collections.eclipse.fastListOf
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.r2dbc.spi.IsolationLevel
@@ -32,7 +31,7 @@ class Ex01_TransactionIsolation: R2dbcExposedTestBase() {
     private val transactionIsolationSupportDB =
         TestDB.ALL_MARIADB + TestDB.MYSQL_V5 + TestDB.POSTGRESQL
 
-    private val isolations = fastListOf(
+    private val isolations = listOf(
         // Connection.TRANSACTION_NONE,              // not supported
         IsolationLevel.READ_UNCOMMITTED,
         IsolationLevel.READ_COMMITTED,

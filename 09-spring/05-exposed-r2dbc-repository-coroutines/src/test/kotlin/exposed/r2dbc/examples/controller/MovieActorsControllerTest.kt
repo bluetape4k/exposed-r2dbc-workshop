@@ -4,11 +4,11 @@ import exposed.r2dbc.examples.AbstractExposedR2dbcRepositoryTest
 import exposed.r2dbc.examples.domain.model.MovieActorCountRecord
 import exposed.r2dbc.examples.domain.model.MovieWithActorRecord
 import exposed.r2dbc.examples.domain.model.MovieWithProducingActorRecord
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.spring.tests.httpGet
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitSingle
 import org.amshove.kluent.shouldBeEqualTo
@@ -45,7 +45,7 @@ class MovieActorsControllerTest(
             .expectStatus().is2xxSuccessful
             .returnResult<MovieActorCountRecord>().responseBody
             .asFlow()
-            .toFastList()
+            .toList()
 
         movieActorCounts.forEach {
             log.debug { "movieActorCount=$it" }
@@ -60,7 +60,7 @@ class MovieActorsControllerTest(
             .expectStatus().is2xxSuccessful
             .returnResult<MovieWithProducingActorRecord>().responseBody
             .asFlow()
-            .toFastList()
+            .toList()
 
         movieWithProducers.forEach {
             log.debug { "movieWithProducer=$it" }

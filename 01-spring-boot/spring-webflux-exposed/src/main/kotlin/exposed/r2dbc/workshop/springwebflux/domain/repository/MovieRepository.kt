@@ -12,13 +12,13 @@ import exposed.r2dbc.workshop.springwebflux.domain.model.toMovieRecord
 import exposed.r2dbc.workshop.springwebflux.domain.model.toMovieWithActorRecord
 import exposed.r2dbc.workshop.springwebflux.domain.model.toMovieWithProducingActorRecord
 import io.bluetape4k.coroutines.flow.extensions.bufferUntilChanged
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.toList
 import org.jetbrains.exposed.v1.core.Join
 import org.jetbrains.exposed.v1.core.count
 import org.jetbrains.exposed.v1.core.eq
@@ -78,8 +78,8 @@ class MovieRepository {
 
         params.forEach { (key, value) ->
             when (key) {
-                MovieTable::id.name -> value?.run { query.andWhere { MovieTable.id eq value.toLong() } }
-                MovieTable::name.name -> value?.run { query.andWhere { MovieTable.name eq value } }
+                MovieTable::id.name          -> value?.run { query.andWhere { MovieTable.id eq value.toLong() } }
+                MovieTable::name.name        -> value?.run { query.andWhere { MovieTable.name eq value } }
                 MovieTable::producerName.name -> value?.run { query.andWhere { MovieTable.producerName eq value } }
                 MovieTable::releaseDate.name -> value?.run {
                     query.andWhere {
@@ -177,7 +177,7 @@ class MovieRepository {
             .selectAll()
             .where { ActorInMovieTable.movieId eq movieId }
             .map { it.toActorRecord() }
-            .toFastList()
+            .toList()
 
         return MovieTable
             .selectAll()

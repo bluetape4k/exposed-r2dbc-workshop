@@ -8,7 +8,6 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.idgenerators.uuid.TimebasedUuid
 import io.bluetape4k.idgenerators.uuid.TimebasedUuid.Epoch
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -17,6 +16,7 @@ import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flattenConcat
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
@@ -105,7 +105,7 @@ class Ex16_FetchBatchedResults: R2dbcExposedTestBase() {
 
             // 50개의 도시 이름을 가져옵니다. (배치 사이즈: 25 - 2번 나눠서 가져옵니다.)
             val batches = cities.selectAll().where { cities.id less 51 }.fetchBatchedResults(batchSize = BATCH_SIZE)
-                .map { it.toCityNameList() }.filterNot { it.isEmpty() }.toFastList()
+                .map { it.toCityNameList() }.filterNot { it.isEmpty() }.toList()
 
             batches shouldHaveSize 2
 
@@ -155,7 +155,7 @@ class Ex16_FetchBatchedResults: R2dbcExposedTestBase() {
 
                 val batches = cities.selectAll().where { cities.id less 51 }
                     .fetchBatchedResults(batchSize = BATCH_SIZE, sortOrder = SortOrder.DESC).map { it.toCityNameList() }
-                    .filterNot { it.isEmpty() }.toFastList()
+                    .filterNot { it.isEmpty() }.toList()
 
                 batches shouldHaveSize 2
 
@@ -194,7 +194,7 @@ class Ex16_FetchBatchedResults: R2dbcExposedTestBase() {
             }
 
             val batches =
-                cities.selectAll().fetchBatchedResults(batchSize = 100).map { it.toCityNameList() }.toFastList()
+                cities.selectAll().fetchBatchedResults(batchSize = 100).map { it.toCityNameList() }.toList()
 
             batches shouldHaveSize 1
             batches shouldBeEqualTo listOf(names)
@@ -223,7 +223,7 @@ class Ex16_FetchBatchedResults: R2dbcExposedTestBase() {
 
         withTables(testDB, cities, users) {
             val batches =
-                cities.selectAll().fetchBatchedResults(batchSize = 100).flatMapConcat { it.toCityNames() }.toFastList()
+                cities.selectAll().fetchBatchedResults(batchSize = 100).flatMapConcat { it.toCityNames() }.toList()
 
             batches.shouldBeEmpty()
         }
@@ -251,7 +251,7 @@ class Ex16_FetchBatchedResults: R2dbcExposedTestBase() {
             cities.batchInsert(names) { name -> this[cities.name] = name }
 
             val batches = cities.selectAll().where { cities.id greater 50 }.fetchBatchedResults(batchSize = 100)
-                .map { it.toCityNameList() }.filterNot { it.isEmpty() }.toFastList()
+                .map { it.toCityNameList() }.filterNot { it.isEmpty() }.toList()
 
             batches.shouldBeEmpty()
         }
@@ -272,7 +272,7 @@ class Ex16_FetchBatchedResults: R2dbcExposedTestBase() {
     fun `batch size 가 0이거나 음수이면 fetchBatchedResults를 사용할 수 없다`(testDB: TestDB) = runTest {
         withCitiesAndUsers(testDB) { cities, _, _ ->
             expectException<IllegalArgumentException> {
-                cities.selectAll().fetchBatchedResults(-1).toFastList()
+                cities.selectAll().fetchBatchedResults(-1).toList()
             }
         }
     }
@@ -324,7 +324,7 @@ class Ex16_FetchBatchedResults: R2dbcExposedTestBase() {
         withTables(testDB, tester1, tester2) {
             val join = (tester2 innerJoin tester1)
 
-            join.selectAll().fetchBatchedResults(10_000).flattenConcat().toFastList() shouldHaveSize 0
+            join.selectAll().fetchBatchedResults(10_000).flattenConcat().toList() shouldHaveSize 0
         }
     }
 
@@ -365,8 +365,11 @@ class Ex16_FetchBatchedResults: R2dbcExposedTestBase() {
             tester.insert { it[name] = "a" }
             tester.insert { it[name] = "b" }
 
-            tester.alias("tester_alias").selectAll().fetchBatchedResults(1).flattenConcat()
-                .toFastList() shouldHaveSize 2
+            tester.alias("tester_alias")
+                .selectAll()
+                .fetchBatchedResults(1)
+                .flattenConcat()
+                .toList() shouldHaveSize 2
         }
     }
 }

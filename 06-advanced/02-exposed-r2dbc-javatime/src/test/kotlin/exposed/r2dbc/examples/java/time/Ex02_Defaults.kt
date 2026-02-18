@@ -8,7 +8,6 @@ import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.inProperCase
 import exposed.r2dbc.shared.tests.insertAndWait
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.collections.eclipse.toFastList
 import io.bluetape4k.exposed.r2dbc.sorted
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -341,7 +340,7 @@ class Ex02_Defaults: R2dbcExposedTestBase() {
 
             log.debug { "Expected: $expected" }
             log.debug { "Actual: ${testTable.ddl}" }
-            testTable.ddl shouldBeEqualTo expected.toFastList()
+            testTable.ddl shouldBeEqualTo expected.toList()
 
             val id1 = testTable.insertAndGetId { }
 

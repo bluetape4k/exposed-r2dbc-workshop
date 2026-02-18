@@ -3,7 +3,7 @@ package exposed.r2dbc.examples.cache.controller
 import exposed.r2dbc.examples.cache.AbstractCacheStrategyTest
 import exposed.r2dbc.examples.cache.domain.model.UserEventTable
 import exposed.r2dbc.examples.cache.domain.model.newUserEventRecord
-import io.bluetape4k.junit5.awaitility.suspendUntil
+import io.bluetape4k.junit5.awaitility.untilSuspending
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.info
@@ -46,7 +46,7 @@ class UserEventControllerTest(
         // 비동기로 처리되므로, await를 사용하여 결과를 기다림
         await.atMost(Duration.ofSeconds(4))
             .pollInterval(Duration.ofMillis(100))
-            .suspendUntil {
+            .untilSuspending {
                 log.info { "Waiting for insert user events to DB." }
                 getCountOfUserEvents() == prevCount + 1L
             }
@@ -72,7 +72,7 @@ class UserEventControllerTest(
         // 비동기로 처리되므로, await를 사용하여 결과를 기다림
         await.atMost(Duration.ofSeconds(10))
             .pollInterval(Duration.ofMillis(100))
-            .suspendUntil {
+            .untilSuspending {
                 log.info { "Waiting for insert user events to DB." }
                 getCountOfUserEvents() == (prevCount + insertCount)
             }

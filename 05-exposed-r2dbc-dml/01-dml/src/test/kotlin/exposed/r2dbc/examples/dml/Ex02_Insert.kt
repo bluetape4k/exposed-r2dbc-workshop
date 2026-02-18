@@ -9,7 +9,6 @@ import exposed.r2dbc.shared.tests.inProperCase
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.codec.Base58
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.exposed.r2dbc.statements.BatchInsertOnConflictDoNothing
 import io.bluetape4k.exposed.r2dbc.statements.BatchInsertOnConflictDoNothingExecutable
 import io.bluetape4k.idgenerators.uuid.TimebasedUuid
@@ -21,6 +20,7 @@ import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import org.amshove.kluent.fail
@@ -537,7 +537,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
             val rows = standardTable
                 .select(externalIdColumn)
                 .map { it[externalIdColumn] }
-                .toFastList()
+                .toList()
 
             rows shouldBeEqualTo listOf(id1)
         }
@@ -695,7 +695,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
             val orderIds = OrderedDataTable.select(OrderedDataTable.id)
                 .orderBy(OrderedDataTable.order to SortOrder.ASC)
                 .map { it[OrderedDataTable.id] }
-                .toFastList()
+                .toList()
 
             orderIds.map { it.value } shouldBeEqualTo listOf(bar.value, foo.value)
         }

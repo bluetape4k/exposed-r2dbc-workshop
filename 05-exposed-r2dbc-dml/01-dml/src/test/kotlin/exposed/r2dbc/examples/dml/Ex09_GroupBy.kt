@@ -4,12 +4,12 @@ import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.logging.warn
 import io.bluetape4k.support.toBigDecimal
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
@@ -75,7 +75,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
                     cAlias
                 )
                 .groupBy(cities.name)
-                .toFastList()
+                .toList()
 
             rows.forEach {
                 val cityName = it[cities.name]
@@ -90,7 +90,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
                     "Munich" -> userCount shouldBeEqualTo 2L
                     "Prague" -> userCount shouldBeEqualTo 0L
                     "St. Petersburg" -> userCount shouldBeEqualTo 1L
-                    else -> error("Unknown city $cityName")
+                    else     -> error("Unknown city $cityName")
                 }
                 userCountAlias shouldBeEqualTo userCount
             }
@@ -117,7 +117,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
                 .select(cities.name, users.id.count())
                 .groupBy(cities.name)
                 .having { users.id.count() eq 1 }
-                .toFastList()
+                .toList()
 
             rows shouldHaveSize 1
             rows[0][cities.name] shouldBeEqualTo "St. Petersburg"
@@ -150,7 +150,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
                 .groupBy(cities.name)
                 .having { users.id.count().eq<Number, Long, Int>(maxExpr) }
                 .orderBy(cities.name)
-                .toFastList()
+                .toList()
 
             rows.forEach { row ->
                 log.debug { "city name=${row[cities.name]}, maxExpr=${row[maxExpr]}" }
@@ -195,7 +195,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
                 .groupBy(cities.name)
                 .having { users.id.count() lessEq 42L }
                 .orderBy(cities.name)
-                .toFastList()
+                .toList()
 
             rows shouldHaveSize 2
 
@@ -231,7 +231,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
 
             cities.select(maxNullableId)
                 .map { it[maxNullableId] }
-                .toFastList()
+                .toList()
                 .let { result ->
                     result shouldHaveSize 1
                     result.single().shouldNotBeNull() shouldBeEqualTo 3
@@ -240,7 +240,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
             cities.select(maxNullableId)
                 .where { cities.id.isNull() }
                 .map { it[maxNullableId] }
-                .toFastList()
+                .toList()
                 .let { result ->
                     result shouldHaveSize 1
                     result.single().shouldBeNull()
@@ -269,14 +269,14 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
 
             val avgId = cities.select(cities.id)
                 .map { it[cities.id] }
-                .toFastList()
+                .toList()
                 .average()
                 .toBigDecimal()
                 .setScale(2)
 
             cities.select(avgIdExpr)
                 .map { it[avgIdExpr] }
-                .toFastList()
+                .toList()
                 .let { result ->
                     result shouldHaveSize 1
                     result.single()?.toBigDecimal() shouldBeEqualTo avgId
@@ -285,7 +285,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
             cities.select(avgIdExpr)
                 .where { cities.id.isNull() }
                 .map { it[avgIdExpr] }
-                .toFastList()
+                .toList()
                 .let { result ->
                     result shouldHaveSize 1
                     result.single().shouldBeNull()
@@ -310,7 +310,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
                     val result = cities.leftJoin(users)
                         .select(cities.name, groupConcat)
                         .groupBy(cities.id, cities.name)
-                        .toFastList()
+                        .toList()
                         .associate { it[cities.name] to it[groupConcat] }
                     assert(result)
                 } catch (e: UnsupportedByDialectException) {
@@ -322,7 +322,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
                         dialect.name in dialectNames -> true
                         dialect is H2Dialect && dialect.delegatedDialectNameProvider != null ->
                             dialect.delegatedDialectNameProvider!!.dialectName in dialectNames
-                        else -> false
+                        else                         -> false
                     }
                     check.shouldBeTrue()
                 }
@@ -353,7 +353,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
                     is MysqlDialect, is SQLServerDialect ->
                         it["Munich"] shouldBeEqualTo "Eugene, Sergey"
 
-                    else ->
+                    else                                ->
                         it["Munich"] shouldBeEqualTo "Sergey, Eugene"
                 }
 
@@ -379,7 +379,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
                             listOf("Sergey | Eugene", "Eugene | Sergey") shouldContain it["Munich"]
 
                         is MysqlDialect, is PostgreSQLDialect -> it["Munich"] shouldBeEqualTo "Eugene | Sergey"
-                        is H2Dialect -> {
+                        is H2Dialect      -> {
                             if (currentDialect.h2Mode == H2Dialect.H2CompatibilityMode.SQLServer) {
                                 it["Munich"] shouldBeEqualTo "Sergey | Eugene"
                             } else {
@@ -387,7 +387,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
                             }
                         }
 
-                        else -> it["Munich"] shouldBeEqualTo "Sergey | Eugene"
+                        else              -> it["Munich"] shouldBeEqualTo "Sergey | Eugene"
                     }
                     it["Prague"].shouldBeNull()
                 }

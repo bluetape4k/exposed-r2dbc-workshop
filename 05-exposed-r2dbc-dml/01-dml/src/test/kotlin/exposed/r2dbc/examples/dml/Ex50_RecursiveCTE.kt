@@ -3,7 +3,6 @@ package exposed.r2dbc.examples.dml
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.exposed.r2dbc.getInt
 import io.bluetape4k.exposed.r2dbc.getIntOrNull
 import io.bluetape4k.exposed.r2dbc.getString
@@ -11,6 +10,7 @@ import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.KLogging
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.toList
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
 import org.amshove.kluent.shouldNotBeNull
@@ -74,7 +74,7 @@ class Ex50_RecursiveCTE: R2dbcExposedTestBase() {
             val sql = when (testDB) {
                 in TestDB.ALL_POSTGRES -> categoriesWithRecursiveForPostgres()
                 in setOf(TestDB.MYSQL_V8, TestDB.MARIADB) -> categoriesWithRecursiveForMySQL()
-                else -> throw IllegalStateException("Unsupported dialect for recursive CTE test: $testDB")
+                else                   -> throw IllegalStateException("Unsupported dialect for recursive CTE test: $testDB")
             }
 
             // val categoryRecords = mutableListOf<CategoryRecord>()
@@ -90,7 +90,7 @@ class Ex50_RecursiveCTE: R2dbcExposedTestBase() {
                     }
                 }
                     ?.mapNotNull { it }
-                    ?.toFastList()
+                    ?.toList()
 
             categoryRecords.shouldNotBeNull() shouldHaveSize 5
             categoryRecords[0].name shouldBeEqualTo "Root"

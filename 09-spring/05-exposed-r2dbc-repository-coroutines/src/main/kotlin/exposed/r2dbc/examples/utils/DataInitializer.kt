@@ -5,7 +5,6 @@ import exposed.r2dbc.examples.domain.model.MovieSchema.ActorInMovieTable
 import exposed.r2dbc.examples.domain.model.MovieSchema.ActorTable
 import exposed.r2dbc.examples.domain.model.MovieSchema.MovieTable
 import exposed.r2dbc.examples.domain.model.MovieWithActorRecord
-import io.bluetape4k.collections.eclipse.fastListOf
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.info
 import kotlinx.coroutines.Dispatchers
@@ -69,7 +68,7 @@ class DataInitializer: ApplicationListener<ApplicationReadyEvent> {
         val russellCrowe = ActorRecord(0, "Russell", "Crowe", "1970-01-20")
         val edwardNorton = ActorRecord(0, "Edward", "Norton", "1975-04-03")
 
-        val actors = fastListOf(
+        val actors = listOf(
             johnnyDepp,
             bradPitt,
             angelinaJolie,
@@ -81,34 +80,34 @@ class DataInitializer: ApplicationListener<ApplicationReadyEvent> {
             edwardNorton
         )
 
-        val movies = fastListOf(
+        val movies = listOf(
             MovieWithActorRecord(
                 0,
                 "Gladiator",
                 johnnyDepp.firstName,
                 "2000-05-01",
-                fastListOf(russellCrowe, ellenPaige, craigDaniel)
+                mutableListOf(russellCrowe, ellenPaige, craigDaniel)
             ),
             MovieWithActorRecord(
                 0,
                 "Guardians of the galaxy",
                 johnnyDepp.firstName,
                 "2014-07-21",
-                fastListOf(angelinaGrace, bradPitt, ellenPaige, angelinaJolie, johnnyDepp)
+                mutableListOf(angelinaGrace, bradPitt, ellenPaige, angelinaJolie, johnnyDepp)
             ),
             MovieWithActorRecord(
                 0,
                 "Fight club",
                 craigDaniel.firstName,
                 "1999-09-13",
-                fastListOf(bradPitt, jenniferAniston, edwardNorton)
+                mutableListOf(bradPitt, jenniferAniston, edwardNorton)
             ),
             MovieWithActorRecord(
                 0,
                 "13 Reasons Why",
                 "Suzuki",
                 "2016-01-01",
-                fastListOf(angelinaJolie, jenniferAniston)
+                mutableListOf(angelinaJolie, jenniferAniston)
             )
         )
 

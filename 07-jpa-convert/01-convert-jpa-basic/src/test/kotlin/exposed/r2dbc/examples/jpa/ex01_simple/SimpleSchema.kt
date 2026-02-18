@@ -1,11 +1,11 @@
 package exposed.r2dbc.examples.jpa.ex01_simple
 
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.exposed.dao.entityToStringBuilder
 import io.bluetape4k.exposed.dao.idEquals
 import io.bluetape4k.exposed.dao.idHashCode
 import io.bluetape4k.support.requireNotBlank
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
@@ -89,6 +89,6 @@ object SimpleSchema {
     }
 
     suspend fun SizedIterable<ResultRow>.toSimpleRecords(): List<SimpleRecord> {
-        return this.map { it.toSimpleRecord() }.toFastList()
+        return this.map { it.toSimpleRecord() }.toList()
     }
 }

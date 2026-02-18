@@ -3,13 +3,11 @@ package exposed.r2dbc.examples.dml
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.collections.eclipse.toUnifiedSet
-import io.bluetape4k.collections.eclipse.unifiedMapOf
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
@@ -325,7 +323,7 @@ class Ex15_Returning: R2dbcExposedTestBase() {
             Items.selectAll().count() shouldBeEqualTo 0L
 
             // 삭제될 것이 없으므로, 삭제된 레코드가 없습니다.
-            Items.deleteReturning().toFastList().shouldBeEmpty()
+            Items.deleteReturning().toList().shouldBeEmpty()
         }
     }
 
@@ -371,7 +369,7 @@ class Ex15_Returning: R2dbcExposedTestBase() {
              * DELETE FROM items RETURNING items.id
              * ```
              */
-            val result2 = Items.deleteReturning(listOf(Items.id)).map { it[Items.id].value }.toFastList()
+            val result2 = Items.deleteReturning(listOf(Items.id)).map { it[Items.id].value }.toList()
             result2 shouldBeEqualTo listOf(1, 2)
 
             Items.selectAll().count() shouldBeEqualTo 0L
@@ -389,7 +387,7 @@ class Ex15_Returning: R2dbcExposedTestBase() {
         Assumptions.assumeTrue { testDB in updateReturningSupportedDb }
 
         withTables(testDB, Items) {
-            val input = unifiedMapOf("A" to 99.0, "B" to 100.0, "C" to 200.0)
+            val input = mapOf("A" to 99.0, "B" to 100.0, "C" to 200.0)
             Items.batchInsert(input.entries) { (n, p) ->
                 this[Items.name] = n
                 this[Items.price] = p
@@ -429,8 +427,8 @@ class Ex15_Returning: R2dbcExposedTestBase() {
                     it[name] = name.lowerCase()
                 }
                 .map { it[Items.name] }
-                .toFastList()
-            result2.toUnifiedSet() shouldBeEqualTo input.keys.map { it.lowercase() }.toUnifiedSet()
+                .toList()
+            result2.toSet() shouldBeEqualTo input.keys.map { it.lowercase() }.toSet()
 
             /**
              * 모든 레코드의 price를 `0.0`으로 변경하고, price 컬럼의 alias 만 반환합니다.
@@ -447,7 +445,7 @@ class Ex15_Returning: R2dbcExposedTestBase() {
                     it[price] = 0.0
                 }
                 .map { it[newPrice] }
-                .toFastList()
+                .toList()
 
             result3 shouldHaveSize 3
             result3.all { it == 0.0 }.shouldBeTrue()

@@ -6,10 +6,10 @@ import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
@@ -257,7 +257,7 @@ class Ex05_ArrayColumnType: R2dbcExposedTestBase() {
             val result3 = ArrayTestTable
                 .selectAll()
                 .where { ArrayTestTable.numbers[1] greaterEq ArrayTestTable.numbers[3] }
-                .toFastList()
+                .toList()
             result3.shouldBeEmpty()
 
             /**
@@ -500,7 +500,7 @@ class Ex05_ArrayColumnType: R2dbcExposedTestBase() {
              */
             val result2 = ArrayTestTable.select(ArrayTestTable.id)
                 .where { ArrayTestTable.id eq anyFrom(ArrayTestTable.numbers.slice(2, 3)) }
-            result2.toFastList().shouldBeEmpty()
+            result2.toList().shouldBeEmpty()
 
             /**
              * ```sql
@@ -522,7 +522,7 @@ class Ex05_ArrayColumnType: R2dbcExposedTestBase() {
              */
             val result4 = ArrayTestTable.select(ArrayTestTable.id)
                 .where { ArrayTestTable.id greater allFrom(ArrayTestTable.numbers) }
-            result4.toFastList().shouldBeEmpty()
+            result4.toList().shouldBeEmpty()
         }
     }
 

@@ -5,12 +5,12 @@ import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.codec.Base58
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
@@ -1022,7 +1022,7 @@ class Ex04_Upsert: R2dbcExposedTestBase() {
                 it[age] = 20
             }
 
-            val rows = tester.selectAll().toFastList()
+            val rows = tester.selectAll().toList()
             rows.forEach {
                 log.debug { "id: ${it[tester.id]}, name: ${it[tester.name]}, address: ${it[tester.address]}, age: ${it[tester.age]}" }
             }

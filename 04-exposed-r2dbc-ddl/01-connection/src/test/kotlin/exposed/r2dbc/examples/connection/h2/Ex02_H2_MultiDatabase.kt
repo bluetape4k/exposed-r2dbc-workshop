@@ -3,7 +3,6 @@ package exposed.r2dbc.examples.connection.h2
 import exposed.r2dbc.shared.dml.DMLTestData
 import exposed.r2dbc.shared.samples.CountryTable
 import exposed.r2dbc.shared.tests.TestDB
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.exposed.r2dbc.getInt
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -14,6 +13,7 @@ import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.invoke
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.withContext
@@ -122,7 +122,7 @@ class Ex02_H2_MultiDatabase {
     fun `Embedded Inserts In Different Database`() = runSuspendIO {
         suspendTransaction(db = db1) {
             SchemaUtils.create(DMLTestData.Cities)
-            DMLTestData.Cities.selectAll().toFastList().shouldBeEmpty()
+            DMLTestData.Cities.selectAll().toList().shouldBeEmpty()
             DMLTestData.Cities.insert {
                 it[DMLTestData.Cities.name] = "city1"
             }
@@ -189,7 +189,7 @@ class Ex02_H2_MultiDatabase {
 
             DMLTestData.Cities.selectAll()
                 .map { it[DMLTestData.Cities.name] }
-                .toFastList() shouldBeEqualTo listOf("city1", "city4", "city5")
+                .toList() shouldBeEqualTo listOf("city1", "city4", "city5")
 
             SchemaUtils.drop(DMLTestData.Cities)
         }
@@ -242,7 +242,7 @@ class Ex02_H2_MultiDatabase {
                 .map {
                     it[DMLTestData.Cities.name]
                 }
-                .toFastList() shouldBeEqualTo listOf("city1", "city4", "city5")
+                .toList() shouldBeEqualTo listOf("city1", "city4", "city5")
 
             SchemaUtils.drop(DMLTestData.Cities)
         }

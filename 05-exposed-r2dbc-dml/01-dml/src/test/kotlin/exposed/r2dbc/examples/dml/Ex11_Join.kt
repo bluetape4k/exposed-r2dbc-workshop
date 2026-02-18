@@ -5,13 +5,12 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.collections.eclipse.toUnifiedSet
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import nl.altindag.log.LogCaptor
 import org.amshove.kluent.shouldBeEmpty
@@ -137,7 +136,7 @@ class Ex11_Join: R2dbcExposedTestBase() {
             val rows = cities.innerJoin(users).innerJoin(userData)
                 .selectAll()
                 .orderBy(users.id)
-                .toFastList()
+                .toList()
 
             rows shouldHaveSize 2
 
@@ -211,7 +210,7 @@ class Ex11_Join: R2dbcExposedTestBase() {
              */
             val rows = numbers.innerJoin(map).innerJoin(names)
                 .selectAll()
-                .toFastList()
+                .toList()
 
             rows shouldHaveSize 1
             rows[0][numbers.id] shouldBeEqualTo 2
@@ -243,7 +242,7 @@ class Ex11_Join: R2dbcExposedTestBase() {
                 .onEach { (userName, cityName) ->
                     log.debug { "user=$userName, city=$cityName" }
                 }
-                .toFastList()
+                .toList()
 
             val allUsers = setOf(
                 "Andrey",
@@ -254,7 +253,7 @@ class Ex11_Join: R2dbcExposedTestBase() {
             )
 
             allUsersToStPetersburg.map { it.second }.distinct() shouldBeEqualTo listOf("St. Petersburg")
-            allUsersToStPetersburg.map { it.first }.toUnifiedSet() shouldBeEqualTo allUsers
+            allUsersToStPetersburg.map { it.first }.toSet() shouldBeEqualTo allUsers
         }
     }
 

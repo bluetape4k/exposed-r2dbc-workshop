@@ -2,10 +2,10 @@ package exposed.r2dbc.examples.domain.repository
 
 import exposed.r2dbc.examples.AbstractExposedR2dbcRepositoryTest
 import exposed.r2dbc.examples.domain.model.MovieRecord
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
+import kotlinx.coroutines.flow.toList
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldHaveSize
@@ -53,7 +53,7 @@ class MovieR2dbcRepositoryTest(
         val params = mapOf("producerName" to "Johnny")
 
         val movies = suspendTransaction {
-            movieRepository.searchMovies(params).toFastList()
+            movieRepository.searchMovies(params).toList()
         }
 
         movies.forEach {
@@ -94,7 +94,7 @@ class MovieR2dbcRepositoryTest(
     @Test
     fun `get all movies and actors`() = runSuspendIO {
         val movies = suspendTransaction {
-            movieRepository.getAllMoviesWithActors().toFastList()
+            movieRepository.getAllMoviesWithActors().toList()
         }
         movies.shouldNotBeEmpty()
 
@@ -126,7 +126,7 @@ class MovieR2dbcRepositoryTest(
     fun `get movie and actors count`() = runSuspendIO {
 
         val movieActorsCount = suspendTransaction {
-            movieRepository.getMovieActorsCount().toFastList()
+            movieRepository.getMovieActorsCount().toList()
         }
         movieActorsCount.shouldNotBeEmpty()
         movieActorsCount.forEach {
@@ -137,7 +137,7 @@ class MovieR2dbcRepositoryTest(
     @Test
     fun `find movies with acting producers`() = runSuspendIO {
         val movies = suspendTransaction {
-            movieRepository.findMoviesWithActingProducers().toFastList()
+            movieRepository.findMoviesWithActingProducers().toList()
         }
 
         movies.forEach {

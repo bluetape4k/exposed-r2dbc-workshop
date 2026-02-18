@@ -4,9 +4,9 @@ import exposed.r2dbc.shared.repository.MovieSchema.ActorTable
 import exposed.r2dbc.shared.repository.MovieSchema.withMovieAndActors
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.KLogging
 import io.bluetape4k.logging.debug
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeFalse
@@ -52,7 +52,7 @@ class ActorRepositoryTest: R2dbcExposedTestBase() {
     fun `search actors by lastName`(testDB: TestDB) = runTest {
         withMovieAndActors(testDB) {
             val params = mapOf("lastName" to "Depp")
-            val actors = repository.searchActors(params).toFastList()
+            val actors = repository.searchActors(params).toList()
 
             actors.shouldNotBeEmpty()
             actors.forEach {
@@ -160,10 +160,10 @@ class ActorRepositoryTest: R2dbcExposedTestBase() {
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `findAll with limit and offset`(testDB: TestDB) = runTest {
         withMovieAndActors(testDB) {
-            repository.findAll(limit = 2).toFastList() shouldHaveSize 2
-            repository.findAll { ActorTable.lastName eq "Depp" }.toFastList() shouldHaveSize 1
-            repository.findAll(limit = 3) { ActorTable.lastName eq "Depp" }.toFastList() shouldHaveSize 1
-            repository.findAll(limit = 3, offset = 1) { ActorTable.lastName eq "Depp" }.toFastList() shouldHaveSize 0
+            repository.findAll(limit = 2).toList() shouldHaveSize 2
+            repository.findAll { ActorTable.lastName eq "Depp" }.toList() shouldHaveSize 1
+            repository.findAll(limit = 3) { ActorTable.lastName eq "Depp" }.toList() shouldHaveSize 1
+            repository.findAll(limit = 3, offset = 1) { ActorTable.lastName eq "Depp" }.toList() shouldHaveSize 0
         }
     }
 

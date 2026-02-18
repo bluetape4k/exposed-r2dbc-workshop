@@ -3,13 +3,13 @@ package exposed.r2dbc.examples.domain
 import exposed.r2dbc.examples.AbstractExposedR2dbcRepositoryTest
 import exposed.r2dbc.examples.domain.model.MovieSchema.ActorTable
 import exposed.r2dbc.examples.domain.model.toActorRecord
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.junit5.coroutines.SuspendedJobTester
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.support.uninitialized
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import org.amshove.kluent.shouldNotBeEmpty
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.selectAll
@@ -31,7 +31,7 @@ class DomainSQLTest: AbstractExposedR2dbcRepositoryTest() {
     @Test
     fun `get all actors`() = runSuspendIO {
         val actors = suspendTransaction {
-            ActorTable.selectAll().map { it.toActorRecord() }.toFastList()
+            ActorTable.selectAll().map { it.toActorRecord() }.toList()
         }
 
         actors.forEach { actor ->
@@ -43,14 +43,14 @@ class DomainSQLTest: AbstractExposedR2dbcRepositoryTest() {
     @Test
     fun `get all actors in coroutines`() = runSuspendIO {
         SuspendedJobTester()
-            .numThreads(Runtime.getRuntime().availableProcessors())
-            .roundsPerJob(Runtime.getRuntime().availableProcessors() * 4)
+            .workers(Runtime.getRuntime().availableProcessors())
+            .rounds(Runtime.getRuntime().availableProcessors() * 4)
             .add {
                 inTopLevelSuspendTransaction(
                     transactionIsolation = database.transactionManager.defaultIsolationLevel!!,
                     db = database
                 ) {
-                    val actors = ActorTable.selectAll().map { it.toActorRecord() }.toFastList()
+                    val actors = ActorTable.selectAll().map { it.toActorRecord() }.toList()
                     actors.shouldNotBeEmpty()
                 }
             }

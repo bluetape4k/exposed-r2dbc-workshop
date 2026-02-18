@@ -8,12 +8,12 @@ import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.all
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
@@ -217,7 +217,7 @@ class Ex01_KotlinDateTime: R2dbcExposedTestBase() {
                 it[testDate.time] = dateTimeWithManyNanos
             }
 
-            val dateTimesFromDB = testDate.selectAll().map { it[testDate.time] }.toFastList()
+            val dateTimesFromDB = testDate.selectAll().map { it[testDate.time] }.toList()
 
             dateTimesFromDB[0] shouldDateTimeEqualTo dateTimeWithFewNanos
             dateTimesFromDB[1] shouldDateTimeEqualTo dateTimeWithManyNanos
@@ -331,13 +331,13 @@ class Ex01_KotlinDateTime: R2dbcExposedTestBase() {
                 it[deleted] = mayTheFourth.plus(1, DateTimeUnit.DAY)
             }
 
-            val sameDateResult = tester.selectAll().where { tester.created eq tester.deleted }.toFastList()
+            val sameDateResult = tester.selectAll().where { tester.created eq tester.deleted }.toList()
             sameDateResult shouldHaveSize 1
             sameDateResult.single()[tester.deleted] shouldBeEqualTo mayTheFourth
 
             val sameMonthResult = tester.selectAll()
                 .where { tester.created.month() eq tester.deleted.month() }
-                .toFastList()
+                .toList()
             sameMonthResult shouldHaveSize 2
 
             val year2023 = if (currentDialectTest is PostgreSQLDialect) {
@@ -349,7 +349,7 @@ class Ex01_KotlinDateTime: R2dbcExposedTestBase() {
             val createdIn2023 = tester
                 .selectAll()
                 .where { tester.created.year() eq year2023 }
-                .toFastList()
+                .toList()
 
             createdIn2023 shouldHaveSize 2
         }
@@ -946,10 +946,10 @@ class Ex01_KotlinDateTime: R2dbcExposedTestBase() {
 infix fun <T> T.shouldDateTimeEqualTo(d2: T?) {
     val d1 = this
     when {
-        d1 == null && d2 == null -> return
-        d1 == null -> error("d1 is null while d2 is not")
-        d2 == null -> error("d1 is not null while d2 is null")
-        d1 is LocalTime && d2 is LocalTime -> {
+        d1 == null && d2 == null                   -> return
+        d1 == null                                 -> error("d1 is null while d2 is not")
+        d2 == null                                 -> error("d1 is not null while d2 is null")
+        d1 is LocalTime && d2 is LocalTime         -> {
             d1.toSecondOfDay() shouldBeEqualTo d2.toSecondOfDay()
             if (d2.nanosecond != 0) {
                 d1.nanosecond shouldFractionalPartEqualTo d2.nanosecond
@@ -960,7 +960,7 @@ infix fun <T> T.shouldDateTimeEqualTo(d2: T?) {
                     d2.toJavaLocalDateTime().toEpochSecond(ZoneOffset.UTC)
             d1.nanosecond shouldFractionalPartEqualTo d2.nanosecond
         }
-        d1 is Instant && d2 is Instant -> {
+        d1 is Instant && d2 is Instant             -> {
             d1.epochSeconds shouldBeEqualTo d2.epochSeconds
             d1.nanosecondsOfSecond shouldFractionalPartEqualTo d2.nanosecondsOfSecond
         }
@@ -969,7 +969,7 @@ infix fun <T> T.shouldDateTimeEqualTo(d2: T?) {
                     d2.toLocalDateTime().toKotlinLocalDateTime()
             d1.offset shouldBeEqualTo d2.offset
         }
-        else -> d1 shouldBeEqualTo d2
+        else                                       -> d1 shouldBeEqualTo d2
     }
 }
 
@@ -979,10 +979,10 @@ private infix fun Int.shouldFractionalPartEqualTo(nano2: Int) {
     val db = dialect.name
     when (dialect) {
         // accurate to 100 nanoseconds
-        is SQLServerDialect ->
+        is SQLServerDialect                                 ->
             nano1.nanoRoundTo100Nanos() shouldBeEqualTo nano2.nanoRoundTo100Nanos()
         // microseconds
-        is MariaDBDialect ->
+        is MariaDBDialect                                   ->
             nano1.nanoFloorToMicro() shouldBeEqualTo nano2.nanoFloorToMicro()
 
         is H2Dialect, is PostgreSQLDialect, is MysqlDialect -> {
@@ -994,11 +994,11 @@ private infix fun Int.shouldFractionalPartEqualTo(nano2: Int) {
             }
         }
         // milliseconds
-        is OracleDialect ->
+        is OracleDialect                                    ->
             nano1.nanoRoundToMilli() shouldBeEqualTo nano2.nanoRoundToMilli()
-        is SQLiteDialect ->
+        is SQLiteDialect                                    ->
             nano1.nanoFloorToMilli() shouldBeEqualTo nano2.nanoFloorToMilli()
-        else -> fail("Unknown dialect $db")
+        else                                                -> fail("Unknown dialect $db")
     }
 }
 

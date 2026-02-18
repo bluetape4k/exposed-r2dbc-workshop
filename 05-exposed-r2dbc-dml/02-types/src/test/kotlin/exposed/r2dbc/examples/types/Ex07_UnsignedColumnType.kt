@@ -6,10 +6,10 @@ import exposed.r2dbc.shared.tests.assertFailAndRollback
 import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeInRange
@@ -99,7 +99,7 @@ class Ex07_UnsignedColumnType: R2dbcExposedTestBase() {
                 it[unsignedByte] = 123u
             }
 
-            val result = UByteTable.selectAll().toFastList()
+            val result = UByteTable.selectAll().toList()
             result shouldHaveSize 1
             result.single()[UByteTable.unsignedByte] shouldBeEqualTo 123u
         }
@@ -113,7 +113,7 @@ class Ex07_UnsignedColumnType: R2dbcExposedTestBase() {
             val ddlEnding = when (currentDialectTest) {
                 is MysqlDialect -> "(ubyte TINYINT UNSIGNED NOT NULL)"
                 is SQLServerDialect -> "(ubyte TINYINT NOT NULL)"
-                else -> "CHECK (ubyte BETWEEN 0 and ${UByte.MAX_VALUE}))"
+                else            -> "CHECK (ubyte BETWEEN 0 and ${UByte.MAX_VALUE}))"
             }
             UByteTable.ddl.single().endsWith(ddlEnding, ignoreCase = true).shouldBeTrue()
 
@@ -172,7 +172,7 @@ class Ex07_UnsignedColumnType: R2dbcExposedTestBase() {
                 exec(UByteTable.unsignedByte.modifyStatement().first())
                 UByteTable.insert { it[unsignedByte] = number2 }
 
-                val result2 = UByteTable.selectAll().map { it[UByteTable.unsignedByte] }.toFastList()
+                val result2 = UByteTable.selectAll().map { it[UByteTable.unsignedByte] }.toList()
                 result2 shouldContainSame listOf(number1, number2)
             } finally {
                 SchemaUtils.drop(UByteTable)
@@ -188,7 +188,7 @@ class Ex07_UnsignedColumnType: R2dbcExposedTestBase() {
                 it[unsignedShort] = 123u
             }
 
-            val result = UShortTable.selectAll().toFastList()
+            val result = UShortTable.selectAll().toList()
             result shouldHaveSize 1
             result.single()[UShortTable.unsignedShort] shouldBeEqualTo 123u
         }
@@ -260,7 +260,7 @@ class Ex07_UnsignedColumnType: R2dbcExposedTestBase() {
                 exec(UShortTable.unsignedShort.modifyStatement().first())
                 UShortTable.insert { it[unsignedShort] = number2 }
 
-                val result2 = UShortTable.selectAll().map { it[UShortTable.unsignedShort] }.toFastList()
+                val result2 = UShortTable.selectAll().map { it[UShortTable.unsignedShort] }.toList()
                 result2 shouldContainSame listOf(number1, number2)
 
             } finally {
@@ -277,7 +277,7 @@ class Ex07_UnsignedColumnType: R2dbcExposedTestBase() {
                 it[unsignedInt] = 123u
             }
 
-            val result = UIntTable.selectAll().toFastList()
+            val result = UIntTable.selectAll().toList()
             result shouldHaveSize 1
             result.single()[UIntTable.unsignedInt] shouldBeEqualTo 123u
         }
@@ -350,7 +350,7 @@ class Ex07_UnsignedColumnType: R2dbcExposedTestBase() {
                 exec(UIntTable.unsignedInt.modifyStatement().first())
                 UIntTable.insert { it[unsignedInt] = number2 }
 
-                val result2 = UIntTable.selectAll().map { it[UIntTable.unsignedInt] }.toFastList()
+                val result2 = UIntTable.selectAll().map { it[UIntTable.unsignedInt] }.toList()
                 result2 shouldContainSame listOf(number1, number2)
 
             } finally {
@@ -367,7 +367,7 @@ class Ex07_UnsignedColumnType: R2dbcExposedTestBase() {
                 it[unsignedLong] = 123uL
             }
 
-            val result = ULongTable.selectAll().toFastList()
+            val result = ULongTable.selectAll().toList()
             result.size shouldBeEqualTo 1
             result.single()[ULongTable.unsignedLong] shouldBeEqualTo 123uL
         }
@@ -386,7 +386,7 @@ class Ex07_UnsignedColumnType: R2dbcExposedTestBase() {
                 it[unsignedLong] = maxValue
             }
 
-            val result = ULongTable.selectAll().toFastList()
+            val result = ULongTable.selectAll().toList()
             result shouldHaveSize 1
             result.single()[ULongTable.unsignedLong] shouldBeEqualTo maxValue
         }

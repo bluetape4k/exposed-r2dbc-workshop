@@ -3,7 +3,6 @@ package exposed.r2dbc.shared.repository
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.collections.eclipse.fastListOf
 import io.bluetape4k.logging.KLogging
 import io.bluetape4k.logging.info
 import kotlinx.coroutines.flow.first
@@ -67,7 +66,7 @@ object MovieSchema: KLogging() {
         val russellCrowe = ActorRecord(0, "Russell", "Crowe", "1970-01-20")
         val edwardNorton = ActorRecord(0, "Edward", "Norton", "1975-04-03")
 
-        val actors = fastListOf(
+        val actors = listOf(
             johnnyDepp,
             bradPitt,
             angelinaJolie,
@@ -79,30 +78,30 @@ object MovieSchema: KLogging() {
             edwardNorton
         )
 
-        val movies = fastListOf(
+        val movies = listOf(
             MovieWithActorRecord(
                 "Gladiator",
                 johnnyDepp.firstName,
                 "2000-05-01",
-                fastListOf(russellCrowe, ellenPaige, craigDaniel)
+                mutableListOf(russellCrowe, ellenPaige, craigDaniel)
             ),
             MovieWithActorRecord(
                 "Guardians of the galaxy",
                 johnnyDepp.firstName,
                 "2014-07-21",
-                fastListOf(angelinaGrace, bradPitt, ellenPaige, angelinaJolie, johnnyDepp)
+                mutableListOf(angelinaGrace, bradPitt, ellenPaige, angelinaJolie, johnnyDepp)
             ),
             MovieWithActorRecord(
                 "Fight club",
                 craigDaniel.firstName,
                 "1999-09-13",
-                fastListOf(bradPitt, jenniferAniston, edwardNorton)
+                mutableListOf(bradPitt, jenniferAniston, edwardNorton)
             ),
             MovieWithActorRecord(
                 "13 Reasons Why",
                 "Suzuki",
                 "2016-01-01",
-                fastListOf(angelinaJolie, jenniferAniston)
+                mutableListOf(angelinaJolie, jenniferAniston)
             )
         )
 

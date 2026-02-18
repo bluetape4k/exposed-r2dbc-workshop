@@ -2,13 +2,13 @@ package exposed.r2dbc.examples.controller
 
 import exposed.r2dbc.examples.AbstractExposedR2dbcRepositoryTest
 import exposed.r2dbc.examples.domain.model.ActorRecord
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.spring.tests.httpDelete
 import io.bluetape4k.spring.tests.httpGet
 import io.bluetape4k.spring.tests.httpPost
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitSingle
 import org.amshove.kluent.shouldBeEqualTo
@@ -41,7 +41,7 @@ class ActorControllerTest(
             .expectStatus().is2xxSuccessful
             .returnResult<ActorRecord>().responseBody
             .asFlow()
-            .toFastList()
+            .toList()
 
         actors.forEach {
             log.debug { "Actor: $it" }
@@ -72,7 +72,7 @@ class ActorControllerTest(
             .expectStatus().is2xxSuccessful
             .returnResult<ActorRecord>().responseBody
             .asFlow()
-            .toFastList()
+            .toList()
 
         angelinas.forEach {
             log.debug { "Angelians: $it" }

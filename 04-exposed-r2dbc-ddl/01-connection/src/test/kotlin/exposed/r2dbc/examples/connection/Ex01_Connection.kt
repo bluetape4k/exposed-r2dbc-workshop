@@ -3,8 +3,6 @@ package exposed.r2dbc.examples.connection
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.collections.eclipse.toUnifiedSet
-import io.bluetape4k.collections.eclipse.unifiedSetOf
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.test.runTest
@@ -50,7 +48,7 @@ class Ex01_Connection: R2dbcExposedTestBase() {
         withTables(TestDB.H2, People) {
             val columnMetadata = connection().metadata {
                 columns(People)[People].shouldNotBeNull()
-            }.toUnifiedSet()
+            }.toSet()
 
             val h2Dialect = (db.dialect as H2Dialect)
             val idType = "BIGINT"
@@ -60,7 +58,7 @@ class Ex01_Connection: R2dbcExposedTestBase() {
                 if (h2Dialect.h2Mode == H2Dialect.H2CompatibilityMode.Oracle) "VARCHAR2(42)" else "VARCHAR(42)"
             val ageType = if (h2Dialect.h2Mode == H2Dialect.H2CompatibilityMode.Oracle) "INTEGER" else "INT"
 
-            val expected = unifiedSetOf(
+            val expected = setOf(
                 ColumnMetadata(
                     People.id.nameInDatabaseCase(),
                     Types.BIGINT,

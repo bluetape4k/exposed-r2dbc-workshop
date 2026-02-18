@@ -4,7 +4,6 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.collections.intRangeOf
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
@@ -20,6 +19,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.withContext
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
@@ -172,7 +172,7 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
             val ids = TesterUnique.selectAll()
                 .orderBy(TesterUnique.id)
                 .map { it[TesterUnique.id] }
-                .toFastList()
+                .toList()
 
             ids shouldBeEqualTo listOf(originId, updatedId)
         }
@@ -234,7 +234,7 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
             val ids = TesterUnique.selectAll()
                 .orderBy(TesterUnique.id)
                 .map { it[TesterUnique.id] }
-                .toFastList()
+                .toList()
             ids shouldBeEqualTo listOf(originId, updatedId)
         }
     }
@@ -298,7 +298,7 @@ class Ex01_Coroutines: R2dbcExposedTestBase() {
                         db = db
                     ) {
                         log.debug { "task[$it]: selected" }
-                        Tester.selectAll().toFastList()
+                        Tester.selectAll().toList()
                     }
                 }
             }

@@ -4,12 +4,12 @@ import exposed.r2dbc.examples.dml.Ex22_ColumnWithTransform.TransformTable.simple
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.idgenerators.uuid.TimebasedUuid
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
@@ -503,7 +503,7 @@ class Ex22_ColumnWithTransform: R2dbcExposedTestBase() {
             tester.selectAll()
                 .orderBy(tester.v1)
                 .map { it[tester.v1].value }
-                .toFastList() shouldBeEqualTo listOf(1, 2, 3)
+                .toList() shouldBeEqualTo listOf(1, 2, 3)
         }
     }
 

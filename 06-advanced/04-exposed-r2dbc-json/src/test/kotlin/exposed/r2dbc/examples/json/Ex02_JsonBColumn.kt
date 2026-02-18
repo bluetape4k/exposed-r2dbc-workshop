@@ -7,11 +7,11 @@ import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.singleOrNull
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerializationException
@@ -284,7 +284,7 @@ class Ex02_JsonBColumn: R2dbcExposedJsonTest() {
             }
 
             val userIsInactive = JsonBTable.jsonBColumn.contains("""{"active":false}""")
-            val result = tester.selectAll().where { userIsInactive }.toFastList()
+            val result = tester.selectAll().where { userIsInactive }.toList()
             result.shouldBeEmpty()
 
             val alphaTreamUserAsJson = """{"user":${Json.encodeToString(alphaTeamUser)}}"""
@@ -431,7 +431,7 @@ class Ex02_JsonBColumn: R2dbcExposedJsonTest() {
             val toScala = testDB != TestDB.MYSQL_V5
             val path2 = if (currentDialectTest is PostgreSQLDialect) "0" else "[0]"
             val firstNumber = JsonBArrayTable.numbers.extract<Int>(path2, toScalar = toScala)
-            tester.select(firstNumber).map { it[firstNumber] }.toFastList() shouldBeEqualTo listOf(100, 3)
+            tester.select(firstNumber).map { it[firstNumber] }.toList() shouldBeEqualTo listOf(100, 3)
         }
     }
 
@@ -794,7 +794,7 @@ class Ex02_JsonBColumn: R2dbcExposedJsonTest() {
             val nestedKeyResult = tester
                 .selectAll()
                 .where { JsonBTable.jsonBColumn keyExists "name" }
-                .toFastList()
+                .toList()
             nestedKeyResult.shouldBeEmpty()
         }
     }

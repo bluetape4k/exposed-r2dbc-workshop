@@ -8,12 +8,12 @@ import exposed.r2dbc.multitenant.webflux.tenant.Tenants
 import exposed.r2dbc.multitenant.webflux.tenant.suspendTransactionWithTenant
 import exposed.r2dbc.shared.repository.MovieSchema
 import exposed.r2dbc.shared.repository.toActorRecord
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.support.uninitialized
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import org.amshove.kluent.shouldNotBeEmpty
 import org.amshove.kluent.shouldNotBeNull
 import org.jetbrains.exposed.v1.r2dbc.selectAll
@@ -50,7 +50,7 @@ class ExposedR2dbcConfigTest: AbstractMultitenantTest() {
             val actors = MovieSchema.ActorTable
                 .selectAll()
                 .map { it.toActorRecord() }
-                .toFastList()
+                .toList()
 
             actors.shouldNotBeEmpty()
 

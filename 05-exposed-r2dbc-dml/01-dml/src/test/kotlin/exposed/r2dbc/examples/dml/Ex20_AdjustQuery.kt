@@ -4,9 +4,9 @@ import exposed.r2dbc.shared.dml.DMLTestData
 import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
 import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
@@ -106,7 +106,7 @@ class Ex20_AdjustQuery: R2dbcExposedTestBase() {
             val originalQuery = cities.select(cities.name)
 
             assertFailsWith<IllegalArgumentException> {
-                originalQuery.adjustSelect { select(emptyList()) }.toFastList()
+                originalQuery.adjustSelect { select(emptyList()) }.toList()
             }
         }
     }
@@ -246,7 +246,7 @@ class Ex20_AdjustQuery: R2dbcExposedTestBase() {
             val actualHaving = queryAdjusted.having
 
             actualHaving!!.repr() shouldBeEqualTo predicateHaving.repr()
-            val rows = queryAdjusted.orderBy(cities.name).toFastList()
+            val rows = queryAdjusted.orderBy(cities.name).toList()
             rows shouldHaveSize 2
             rows[0][cities.name] shouldBeEqualTo "Munich"
             rows[1][cities.name] shouldBeEqualTo "St. Petersburg"
@@ -283,7 +283,7 @@ class Ex20_AdjustQuery: R2dbcExposedTestBase() {
             val actualHaving = queryAdjusted.having
             actualHaving!!.repr() shouldBeEqualTo (predicateHaving and predicateHaving).repr()
 
-            val rows = queryAdjusted.orderBy(cities.name).toFastList()
+            val rows = queryAdjusted.orderBy(cities.name).toList()
             rows shouldHaveSize 2
             rows[0][cities.name] shouldBeEqualTo "Munich"
             rows[1][cities.name] shouldBeEqualTo "St. Petersburg"
@@ -321,7 +321,7 @@ class Ex20_AdjustQuery: R2dbcExposedTestBase() {
             val actualHaving = queryAdjusted.having
             actualHaving!!.repr() shouldBeEqualTo (predicateHaving or predicateHaving).repr()
 
-            val rows = queryAdjusted.orderBy(cities.name).toFastList()
+            val rows = queryAdjusted.orderBy(cities.name).toList()
             rows shouldHaveSize 2
             rows[0][cities.name] shouldBeEqualTo "Munich"
             rows[1][cities.name] shouldBeEqualTo "St. Petersburg"

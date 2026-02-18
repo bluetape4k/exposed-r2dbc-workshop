@@ -4,9 +4,9 @@ import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
@@ -86,7 +86,7 @@ class Ex07_DistinctOn: R2dbcExposedTestBase() {
             val distinctValue1 = tester.selectAll()
                 .withDistinctOn(tester.v1)
                 .orderBy(tester.v1 to SortOrder.ASC, tester.v2 to SortOrder.ASC)
-                .toFastList()
+                .toList()
                 .associate { it[tester.v1] to it[tester.v2] }
 
             distinctValue1 shouldBeEqualTo mapOf(1 to 1, 2 to 1, 4 to 4)
@@ -108,7 +108,7 @@ class Ex07_DistinctOn: R2dbcExposedTestBase() {
             val distinctValue2 = tester.selectAll()
                 .withDistinctOn(tester.v2)
                 .orderBy(tester.v2 to SortOrder.ASC, tester.v1 to SortOrder.ASC)
-                .toFastList()
+                .toList()
                 .associate { it[tester.v1] to it[tester.v2] }
 
 
@@ -132,7 +132,7 @@ class Ex07_DistinctOn: R2dbcExposedTestBase() {
                 .selectAll()
                 .withDistinctOn(tester.v1, tester.v2)
                 .orderBy(tester.v1 to SortOrder.ASC, tester.v2 to SortOrder.ASC)
-                .toFastList()
+                .toList()
                 .associate { it[tester.v1] to it[tester.v2] }
 
             distinctBoth shouldBeEqualTo mapOf(1 to 1, 1 to 2, 2 to 1, 2 to 2, 4 to 4)
@@ -154,7 +154,7 @@ class Ex07_DistinctOn: R2dbcExposedTestBase() {
             val distinctSequential = tester.selectAll()
                 .withDistinctOn(tester.v1 to SortOrder.ASC)
                 .withDistinctOn(tester.v2 to SortOrder.ASC)
-                .toFastList()
+                .toList()
                 .associate { it[tester.v1] to it[tester.v2] }
 
             distinctSequential shouldBeEqualTo distinctBoth
