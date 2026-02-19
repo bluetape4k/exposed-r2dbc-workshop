@@ -82,7 +82,7 @@ object Versions {
     const val chaos_monkey = "3.2.2"        // https://mvnrepository.com/artifact/de.codecentric/chaos-monkey-spring-boot
     const val blockhound = "1.0.15.RELEASE"  // https://mvnrepository.com/artifact/io.projectreactor.tools/blockhound
 
-    const val vertx = "4.5.24"               // https://mvnrepository.com/artifact/io.vertx/vertx-core
+    const val vertx = "4.5.25"               // https://mvnrepository.com/artifact/io.vertx/vertx-core
 
     const val swagger = "2.2.41"              // https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations
     const val springdoc_openapi = "2.8.14"     // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
@@ -109,7 +109,6 @@ object Versions {
 
     const val feign = "13.6"        // https://mvnrepository.com/artifact/io.github.openfeign/feign-core
     const val httpclient5 = "5.5.1"   // https://mvnrepository.com/artifact/org.apache.httpcomponents.client5/httpclient5
-    const val httpcore5 = "5.3.6"    // https://mvnrepository.com/artifact/org.apache.httpcomponents.core5/httpcore5
     const val retrofit2 = "3.0.0"   // https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit
     const val okhttp3 = "5.3.0"     // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
     const val okio = "3.16.1"         // https://mvnrepository.com/artifact/com.squareup.okio/okio
@@ -121,7 +120,7 @@ object Versions {
 
     const val mongo_driver = "5.5.1"   // https://mvnrepository.com/artifact/org.mongodb/mongodb-driver-sync
     const val lettuce = "6.8.1.RELEASE" // https://mvnrepository.com/artifact/io.lettuce/lettuce-core
-    const val redisson = "3.52.0"       // https://mvnrepository.com/artifact/org.redisson/redisson
+    const val redisson = "4.2.0"       // https://mvnrepository.com/artifact/org.redisson/redisson
 
     // NOTE: Hibernate 는 jakarta 버전인 경우 orm, validator 등이 group 에 포함됩니다.
     // NOTE: 이 경우 기존 javax 를 사용하는 버전과 충돌이 생길 수 있으니 조심하세요
@@ -813,12 +812,6 @@ object Libs {
     const val httpclient5_fluent = "org.apache.httpcomponents.client5:httpclient5-fluent:${Versions.httpclient5}"
     const val httpclient5_testing = "org.apache.httpcomponents.client5:httpclient5-testing:${Versions.httpclient5}"
 
-    // Apache HttpComponents HttpCore5
-    const val httpcore5 = "org.apache.httpcomponents.core5:httpcore5:${Versions.httpcore5}"
-    const val httpcore5_h2 = "org.apache.httpcomponents.core5:httpcore5-h2:${Versions.httpcore5}"
-    const val httpcore5_reactive = "org.apache.httpcomponents.core5:httpcore5-reactive:${Versions.httpcore5}"
-    const val httpcore5_testing = "org.apache.httpcomponents.core5:httpcore5-testing:${Versions.httpcore5}"
-
     // OpenFeign
     fun feign(module: String) = "io.github.openfeign:feign-$module:${Versions.feign}"
     val feign_bom = feign("bom")
@@ -1078,7 +1071,7 @@ object Libs {
     // R2DBC (버전은 spring-data 버전을 사용한다)
     fun r2dbc(module: String, version: String = Versions.r2dbc): String = "io.r2dbc:r2dbc-$module:$version"
     val r2dbc_spi = r2dbc("spi")
-    val r2dbc_h2 = r2dbc("h2", "1.1.0.RELEASE")
+    val r2dbc_h2 = r2dbc("h2", "1.1.0.RELEASE")       // https://mvnrepository.com/artifact/io.r2dbc/r2dbc-h2
     val r2dbc_pool = r2dbc("pool", "1.0.2.RELEASE")   // https://mvnrepository.com/artifact/io.r2dbc/r2dbc-pool
     val r2dbc_proxy = r2dbc("spi", "1.1.6.RELEASE")   // https://mvnrepository.com/artifact/io.r2dbc/r2dbc-proxy
 
@@ -1106,8 +1099,7 @@ object Libs {
     const val byte_buddy = "net.bytebuddy:byte-buddy:1.17.8"   // https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy
     const val byte_buddy_agent = "net.bytebuddy:byte-buddy-agent:1.17.8"   // https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy-agent
 
-    const val hikaricp = "com.zaxxer:HikariCP:6.3.0"                    // https://mvnrepository.com/artifact/com.zaxxer/HikariCP
-    const val tomcat_jdbc = "org.apache.tomcat:tomcat-jdbc:10.1.28"      // https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-jdbc
+    const val hikaricp = "com.zaxxer:HikariCP:7.0.2"                    // https://mvnrepository.com/artifact/com.zaxxer/HikariCP
 
     // Agroal Data
     fun agroal(module: String, version: String = Versions.agroal) = "io.agroal:agroal-$module:$version"
