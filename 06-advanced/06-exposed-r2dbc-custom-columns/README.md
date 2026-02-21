@@ -1,38 +1,38 @@
-# 06 Exposed R2DBC Custom ColumnType example
+# 06 Exposed R2DBC Custom ColumnType (사용자 정의 컬럼 타입)
 
-This module is a collection of advanced examples demonstrating how to extend Exposed's functionality by creating custom column types and client-side default value generators. These techniques allow you to add features like transparent encryption, compression, binary serialization, and custom ID generation directly into your table definitions.
+이 모듈은 커스텀 컬럼 타입과 클라이언트 측 기본값 생성기를 생성하여 Exposed의 기능을 확장하는 고급 예제 모음입니다. 이 기술을 통해 투명한 암호화, 압축, 바이너리 직렬화, 커스텀 ID 생성 등의 기능을 테이블 정의에 직접 추가할 수 있습니다.
 
-## Learning Objectives
+## 학습 목표
 
-- Create and use custom client-side default value generators for columns (e.g., for unique IDs).
-- Implement custom column types for transparent data transformation, such as compression and encryption.
-- Understand how to build searchable (deterministic) encrypted columns.
-- Learn to store arbitrary Kotlin objects in binary columns using serialization.
-- Combine multiple transformations, like serialization and compression.
+- 컬럼용 커스텀 클라이언트 측 기본값 생성기 생성 및 사용 (예: 고유 ID용)
+- 압축 및 암호화 같은 투명한 데이터 변환을 위한 커스텀 컬럼 타입 구현
+- 검색 가능한(결정적) 암호화 컬럼 구축 방법 이해
+- 직렬화를 사용하여 임의의 Kotlin 객체를 바이너리 컬럼에 저장하는 방법 학습
+- 직렬화와 압축 같은 여러 변환 조합
 
 ---
 
-## 1. Custom Client-Side Default Generators
+## 1. 커스텀 클라이언트 측 기본값 생성기
 
-**(Source: `CustomClientDefaultFunctionsTest.kt`)**
+**(출처: `CustomClientDefaultFunctionsTest.kt`)**
 
-Exposed's
-`clientDefault` mechanism can be wrapped in extension functions to create reusable, descriptive ID generators. These functions are called by your application
-*before* the `INSERT` statement is sent to the database.
+Exposed의 `clientDefault` 메커니즘을 확장 함수로 감싸서 재사용 가능하고 설명적인 ID 생성기를 만들 수 있습니다. 이 함수들은 `INSERT` 문이 데이터베이스로 전송되기
+*전에* 애플리케이션에서 호출됩니다.
 
-### Key Concepts
+### 핵심 개념
 
-- **`clientDefault { ... }`
-  **: A function on a column definition that executes a lambda to generate a default value if one isn't provided.
-- **Extension Functions**: By wrapping `clientDefault` in your own functions, you can create a clean, declarative API.
+- **`clientDefault { ... }`**: 값이 제공되지 않으면 람다를 실행하여 기본값을 생성하는 컬럼 정의의 함수
+- **확장 함수**: `clientDefault`를 자신만의 함수로 감싸서 깔끔하고 선언적인 API를 생성
 
-### Examples
+### 예제
 
-- **.timebasedGenerated()**: Generates a time-based (version 1) UUID.
-- **.snowflakeGenerated()**: Generates a unique, k-ordered ID using the Snowflake algorithm.
-- **.ksuidGenerated()**: Generates a K-Sortable Unique Identifier, which is time-ordered and lexicographically sortable.
+| 함수                      | 설명                                                   |
+|-------------------------|------------------------------------------------------|
+| `.timebasedGenerated()` | 시간 기반(버전 1) UUID 생성                                  |
+| `.snowflakeGenerated()` | Snowflake 알고리즘을 사용한 k-ordered 고유 `Long` ID 생성        |
+| `.ksuidGenerated()`     | 시간 순서이고 사전식으로 정렬 가능한 K-Sortable Unique Identifier 생성 |
 
-### Code Snippet
+### 코드 예제
 
 ```kotlin
 import io.bluetape4k.exposed.core.ksuidGenerated
@@ -40,86 +40,84 @@ import io.bluetape4k.exposed.core.snowflakeGenerated
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 
 object ClientGenerated: IntIdTable() {
-    // These columns will be auto-populated on insert if no value is provided.
+    // 삽입 시 값이 제공되지 않으면 이 컬럼들은 자동으로 채워집니다
     val snowflake: Column<Long> = long("snowflake").snowflakeGenerated()
     val ksuid: Column<String> = varchar("ksuid", 27).ksuidGenerated()
 }
 
-// Usage (DSL)
+// 사용 (DSL)
 ClientGenerated.insert {
-    // No need to specify values for snowflake or ksuid
+    // snowflake나 ksuid 값을 지정할 필요 없음
 }
 
-// Usage (DAO)
+// 사용 (DAO)
 class ClientGeneratedEntity(id: EntityID<Int>): IntEntity(id) {
     companion object: IntEntityClass<ClientGeneratedEntity>(ClientGenerated)
     // ...
 }
 ClientGeneratedEntity.new {
-    // Properties are generated automatically
+    // 속성이 자동으로 생성됨
 }
 ```
 
 ---
 
-## 2. Transparent Compression
+## 2. 투명한 압축
 
-**(Source: `compress/`)**
+**(출처: `compress/`)**
 
-This example shows how to create custom column types that automatically compress data before writing it to the database and decompress it upon reading. This is ideal for reducing storage space for large
-`TEXT` or `BLOB` fields.
+데이터를 데이터베이스에 쓰기 전에 자동으로 압축하고 읽을 때 압축을 해제하는 커스텀 컬럼 타입을 만드는 방법을 보여줍니다. 대용량 `TEXT` 또는 `BLOB` 필드의 저장 공간을 줄이는 데 이상적입니다.
 
-### Key Concepts
+### 핵심 개념
 
-- **`compressedBinary(name, length, compressor)`**: A custom column type that maps to a `VARBINARY` database column.
-- **`compressedBlob(name, compressor)`**: A custom column type that maps to a `BLOB` database column.
-- **`Compressors`**: An object/enum providing different compression algorithms, such as `LZ4`, `Snappy`, and `Zstd`.
+| 함수                                           | 설명                                                  |
+|----------------------------------------------|-----------------------------------------------------|
+| `compressedBinary(name, length, compressor)` | `VARBINARY` 데이터베이스 컬럼에 매핑되는 커스텀 컬럼 타입               |
+| `compressedBlob(name, compressor)`           | `BLOB` 데이터베이스 컬럼에 매핑되는 커스텀 컬럼 타입                    |
+| `Compressors`                                | `LZ4`, `Snappy`, `Zstd` 등 다양한 압축 알고리즘을 제공하는 객체/enum |
 
-### Code Snippet
+### 코드 예제
 
 ```kotlin
 import io.bluetape4k.exposed.core.compress.compressedBlob
 import io.bluetape4k.io.compressor.Compressors
 
 private object CompressedTable: IntIdTable() {
-    // This column will store Zstd-compressed data in a BLOB field.
+    // 이 컬럼은 BLOB 필드에 Zstd로 압축된 데이터를 저장합니다
     val compressedContent = compressedBlob("zstd_blob", Compressors.Zstd).nullable()
 }
 
-// Usage
+// 사용
 val largeData = "some very long string...".toByteArray()
 CompressedTable.insert {
-    // The `largeData` ByteArray is automatically compressed here.
+    // `largeData` ByteArray가 여기서 자동으로 압축됩니다
     it[compressedContent] = largeData
 }
 
 val row = CompressedTable.selectAll().single()
-// The data is automatically decompressed when read.
+// 읽을 때 데이터가 자동으로 압축 해제됩니다
 val originalData = row[CompressedTable.compressedContent]
 ```
 
 ---
 
-## 3. Searchable (Deterministic) Encryption
+## 3. 검색 가능한(결정적) 암호화
 
-**(Source: `encrypt/`)**
+**(출처: `encrypt/`)**
 
-This example implements custom column types for transparent, **deterministic
-** encryption. "Deterministic" means that the same input will always produce the same encrypted output.
+투명하고 **결정적**인 암호화를 위한 커스텀 컬럼 타입을 구현합니다. "결정적"이라는 것은 동일한 입력이 항상 동일한 암호화된 출력을 생성한다는 의미입니다.
 
-This is a critical distinction from the
-`exposed-crypt` module, which uses non-deterministic encryption. While less secure, deterministic encryption allows you to perform direct equality checks on the encrypted data in
-`WHERE` clauses.
+이는 비결정적 암호화를 사용하는 `exposed-crypt` 모듈과 중요한 차이점입니다. 보안성은 낮지만, 결정적 암호화는 암호화된 데이터에 대해 `WHERE` 절에서 직접 동등성 검사를 수행할 수 있습니다.
 
-### Key Concepts
+### 핵심 개념
 
-- **`encryptedVarChar(name, length, encryptor)`**: A custom column for storing encrypted strings that can be searched.
-- **`encryptedBinary(name, length, encryptor)`
-  **: A custom column for storing encrypted byte arrays that can be searched.
-- **`Encryptors`**: Provides various symmetric encryption algorithms (`AES`,
-  `RC4`, etc.) configured for deterministic output.
+| 함수                                          | 설명                                              |
+|---------------------------------------------|-------------------------------------------------|
+| `encryptedVarChar(name, length, encryptor)` | 검색 가능한 암호화된 문자열 저장용 커스텀 컬럼                      |
+| `encryptedBinary(name, length, encryptor)`  | 검색 가능한 암호화된 바이트 배열 저장용 커스텀 컬럼                   |
+| `Encryptors`                                | 결정적 출력으로 구성된 다양한 대칭 암호화 알고리즘(`AES`, `RC4` 등) 제공 |
 
-### Code Snippet
+### 코드 예제
 
 ```kotlin
 import io.bluetape4k.exposed.core.encrypt.encryptedVarChar
@@ -129,73 +127,72 @@ private object EncryptedUsers: IntIdTable("EncryptedUsers") {
     val email = encryptedVarChar("email", 256, Encryptors.AES)
 }
 
-// Usage
+// 사용
 val userEmail = "test@example.com"
 EncryptedUsers.insert {
     it[email] = userEmail
 }
 
-// Because encryption is deterministic, we can search by the plaintext value.
+// 암호화가 결정적이므로 평문 값으로 검색할 수 있습니다
 val user = EncryptedUsers.selectAll().where { EncryptedUsers.email eq userEmail }.single()
 
-// The value is decrypted automatically upon retrieval.
+// 조회 시 값이 자동으로 복호화됩니다
 user[EncryptedUsers.email] shouldBeEqualTo userEmail
 ```
 
 ---
 
-## 4. Binary Serialization
+## 4. 바이너리 직렬화
 
-**(Source: `serialization/`)**
+**(출처: `serialization/`)**
 
-This example shows how to store any `java.io.Serializable` Kotlin object in a binary database column (`VARBINARY` or
-`BLOB`). This is an alternative to JSON for storing structured data, and can be more space-efficient, especially when combined with compression.
+모든 `java.io.Serializable` Kotlin 객체를 바이너리 데이터베이스 컬럼(`VARBINARY` 또는
+`BLOB`)에 저장하는 방법을 보여줍니다. 이는 구조화된 데이터 저장을 위한 JSON의 대안이며, 특히 압축과 결합할 때 더 공간 효율적일 수 있습니다.
 
-### Key Concepts
+### 핵심 개념
 
-- **`binarySerializedBinary<T>(name, length, serializer)`**: Maps a `Serializable` object of type `T` to a
-  `VARBINARY` column.
-- **`binarySerializedBlob<T>(name, serializer)`**: Maps a `Serializable` object of type `T` to a `BLOB` column.
-- **`BinarySerializers`
-  **: Provides different binary serialization libraries, often combined with a compression algorithm (e.g., `LZ4Kryo`,
-  `ZstdFory`).
+| 함수                                                    | 설명                                                            |
+|-------------------------------------------------------|---------------------------------------------------------------|
+| `binarySerializedBinary<T>(name, length, serializer)` | `Serializable` 객체 `T`를 `VARBINARY` 컬럼에 매핑                     |
+| `binarySerializedBlob<T>(name, serializer)`           | `Serializable` 객체 `T`를 `BLOB` 컬럼에 매핑                          |
+| `BinarySerializers`                                   | 압축 알고리즘과 결합된 다양한 바이너리 직렬화 라이브러리 제공 (예: `LZ4Kryo`, `ZstdFory`) |
 
-### Code Snippet
+### 코드 예제
 
 ```kotlin
 import io.bluetape4k.exposed.core.serializable.binarySerializedBlob
 import io.bluetape4k.io.serializer.BinarySerializers
 import java.io.Serializable
 
-// The data class must be Serializable
+// 데이터 클래스는 Serializable이어야 함
 data class UserProfile(val username: String, val settings: Map<String, String>): Serializable
 
 private object UserData: IntIdTable("UserData") {
-    // Store a UserProfile object in a BLOB, serialized with Kryo and compressed with LZ4.
+    // UserProfile 객체를 BLOB에 저장, Kryo로 직렬화하고 LZ4로 압축
     val profile = binarySerializedBlob<UserProfile>("profile", BinarySerializers.LZ4Kryo)
 }
 
-// Usage
+// 사용
 val userProfile = UserProfile("john.doe", mapOf("theme" to "dark", "lang" to "en"))
 UserData.insert {
     it[profile] = userProfile
 }
 
-// The object is automatically deserialized and decompressed on read.
+// 읽을 때 객체가 자동으로 역직렬화되고 압축 해제됩니다
 val retrievedProfile = UserData.selectAll().first()[UserData.profile]
 retrievedProfile.settings["theme"] shouldBeEqualTo "dark"
 ```
 
-## Test Execution
+## 테스트 실행
 
 ```bash
-# Run all tests in this module
-./gradlew :06-advanced:06-custom-columns:test
+# 이 모듈의 모든 테스트 실행
+./gradlew :06-advanced:06-exposed-r2dbc-custom-columns:test
 
-# Run tests for a specific feature, e.g., compression
-./gradlew :06-advanced:06-custom-columns:test --tests "exposed.examples.custom.columns.compress.*"
+# 특정 기능 테스트 실행 (예: 압축)
+./gradlew :06-advanced:06-exposed-r2dbc-custom-columns:test --tests "exposed.examples.custom.columns.compress.*"
 ```
 
-## Further Reading
+## 참고 자료
 
 - [Exposed Custom ColumnTypes](https://debop.notion.site/Custom-Columns-1c32744526b0802aa7a8e2e5f08042cb)

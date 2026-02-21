@@ -1,7 +1,15 @@
-# 04-transactions
+# 04 Transaction Management (트랜잭션 관리)
 
 Exposed R2DBC의 **트랜잭션(Transaction)
 ** 관리 기능을 다루는 예제 모듈입니다. 트랜잭션 격리 수준, Raw SQL 실행, 파라미터 바인딩, 쿼리 타임아웃, 중첩 트랜잭션(Savepoint) 등 트랜잭션 제어의 핵심 패턴을 6개의 테스트 파일로 학습할 수 있습니다.
+
+## 학습 목표
+
+- 트랜잭션 격리 수준(Isolation Level) 설정 방법 이해
+- Raw SQL 실행 및 파라미터 바인딩
+- 쿼리 타임아웃 설정 및 예외 처리
+- 중첩 트랜잭션과 Savepoint 활용
+- Coroutine 기반 트랜잭션 제어 패턴 습득
 
 ## 기술 스택
 

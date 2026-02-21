@@ -1,6 +1,13 @@
-# exposed-r2dbc-sql-example
+# 03 Exposed R2DBC SQL Example (SQL DSL 기본)
 
-Exposed DSL 방식으로 SQL 문을 생성하는 법을 알아보기 위한 예제 프로젝트입니다.
+Exposed R2DBC의 SQL DSL(Domain Specific Language)을 사용하여 타입 안전한 쿼리를 작성하는 방법을 학습합니다. R2DBC 환경에서 비동기로 SELECT, INSERT, UPDATE, DELETE를 수행합니다.
+
+## 학습 목표
+
+- Exposed DSL로 테이블 정의하는 방법 이해
+- 타입 안전한 SQL 쿼리 작성
+- JOIN을 통한 관계형 데이터 조회
+- R2DBC 환경에서의 비동기 쿼리 실행 패턴
 
 ## 예제 ERD
 
@@ -66,7 +73,7 @@ fun `join with foreign key`(testDB: TestDB) {
 }
 ```
 
-위 메소드에서 생성되는 SQL 문은 다음과 같습니다. SQL 생성을 위한 Kotlin DSL 이 상당히 직과적이라고 생각합니다. 사용자가 어느정도 SQL 문에 대해 알고 있다면, Exposed DSL 을 사용하여 SQL 문을 작성하는 것이 어렵지 않을 것입니다.
+위 메소드에서 생성되는 SQL 문은 다음과 같습니다. SQL 생성을 위한 Kotlin DSL 이 상당히 직관적입니다.
 
 ```sql
 -- Postgres
@@ -77,3 +84,15 @@ SELECT users."name",
  WHERE (cities."name" = 'Busan')
     OR (users.city_id IS NULL)
 ```
+
+## 테스트 실행
+
+```bash
+# 이 모듈의 모든 테스트 실행
+./gradlew :03-exposed-r2dbc-basic:exposed-r2dbc-sql-example:test
+```
+
+## 참고 자료
+
+- [Exposed DSL 가이드](https://github.com/JetBrains/Exposed/wiki/DSL)
+- [Kotlin Exposed Book](https://debop.notion.site/Kotlin-Exposed-Book-1ad2744526b080428173e9c907abdae2)

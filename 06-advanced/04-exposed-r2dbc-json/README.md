@@ -1,67 +1,60 @@
-# 04 Exposed R2DBC Json example
+# 04 Exposed R2DBC JSON (JSON/JSONB 지원)
 
-This module demonstrates how to use the `exposed-json` extension to map
-`@Serializable` Kotlin classes to native database `JSON` and
-`JSONB` columns. This allows for storing complex, schemaless data directly within your relational database and leveraging powerful, database-specific JSON query functions.
+이 모듈은 `exposed-json` 확장을 사용하여 `@Serializable` Kotlin 클래스를 네이티브 데이터베이스 `JSON`과
+`JSONB` 컬럼에 매핑하는 방법을 학습합니다. 관계형 데이터베이스 내에 복잡하고 스키마 없는 데이터를 직접 저장하고, 강력한 데이터베이스별 JSON 쿼리 함수를 활용할 수 있습니다.
 
-This functionality relies on the `kotlinx.serialization` library.
+이 기능은 `kotlinx.serialization` 라이브러리를 기반으로 합니다.
 
-## Learning Objectives
+## 학습 목표
 
-- Define table columns that map to `JSON` and `JSONB` data types.
-- Store and retrieve complex, nested Kotlin objects and collections in a single column.
-- Use the `.extract<T>()` function to query for specific fields within a JSON object.
-- Filter rows using `.contains()` and `.exists()` operators to check for the presence of data within a JSON structure.
-- Understand the difference between `json` and `jsonb` column types.
-- Apply JSON columns in both DSL and DAO styles.
+- `JSON`과 `JSONB` 데이터 타입에 매핑되는 테이블 컬럼 정의
+- 단일 컬럼에 복잡하고 중첩된 Kotlin 객체와 컬렉션 저장 및 조회
+- `.extract<T>()` 함수를 사용하여 JSON 객체 내의 특정 필드 쿼리
+- `.contains()`와 `.exists()` 연산자를 사용하여 JSON 구조 내 데이터 존재 여부 필터링
+- `json`과 `jsonb` 컬럼 타입의 차이점 이해
+- DSL과 DAO 스타일 모두에서 JSON 컬럼 적용
 
-## Key Concepts
+## 핵심 개념
 
-### `json` vs. `jsonb`
+### `json` vs `jsonb`
 
-- **`json<T>(name, jsonMapper)`**: Stores data as a plain text
-  `JSON` string. It preserves the exact input format, including whitespace and duplicate keys. It's generally faster to write but slower to query.
-- **`jsonb<T>(name, jsonMapper)`
-  **: Stores data in a decomposed binary format. Writes are slightly slower due to the conversion overhead, but it is much more efficient to query and can be indexed (especially in PostgreSQL). It does not preserve whitespace or duplicate keys.
+| 타입                           | 설명                    | 장단점                           |
+|------------------------------|-----------------------|-------------------------------|
+| `json<T>(name, jsonMapper)`  | 일반 텍스트 `JSON` 문자열로 저장 | 쓰기는 빠르지만 쿼리는 느림, 공백과 중복 키 보존  |
+| `jsonb<T>(name, jsonMapper)` | 분해된 바이너리 형식으로 저장      | 쓰기는 약간 느리지만 쿼리는 훨씬 빠름, 인덱싱 가능 |
 
-**Recommendation:** Use
-`jsonb` whenever your database supports it (like PostgreSQL) and you need to perform queries on the JSON data.
+**권장**: PostgreSQL처럼 데이터베이스에서 지원하고 JSON 데이터에 대한 쿼리를 수행해야 한다면 `jsonb`를 사용하세요.
 
-### Querying Functions
+### 쿼리 함수
 
-- **`.extract<T>(path, toScalar)`
-  **: Extracts a value from a JSON document at a specific path. The path syntax varies by database (e.g.,
-  `".user.name"` for MySQL, `"user", "name"` for PostgreSQL).
-- **`.contains(value, path)`
-  **: Checks if the JSON document contains a given JSON-formatted string as a value, optionally at a specific path. In PostgreSQL, this uses the efficient
-  `@>` operator.
-- **`.exists(path, optional)`
-  **: Checks if a value exists at a given JSONPath expression. This is a powerful way to query for the structure of your JSON documents.
+| 함수                            | 설명                                                                                            |
+|-------------------------------|-----------------------------------------------------------------------------------------------|
+| `.extract<T>(path, toScalar)` | JSON 문서에서 특정 경로의 값 추출. 경로 문법은 데이터베이스마다 다름 (MySQL: `.user.name`, PostgreSQL: `"user", "name"`) |
+| `.contains(value, path)`      | JSON 문서에 주어진 JSON 형식 문자열이 값으로 포함되어 있는지 확인. PostgreSQL에서는 효율적인 `@>` 연산자 사용                     |
+| `.exists(path, optional)`     | 주어진 JSONPath 표현식에 값이 존재하는지 확인                                                                 |
 
-## Examples Overview
+## 예제 개요
 
 ### `JsonTestData.kt`
 
-This file defines the `@Serializable` data classes (`User`, `DataHolder`, `UserGroup`) and the Exposed `Table` objects (
-`JsonTable`, `JsonBTable`) that are used throughout the examples.
+예제 전반에서 사용되는 `@Serializable` 데이터 클래스(`User`, `DataHolder`, `UserGroup`)와 Exposed `Table` 객체(`JsonTable`,
+`JsonBTable`)를 정의합니다.
 
 ### `Ex01_JsonColumn.kt` (DSL & DAO with `json`)
 
-This file demonstrates the usage of the `json` column type.
+`json` 컬럼 타입의 사용법을 보여줍니다.
 
-- **DSL**: Shows how to `insert`, `update`, and `select` using the DSL.
-- **DAO**: A `JsonEntity` class is used to show how `json` columns can be used as properties in the DAO pattern.
-- **Querying**: Demonstrates extracting values with `.extract<T>()` and filtering records using `.contains()` and
-  `.exists()`.
+- **DSL**: DSL을 사용한 `insert`, `update`, `select` 방법
+- **DAO**: `JsonEntity` 클래스를 사용하여 DAO 패턴에서 `json` 컬럼을 속성으로 사용하는 방법
+- **쿼리**: `.extract<T>()`로 값 추출, `.contains()`와 `.exists()`로 레코드 필터링
 
 ### `Ex02_JsonBColumn.kt` (DSL & DAO with `jsonb`)
 
-This file mirrors the examples in `Ex01_JsonColumn.kt` but uses the
-`jsonb` column type. The code is nearly identical, highlighting that the primary difference is in the table definition and the underlying database performance and capabilities, rather than the Exposed API.
+`Ex01_JsonColumn.kt`와 유사하지만 더 성능이 좋은 `jsonb` 컬럼 타입을 사용합니다. 코드는 거의 동일하며, 주요 차이점은 테이블 정의와 기본 데이터베이스 성능 및 기능에 있음을 보여줍니다.
 
-## Code Snippets
+## 코드 예제
 
-### 1. Defining a Table with `jsonb` Column
+### 1. `jsonb` 컬럼이 있는 테이블 정의
 
 ```kotlin
 import org.jetbrains.exposed.v1.json.jsonb
@@ -75,57 +68,56 @@ data class User(val name: String, val team: String?)
 data class DataHolder(val user: User, val logins: Int, val active: Boolean)
 
 object UserTable: IntIdTable("users") {
-    // The column stores the entire DataHolder object as JSONB
+    // 컬럼이 전체 DataHolder 객체를 JSONB로 저장
     val data = jsonb<DataHolder>("data", Json.Default)
 }
 ```
 
-### 2. Inserting and Updating JSON Data
+### 2. JSON 데이터 삽입 및 업데이트
 
 ```kotlin
-// Insert a new record
+// 새 레코드 삽입
 val id = UserTable.insertAndGetId {
   it[data] = DataHolder(User("John Doe", "A-Team"), 15, true)
 }
 
-// Update the JSON data in the record
+// 레코드의 JSON 데이터 업데이트
 UserTable.update({ UserTable.id eq id }) {
   it[data] = DataHolder(User("John Doe", "A-Team"), 16, false)
 }
 ```
 
-### 3. Querying with `.extract()`
+### 3. `.extract()`로 쿼리하기
 
 ```kotlin
-// Extract the 'active' boolean field from the JSONB column
-// Note: path syntax may vary by database
+// JSONB 컬럼에서 'active' 불린 필드 추출
+// 참고: 경로 문법은 데이터베이스마다 다를 수 있음
 val isActive = UserTable.data.extract<Boolean>(".active", toScalar = true)
 
-// Find all inactive users
+// 모든 비활성 사용자 찾기
 val inactiveUsers = UserTable.selectAll().where { isActive eq false }.toList()
 ```
 
-### 4. Filtering with `.contains()` (PostgreSQL & MySQL)
+### 4. `.contains()`로 필터링 (PostgreSQL & MySQL)
 
 ```kotlin
-// Find all users that have "active":false in their data
+// 데이터에 "active":false가 있는 모든 사용자 찾기
 val userIsInactive = UserTable.data.contains("""{"active":false}""")
 val result = UserTable.selectAll().where { userIsInactive }.toList()
 ```
 
-## Test Execution
+## 테스트 실행
 
-**Note
-**: JSON/JSONB features are highly database-dependent. Many tests are skipped on databases with limited support (like H2). For best results, run against PostgreSQL.
+**참고**: JSON/JSONB 기능은 데이터베이스에 따라 크게 달라집니다. 많은 테스트가 제한된 지원을 가진 데이터베이스(예: H2)에서는 건너뜁니다. 최상의 결과를 위해 PostgreSQL에서 실행하세요.
 
 ```bash
-# Run all tests in this module
-./gradlew :06-advanced:04-exposed-json:test
+# 이 모듈의 모든 테스트 실행
+./gradlew :06-advanced:04-exposed-r2dbc-json:test
 
-# Run tests for the JSONB column type
-./gradlew :06-advanced:04-exposed-json:test --tests "exposed.examples.json.Ex02_JsonBColumn"
+# JSONB 컬럼 타입 테스트
+./gradlew :06-advanced:04-exposed-r2dbc-json:test --tests "exposed.examples.json.Ex02_JsonBColumn"
 ```
 
-## Further Reading
+## 참고 자료
 
 - [Exposed Json](https://debop.notion.site/Exposed-Json-1c32744526b080a9bee3d7b92463e90c)

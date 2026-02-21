@@ -1,7 +1,14 @@
-# 03-functions
+# 03 SQL Functions (SQL 함수)
 
 Exposed R2DBC DSL에서 사용 가능한 **SQL 함수(Functions)
 ** 예제 모듈입니다. 문자열/비트 연산, 수학 함수, 통계 함수, 삼각 함수, 윈도우 함수(Window Function) 등 SQL 내장 함수와 커스텀 함수를 6개의 테스트 파일로 다루고 있습니다.
+
+## 학습 목표
+
+- SQL 함수를 Exposed DSL에서 사용하는 방법 이해
+- 문자열, 수학, 통계, 삼각 함수 활용
+- 윈도우 함수(Window Function)로 분석 쿼리 작성
+- 커스텀 함수 정의 및 사용법 습득
 
 ## 기술 스택
 

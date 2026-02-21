@@ -1,132 +1,130 @@
-# 02 Exposed R2DBC Java Time example
+# 02 Exposed R2DBC JavaTime (java.time 통합)
 
-This module demonstrates how to use the
-`exposed-java-time` extension, which provides seamless integration with the modern Java 8
-`java.time` (JSR-310) API. This is the standard and recommended way to handle date and time values in Exposed.
+이 모듈은 Java 8의 `java.time` (JSR-310) API와 Exposed의 통합 방법을 학습합니다. Exposed에서 날짜와 시간 값을 처리하는 표준적이고 권장되는 방법입니다.
 
-## Learning Objectives
+## 학습 목표
 
-- Understand how to map database date/time types to `java.time` objects like `LocalDate`, `LocalDateTime`,
-  `Instant`, and `OffsetDateTime`.
-- Use built-in SQL functions for date/time manipulation (e.g., `year()`, `month()`, `day()`).
-- Define default values for date/time columns, including server-side defaults like `CURRENT_TIMESTAMP`.
-- Correctly use date/time literals in `WHERE` clauses for comparisons.
-- Be aware of the differences in date/time handling and precision across various database dialects.
+- 데이터베이스 날짜/시간 타입을 `LocalDate`, `LocalDateTime`, `Instant`, `OffsetDateTime` 같은 `java.time` 객체로 매핑하는 방법 이해
+- 날짜/시간 조작을 위한 내장 SQL 함수(`year()`, `month()`, `day()` 등) 사용
+- `CURRENT_TIMESTAMP` 같은 서버 측 기본값을 포함한 날짜/시간 컬럼의 기본값 정의
+- `WHERE` 절에서 비교를 위해 날짜/시간 리터럴 올바르게 사용
+- 다양한 데이터베이스 방언 간의 날짜/시간 처리 및 정밀도 차이 인식
 
-## Key Column Types and Functions
+## 주요 컬럼 타입 및 함수
 
-The `exposed-java-time` module introduces several column types and functions to your Exposed DSL.
+`exposed-java-time` 모듈은 Exposed DSL에 여러 컬럼 타입과 함수를 추가합니다.
 
-### Column Types
+### 컬럼 타입
 
-- `date(name)`: Maps to `java.time.LocalDate`.
-- `time(name)`: Maps to `java.time.LocalTime`.
-- `datetime(name)`: Maps to `java.time.LocalDateTime`.
-- `timestamp(name)`: Maps to `java.time.Instant`.
-- `timestampWithTimeZone(name)`: Maps to `java.time.OffsetDateTime`.
-- `duration(name)`: Maps to `java.time.Duration`.
+| 타입                            | 설명           | Java 타입                    |
+|-------------------------------|--------------|----------------------------|
+| `date(name)`                  | 날짜           | `java.time.LocalDate`      |
+| `time(name)`                  | 시간           | `java.time.LocalTime`      |
+| `datetime(name)`              | 날짜시간         | `java.time.LocalDateTime`  |
+| `timestamp(name)`             | 타임스탬프        | `java.time.Instant`        |
+| `timestampWithTimeZone(name)` | 시간대 포함 타임스탬프 | `java.time.OffsetDateTime` |
+| `duration(name)`              | 기간           | `java.time.Duration`       |
 
-### Default Expressions
+### 기본값 표현식
 
-You can use special expressions to set server-side default values.
+서버 측 기본값을 설정하기 위한 특수 표현식을 사용할 수 있습니다.
 
-- `CurrentDate`: Represents the database's `CURRENT_DATE` function.
-- `CurrentDateTime` / `CurrentTimestamp`: Represent the database's `CURRENT_TIMESTAMP` or equivalent function.
-- `CurrentTimestampWithTimeZone`: Represents the database's `CURRENT_TIMESTAMP WITH TIME ZONE` function.
+| 표현식                                    | 설명                                            |
+|----------------------------------------|-----------------------------------------------|
+| `CurrentDate`                          | 데이터베이스의 `CURRENT_DATE` 함수                     |
+| `CurrentDateTime` / `CurrentTimestamp` | 데이터베이스의 `CURRENT_TIMESTAMP` 또는 동등한 함수         |
+| `CurrentTimestampWithTimeZone`         | 데이터베이스의 `CURRENT_TIMESTAMP WITH TIME ZONE` 함수 |
 
-### Literals for Queries
+### 쿼리용 리터럴
 
-When comparing date/time values in a
-`WHERE` clause, it's best practice to use literal functions to ensure the value is formatted correctly for the specific database dialect.
+`WHERE` 절에서 날짜/시간 값을 비교할 때, 특정 데이터베이스 방언에 맞게 값이 올바르게 포맷되도록 리터럴 함수를 사용하는 것이 좋습니다.
 
-- `dateLiteral(LocalDate)`
-- `timeLiteral(LocalTime)`
-- `dateTimeLiteral(LocalDateTime)`
-- `timestampLiteral(Instant)`
-- `timestampWithTimeZoneLiteral(OffsetDateTime)`
+| 함수                                             | 설명               |
+|------------------------------------------------|------------------|
+| `dateLiteral(LocalDate)`                       | 날짜 리터럴           |
+| `timeLiteral(LocalTime)`                       | 시간 리터럴           |
+| `dateTimeLiteral(LocalDateTime)`               | 날짜시간 리터럴         |
+| `timestampLiteral(Instant)`                    | 타임스탬프 리터럴        |
+| `timestampWithTimeZoneLiteral(OffsetDateTime)` | 시간대 포함 타임스탬프 리터럴 |
 
-## Examples Overview
+## 예제 개요
 
-### `Ex01_JavaTime.kt` - Basic Usage and Functions
+### `Ex01_JavaTime.kt` - 기본 사용법 및 함수
 
-This file demonstrates core functionality, including:
+핵심 기능을 보여줍니다:
 
-- Using date part extraction functions like `year()`, `month()`, and `day()` in queries.
-- Storing and retrieving `Instant` and `LocalDateTime` values, including handling of nanosecond precision.
-- Working with
-  `timestampWithTimeZone` and understanding how different databases handle time zone information (e.g., some convert to and store in UTC).
+- 쿼리에서 `year()`, `month()`, `day()` 같은 날짜 부분 추출 함수 사용
+- `Instant`와 `LocalDateTime` 값 저장 및 조회, 나노초 정밀도 처리 포함
+- `timestampWithTimeZone` 작업 및 다양한 데이터베이스의 시간대 정보 처리 방법 이해
 
-### `Ex02_Defaults.kt` - Default Values
+### `Ex02_Defaults.kt` - 기본값
 
-This file explores how to set default values for date/time columns.
+날짜/시간 컬럼의 기본값 설정 방법을 살펴봅니다.
 
-- `clientDefault { ... }`: The default value is generated by the client (your application) before the
-  `INSERT` statement.
-- `default(value)`: A constant default value.
-- `defaultExpression(...)`: The default value is generated by the database itself, using functions like
-  `CurrentDateTime`.
+- `clientDefault { ... }`: 클라이언트(애플리케이션)에서 `INSERT` 문 전에 기본값 생성
+- `default(value)`: 상수 기본값
+- `defaultExpression(...)`: `CurrentDateTime` 같은 함수를 사용하여 데이터베이스 자체에서 기본값 생성
 
-### `Ex03_DateTimeLiteral.kt` - Querying with Literals
+### `Ex03_DateTimeLiteral.kt` - 리터럴로 쿼리하기
 
-This file shows the correct way to use date/time values in `WHERE` clauses. Using literal functions like
-`dateLiteral()` and `dateTimeLiteral()` ensures that the comparison works correctly across different databases.
+`WHERE` 절에서 날짜/시간 값을 올바르게 사용하는 방법을 보여줍니다. `dateLiteral()`,
+`dateTimeLiteral()` 같은 리터럴 함수를 사용하면 다양한 데이터베이스에서 비교가 올바르게 작동합니다.
 
-### `Ex04_MiscTable.kt` - Comprehensive Integration Test
+### `Ex04_MiscTable.kt` - 종합 통합 테스트
 
-This file contains a large table (`Misc`) with every
-`java.time` column type in both nullable and non-nullable variants. It provides extensive tests for `INSERT`,
-`SELECT`, and `UPDATE` operations, serving as a robust example of how these types behave in practice.
+모든 `java.time` 컬럼 타입을 nullable과 non-nullable 변형으로 포함한 대규모 테이블(`Misc`)을 포함합니다. `INSERT`, `SELECT`,
+`UPDATE` 작업에 대한 광범위한 테스트를 제공합니다.
 
-## Code Snippets
+## 코드 예제
 
-### 1. Defining a Table with `java.time` Columns
+### 1. `java.time` 컬럼이 있는 테이블 정의
 
 ```kotlin
 object CitiesTime: IntIdTable("CitiesTime") {
   val name: Column<String> = varchar("name", 50)
 
-  // A nullable LocalDateTime column
+  // nullable LocalDateTime 컬럼
   val local_time: Column<LocalDateTime?> = datetime("local_time").nullable()
 }
 
 object TableWithDBDefault: IntIdTable("t_db_default") {
-  // A non-nullable LocalDateTime column with a server-side default
+  // 서버 측 기본값이 있는 non-nullable LocalDateTime 컬럼
   val t1: Column<LocalDateTime> = datetime("t1").defaultExpression(CurrentDateTime)
 }
 ```
 
-### 2. Inserting and Querying `java.time` Values
+### 2. `java.time` 값 삽입 및 조회
 
 ```kotlin
-// Inserting a value
+// 값 삽입
 val now = LocalDateTime.now()
 val cityID = CitiesTime.insertAndGetId {
   it[name] = "Seoul"
   it[local_time] = now
 }
 
-// Querying using a date part function
+// 날짜 부분 함수를 사용한 조회
 val year = CitiesTime
   .select(CitiesTime.local_time.year())
   .where { CitiesTime.id eq cityID }
   .single()[CitiesTime.local_time.year()]
 
-// Querying using a literal in a WHERE clause
+// WHERE 절에서 리터럴을 사용한 조회
 val result = TableWithDate.selectAll()
   .where { TableWithDate.date less dateLiteral(LocalDate.of(3000, 1, 1)) }
   .firstOrNull()
 ```
 
-## Test Execution
+## 테스트 실행
 
 ```bash
-# Run all tests in this module
-./gradlew :06-advanced:02-exposed-javatime:test
+# 이 모듈의 모든 테스트 실행
+./gradlew :06-advanced:02-exposed-r2dbc-javatime:test
 
-# Run a specific test class
-./gradlew :06-advanced:02-exposed-javatime:test --tests "exposed.examples.java.time.Ex01_JavaTime"
+# 특정 테스트 클래스 실행
+./gradlew :06-advanced:02-exposed-r2dbc-javatime:test --tests "exposed.examples.java.time.Ex01_JavaTime"
 ```
 
-## Further Reading
+## 참고 자료
 
 - [Exposed Java Time Module](https://debop.notion.site/Exposed-Java-Time-1c32744526b0809d85e1d0425038dfdd)

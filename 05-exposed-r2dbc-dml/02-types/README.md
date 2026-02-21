@@ -1,7 +1,14 @@
-# 02-types
+# 02 Column Types (컬럼 타입)
 
 Exposed R2DBC DSL에서 지원하는 **다양한 컬럼 타입(Column Types)
 ** 의 사용법을 다루는 예제 모듈입니다. Boolean, Char, Numeric, Double, Array, Unsigned, Blob, UUID 등 SQL 데이터 타입별로 테이블 정의, INSERT, SELECT, 타입 변환 패턴을 9개의 테스트 파일로 학습할 수 있습니다.
+
+## 학습 목표
+
+- 다양한 SQL 컬럼 타입을 Exposed DSL로 정의하는 방법 이해
+- Boolean, String, Numeric 타입의 활용
+- Array, Blob, UUID 등 고급 타입 사용법
+- 데이터베이스별 타입 지원 차이점 파악
 
 ## 기술 스택
 
