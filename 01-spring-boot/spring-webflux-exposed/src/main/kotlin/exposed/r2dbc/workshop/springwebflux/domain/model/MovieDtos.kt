@@ -1,6 +1,5 @@
 package exposed.r2dbc.workshop.springwebflux.domain.model
 
-import io.bluetape4k.collections.eclipse.fastListOf
 import java.io.Serializable
 
 /**

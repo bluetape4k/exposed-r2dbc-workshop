@@ -67,7 +67,7 @@ dependencies {
     implementation(Libs.springBootStarter("aop"))
     implementation(Libs.springBootStarter("validation"))
     implementation(Libs.springBootStarter("webflux"))
-    
+
     testImplementation(Libs.bluetape4k_spring_tests)
     testImplementation(Libs.springBootStarter("test")) {
         exclude(group = "junit", module = "junit")
@@ -92,7 +92,7 @@ dependencies {
     runtimeOnly(Libs.lz4_java)
     runtimeOnly(Libs.snappy_java)
     runtimeOnly(Libs.zstd_jni)
-    
+
     // Near Cache
     implementation(Libs.caffeine)
 

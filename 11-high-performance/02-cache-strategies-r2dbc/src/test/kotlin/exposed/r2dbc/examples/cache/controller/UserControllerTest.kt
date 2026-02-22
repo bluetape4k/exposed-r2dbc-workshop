@@ -128,7 +128,7 @@ class UserControllerTest(
 
         val invalidatedId = idsInDB.shuffled().take(3)
         val ids = invalidatedId.joinToString(",")
-        
+
         val invalidedCount = client
             .httpDelete("/users/invalidate?ids=$ids")
             .expectStatus().is2xxSuccessful

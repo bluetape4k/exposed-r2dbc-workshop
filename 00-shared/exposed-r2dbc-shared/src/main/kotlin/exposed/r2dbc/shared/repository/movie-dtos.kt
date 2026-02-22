@@ -1,6 +1,5 @@
 package exposed.r2dbc.shared.repository
 
-import io.bluetape4k.collections.eclipse.fastListOf
 import io.bluetape4k.exposed.core.HasIdentifier
 import java.io.Serializable
 

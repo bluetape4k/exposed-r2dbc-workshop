@@ -106,7 +106,7 @@ enum class TestDB(
                     "&serverTimezone=UTC" +  // TimeZone 을 UTC 로 설정
                     "&zeroDateTimeBehavior=convertToNull" +
                     "&rewriteBatchedStatements=true"   // Batch 처리를 위한 설정
-            
+
             if (USE_TESTCONTAINERS) {
                 val port = Containers.MySql5.port
                 val databaseName = Containers.MariaDB.databaseName
