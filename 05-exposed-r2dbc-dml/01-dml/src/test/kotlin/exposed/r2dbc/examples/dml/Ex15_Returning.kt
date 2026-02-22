@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.dml
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -42,7 +42,7 @@ import kotlin.test.assertIs
  *
  * 단, 이 함수들은 Postgres, MariaDB 에서만 지원합니다.
  */
-class Ex15_Returning: R2dbcExposedTestBase() {
+class Ex15_Returning: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.dml
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
@@ -26,7 +26,7 @@ import org.junit.jupiter.params.provider.MethodSource
  *
  * Postgres와 H2 에서만 지원됩니다. MySQL과 MariaDB에서는 지원되지 않습니다.
  */
-class Ex07_DistinctOn: R2dbcExposedTestBase() {
+class Ex07_DistinctOn: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

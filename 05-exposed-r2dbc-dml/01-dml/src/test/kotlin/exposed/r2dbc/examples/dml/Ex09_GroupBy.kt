@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.dml
 
 import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -46,7 +46,7 @@ import org.jetbrains.exposed.v1.r2dbc.select
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-class Ex09_GroupBy: R2dbcExposedTestBase() {
+class Ex09_GroupBy: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -87,10 +87,10 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
                 log.debug { "cityName=$cityName, userCount=$userCount, userCountAlias=$userCountAlias" }
 
                 when (cityName) {
-                    "Munich" -> userCount shouldBeEqualTo 2L
-                    "Prague" -> userCount shouldBeEqualTo 0L
+                    "Munich"         -> userCount shouldBeEqualTo 2L
+                    "Prague"         -> userCount shouldBeEqualTo 0L
                     "St. Petersburg" -> userCount shouldBeEqualTo 1L
-                    else     -> error("Unknown city $cityName")
+                    else             -> error("Unknown city $cityName")
                 }
                 userCountAlias shouldBeEqualTo userCount
             }
@@ -319,10 +319,10 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
                     val dialectNames = dialects.map { it.dialectName }
                     val dialect = e.dialect
                     val check = when {
-                        dialect.name in dialectNames -> true
+                        dialect.name in dialectNames                                         -> true
                         dialect is H2Dialect && dialect.delegatedDialectNameProvider != null ->
                             dialect.delegatedDialectNameProvider!!.dialectName in dialectNames
-                        else                         -> false
+                        else                                                                 -> false
                     }
                     check.shouldBeTrue()
                 }
@@ -347,13 +347,13 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
 
                 when (currentDialectTest) {
                     // return order is arbitrary if no ORDER BY is specified
-                    is MariaDBDialect, is SQLiteDialect ->
+                    is MariaDBDialect, is SQLiteDialect  ->
                         listOf("Sergey, Eugene", "Eugene, Sergey") shouldContain it["Munich"]
 
                     is MysqlDialect, is SQLServerDialect ->
                         it["Munich"] shouldBeEqualTo "Eugene, Sergey"
 
-                    else                                ->
+                    else                                 ->
                         it["Munich"] shouldBeEqualTo "Sergey, Eugene"
                 }
 
@@ -375,11 +375,11 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
                     it["St. Petersburg"] shouldBeEqualTo "Andrey"
 
                     when (currentDialectTest) {
-                        is MariaDBDialect ->
+                        is MariaDBDialect                     ->
                             listOf("Sergey | Eugene", "Eugene | Sergey") shouldContain it["Munich"]
 
                         is MysqlDialect, is PostgreSQLDialect -> it["Munich"] shouldBeEqualTo "Eugene | Sergey"
-                        is H2Dialect      -> {
+                        is H2Dialect                          -> {
                             if (currentDialect.h2Mode == H2Dialect.H2CompatibilityMode.SQLServer) {
                                 it["Munich"] shouldBeEqualTo "Sergey | Eugene"
                             } else {
@@ -387,7 +387,7 @@ class Ex09_GroupBy: R2dbcExposedTestBase() {
                             }
                         }
 
-                        else              -> it["Munich"] shouldBeEqualTo "Sergey | Eugene"
+                        else                                  -> it["Munich"] shouldBeEqualTo "Sergey | Eugene"
                     }
                     it["Prague"].shouldBeNull()
                 }

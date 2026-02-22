@@ -3,7 +3,7 @@ package exposed.r2dbc.examples.jpa.ex02_entities
 import exposed.r2dbc.examples.jpa.ex02_entities.BlogSchema.PostDetailTable
 import exposed.r2dbc.examples.jpa.ex02_entities.BlogSchema.PostTable
 import exposed.r2dbc.examples.jpa.ex02_entities.BlogSchema.blogTables
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
@@ -22,7 +22,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDate
 
-class Ex01_Blog: R2dbcExposedTestBase() {
+class Ex01_Blog: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

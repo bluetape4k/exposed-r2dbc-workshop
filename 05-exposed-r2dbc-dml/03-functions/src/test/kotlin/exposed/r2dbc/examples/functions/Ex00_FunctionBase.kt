@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.functions
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withDb
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -15,7 +15,7 @@ import java.math.RoundingMode
 
 typealias SqlFunction<T> = org.jetbrains.exposed.v1.core.Function<T>
 
-abstract class Ex00_FunctionBase: R2dbcExposedTestBase() {
+abstract class Ex00_FunctionBase: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

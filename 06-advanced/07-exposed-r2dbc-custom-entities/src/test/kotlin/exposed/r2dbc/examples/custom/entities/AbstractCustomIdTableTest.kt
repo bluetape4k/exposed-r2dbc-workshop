@@ -1,12 +1,12 @@
 package exposed.r2dbc.examples.custom.entities
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.params.provider.Arguments
 
-abstract class AbstractCustomIdTableTest: R2dbcExposedTestBase() {
+abstract class AbstractCustomIdTableTest: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel() {
         const val GET_TESTDB_AND_ENTITY_COUNT = "getTestDBAndEntityCount"

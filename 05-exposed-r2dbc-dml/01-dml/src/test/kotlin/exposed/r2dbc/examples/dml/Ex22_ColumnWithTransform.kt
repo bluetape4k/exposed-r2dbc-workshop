@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.dml
 
 import exposed.r2dbc.examples.dml.Ex22_ColumnWithTransform.TransformTable.simple
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.idgenerators.uuid.TimebasedUuid
@@ -36,7 +36,7 @@ import java.util.*
 /**
  * 컬럼의 수형이나 값을 변환하는 [ColumnTransformer] 를 활용하는 예제
  */
-class Ex22_ColumnWithTransform: R2dbcExposedTestBase() {
+class Ex22_ColumnWithTransform: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

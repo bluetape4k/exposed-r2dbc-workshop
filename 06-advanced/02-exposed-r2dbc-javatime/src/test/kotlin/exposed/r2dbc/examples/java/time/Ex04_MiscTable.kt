@@ -3,7 +3,7 @@ package exposed.r2dbc.examples.java.time
 import exposed.r2dbc.shared.MiscTable
 import exposed.r2dbc.shared.checkInsert
 import exposed.r2dbc.shared.checkRow
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
@@ -102,7 +102,7 @@ object Misc: MiscTable() {
 }
 
 
-class Ex04_MiscTable: R2dbcExposedTestBase() {
+class Ex04_MiscTable: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -526,7 +526,7 @@ class Ex04_MiscTable: R2dbcExposedTestBase() {
 
             val dtValue = when (testDB) {
                 in requiresExplicitDTCast -> Cast(dateTimeParam(dateTime), JavaLocalDateTimeColumnType())
-                else -> dateTimeParam(dateTime)
+                else                      -> dateTimeParam(dateTime)
             }
             tbl.checkRowFull(
                 tbl.selectAll().where { Misc.dt.eq(dtValue) }.single(),
@@ -953,7 +953,7 @@ class Ex04_MiscTable: R2dbcExposedTestBase() {
 
             val dtValue = when (testDB) {
                 in requiresExplicitDTCast -> Cast(dateTimeParam(dateTime), JavaLocalDateTimeColumnType())
-                else -> dateTimeParam(dateTime)
+                else                      -> dateTimeParam(dateTime)
             }
             tbl.checkRowFull(
                 tbl.selectAll().where { Misc.dt.eq(dtValue) }.single(),

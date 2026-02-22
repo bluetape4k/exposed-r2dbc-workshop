@@ -4,7 +4,7 @@ import exposed.r2dbc.examples.jackson.JacksonSchema.DataHolder
 import exposed.r2dbc.examples.jackson.JacksonSchema.User
 import exposed.r2dbc.examples.jackson.JacksonSchema.withJacksonBArrays
 import exposed.r2dbc.examples.jackson.JacksonSchema.withJacksonBTable
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
@@ -56,7 +56,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 @Suppress("DEPRECATION")
-class JacksonBColumnTest: R2dbcExposedTestBase() {
+class JacksonBColumnTest: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -148,7 +148,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
 
             val path = when (currentDialectTest) {
                 is PostgreSQLDialect -> arrayOf("user", "name")
-                else -> arrayOf(".user.name")
+                else                 -> arrayOf(".user.name")
             }
             val username: Extract<String> = tester.jacksonBColumn.extract<String>(*path)
             val row3 = tester
@@ -185,7 +185,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
             val logins = when (currentDialectTest) {
                 is PostgreSQLDialect ->
                     tester.jacksonBColumn.extract<Int>("logins").castTo(IntegerColumnType())
-                else ->
+                else                 ->
                     tester.jacksonBColumn.extract<Int>(".logins")
             }
             val tooManyLogins = logins greaterEq 1000
@@ -339,7 +339,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
         withJacksonBArrays(testDB) { tester, singleId, tripleId ->
             val path1 = when (currentDialectTest) {
                 is PostgreSQLDialect -> arrayOf("users", "0", "team")
-                else -> arrayOf(".users[0].team")
+                else                 -> arrayOf(".users[0].team")
             }
             val firstIsOnTeamA: Op<Boolean> = tester.groups.extract<String>(*path1) eq "Team A"
             tester
@@ -351,7 +351,7 @@ class JacksonBColumnTest: R2dbcExposedTestBase() {
             val toScalar = testDB != TestDB.MYSQL_V5
             val path2 = when (currentDialectTest) {
                 is PostgreSQLDialect -> "0"
-                else -> "[0]"
+                else                 -> "[0]"
             }
             val firstNumber: Extract<Int> = tester.numbers.extract<Int>(path2, toScalar = toScalar)
             tester

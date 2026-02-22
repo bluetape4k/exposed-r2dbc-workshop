@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.transactions
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.inProperCase
 import exposed.r2dbc.shared.tests.withTables
@@ -32,7 +32,7 @@ import org.junit.jupiter.params.provider.MethodSource
 import org.testcontainers.utility.Base58
 import java.sql.ResultSet
 
-class Ex02_TransactionExec: R2dbcExposedTestBase() {
+class Ex02_TransactionExec: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -143,8 +143,8 @@ class Ex02_TransactionExec: R2dbcExposedTestBase() {
         val columnAlias = "last_inserted_id"
         val selectLastIdStatement = when (testDB) {
             TestDB.POSTGRESQL -> "SELECT lastval() AS $columnAlias;"
-            TestDB.MARIADB -> "SELECT LASTVAL(${ExecTable.id.autoIncColumnType?.autoincSeq}) AS $columnAlias"
-            else           -> "SELECT LAST_INSERT_ID() AS $columnAlias"
+            TestDB.MARIADB    -> "SELECT LASTVAL(${ExecTable.id.autoIncColumnType?.autoincSeq}) AS $columnAlias"
+            else              -> "SELECT LAST_INSERT_ID() AS $columnAlias"
         }
 
         val insertAndSelectStatements =

@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.money
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.money.moneyOf
 import kotlinx.atomicfu.atomic
@@ -8,7 +8,7 @@ import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 import org.jetbrains.exposed.v1.money.compositeMoney
 import java.math.BigDecimal
 
-class Ex01_MoneyDefaults: R2dbcExposedTestBase() {
+class Ex01_MoneyDefaults: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

@@ -2,7 +2,7 @@ package exposed.r2dbc.examples.dml
 
 import exposed.r2dbc.shared.dml.DMLTestData.toCityNameList
 import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
@@ -49,7 +49,7 @@ import org.junit.jupiter.params.provider.MethodSource
 /**
  * 조건을 표현하는 다양한 [Op] 에 대한 예제 모음
  */
-class Ex23_Conditions: R2dbcExposedTestBase() {
+class Ex23_Conditions: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -529,10 +529,10 @@ class Ex23_Conditions: R2dbcExposedTestBase() {
             results.collect {
                 val cityName = it[cities.name]
                 val expectedNumber = when {
-                    cityName.startsWith("M") -> 0
+                    cityName.startsWith("M")    -> 0
                     cityName.startsWith("St. ") -> 1
-                    cityName.startsWith("P") -> 2
-                    else                     -> -1
+                    cityName.startsWith("P")    -> 2
+                    else                        -> -1
                 }
                 it[chainedCondition] shouldBeEqualTo expectedNumber
             }

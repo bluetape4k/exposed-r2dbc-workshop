@@ -2,7 +2,7 @@
 
 package exposed.r2dbc.examples.kotlin.datetime
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -33,7 +33,7 @@ import kotlin.time.Instant
 /**
  * DATE, DATEIME 컬럼을 [dateLiteral], [dateTimeLiteral] 으로 사용하는 예
  */
-class Ex03_DateTimeLiteral: R2dbcExposedTestBase() {
+class Ex03_DateTimeLiteral: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

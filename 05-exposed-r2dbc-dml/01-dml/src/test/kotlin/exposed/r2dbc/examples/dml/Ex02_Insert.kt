@@ -2,7 +2,7 @@ package exposed.r2dbc.examples.dml
 
 import exposed.r2dbc.shared.dml.DMLTestData.Cities
 import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.assertFailAndRollback
 import exposed.r2dbc.shared.tests.inProperCase
@@ -66,7 +66,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.*
 
-class Ex02_Insert: R2dbcExposedTestBase() {
+class Ex02_Insert: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -979,7 +979,7 @@ class Ex02_Insert: R2dbcExposedTestBase() {
                     in TestDB.ALL_MARIADB -> {
                         exec("${createStatement.trimIndent()} $computedName $computedType GENERATED ALWAYS AS ($computation) STORED)")
                     }
-                    else -> SchemaUtils.create(generatedTable)
+                    else                  -> SchemaUtils.create(generatedTable)
                 }
 
                 assertFailAndRollback("Generated columns are auto-drived and read-only") {

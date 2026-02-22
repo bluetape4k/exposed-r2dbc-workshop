@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.dml
 
 import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -39,7 +39,7 @@ import org.junit.jupiter.params.provider.MethodSource
 /**
  * `UNION` 쿼리 예제 모음
  */
-class Ex17_Union: R2dbcExposedTestBase() {
+class Ex17_Union: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -247,10 +247,10 @@ class Ex17_Union: R2dbcExposedTestBase() {
                 is PostgreSQLDialect,
                 is SQLServerDialect,
                 is MariaDBDialect,
-                     -> true
+                             -> true
 
                 is H2Dialect -> (currentDialect as H2Dialect).isSecondVersion
-                else -> false
+                else         -> false
             }
             log.debug { "intersectAppliedFirst: $intersectAppliedFirst" }
 

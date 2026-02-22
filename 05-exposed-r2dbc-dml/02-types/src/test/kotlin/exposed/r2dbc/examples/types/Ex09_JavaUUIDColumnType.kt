@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.types
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
@@ -22,7 +22,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.*
 
-class Ex09_JavaUUIDColumnType: R2dbcExposedTestBase() {
+class Ex09_JavaUUIDColumnType: AbstractR2dbcExposedTest() {
 
     companion object: KLogging()
 

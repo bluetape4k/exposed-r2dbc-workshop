@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.types
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withDb
@@ -33,7 +33,7 @@ import org.junit.jupiter.params.provider.MethodSource
  *
  * @see [ExposedBlob]
  */
-class Ex08_BlobColumnType: R2dbcExposedTestBase() {
+class Ex08_BlobColumnType: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -148,7 +148,7 @@ class Ex08_BlobColumnType: R2dbcExposedTestBase() {
                     }
                 }
 
-                else -> {
+                else                             -> {
                     SchemaUtils.create(tester)
 
                     tester.insert {

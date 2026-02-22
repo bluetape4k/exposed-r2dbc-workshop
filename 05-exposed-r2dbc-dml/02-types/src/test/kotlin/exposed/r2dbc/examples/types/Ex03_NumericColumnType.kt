@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.types
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.assertFailAndRollback
 import exposed.r2dbc.shared.tests.currentDialectTest
@@ -32,7 +32,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.math.BigDecimal
 
-class Ex03_NumericColumnType: R2dbcExposedTestBase() {
+class Ex03_NumericColumnType: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -103,7 +103,7 @@ class Ex03_NumericColumnType: R2dbcExposedTestBase() {
                 in TestDB.ALL_POSTGRES_LIKE ->
                     "CHECK ($columnName BETWEEN ${Byte.MIN_VALUE} AND ${Byte.MAX_VALUE}))"
 
-                else ->
+                else                        ->
                     "($columnName ${tester.byte.columnType} NOT NULL)"
             }
 

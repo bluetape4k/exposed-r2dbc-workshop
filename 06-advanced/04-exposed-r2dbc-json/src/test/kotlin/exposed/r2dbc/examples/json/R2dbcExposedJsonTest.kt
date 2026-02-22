@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.json
 
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -11,7 +11,7 @@ import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 import org.junit.jupiter.api.Assumptions
 
-abstract class R2dbcExposedJsonTest: R2dbcExposedTestBase() {
+abstract class R2dbcExposedJsonTest: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

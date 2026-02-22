@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.dml
 
 import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-class Ex05_Delete: R2dbcExposedTestBase() {
+class Ex05_Delete: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

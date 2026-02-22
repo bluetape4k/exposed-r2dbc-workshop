@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.connection
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -19,7 +19,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.sql.Types
 
-class Ex01_Connection: R2dbcExposedTestBase() {
+class Ex01_Connection: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

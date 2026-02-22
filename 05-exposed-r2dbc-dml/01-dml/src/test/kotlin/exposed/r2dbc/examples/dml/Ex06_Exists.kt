@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.dml
 
 import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -34,7 +34,7 @@ import org.junit.jupiter.params.provider.MethodSource
 /**
  * `EXISTS` 키워드를 사용하는 예제입니다.
  */
-class Ex06_Exists: R2dbcExposedTestBase() {
+class Ex06_Exists: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

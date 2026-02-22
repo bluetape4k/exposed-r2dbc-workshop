@@ -1,6 +1,6 @@
 package exposed.r2dbc.shared.mapping
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
@@ -55,7 +55,7 @@ object OrderSchema {
     }
 
     @Suppress("UnusedReceiverParameter")
-    suspend fun R2dbcExposedTestBase.withOrdersTables(
+    suspend fun AbstractR2dbcExposedTest.withOrdersTables(
         testDB: TestDB,
         statement: suspend R2dbcTransaction.(
             orders: OrderTable,

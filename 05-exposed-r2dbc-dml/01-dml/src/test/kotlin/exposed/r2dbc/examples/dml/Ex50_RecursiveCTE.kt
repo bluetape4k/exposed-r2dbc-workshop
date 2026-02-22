@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.dml
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.exposed.r2dbc.getInt
@@ -23,7 +23,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.io.Serializable
 
-class Ex50_RecursiveCTE: R2dbcExposedTestBase() {
+class Ex50_RecursiveCTE: AbstractR2dbcExposedTest() {
 
     companion object: KLogging()
 
@@ -72,9 +72,9 @@ class Ex50_RecursiveCTE: R2dbcExposedTestBase() {
             }
 
             val sql = when (testDB) {
-                in TestDB.ALL_POSTGRES -> categoriesWithRecursiveForPostgres()
+                in TestDB.ALL_POSTGRES                    -> categoriesWithRecursiveForPostgres()
                 in setOf(TestDB.MYSQL_V8, TestDB.MARIADB) -> categoriesWithRecursiveForMySQL()
-                else                   -> throw IllegalStateException("Unsupported dialect for recursive CTE test: $testDB")
+                else                                      -> throw IllegalStateException("Unsupported dialect for recursive CTE test: $testDB")
             }
 
             // val categoryRecords = mutableListOf<CategoryRecord>()

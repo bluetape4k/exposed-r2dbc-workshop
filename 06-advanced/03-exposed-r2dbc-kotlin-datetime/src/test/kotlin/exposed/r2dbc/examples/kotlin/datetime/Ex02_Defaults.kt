@@ -2,13 +2,13 @@
 
 package exposed.r2dbc.examples.kotlin.datetime
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.constraintNamePart
 import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.inProperCase
-import exposed.r2dbc.shared.tests.insertAndWait
+import exposed.r2dbc.shared.tests.insertAndSuspending
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -91,7 +91,7 @@ import kotlin.time.DurationUnit
 import kotlin.time.ExperimentalTime
 import kotlin.time.toDuration
 
-class Ex02_Defaults: R2dbcExposedTestBase() {
+class Ex02_Defaults: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -291,7 +291,7 @@ class Ex02_Defaults: R2dbcExposedTestBase() {
         fun Expression<*>.itOrNull() = when {
             currentDialectTest.isAllowedAsColumnDefault(this) ->
                 "DEFAULT ${currentDialectTest.dataTypeProvider.processForDefaultValue(this)} NOT NULL"
-            else -> "NULL"
+            else                                              -> "NULL"
         }
 
         withTables(testDB, tester) {
@@ -576,7 +576,7 @@ class Ex02_Defaults: R2dbcExposedTestBase() {
         fun Expression<*>.itOrNull() = when {
             currentDialectTest.isAllowedAsColumnDefault(this) ->
                 "DEFAULT ${currentDialectTest.dataTypeProvider.processForDefaultValue(this)} NOT NULL"
-            else -> "NULL"
+            else                                              -> "NULL"
         }
 
         Assumptions.assumeTrue { testDB !in TestDB.ALL_MARIADB + TestDB.MYSQL_V5 }
@@ -646,13 +646,13 @@ class Ex02_Defaults: R2dbcExposedTestBase() {
             val duration: Long = 1000
 
             repeat(2) {
-                tester.insertAndWait(duration)
+                tester.insertAndSuspending(duration)
             }
 
             delay(duration)
 
             repeat(2) {
-                tester.insertAndWait(duration)
+                tester.insertAndSuspending(duration)
             }
 
             val sortedEntries: List<LocalDateTime> = tester.selectAll().map { it[tester.time] }.toList().sorted()

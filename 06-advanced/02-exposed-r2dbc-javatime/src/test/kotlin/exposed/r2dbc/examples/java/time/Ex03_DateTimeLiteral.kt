@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.java.time
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -30,7 +30,7 @@ import java.time.LocalDateTime
 /**
  * [dateLiteral], [dateTimeLiteral], [timestampLiteral] 사용 방법
  */
-class Ex03_DateTimeLiteral: R2dbcExposedTestBase() {
+class Ex03_DateTimeLiteral: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

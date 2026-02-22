@@ -3,7 +3,7 @@ package exposed.r2dbc.examples.custom.columns.compress
 import exposed.r2dbc.examples.custom.columns.compress.CompressedBinaryColumnTypeTest.T1.lzData
 import exposed.r2dbc.examples.custom.columns.compress.CompressedBinaryColumnTypeTest.T1.snappyData
 import exposed.r2dbc.examples.custom.columns.compress.CompressedBinaryColumnTypeTest.T1.zstdData
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.exposed.core.compress.compressedBinary
@@ -23,7 +23,7 @@ import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-class CompressedBinaryColumnTypeTest: R2dbcExposedTestBase() {
+class CompressedBinaryColumnTypeTest: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

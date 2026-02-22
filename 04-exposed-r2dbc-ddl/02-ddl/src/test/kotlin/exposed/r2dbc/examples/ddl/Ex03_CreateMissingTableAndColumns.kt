@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.ddl
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.assertFailAndRollback
 import exposed.r2dbc.shared.tests.withDb
@@ -19,7 +19,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.*
 
-class Ex03_CreateMissingTableAndColumns: R2dbcExposedTestBase() {
+class Ex03_CreateMissingTableAndColumns: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

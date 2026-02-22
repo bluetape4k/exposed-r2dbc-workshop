@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.jackson3
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.exposed.core.jackson3.jackson
@@ -66,7 +66,7 @@ object JacksonSchema {
 
     data class UserGroup(val users: List<User>)
 
-    suspend fun R2dbcExposedTestBase.withJacksonTable(
+    suspend fun AbstractR2dbcExposedTest.withJacksonTable(
         testDB: TestDB,
         statement: suspend R2dbcTransaction.(tester: JacksonTable, user1: User, data1: DataHolder) -> Unit,
     ) {
@@ -84,7 +84,7 @@ object JacksonSchema {
         }
     }
 
-    suspend fun R2dbcExposedTestBase.withJacksonBTable(
+    suspend fun AbstractR2dbcExposedTest.withJacksonBTable(
         testDB: TestDB,
         statement: suspend R2dbcTransaction.(tester: JacksonBTable, user1: User, data1: DataHolder) -> Unit,
     ) {
@@ -102,7 +102,7 @@ object JacksonSchema {
         }
     }
 
-    suspend fun R2dbcExposedTestBase.withJacksonArrays(
+    suspend fun AbstractR2dbcExposedTest.withJacksonArrays(
         testDB: TestDB,
         statement: suspend R2dbcTransaction.(
             tester: JacksonArrayTable,
@@ -128,7 +128,7 @@ object JacksonSchema {
         }
     }
 
-    suspend fun R2dbcExposedTestBase.withJacksonBArrays(
+    suspend fun AbstractR2dbcExposedTest.withJacksonBArrays(
         testDB: TestDB,
         statement: suspend R2dbcTransaction.(
             tester: JacksonBArrayTable,

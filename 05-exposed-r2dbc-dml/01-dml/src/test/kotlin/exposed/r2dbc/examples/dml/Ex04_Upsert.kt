@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.dml
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
@@ -53,7 +53,7 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.util.*
 import kotlin.properties.Delegates
 
-class Ex04_Upsert: R2dbcExposedTestBase() {
+class Ex04_Upsert: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

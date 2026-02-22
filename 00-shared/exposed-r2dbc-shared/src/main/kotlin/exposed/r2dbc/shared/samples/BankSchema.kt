@@ -1,6 +1,6 @@
 package exposed.r2dbc.shared.samples
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.junit5.faker.Fakers
@@ -98,7 +98,7 @@ object BankSchema {
     )
 
     @Suppress("UnusedReceiverParameter")
-    suspend fun R2dbcExposedTestBase.withBankTables(
+    suspend fun AbstractR2dbcExposedTest.withBankTables(
         testDB: TestDB,
         block: suspend R2dbcTransaction.(accounts: BankAccountTable, owners: AccountOwnerTable) -> Unit,
     ) {

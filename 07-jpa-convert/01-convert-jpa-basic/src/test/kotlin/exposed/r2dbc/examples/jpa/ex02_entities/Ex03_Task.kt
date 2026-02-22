@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.jpa.ex02_entities
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -16,7 +16,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDate
 
-class Ex03_Task: R2dbcExposedTestBase() {
+class Ex03_Task: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

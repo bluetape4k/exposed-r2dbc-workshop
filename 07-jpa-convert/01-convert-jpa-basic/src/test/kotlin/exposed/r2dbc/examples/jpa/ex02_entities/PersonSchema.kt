@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.jpa.ex02_entities
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.exposed.dao.entityToStringBuilder
@@ -153,7 +153,7 @@ object PersonSchema: KLoggingChannel() {
 
 
     @Suppress("UnusedReceiverParameter")
-    suspend fun R2dbcExposedTestBase.withPersonAndAddress(
+    suspend fun AbstractR2dbcExposedTest.withPersonAndAddress(
         testDB: TestDB,
         statement: suspend R2dbcTransaction.(
             persons: PersonTable,

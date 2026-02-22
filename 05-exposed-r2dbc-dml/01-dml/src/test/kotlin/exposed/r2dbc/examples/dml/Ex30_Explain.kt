@@ -1,11 +1,10 @@
 package exposed.r2dbc.examples.dml
 
 import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.single
@@ -39,7 +38,7 @@ import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-class Ex30_Explain: R2dbcExposedTestBase() {
+class Ex30_Explain: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -361,8 +360,8 @@ class Ex30_Explain: R2dbcExposedTestBase() {
         withTables(testDB, Countries) {
             val formatOption = when (testDB) {
                 in TestDB.ALL_MYSQL_LIKE -> "FORMAT=JSON"
-                in TestDB.ALL_POSTGRES -> "FORMAT JSON"
-                else -> throw kotlin.UnsupportedOperationException("Format option not provided for this dialect")
+                in TestDB.ALL_POSTGRES   -> "FORMAT JSON"
+                else                     -> throw kotlin.UnsupportedOperationException("Format option not provided for this dialect")
             }
 
             val query = Countries.select(Countries.id).where { Countries.code like "A%" }
@@ -372,7 +371,7 @@ class Ex30_Explain: R2dbcExposedTestBase() {
 
             when (testDB) {
                 in TestDB.ALL_MYSQL_LIKE -> jsonString.shouldStartWith("{")
-                else -> jsonString.shouldStartWith("[")
+                else                     -> jsonString.shouldStartWith("[")
             }
 
             // test multiple options only

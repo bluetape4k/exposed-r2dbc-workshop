@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.types
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -31,7 +31,7 @@ import org.junit.jupiter.params.provider.MethodSource
 /**
  * Boolean column type 사용 예
  */
-class Ex01_BooleanColumnType: R2dbcExposedTestBase() {
+class Ex01_BooleanColumnType: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -196,8 +196,8 @@ class Ex01_BooleanColumnType: R2dbcExposedTestBase() {
         // DB 컬럼 값을 Kotlin Boolean 값으로 변환
         override fun valueFromDB(value: Any): Boolean? {
             return when (characterColumnType.valueFromDB(value).uppercase()) {
-                "Y" -> true
-                "N" -> false
+                "Y"  -> true
+                "N"  -> false
                 else -> null
             }
         }
@@ -210,9 +210,9 @@ class Ex01_BooleanColumnType: R2dbcExposedTestBase() {
             characterColumnType.nonNullValueToString(value.asChar() ?: 'N')
 
         private fun Boolean?.asChar(): Char? = when (this) {
-            true -> 'Y'
+            true  -> 'Y'
             false -> 'N'
-            else -> null
+            else  -> null
         }
     }
 

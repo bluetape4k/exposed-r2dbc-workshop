@@ -2,7 +2,7 @@ package exposed.r2dbc.examples.jpa.ex01_simple
 
 import exposed.r2dbc.examples.jpa.ex01_simple.SimpleSchema.SimpleTable
 import exposed.r2dbc.examples.jpa.ex01_simple.SimpleSchema.toSimpleRecords
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -23,7 +23,7 @@ import org.junit.jupiter.params.provider.MethodSource
 /**
  * [SimpleTable] 을 DSL 을 이용하여 작업하는 예제
  */
-class Ex01_Simple_DSL: R2dbcExposedTestBase() {
+class Ex01_Simple_DSL: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel() {
         private const val ENTITY_COUNT = 10

@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.jpa.ex03_customId
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
@@ -26,7 +26,7 @@ import org.junit.jupiter.params.provider.MethodSource
  *
  * JPA 의 `@Convert` 와 유사합니다.
  */
-class Ex01_CustomId: R2dbcExposedTestBase() {
+class Ex01_CustomId: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

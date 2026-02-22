@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.ddl
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.inProperCase
 import exposed.r2dbc.shared.tests.withDb
@@ -22,7 +22,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import kotlin.test.assertFails
 
-class Ex02_CreateTable: R2dbcExposedTestBase() {
+class Ex02_CreateTable: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.transactions
 
 import exposed.r2dbc.shared.dml.DMLTestData
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.codec.Base58
@@ -85,7 +85,7 @@ suspend fun <T> runWithSavepointOrNewTransaction(
 }
 
 
-class Ex05_NestedTransactions_Coroutines: R2dbcExposedTestBase() {
+class Ex05_NestedTransactions_Coroutines: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

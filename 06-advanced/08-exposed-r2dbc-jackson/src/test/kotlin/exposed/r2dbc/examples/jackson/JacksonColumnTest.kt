@@ -4,7 +4,7 @@ import exposed.r2dbc.examples.jackson.JacksonSchema.DataHolder
 import exposed.r2dbc.examples.jackson.JacksonSchema.User
 import exposed.r2dbc.examples.jackson.JacksonSchema.withJacksonArrays
 import exposed.r2dbc.examples.jackson.JacksonSchema.withJacksonTable
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
@@ -57,7 +57,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 @Suppress("DEPRECATION")
-class JacksonColumnTest: R2dbcExposedTestBase() {
+class JacksonColumnTest: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -150,7 +150,7 @@ class JacksonColumnTest: R2dbcExposedTestBase() {
 
             val path = when (currentDialectTest) {
                 is PostgreSQLDialect -> arrayOf("user", "name")
-                else -> arrayOf(".user.name")
+                else                 -> arrayOf(".user.name")
             }
             val username = tester.jacksonColumn.extract<String>(*path)
             val row3 = tester.select(username).singleOrNull()
@@ -184,7 +184,7 @@ class JacksonColumnTest: R2dbcExposedTestBase() {
             // Postgres requires type casting to compare json field as integer value in DB
             val logins = when (currentDialectTest) {
                 is PostgreSQLDialect -> tester.jacksonColumn.extract<Int>("logins").castTo(IntegerColumnType())
-                else -> tester.jacksonColumn.extract<Int>(".logins")
+                else                 -> tester.jacksonColumn.extract<Int>(".logins")
             }
             val tooManyLogins = logins greaterEq 1000
 
@@ -338,7 +338,7 @@ class JacksonColumnTest: R2dbcExposedTestBase() {
             if (testDialect is OracleDialect || testDialect is SQLServerDialect) {
                 val filterPath = when (testDialect) {
                     is OracleDialect -> "?(@.logins == $maximumLogins)"
-                    else -> ".logins ? (@ == $maximumLogins)"
+                    else             -> ".logins ? (@ == $maximumLogins)"
                 }
                 val hasMaxLogins = tester.jacksonColumn.exists(filterPath)
                 val usersWithMaxLogins: Query = tester
@@ -348,7 +348,7 @@ class JacksonColumnTest: R2dbcExposedTestBase() {
 
                 val (jsonPath, optionalArg) = when (testDialect) {
                     is OracleDialect -> "?(@.user.team == \$team)" to "PASSING '$teamA' AS \"team\""
-                    else -> ".user.team ? (@ == \$team)" to "{\"team\":\"$teamA\"}"
+                    else             -> ".user.team ? (@ == \$team)" to "{\"team\":\"$teamA\"}"
                 }
                 val isOnTeamA = tester.jacksonColumn.exists(jsonPath, optional = optionalArg)
                 val usersOnTeamA: Query = tester
@@ -386,7 +386,7 @@ class JacksonColumnTest: R2dbcExposedTestBase() {
         withJacksonArrays(testDB) { tester, singleId, tripleId ->
             val path1 = when (currentDialectTest) {
                 is PostgreSQLDialect -> arrayOf("users", "0", "team")
-                else -> arrayOf(".users[0].team")
+                else                 -> arrayOf(".users[0].team")
             }
             val firstIsOnTeamA: Op<Boolean> = tester.groups.extract<String>(*path1) eq "Team A"
             tester
@@ -398,7 +398,7 @@ class JacksonColumnTest: R2dbcExposedTestBase() {
             val toScalar = testDB != TestDB.MYSQL_V5
             val path2 = when (currentDialectTest) {
                 is PostgreSQLDialect -> "0"
-                else -> "[0]"
+                else                 -> "[0]"
             }
             val firstNumber: Extract<Int> = tester.numbers.extract<Int>(path2, toScalar = toScalar)
             tester

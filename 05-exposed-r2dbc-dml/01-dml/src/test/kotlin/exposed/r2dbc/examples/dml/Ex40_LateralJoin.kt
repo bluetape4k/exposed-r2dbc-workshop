@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.dml
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
@@ -45,7 +45,7 @@ import org.junit.jupiter.params.provider.MethodSource
  *
  * 참고: [Lateral 기능](https://www.perplexity.ai/search/sql-joinsi-lateral-yi-gineunge-dEWB59TDTqOYIIW0bB86pQ)
  */
-class Ex40_LateralJoin: R2dbcExposedTestBase() {
+class Ex40_LateralJoin: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

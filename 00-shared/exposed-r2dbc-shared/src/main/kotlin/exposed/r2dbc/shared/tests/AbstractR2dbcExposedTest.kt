@@ -5,7 +5,7 @@ import io.bluetape4k.logging.KLogging
 import org.jetbrains.exposed.v1.core.Schema
 import java.util.*
 
-abstract class R2dbcExposedTestBase {
+abstract class AbstractR2dbcExposedTest {
 
     init {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"))

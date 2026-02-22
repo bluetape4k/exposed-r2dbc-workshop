@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.transactions
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withDb
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -21,7 +21,7 @@ import org.junit.jupiter.params.provider.MethodSource
 /**
  * Connection의 Transaction Isolation Level을 설정하는 방법에 대한 테스트 코드입니다.
  */
-class Ex01_TransactionIsolation: R2dbcExposedTestBase() {
+class Ex01_TransactionIsolation: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

@@ -1,12 +1,12 @@
 package exposed.r2dbc.examples.java.time
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.constraintNamePart
 import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.inProperCase
-import exposed.r2dbc.shared.tests.insertAndWait
+import exposed.r2dbc.shared.tests.insertAndSuspending
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.exposed.r2dbc.sorted
 import io.bluetape4k.junit5.coroutines.runSuspendIO
@@ -87,7 +87,7 @@ private val dbTimestampNow: CustomFunction<OffsetDateTime>
 /**
  * Java Time 형식의 컬럼에 기본값 설정과 관련된 테스트
  */
-class Ex02_Defaults: R2dbcExposedTestBase() {
+class Ex02_Defaults: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -291,7 +291,7 @@ class Ex02_Defaults: R2dbcExposedTestBase() {
         fun Expression<*>.itOrNull() = when {
             currentDialectTest.isAllowedAsColumnDefault(this) ->
                 "DEFAULT ${currentDialectTest.dataTypeProvider.processForDefaultValue(this)} NOT NULL"
-            else -> "NULL"
+            else                                              -> "NULL"
         }
 
         withTables(testDB, testTable) {
@@ -542,7 +542,7 @@ class Ex02_Defaults: R2dbcExposedTestBase() {
         fun Expression<*>.itOrNull() = when {
             currentDialectTest.isAllowedAsColumnDefault(this) ->
                 "DEFAULT ${currentDialectTest.dataTypeProvider.processForDefaultValue(this)} NOT NULL"
-            else -> "NULL"
+            else                                              -> "NULL"
         }
 
         withTables(testDB, testTable) {
@@ -612,13 +612,13 @@ class Ex02_Defaults: R2dbcExposedTestBase() {
         withTables(testDB, testDate) {
 
             repeat(2) {
-                testDate.insertAndWait(duration)
+                testDate.insertAndSuspending(duration)
             }
 
             delay(duration)
 
             repeat(2) {
-                testDate.insertAndWait(duration)
+                testDate.insertAndSuspending(duration)
             }
 
             val sortedEntries: List<LocalDateTime> = testDate.selectAll().map { it[testDate.time] }.sorted()

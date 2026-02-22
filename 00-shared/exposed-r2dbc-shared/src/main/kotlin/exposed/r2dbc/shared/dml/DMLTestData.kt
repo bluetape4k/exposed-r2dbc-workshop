@@ -1,10 +1,9 @@
 package exposed.r2dbc.shared.dml
 
 import exposed.r2dbc.shared.dml.DMLTestData.Users.Flags
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.coroutines.flow.extensions.toFastList
 import io.bluetape4k.idgenerators.uuid.TimebasedUuid
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -128,7 +127,7 @@ object DMLTestData {
 
 
     @Suppress("UnusedReceiverParameter")
-    suspend fun R2dbcExposedTestBase.withCitiesAndUsers(
+    suspend fun AbstractR2dbcExposedTest.withCitiesAndUsers(
         testDB: TestDB,
         statement: suspend R2dbcTransaction.(
             cities: Cities,
@@ -217,7 +216,7 @@ object DMLTestData {
     }
 
     @Suppress("UnusedReceiverParameter")
-    suspend fun R2dbcExposedTestBase.withSales(
+    suspend fun AbstractR2dbcExposedTest.withSales(
         dialect: TestDB,
         statement: suspend R2dbcTransaction.(testDB: TestDB, sales: Sales) -> Unit,
     ) {
@@ -247,7 +246,7 @@ object DMLTestData {
     }
 
     @Suppress("UnusedReceiverParameter")
-    suspend fun R2dbcExposedTestBase.withSomeAmounts(
+    suspend fun AbstractR2dbcExposedTest.withSomeAmounts(
         testDB: TestDB,
         statement: suspend R2dbcTransaction.(testDB: TestDB, someAmounts: SomeAmounts) -> Unit,
     ) {
@@ -268,7 +267,7 @@ object DMLTestData {
     }
 
     @Suppress("UnusedReceiverParameter")
-    suspend fun R2dbcExposedTestBase.withSalesAndSomeAmounts(
+    suspend fun AbstractR2dbcExposedTest.withSalesAndSomeAmounts(
         testDB: TestDB,
         statement: suspend R2dbcTransaction.(
             testDB: TestDB,

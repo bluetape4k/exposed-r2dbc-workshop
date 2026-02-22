@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.dml
 
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -32,7 +32,7 @@ val TEST_DEFAULT_DATE_TIME: LocalDateTime = LocalDateTime.of(
  *
  * 참고: [SQL MERGE INTO 설명](https://www.perplexity.ai/search/sql-merge-into-gumune-daehae-s-y_xKDfwFR8ewN6qIY9jqJw)
  */
-abstract class Ex14_MergeBase: R2dbcExposedTestBase() {
+abstract class Ex14_MergeBase: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

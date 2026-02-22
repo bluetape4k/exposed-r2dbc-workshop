@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.transactions
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.inProperCase
 import exposed.r2dbc.shared.tests.withTables
@@ -40,7 +40,7 @@ import org.junit.jupiter.params.provider.MethodSource
  * )
  * ```
  */
-class Ex03_Parameterization: R2dbcExposedTestBase() {
+class Ex03_Parameterization: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -258,7 +258,7 @@ class Ex03_Parameterization: R2dbcExposedTestBase() {
     private fun urlExtra(testDB: TestDB): String {
         return when (testDB) {
             in TestDB.ALL_MYSQL -> "&allowMultiQueries=true"
-            else -> ""
+            else                -> ""
         }
     }
 }

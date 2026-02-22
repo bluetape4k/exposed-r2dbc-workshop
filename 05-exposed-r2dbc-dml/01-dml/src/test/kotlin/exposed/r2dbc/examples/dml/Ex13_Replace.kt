@@ -3,7 +3,7 @@ package exposed.r2dbc.examples.dml
 import exposed.r2dbc.shared.dml.DMLTestData
 import exposed.r2dbc.shared.dml.DMLTestData.toCityNameList
 import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.idgenerators.uuid.TimebasedUuid.Epoch
@@ -36,7 +36,7 @@ import org.junit.jupiter.params.provider.MethodSource
  *
  * **`REPLACE INTO` 문은 MySQL, MariaDB 에서만 지원한다.**
  */
-class Ex13_Replace: R2dbcExposedTestBase() {
+class Ex13_Replace: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

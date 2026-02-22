@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.crypt
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -31,7 +31,7 @@ import org.jetbrains.exposed.v1.r2dbc.update
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-class Ex01_EncryptedColumn: R2dbcExposedTestBase() {
+class Ex01_EncryptedColumn: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

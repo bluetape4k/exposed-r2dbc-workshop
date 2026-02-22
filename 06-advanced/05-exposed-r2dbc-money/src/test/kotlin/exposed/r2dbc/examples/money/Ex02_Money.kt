@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.money
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
@@ -32,7 +32,7 @@ import java.math.BigDecimal
 import javax.money.CurrencyUnit
 import javax.money.MonetaryAmount
 
-class Ex02_Money: R2dbcExposedTestBase() {
+class Ex02_Money: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

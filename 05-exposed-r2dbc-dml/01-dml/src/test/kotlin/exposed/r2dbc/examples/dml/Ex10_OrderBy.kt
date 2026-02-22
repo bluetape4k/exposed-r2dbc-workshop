@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.dml
 
 import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.withTables
@@ -28,7 +28,7 @@ import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-class Ex10_OrderBy: R2dbcExposedTestBase() {
+class Ex10_OrderBy: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -61,13 +61,13 @@ class Ex10_OrderBy: R2dbcExposedTestBase() {
      */
     private fun isNullFirst(): Boolean = when (currentDialectTest) {
         is OracleDialect, is PostgreSQLDialect -> true
-        is H2Dialect ->
+        is H2Dialect                           ->
             currentDialectTest.h2Mode in listOf(
                 H2Dialect.H2CompatibilityMode.PostgreSQL,
                 H2Dialect.H2CompatibilityMode.Oracle
             )
 
-        else         -> false
+        else                                   -> false
     }
 
     /**

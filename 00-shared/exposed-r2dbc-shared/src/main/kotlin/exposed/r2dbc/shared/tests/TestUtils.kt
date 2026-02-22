@@ -29,8 +29,8 @@ fun <T> Column<T>.constraintNamePart() = (currentDialectTest as? SQLServerDialec
     " CONSTRAINT DF_${table.tableName}_$name"
 } ?: ""
 
-suspend fun Table.insertAndWait(duration: Long) {
+suspend fun Table.insertAndSuspending(duration: Long) {
     this.insert { }
-    // TransactionManager.current().commit()
+    TransactionManager.current().commit()
     delay(duration)
 }

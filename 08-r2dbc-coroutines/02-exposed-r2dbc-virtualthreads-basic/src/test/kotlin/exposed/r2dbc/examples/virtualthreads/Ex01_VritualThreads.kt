@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.virtualthreads
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.collections.intRangeOf
@@ -38,10 +38,9 @@ import org.junit.jupiter.api.condition.JRE
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.concurrent.CopyOnWriteArrayList
-import kotlin.collections.flatten
 
 @EnabledOnJre(JRE.JAVA_21)
-class Ex01_VritualThreads: R2dbcExposedTestBase() {
+class Ex01_VritualThreads: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -110,7 +109,7 @@ class Ex01_VritualThreads: R2dbcExposedTestBase() {
             }.awaitAll()
 
             delay(10)
-            
+
             // 중첩 트랜잭션에서 virtual threads 를 이용하여 동시에 여러 작업을 수행한다.
             val vtScope2 = CoroutineScope(Dispatchers.VT)
             val rows = List(recordCount) { index ->

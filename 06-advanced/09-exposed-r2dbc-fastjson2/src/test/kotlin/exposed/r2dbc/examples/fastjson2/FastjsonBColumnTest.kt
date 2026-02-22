@@ -4,7 +4,7 @@ import exposed.r2dbc.examples.fastjson2.FastjsonSchema.DataHolder
 import exposed.r2dbc.examples.fastjson2.FastjsonSchema.User
 import exposed.r2dbc.examples.fastjson2.FastjsonSchema.withFastjsonBArrays
 import exposed.r2dbc.examples.fastjson2.FastjsonSchema.withFastjsonBTable
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
@@ -56,7 +56,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 @Suppress("DEPRECATION")
-class FastjsonBColumnTest: R2dbcExposedTestBase() {
+class FastjsonBColumnTest: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -143,7 +143,7 @@ class FastjsonBColumnTest: R2dbcExposedTestBase() {
 
             val path = when (currentDialectTest) {
                 is PostgreSQLDialect -> arrayOf("user", "name")
-                else -> arrayOf(".user.name")
+                else                 -> arrayOf(".user.name")
             }
             val username: Extract<String> = tester.fastjsonBColumn.extract<String>(*path)
             val row3: ResultRow? = tester.select(username).singleOrNull()
@@ -178,7 +178,7 @@ class FastjsonBColumnTest: R2dbcExposedTestBase() {
             val logins = when (currentDialectTest) {
                 is PostgreSQLDialect ->
                     tester.fastjsonBColumn.extract<Int>("logins").castTo(IntegerColumnType())
-                else ->
+                else                 ->
                     tester.fastjsonBColumn.extract<Int>(".logins")
             }
             val tooManyLogins = logins greaterEq 1000
@@ -321,7 +321,7 @@ class FastjsonBColumnTest: R2dbcExposedTestBase() {
         withFastjsonBArrays(testDB) { tester, singleId, tripleId ->
             val path1 = when (currentDialectTest) {
                 is PostgreSQLDialect -> arrayOf("users", "0", "team")
-                else -> arrayOf(".users[0].team")
+                else                 -> arrayOf(".users[0].team")
             }
             val firstIsOnTeamA = tester.groups.extract<String>(*path1) eq "Team A"
             tester.selectAll().where { firstIsOnTeamA }.single()[tester.id] shouldBeEqualTo singleId
@@ -330,7 +330,7 @@ class FastjsonBColumnTest: R2dbcExposedTestBase() {
             val toScalar = testDB != TestDB.MYSQL_V5
             val path2 = when (currentDialectTest) {
                 is PostgreSQLDialect -> "0"
-                else -> "[0]"
+                else                 -> "[0]"
             }
             val firstNumber = tester.numbers.extract<Int>(path2, toScalar = toScalar)
             tester

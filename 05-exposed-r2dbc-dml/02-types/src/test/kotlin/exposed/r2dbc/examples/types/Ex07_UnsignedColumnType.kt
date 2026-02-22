@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.types
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.assertFailAndRollback
 import exposed.r2dbc.shared.tests.currentDialectTest
@@ -31,7 +31,7 @@ import org.junit.jupiter.params.provider.MethodSource
 /**
  * Unsigned 수형을 가진 컬럼에 대한 예제
  */
-class Ex07_UnsignedColumnType: R2dbcExposedTestBase() {
+class Ex07_UnsignedColumnType: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -111,9 +111,9 @@ class Ex07_UnsignedColumnType: R2dbcExposedTestBase() {
     fun testUByteWithCheckConstraint(testDB: TestDB) = runTest {
         withTables(testDB, UByteTable) {
             val ddlEnding = when (currentDialectTest) {
-                is MysqlDialect -> "(ubyte TINYINT UNSIGNED NOT NULL)"
+                is MysqlDialect     -> "(ubyte TINYINT UNSIGNED NOT NULL)"
                 is SQLServerDialect -> "(ubyte TINYINT NOT NULL)"
-                else            -> "CHECK (ubyte BETWEEN 0 and ${UByte.MAX_VALUE}))"
+                else                -> "CHECK (ubyte BETWEEN 0 and ${UByte.MAX_VALUE}))"
             }
             UByteTable.ddl.single().endsWith(ddlEnding, ignoreCase = true).shouldBeTrue()
 

@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.ddl
 
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.assertFailAndRollback
 import exposed.r2dbc.shared.tests.assertTrue
@@ -75,7 +75,7 @@ import java.util.*
 /**
  * 다양한 DDL 예제
  */
-class Ex10_DDL_Examples: R2dbcExposedTestBase() {
+class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -191,7 +191,7 @@ class Ex10_DDL_Examples: R2dbcExposedTestBase() {
             val (tableName, publicName, dataName, constraintName) = keywords.map {
                 when (currentDialectTest) {
                     is MysqlDialect -> "`$it`"
-                    else -> "\"$it\""
+                    else            -> "\"$it\""
                 }
             }
 

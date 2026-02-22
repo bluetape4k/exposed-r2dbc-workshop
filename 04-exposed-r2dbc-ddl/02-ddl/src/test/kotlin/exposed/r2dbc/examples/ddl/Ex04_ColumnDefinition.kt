@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.ddl
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.exposed.r2dbc.getBoolean
@@ -29,7 +29,7 @@ import kotlin.test.assertFails
 import kotlin.test.assertFailsWith
 
 @Suppress("DEPRECATION")
-class Ex04_ColumnDefinition: R2dbcExposedTestBase() {
+class Ex04_ColumnDefinition: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.transactions
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withDb
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -23,15 +23,15 @@ import kotlin.test.DefaultAsserter.fail
  * - [org.jetbrains.exposed.sql.Transaction.queryTimeout] = 0 이면 Timeout 이 없음을 의미
  * - [org.jetbrains.exposed.sql.Transaction.queryTimeout] < 0 이면 예외가 발생
  */
-class Ex04_QueryTimeout: R2dbcExposedTestBase() {
+class Ex04_QueryTimeout: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
     private fun generateTimeoutStatement(db: TestDB, timeout: Int): String {
         return when (db) {
             in TestDB.ALL_MYSQL_MARIADB -> "SELECT SLEEP($timeout) = 0;"
-            in TestDB.ALL_POSTGRES -> "SELECT pg_sleep($timeout);"
-            else -> throw NotImplementedError()
+            in TestDB.ALL_POSTGRES      -> "SELECT pg_sleep($timeout);"
+            else                        -> throw NotImplementedError()
         }
     }
 
@@ -68,7 +68,7 @@ class Ex04_QueryTimeout: R2dbcExposedTestBase() {
                     TestDB.POSTGRESQL -> cause.cause shouldBeInstanceOf PSQLException::class
                     // PostgreSQLNG 은 취소된 statement message를 포함한 표준 [PGSQLSimpleException] 을 던집니다.
                     // TestDB.POSTGRESQLNG -> cause.cause shouldBeInstanceOf PGSQLSimpleException::class
-                    else -> cause.cause shouldBeInstanceOf R2dbcTimeoutException::class
+                    else              -> cause.cause shouldBeInstanceOf R2dbcTimeoutException::class
                 }
             }
         }
@@ -129,7 +129,7 @@ class Ex04_QueryTimeout: R2dbcExposedTestBase() {
                 when (testDB) {
                     // PostgreSQL 은 취소된 statement message를 포함한 표준 [PSQLException] 을 던집니다.
                     // Query timeout 은 0 이상의 값이어야 합니다.
-                    TestDB.POSTGRESQL -> {
+                    TestDB.POSTGRESQL     -> {
                         log.debug { "Postgres error. cause.cause: ${cause.cause?.javaClass?.name}" }
                         cause.cause shouldBeInstanceOf R2dbcTimeoutException::class
                     }
@@ -142,7 +142,7 @@ class Ex04_QueryTimeout: R2dbcExposedTestBase() {
 
                     // SqlServer throws a regular SQLServerException with a minus timeout value
                     // TestDB.SQLSERVER -> assertTrue(cause.cause is SQLServerException)
-                    else -> throw NotImplementedError()
+                    else                  -> throw NotImplementedError()
                 }
             }
         }

@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.types
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
@@ -53,7 +53,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 @Suppress("DEPRECATION")
-class Ex05_ArrayColumnType: R2dbcExposedTestBase() {
+class Ex05_ArrayColumnType: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -140,7 +140,7 @@ class Ex05_ArrayColumnType: R2dbcExposedTestBase() {
             result2[ArrayTestTable.strings].shouldBeEmpty()
             result2[ArrayTestTable.doubles]?.shouldBeEmpty()
 
-            Assumptions.assumeTrue { testDB == TestDB.POSTGRESQL } 
+            Assumptions.assumeTrue { testDB == TestDB.POSTGRESQL }
             val id3 = ArrayTestTable.insertAndGetId {
                 it[ArrayTestTable.numbers] = listOf(5)
                 // FIXME: H2, H2_PSQL 은 왜 에러가 날까? JDBC 에서는 잘 되는데????

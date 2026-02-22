@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.ddl
 
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.Containers
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
@@ -32,7 +32,7 @@ import org.junit.jupiter.params.provider.MethodSource
  * JPA의  `@Enumerated(EnumType.STRING)` 과 같은 방식으로 사용하시던 분들은
  * Exposed의 column transformation 기능을 사용하는 것을 추천합니다.
  */
-class Ex07_CustomEnumeration: R2dbcExposedTestBase() {
+class Ex07_CustomEnumeration: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -85,7 +85,7 @@ class Ex07_CustomEnumeration: R2dbcExposedTestBase() {
                 toDb = { value ->
                     when (currentDialect) {
                         is PostgreSQLDialect -> value
-                        else -> value.name
+                        else                 -> value.name
                     }
                 }
             )
@@ -132,8 +132,8 @@ class Ex07_CustomEnumeration: R2dbcExposedTestBase() {
         withDb(testDB) {
             val sqlType = when (currentDialect) {
                 is PostgreSQLDialect -> "StatusEnum"
-                is MysqlDialect -> "ENUM('ACTIVE', 'INACTIVE')"
-                else -> error("Unsupported dialect: $currentDialect")
+                is MysqlDialect      -> "ENUM('ACTIVE', 'INACTIVE')"
+                else                 -> error("Unsupported dialect: $currentDialect")
             }
             try {
                 if (currentDialect is PostgreSQLDialect) {
@@ -197,8 +197,8 @@ class Ex07_CustomEnumeration: R2dbcExposedTestBase() {
         withDb(testDB) {
             val sqlType = when (currentDialect) {
                 is PostgreSQLDialect -> "StatusEnum"
-                is MysqlDialect -> "ENUM('ACTIVE', 'INACTIVE')"
-                else -> error("Unsupported case. dialect: $currentDialect")
+                is MysqlDialect      -> "ENUM('ACTIVE', 'INACTIVE')"
+                else                 -> error("Unsupported case. dialect: $currentDialect")
             }
 
             try {

@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.fastjson2
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.exposed.core.fastjson2.fastjson
@@ -66,7 +66,7 @@ object FastjsonSchema {
 
     data class UserGroup(val users: List<User>)
 
-    suspend fun R2dbcExposedTestBase.withFastjsonTable(
+    suspend fun AbstractR2dbcExposedTest.withFastjsonTable(
         testDB: TestDB,
         statement: suspend R2dbcTransaction.(tester: FastjsonTable, user1: User, data1: DataHolder) -> Unit,
     ) {
@@ -84,7 +84,7 @@ object FastjsonSchema {
         }
     }
 
-    suspend fun R2dbcExposedTestBase.withFastjsonBTable(
+    suspend fun AbstractR2dbcExposedTest.withFastjsonBTable(
         testDB: TestDB,
         statement: suspend R2dbcTransaction.(tester: FastjsonBTable, user1: User, data1: DataHolder) -> Unit,
     ) {
@@ -102,7 +102,7 @@ object FastjsonSchema {
         }
     }
 
-    suspend fun R2dbcExposedTestBase.withFastjsonArrays(
+    suspend fun AbstractR2dbcExposedTest.withFastjsonArrays(
         testDB: TestDB,
         statement: suspend R2dbcTransaction.(
             tester: FastjsonArrayTable,
@@ -128,7 +128,7 @@ object FastjsonSchema {
         }
     }
 
-    suspend fun R2dbcExposedTestBase.withFastjsonBArrays(
+    suspend fun AbstractR2dbcExposedTest.withFastjsonBArrays(
         testDB: TestDB,
         statement: suspend R2dbcTransaction.(
             tester: FastjsonBArrayTable,

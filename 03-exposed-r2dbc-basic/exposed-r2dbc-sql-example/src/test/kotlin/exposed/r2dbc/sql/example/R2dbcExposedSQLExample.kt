@@ -1,6 +1,6 @@
 package exposed.r2dbc.sql.example
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.sql.example.Schema.CityTable
 import exposed.r2dbc.sql.example.Schema.UserTable
@@ -24,7 +24,7 @@ import org.jetbrains.exposed.v1.r2dbc.update
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-class R2dbcExposedSQLExample: R2dbcExposedTestBase() {
+class R2dbcExposedSQLExample: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -104,7 +104,7 @@ class R2dbcExposedSQLExample: R2dbcExposedTestBase() {
     fun `manual inner join`(testDB: TestDB) = runSuspendIO {
         withCityUsers(testDB) {
             var userCount = 0
-            
+
             UserTable
                 .innerJoin(CityTable)
                 .select(UserTable.name, CityTable.name)

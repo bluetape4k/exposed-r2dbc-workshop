@@ -2,7 +2,7 @@
 
 package exposed.r2dbc.examples.kotlin.datetime
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
@@ -96,7 +96,7 @@ import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-class Ex01_KotlinDateTime: R2dbcExposedTestBase() {
+class Ex01_KotlinDateTime: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -415,7 +415,7 @@ class Ex01_KotlinDateTime: R2dbcExposedTestBase() {
 
             val dateTime = when (testDB) {
                 in requiresExplicitDTCast -> Cast(dateTimeParam(mayTheFourthDT), KotlinLocalDateTimeColumnType())
-                else -> dateTimeParam(mayTheFourthDT)
+                else                      -> dateTimeParam(mayTheFourthDT)
             }
             val createdMayFourth = tester.selectAll()
                 .where { tester.created eq dateTime }
@@ -725,7 +725,7 @@ class Ex01_KotlinDateTime: R2dbcExposedTestBase() {
                     TestDB.MYSQL_V8, // TestDB.SQLSERVER,
                         // in TestDB.ALL_ORACLE_LIKE,
                     in TestDB.ALL_POSTGRES_LIKE,
-                        -> OffsetDateTime.parse("2023-05-04T05:04:01.123123+00:00")
+                         -> OffsetDateTime.parse("2023-05-04T05:04:01.123123+00:00")
                     else -> now
                 }.toLocalTime().toKotlinLocalTime()
 
@@ -946,21 +946,21 @@ class Ex01_KotlinDateTime: R2dbcExposedTestBase() {
 infix fun <T> T.shouldDateTimeEqualTo(d2: T?) {
     val d1 = this
     when {
-        d1 == null && d2 == null                   -> return
-        d1 == null                                 -> error("d1 is null while d2 is not")
-        d2 == null                                 -> error("d1 is not null while d2 is null")
-        d1 is LocalTime && d2 is LocalTime         -> {
+        d1 == null && d2 == null                     -> return
+        d1 == null                                   -> error("d1 is null while d2 is not")
+        d2 == null                                   -> error("d1 is not null while d2 is null")
+        d1 is LocalTime && d2 is LocalTime           -> {
             d1.toSecondOfDay() shouldBeEqualTo d2.toSecondOfDay()
             if (d2.nanosecond != 0) {
                 d1.nanosecond shouldFractionalPartEqualTo d2.nanosecond
             }
         }
-        d1 is LocalDateTime && d2 is LocalDateTime -> {
+        d1 is LocalDateTime && d2 is LocalDateTime   -> {
             d1.toJavaLocalDateTime().toEpochSecond(ZoneOffset.UTC) shouldBeEqualTo
                     d2.toJavaLocalDateTime().toEpochSecond(ZoneOffset.UTC)
             d1.nanosecond shouldFractionalPartEqualTo d2.nanosecond
         }
-        d1 is Instant && d2 is Instant             -> {
+        d1 is Instant && d2 is Instant               -> {
             d1.epochSeconds shouldBeEqualTo d2.epochSeconds
             d1.nanosecondsOfSecond shouldFractionalPartEqualTo d2.nanosecondsOfSecond
         }
@@ -969,7 +969,7 @@ infix fun <T> T.shouldDateTimeEqualTo(d2: T?) {
                     d2.toLocalDateTime().toKotlinLocalDateTime()
             d1.offset shouldBeEqualTo d2.offset
         }
-        else                                       -> d1 shouldBeEqualTo d2
+        else                                         -> d1 shouldBeEqualTo d2
     }
 }
 
@@ -990,7 +990,7 @@ private infix fun Int.shouldFractionalPartEqualTo(nano2: Int) {
                 null, true -> {
                     nano1.nanoRoundToMicro() shouldBeEqualTo nano2.nanoRoundToMicro()
                 }
-                else -> {} // don't compare fractional part
+                else       -> {} // don't compare fractional part
             }
         }
         // milliseconds

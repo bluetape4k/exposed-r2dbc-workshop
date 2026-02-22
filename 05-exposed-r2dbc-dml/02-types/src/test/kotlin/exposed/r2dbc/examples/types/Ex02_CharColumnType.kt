@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.types
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-class Ex02_CharColumnType: R2dbcExposedTestBase() {
+class Ex02_CharColumnType: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -80,7 +80,7 @@ class Ex02_CharColumnType: R2dbcExposedTestBase() {
          */
         val collateOption = when (testDB) {
             in TestDB.ALL_POSTGRES -> "C"
-            else -> "utf8mb4_bin"
+            else                   -> "utf8mb4_bin"
         }
         val tester = object: Table("tester") {
             val letter = char("letter", 1, collate = collateOption)

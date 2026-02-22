@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.dml
 
 import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.toList
@@ -29,7 +29,7 @@ import java.math.BigDecimal
 /**
  * `INSERT INTO ... SELECT ... FROM ...` 구문 예제 모음
  */
-class Ex12_InsertInto_Select: R2dbcExposedTestBase() {
+class Ex12_InsertInto_Select: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

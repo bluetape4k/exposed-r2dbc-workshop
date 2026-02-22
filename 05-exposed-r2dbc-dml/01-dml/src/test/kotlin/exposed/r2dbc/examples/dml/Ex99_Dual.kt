@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.dml
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withDb
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -22,7 +22,7 @@ import java.time.LocalDateTime
 /**
  * 더미 테이블인 "DUAL" 테이블을 이용하는 예제입니다.
  */
-class Ex99_Dual: R2dbcExposedTestBase() {
+class Ex99_Dual: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

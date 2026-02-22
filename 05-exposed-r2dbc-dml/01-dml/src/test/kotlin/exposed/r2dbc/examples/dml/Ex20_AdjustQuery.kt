@@ -2,7 +2,7 @@ package exposed.r2dbc.examples.dml
 
 import exposed.r2dbc.shared.dml.DMLTestData
 import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
@@ -35,7 +35,7 @@ import kotlin.test.assertFalse
 /**
  * 기존 Query 에 대한 변경이나 추가를 할 수 있는 `adjustSelect`, `adjustColumnSet`, `adjustWhere`, `adjustHaving` 등의 함수를 테스트한다.
  */
-class Ex20_AdjustQuery: R2dbcExposedTestBase() {
+class Ex20_AdjustQuery: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -52,7 +52,7 @@ class Ex20_AdjustQuery: R2dbcExposedTestBase() {
             when (userName) {
                 "Andrey" -> cityName shouldBeEqualTo "St. Petersburg"
                 "Sergey" -> cityName shouldBeEqualTo "Munich"
-                else -> error { "Unexpected user name: $userName" }
+                else     -> error { "Unexpected user name: $userName" }
             }
         }
     }

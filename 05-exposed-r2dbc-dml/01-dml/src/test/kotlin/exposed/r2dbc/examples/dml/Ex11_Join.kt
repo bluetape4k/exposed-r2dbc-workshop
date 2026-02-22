@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.dml
 
 import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
@@ -44,7 +44,7 @@ import org.junit.jupiter.params.provider.MethodSource
  *
  * 참조: [5 Infographics to Understand SQL Joins visually](https://datalemur.com/blog/sql-joins-infographics)
  */
-class Ex11_Join: R2dbcExposedTestBase() {
+class Ex11_Join: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -74,7 +74,7 @@ class Ex11_Join: R2dbcExposedTestBase() {
                     when (userName) {
                         "Andrey" -> cityName shouldBeEqualTo "St. Petersburg"
                         "Sergey" -> cityName shouldBeEqualTo "Munich"
-                        else -> error("Unexpected user $userName")
+                        else     -> error("Unexpected user $userName")
                     }
                 }
         }

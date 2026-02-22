@@ -4,7 +4,7 @@ import exposed.r2dbc.examples.fastjson2.FastjsonSchema.DataHolder
 import exposed.r2dbc.examples.fastjson2.FastjsonSchema.User
 import exposed.r2dbc.examples.fastjson2.FastjsonSchema.withFastjsonArrays
 import exposed.r2dbc.examples.fastjson2.FastjsonSchema.withFastjsonTable
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
@@ -58,7 +58,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 @Suppress("DEPRECATION")
-class FastjsonColumnTest: R2dbcExposedTestBase() {
+class FastjsonColumnTest: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -146,7 +146,7 @@ class FastjsonColumnTest: R2dbcExposedTestBase() {
 
             val path = when (currentDialectTest) {
                 is PostgreSQLDialect -> arrayOf("user", "name")
-                else -> arrayOf(".user.name")
+                else                 -> arrayOf(".user.name")
             }
             val username: Extract<String> = tester.fastjsonColumn.extract<String>(*path)
             val row3 = tester.select(username).singleOrNull()
@@ -180,7 +180,7 @@ class FastjsonColumnTest: R2dbcExposedTestBase() {
             // Postgres requires type casting to compare json field as integer value in DB
             val logins = when (currentDialectTest) {
                 is PostgreSQLDialect -> tester.fastjsonColumn.extract<Int>("logins").castTo(IntegerColumnType())
-                else -> tester.fastjsonColumn.extract<Int>(".logins")
+                else                 -> tester.fastjsonColumn.extract<Int>(".logins")
             }
             val tooManyLogins = logins greaterEq 1000
 
@@ -315,7 +315,7 @@ class FastjsonColumnTest: R2dbcExposedTestBase() {
             if (testDialect is OracleDialect || testDialect is SQLServerDialect) {
                 val filterPath = when (testDialect) {
                     is OracleDialect -> "?(@.logins == $maximumLogins)"
-                    else -> ".logins ? (@ == $maximumLogins)"
+                    else             -> ".logins ? (@ == $maximumLogins)"
                 }
                 val hasMaxLogins: Exists = tester.fastjsonColumn.exists(filterPath)
                 val usersWithMaxLogins: Query = tester.select(tester.id).where { hasMaxLogins }
@@ -323,7 +323,7 @@ class FastjsonColumnTest: R2dbcExposedTestBase() {
 
                 val (jsonPath, optionalArg) = when (testDialect) {
                     is OracleDialect -> "?(@.user.team == \$team)" to "PASSING '$teamA' AS \"team\""
-                    else -> ".user.team ? (@ == \$team)" to "{\"team\":\"$teamA\"}"
+                    else             -> ".user.team ? (@ == \$team)" to "{\"team\":\"$teamA\"}"
                 }
                 val isOnTeamA: Exists = tester.fastjsonColumn.exists(jsonPath, optional = optionalArg)
                 val usersOnTeamA: Query = tester.select(tester.id).where { isOnTeamA }
@@ -359,7 +359,7 @@ class FastjsonColumnTest: R2dbcExposedTestBase() {
         withFastjsonArrays(testDB) { tester, singleId, tripleId ->
             val path1 = when (currentDialectTest) {
                 is PostgreSQLDialect -> arrayOf("users", "0", "team")
-                else -> arrayOf(".users[0].team")
+                else                 -> arrayOf(".users[0].team")
             }
             val firstIsOnTeamA: Op<Boolean> = tester.groups.extract<String>(*path1) eq "Team A"
             tester.selectAll().where { firstIsOnTeamA }.single()[tester.id] shouldBeEqualTo singleId
@@ -368,7 +368,7 @@ class FastjsonColumnTest: R2dbcExposedTestBase() {
             val toScalar = testDB != TestDB.MYSQL_V5
             val path2 = when (currentDialectTest) {
                 is PostgreSQLDialect -> "0"
-                else -> "[0]"
+                else                 -> "[0]"
             }
             val firstNumber: Extract<Int> = tester.numbers.extract<Int>(path2, toScalar = toScalar)
             tester.select(firstNumber).map { it[firstNumber] }.toList() shouldBeEqualTo listOf(100, 3)

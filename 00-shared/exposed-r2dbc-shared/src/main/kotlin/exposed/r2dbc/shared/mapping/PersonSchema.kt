@@ -1,6 +1,6 @@
 package exposed.r2dbc.shared.mapping
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import org.jetbrains.exposed.v1.core.Table
@@ -120,7 +120,7 @@ object PersonSchema {
     ): Serializable
 
     @Suppress("UnusedReceiverParameter")
-    suspend fun R2dbcExposedTestBase.withPersons(
+    suspend fun AbstractR2dbcExposedTest.withPersons(
         testDB: TestDB,
         block: suspend R2dbcTransaction.(PersonTable, AddressTable) -> Unit,
     ) {
@@ -130,7 +130,7 @@ object PersonSchema {
     }
 
     @Suppress("UnusedReceiverParameter")
-    suspend fun R2dbcExposedTestBase.withPersonsAndAddress(
+    suspend fun AbstractR2dbcExposedTest.withPersonsAndAddress(
         testDB: TestDB,
         statement: suspend R2dbcTransaction.(
             persons: PersonSchema.PersonTable,

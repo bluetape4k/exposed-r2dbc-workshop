@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.java.time
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.currentDialectTest
 import exposed.r2dbc.shared.tests.expectException
@@ -77,7 +77,7 @@ import java.util.*
 /**
  * Exposed에서 제공하는 Java Time 수형을 사용하는 테스트
  */
-class Ex01_JavaTime: R2dbcExposedTestBase() {
+class Ex01_JavaTime: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
@@ -400,7 +400,7 @@ class Ex01_JavaTime: R2dbcExposedTestBase() {
             val requiresExplicitDTCast = listOf(TestDB.H2_PSQL)
             val dateTime = when (testDB) {
                 in requiresExplicitDTCast -> Cast(dateTimeParam(mayTheFourth), JavaLocalDateTimeColumnType())
-                else -> dateTimeParam(mayTheFourth)
+                else                      -> dateTimeParam(mayTheFourth)
             }
 
             /**
@@ -483,7 +483,7 @@ class Ex01_JavaTime: R2dbcExposedTestBase() {
                 is PostgreSQLDialect -> tester.modified.extract<String>("${prefix}timestamp")
                     .castTo(JavaLocalDateTimeColumnType())
 
-                else -> tester.modified.extract<String>("${prefix}timestamp")
+                else                 -> tester.modified.extract<String>("${prefix}timestamp")
             }
             val modifiedBeforeCreation = tester.selectAll()
                 .where { dateModified less tester.created }
@@ -679,7 +679,7 @@ class Ex01_JavaTime: R2dbcExposedTestBase() {
                 // https://www.perplexity.ai/search/mysql-jdbc-connection-sie-loca-atDZSJ7QQsyTx6nN4OyM.g
                 TestDB.MYSQL_V8, in TestDB.ALL_POSTGRES_LIKE ->
                     OffsetDateTime.parse("2023-05-04T05:04:01.123123+00:00")  // NOTE: Microseconds 까지만 지원
-                else -> now
+                else                                         -> now
             }.toLocalTime()
 
             // SELECT TO_CHAR(tester.timestampz_column, 'HH24:MI:SS.US') FROM tester WHERE tester.id = 1
@@ -907,11 +907,11 @@ fun <T: Temporal> T?.isEqualDateTime(other: Temporal?): Boolean = try {
 infix fun <T: Temporal> T?.shouldTemporalEqualTo(d2: T?) {
     val d1 = this
     when {
-        d1 == null && d2 == null                   -> return
-        d1 == null                                 -> error("d1 is null while d2 is not on ${currentDialectTest.name}")
-        d2 == null                                 -> error("d1 is not null while d2 is null on ${currentDialectTest.name}")
+        d1 == null && d2 == null                     -> return
+        d1 == null                                   -> error("d1 is null while d2 is not on ${currentDialectTest.name}")
+        d2 == null                                   -> error("d1 is not null while d2 is null on ${currentDialectTest.name}")
 
-        d1 is LocalTime && d2 is LocalTime         -> {
+        d1 is LocalTime && d2 is LocalTime           -> {
             d1.toSecondOfDay() shouldBeEqualTo d2.toSecondOfDay()
             // d1 이 DB에서 읽어온 Temporal 값이어야 한다. (nanos 를 지원하는 Dialect 에서만 비교한다)
             if (d1.nano != 0) {
@@ -919,12 +919,12 @@ infix fun <T: Temporal> T?.shouldTemporalEqualTo(d2: T?) {
             }
         }
 
-        d1 is LocalDateTime && d2 is LocalDateTime -> {
+        d1 is LocalDateTime && d2 is LocalDateTime   -> {
             d1.toEpochSecond(ZoneOffset.UTC) shouldBeEqualTo d2.toEpochSecond(ZoneOffset.UTC)
             d1.nano shouldFractionalPartEqualTo d2.nano
         }
 
-        d1 is Instant && d2 is Instant             -> {
+        d1 is Instant && d2 is Instant               -> {
             d1.epochSecond shouldBeEqualTo d2.epochSecond
             d1.nano shouldFractionalPartEqualTo d2.nano
         }
@@ -934,7 +934,7 @@ infix fun <T: Temporal> T?.shouldTemporalEqualTo(d2: T?) {
             d1.offset shouldBeEqualTo d2.offset
         }
 
-        else                                       -> {
+        else                                         -> {
             d1 shouldBeEqualTo d2
         }
     }
@@ -966,7 +966,7 @@ infix fun Int.shouldFractionalPartEqualTo(nano2: Int) {
                     nano1.nanoRoundToMicro() shouldBeEqualTo nano2.nanoRoundToMicro()
                 }
 
-                else -> {} // don't compare fractional part
+                else       -> {} // don't compare fractional part
             }
 
         // milliseconds

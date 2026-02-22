@@ -1,6 +1,6 @@
 package exposed.r2dbc.examples.custom.columns.serialization
 
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.exposed.core.serializable.binarySerializedBinary
@@ -17,7 +17,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.io.Serializable
 
-class BinarySerializedBinaryColumnTypeTest: R2dbcExposedTestBase() {
+class BinarySerializedBinaryColumnTypeTest: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 

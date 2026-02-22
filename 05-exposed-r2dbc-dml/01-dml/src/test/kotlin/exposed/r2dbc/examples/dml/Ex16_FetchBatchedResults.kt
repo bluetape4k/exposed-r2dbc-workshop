@@ -4,7 +4,7 @@ import exposed.r2dbc.shared.dml.DMLTestData
 import exposed.r2dbc.shared.dml.DMLTestData.toCityNameList
 import exposed.r2dbc.shared.dml.DMLTestData.toCityNames
 import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
-import exposed.r2dbc.shared.tests.R2dbcExposedTestBase
+import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
@@ -40,7 +40,7 @@ import java.util.*
  *
  * **단, `autoIncrement` 컬럼이 없는 테이블에 대해서는 사용할 수 없습니다.**
  */
-class Ex16_FetchBatchedResults: R2dbcExposedTestBase() {
+class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel() {
         private const val BATCH_SIZE = 25
