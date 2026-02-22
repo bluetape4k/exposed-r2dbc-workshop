@@ -31,7 +31,7 @@ class ExposedR2dbcConfig {
      * Java 21 가상 스레드 기반 코루틴 컨텍스트를 제공합니다.
      * 데이터베이스 I/O 작업에 최적화되어 있습니다.
      */
-    @Bean
+    @Bean(destroyMethod = "")
     fun databaseCoroutineDispatcher(): CoroutineDispatcher {
         return Dispatchers.IO // 기본적으로 IO 디스패처를 사용합니다.
         // return Executors.newVirtualThreadPerTaskExecutor().asCoroutineDispatcher()
