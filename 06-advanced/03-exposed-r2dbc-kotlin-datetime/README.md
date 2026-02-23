@@ -126,10 +126,10 @@ val result = TableWithDate.selectAll()
 
 ```bash
 # 이 모듈의 모든 테스트 실행
-./gradlew :06-advanced:03-exposed-r2dbc-kotlin-datetime:test
+./gradlew :03-exposed-r2dbc-kotlin-datetime:test
 
 # 특정 테스트 클래스 실행
-./gradlew :06-advanced:03-exposed-r2dbc-kotlin-datetime:test --tests "exposed.examples.kotlin.datetime.Ex01_KotlinDateTime"
+./gradlew :03-exposed-r2dbc-kotlin-datetime:test --tests "exposed.examples.kotlin.datetime.Ex01_KotlinDateTime"
 ```
 
 ## 참고 자료

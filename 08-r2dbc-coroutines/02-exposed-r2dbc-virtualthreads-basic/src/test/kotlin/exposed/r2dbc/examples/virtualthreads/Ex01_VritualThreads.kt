@@ -4,16 +4,18 @@ import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.collections.intRangeOf
-import io.bluetape4k.concurrent.virtualthread.VT
+import io.bluetape4k.concurrent.virtualthread.newVT
 import io.bluetape4k.exposed.r2dbc.virtualThreadTransaction
-import io.bluetape4k.junit5.coroutines.runSuspendIO
+import io.bluetape4k.junit5.coroutines.runSuspendVT
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.joinAll
@@ -37,9 +39,13 @@ import org.junit.jupiter.api.condition.EnabledOnJre
 import org.junit.jupiter.api.condition.JRE
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import java.io.Serializable
 import java.util.concurrent.CopyOnWriteArrayList
 
 @EnabledOnJre(JRE.JAVA_21)
+/**
+ * Exposed R2DBC를 가상 스레드 기반 코루틴 디스패처에서 실행하는 패턴을 검증합니다.
+ */
 class Ex01_VritualThreads: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
@@ -53,6 +59,10 @@ class Ex01_VritualThreads: AbstractR2dbcExposedTest() {
     object VTester: IntIdTable("virtualthreads_table") {
         val name = varchar("name", 50).nullable()
     }
+
+    data class VRecord(val id: Int, val name: String?): Serializable
+
+    fun ResultRow.toVRecord(): VRecord = VRecord(this[VTester.id].value, this[VTester.name])
 
     /**
      * ```sql
@@ -75,10 +85,9 @@ class Ex01_VritualThreads: AbstractR2dbcExposedTest() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `virtual threads 를 이용하여 순차 작업 수행하기`(testDB: TestDB) = runSuspendIO {
+    fun `virtual threads 를 이용하여 순차 작업 수행하기`(testDB: TestDB) = runSuspendVT {
         withTables(testDB, VTester) {
             val id = VTester.insertAndGetId { }
-            // commit()
 
             // 내부적으로 새로운 트랜잭션을 생성하여 비동기 작업을 수행한다
             getTesterById(id.value)!![VTester.id].value shouldBeEqualTo id.value
@@ -90,33 +99,37 @@ class Ex01_VritualThreads: AbstractR2dbcExposedTest() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `중첩된 virtual thread 용 트랜잭션을 async로 실행`(testDB: TestDB) = runSuspendIO {
+    fun `중첩된 virtual thread 용 트랜잭션을 async로 실행`(testDB: TestDB) = runSuspendVT {
         Assumptions.assumeTrue { testDB !in TestDB.ALL_MARIADB_LIKE }
 
         withTables(testDB, VTester) {
             val recordCount = 5
             delay(10)
 
-            val vtScope = CoroutineScope(Dispatchers.VT)
+            // val vtScope = CoroutineScope(Dispatchers.newVT)
             List(recordCount) { index ->
-                vtScope.async {
-                    suspendTransaction {
-                        log.debug { "Task[$index] inserting ..." }
-                        // insert 를 수행하는 트랜잭션을 생성한다
-                        VTester.insert { }
+                coroutineScope {
+                    async {
+                        suspendTransaction {
+                            maxAttempts = 10
+                            log.debug { "Task[$index] inserting ..." }
+                            // insert 를 수행하는 트랜잭션을 생성한다
+                            VTester.insert { }
+                        }
                     }
                 }
             }.awaitAll()
 
-            delay(10)
-
             // 중첩 트랜잭션에서 virtual threads 를 이용하여 동시에 여러 작업을 수행한다.
-            val vtScope2 = CoroutineScope(Dispatchers.VT)
+            // val vtScope2 = CoroutineScope(Dispatchers.newVT)
             val rows = List(recordCount) { index ->
-                vtScope2.async {
-                    suspendTransaction {
-                        log.debug { "Task[$index] selecting ..." }
-                        VTester.selectAll().toList(CopyOnWriteArrayList())
+                coroutineScope {
+                    async {
+                        inTopLevelSuspendTransaction {
+                            maxAttempts = 10
+                            log.debug { "Task[$index] selecting ..." }
+                            VTester.selectAll().map { it.toVRecord() }.toList()
+                        }
                     }
                 }
             }.awaitAll().flatten()
@@ -129,12 +142,12 @@ class Ex01_VritualThreads: AbstractR2dbcExposedTest() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `다수의 비동기 작업을 수행 후 대기`(testDB: TestDB) = runSuspendIO {
+    fun `다수의 비동기 작업을 수행 후 대기`(testDB: TestDB) = runSuspendVT {
         withTables(testDB, VTester) {
             val recordCount = 10
             val results = CopyOnWriteArrayList<Int>()
 
-            val vtScope = CoroutineScope(Dispatchers.VT)
+            val vtScope = CoroutineScope(Dispatchers.newVT)
             List(recordCount) { index ->
                 vtScope.launch {
                     inTopLevelSuspendTransaction(
@@ -153,6 +166,22 @@ class Ex01_VritualThreads: AbstractR2dbcExposedTest() {
             results.sorted() shouldBeEqualTo intRangeOf(1, recordCount)
             results.count() shouldBeEqualTo recordCount
             VTester.selectAll().count() shouldBeEqualTo recordCount.toLong()
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource(ENABLE_DIALECTS_METHOD)
+    fun `virtual threads 환경에서 조건 조회`(testDB: TestDB) = runSuspendVT {
+        withTables(testDB, VTester) {
+            listOf("alpha", "beta", "gamma").forEach { name ->
+                VTester.insert { it[VTester.name] = name }
+            }
+
+            val row = VTester.selectAll()
+                .where { VTester.name eq "beta" }
+                .singleOrNull()
+
+            row?.getOrNull(VTester.name) shouldBeEqualTo "beta"
         }
     }
 }

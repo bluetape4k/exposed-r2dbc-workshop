@@ -190,17 +190,17 @@ fun r2dbcDatabase(
 ### 기본 실행 (H2 인메모리)
 
 ```bash
-./gradlew :09-spring:05-exposed-r2dbc-repository-coroutines:bootRun
+./gradlew :05-exposed-r2dbc-repository-coroutines:bootRun
 ```
 
 ### Profile 지정 실행
 
 ```bash
 # PostgreSQL (Testcontainers 자동 실행)
-./gradlew :09-spring:05-exposed-r2dbc-repository-coroutines:bootRun --args='--spring.profiles.active=postgres'
+./gradlew :05-exposed-r2dbc-repository-coroutines:bootRun --args='--spring.profiles.active=postgres'
 
 # MySQL (Testcontainers 자동 실행)
-./gradlew :09-spring:05-exposed-r2dbc-repository-coroutines:bootRun --args='--spring.profiles.active=mysql'
+./gradlew :05-exposed-r2dbc-repository-coroutines:bootRun --args='--spring.profiles.active=mysql'
 ```
 
 ### Swagger UI 접속
@@ -210,7 +210,7 @@ fun r2dbcDatabase(
 ## 테스트
 
 ```bash
-./gradlew :09-spring:05-exposed-r2dbc-repository-coroutines:test
+./gradlew :05-exposed-r2dbc-repository-coroutines:test
 ```
 
 테스트는 `@ActiveProfiles("h2")`로 H2 인메모리 DB를 사용하며, `@SpringBootTest`로 전체 애플리케이션 컨텍스트를 로드합니다.

@@ -29,6 +29,16 @@ private suspend fun acquireSemaphoreSuspending(testDB: TestDB) =
         testDbSemaphores.computeIfAbsent(testDB) { Semaphore(1, true) }.acquire()
     }
 
+/**
+ * 지정한 [TestDB]에 대해 코루틴 트랜잭션 컨텍스트를 열고 [statement]를 실행합니다.
+ *
+ * 테스트 DB별로 세마포어를 사용해 동시 접근을 직렬화하고, 최초 실행 시 연결 초기화 및
+ * JVM 종료 훅 등록을 수행합니다.
+ *
+ * @param testDB 테스트 대상 DB 정보
+ * @param configure 데이터베이스 구성 커스터마이징
+ * @param statement 트랜잭션 내부에서 실행할 테스트 코드
+ */
 suspend fun withDb(
     testDB: TestDB,
     configure: (DatabaseConfig.Builder.() -> Unit)? = {},

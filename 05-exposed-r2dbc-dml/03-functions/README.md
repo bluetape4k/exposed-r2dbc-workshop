@@ -115,10 +115,10 @@ sales.select(sales.product, sales.amount, rowNum)
 
 ```bash
 # 전체 Functions 테스트 실행
-./gradlew :05-exposed-r2dbc-dml:03-functions:test
+./gradlew :03-functions:test
 
 # 특정 테스트 클래스 실행
-./gradlew :05-exposed-r2dbc-dml:03-functions:test --tests "exposed.r2dbc.examples.functions.Ex05_WindowFunction"
+./gradlew :03-functions:test --tests "exposed.r2dbc.examples.functions.Ex05_WindowFunction"
 ```
 
 ## Further Reading

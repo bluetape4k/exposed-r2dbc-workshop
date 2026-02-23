@@ -92,7 +92,7 @@ class UserRepository(private val database: R2dbcDatabase) {
 
 ```bash
 # 이 모듈의 모든 테스트 실행
-./gradlew :08-r2dbc-coroutines:02-exposed-r2dbc-virtualthreads-basic:test
+./gradlew :02-exposed-r2dbc-virtualthreads-basic:test
 ```
 
 ## 참고 자료

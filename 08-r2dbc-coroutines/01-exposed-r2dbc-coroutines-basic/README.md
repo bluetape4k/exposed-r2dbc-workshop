@@ -122,14 +122,29 @@ suspend fun safeOperation(): Result<UserRecord> = runCatching {
 }
 ```
 
+## 예제 테스트 구성
+
+이 모듈은 코루틴 트랜잭션의 핵심 패턴을 `ParameterizedTest` 기반으로 멀티 DB 환경에서 검증합니다.
+
+- `Ex01_Coroutines`: 순차/병렬 트랜잭션, 중첩 트랜잭션, 비동기 작업 조합
+- `Ex02_CoroutinesFlow`: Flow 기반 결과 수집, `inTopLevelSuspendTransaction` 병렬 실행
+
+특히 `Ex02_CoroutinesFlow`는 다음 두 가지 실무 패턴을 최소 예제로 보여줍니다.
+
+1. `selectAll()` 결과를 Flow 연산(`map`, `toList`)으로 안전하게 수집
+2. 복수 코루틴에서 독립 트랜잭션을 병렬 실행한 뒤 결과를 일관성 있게 검증
+
 ## 테스트 실행
 
 ```bash
 # 이 모듈의 모든 테스트 실행
-./gradlew :08-r2dbc-coroutines:01-exposed-r2dbc-coroutines-basic:test
+./gradlew :01-exposed-r2dbc-coroutines-basic:test
 
 # 특정 테스트만 실행
-./gradlew :08-r2dbc-coroutines:01-exposed-r2dbc-coroutines-basic:test --tests "exposed.r2dbc.examples.coroutines.Ex01_Coroutines"
+./gradlew :01-exposed-r2dbc-coroutines-basic:test --tests "exposed.r2dbc.examples.coroutines.Ex01_Coroutines"
+
+# Flow 예제 테스트만 실행
+./gradlew :01-exposed-r2dbc-coroutines-basic:test --tests "exposed.r2dbc.examples.coroutines.Ex02_CoroutinesFlow"
 ```
 
 ## 참고 자료

@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+/**
+ * 영화 도메인 조회/검색/저장/삭제 API를 제공합니다.
+ */
 @RestController
 @RequestMapping("/movies")
 class MovieController(
@@ -26,12 +29,18 @@ class MovieController(
 
     companion object: KLoggingChannel()
 
+    /**
+     * 전체 영화 목록을 조회합니다.
+     */
     @GetMapping
     suspend fun getMoviews(): List<MovieRecord> =
         suspendTransaction {
             movieRepository.findAll().toList()
         }
 
+    /**
+     * ID 기준으로 영화와 배우 정보를 함께 조회합니다.
+     */
     @GetMapping("/{id}")
     suspend fun getMovieWithActors(@PathVariable id: Long): MovieWithActorRecord? =
         suspendTransaction {
@@ -49,12 +58,18 @@ class MovieController(
         }
     }
 
+    /**
+     * 영화 정보를 저장합니다.
+     */
     @PostMapping
     suspend fun saveMovie(@RequestBody movie: MovieRecord): MovieRecord =
         suspendTransaction {
             movieRepository.save(movie)
         }
 
+    /**
+     * ID로 영화를 삭제하고 영향받은 행 수를 반환합니다.
+     */
     @DeleteMapping("/{id}")
     suspend fun deleteMovieById(@PathVariable("id") id: Long): Int =
         suspendTransaction {

@@ -141,10 +141,10 @@ suspend fun <T> runWithSavepoint(
 
 ```bash
 # 전체 Transactions 테스트 실행
-./gradlew :05-exposed-r2dbc-dml:04-transactions:test
+./gradlew :04-transactions:test
 
 # 특정 테스트 클래스 실행
-./gradlew :05-exposed-r2dbc-dml:04-transactions:test --tests "exposed.r2dbc.examples.transactions.Ex05_NestedTransactions"
+./gradlew :04-transactions:test --tests "exposed.r2dbc.examples.transactions.Ex05_NestedTransactions"
 ```
 
 ## Further Reading

@@ -13,6 +13,9 @@ import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
+/**
+ * [ActorR2dbcRepository] 동작을 검증하는 통합 테스트.
+ */
 class ActorR2dbcRepositoryTest(
     @param:Autowired private val actorRepository: ActorR2dbcRepository,
 ): AbstractExposedR2dbcRepositoryTest() {
@@ -62,6 +65,14 @@ class ActorR2dbcRepositoryTest(
 
         actors.forEach {
             log.debug { "actor: $it" }
+        }
+        actors.shouldNotBeEmpty()
+    }
+
+    @Test
+    fun `search actors with empty params returns all actors`() = runSuspendIO {
+        val actors = suspendTransaction {
+            actorRepository.searchActors(emptyMap()).toList()
         }
         actors.shouldNotBeEmpty()
     }

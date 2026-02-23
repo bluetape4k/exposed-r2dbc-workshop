@@ -32,6 +32,9 @@ import org.junit.jupiter.params.provider.MethodSource
 import org.testcontainers.utility.Base58
 import java.sql.ResultSet
 
+/**
+ * [R2dbcTransaction.exec] 기반 단일/복수 SQL 실행 시나리오를 검증한다.
+ */
 class Ex02_TransactionExec: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
@@ -232,6 +235,25 @@ class Ex02_TransactionExec: AbstractR2dbcExposedTest() {
             execInBatch(statments)
 
             users.selectAll().count() shouldBeEqualTo 3
+        }
+    }
+
+    /**
+     * 단일 `SELECT` 실행 결과를 변환 함수로 읽어올 수 있는지 검증한다.
+     */
+    @ParameterizedTest
+    @MethodSource(ENABLE_DIALECTS_METHOD)
+    fun `exec projection query`(testDB: TestDB) = runTest {
+        withTables(testDB, ExecTable) {
+            ExecTable.insert { it[amount] = 10 }
+            ExecTable.insert { it[amount] = 20 }
+
+            val amounts = exec(
+                stmt = """SELECT amount FROM ${ExecTable.tableName.inProperCase()} ORDER BY id;""",
+                explicitStatementType = StatementType.SELECT
+            ) { row -> row.getInt("amount") }!!.toList()
+
+            amounts shouldBeEqualTo listOf(10, 20)
         }
     }
 }

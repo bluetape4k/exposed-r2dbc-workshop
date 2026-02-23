@@ -66,9 +66,9 @@ class CompressedBlobColumnTypeTest: AbstractR2dbcExposedTest() {
             }
 
             val row = T1.selectAll().where { T1.id eq id }.single()
-            row[T1.lzData]!!.toUtf8String() shouldBeEqualTo text
-            row[T1.snappyData]!!.toUtf8String() shouldBeEqualTo text
-            row[T1.zstdData]!!.toUtf8String() shouldBeEqualTo text
+            row[T1.lzData]?.toUtf8String() shouldBeEqualTo text
+            row[T1.snappyData]?.toUtf8String() shouldBeEqualTo text
+            row[T1.zstdData]?.toUtf8String() shouldBeEqualTo text
         }
     }
 

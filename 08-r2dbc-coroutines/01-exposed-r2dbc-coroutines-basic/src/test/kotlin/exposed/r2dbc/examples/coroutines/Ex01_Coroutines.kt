@@ -12,7 +12,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExecutorCoroutineDispatcher
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -41,6 +40,12 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.concurrent.Executors
 
+/**
+ * Exposed R2DBC를 코루틴과 함께 사용할 때의 기본 패턴을 검증하는 예제 테스트입니다.
+ *
+ * `suspendTransaction`, `inTopLevelSuspendTransaction`, 비동기 작업 조합을 중심으로
+ * 트랜잭션 경계와 동시성 동작을 확인합니다.
+ */
 class Ex01_Coroutines: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel() {
@@ -68,6 +73,12 @@ class Ex01_Coroutines: AbstractR2dbcExposedTest() {
         override val primaryKey = PrimaryKey(id)
     }
 
+    /**
+     * [Tester] 테이블에서 ID로 단일 레코드를 조회합니다.
+     *
+     * @param id 조회할 PK 값
+     * @return 레코드가 존재하면 [ResultRow], 없으면 `null`
+     */
     suspend fun getTesterById(id: Int): ResultRow? = suspendTransaction {
         Tester.selectAll().where { Tester.id eq id }.singleOrNull()
     }
@@ -77,7 +88,7 @@ class Ex01_Coroutines: AbstractR2dbcExposedTest() {
      *
      * 최상단 `withSuspendedTables` 는 xxxx-worker-2 스레드에서 실행되고,
      * 내부에서는 `singleThreadDispatcher` 를 사용하여 하나의 Thread 에서 수행됩니다.
-     * 비동기로 실행시키고 싶지만, 내부 코드가 한 스레드에서 실행되도록 하고 싶을 때 사용하는 기법입나다.
+     * 비동기로 실행시키고 싶지만, 내부 코드가 한 스레드에서 실행되도록 하고 싶을 때 사용하는 기법입니다.
      *
      * ```shell
      * 07:56:23.937 DEBUG [r-worker-2 @coroutine#30] Exposed                             :37: DROP TABLE IF EXISTS coroutines_tester
@@ -192,6 +203,7 @@ class Ex01_Coroutines: AbstractR2dbcExposedTest() {
             TesterUnique.insert {
                 it[TesterUnique.id] = originId
             }
+            commit()
             TesterUnique.selectAll().single()[TesterUnique.id] shouldBeEqualTo originId
 
             val ioScope = CoroutineScope(Dispatchers.IO)
@@ -200,7 +212,7 @@ class Ex01_Coroutines: AbstractR2dbcExposedTest() {
             val (insertResult, updateResult) = listOf(
                 // 비동기 방식으로 originId 를 가진 레코드를 삽입한다
                 ioScope.async {
-                    suspendTransaction {
+                    inTopLevelSuspendTransaction {
                         // 기존 레코드가 있기 때문에 Unique Constraint 위배 예외가 발생할 수 있다. (coroutines_tester_unique_pkey)
                         // updateJob에 의해 기본 레코드가 update 가 된 후 (id가 1 -> 99) 에 insertJob이 성공한다.
                         // 그래서 maxAttempts 를 1 이상의 충분한 값으로 설정한다.
@@ -216,7 +228,7 @@ class Ex01_Coroutines: AbstractR2dbcExposedTest() {
 
                 // 비동기 방식으로 originId를 가진 레코드를 updateId로 업데이트 한다
                 defaultScope.async {
-                    suspendTransaction {
+                    inTopLevelSuspendTransaction {
                         maxAttempts = 20
 
                         // UPDATE coroutines_tester_unique SET id=99 WHERE coroutines_tester_unique.id = 1
@@ -277,8 +289,10 @@ class Ex01_Coroutines: AbstractR2dbcExposedTest() {
             val recordCount = 10
 
             // recordCount 만큼의 Connection을 이용하여 동시에 작업합니다.
+            val scope = CoroutineScope(Dispatchers.IO)
+
             List(recordCount) {
-                GlobalScope.async(Dispatchers.IO) {
+                scope.async {
                     inTopLevelSuspendTransaction(
                         transactionIsolation = db.transactionManager.defaultIsolationLevel!!,
                         db = db
@@ -292,7 +306,7 @@ class Ex01_Coroutines: AbstractR2dbcExposedTest() {
 
             // nested transaction 에서 동시에 여러 개의 작업을 수행한다
             val tasks: List<Deferred<List<ResultRow>>> = List(recordCount) {
-                GlobalScope.async(Dispatchers.IO) {
+                scope.async {
                     inTopLevelSuspendTransaction(
                         transactionIsolation = db.transactionManager.defaultIsolationLevel!!,
                         db = db

@@ -482,6 +482,17 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
     }
 
     /**
+     * 이름 없는 테이블을 생성한 뒤 초기 건수가 0인지 확인합니다.
+     */
+    @ParameterizedTest
+    @MethodSource(ENABLE_DIALECTS_METHOD)
+    fun `unnamed table 초기 건수는 0이다`(testDB: TestDB) = runTest {
+        withTables(testDB, unnamedTable) {
+            unnamedTable.selectAll().count() shouldBeEqualTo 0L
+        }
+    }
+
+    /**
      * 인덱스 생성하기
      */
     @ParameterizedTest

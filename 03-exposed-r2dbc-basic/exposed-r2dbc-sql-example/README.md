@@ -89,7 +89,7 @@ SELECT users."name",
 
 ```bash
 # 이 모듈의 모든 테스트 실행
-./gradlew :03-exposed-r2dbc-basic:exposed-r2dbc-sql-example:test
+./gradlew :exposed-r2dbc-sql-example:test
 ```
 
 ## 참고 자료

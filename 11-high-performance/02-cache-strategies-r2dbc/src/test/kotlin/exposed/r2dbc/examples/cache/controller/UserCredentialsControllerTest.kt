@@ -28,6 +28,9 @@ import org.springframework.test.web.reactive.server.returnResult
 import java.time.Instant
 import java.util.concurrent.CopyOnWriteArrayList
 
+/**
+ * UserCredentials 캐시 컨트롤러의 조회/무효화 동작을 검증한다.
+ */
 class UserCredentialsControllerTest(
     @param:Autowired private val client: WebTestClient,
     @param:Autowired private val repository: UserCredentialsCacheRepository,
@@ -75,6 +78,18 @@ class UserCredentialsControllerTest(
             .shouldNotBeNull()
 
         ucs shouldHaveSize idsInDB.size
+    }
+
+    @Test
+    fun `findAll user credentials with limit`() = runSuspendIO {
+        val ucs = client
+            .httpGet("/user-credentials?limit=4")
+            .expectStatus().is2xxSuccessful
+            .expectBodyList<UserCredentialsRecord>()
+            .returnResult().responseBody
+            .shouldNotBeNull()
+
+        ucs shouldHaveSize 4
     }
 
     @Test

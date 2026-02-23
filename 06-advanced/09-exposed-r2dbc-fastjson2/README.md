@@ -113,10 +113,10 @@ println(entity.data.info.name) // "dao_user" 출력
 
 ```bash
 # 이 모듈의 모든 테스트 실행
-./gradlew :06-advanced:09-exposed-r2dbc-fastjson2:test
+./gradlew :09-exposed-r2dbc-fastjson2:test
 
 # FastjsonB 컬럼 타입 테스트
-./gradlew :06-advanced:09-exposed-r2dbc-fastjson2:test --tests "exposed.examples.fastjson2.FastjsonBColumnTest"
+./gradlew :09-exposed-r2dbc-fastjson2:test --tests "exposed.examples.fastjson2.FastjsonBColumnTest"
 ```
 
 ## 참고 자료

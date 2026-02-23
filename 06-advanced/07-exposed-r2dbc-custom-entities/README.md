@@ -111,10 +111,10 @@ transaction {
 
 ```bash
 # 이 모듈의 모든 테스트 실행
-./gradlew :06-advanced:07-exposed-r2dbc-custom-entities:test
+./gradlew :07-exposed-r2dbc-custom-entities:test
 
 # 특정 엔티티 타입 테스트 실행 (예: Snowflake)
-./gradlew :06-advanced:07-exposed-r2dbc-custom-entities:test --tests "exposed.examples.custom.entities.SnowflakeIdTableTest"
+./gradlew :07-exposed-r2dbc-custom-entities:test --tests "exposed.examples.custom.entities.SnowflakeIdTableTest"
 ```
 
 ## 참고 자료

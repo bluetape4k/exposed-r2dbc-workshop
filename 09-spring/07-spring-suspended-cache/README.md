@@ -186,13 +186,13 @@ class CachedCountryR2dbcRepository(
 
 ```bash
 # 기본 실행 (H2 + Redis via Testcontainers)
-./gradlew :09-spring:07-spring-suspended-cache:bootRun
+./gradlew :07-spring-suspended-cache:bootRun
 
 # PostgreSQL 사용
-./gradlew :09-spring:07-spring-suspended-cache:bootRun --args='--spring.profiles.active=postgres'
+./gradlew :07-spring-suspended-cache:bootRun --args='--spring.profiles.active=postgres'
 
 # MySQL 사용
-./gradlew :09-spring:07-spring-suspended-cache:bootRun --args='--spring.profiles.active=mysql'
+./gradlew :07-spring-suspended-cache:bootRun --args='--spring.profiles.active=mysql'
 ```
 
 Redis는 Testcontainers를 통해 자동으로 실행됩니다.
@@ -200,7 +200,7 @@ Redis는 Testcontainers를 통해 자동으로 실행됩니다.
 ## 테스트
 
 ```bash
-./gradlew :09-spring:07-spring-suspended-cache:test
+./gradlew :07-spring-suspended-cache:test
 ```
 
 ### 테스트 목록

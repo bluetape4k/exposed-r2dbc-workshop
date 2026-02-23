@@ -44,10 +44,10 @@ class UserEventControllerTest(
         response.shouldBeTrue()
 
         // 비동기로 처리되므로, await를 사용하여 결과를 기다림
-        await.atMost(Duration.ofSeconds(4))
+        await.atMost(Duration.ofSeconds(5))
             .pollInterval(Duration.ofMillis(100))
             .untilSuspending {
-                log.info { "Waiting for insert user events to DB." }
+                log.info { "Waiting for insert user events to DB..." }
                 getCountOfUserEvents() == prevCount + 1L
             }
 

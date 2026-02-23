@@ -213,19 +213,19 @@ curl -H "X-TENANT-ID: korean" http://localhost:8080/actors/2
 ### 기본 실행 (H2 인메모리)
 
 ```bash
-./gradlew :10-multi-tenant:03-multitenant-spring-webflux:bootRun
+./gradlew :03-multitenant-spring-webflux:bootRun
 ```
 
 ### PostgreSQL 사용
 
 ```bash
-./gradlew :10-multi-tenant:03-multitenant-spring-webflux:bootRun --args='--spring.profiles.active=postgres'
+./gradlew :03-multitenant-spring-webflux:bootRun --args='--spring.profiles.active=postgres'
 ```
 
 ## 테스트
 
 ```bash
-./gradlew :10-multi-tenant:03-multitenant-spring-webflux:test
+./gradlew :03-multitenant-spring-webflux:test
 ```
 
 테스트는 `@ActiveProfiles("h2")`로 H2 인메모리 DB를 사용합니다.

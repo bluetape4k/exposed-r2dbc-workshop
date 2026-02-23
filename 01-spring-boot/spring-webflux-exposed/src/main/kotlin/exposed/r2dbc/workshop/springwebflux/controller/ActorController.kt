@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+/**
+ * 배우(Actor) 리소스에 대한 조회/검색/등록/삭제 API를 제공합니다.
+ */
 @RestController
 @RequestMapping("/actors")
 class ActorController(
@@ -26,6 +29,9 @@ class ActorController(
 
     companion object: KLoggingChannel()
 
+    /**
+     * ID로 배우 한 건을 조회합니다.
+     */
     @GetMapping("/{id}")
     suspend fun getActorById(@PathVariable id: Long): ActorRecord? =
         suspendTransaction {
@@ -33,6 +39,9 @@ class ActorController(
             actorRepository.findById(id)
         }
 
+    /**
+     * 쿼리 파라미터 기반으로 배우를 검색합니다.
+     */
     @GetMapping
     suspend fun searchActors(request: ServerHttpRequest): List<ActorRecord> {
         val params = request.queryParams.map { it.key to it.value.joinToString(",") }.toMap()
@@ -43,12 +52,18 @@ class ActorController(
         }
     }
 
+    /**
+     * 신규 배우를 생성합니다.
+     */
     @PostMapping
     suspend fun createActor(@RequestBody actor: ActorRecord): ActorRecord =
         suspendTransaction {
             actorRepository.create(actor)
         }
 
+    /**
+     * ID로 배우를 삭제하고 영향받은 행 수를 반환합니다.
+     */
     @DeleteMapping("/{id}")
     suspend fun deleteActor(@PathVariable("id") actorId: Long): Int =
         suspendTransaction {

@@ -4,6 +4,7 @@ import exposed.r2dbc.multitenant.webflux.AbstractMultitenantTest
 import exposed.r2dbc.multitenant.webflux.domain.model.ActorRecord
 import exposed.r2dbc.multitenant.webflux.tenant.TenantFilter
 import exposed.r2dbc.multitenant.webflux.tenant.TenantFilter.Companion.TENANT_HEADER
+import exposed.r2dbc.multitenant.webflux.tenant.Tenants
 import exposed.r2dbc.multitenant.webflux.tenant.Tenants.Tenant
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
@@ -20,6 +21,9 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.expectBodyList
 import org.springframework.test.web.reactive.server.returnResult
 
+/**
+ * 멀티테넌트 Actor API에서 tenant 헤더 기반 분기를 검증합니다.
+ */
 class ActorControllerTest(
     @param:Autowired private val client: WebTestClient,
 ): AbstractMultitenantTest() {
@@ -70,5 +74,43 @@ class ActorControllerTest(
             Tenant.ENGLISH to "Brad"
         )
         actor.firstName shouldBeEqualTo expectedFirstName[tenant]
+    }
+
+    @ParameterizedTest(name = "tenant={0}")
+    @EnumSource(Tenant::class)
+    fun `헤더 이름 대소문자와 무관하게 동일 tenant 조회`(tenant: Tenant) = runSuspendIO {
+        val actors = client
+            .get()
+            .uri("/actors")
+            .header("x-tenant-id", tenant.id)
+            .exchange()
+            .expectStatus().is2xxSuccessful
+            .expectBodyList<ActorRecord>()
+            .returnResult().responseBody
+            .shouldNotBeNull()
+
+        actors shouldHaveSize 9
+    }
+
+    @org.junit.jupiter.api.Test
+    fun `tenant 헤더가 없으면 기본 tenant 조회와 동일하다`() = runSuspendIO {
+        val defaultTenant = Tenants.DEFAULT_TENANT
+        val actorWithHeader = client
+            .get()
+            .uri("/actors/2")
+            .header(TENANT_HEADER, defaultTenant.id)
+            .exchange()
+            .expectStatus().is2xxSuccessful
+            .returnResult<ActorRecord>().responseBody
+            .awaitSingle()
+        val actorWithoutHeader = client
+            .get()
+            .uri("/actors/2")
+            .exchange()
+            .expectStatus().is2xxSuccessful
+            .returnResult<ActorRecord>().responseBody
+            .awaitSingle()
+
+        actorWithoutHeader.firstName shouldBeEqualTo actorWithHeader.firstName
     }
 }

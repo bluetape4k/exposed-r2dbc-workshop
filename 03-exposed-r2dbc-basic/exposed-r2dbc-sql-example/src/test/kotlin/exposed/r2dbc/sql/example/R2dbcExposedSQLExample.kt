@@ -8,7 +8,9 @@ import exposed.r2dbc.sql.example.Schema.withCityUsers
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.info
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.toList
 import org.amshove.kluent.shouldBeEqualTo
 import org.jetbrains.exposed.v1.core.count
 import org.jetbrains.exposed.v1.core.eq
@@ -24,6 +26,9 @@ import org.jetbrains.exposed.v1.r2dbc.update
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Exposed SQL DSL을 R2DBC 환경에서 사용하는 기본 예제를 검증합니다.
+ */
 class R2dbcExposedSQLExample: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
@@ -182,6 +187,26 @@ class R2dbcExposedSQLExample: AbstractR2dbcExposedTest() {
                     log.info { "$cityName has no users" }
                 }
             }
+        }
+    }
+
+    /**
+     * `AND` 조건을 조합해 특정 도시의 사용자만 조회합니다.
+     */
+    @ParameterizedTest
+    @MethodSource(ENABLE_DIALECTS_METHOD)
+    fun `andWhere 로 다중 조건 조회하기`(testDB: TestDB) = runSuspendIO {
+        withCityUsers(testDB) {
+            val names = UserTable
+                .innerJoin(CityTable)
+                .select(UserTable.name, CityTable.name)
+                .where { CityTable.name eq "Busan" }
+                .andWhere { UserTable.name like "J%.Doe" }
+                .orderBy(UserTable.name)
+                .map { it[UserTable.name] }
+                .toList()
+
+            names shouldBeEqualTo listOf("Jane.Doe", "John.Doe")
         }
     }
 }

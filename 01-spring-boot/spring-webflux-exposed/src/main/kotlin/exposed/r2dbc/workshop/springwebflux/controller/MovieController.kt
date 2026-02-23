@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+/**
+ * 영화(Movie) 리소스의 기본 CRUD/검색 API를 제공합니다.
+ */
 @RestController
 @RequestMapping("/movies")
 class MovieController(
@@ -25,12 +28,18 @@ class MovieController(
 
     companion object: KLoggingChannel()
 
+    /**
+     * ID로 영화 한 건을 조회합니다.
+     */
     @GetMapping("/{id}")
     suspend fun getMovieById(@PathVariable("id") movieId: Long): MovieRecord? =
         suspendTransaction {
             movieRepository.findById(movieId)
         }
 
+    /**
+     * 쿼리 파라미터 기반으로 영화를 검색합니다.
+     */
     @GetMapping
     suspend fun searchMovies(request: ServerHttpRequest): List<MovieRecord> {
         val params = request.queryParams.map { it.key to it.value.first() }.toMap()
@@ -40,12 +49,18 @@ class MovieController(
         }
     }
 
+    /**
+     * 신규 영화를 생성합니다.
+     */
     @PostMapping
     suspend fun createMovie(@RequestBody movie: MovieRecord): MovieRecord =
         suspendTransaction {
             movieRepository.create(movie)
         }
 
+    /**
+     * ID로 영화를 삭제하고 영향받은 행 수를 반환합니다.
+     */
     @DeleteMapping("/{id}")
     suspend fun deleteMovie(@PathVariable("id") movieId: Long): Int =
         suspendTransaction {

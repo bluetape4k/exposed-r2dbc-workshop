@@ -9,13 +9,18 @@ import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.spring.tests.httpGet
 import io.bluetape4k.support.uninitialized
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.reactive.awaitSingle
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeNull
 import org.junit.jupiter.api.RepeatedTest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.returnResult
 
+/**
+ * 국가 조회 컨트롤러 공통 동작을 검증하는 추상 테스트.
+ */
 abstract class AbstractCountryControllerTest: AbstractSpringSuspendedCacheApplicationTest() {
 
     companion object: KLoggingChannel() {
@@ -56,5 +61,16 @@ abstract class AbstractCountryControllerTest: AbstractSpringSuspendedCacheApplic
             .collect { (code, country) ->
                 country.code shouldBeEqualTo code
             }
+    }
+
+    @RepeatedTest(REPEAT_SIZE)
+    fun `unknown country code returns empty body`() = runSuspendIO {
+        val country = client
+            .httpGet("/$basePath/countries/__UNKNOWN__")
+            .expectStatus().is2xxSuccessful
+            .returnResult<CountryRecord>().responseBody
+            .awaitFirstOrNull()
+
+        country.shouldBeNull()
     }
 }

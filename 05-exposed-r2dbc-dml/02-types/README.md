@@ -110,10 +110,10 @@ object KotlinUUIDTable: Table("test_kotlin_uuid") {
 
 ```bash
 # 전체 Column Types 테스트 실행
-./gradlew :05-exposed-r2dbc-dml:02-types:test
+./gradlew :02-types:test
 
 # 특정 테스트 클래스 실행
-./gradlew :05-exposed-r2dbc-dml:02-types:test --tests "exposed.r2dbc.examples.types.Ex05_ArrayColumnType"
+./gradlew :02-types:test --tests "exposed.r2dbc.examples.types.Ex05_ArrayColumnType"
 ```
 
 ## Further Reading

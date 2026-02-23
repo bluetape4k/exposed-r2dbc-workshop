@@ -208,13 +208,13 @@ cities.crossJoin(users)
 
 ```bash
 # 전체 DML 테스트 실행
-./gradlew :05-exposed-r2dbc-dml:01-dml:test
+./gradlew :01-dml:test
 
 # 특정 테스트 클래스 실행
-./gradlew :05-exposed-r2dbc-dml:01-dml:test --tests "exposed.r2dbc.examples.dml.Ex01_Select"
+./gradlew :01-dml:test --tests "exposed.r2dbc.examples.dml.Ex01_Select"
 
 # 특정 테스트 메서드 실행
-./gradlew :05-exposed-r2dbc-dml:01-dml:test --tests "exposed.r2dbc.examples.dml.Ex04_Upsert.upsert with PK conflict"
+./gradlew :01-dml:test --tests "exposed.r2dbc.examples.dml.Ex04_Upsert.upsert with PK conflict"
 ```
 
 ## Further Reading

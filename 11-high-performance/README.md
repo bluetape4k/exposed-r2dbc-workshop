@@ -6,3 +6,5 @@
 
 - **02-cache-strategies-r2dbc
   **: R2DBC 환경에서 다양한 캐싱 전략 (Read Through, Write Through, Write Behind 등)을 Redisson 및 Exposed와 함께 구현하는 방법을 설명합니다. 자세한 내용은 [여기](./02-cache-strategies-r2dbc/README.md)를 참조하세요.
+- **03-routing-datasource
+  **: Exposed R2DBC + Spring WebFlux에서 tenant + read/write 분리 라우팅을 구현하는 방법을 설명합니다. 자세한 내용은 [여기](./03-routing-datasource/README.md)를 참조하세요.

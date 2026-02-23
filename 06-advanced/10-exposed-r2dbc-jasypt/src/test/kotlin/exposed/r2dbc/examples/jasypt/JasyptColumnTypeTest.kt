@@ -12,6 +12,7 @@ import io.bluetape4k.support.toUtf8Bytes
 import io.bluetape4k.support.toUtf8String
 import kotlinx.coroutines.flow.single
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeNull
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
@@ -20,6 +21,9 @@ import org.jetbrains.exposed.v1.r2dbc.update
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Jasypt 기반 암호화 컬럼의 CRUD 동작을 검증한다.
+ */
 class JasyptColumnTypeTest: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
@@ -124,6 +128,33 @@ class JasyptColumnTypeTest: AbstractR2dbcExposedTest() {
             updatedRow[stringTable.name] shouldBeEqualTo updatedName
             updatedRow[stringTable.city] shouldBeEqualTo updatedCity
             updatedRow[stringTable.address]!!.toUtf8String() shouldBeEqualTo updatedAddress
+        }
+    }
+
+    /**
+     * nullable 암호화 컬럼이 `null` 값을 그대로 보존하는지 검증한다.
+     */
+    @ParameterizedTest
+    @MethodSource(ENABLE_DIALECTS_METHOD)
+    fun `nullable encrypted columns keep null values`(testDB: TestDB) = runSuspendIO {
+        val stringTable = object: IntIdTable("nullable_string_table") {
+            val name = jasyptVarChar("name", 255, Encryptors.AES).nullable()
+            val city = jasyptVarChar("city", 255, Encryptors.RC4).nullable()
+            val address = jasyptBinary("address", 255, Encryptors.TripleDES).nullable()
+        }
+
+        withTables(testDB, stringTable) {
+            val insertedName = faker.name().firstName()
+            val id = stringTable.insertAndGetId {
+                it[name] = insertedName
+                it[city] = null
+                it[address] = null
+            }
+
+            val row = stringTable.selectAll().where { stringTable.id eq id }.single()
+            row[stringTable.name] shouldBeEqualTo insertedName
+            row[stringTable.city].shouldBeNull()
+            row[stringTable.address].shouldBeNull()
         }
     }
 }

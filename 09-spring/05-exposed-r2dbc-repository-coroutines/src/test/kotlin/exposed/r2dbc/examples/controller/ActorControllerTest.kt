@@ -11,6 +11,7 @@ import io.bluetape4k.spring.tests.httpPost
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.reactive.awaitSingle
+import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeTrue
 import org.amshove.kluent.shouldHaveSize
@@ -21,6 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.returnResult
 
+/**
+ * Actor REST API의 조회/검색/등록/삭제 동작을 검증합니다.
+ */
 class ActorControllerTest(
     @param:Autowired private val client: WebTestClient,
 ): AbstractExposedR2dbcRepositoryTest() {
@@ -118,5 +122,17 @@ class ActorControllerTest(
 
         log.debug { "deletedCount=$deletedCount" }
         deletedCount shouldBeEqualTo 1
+    }
+
+    @Test
+    fun `search endpoint는 파라미터가 없으면 빈 목록을 반환`() = runSuspendIO {
+        val response = client
+            .httpGet("/actors/search")
+            .expectStatus().is2xxSuccessful
+            .returnResult<ActorRecord>().responseBody
+            .asFlow()
+            .toList()
+
+        response.shouldBeEmpty()
     }
 }

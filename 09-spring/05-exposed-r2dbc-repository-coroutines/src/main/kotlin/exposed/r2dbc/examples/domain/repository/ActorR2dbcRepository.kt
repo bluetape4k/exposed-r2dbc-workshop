@@ -17,6 +17,9 @@ import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
 
+/**
+ * 배우(Actor) 엔티티에 대한 Exposed R2DBC 저장소 구현체.
+ */
 @Repository
 class ActorR2dbcRepository: ExposedR2dbcRepository<ActorRecord, Long> {
 
@@ -26,6 +29,9 @@ class ActorR2dbcRepository: ExposedR2dbcRepository<ActorRecord, Long> {
 
     override suspend fun ResultRow.toEntity(): ActorRecord = toActorRecord()
 
+    /**
+     * 요청 파라미터 기반으로 배우 목록을 동적 검색한다.
+     */
     fun searchActors(params: Map<String, String?>): Flow<ActorRecord> {
         log.debug { "Search Actors by params. params: $params" }
 
@@ -45,6 +51,9 @@ class ActorR2dbcRepository: ExposedR2dbcRepository<ActorRecord, Long> {
         return query.map { it.toEntity() }
     }
 
+    /**
+     * 신규 배우를 저장하고 생성된 식별자를 반영한 레코드를 반환한다.
+     */
     suspend fun save(actor: ActorRecord): ActorRecord {
         log.debug { "Save new actor. actor=$actor" }
 

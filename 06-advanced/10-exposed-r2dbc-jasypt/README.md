@@ -96,10 +96,10 @@ userByApiKey[UserSecrets.username] shouldBeEqualTo "john.doe"
 
 ```bash
 # 이 모듈의 모든 테스트 실행
-./gradlew :06-advanced:10-exposed-r2dbc-jasypt:test
+./gradlew :10-exposed-r2dbc-jasypt:test
 
 # 특정 테스트 클래스 실행
-./gradlew :06-advanced:10-exposed-r2dbc-jasypt:test --tests "exposed.examples.jasypt.JasyptColumnTypeTest"
+./gradlew :10-exposed-r2dbc-jasypt:test --tests "exposed.examples.jasypt.JasyptColumnTypeTest"
 ```
 
 ## 참고 자료

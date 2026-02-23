@@ -58,6 +58,9 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 @Suppress("DEPRECATION")
+/**
+ * Fastjson2 기반 JSON 컬럼의 읽기/쓰기 및 JSON 함수 동작을 검증한다.
+ */
 class FastjsonColumnTest: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
@@ -186,6 +189,21 @@ class FastjsonColumnTest: AbstractR2dbcExposedTest() {
 
             val row = tester.select(tester.id).where { tooManyLogins }.singleOrNull()
             row?.get(tester.id) shouldBeEqualTo newId
+        }
+    }
+
+    /**
+     * 존재하지 않는 JSON 경로를 extract 하면 null 이 반환되는지 검증한다.
+     */
+    @ParameterizedTest
+    @MethodSource(ENABLE_DIALECTS_METHOD)
+    fun `extract missing path returns null`(testDB: TestDB) = runTest {
+        Assumptions.assumeTrue { testDB !in TestDB.ALL_H2 }
+
+        withFastjsonTable(testDB) { tester, _, _ ->
+            val missing: Extract<String> = tester.fastjsonColumn.extract<String>(".missing.path")
+            val row = tester.select(missing).singleOrNull()
+            row?.get(missing).shouldBeNull()
         }
     }
 

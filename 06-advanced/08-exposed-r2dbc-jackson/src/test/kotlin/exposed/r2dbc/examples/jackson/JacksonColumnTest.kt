@@ -28,6 +28,7 @@ import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldBeTrue
+import org.amshove.kluent.shouldNotBeNull
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.IntegerColumnType
 import org.jetbrains.exposed.v1.core.Op
@@ -57,6 +58,9 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 @Suppress("DEPRECATION")
+/**
+ * Jackson 기반 JSON 컬럼의 직렬화/역직렬화와 검색 함수를 검증합니다.
+ */
 class JacksonColumnTest: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
@@ -763,5 +767,28 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
             value shouldBeEqualTo defaultUser
         }
 
+    }
+
+    /**
+     * JSON 경로 추출 값으로 조건 검색이 가능한지 확인합니다.
+     */
+    @ParameterizedTest
+    @MethodSource(ENABLE_DIALECTS_METHOD)
+    fun `extract된 username으로 행 조회`(testDB: TestDB) = runTest {
+        Assumptions.assumeTrue { testDB !in TestDB.ALL_H2 }
+
+        withJacksonTable(testDB) { tester, user1, _ ->
+            val path = when (currentDialectTest) {
+                is PostgreSQLDialect -> arrayOf("user", "name")
+                else                 -> arrayOf(".user.name")
+            }
+            val username = tester.jacksonColumn.extract<String>(*path)
+
+            val found = tester.selectAll()
+                .where { username eq user1.name }
+                .singleOrNull()
+
+            found.shouldNotBeNull()
+        }
     }
 }

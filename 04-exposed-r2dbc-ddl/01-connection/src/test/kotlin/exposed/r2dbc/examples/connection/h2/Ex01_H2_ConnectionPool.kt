@@ -19,6 +19,9 @@ import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.api.Test
 
+/**
+ * H2 R2DBC 풀 연결에서 동시 트랜잭션 동작을 검증한다.
+ */
 class Ex01_H2_ConnectionPool {
 
     companion object: KLoggingChannel()
@@ -27,6 +30,17 @@ class Ex01_H2_ConnectionPool {
 
     private val h2PoolDB1 by lazy {
         R2dbcDatabase.connect("r2dbc:pool:h2:mem:///poolDB1?maxSize=$maximumPoolSize")
+    }
+
+    @Test
+    fun `pool table starts with empty rows`() = runSuspendIO {
+        Assumptions.assumeTrue { TestDB.H2 in TestDB.enabledDialects() }
+
+        suspendTransaction(db = h2PoolDB1) {
+            SchemaUtils.create(TestTable)
+            TestTable.selectAll().count() shouldBeEqualTo 0L
+            SchemaUtils.drop(TestTable)
+        }
     }
 
     @Test

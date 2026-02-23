@@ -16,6 +16,9 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.time.LocalDate
 
+/**
+ * JPA 스타일 Task 엔티티 매핑을 Exposed DSL로 변환한 예제를 검증한다.
+ */
 class Ex03_Task: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
@@ -62,6 +65,32 @@ class Ex03_Task: AbstractR2dbcExposedTest() {
             row[TaskTable.status] shouldBeEqualTo TaskStatusType.TO_DO
             row[TaskTable.changedOn] shouldBeEqualTo today
             row[TaskTable.changedBy] shouldBeEqualTo "admin"
+        }
+    }
+
+    /**
+     * enum 문자열 컬럼으로 저장된 상태 값을 조건으로 조회할 수 있는지 검증한다.
+     */
+    @ParameterizedTest
+    @MethodSource(ENABLE_DIALECTS_METHOD)
+    fun `search task by enum status`(testDB: TestDB) = runTest {
+        withTables(testDB, TaskTable) {
+            TaskTable.insertAndGetId {
+                it[status] = TaskStatusType.TO_DO
+                it[changedOn] = today
+                it[changedBy] = "worker-a"
+            }
+            TaskTable.insertAndGetId {
+                it[status] = TaskStatusType.DONE
+                it[changedOn] = today
+                it[changedBy] = "worker-b"
+            }
+
+            val doneTask = TaskTable.selectAll()
+                .where { TaskTable.status eq TaskStatusType.DONE }
+                .single()
+
+            doneTask[TaskTable.changedBy] shouldBeEqualTo "worker-b"
         }
     }
 }

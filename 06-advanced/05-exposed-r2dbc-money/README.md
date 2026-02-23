@@ -121,10 +121,10 @@ val usdAccounts = AccountTable.selectAll().where { AccountTable.composite_money.
 
 ```bash
 # 이 모듈의 모든 테스트 실행
-./gradlew :06-advanced:05-exposed-r2dbc-money:test
+./gradlew :05-exposed-r2dbc-money:test
 
 # 특정 테스트 클래스 실행
-./gradlew :06-advanced:05-exposed-r2dbc-money:test --tests "exposed.examples.money.Ex02_Money"
+./gradlew :05-exposed-r2dbc-money:test --tests "exposed.examples.money.Ex02_Money"
 ```
 
 ## 참고 자료

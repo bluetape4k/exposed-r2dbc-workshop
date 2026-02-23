@@ -209,7 +209,7 @@ object CustomIdTable: IdTable<Email>("emails") {
 ## 테스트 실행
 
 ```bash
-./gradlew :07-jpa-convert:01-convert-jpa-basic:test
+./gradlew :01-convert-jpa-basic:test
 ```
 
 모든 테스트는 `@ParameterizedTest` + `@MethodSource`로 H2, MySQL, PostgreSQL 등 여러 DB에서 자동 실행됩니다.

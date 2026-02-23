@@ -87,6 +87,9 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.math.BigDecimal
 
+/**
+ * Exposed 함수(Expression/Custom Function) 사용 패턴을 검증하는 예제 테스트입니다.
+ */
 class Ex01_Functions: Ex00_FunctionBase() {
 
     companion object: KLoggingChannel()
@@ -255,6 +258,24 @@ class Ex01_Functions: Ex00_FunctionBase() {
             rows[1][sum].asBigDecimal() shouldBeEqualTo 203.0.toBigDecimal()
             rows[1][div].asBigDecimal() shouldBeEqualTo 2.0.toBigDecimal()
             rows[1][mod].asBigDecimal() shouldBeEqualTo 3.0.toBigDecimal()
+        }
+    }
+
+    /**
+     * 문자열 함수의 결과 길이가 모두 0보다 큰지 확인합니다.
+     */
+    @ParameterizedTest
+    @MethodSource(ENABLE_DIALECTS_METHOD)
+    fun `string length function`(testDB: TestDB) = runTest {
+        withCitiesAndUsers(testDB) { cities, _, _ ->
+            val lengths = cities
+                .select(cities.name.charLength())
+                .map { it[cities.name.charLength()] }
+                .toList()
+
+            lengths.shouldNotBeNull()
+            lengths.size shouldBeEqualTo 3
+            lengths.all { (it ?: 0) > 0 }.shouldBeTrue()
         }
     }
 

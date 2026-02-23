@@ -19,6 +19,9 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.sql.Types
 
+/**
+ * R2DBC 연결에서 메타데이터 조회 API 사용 예제를 검증한다.
+ */
 class Ex01_Connection: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
@@ -155,6 +158,19 @@ class Ex01_Connection: AbstractR2dbcExposedTest() {
                 log.debug { "key: $key, constraints: $constraints" }
             }
             constraints.keys shouldHaveSize 2   // parent, child
+        }
+    }
+
+    /**
+     * 단일 테이블의 제약조건 메타데이터 조회가 수행되는지 확인한다.
+     */
+    @Test
+    fun `single table constraints metadata`() = runTest {
+        withTables(TestDB.H2, People) {
+            val constraints = connection().metadata {
+                tableConstraints(listOf(People))
+            }
+            constraints.keys shouldHaveSize 1
         }
     }
 }

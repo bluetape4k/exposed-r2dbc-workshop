@@ -154,7 +154,8 @@ JPA의 기본 기능을 Exposed R2DBC로 구현하는 방법을 학습합니다.
 
 #### [Coroutines 기본](08-r2dbc-coroutines/01-exposed-r2dbc-coroutines-basic/README.md)
 
-Exposed R2DBC를 Kotlin Coroutines 환경에서 사용하는 방법을 학습합니다. `suspend` 함수와 Flow를 활용한 비동기 처리를 다룹니다.
+Exposed R2DBC를 Kotlin Coroutines 환경에서 사용하는 방법을 학습합니다. `suspend` 함수와 Flow를 활용한 비동기 처리를 다룹니다. 예제 테스트(`Ex01_Coroutines`,
+`Ex02_CoroutinesFlow`)를 통해 순차/병렬 트랜잭션과 Flow 수집 패턴을 함께 확인할 수 있습니다.
 
 #### [Virtual Threads 기본](08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/README.md)
 
@@ -188,6 +189,10 @@ WebFlux와 Coroutines를 이용하여 반응형 멀티테넌시를 구현하는 
 
 R2DBC 환경에서 비동기로 작동하는 다양한 캐시 전략(Read Through, Write Through, Write Behind)을 구현합니다.
 
+#### [Routing DataSource (WebFlux + Exposed R2DBC)](11-high-performance/03-routing-datasource/README.md)
+
+Spring WebFlux 요청 컨텍스트를 기반으로 tenant + read/write 분리 라우팅을 적용하는 Exposed R2DBC 예제입니다.
+
 ---
 
 ## 시작하기
@@ -205,7 +210,7 @@ R2DBC 환경에서 비동기로 작동하는 다양한 캐시 전략(Read Throug
 ./gradlew build
 
 # 특정 모듈 테스트 실행
-./gradlew :05-exposed-r2dbc-dml:01-dml:test
+./gradlew :01-dml:test
 ```
 
 ### IDE 설정

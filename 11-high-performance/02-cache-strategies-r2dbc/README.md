@@ -164,7 +164,7 @@ DB 데이터를 읽기 전용으로 캐시합니다. `UserCredentialsCacheReposi
 
 ```bash
 # 전체 테스트 실행
-./gradlew :11-high-performance:02-cache-strategies-coroutines:test
+./gradlew :02-cache-strategies-r2dbc:test
 ```
 
 ### 주요 테스트 시나리오

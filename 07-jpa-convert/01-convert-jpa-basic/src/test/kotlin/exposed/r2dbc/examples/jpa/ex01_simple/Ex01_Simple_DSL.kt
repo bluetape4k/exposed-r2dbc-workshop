@@ -94,4 +94,20 @@ class Ex01_Simple_DSL: AbstractR2dbcExposedTest() {
             dtos shouldHaveSize ENTITY_COUNT
         }
     }
+
+    @ParameterizedTest
+    @MethodSource(ENABLE_DIALECTS_METHOD)
+    fun `simple entity 페이징 건수 확인`(testDB: TestDB) = runTest {
+        withTables(testDB, SimpleTable) {
+            persistSimpleEntities()
+
+            val pagedRows = SimpleTable
+                .selectAll()
+                .limit(3)
+                .offset(0)
+                .toList()
+
+            pagedRows shouldHaveSize 3
+        }
+    }
 }

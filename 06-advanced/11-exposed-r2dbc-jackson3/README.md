@@ -103,10 +103,10 @@ println(entity.data.info.name) // "dao_user" 출력
 
 ```bash
 # 이 모듈의 모든 테스트 실행
-./gradlew :06-advanced:11-exposed-r2dbc-jackson3:test
+./gradlew :11-exposed-r2dbc-jackson3:test
 
 # JSONB 컬럼 타입 테스트
-./gradlew :06-advanced:11-exposed-r2dbc-jackson3:test --tests "exposed.examples.jackson3.JacksonBColumnTest"
+./gradlew :11-exposed-r2dbc-jackson3:test --tests "exposed.examples.jackson3.JacksonBColumnTest"
 ```
 
 ## 참고 자료

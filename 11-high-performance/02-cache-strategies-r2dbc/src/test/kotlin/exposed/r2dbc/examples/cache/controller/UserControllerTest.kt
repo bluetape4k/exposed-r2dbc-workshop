@@ -31,6 +31,9 @@ import org.springframework.test.web.reactive.server.returnResult
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.random.Random
 
+/**
+ * User 캐시 컨트롤러의 Read-Through/Write-Through/무효화 동작을 검증합니다.
+ */
 class UserControllerTest(
     @param:Autowired private val client: WebTestClient,
     @param:Autowired private val repository: UserCacheRepository,
@@ -136,5 +139,17 @@ class UserControllerTest(
             .awaitSingle()
 
         invalidedCount shouldBeEqualTo invalidatedId.size.toLong()
+    }
+
+    @Test
+    fun `limit 파라미터로 조회 건수를 제한한다`() = runSuspendIO {
+        val users = client
+            .httpGet("/users?limit=3")
+            .expectStatus().is2xxSuccessful
+            .expectBodyList<UserRecord>()
+            .returnResult().responseBody
+            .shouldNotBeNull()
+
+        users shouldHaveSize 3
     }
 }

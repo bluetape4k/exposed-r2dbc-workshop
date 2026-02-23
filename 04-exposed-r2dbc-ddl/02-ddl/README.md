@@ -99,10 +99,10 @@ suspendTransaction {
 
 ```bash
 # 이 모듈의 모든 테스트 실행
-./gradlew :04-exposed-r2dbc-ddl:02-ddl:test
+./gradlew :02-ddl:test
 
 # 특정 테스트만 실행
-./gradlew :04-exposed-r2dbc-ddl:02-ddl:test --tests "exposed.r2dbc.examples.ddl.*"
+./gradlew :02-ddl:test --tests "exposed.r2dbc.examples.ddl.*"
 ```
 
 ## 참고 자료

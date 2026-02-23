@@ -34,7 +34,9 @@ class TenantFilter: WebFilter {
 
         chain
             .filter(exchange)
-            .contextWrite { it.put(TenantId.TENANT_ID_KEY, TenantId(tenant)) }
+            .contextWrite {
+                it.put(TenantId.TENANT_ID_KEY, TenantId(tenant))
+            }
             .awaitSingleOrNull()     // awaitSingle() 을 사용하면, 전송 후에도 뭔가 처리하느라 예외가 발생함.
     }
 }
