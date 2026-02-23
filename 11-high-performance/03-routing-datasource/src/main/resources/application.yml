@@ -1,0 +1,17 @@
+server:
+    port: 8080
+
+spring:
+    application:
+        name: routing-datasource-r2dbc
+
+routing:
+    r2dbc:
+        default-tenant: default
+        tenants:
+            default:
+                rw: r2dbc:h2:mem:///routing_default_rw;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+                ro: r2dbc:h2:mem:///routing_default_ro;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+            acme:
+                rw: r2dbc:h2:mem:///routing_acme_rw;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+                ro: r2dbc:h2:mem:///routing_acme_ro;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
