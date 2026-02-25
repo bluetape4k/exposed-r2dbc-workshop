@@ -286,8 +286,9 @@ subprojects {
             dependency(Libs.kryo)
             dependency(Libs.fory_kotlin)
 
-            // Jackson (이상하게 mavenBom 에 적용이 안되어서 강제로 추가하였다)
+            // HINT: Jackson (이상하게 mavenBom 에 적용이 안되어서 강제로 추가하였다)
             dependency(Libs.jackson_bom)
+            dependency(Libs.jackson_annotations)
             dependency(Libs.jackson_core)
             dependency(Libs.jackson_databind)
             dependency(Libs.jackson_datatype_jdk8)
@@ -298,6 +299,15 @@ subprojects {
             dependency(Libs.jackson_module_parameter_names)
             dependency(Libs.jackson_module_blackbird)
             dependency(Libs.jackson_module_jsonSchema)
+
+            dependency(Libs.jackson_dataformat_avro)
+            dependency(Libs.jackson_dataformat_cbor)
+            dependency(Libs.jackson_dataformat_ion)
+            dependency(Libs.jackson_dataformat_protobuf)
+            dependency(Libs.jackson_dataformat_smile)
+            dependency(Libs.jackson_dataformat_csv)
+            dependency(Libs.jackson_dataformat_properties)
+            dependency(Libs.jackson_dataformat_yaml)
 
             // Retrofit
             dependency(Libs.retrofit2)

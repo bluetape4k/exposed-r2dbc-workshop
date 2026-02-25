@@ -3,7 +3,7 @@ package exposed.r2dbc.examples.custom.entities
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.coroutines.flow.extensions.flowFromSuspend
-import io.bluetape4k.exposed.dao.id.TimebasedUUIDBase62Table
+import io.bluetape4k.exposed.core.dao.id.TimebasedUUIDBase62Table
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.asFlow

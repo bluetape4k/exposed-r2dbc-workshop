@@ -3,7 +3,7 @@ package exposed.r2dbc.examples.cache.domain.model
 import exposed.r2dbc.examples.cache.utils.faker
 import io.bluetape4k.codec.Base58
 import io.bluetape4k.exposed.core.HasIdentifier
-import io.bluetape4k.exposed.dao.id.TimebasedUUIDBase62Table
+import io.bluetape4k.exposed.core.dao.id.TimebasedUUIDBase62Table
 import io.bluetape4k.idgenerators.uuid.TimebasedUuid
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.javatime.CurrentTimestamp

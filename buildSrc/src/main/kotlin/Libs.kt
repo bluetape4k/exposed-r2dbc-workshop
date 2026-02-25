@@ -91,7 +91,7 @@ object Versions {
 
     const val bucket4j = "8.16.0"       // https://mvnrepository.com/artifact/com.bucket4j/bucket4j_jdk17-core
     const val resilience4j = "2.3.0"   // https://mvnrepository.com/artifact/io.github.resilience4j/resilience4j-bom
-    const val netty = "4.2.9.Final"  // https://mvnrepository.com/artifact/io.netty/netty-all
+    const val netty = "4.2.10.Final"  // https://mvnrepository.com/artifact/io.netty/netty-all
 
     const val aws = "1.12.772"          // https://mvnrepository.com/artifact/com.amazonaws
     const val aws2 = "2.38.7"              // https://mvnrepository.com/artifact/software.amazon.awssdk/aws-sdk-java
@@ -114,8 +114,9 @@ object Versions {
     const val okio = "3.16.1"         // https://mvnrepository.com/artifact/com.squareup.okio/okio
     const val asynchttpclient = "2.12.4"  // https://mvnrepository.com/artifact/org.asynchttpclient/async-http-client
 
-    const val jackson = "2.20.2" // https://mvnrepository.com/artifact/com.fasterxml.jackson/jackson-bom
-    const val jackson3 = "3.0.4" // https://mvnrepository.com/artifact/tools.jackson/jackson-bom
+    const val jackson_annotations = "2.21" // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
+    const val jackson = "2.21.1" // https://mvnrepository.com/artifact/com.fasterxml.jackson/jackson-bom
+    const val jackson3 = "3.1.0" // https://mvnrepository.com/artifact/tools.jackson/jackson-bom
     const val fastjson2 = "2.0.60" // https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2
 
     const val mongo_driver = "5.5.1"   // https://mvnrepository.com/artifact/org.mongodb/mongodb-driver-sync
@@ -879,7 +880,7 @@ object Libs {
 
     fun jacksonCore(module: String, version: String = Versions.jackson) = jackson("core", module, version)
 
-    val jackson_annotations = jacksonCore("annotations", "2.10")
+    val jackson_annotations = jacksonCore("annotations", Versions.jackson_annotations)
     val jackson_core = jacksonCore("core")
     val jackson_databind = jacksonCore("databind")
 
@@ -1131,7 +1132,7 @@ object Libs {
     const val flyway_core = "org.flywaydb:flyway-core:11.18.0"  // https://mvnrepository.com/artifact/org.flywaydb/flyway-core
 
     // UUID Generator
-    const val java_uuid_generator = "com.fasterxml.uuid:java-uuid-generator:5.1.0"   // https://mvnrepository.com/artifact/com.fasterxml.uuid/java-uuid-generator
+    const val java_uuid_generator = "com.fasterxml.uuid:java-uuid-generator:5.2.0"   // https://mvnrepository.com/artifact/com.fasterxml.uuid/java-uuid-generator
     const val uuid_creator = "com.github.f4b6a3:uuid-creator:5.3.2"
 
     // Cache2K
