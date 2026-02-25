@@ -11,6 +11,8 @@ dependencies {
     testImplementation(Libs.exposed_r2dbc)
     testImplementation(Libs.bluetape4k_exposed_r2dbc)
 
+    // Java 21 에서 Virtual Thread 를 사용할 때 (Java 25 에서는 jdk25 를 사용하세요)
+    testRuntimeOnly(Libs.bluetape4k_virtualthread_jdk21)
     testImplementation(Libs.bluetape4k_junit5)
 
     testRuntimeOnly(Libs.h2_v2)
