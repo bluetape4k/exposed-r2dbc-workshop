@@ -182,25 +182,8 @@ subprojects {
         setApplyMavenExclusions(false)
 
         imports {
-            mavenBom(Libs.bluetape4k_bom)
-            mavenBom(Libs.spring_integration_bom)
-            mavenBom(Libs.spring_cloud_dependencies)
             mavenBom(Libs.spring_boot_dependencies)
-            mavenBom(Libs.spring_modulith_bom)
-
-            mavenBom(Libs.feign_bom)
-            mavenBom(Libs.log4j_bom)
-            mavenBom(Libs.testcontainers_bom)
-            mavenBom(Libs.junit_bom)
-            mavenBom(Libs.aws_bom)
-            mavenBom(Libs.aws2_bom)
-            mavenBom(Libs.okhttp3_bom)
-            mavenBom(Libs.grpc_bom)
-            mavenBom(Libs.protobuf_bom)
-            mavenBom(Libs.resilience4j_bom)
-            mavenBom(Libs.netty_bom)
-            mavenBom(Libs.jackson_bom)
-
+            mavenBom(Libs.bluetape4k_bom)
             mavenBom(Libs.kotlinx_coroutines_bom)
             mavenBom(Libs.kotlin_bom)
         }
@@ -210,6 +193,7 @@ subprojects {
             // Kotlinx Coroutines (mavenBom 이 적용이 안되어서 추가로 명시했습니다)
             dependency(Libs.kotlinx_coroutines_bom)
             dependency(Libs.kotlinx_coroutines_core)
+            dependency(Libs.kotlinx_coroutines_core_common)
             dependency(Libs.kotlinx_coroutines_core_jvm)
             dependency(Libs.kotlinx_coroutines_reactive)
             dependency(Libs.kotlinx_coroutines_reactor)
@@ -240,20 +224,6 @@ subprojects {
             dependency(Libs.log4j_over_slf4j)
             dependency(Libs.logback)
             dependency(Libs.logback_core)
-
-            // Javax API
-            dependency(Libs.javax_activation_api)
-            dependency(Libs.javax_annotation_api)
-            dependency(Libs.javax_el_api)
-            dependency(Libs.javax_cache_api)
-            dependency(Libs.javax_inject)
-            dependency(Libs.javax_json_api)
-            dependency(Libs.javax_persistence_api)
-            dependency(Libs.javax_servlet_api)
-            dependency(Libs.javax_transaction_api)
-            dependency(Libs.javax_validation_api)
-            dependency(Libs.javax_ws_rs_api)
-            dependency(Libs.javax_xml_bind)
 
             // jakarta
             dependency(Libs.jakarta_activation_api)
@@ -286,7 +256,7 @@ subprojects {
             dependency(Libs.kryo)
             dependency(Libs.fory_kotlin)
 
-            // HINT: Jackson (이상하게 mavenBom 에 적용이 안되어서 강제로 추가하였다)
+            // NOTE: Jackson (이상하게 mavenBom 에 적용이 안되어서 강제로 추가하였다)
             dependency(Libs.jackson_bom)
             dependency(Libs.jackson_annotations)
             dependency(Libs.jackson_core)
@@ -300,66 +270,14 @@ subprojects {
             dependency(Libs.jackson_module_blackbird)
             dependency(Libs.jackson_module_jsonSchema)
 
-            dependency(Libs.jackson_dataformat_avro)
-            dependency(Libs.jackson_dataformat_cbor)
-            dependency(Libs.jackson_dataformat_ion)
-            dependency(Libs.jackson_dataformat_protobuf)
-            dependency(Libs.jackson_dataformat_smile)
-            dependency(Libs.jackson_dataformat_csv)
-            dependency(Libs.jackson_dataformat_properties)
-            dependency(Libs.jackson_dataformat_yaml)
-
-            // Retrofit
-            dependency(Libs.retrofit2)
-            dependency(Libs.retrofit2_adapter_java8)
-            dependency(Libs.retrofit2_adapter_reactor)
-            dependency(Libs.retrofit2_adapter_rxjava2)
-            dependency(Libs.retrofit2_converter_jackson)
-            dependency(Libs.retrofit2_converter_moshi)
-            dependency(Libs.retrofit2_converter_protobuf)
-            dependency(Libs.retrofit2_converter_scalars)
-            dependency(Libs.retrofit2_mock)
-
-            // Http
-            dependency(Libs.async_http_client)
-            dependency(Libs.async_http_client_extras_retrofit2)
-            dependency(Libs.async_http_client_extras_rxjava2)
-
-            dependency(Libs.httpclient5)
-
-            dependency(Libs.grpc_kotlin_stub)
-
-            dependency(Libs.mongo_bson)
-            dependency(Libs.mongodb_driver_core)
-            dependency(Libs.mongodb_driver_reactivestreams)
-
             // Hibernate
             dependency(Libs.hibernate_core)
             dependency(Libs.hibernate_jcache)
             dependency(Libs.javassist)
 
-            dependency(Libs.antlr4_runtime)  // https://github.com/spring-projects/spring-data-jpa/issues/3262
-            dependency(Libs.antlr4_tool)
-
-            dependency(Libs.querydsl_apt)
-            dependency(Libs.querydsl_core)
-            dependency(Libs.querydsl_jpa)
-
             // Validators
-            dependency(Libs.javax_validation_api)
             dependency(Libs.hibernate_validator)
             dependency(Libs.hibernate_validator_annotation_processor)
-            dependency(Libs.javax_el)
-
-            dependency(Libs.hikaricp)
-            dependency(Libs.mysql_connector_j)
-            dependency(Libs.mariadb_java_client)
-
-            dependency(Libs.caffeine)
-            dependency(Libs.caffeine_jcache)
-
-            dependency(Libs.objenesis)
-            dependency(Libs.ow2_asm)
 
             dependency(Libs.junit_bom)
             dependency(Libs.junit_jupiter)
@@ -371,28 +289,6 @@ subprojects {
             dependency(Libs.junit_platform_engine)
             dependency(Libs.junit_platform_launcher)
             dependency(Libs.junit_platform_runner)
-
-            dependency(Libs.kluent)
-            dependency(Libs.assertj_core)
-
-            dependency(Libs.mockk)
-            dependency(Libs.datafaker)
-            dependency(Libs.random_beans)
-
-            dependency(Libs.jsonpath)
-            dependency(Libs.jsonassert)
-
-            dependency(Libs.bouncycastle_bcpkix)
-            dependency(Libs.bouncycastle_bcprov)
-
-            // OW2 ASM
-            dependency(Libs.ow2_asm)
-            dependency(Libs.ow2_asm_commons)
-            dependency(Libs.ow2_asm_util)
-            dependency(Libs.ow2_asm_tree)
-
-            dependency(Libs.snakeyaml)
-            dependency(Libs.jna)
         }
     }
 
@@ -405,11 +301,6 @@ subprojects {
         val compileOnly by configurations
         val testCompileOnly by configurations
         val testRuntimeOnly by configurations
-
-        compileOnly(platform(Libs.bluetape4k_bom))
-        compileOnly(platform(Libs.spring_boot_dependencies))
-        compileOnly(platform(Libs.jackson_bom))
-        compileOnly(platform(Libs.kotlinx_coroutines_bom))
 
         implementation(Libs.kotlin_stdlib)
         implementation(Libs.kotlin_reflect)
