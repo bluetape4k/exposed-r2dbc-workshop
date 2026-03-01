@@ -81,7 +81,7 @@
 ## 테스트 실행
 
 ```bash
-# 기본값으로 실행 (H2 + PostgreSQL + MySQL V8 + MariaDB)
+# 기본값으로 실행 (H2 + PostgreSQL + MySQL V8)
 ./gradlew :exposed-r2dbc-00-shared-exposed-r2dbc-shared:test
 
 # H2 계열만 테스트 (빠른 로컬 개발용)

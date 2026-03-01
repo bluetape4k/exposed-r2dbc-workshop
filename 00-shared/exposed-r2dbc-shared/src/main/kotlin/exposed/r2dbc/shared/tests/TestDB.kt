@@ -196,7 +196,7 @@ enum class TestDB(
          * 우선순위:
          * 1. `-PuseDB=H2,POSTGRESQL,...` 로 명시적 지정 시 해당 DB만 테스트
          * 2. `-PuseFastDB=true` 이면 H2 계열만 테스트
-         * 3. 기본값: H2, POSTGRESQL, MYSQL_V8, MARIADB
+         * 3. 기본값: H2, POSTGRESQL, MYSQL_V8
          *
          * 예:
          * - `./gradlew test -PuseDB=H2,POSTGRESQL`
