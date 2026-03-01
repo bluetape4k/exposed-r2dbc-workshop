@@ -75,3 +75,41 @@
 
 이러한 구성 요소를 중앙 집중화함으로써 `exposed-r2dbc-shared`는
 `exposed-r2dbc-workshop` 프로젝트의 모든 예제와 테스트가 일관되고 견고하며 관리하기 쉬운 테스트 환경을 제공받을 수 있습니다.
+
+---
+
+## 테스트 실행
+
+```bash
+# 기본값으로 실행 (H2 + PostgreSQL + MySQL V8 + MariaDB)
+./gradlew :exposed-r2dbc-00-shared-exposed-r2dbc-shared:test
+
+# H2 계열만 테스트 (빠른 로컬 개발용)
+./gradlew :exposed-r2dbc-00-shared-exposed-r2dbc-shared:test -PuseFastDB=true
+
+# 특정 DB 지정
+./gradlew :exposed-r2dbc-00-shared-exposed-r2dbc-shared:test -PuseDB=H2,POSTGRESQL
+```
+
+### 테스트 대상 DB 선택 옵션
+
+| Gradle 프로퍼티              | 설명                                              |
+|----------------------------|--------------------------------------------------|
+| `-PuseFastDB=true`         | H2 계열 인메모리 DB만 테스트 (빠른 피드백)           |
+| `-PuseDB=<이름,...>`        | 쉼표로 구분하여 테스트할 DB를 직접 지정              |
+
+`-PuseDB`에 사용 가능한 값:
+
+| 값            | 설명                          |
+|--------------|------------------------------|
+| `H2`         | H2 (인메모리, 기본 모드)         |
+| `H2_MYSQL`   | H2 (MySQL 호환 모드)           |
+| `H2_MARIADB` | H2 (MariaDB 호환 모드)         |
+| `H2_PSQL`    | H2 (PostgreSQL 호환 모드)      |
+| `MARIADB`    | MariaDB (Testcontainers)     |
+| `MYSQL_V5`   | MySQL 5.x (Testcontainers)   |
+| `MYSQL_V8`   | MySQL 8.x (Testcontainers)   |
+| `POSTGRESQL` | PostgreSQL (Testcontainers)  |
+
+> [!NOTE]
+> 우선순위: `-PuseDB` > `-PuseFastDB` > 기본값 (H2, POSTGRESQL, MYSQL_V8)
