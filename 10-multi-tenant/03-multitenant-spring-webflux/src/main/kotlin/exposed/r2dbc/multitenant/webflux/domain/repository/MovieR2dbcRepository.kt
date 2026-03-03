@@ -12,7 +12,7 @@ import exposed.r2dbc.multitenant.webflux.domain.model.toMovieRecord
 import exposed.r2dbc.multitenant.webflux.domain.model.toMovieWithActorRecord
 import exposed.r2dbc.multitenant.webflux.domain.model.toMovieWithProducingActorRecord
 import io.bluetape4k.coroutines.flow.extensions.bufferUntilChanged
-import io.bluetape4k.exposed.r2dbc.repository.ExposedR2dbcRepository
+import io.bluetape4k.exposed.r2dbc.repository.R2dbcRepository
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +23,6 @@ import org.jetbrains.exposed.v1.core.Join
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.alias
 import org.jetbrains.exposed.v1.core.count
-import org.jetbrains.exposed.v1.core.dao.id.IdTable
 import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.innerJoin
@@ -35,7 +34,7 @@ import org.springframework.stereotype.Repository
 import java.time.LocalDate
 
 @Repository
-class MovieR2dbcRepository: ExposedR2dbcRepository<MovieRecord, Long> {
+class MovieR2dbcRepository: R2dbcRepository<Long, MovieTable, MovieRecord> {
 
     companion object: KLoggingChannel() {
         private val MovieActorJoin: Join by lazy {
@@ -57,7 +56,7 @@ class MovieR2dbcRepository: ExposedR2dbcRepository<MovieRecord, Long> {
         }
     }
 
-    override val table: IdTable<Long> = MovieTable
+    override val table = MovieTable
 
     override suspend fun ResultRow.toEntity(): MovieRecord = toMovieRecord()
 

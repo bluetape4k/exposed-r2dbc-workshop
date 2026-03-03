@@ -3,13 +3,12 @@ package exposed.r2dbc.examples.domain.repository
 import exposed.r2dbc.examples.domain.model.ActorRecord
 import exposed.r2dbc.examples.domain.model.MovieSchema.ActorTable
 import exposed.r2dbc.examples.domain.model.toActorRecord
-import io.bluetape4k.exposed.r2dbc.repository.ExposedR2dbcRepository
+import io.bluetape4k.exposed.r2dbc.repository.R2dbcRepository
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.jetbrains.exposed.v1.core.ResultRow
-import org.jetbrains.exposed.v1.core.dao.id.IdTable
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.andWhere
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
@@ -21,11 +20,11 @@ import java.time.LocalDate
  * 배우(Actor) 엔티티에 대한 Exposed R2DBC 저장소 구현체.
  */
 @Repository
-class ActorR2dbcRepository: ExposedR2dbcRepository<ActorRecord, Long> {
+class ActorR2dbcRepository: R2dbcRepository<Long, ActorTable, ActorRecord> {
 
     companion object: KLoggingChannel()
 
-    override val table: IdTable<Long> = ActorTable
+    override val table = ActorTable
 
     override suspend fun ResultRow.toEntity(): ActorRecord = toActorRecord()
 

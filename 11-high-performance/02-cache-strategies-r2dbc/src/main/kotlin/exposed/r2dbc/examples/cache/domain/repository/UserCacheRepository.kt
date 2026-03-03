@@ -3,7 +3,7 @@ package exposed.r2dbc.examples.cache.domain.repository
 import exposed.r2dbc.examples.cache.domain.model.UserRecord
 import exposed.r2dbc.examples.cache.domain.model.UserTable
 import exposed.r2dbc.examples.cache.domain.model.toUserRecord
-import io.bluetape4k.exposed.r2dbc.redisson.repository.AbstractR2dbcCacheRepository
+import io.bluetape4k.exposed.r2dbc.redisson.repository.AbstractR2dbcRedissonRepository
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.redis.redisson.cache.RedisCacheConfig
@@ -19,7 +19,7 @@ import java.time.Instant
  * Read Through / Write Through 를 이용해 DB의 사용자 정보를 캐시합니다.
  */
 @Repository
-class UserCacheRepository(redissonClient: RedissonClient): AbstractR2dbcCacheRepository<UserRecord, Long>(
+class UserCacheRepository(redissonClient: RedissonClient): AbstractR2dbcRedissonRepository<Long, UserTable, UserRecord>(
     redissonClient = redissonClient,
     cacheName = "exposed:coroutines:users",
     config = RedisCacheConfig.READ_WRITE_THROUGH_WITH_NEAR_CACHE.copy(deleteFromDBOnInvalidate = true)

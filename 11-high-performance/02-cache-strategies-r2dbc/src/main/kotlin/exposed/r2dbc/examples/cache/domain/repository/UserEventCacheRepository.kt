@@ -3,12 +3,11 @@ package exposed.r2dbc.examples.cache.domain.repository
 import exposed.r2dbc.examples.cache.domain.model.UserEventRecord
 import exposed.r2dbc.examples.cache.domain.model.UserEventTable
 import exposed.r2dbc.examples.cache.domain.model.toUserEventRecord
-import io.bluetape4k.exposed.r2dbc.redisson.repository.AbstractR2dbcCacheRepository
+import io.bluetape4k.exposed.r2dbc.redisson.repository.AbstractR2dbcRedissonRepository
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.bluetape4k.redis.redisson.cache.RedisCacheConfig
 import org.jetbrains.exposed.v1.core.ResultRow
-import org.jetbrains.exposed.v1.core.dao.id.IdTable
 import org.jetbrains.exposed.v1.core.statements.BatchInsertStatement
 import org.jetbrains.exposed.v1.core.statements.UpdateStatement
 import org.redisson.api.RedissonClient
@@ -20,7 +19,7 @@ import org.springframework.stereotype.Repository
 @Repository
 class UserEventCacheRepository(
     redissonClient: RedissonClient,
-): AbstractR2dbcCacheRepository<UserEventRecord, Long>(
+): AbstractR2dbcRedissonRepository<Long, UserEventTable, UserEventRecord>(
     redissonClient = redissonClient,
     cacheName = "exposed:coroutines:user-events",
     config = RedisCacheConfig.WRITE_BEHIND_WITH_NEAR_CACHE,
@@ -28,7 +27,7 @@ class UserEventCacheRepository(
 
     companion object: KLoggingChannel()
 
-    override val entityTable: IdTable<Long> = UserEventTable
+    override val entityTable = UserEventTable
     override suspend fun ResultRow.toEntity(): UserEventRecord = toUserEventRecord()
 
     override fun doInsertEntity(

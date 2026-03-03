@@ -169,21 +169,6 @@ class ActorRepositoryTest: AbstractR2dbcExposedTest() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `delete entity`(testDB: TestDB) = runTest {
-        withMovieAndActors(testDB) {
-            val actor = newActorRecord()
-            val savedActor = repository.save(actor)
-            savedActor.id.shouldNotBeNull()
-
-            // Delete savedActor
-            repository.delete(savedActor) shouldBeEqualTo 1
-            // Already deleted
-            repository.delete(savedActor) shouldBeEqualTo 0
-        }
-    }
-
-    @ParameterizedTest
-    @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `delete entity by id`(testDB: TestDB) = runTest {
         withMovieAndActors(testDB) {
             val actor = newActorRecord()

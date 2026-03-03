@@ -4,7 +4,7 @@ package exposed.r2dbc.examples.cache.domain.repository
 import exposed.r2dbc.examples.cache.domain.model.UserCredentialsRecord
 import exposed.r2dbc.examples.cache.domain.model.UserCredentialsTable
 import exposed.r2dbc.examples.cache.domain.model.toUserCredentialsRecord
-import io.bluetape4k.exposed.r2dbc.redisson.repository.AbstractR2dbcCacheRepository
+import io.bluetape4k.exposed.r2dbc.redisson.repository.AbstractR2dbcRedissonRepository
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.redis.redisson.cache.RedisCacheConfig
 import org.jetbrains.exposed.v1.core.ResultRow
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository
 @Repository
 class UserCredentialsCacheRepository(
     redissonClient: RedissonClient,
-): AbstractR2dbcCacheRepository<UserCredentialsRecord, String>(
+): AbstractR2dbcRedissonRepository<String, UserCredentialsTable, UserCredentialsRecord>(
     redissonClient = redissonClient,
     cacheName = "exposed:coroutines:user-credentials",
     config = RedisCacheConfig.READ_ONLY_WITH_NEAR_CACHE,
