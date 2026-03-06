@@ -243,6 +243,19 @@ Jasypt를 사용하여 R2DBC 환경에서 **결정적(검색 가능한)** 암호
 
 Jackson 3.x 버전을 사용하여 R2DBC 환경에서 JSON/JSONB 컬럼을 처리하는 방법을 학습합니다.
 
+#### [Exposed R2DBC Tink (Google Tink 기반 암호화)](06-advanced/12-exposed-r2dbc-tink/README.md)
+
+**Google Tink** 암호화 라이브러리를 Exposed R2DBC와 통합하여 DAEAD(결정적, 검색 가능)와 AEAD(비결정적, 고보안) 두 가지 암호화 방식을 제공합니다.
+
+| 컬럼 타입                                      | 암호화 방식 | WHERE 검색 | 알고리즘                              |
+|----------------------------------------------|---------|----------|-------------------------------------|
+| `tinkDaeadVarChar(name, length)`             | DAEAD   | 가능       | AES-SIV 기반 결정적 암호화                 |
+| `tinkAeadVarChar(name, length, algorithm)`   | AEAD    | 불가       | `AES256_GCM`, `CHACHA20_POLY1305` 등 |
+| `tinkAeadBinary(name, length, algorithm)`    | AEAD    | 불가       | `AES256_GCM`, `CHACHA20_POLY1305` 등 |
+
+- **DAEAD**: 동일 평문 → 항상 동일 암호문 → `WHERE` 절 검색 가능 (이름, 이메일 등)
+- **AEAD**: 동일 평문 → 매번 다른 암호문 → 더 높은 보안 강도 (주소, 비밀 데이터 등)
+
 ---
 
 ### JPA 마이그레이션
