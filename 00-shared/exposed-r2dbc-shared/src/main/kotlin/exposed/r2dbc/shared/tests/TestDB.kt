@@ -211,9 +211,9 @@ enum class TestDB(
                     .toSet()
                     .ifEmpty { setOf(H2) }
             }
-            return if (useFastDB) ALL_H2
+
+            return if (useFastDB) setOf(H2)
             else setOf(H2, POSTGRESQL, MYSQL_V8)
-            // else ALL_H2 + ALL_POSTGRES + ALL_MYSQL_MARIADB - MYSQL_V5 // MySQL 5.7 과 MySQL 8.0 이 Driver의 버전이 다름
         }
     }
 }
