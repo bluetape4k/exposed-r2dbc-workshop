@@ -9,6 +9,7 @@ import org.jetbrains.exposed.v1.core.statements.StatementInterceptor
 import org.jetbrains.exposed.v1.core.transactions.nullableTransactionScope
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
+import org.jetbrains.exposed.v1.r2dbc.transactions.TransactionManager
 import org.jetbrains.exposed.v1.r2dbc.transactions.transactionManager
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Semaphore
@@ -41,14 +42,13 @@ private suspend fun acquireSemaphoreSuspending(testDB: TestDB) =
  */
 suspend fun withDb(
     testDB: TestDB,
-    configure: (DatabaseConfig.Builder.() -> Unit)? = {},
+    configure: (DatabaseConfig.Builder.() -> Unit)? = null,
     statement: suspend R2dbcTransaction.(TestDB) -> Unit,
 ) {
 
     acquireSemaphoreSuspending(testDB)
     try {
-        val unregistered = testDB !in registeredOnShutdown
-        val newConfiguration = configure != null && !unregistered
+        val unregistered = testDB !in registeredOnShutdown || testDB.db == null
 
         if (unregistered) {
             testDB.beforeConnection()
@@ -61,22 +61,24 @@ suspend fun withDb(
         }
 
         val registeredDb = testDB.db!!
-        if (newConfiguration) {
-            testDB.db = testDB.connect(configure)
+        val database = when {
+            configure == null -> registeredDb
+            unregistered -> registeredDb
+            else -> testDB.connect(configure)
         }
-        val database = testDB.db!!
-        suspendTransaction(
-            db = database,
-            transactionIsolation = database.transactionManager.defaultIsolationLevel,
-        ) {
-            maxAttempts = 1
-            registerInterceptor(CurrentTestDBInterceptor)
-            currentTestDB = testDB
-            statement(testDB)
-        }
-        // revert any new configuration to not be carried over to the next test in suite
-        if (configure != null) {
-            testDB.db = registeredDb
+        TransactionManager.defaultDatabase = database
+        try {
+            suspendTransaction(
+                db = database,
+                transactionIsolation = database.transactionManager.defaultIsolationLevel,
+            ) {
+                maxAttempts = 1
+                registerInterceptor(CurrentTestDBInterceptor)
+                currentTestDB = testDB
+                statement(testDB)
+            }
+        } finally {
+            TransactionManager.defaultDatabase = registeredDb
         }
     } finally {
         testDbSemaphores.getValue(testDB).release()

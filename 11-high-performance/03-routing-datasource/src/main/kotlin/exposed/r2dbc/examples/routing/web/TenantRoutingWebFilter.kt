@@ -1,8 +1,6 @@
 package exposed.r2dbc.examples.routing.web
 
 import exposed.r2dbc.examples.routing.context.RoutingContextKeys
-import kotlinx.coroutines.reactor.awaitSingleOrNull
-import kotlinx.coroutines.reactor.mono
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.springframework.web.server.ServerWebExchange
@@ -19,7 +17,7 @@ class TenantRoutingWebFilter(
     private val defaultTenant: String,
 ): WebFilter {
 
-    override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> = mono {
+    override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> {
         val tenant = exchange.request.headers.getFirst(TENANT_HEADER)
             ?.takeIf { it.isNotBlank() }
             ?: defaultTenant
@@ -28,16 +26,18 @@ class TenantRoutingWebFilter(
             ?.toBooleanStrictOrNull()
             ?: exchange.request.path.value().endsWith("/readonly")
 
-        chain.filter(exchange)
+        return chain.filter(exchange)
             .contextWrite {
                 it.put(RoutingContextKeys.TENANT, tenant)
                     .put(RoutingContextKeys.READ_ONLY, readOnly)
             }
-            .awaitSingleOrNull()// awaitSingle() 을 사용하면, 전송 후에도 뭔가 처리하느라 예외가 발생함.
     }
 
     companion object {
+        /** 테넌트 식별자를 전달하는 요청 헤더 이름입니다. */
         const val TENANT_HEADER = "X-Tenant-Id"
+
+        /** 읽기 전용 라우팅 여부를 명시적으로 전달하는 요청 헤더 이름입니다. */
         const val READ_ONLY_HEADER = "X-Read-Only"
     }
 }

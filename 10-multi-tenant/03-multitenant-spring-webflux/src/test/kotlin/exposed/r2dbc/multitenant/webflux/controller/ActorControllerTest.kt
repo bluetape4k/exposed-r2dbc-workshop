@@ -113,4 +113,14 @@ class ActorControllerTest(
 
         actorWithoutHeader.firstName shouldBeEqualTo actorWithHeader.firstName
     }
+
+    @org.junit.jupiter.api.Test
+    fun `등록되지 않은 tenant 헤더는 400을 반환한다`() = runSuspendIO {
+        client
+            .get()
+            .uri("/actors")
+            .header(TENANT_HEADER, "unknown-tenant")
+            .exchange()
+            .expectStatus().isBadRequest
+    }
 }

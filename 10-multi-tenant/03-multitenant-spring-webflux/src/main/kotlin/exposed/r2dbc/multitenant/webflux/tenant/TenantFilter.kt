@@ -4,7 +4,9 @@ import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import kotlinx.coroutines.reactor.mono
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
+import org.springframework.web.server.ResponseStatusException
 import org.springframework.web.server.ServerWebExchange
 import org.springframework.web.server.WebFilter
 import org.springframework.web.server.WebFilterChain
@@ -30,7 +32,9 @@ class TenantFilter: WebFilter {
     override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> = mono {
         val tenantId = exchange.request.headers.getFirst(TENANT_HEADER)
         log.debug { "Request tenantId: $tenantId" }
-        val tenant = Tenants.getById(tenantId ?: Tenants.DEFAULT_TENANT.id)
+        val resolvedTenantId = tenantId?.takeIf { it.isNotBlank() } ?: Tenants.DEFAULT_TENANT.id
+        val tenant = Tenants.findById(resolvedTenantId)
+            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown tenant id: $resolvedTenantId")
 
         chain
             .filter(exchange)

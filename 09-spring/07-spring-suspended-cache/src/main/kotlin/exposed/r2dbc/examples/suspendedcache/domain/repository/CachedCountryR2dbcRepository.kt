@@ -5,6 +5,9 @@ import exposed.r2dbc.examples.suspendedcache.cache.LettuceSuspendedCacheManager
 import exposed.r2dbc.examples.suspendedcache.domain.model.CountryRecord
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 
+/**
+ * [CountryR2dbcRepository] 앞단에 Redis 캐시를 두는 decorator 구현입니다.
+ */
 class CachedCountryR2dbcRepository(
     private val delegate: CountryR2dbcRepository,
     private val cacheManager: LettuceSuspendedCacheManager,

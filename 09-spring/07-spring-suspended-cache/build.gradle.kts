@@ -71,6 +71,7 @@ dependencies {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
         exclude(module = "mockito-core")
     }
+    testImplementation(Libs.mockk)
 
     // Redis Cache
     implementation(Libs.lettuce_core)

@@ -2,7 +2,6 @@ package exposed.r2dbc.shared.tests
 
 import org.jetbrains.exposed.v1.core.DatabaseConfig
 import org.jetbrains.exposed.v1.core.Table
-import org.jetbrains.exposed.v1.r2dbc.ExposedR2dbcException
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction
@@ -30,11 +29,13 @@ suspend fun withTables(
         SchemaUtils.create(*tables)
         commit()
 
+        var statementFailure: Throwable? = null
         try {
             statement(testDB)
             commit()
-        } catch (ex: ExposedR2dbcException) {
-            println("Failed to execute statement: ${ex.message}")
+        } catch (ex: Throwable) {
+            statementFailure = ex
+            throw ex
         } finally {
             try {
                 SchemaUtils.drop(*tables)
@@ -42,12 +43,21 @@ suspend fun withTables(
             } catch (ex: Throwable) {
                 println("Failed to drop tables: ${ex.message}")
                 val database = testDB.db!!
-                inTopLevelSuspendTransaction(
-                    transactionIsolation = database.transactionManager.defaultIsolationLevel!!,
-                    db = database,
-                ) {
-                    maxAttempts = 1
-                    runCatching { SchemaUtils.drop(*tables) }
+                val recoveryFailure = runCatching {
+                    inTopLevelSuspendTransaction(
+                        transactionIsolation = database.transactionManager.defaultIsolationLevel!!,
+                        db = database,
+                    ) {
+                        maxAttempts = 1
+                        SchemaUtils.drop(*tables)
+                    }
+                }.exceptionOrNull()
+
+                if (statementFailure != null) {
+                    statementFailure.addSuppressed(ex)
+                    recoveryFailure?.let(statementFailure::addSuppressed)
+                } else if (recoveryFailure != null) {
+                    throw recoveryFailure
                 }
             }
         }

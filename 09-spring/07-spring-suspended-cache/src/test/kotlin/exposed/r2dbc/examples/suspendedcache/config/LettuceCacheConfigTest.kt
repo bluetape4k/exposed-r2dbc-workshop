@@ -38,4 +38,19 @@ class LettuceCacheConfigTest(
         cache.get(countryKr.code) shouldBeEqualTo countryKr
         cache.get(countryUs.code) shouldBeEqualTo countryUs
     }
+
+    @Test
+    fun `clear는 scan 기반으로 100개 초과 키도 모두 제거한다`() = runSuspendIO {
+        val cache = lettuceSuspendedCacheManager.getOrCreate<String, String>("bulk-clear")
+
+        repeat(150) { index ->
+            cache.put("key-$index", "value-$index")
+        }
+
+        cache.clear()
+
+        repeat(150) { index ->
+            cache.get("key-$index") shouldBeEqualTo null
+        }
+    }
 }

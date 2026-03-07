@@ -19,7 +19,12 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.context.annotation.Profile
+import org.springframework.beans.factory.annotation.Value
 import java.time.Duration
+
+internal fun resolvePoolMaxSize(configuredMaxSize: Int): Int =
+    if (configuredMaxSize > 0) configuredMaxSize
+    else maxOf(Runtimex.availableProcessors * 2, 16)
 
 @Configuration
 class ExposedR2dbcConfig {
@@ -112,13 +117,16 @@ class ExposedR2dbcConfig {
      */
     @Bean
     @Primary
-    fun connectionPool(connectionFactoryOptions: ConnectionFactoryOptions): ConnectionPool {
+    fun connectionPool(
+        connectionFactoryOptions: ConnectionFactoryOptions,
+        @Value("\${app.r2dbc.pool.max-size:0}") configuredMaxSize: Int,
+    ): ConnectionPool {
         val connectionFactory = ConnectionFactories.get(connectionFactoryOptions)
         val poolConfig = ConnectionPoolConfiguration.builder(connectionFactory)
             .maxIdleTime(Duration.ofMinutes(10))
             .maxLifeTime(Duration.ofMinutes(30))
             .maxCreateConnectionTime(Duration.ofSeconds(10))
-            .maxSize(maxOf(Runtimex.availableProcessors * 4, 100))
+            .maxSize(resolvePoolMaxSize(configuredMaxSize))
             .initialSize(2)
             .minIdle(2)
             .acquireRetry(3)

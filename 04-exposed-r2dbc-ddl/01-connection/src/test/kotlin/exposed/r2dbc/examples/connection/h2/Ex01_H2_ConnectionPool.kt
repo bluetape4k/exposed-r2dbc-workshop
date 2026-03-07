@@ -57,7 +57,7 @@ class Ex01_H2_ConnectionPool {
 
         val jobs = List(exceedsPoolSize) { index ->
             launch {
-                suspendTransaction {
+                suspendTransaction(db = h2PoolDB1) {
                     delay(100)
                     val entityId = TestTable.insertAndGetId { it[TestTable.testValue] = "test$index" }
                     log.debug { "Created test entity. entityId: $entityId" }
