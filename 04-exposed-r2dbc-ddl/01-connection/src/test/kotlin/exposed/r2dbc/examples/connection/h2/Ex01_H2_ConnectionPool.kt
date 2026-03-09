@@ -74,6 +74,16 @@ class Ex01_H2_ConnectionPool {
         }
     }
 
+    /**
+     * 커넥션 풀 테스트용 테이블.
+     *
+     * ```sql
+     * CREATE TABLE IF NOT EXISTS HIKARI_TESTER (
+     *     id INT AUTO_INCREMENT PRIMARY KEY,
+     *     test_value VARCHAR(32) NOT NULL
+     * )
+     * ```
+     */
     object TestTable: IntIdTable("HIKARI_TESTER") {
         val testValue: Column<String> = varchar("test_value", 32)
     }

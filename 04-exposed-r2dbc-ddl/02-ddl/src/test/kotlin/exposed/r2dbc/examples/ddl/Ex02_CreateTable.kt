@@ -22,17 +22,55 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import kotlin.test.assertFails
 
+/**
+ * Exposed R2DBC에서 테이블 생성 DDL 패턴 예제.
+ *
+ * [SchemaUtils.create]를 사용하여 다양한 방식으로 테이블을 정의하고 생성하는 방법을 보여줍니다.
+ *
+ * 주요 예제:
+ * - 중복 컬럼이 있는 테이블 생성 시 예외 발생 검증
+ * - `entityId()`로 특정 컬럼을 PRIMARY KEY로 지정
+ * - `PrimaryKey`로 단일/복합 기본키 정의
+ * - 복합 외래키(2개 컬럼 참조) 정의 방법 (`foreignKey(...)`)
+ *
+ * ```sql
+ * -- 단일 PRIMARY KEY
+ * CREATE TABLE IF NOT EXISTS book (
+ *     id SERIAL,
+ *     CONSTRAINT PK_Book_ID PRIMARY KEY (id)
+ * );
+ *
+ * -- 복합 PRIMARY KEY
+ * CREATE TABLE IF NOT EXISTS person (
+ *     id1 INT, id2 INT,
+ *     CONSTRAINT PK_Person_ID PRIMARY KEY (id1, id2)
+ * );
+ *
+ * -- 복합 FOREIGN KEY
+ * CREATE TABLE IF NOT EXISTS child1 (
+ *     id_a INT NOT NULL, id_b INT NOT NULL,
+ *     CONSTRAINT MyForeignKey1 FOREIGN KEY (id_a, id_b)
+ *     REFERENCES parent1(id_a, id_b) ON DELETE CASCADE ON UPDATE CASCADE
+ * );
+ * ```
+ *
+ * @see SchemaUtils.create
+ * @see org.jetbrains.exposed.v1.core.Table.foreignKey
+ */
 class Ex02_CreateTable: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
+    /** 동일한 컬럼명 `id`가 두 번 선언된 테이블. 생성 시 예외 발생을 검증합니다. */
     object TableWithDuplicatedColumn: Table("myTable") {
         val id1 = integer("id")
         val id2 = integer("id")  // 중복된 컬럼명
     }
 
+    /** `IntIdTable`을 사용하는 기준 테이블. `id` 컬럼이 자동 증가 INT PK입니다. */
     object IDTable: IntIdTable("IntIdTable")
 
+    /** [IDTable]의 `id`를 중복된 이름으로 참조하는 테이블. 생성 시 예외 발생을 검증합니다. */
     object TableDuplicatedColumnReferenceToIntIdTable: IntIdTable("myTable") {
         val reference = reference("id", IDTable)
     }

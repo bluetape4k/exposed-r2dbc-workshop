@@ -28,6 +28,39 @@ import org.junit.jupiter.params.provider.MethodSource
 import kotlin.test.assertFails
 import kotlin.test.assertFailsWith
 
+/**
+ * Exposed R2DBC에서 다양한 컬럼 정의 패턴을 보여주는 예제.
+ *
+ * 컬럼 기본값, 서버 기본값, CHECK 제약, generated 컬럼, nullable 처리 등
+ * 실제 DDL 생성 결과와 함께 학습할 수 있습니다.
+ *
+ * 주요 예제:
+ * - `clientDefault` / `defaultExpression` 으로 기본값 설정
+ * - `check(...)` 제약 조건 추가
+ * - `generatedAs(...)` 로 계산 컬럼(generated column) 정의
+ * - nullable 컬럼 및 nullability 검증
+ *
+ * ```sql
+ * -- CHECK 제약 예시 (H2)
+ * CREATE TABLE IF NOT EXISTS tester (
+ *     id INT NOT NULL,
+ *     "name" VARCHAR(255) NOT NULL,
+ *     CONSTRAINT chk_tester_name_valid CHECK ("name" > '')
+ * );
+ *
+ * -- Generated column 예시 (MySQL V8)
+ * CREATE TABLE IF NOT EXISTS tester (
+ *     first_name VARCHAR(30) NOT NULL,
+ *     last_name VARCHAR(30) NOT NULL,
+ *     full_name VARCHAR(61) GENERATED ALWAYS AS (CONCAT(first_name, ' ', last_name)) STORED NOT NULL
+ * );
+ * ```
+ *
+ * @see org.jetbrains.exposed.v1.core.Table.check
+ * @see org.jetbrains.exposed.v1.core.Column.generatedAs
+ * @see org.jetbrains.exposed.v1.core.Column.clientDefault
+ */
+
 @Suppress("DEPRECATION")
 class Ex04_ColumnDefinition: AbstractR2dbcExposedTest() {
 

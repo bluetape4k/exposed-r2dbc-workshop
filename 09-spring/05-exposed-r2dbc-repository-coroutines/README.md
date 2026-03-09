@@ -42,8 +42,33 @@ src/main/kotlin/exposed/r2dbc/examples/
 │       ├── MovieR2dbcRepository.kt       # 영화 Repository (ExposedR2dbcRepository 구현)
 │       └── ActorR2dbcRepository.kt       # 배우 Repository (ExposedR2dbcRepository 구현)
 └── utils/
-    └── DataInitializer.kt                # 애플리케이션 시작 시 샘플 데이터 삽입
+    └── DataInitializer.kt                # 애플리케이션 시작 시 샘플 데이터 삽입 (runBlocking 브릿지 패턴)
 ```
+
+## Spring + Coroutine 브릿지 패턴 (`DataInitializer`)
+
+`ApplicationListener<ApplicationReadyEvent>`의 `onApplicationEvent`는 일반(non-suspend) 함수입니다.
+Exposed R2DBC의 `suspendTransaction`을 사용하려면 `runBlocking`으로 코루틴 세계를 브릿지해야 합니다.
+
+```kotlin
+@Component
+class DataInitializer: ApplicationListener<ApplicationReadyEvent> {
+
+    override fun onApplicationEvent(event: ApplicationReadyEvent) {
+        // runBlocking: 현재 스레드를 블로킹하고 코루틴을 실행
+        // Dispatchers.IO: I/O 집약적 초기화 작업에 최적화된 스레드 풀 사용
+        runBlocking(Dispatchers.IO) {
+            suspendTransaction {
+                createTables()
+                populateData()
+            }
+        }
+    }
+}
+```
+
+> **주의**: `runBlocking`은 초기화 로직에서만 사용합니다. 서비스/레포지토리 레이어에서는
+> `suspend fun`과 `suspendTransaction`을 직접 사용해야 합니다.
 
 ## 데이터베이스 스키마
 

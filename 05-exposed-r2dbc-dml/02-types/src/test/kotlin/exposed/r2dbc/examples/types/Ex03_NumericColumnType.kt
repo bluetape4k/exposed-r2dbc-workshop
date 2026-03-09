@@ -32,6 +32,19 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.math.BigDecimal
 
+/**
+ * Exposed R2DBC에서 정수 및 실수 숫자 컬럼 타입을 사용하는 예제.
+ *
+ * 주요 학습 내용:
+ * - `integer()`, `long()`, `short()` — 정수 타입 컬럼
+ * - `float()` — 단정도 부동소수점 컬럼
+ * - `decimal(precision, scale)` — 고정 소수점 컬럼 (BigDecimal)
+ * - 숫자 컬럼의 최솟값/최댓값 경계 테스트
+ * - `assertFailAndRollback` 으로 범위 초과 시 예외 검증
+ * - `RoundFunction` 을 사용한 반올림 연산
+ *
+ * 모든 쿼리는 `withTables(testDB, ...)` 블록 내에서 실행됩니다.
+ */
 class Ex03_NumericColumnType: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

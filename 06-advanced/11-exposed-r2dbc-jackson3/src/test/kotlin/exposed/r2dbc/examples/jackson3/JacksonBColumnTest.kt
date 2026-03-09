@@ -55,6 +55,38 @@ import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Jackson 3.x 기반 JSONB 컬럼(`jacksonb()`) 테스트 모음.
+ *
+ * `bluetape4k-exposed` 의 `jacksonb()` 확장 함수로 정의한 JSONB(바이너리 JSON) 컬럼에 대해
+ * 다음 기능을 검증합니다:
+ *
+ * - **삽입 및 조회**: `insertAndGetId` / `selectAll` 로 객체를 JSONB 형식으로 저장하고 역직렬화하여 조회
+ * - **업데이트**: `update` 로 JSONB 컬럼 값 변경
+ * - **경로 추출 (`extract`)**: DB 내장 함수로 JSONB 내부 필드를 직접 SELECT
+ *   - PostgreSQL: `JSONB_EXTRACT_PATH` / `JSONB_EXTRACT_PATH_TEXT`
+ *   - MySQL: `JSON_EXTRACT` / `JSON_UNQUOTE(JSON_EXTRACT(...))`
+ * - **포함 여부 검사 (`contains`)**: 특정 JSON 조각이 JSONB 컬럼 값에 포함되는지 확인
+ *   - PostgreSQL: `@>` 연산자 (JSONB native)
+ *   - MySQL/MariaDB: `JSON_CONTAINS()`
+ * - **경로 존재 여부 (`exists`)**: 지정 경로에 데이터가 존재하는지 확인
+ *   - PostgreSQL: `JSONB_PATH_EXISTS()` (필터 조건 및 `optional` 변수 바인딩 지원)
+ *   - MySQL/MariaDB: `JSON_CONTAINS_PATH()`
+ * - **배열 컬럼 처리**: `jacksonb<UserGroup>`, `jacksonb<IntArray>` 등 컬렉션 타입 컬럼 지원
+ * - **기본값**: `default()` / `clientDefault()` 로 JSONB 컬럼 기본값 설정
+ * - **nullable 컬럼**: `nullable()` 선언 후 null 값 삽입 및 조회
+ * - **UPSERT**: `upsert {}` 블록에서 JSONB 컬럼 지원
+ * - **transform**: `transform(wrap, unwrap)` 으로 저장 타입과 도메인 타입 분리
+ * - **databaseGenerated**: DB 측 기본값으로 선언된 컬럼을 애플리케이션에서 읽기 전용으로 사용
+ * - **커스텀 연산자 (`??`)**: PostgreSQL 전용 `??` 연산자로 최상위 키 존재 여부 직접 검사
+ *   (`??` 는 JDBC prepared statement 의 `?` 와 충돌하여 이중으로 이스케이프해야 합니다)
+ *
+ * JSONB는 PostgreSQL에서 데이터를 파싱된 바이너리 형식으로 저장하므로
+ * JSON 텍스트 컬럼보다 경로 검색 성능이 우수하고 GIN 인덱스를 지원합니다.
+ *
+ * Jackson 3.x 는 Jakarta EE 네임스페이스 기반의 최신 메이저 버전이며,
+ * `io.bluetape4k.exposed.core.jackson3.*` 패키지의 확장 함수를 사용합니다.
+ */
 @Suppress("DEPRECATION")
 class JacksonBColumnTest: AbstractR2dbcExposedTest() {
 

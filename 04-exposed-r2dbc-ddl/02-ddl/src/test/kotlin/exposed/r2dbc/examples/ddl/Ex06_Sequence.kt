@@ -19,6 +19,20 @@ import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Exposed R2DBC에서 데이터베이스 시퀀스(SEQUENCE)를 정의하고 활용하는 예제 클래스.
+ *
+ * 시퀀스는 자동 증가하는 고유 번호를 생성하는 DB 객체로,
+ * `SchemaUtils.createSequence()`로 생성하고 `nextIntVal()`/`nextLongVal()`로 다음 값을 조회합니다.
+ *
+ * 주요 학습 내용:
+ * - [SchemaUtils.createSequence] / [SchemaUtils.dropSequence]를 통한 시퀀스 생명주기 관리
+ * - [nextIntVal]을 사용한 INSERT 시 시퀀스 값 할당
+ * - H2, PostgreSQL 등 DB별 시퀀스 지원 여부 확인 (`currentDialect.supportsSequenceAsGeneratedKeys`)
+ *
+ * @see org.jetbrains.exposed.v1.core.Sequence
+ * @see org.jetbrains.exposed.v1.r2dbc.SchemaUtils.createSequence
+ */
 class Ex06_Sequence: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

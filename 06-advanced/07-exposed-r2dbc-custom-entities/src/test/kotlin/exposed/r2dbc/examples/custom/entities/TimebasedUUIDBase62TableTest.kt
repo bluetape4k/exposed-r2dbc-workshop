@@ -28,6 +28,25 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import kotlin.random.Random
 
+/**
+ * 시간 기반 UUID를 Base62 인코딩한 22자 문자열을 기본 키로 사용하는 테이블 예제.
+ *
+ * `bluetape4k-exposed` 의 [TimebasedUUIDBase62Table]을 상속받아 `VARCHAR(22)` PRIMARY KEY를
+ * 자동으로 Base62 인코딩된 UUID 값으로 채웁니다. [TimebasedUUIDTable]의 128비트 UUID를
+ * 대·소문자 알파벳과 숫자만으로 이루어진 22자 문자열로 압축하므로, URL 안전하고 사람이 읽기 쉽습니다.
+ *
+ * TimebasedUUID Base62 특성:
+ * - 길이: 22자 (`[0-9A-Za-z]` 문자만 사용)
+ * - 시간 정렬 가능 (UUIDv1 기반)
+ * - UUID(36자)보다 짧아 저장 공간 및 인덱스 효율 향상
+ * - URL, 파일명, 경로에 그대로 사용 가능 (특수문자 없음)
+ *
+ * 추가 테스트:
+ * - [insertIgnore as flow]: Kotlin Flow를 활용한 병렬 `INSERT IGNORE` 패턴 (MySQL/PostgreSQL 전용)
+ *
+ * @see TimebasedUUIDTableTest 표준 UUID 형식이 필요한 경우
+ * @see KsuidTableTest 순수 문자열 정렬 ID가 필요한 경우
+ */
 @TestMethodOrder(MethodOrderer.MethodName::class)
 class TimebasedUUIDBase62TableTest: AbstractCustomIdTableTest() {
 

@@ -57,10 +57,26 @@ import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-@Suppress("DEPRECATION")
 /**
- * Jackson 기반 JSON 컬럼의 직렬화/역직렬화와 검색 함수를 검증합니다.
+ * Jackson 기반 JSON(`jackson()`) 컬럼의 직렬화/역직렬화와 JSON 검색 함수를 검증하는 테스트.
+ *
+ * `bluetape4k-exposed` 의 `jackson()` 확장 함수를 사용하여 Kotlin 객체를 JSON 텍스트 형식으로
+ * 컬럼에 저장하고, JSON 경로 추출(`extract`), 포함 여부(`contains`), 존재 여부(`exists`) 함수를 테스트합니다.
+ *
+ * 주요 테스트 케이스:
+ * - INSERT/SELECT: JSON 컬럼에 Kotlin 객체 저장 및 역직렬화 검증
+ * - UPDATE: JSON 컬럼 값 수정 후 재조회
+ * - `extract`: JSON 경로로 특정 필드 추출 (DB 방언별 경로 문법 차이 처리)
+ * - `contains`: JSON 컬럼이 특정 JSON 부분 구조를 포함하는지 검색 (PostgreSQL, MySQL 지원)
+ * - `exists`: JSON 경로가 존재하는지 검색
+ * - 배열 컬럼(`List<User>`, `IntArray` 등)에서의 JSON 검색 함수 조합
+ * - `default`, `clientDefault`, `databaseGenerated`, `transform`, `upsert` 지원
+ * - nullable JSON 컬럼 처리
+ *
+ * @see JacksonBColumnTest JSONB 컬럼(바이너리) 테스트
+ * @see JacksonSchema 스키마 및 헬퍼 함수 정의
  */
+@Suppress("DEPRECATION")
 class JacksonColumnTest: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

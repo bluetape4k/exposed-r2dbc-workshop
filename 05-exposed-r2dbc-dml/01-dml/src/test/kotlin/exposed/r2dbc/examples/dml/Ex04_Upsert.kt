@@ -53,6 +53,22 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.util.*
 import kotlin.properties.Delegates
 
+/**
+ * Exposed R2DBC에서 UPSERT(INSERT OR UPDATE) 구문을 사용하는 예제.
+ *
+ * 주요 학습 내용:
+ * - `upsert { }` 를 사용한 기본 Upsert (충돌 시 업데이트)
+ * - `batchUpsert()` 로 여러 행 일괄 Upsert
+ * - `onConflict` 절로 충돌 처리 전략 지정
+ * - `upsert { } where` 조건부 Upsert
+ * - UUID 기본키와 함께 Upsert 사용
+ *
+ * 주의사항:
+ * - Upsert 지원 방식은 DB마다 다릅니다 (PostgreSQL: `ON CONFLICT DO UPDATE`, MySQL: `ON DUPLICATE KEY UPDATE`)
+ * - H2는 `MERGE INTO` 구문을 사용합니다.
+ *
+ * 모든 쿼리는 `withTables(testDB, ...)` 블록 내에서 실행됩니다.
+ */
 class Ex04_Upsert: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

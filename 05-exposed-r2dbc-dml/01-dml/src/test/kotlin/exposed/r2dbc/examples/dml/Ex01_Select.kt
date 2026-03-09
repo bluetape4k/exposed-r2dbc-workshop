@@ -51,6 +51,20 @@ import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Exposed R2DBC에서 SELECT 쿼리를 사용하는 다양한 방법을 보여주는 예제.
+ *
+ * 주요 학습 내용:
+ * - `selectAll()`, `select { where }` 를 사용한 기본 조회
+ * - `orderBy`, `limit`, `offset` 을 활용한 결과 제어
+ * - `groupBy`, `having` 을 사용한 집계 쿼리
+ * - `inSubQuery`, `inTable`, `eq AnyFrom`, `neq AnyFrom` 등 비교 연산자
+ * - `null` 비교: `isNull`, `isNotNull`, `nullSafeEq`
+ * - 집합 연산: UNION, EXCEPT, INTERSECT
+ *
+ * 모든 쿼리는 `withTables(testDB, ...)` 블록 내에서 실행되며,
+ * H2, PostgreSQL, MySQL, MariaDB에서 테스트됩니다.
+ */
 class Ex01_Select: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

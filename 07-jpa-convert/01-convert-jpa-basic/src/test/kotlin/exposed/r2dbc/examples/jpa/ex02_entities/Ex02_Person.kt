@@ -211,7 +211,7 @@ class Ex02_Person: AbstractR2dbcExposedTest() {
 
             // DELETE FROM PERSONS WHERE (PERSONS.ID > $id1) OR (PERSONS.OCCUPATION IS NOT NULL) AND (PERSONS.ID < $id3)
             persons.deleteWhere {
-                (persons.id greaterEq id1 or persons.occupation.isNotNull()) and (persons.employeed eq true)
+                (persons.id greaterEq id1 or persons.occupation.isNotNull()) and (persons.employed eq true)
             } shouldBeEqualTo 5
         }
     }
@@ -233,7 +233,7 @@ class Ex02_Person: AbstractR2dbcExposedTest() {
             val id3 = insertPerson()
 
             persons.deleteWhere {
-                (persons.id greaterEq id1) or ((persons.occupation.isNotNull()) and (persons.employeed eq true))
+                (persons.id greaterEq id1) or ((persons.occupation.isNotNull()) and (persons.employed eq true))
             } shouldBeEqualTo 5
         }
     }
@@ -288,7 +288,7 @@ class Ex02_Person: AbstractR2dbcExposedTest() {
                 it[firstName] = "John"
                 it[lastName] = "Doe"
                 it[birthDate] = LocalDate.now()
-                it[employeed] = true
+                it[employed] = true
                 it[occupation] = "Software Engineer"
                 it[addressId] = 1L
             }
@@ -319,7 +319,7 @@ class Ex02_Person: AbstractR2dbcExposedTest() {
                 this[persons.firstName] = record.firstName!!
                 this[persons.lastName] = record.lastName!!
                 this[persons.birthDate] = record.birthDate!!
-                this[persons.employeed] = record.employeed!!
+                this[persons.employed] = record.employed!!
                 this[persons.occupation] = record.occupation
                 this[persons.addressId] = record.address!!
             }
@@ -355,7 +355,7 @@ class Ex02_Person: AbstractR2dbcExposedTest() {
                     persons.firstName,
                     persons.lastName,
                     persons.birthDate,
-                    persons.employeed,
+                    persons.employed,
                     persons.occupation,
                     persons.addressId
                 ).where {
@@ -399,7 +399,7 @@ class Ex02_Person: AbstractR2dbcExposedTest() {
                     personsDml.firstName,
                     personsDml.lastName,
                     personsDml.birthDate,
-                    personsDml.employeed,
+                    personsDml.employed,
                     personsDml.occupation,
                     personsDml.addressId
                 ).orderBy(personsDml.id)

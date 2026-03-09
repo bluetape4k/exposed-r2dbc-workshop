@@ -16,6 +16,17 @@ import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Exposed R2DBC에서 Double(배정밀도 부동소수점) 컬럼 타입을 사용하는 예제.
+ *
+ * 주요 학습 내용:
+ * - `double()` 컬럼 타입 정의 및 사용
+ * - Double 값의 삽입, 조회, 비교
+ * - `insertAndGetId()` 로 삽입 후 ID 즉시 반환
+ * - nullable double 컬럼 처리
+ *
+ * 모든 쿼리는 `withTables(testDB, ...)` 블록 내에서 실행됩니다.
+ */
 class Ex04_DoubleColumnType: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

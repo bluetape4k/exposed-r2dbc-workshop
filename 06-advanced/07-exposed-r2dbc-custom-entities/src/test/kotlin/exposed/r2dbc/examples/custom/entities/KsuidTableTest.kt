@@ -20,6 +20,20 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import kotlin.random.Random
 
+/**
+ * KSUID(K-Sortable Unique Identifier)를 기본 키로 사용하는 테이블 예제.
+ *
+ * `bluetape4k-exposed` 의 [KsuidTable]을 상속받아 `VARCHAR(27)` PRIMARY KEY를 자동으로
+ * KSUID 값으로 채웁니다. KSUID는 초(second) 단위 정렬 가능한 고유 식별자입니다.
+ *
+ * KSUID 특성:
+ * - 길이: 27자 (Base62 인코딩)
+ * - 시간 정렬 가능 (초 단위)
+ * - 전역 고유성 보장
+ * - UUID v4 대비 더 짧고 정렬 가능
+ *
+ * @see KsuidMillisTableTest 밀리초 단위 정밀도가 필요한 경우
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 class KsuidTableTest: AbstractCustomIdTableTest() {
 

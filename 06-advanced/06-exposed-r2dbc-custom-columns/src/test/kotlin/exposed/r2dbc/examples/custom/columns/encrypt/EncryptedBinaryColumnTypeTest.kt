@@ -21,6 +21,23 @@ import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * 결정적(Deterministic) 암호화를 BINARY 컬럼에 적용하는 커스텀 컬럼 타입 예제.
+ *
+ * `bluetape4k-exposed` 의 `encryptedBinary()` 확장 함수를 사용하여
+ * INSERT 시 자동으로 바이너리 데이터를 암호화하고, SELECT 시 자동으로 복호화합니다.
+ * 결정적 암호화이므로 암호화된 바이너리 값을 WHERE 절에서 직접 비교할 수 있습니다.
+ *
+ * [EncryptedVarCharColumnTypeTest] 와 달리 바이너리 형태로 저장하며,
+ * PostgreSQL 에서는 `bytea`, MySQL 에서는 `VARBINARY` 타입을 사용합니다.
+ *
+ * 지원 암호화 알고리즘 ([Encryptors]):
+ * - [Encryptors.DeterministicAES]: AES 결정적 암호화
+ * - [Encryptors.DeterministicRC4]: RC4 결정적 암호화
+ * - [Encryptors.TripleDES]: Triple DES 암호화
+ *
+ * 내부 테이블 [T1]은 테스트 전용 private 스키마입니다.
+ */
 class EncryptedBinaryColumnTypeTest: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

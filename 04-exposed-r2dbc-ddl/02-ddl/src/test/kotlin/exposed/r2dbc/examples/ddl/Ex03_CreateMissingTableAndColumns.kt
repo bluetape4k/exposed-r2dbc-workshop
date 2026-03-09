@@ -19,6 +19,30 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.*
 
+/**
+ * Exposed R2DBC에서 누락된 테이블 및 컬럼을 자동 생성하는 예제.
+ *
+ * [SchemaUtils.createMissingTablesAndColumns]를 사용하여 이미 존재하는 테이블에
+ * 새 컬럼/인덱스를 추가하거나, 없는 테이블만 선택적으로 생성하는 방법을 보여줍니다.
+ * 스키마 마이그레이션이 필요한 상황에서 유용합니다.
+ *
+ * 주요 예제:
+ * - V1 테이블 생성 후 V2로 uniqueIndex 추가
+ * - `IdTable<String>`으로 UUID 기반 PK 테이블 생성
+ * - autoIncrement 컬럼을 일반 INT로 변경하는 스키마 전환
+ *
+ * ```sql
+ * -- V1 테이블 생성
+ * CREATE TABLE IF NOT EXISTS tester (
+ *     id INT PRIMARY KEY, "name" VARCHAR(50) NOT NULL, "time" BIGINT NOT NULL
+ * );
+ *
+ * -- V2로 uniqueIndex 추가
+ * ALTER TABLE tester ADD CONSTRAINT tester_time_unique UNIQUE ("time");
+ * ```
+ *
+ * @see SchemaUtils.createMissingTablesAndColumns
+ */
 class Ex03_CreateMissingTableAndColumns: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

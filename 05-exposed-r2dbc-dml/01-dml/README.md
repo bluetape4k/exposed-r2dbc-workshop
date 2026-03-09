@@ -55,7 +55,7 @@ src/test/kotlin/exposed/r2dbc/examples/dml/
 | 파일            | 설명                                                                                                           |
 |---------------|--------------------------------------------------------------------------------------------------------------|
 | `Ex01_Select` | WHERE 조건, AND/OR 결합, `inList`, `inSubQuery`, `anyFrom`, `allFrom`, DISTINCT, LIMIT/OFFSET 등 SELECT의 거의 모든 패턴 |
-| `Ex02_Insert` | 단건/대량 INSERT, `insertIgnore`, `insertAndGetId`, auto-increment, client-default 값                             |
+| `Ex02_Insert` | 단건/대량 INSERT, `insertIgnore`, `insertAndGetId`, auto-increment, generated 컬럼(auto-derived, read-only), Sequence, UUID 기반 삽입 |
 | `Ex03_Update` | 단건 UPDATE, joinQuery를 이용한 조건부 UPDATE, alias 기반 UPDATE                                                        |
 | `Ex04_Upsert` | PK/Unique 충돌 시 INSERT or UPDATE, `batchUpsert`, `onUpdate` 커스텀 로직, `where` 조건, `onUpdateExclude`             |
 | `Ex05_Delete` | `deleteWhere`, `deleteAll`, `deleteIgnoreWhere`, JOIN 기반 삭제                                                  |

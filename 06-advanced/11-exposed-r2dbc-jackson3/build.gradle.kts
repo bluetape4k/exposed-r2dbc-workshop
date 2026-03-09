@@ -10,12 +10,11 @@ dependencies {
     // Exposed
     implementation(Libs.exposed_r2dbc)
     implementation(Libs.bluetape4k_exposed_r2dbc)
-    implementation(Libs.bluetape4k_exposed_jackson3)
-
-    // Jackson 3
-    implementation(Libs.bluetape4k_jackson3)
-    implementation(Libs.jackson3_module_kotlin)
-    implementation(Libs.jackson3_module_blackbird)
+    // Jackson 3 (테스트에서만 사용)
+    testImplementation(Libs.bluetape4k_exposed_jackson3)
+    testImplementation(Libs.bluetape4k_jackson3)
+    testImplementation(Libs.jackson3_module_kotlin)
+    testImplementation(Libs.jackson3_module_blackbird)
 
     testImplementation(Libs.bluetape4k_junit5)
 

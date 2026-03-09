@@ -22,6 +22,19 @@ import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Exposed R2DBC에서 COUNT 집계 함수를 사용하는 예제.
+ *
+ * 주요 학습 내용:
+ * - `count()` 로 전체 행 수 조회
+ * - `countDistinct()` 로 중복 제거 후 행 수 조회
+ * - `count()` 와 `alias` 를 함께 사용하는 방법
+ * - GROUP BY와 함께 COUNT 사용
+ * - UNION 쿼리에서 COUNT 사용
+ * - DISTINCT 컬럼이 포함된 쿼리에서 COUNT
+ *
+ * 모든 쿼리는 `withCitiesAndUsers(testDB)` 블록 내에서 실행됩니다.
+ */
 class Ex08_Count: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

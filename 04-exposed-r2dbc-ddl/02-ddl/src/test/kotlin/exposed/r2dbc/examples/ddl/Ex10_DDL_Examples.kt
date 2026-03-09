@@ -73,7 +73,22 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.util.*
 
 /**
- * 다양한 DDL 예제
+ * Exposed R2DBC의 종합 DDL 예제 모음.
+ *
+ * 테이블 생성, 스키마 관리, 외래키, CHECK 제약, 컬럼 수정, 그리고 트랜잭션 격리 수준 등
+ * 다양한 DDL 패턴을 하나의 클래스에서 종합적으로 학습합니다.
+ *
+ * 주요 예제:
+ * - 테이블 생성/삭제 (`SchemaUtils.create`, `SchemaUtils.drop`)
+ * - 스키마 지정 테이블 (`withSchemas`)
+ * - 외래키 및 참조 무결성 (`reference`, `ReferenceOption`)
+ * - CHECK 제약 조건 추가 (`check(...)`, `CheckConstraint`)
+ * - INSERT 후 generated key 조회
+ * - 트랜잭션 격리 수준 설정 (`IsolationLevel`)
+ * - `generateKey()` 를 통한 ID 채번 확인
+ *
+ * @see SchemaUtils
+ * @see org.jetbrains.exposed.v1.core.Table.check
  */
 class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
 

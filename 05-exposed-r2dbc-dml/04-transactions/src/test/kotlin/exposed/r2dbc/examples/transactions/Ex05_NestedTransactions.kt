@@ -20,6 +20,21 @@ import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Exposed R2DBC에서 중첩 트랜잭션(Nested Transaction)을 사용하는 예제 클래스.
+ *
+ * 중첩 트랜잭션은 외부 트랜잭션 안에서 내부 트랜잭션을 열어,
+ * 내부 트랜잭션의 롤백이 외부 트랜잭션에 영향을 주지 않도록 격리하는 패턴입니다.
+ *
+ * 주요 학습 내용:
+ * - [R2dbcDatabaseConfig]에서 `useNestedTransactions = true` 설정
+ * - [suspendTransaction] 내부에서 다시 [suspendTransaction]을 호출하여 중첩 트랜잭션 생성
+ * - 내부 트랜잭션 롤백 시 외부 트랜잭션의 데이터는 유지되는 격리 동작 확인
+ * - SAVEPOINT 기반의 부분 롤백 메커니즘 이해
+ *
+ * @see R2dbcDatabaseConfig
+ * @see suspendTransaction
+ */
 class Ex05_NestedTransactions: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

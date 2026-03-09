@@ -24,7 +24,23 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 /**
- * Jasypt 기반 암호화 컬럼의 CRUD 동작을 검증한다.
+ * Jasypt(Java Simplified Encryption) 기반 암호화 컬럼의 CRUD 동작을 검증한다.
+ *
+ * `bluetape4k-exposed` 의 `jasyptVarChar` / `jasyptBinary` 확장 함수를 사용하여
+ * Exposed 컬럼에 투명한 암복호화를 적용합니다.
+ *
+ * Jasypt 는 결정적(Deterministic) 암호화와 비결정적(Non-Deterministic) 암호화를 모두 지원합니다:
+ * - **결정적 암호화** (`Encryptors.DeterministicAES`, `Encryptors.DeterministicRC4`):
+ *   같은 평문은 항상 같은 암호문을 생성하므로 WHERE 조건 검색 및 인덱스 사용이 가능합니다.
+ * - **비결정적 암호화** (`Encryptors.TripleDES`, `Encryptors.RC2`):
+ *   같은 평문도 매번 다른 암호문을 생성하므로 WHERE 조건 검색이 불가능합니다.
+ *   (`assertFailsWith<AssertionError>` 로 검색 불가 특성을 검증합니다)
+ *
+ * 검증 항목:
+ * - 문자열 암호화 / 복호화 (VarChar, Binary)
+ * - WHERE 절 검색 가능 여부 (결정적 vs 비결정적)
+ * - UPDATE 후 암호화 값 변경 및 복호화 확인
+ * - nullable 암호화 컬럼에서 null 값 보존
  */
 class JasyptColumnTypeTest: AbstractR2dbcExposedTest() {
 

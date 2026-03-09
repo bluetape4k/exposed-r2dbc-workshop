@@ -25,6 +25,34 @@ import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Exposed R2DBC에서 인덱스 생성 패턴을 보여주는 예제.
+ *
+ * 단순 인덱스, 복합 인덱스, 유니크 인덱스, 부분 인덱스(함수형 인덱스) 등
+ * 다양한 [SchemaUtils]를 통해 인덱스를 생성하고 검증하는 방법을 학습합니다.
+ *
+ * 주요 예제:
+ * - `index(...)` / `uniqueIndex(...)` 로 인덱스 정의
+ * - 복합 컬럼 인덱스 (`index(customIndexName, isUnique, col1, col2)`)
+ * - 함수형/부분 인덱스 (`filterCondition` 파라미터 활용)
+ * - `suspendIndexes()` 로 런타임 인덱스 목록 조회
+ *
+ * ```sql
+ * -- 복합 유니크 인덱스 (Postgres)
+ * CREATE UNIQUE INDEX tester_full_name ON tester (first_name, last_name);
+ *
+ * -- 부분 인덱스 (Postgres)
+ * CREATE INDEX tester_name_partial ON tester (first_name)
+ *     WHERE first_name >= 'M';
+ *
+ * -- 함수형 인덱스 (Postgres)
+ * CREATE INDEX tester_lower_name ON tester (LOWER(first_name));
+ * ```
+ *
+ * @see SchemaUtils.create
+ * @see org.jetbrains.exposed.v1.core.Table.index
+ * @see org.jetbrains.exposed.v1.core.Table.uniqueIndex
+ */
 class Ex05_CreateIndex: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

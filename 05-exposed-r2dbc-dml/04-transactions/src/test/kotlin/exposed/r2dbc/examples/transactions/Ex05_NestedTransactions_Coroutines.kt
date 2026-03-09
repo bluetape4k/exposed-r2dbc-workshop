@@ -85,6 +85,23 @@ suspend fun <T> runWithSavepointOrNewTransaction(
 }
 
 
+/**
+ * Exposed R2DBC에서 코루틴 환경의 중첩 트랜잭션(Savepoint 기반)을 사용하는 예제.
+ *
+ * 주요 학습 내용:
+ * - `suspendTransaction { suspendTransaction { } }` 코루틴 중첩 트랜잭션 구성
+ * - Savepoint를 통한 내부 트랜잭션 부분 롤백
+ * - `rollback()` / `commit()` 수동 제어
+ * - 외부 트랜잭션 커밋 후에도 내부 롤백 데이터가 영향받지 않음을 검증
+ * - 코루틴 컨텍스트에서 자동 커밋(auto-commit) 모드와 Savepoint의 관계
+ *
+ * 주의사항:
+ * - 코루틴 환경에서 중첩 트랜잭션은 R2DBC Savepoint API를 사용합니다.
+ * - 자동 커밋 모드에서 Savepoint 동작은 DB마다 다를 수 있습니다.
+ * - `withContext(Dispatchers.IO)` 와 조합 시 코루틴 컨텍스트 전환에 주의가 필요합니다.
+ *
+ * 모든 쿼리는 `withDb(testDB)` 블록 내에서 실행됩니다.
+ */
 class Ex05_NestedTransactions_Coroutines: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

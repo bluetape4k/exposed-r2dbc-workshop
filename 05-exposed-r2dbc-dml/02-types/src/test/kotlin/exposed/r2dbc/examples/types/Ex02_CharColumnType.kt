@@ -23,6 +23,19 @@ import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Exposed R2DBC에서 문자열 관련 컬럼 타입을 사용하는 예제.
+ *
+ * 주요 학습 내용:
+ * - `char(n)` — 고정 길이 문자열 컬럼
+ * - `varchar(n)` — 가변 길이 문자열 컬럼
+ * - `text()` — 대용량 텍스트 컬럼
+ * - `largeText()` — 초대용량 텍스트 (LONGTEXT, MySQL/MariaDB)
+ * - `mediumText()` — 중간 크기 텍스트 (MEDIUMTEXT, MySQL/MariaDB)
+ * - 문자열 최대 길이 초과 시 예외 발생 확인
+ *
+ * 모든 쿼리는 `withTables(testDB, ...)` 블록 내에서 실행됩니다.
+ */
 class Ex02_CharColumnType: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

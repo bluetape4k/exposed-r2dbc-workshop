@@ -20,6 +20,18 @@ import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 import java.io.Serializable
 import java.time.LocalDate
 
+/**
+ * JPA에서 Exposed R2DBC로 마이그레이션하는 예제 스키마 모음.
+ *
+ * JPA의 `@Entity`, `@Table`, `@Column` 어노테이션 기반 매핑 대신
+ * Exposed의 [LongIdTable], [LongEntity], [LongEntityClass] 패턴을 사용합니다.
+ *
+ * 주요 차이점:
+ * - JPA: 어노테이션 + EntityManager + JPQL
+ * - Exposed: Kotlin DSL + DAO/DSL API + R2DBC 비동기 트랜잭션 ([suspendTransaction])
+ *
+ * 이 스키마는 `addresses` 테이블과 `persons` 테이블 간의 다대일(Many-to-One) 관계를 정의합니다.
+ */
 object PersonSchema: KLoggingChannel() {
 
     val allPersonTables = arrayOf(AddressTable, PersonTable)
@@ -60,7 +72,7 @@ object PersonSchema: KLoggingChannel() {
         val firstName: Column<String> = varchar("first_name", 50)
         val lastName: Column<String> = varchar("last_name", 50)
         val birthDate: Column<LocalDate> = date("birth_date")
-        val employeed: Column<Boolean> = bool("employeed").default(true)
+        val employed: Column<Boolean> = bool("employeed").default(true)
         val occupation: Column<String?> = varchar("occupation", 255).nullable()
         val addressId: Column<EntityID<Long>> = reference("address_id", AddressTable)  // many to one
     }
@@ -75,7 +87,7 @@ object PersonSchema: KLoggingChannel() {
         val firstName = varchar("first_name", 50)
         val lastName = varchar("last_name", 50)
         val birthDate = date("birth_date")
-        val employeed = bool("employeed").default(true)
+        val employed = bool("employeed").default(true)
         val occupation = varchar("occupation", 255).nullable()
         val addressId = long("address_id")  // many to one
 
@@ -106,7 +118,7 @@ object PersonSchema: KLoggingChannel() {
         var firstName: String by PersonTable.firstName
         var lastName: String by PersonTable.lastName
         var birthDate: LocalDate by PersonTable.birthDate
-        var employeed: Boolean by PersonTable.employeed
+        var employed: Boolean by PersonTable.employed
         var occupation: String? by PersonTable.occupation
         var address: Address by Address referencedOn PersonTable.addressId
 
@@ -116,28 +128,34 @@ object PersonSchema: KLoggingChannel() {
             .add("firstName", firstName)
             .add("lastName", lastName)
             .add("birthDate", birthDate)
-            .add("employeed", employeed)
+            .add("employed", employed)
             .add("occupation", occupation)
             .add("address", address)
             .toString()
     }
 
+    /**
+     * SELECT 결과를 담는 불변 데이터 클래스. JPA의 DTO Projection에 해당합니다.
+     */
     data class PersonRecord(
         val id: Long? = null,
         val firstName: String? = null,
         val lastName: String? = null,
         val birthDate: LocalDate? = null,
-        val employeed: Boolean? = null,
+        val employed: Boolean? = null,
         val occupation: String? = null,
         val address: Long? = null,
     ): Serializable
 
+    /**
+     * 연관 엔티티([Address])를 포함하는 가변 데이터 클래스. JPA의 Fetch Join 결과 매핑에 해당합니다.
+     */
     data class PersonWithAddress(
         var id: Long? = null,
         var firstName: String? = null,
         var lastName: String? = null,
         var birthDate: LocalDate? = null,
-        var employeed: Boolean? = null,
+        var employed: Boolean? = null,
         var occupation: String? = null,
         var address: Address? = null,
     ): Serializable
@@ -183,7 +201,7 @@ object PersonSchema: KLoggingChannel() {
                 it[firstName] = "Fred"
                 it[lastName] = "Flintstone"
                 it[birthDate] = LocalDate.of(1935, 2, 1)
-                it[employeed] = true
+                it[employed] = true
                 it[occupation] = "Brontosaurus Operator"
                 it[addressId] = addr1
             }
@@ -191,7 +209,7 @@ object PersonSchema: KLoggingChannel() {
                 it[firstName] = "Wilma"
                 it[lastName] = "Flintstone"
                 it[birthDate] = LocalDate.of(1940, 2, 1)
-                it[employeed] = false
+                it[employed] = false
                 it[occupation] = "Accountant"
                 it[addressId] = addr1
             }
@@ -199,7 +217,7 @@ object PersonSchema: KLoggingChannel() {
                 it[firstName] = "Pebbles"
                 it[lastName] = "Flintstone"
                 it[birthDate] = LocalDate.of(1960, 5, 6)
-                it[employeed] = false
+                it[employed] = false
                 it[addressId] = addr1
             }
             flushCache()
@@ -208,7 +226,7 @@ object PersonSchema: KLoggingChannel() {
                 it[firstName] = "Barney"
                 it[lastName] = "Rubble"
                 it[birthDate] = LocalDate.of(1937, 2, 1)
-                it[employeed] = true
+                it[employed] = true
                 it[occupation] = "Brontosaurus Operator"
                 it[addressId] = addr2
             }
@@ -216,7 +234,7 @@ object PersonSchema: KLoggingChannel() {
                 it[firstName] = "Betty"
                 it[lastName] = "Rubble"
                 it[birthDate] = LocalDate.of(1943, 2, 1)
-                it[employeed] = false
+                it[employed] = false
                 it[occupation] = "Engineer"
                 it[addressId] = addr2
             }
@@ -224,7 +242,7 @@ object PersonSchema: KLoggingChannel() {
                 it[firstName] = "Bamm Bamm"
                 it[lastName] = "Rubble"
                 it[birthDate] = LocalDate.of(1963, 7, 8)
-                it[employeed] = false
+                it[employed] = false
                 it[addressId] = addr2
             }
             flushCache()

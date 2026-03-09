@@ -45,8 +45,33 @@ src/main/kotlin/exposed/r2dbc/examples/suspendedcache/
 │       ├── DefaultCountryR2dbcRepository.kt     # DB 직접 조회 구현
 │       └── CachedCountryR2dbcRepository.kt      # Redis 캐시 + DB 조회 (Decorator 패턴)
 └── utils/
-    └── DataPopulator.kt                         # 애플리케이션 시작 시 249개 국가 코드 샘플 데이터 삽입
+    └── DataPopulator.kt                         # 애플리케이션 시작 시 249개 국가 코드 샘플 데이터 삽입 (runBlocking 브릿지 패턴)
 ```
+
+## Spring + Coroutine 브릿지 패턴 (`DataPopulator`)
+
+`ApplicationListener<ApplicationReadyEvent>`의 `onApplicationEvent`는 일반(non-suspend) 함수입니다.
+Exposed R2DBC의 `suspendTransaction`을 사용하려면 `runBlocking`으로 코루틴 세계를 브릿지해야 합니다.
+
+```kotlin
+@Component
+class DataPopulator: ApplicationListener<ApplicationReadyEvent> {
+
+    override fun onApplicationEvent(event: ApplicationReadyEvent) {
+        // runBlocking: 현재 스레드를 블로킹하고 코루틴을 실행 (초기화 전용 패턴)
+        // Dispatchers.IO: 249개 국가 코드 데이터 삽입에 최적화된 I/O 스레드 풀 사용
+        runBlocking(Dispatchers.IO) {
+            suspendTransaction {
+                createTables()
+                populateCountries()
+            }
+        }
+    }
+}
+```
+
+> **주의**: `runBlocking`은 초기화 로직에서만 사용합니다. Repository/Service 레이어에서는
+> `suspend fun`과 `suspendTransaction`을 직접 사용해야 합니다.
 
 ## 아키텍처
 

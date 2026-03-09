@@ -22,6 +22,21 @@ import org.junit.jupiter.params.provider.MethodSource
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
+/**
+ * Exposed R2DBC에서 Kotlin UUID(`kotlin.uuid.Uuid`)를 기본키 컬럼 타입으로 사용하는 예제.
+ *
+ * 주요 학습 내용:
+ * - `kotlinUUID()` 컬럼 정의로 Kotlin `Uuid` 기반 기본키 생성
+ * - `@OptIn(ExperimentalUuidApi::class)` 어노테이션 필요
+ * - Kotlin UUID를 사용한 삽입, 조회
+ * - Java UUID와 Kotlin UUID의 차이점 이해
+ *
+ * 주의사항:
+ * - `kotlin.uuid.Uuid` API는 실험적(experimental)이므로 `@OptIn` 이 필요합니다.
+ * - Kotlin UUID는 Kotlin 2.0+ 에서 사용 가능합니다.
+ *
+ * 모든 쿼리는 `withTables(testDB, ...)` 블록 내에서 실행됩니다.
+ */
 @OptIn(ExperimentalUuidApi::class)
 class Ex10_KotlinUUIDColumnType: AbstractR2dbcExposedTest() {
 

@@ -8,6 +8,11 @@ import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
 import org.jetbrains.exposed.v1.javatime.timestamp
 import java.time.Instant
 
+/**
+ * 사용자 이벤트 유형을 정의하는 열거형입니다.
+ *
+ * 로그인, 로그아웃, 회원가입 등 사용자 계정 관련 이벤트를 분류합니다.
+ */
 enum class UserEventType {
     LOGIN,
     LOGOUT,
@@ -40,6 +45,12 @@ object UserEventTable: LongIdTable("user_action") {
     }
 }
 
+/**
+ * 사용자 이벤트 정보를 담는 DTO입니다.
+ *
+ * Write-Behind 캐시 전략에서 사용되며, Redis에 먼저 저장 후 비동기로 DB에 반영됩니다.
+ * `id`는 Snowflake 알고리즘으로 자동 생성되어 분산 환경에서도 유일성이 보장됩니다.
+ */
 data class UserEventRecord(
     override val id: Long = Snowflakers.Global.nextId(),
     val username: String,

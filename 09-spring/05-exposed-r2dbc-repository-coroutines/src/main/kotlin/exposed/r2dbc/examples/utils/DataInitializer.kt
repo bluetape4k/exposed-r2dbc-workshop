@@ -24,11 +24,42 @@ import org.springframework.stereotype.Component
 import java.time.LocalDate
 
 
+/**
+ * 애플리케이션 시작 시 테이블을 생성하고 샘플 데이터를 삽입하는 초기화 컴포넌트.
+ *
+ * ## Spring + Coroutine 브릿지 패턴
+ * [ApplicationListener]의 [onApplicationEvent]는 일반 함수(non-suspend)이므로
+ * Exposed R2DBC의 [suspendTransaction]을 직접 호출할 수 없습니다.
+ * [runBlocking]을 사용하여 코루틴 세계와 블로킹 세계를 연결합니다.
+ *
+ * ```kotlin
+ * override fun onApplicationEvent(event: ApplicationReadyEvent) {
+ *     // runBlocking: 현재 스레드를 블로킹하고 코루틴을 실행
+ *     // Dispatchers.IO: I/O 작업에 최적화된 스레드 풀 사용
+ *     runBlocking(Dispatchers.IO) {
+ *         suspendTransaction {
+ *             createTables()
+ *             populateData()
+ *         }
+ *     }
+ * }
+ * ```
+ *
+ * ## 주의사항
+ * - `runBlocking`은 애플리케이션 초기화 시에만 사용 (서비스 레이어에서는 사용 금지)
+ * - 실제 서비스 코드에서는 `suspend fun` + `suspendTransaction`을 직접 사용할 것
+ */
 @Component
 class DataInitializer: ApplicationListener<ApplicationReadyEvent> {
 
     companion object: KLoggingChannel()
 
+    /**
+     * 애플리케이션 준비 완료 이벤트 수신 시 테이블 생성 및 데이터 초기화를 수행합니다.
+     *
+     * [runBlocking]으로 suspend 함수를 호출합니다. 이는 Spring의 이벤트 리스너가
+     * suspend 함수를 지원하지 않기 때문에 필요한 코루틴 브릿지 패턴입니다.
+     */
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
         runBlocking(Dispatchers.IO) {
             suspendTransaction {
