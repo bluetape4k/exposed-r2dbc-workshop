@@ -33,6 +33,24 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.math.BigDecimal
 import java.math.MathContext
 
+/**
+ * Exposed R2DBC에서 수학 함수(Math Functions)를 사용하는 예제.
+ *
+ * 주요 학습 내용:
+ * - `abs()` — 절댓값
+ * - `ceil()` / `floor()` — 올림 / 내림
+ * - `round(n)` — 반올림 (소수점 n자리)
+ * - `sqrt()` — 제곱근
+ * - `exp()` — 지수 함수 (e^x)
+ * - `power(base, exp)` — 거듭제곱
+ * - `sign()` — 부호 (-1, 0, 1)
+ *
+ * 주의사항:
+ * - 일부 함수는 DB에 따라 지원 여부가 다를 수 있습니다.
+ * - 부동소수점 비교 시 반올림 오차에 주의하세요.
+ *
+ * 모든 함수는 `evalFunction(testDB) { }` 헬퍼를 사용하여 실행됩니다.
+ */
 class Ex02_MathFunction: Ex00_FunctionBase() {
 
     companion object: KLoggingChannel()

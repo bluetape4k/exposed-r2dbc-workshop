@@ -19,6 +19,22 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import kotlin.random.Random
 
+/**
+ * 시간 기반 UUID(UUIDv1)를 기본 키로 사용하는 테이블 예제.
+ *
+ * `bluetape4k-exposed` 의 [TimebasedUUIDTable]을 상속받아 `UUID` PRIMARY KEY를 자동으로
+ * 시간 기반 UUID(버전 1) 값으로 채웁니다. UUIDv1은 현재 시간과 노드 정보를 조합하여
+ * 생성되므로 시간 순 정렬이 가능하며, RFC 4122 UUID 표준을 준수합니다.
+ *
+ * TimebasedUUID(UUIDv1) 특성:
+ * - 표준 UUID 형식 (예: `550e8400-e29b-41d4-a716-446655440000`)
+ * - 시간 정렬 가능 (100나노초 단위, 매우 세밀)
+ * - RFC 4122 표준 준수 — UUID를 기본 키로 요구하는 시스템과 호환
+ * - 노드 정보(MAC 주소 또는 랜덤) 포함으로 전역 고유성 보장
+ *
+ * @see TimebasedUUIDBase62TableTest 더 짧은 22자 Base62 표현이 필요한 경우
+ * @see KsuidTableTest 문자열 형식의 정렬 가능 ID가 필요한 경우
+ */
 @TestMethodOrder(MethodOrderer.MethodName::class)
 class TimebasedUUIDTableTest: AbstractCustomIdTableTest() {
 

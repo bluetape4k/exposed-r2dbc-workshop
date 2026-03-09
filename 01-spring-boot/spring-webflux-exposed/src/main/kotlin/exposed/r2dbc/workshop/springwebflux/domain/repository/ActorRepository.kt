@@ -17,11 +17,18 @@ import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
 
+/**
+ * 배우(Actor) 도메인의 데이터 접근 계층입니다.
+ *
+ * Exposed R2DBC DSL을 사용하여 [ActorTable]에 대한 CRUD 및 검색 기능을 제공합니다.
+ * 모든 메서드는 `suspendTransaction` 컨텍스트 안에서 호출되어야 합니다.
+ */
 @Repository
 class ActorRepository {
 
     companion object: KLoggingChannel()
 
+    /** 전체 배우 수를 반환합니다. */
     suspend fun count(): Long =
         ActorTable.selectAll().count()
 

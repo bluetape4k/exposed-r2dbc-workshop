@@ -52,6 +52,23 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Exposed R2DBC에서 Array 컬럼 타입을 사용하는 예제.
+ *
+ * 주요 학습 내용:
+ * - `array<T>()` 컬럼 정의로 배열 타입 컬럼 생성
+ * - 정수 배열(`IntegerColumnType`), 문자열 배열(`TextColumnType`), 바이너리 배열(`BinaryColumnType`) 지원
+ * - `anyFrom(array)`, `allFrom(array)` 를 사용한 배열 비교
+ * - `slice(start, end)` 로 배열의 일부 추출
+ * - `arrayParam()` 을 사용한 파라미터 바인딩
+ * - upsert 와 배열 컬럼 조합
+ *
+ * 주의사항:
+ * - Array 컬럼은 PostgreSQL 및 H2에서만 지원됩니다.
+ * - MySQL/MariaDB는 Array 타입을 지원하지 않습니다.
+ *
+ * 모든 쿼리는 `withTables(testDB, ...)` 또는 `withDb(testDB)` 블록 내에서 실행됩니다.
+ */
 @Suppress("DEPRECATION")
 class Ex05_ArrayColumnType: AbstractR2dbcExposedTest() {
 

@@ -46,6 +46,24 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.math.BigDecimal
 import java.math.RoundingMode
 
+/**
+ * Exposed R2DBC에서 윈도우 함수(Window Functions)를 사용하는 예제.
+ *
+ * 주요 학습 내용:
+ * - `rowNumber()` — 파티션 내 행 번호
+ * - `rank()` / `denseRank()` — 순위 (동점 처리 방식 차이)
+ * - `lead()` / `lag()` — 다음/이전 행 값 참조
+ * - `firstValue()` / `lastValue()` / `nthValue()` — 파티션 내 특정 행 값
+ * - `ntile(n)` — 파티션을 n개 버킷으로 분할
+ * - `cumeDist()` / `percentRank()` — 누적 분포 / 백분위 순위
+ * - `OVER (PARTITION BY ... ORDER BY ...)` 절 구성
+ *
+ * 주의사항:
+ * - 윈도우 함수는 PostgreSQL, MySQL 8+, MariaDB 10.2+, H2에서 지원됩니다.
+ * - `lastValue()` 와 `nthValue()` 는 프레임(ROWS/RANGE) 설정이 중요합니다.
+ *
+ * 모든 쿼리는 `withDb(testDB)` 블록 내에서 실행됩니다.
+ */
 class Ex05_WindowFunction: Ex00_FunctionBase() {
 
     companion object: KLoggingChannel()

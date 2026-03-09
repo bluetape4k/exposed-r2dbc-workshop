@@ -38,6 +38,21 @@ import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Exposed R2DBC에서 EXPLAIN 구문을 사용하여 쿼리 실행 계획을 조회하는 예제.
+ *
+ * 주요 학습 내용:
+ * - `explain { }` 블록으로 SELECT/INSERT/UPDATE/DELETE 쿼리의 실행 계획 조회
+ * - `explainAnalyze { }` 로 실제 실행 통계 포함 분석 (PostgreSQL)
+ * - 실행 계획 결과를 `ExplainResultRow` 로 수집
+ * - DB별 EXPLAIN 지원 여부 확인
+ *
+ * 주의사항:
+ * - EXPLAIN 구문 지원은 DB마다 다릅니다 (H2 미지원 일부).
+ * - `explainAnalyze` 는 PostgreSQL에서만 지원됩니다.
+ *
+ * 모든 쿼리는 `withTables(testDB, ...)` 블록 내에서 실행됩니다.
+ */
 class Ex30_Explain: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

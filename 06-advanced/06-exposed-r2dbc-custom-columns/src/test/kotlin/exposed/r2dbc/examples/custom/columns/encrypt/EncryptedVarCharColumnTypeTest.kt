@@ -18,6 +18,22 @@ import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * 결정적(Deterministic) 암호화를 VARCHAR 컬럼에 적용하는 커스텀 컬럼 타입 예제.
+ *
+ * `bluetape4k-exposed` 의 `encryptedVarChar()` 확장 함수를 사용하여
+ * INSERT 시 자동으로 데이터를 암호화하고, SELECT 시 자동으로 복호화합니다.
+ * 결정적 암호화이므로 동일한 평문은 항상 동일한 암호문이 생성되어 WHERE 절 검색이 가능합니다.
+ *
+ * `exposed-crypt` 모듈의 [encryptedVarchar]과 달리, 결정적 암호화를 지원하므로 WHERE 절 필터링이 가능합니다.
+ *
+ * 지원 암호화 알고리즘 ([Encryptors]):
+ * - [Encryptors.DeterministicAES]: AES 결정적 암호화
+ * - [Encryptors.DeterministicRC4]: RC4 결정적 암호화
+ * - [Encryptors.TripleDES]: Triple DES 암호화
+ *
+ * 내부 테이블 [T1]은 테스트 전용 private 스키마입니다.
+ */
 class EncryptedVarCharColumnTypeTest: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

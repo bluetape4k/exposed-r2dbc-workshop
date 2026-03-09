@@ -27,7 +27,29 @@ import org.junit.jupiter.params.provider.MethodSource
 import kotlin.test.assertFailsWith
 
 /**
- * Jasypt 기반 암호화 컬럼의 CRUD 동작을 검증한다.
+ * Google Tink 기반 암호화 컬럼의 CRUD 동작을 검증한다.
+ *
+ * `bluetape4k-exposed` 의 Tink 확장 함수를 사용하여 Exposed 컬럼에 투명한 암복호화를 적용합니다.
+ * Google Tink 는 업계 표준 암호화 알고리즘을 안전하게 사용할 수 있도록 설계된 고수준 암호화 라이브러리입니다.
+ *
+ * 제공 컬럼 타입:
+ * - `tinkAeadVarChar` / `tinkAeadBinary` / `tinkAeadBlob`: AEAD(Authenticated Encryption with Associated Data)
+ *   비결정적 암호화. 같은 평문도 매번 다른 암호문을 생성하므로 WHERE 조건 검색 불가.
+ * - `tinkDaeadVarChar` / `tinkDaeadBinary` / `tinkDaeadBlob`: DAEAD(Deterministic AEAD)
+ *   결정적 암호화. 같은 평문은 항상 같은 암호문을 생성하므로 WHERE 조건 검색 가능.
+ *   `.index()` 와 함께 사용하여 인덱스 기반 조회를 지원합니다.
+ *
+ * 지원 알고리즘:
+ * - AEAD: `TinkAeads.AES256_GCM`, `TinkAeads.AES128_GCM`, `TinkAeads.CHACHA20_POLY1305`
+ * - DAEAD: `TinkDaeads.AES256_SIV`
+ *
+ * 검증 항목:
+ * - AEAD 컬럼 삽입 및 조회 (VarChar, Binary, Blob)
+ * - DAEAD 컬럼 삽입, 조회 및 WHERE 절 검색
+ * - AEAD 컬럼 UPDATE
+ * - nullable 암호화 컬럼의 null 값 보존
+ * - 컬럼 길이 유효성 검사 (0 이하 길이 거부)
+ * - 다양한 AEAD 알고리즘으로 멀티 컬럼 사용
  */
 class TinkColumnTypeTest: AbstractR2dbcExposedTest() {
 

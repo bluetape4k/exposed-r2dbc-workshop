@@ -14,13 +14,19 @@ import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationListener
 import org.springframework.stereotype.Component
 
+/**
+ * 애플리케이션 시작 시 데이터베이스 테이블을 자동으로 생성하는 초기화 컴포넌트입니다.
+ *
+ * [ApplicationReadyEvent]를 수신하여 [UserTable], [UserCredentialsTable], [UserEventTable]을
+ * 생성합니다. DB I/O 바운드 작업이므로 [Dispatchers.IO] 컨텍스트를 사용합니다.
+ */
 @Component
 class DataInitializer: ApplicationListener<ApplicationReadyEvent> {
 
     companion object: KLoggingChannel()
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
-        runBlocking(Dispatchers.Default) {
+        runBlocking(Dispatchers.IO) {
             suspendTransaction {
                 this.createTables()
             }

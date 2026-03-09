@@ -21,6 +21,17 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.math.BigDecimal
 
+/**
+ * Exposed R2DBC에서 산술 연산(Arithmetic)을 컬럼 표현식으로 사용하는 예제.
+ *
+ * 주요 학습 내용:
+ * - `plus`, `minus`, `times`, `div`, `rem` 연산자를 컬럼 표현식에서 사용
+ * - `BigDecimal` 을 포함한 정밀 소수 연산
+ * - `decimalLiteral`, `doubleLiteral`, `intLiteral` 리터럴과의 산술 조합
+ * - 산술 결과를 SELECT 컬럼으로 활용
+ *
+ * 모든 쿼리는 `withTables(testDB, ...)` 블록 내에서 실행됩니다.
+ */
 class Ex21_Arithmetic: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

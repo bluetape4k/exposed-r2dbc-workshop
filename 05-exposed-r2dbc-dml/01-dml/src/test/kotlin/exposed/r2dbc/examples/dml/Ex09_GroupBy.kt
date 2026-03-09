@@ -46,6 +46,19 @@ import org.jetbrains.exposed.v1.r2dbc.select
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Exposed R2DBC에서 GROUP BY 및 집계 함수를 사용하는 예제.
+ *
+ * 주요 학습 내용:
+ * - `groupBy()` 를 사용한 그룹 집계
+ * - `having { }` 절로 그룹 결과 필터링
+ * - `sum()`, `avg()`, `min()`, `max()` 집계 함수 활용
+ * - `groupConcat()` 으로 그룹 내 값을 하나의 문자열로 합치기
+ * - 다중 컬럼 GROUP BY
+ * - `alias` 를 활용한 집계 결과 명명
+ *
+ * 모든 쿼리는 `withCitiesAndUsers(testDB)` 또는 `withSales(testDB)` 블록 내에서 실행됩니다.
+ */
 class Ex09_GroupBy: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

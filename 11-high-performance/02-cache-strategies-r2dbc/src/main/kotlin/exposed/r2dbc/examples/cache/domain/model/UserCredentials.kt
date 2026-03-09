@@ -23,6 +23,13 @@ object UserCredentialsTable: TimebasedUUIDBase62Table("user_credentials") {
     val updatedAt = timestamp("updated_at").nullable()
 }
 
+/**
+ * 사용자 인증 정보를 담는 DTO입니다.
+ *
+ * Read-Only 캐시 전략에서 사용되며, DB에서 읽은 인증 정보를 Redis에 캐싱합니다.
+ * 캐시 무효화(invalidate) 시 DB에는 영향을 주지 않습니다.
+ * [HasIdentifier]를 구현하여 Redis 캐시 키로 `id`(TimebasedUUID Base62)를 사용합니다.
+ */
 data class UserCredentialsRecord(
     override val id: String,
     val username: String,

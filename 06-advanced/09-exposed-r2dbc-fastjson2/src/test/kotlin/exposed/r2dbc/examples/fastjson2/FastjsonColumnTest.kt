@@ -57,10 +57,27 @@ import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-@Suppress("DEPRECATION")
 /**
- * Fastjson2 기반 JSON 컬럼의 읽기/쓰기 및 JSON 함수 동작을 검증한다.
+ * Fastjson2 기반 JSON(`fastjson()`) 컬럼의 직렬화/역직렬화와 JSON 검색 함수를 검증하는 테스트.
+ *
+ * `bluetape4k-exposed` 의 `fastjson()` 확장 함수를 사용하여 Kotlin 객체를 JSON 텍스트 형식으로
+ * 컬럼에 저장합니다. Fastjson2(Alibaba)는 Jackson보다 빠른 직렬화/역직렬화 성능을 제공합니다.
+ * JSON 경로 추출(`extract`), 포함 여부(`contains`), 존재 여부(`exists`) 함수를 테스트합니다.
+ *
+ * 주요 테스트 케이스:
+ * - INSERT/SELECT: JSON 컬럼에 Kotlin 객체 저장 및 역직렬화 검증
+ * - UPDATE: JSON 컬럼 값 수정 후 재조회
+ * - `extract`: JSON 경로로 특정 필드 추출 (DB 방언별 경로 문법 차이 처리)
+ * - `contains`: JSON 컬럼이 특정 JSON 부분 구조를 포함하는지 검색
+ * - `exists`: JSON 경로가 존재하는지 검색
+ * - `extract missing path returns null`: 없는 경로 추출 시 null 반환 검증 (Jackson 모듈과의 차이점)
+ * - 배열 컬럼(`List<User>`, `IntArray` 등)에서의 JSON 검색 함수 조합
+ * - `default`, `clientDefault`, `databaseGenerated`, `transform`, `upsert`, nullable 컬럼
+ *
+ * @see FastjsonBColumnTest JSONB 컬럼(바이너리) 테스트
+ * @see FastjsonSchema 스키마 및 헬퍼 함수 정의
  */
+@Suppress("DEPRECATION")
 class FastjsonColumnTest: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

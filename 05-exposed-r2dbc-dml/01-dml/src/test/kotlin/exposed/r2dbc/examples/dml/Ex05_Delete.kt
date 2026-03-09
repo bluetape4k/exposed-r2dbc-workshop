@@ -33,6 +33,23 @@ import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Exposed R2DBC에서 DELETE 구문을 사용하는 다양한 방법을 보여주는 예제.
+ *
+ * 주요 학습 내용:
+ * - `deleteWhere { }` 를 사용한 조건부 행 삭제
+ * - `deleteAll()` 로 테이블 전체 삭제
+ * - `deleteIgnoreWhere { }` 로 외래키 오류 무시 삭제 (MySQL/MariaDB)
+ * - JOIN을 포함한 삭제 (MySQL/MariaDB)
+ * - `limit` 을 포함한 삭제
+ * - `delete returning` 으로 삭제된 행 값 반환 (PostgreSQL)
+ *
+ * 주의사항:
+ * - `deleteIgnore` 는 MySQL/MariaDB에서만 지원됩니다.
+ * - JOIN 삭제는 MySQL/MariaDB에서만 지원됩니다.
+ *
+ * 모든 쿼리는 `withTables(testDB, ...)` 블록 내에서 실행됩니다.
+ */
 class Ex05_Delete: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

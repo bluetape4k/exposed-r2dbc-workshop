@@ -55,6 +55,22 @@ import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Jackson 기반 JSONB(`jacksonb()`) 컬럼의 직렬화/역직렬화와 JSON 검색 함수를 검증하는 테스트.
+ *
+ * `bluetape4k-exposed` 의 `jacksonb()` 확장 함수를 사용하여 Kotlin 객체를 JSONB 바이너리 형식으로
+ * 컬럼에 저장합니다. JSONB는 PostgreSQL에서 바이너리로 저장되어 검색 성능이 JSON보다 우수합니다.
+ * MySQL/MariaDB에서는 JSON과 동일하게 처리됩니다.
+ *
+ * [JacksonColumnTest]와 동일한 테스트 케이스를 JSONB 컬럼으로 검증합니다:
+ * - INSERT/SELECT, UPDATE, `extract`, `contains`, `exists`, 배열 컬럼 JSON 검색
+ * - `default`, `clientDefault`, `databaseGenerated`, `transform`, `upsert`, nullable 컬럼
+ * - PostgreSQL 전용 `??` 연산자: 최상위 키 존재 여부를 확인하는 커스텀 연산자 (`keyExists`)
+ *   (JDBC 파라미터 치환 문자와 충돌을 피하기 위해 이중 `?` 이스케이프 처리)
+ *
+ * @see JacksonColumnTest JSON 컬럼(텍스트) 테스트
+ * @see JacksonSchema 스키마 및 헬퍼 함수 정의
+ */
 @Suppress("DEPRECATION")
 class JacksonBColumnTest: AbstractR2dbcExposedTest() {
 

@@ -11,6 +11,31 @@ import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 
+/**
+ * Jackson 3.x 기반 JSON/JSONB 컬럼 테스트에 사용하는 공유 스키마 및 헬퍼 함수 모음.
+ *
+ * `bluetape4k-exposed` 의 `jackson()` / `jacksonb()` 확장 함수를 사용하여
+ * Kotlin 객체를 JSON(텍스트) 또는 JSONB(바이너리) 형식으로 컬럼에 저장합니다.
+ * Jackson 3.x 는 Jakarta EE 네임스페이스 기반의 최신 메이저 버전으로, 가상 스레드(Virtual Thread)
+ * 환경에서도 안정적으로 동작하며 `jackson-databind3` 모듈을 사용합니다.
+ *
+ * 제공 테이블:
+ * - [JacksonTable]: JSON 컬럼 테이블 (`jackson_table`)
+ * - [JacksonBTable]: JSONB 컬럼 테이블 (`jackson_b_table`)
+ * - [JacksonArrayTable]: JSON 배열 컬럼 테이블 (`jackson_arrays`)
+ * - [JacksonBArrayTable]: JSONB 배열 컬럼 테이블 (`jackson_b_arrays`)
+ *
+ * 제공 데이터 클래스:
+ * - [DataHolder]: 테스트용 복합 객체 (중첩 [User] 포함)
+ * - [User]: 사용자 정보 (이름, 팀)
+ * - [UserGroup]: 사용자 목록 그룹
+ *
+ * 제공 헬퍼 함수:
+ * - [withJacksonTable]: [JacksonTable]을 생성하고 초기 데이터를 삽입한 뒤 테스트 블록 실행
+ * - [withJacksonBTable]: [JacksonBTable]을 생성하고 초기 데이터를 삽입한 뒤 테스트 블록 실행
+ * - [withJacksonArrays]: [JacksonArrayTable]에 배열 데이터를 삽입한 뒤 테스트 블록 실행
+ * - [withJacksonBArrays]: [JacksonBArrayTable]에 배열 데이터를 삽입한 뒤 테스트 블록 실행
+ */
 @Suppress("UnusedReceiverParameter")
 object JacksonSchema {
 

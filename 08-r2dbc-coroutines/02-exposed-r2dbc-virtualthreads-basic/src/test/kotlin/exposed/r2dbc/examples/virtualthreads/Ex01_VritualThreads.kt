@@ -42,10 +42,28 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.io.Serializable
 import java.util.concurrent.CopyOnWriteArrayList
 
-@EnabledOnJre(JRE.JAVA_21)
 /**
- * Exposed R2DBC를 가상 스레드 기반 코루틴 디스패처에서 실행하는 패턴을 검증합니다.
+ * JDK 21 Virtual Threads와 Exposed R2DBC를 조합하는 예제 테스트.
+ *
+ * ## Virtual Threads란?
+ * JDK 21에서 정식 도입된 경량 스레드(Project Loom). OS 스레드와 1:1 매핑되지 않으므로
+ * 수천~수백만 개의 동시 작업을 적은 메모리로 처리할 수 있습니다.
+ *
+ * ## Exposed R2DBC + Virtual Threads 조합
+ * - [Dispatchers.newVT]: `Dispatchers.IO`와 유사하지만 Virtual Threads 기반 디스패처
+ * - [virtualThreadTransaction]: Virtual Threads 위에서 새 R2DBC 트랜잭션을 생성
+ * - [inTopLevelSuspendTransaction]: 최상위 suspend 트랜잭션을 Virtual Threads 컨텍스트에서 실행
+ * - [runSuspendVT]: JUnit 5 테스트를 Virtual Threads 코루틴으로 실행하는 헬퍼
+ *
+ * ## 주요 패턴
+ * 1. 순차 작업: `virtualThreadTransaction { ... }` 으로 기존 트랜잭션에서 분기
+ * 2. 병렬 작업: `CoroutineScope(Dispatchers.newVT).async { ... }` 로 다수 비동기 실행
+ * 3. 조건 조회: Virtual Threads 위에서도 Exposed DSL 쿼리를 동일하게 사용
+ *
+ * @see virtualThreadTransaction
+ * @see inTopLevelSuspendTransaction
  */
+@EnabledOnJre(JRE.JAVA_21)
 class Ex01_VritualThreads: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

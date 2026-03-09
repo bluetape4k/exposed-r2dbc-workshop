@@ -22,6 +22,14 @@ import org.springframework.context.annotation.Profile
 import java.time.Duration
 import kotlin.math.max
 
+/**
+ * Spring WebFlux 환경에서 Exposed R2DBC 데이터베이스 연결을 설정하는 구성 클래스입니다.
+ *
+ * Spring Profile(`h2`, `mysql`, `postgres`)에 따라 적절한 [ConnectionFactoryOptions]를 생성하고,
+ * [ConnectionPool]과 Exposed [R2dbcDatabase]를 Bean으로 등록합니다.
+ *
+ * 기본 디스패처는 [Dispatchers.IO]를 사용하며, 가상 스레드 기반으로 전환도 가능합니다.
+ */
 @Configuration
 class ExposedR2dbcConfig {
 

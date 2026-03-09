@@ -28,6 +28,18 @@ import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Exposed R2DBC에서 ORDER BY 정렬을 사용하는 예제.
+ *
+ * 주요 학습 내용:
+ * - `orderBy(column)` 를 사용한 단일 컬럼 정렬
+ * - `orderBy(column to SortOrder.DESC)` 로 내림차순 정렬
+ * - 다중 컬럼 정렬: `orderBy(col1, col2)`
+ * - `nullsFirst()`, `nullsLast()` 로 NULL 값 정렬 순서 지정
+ * - 집계 결과에 ORDER BY 적용
+ *
+ * 모든 쿼리는 `withCitiesAndUsers(testDB)` 블록 내에서 실행됩니다.
+ */
 class Ex10_OrderBy: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

@@ -20,6 +20,22 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import kotlin.random.Random
 
+/**
+ * KSUID Millis(밀리초 단위 K-Sortable Unique Identifier)를 기본 키로 사용하는 테이블 예제.
+ *
+ * `bluetape4k-exposed` 의 [KsuidMillisTable]을 상속받아 `VARCHAR(27)` PRIMARY KEY를 자동으로
+ * KSUID Millis 값으로 채웁니다. [KsuidTable]과 달리 **밀리초(millisecond) 단위** 정밀도로
+ * 타임스탬프를 인코딩하여, 같은 초(second) 안에서도 정렬 가능합니다.
+ *
+ * KSUID Millis 특성:
+ * - 길이: 27자 (Base62 인코딩)
+ * - 시간 정렬 가능 (밀리초 단위, [KsuidTable]보다 세밀한 정렬)
+ * - 전역 고유성 보장
+ * - 고빈도 이벤트(로그, 트랜잭션 등) ID 생성에 적합
+ *
+ * @see KsuidTableTest 초 단위 정밀도로 충분한 경우
+ * @see TimebasedUUIDTableTest UUID 형식의 시간 기반 ID가 필요한 경우
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 class KsuidMillisTableTest: AbstractCustomIdTableTest() {
 

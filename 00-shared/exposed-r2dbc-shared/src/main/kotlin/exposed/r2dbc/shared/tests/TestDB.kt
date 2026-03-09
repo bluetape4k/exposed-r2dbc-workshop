@@ -23,9 +23,20 @@ const val USE_TESTCONTAINERS = true
 val useFastDB: Boolean = System.getProperty("exposed.test.useFastDB", "false").toBoolean()
 
 /**
- * Exposed 기능을 테스트하기 위한 대상 DB 들의 목록과 정보들을 제공합니다.
+ * Exposed R2DBC 기능을 테스트하기 위한 대상 데이터베이스 목록 및 연결 정보를 제공합니다.
+ *
+ * 각 항목은 R2DBC URL 생성 람다, 드라이버 클래스명, 인증 정보, 연결 전/후 훅,
+ * [org.jetbrains.exposed.v1.r2dbc.R2dbcDatabaseConfig] 커스터마이징을 포함합니다.
+ *
+ * 지원하는 데이터베이스:
+ * - [H2], [H2_MYSQL], [H2_PSQL], [H2_MARIADB], [H2_ORACLE], [H2_SQLSERVER]: H2 인메모리 (각 호환 모드)
+ * - [MARIADB]: MariaDB (Testcontainers 또는 외부 서버)
+ * - [MYSQL_V5], [MYSQL_V8]: MySQL 5/8 (Testcontainers 또는 외부 서버)
+ * - [POSTGRESQL]: PostgreSQL (Testcontainers 또는 외부 서버)
+ *
+ * @see enabledDialects
+ * @see connect
  */
-
 enum class TestDB(
     val connection: () -> String,
     val driver: String,
@@ -163,8 +174,15 @@ enum class TestDB(
 //        }
     );
 
+    /** 이 [TestDB]에 해당하는 [R2dbcDatabase] 인스턴스. 최초 연결 시 설정됩니다. */
     var db: R2dbcDatabase? = null
 
+    /**
+     * 이 [TestDB]에 대한 [R2dbcDatabase] 연결을 생성하고 반환합니다.
+     *
+     * @param configure 추가 데이터베이스 구성 커스터마이징 람다
+     * @return 생성된 [R2dbcDatabase] 인스턴스
+     */
     fun connect(configure: R2dbcDatabaseConfig.Builder.() -> Unit = {}): R2dbcDatabase {
         val config = R2dbcDatabaseConfig {
             dbConfig()

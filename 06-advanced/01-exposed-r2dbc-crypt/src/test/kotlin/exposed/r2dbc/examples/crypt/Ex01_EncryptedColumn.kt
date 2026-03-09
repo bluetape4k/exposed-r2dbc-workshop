@@ -31,6 +31,32 @@ import org.jetbrains.exposed.v1.r2dbc.update
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Exposed 내장 `exposed-crypt` 모듈을 이용한 암호화 컬럼 예제.
+ *
+ * `encryptedVarchar` / `encryptedBinary` 컬럼 타입을 사용하여
+ * Kotlin 객체를 DB에 저장할 때 자동으로 암호화하고, 조회 시 자동으로 복호화합니다.
+ *
+ * 지원 알고리즘 (`org.jetbrains.exposed.v1.crypt.Algorithms`):
+ * - `AES_256_PBE_GCM(password, salt)`: AES-256 GCM 모드, AEAD 방식
+ * - `AES_256_PBE_CBC(password, salt)`: AES-256 CBC 모드
+ * - `BLOW_FISH(key)`: Blowfish 대칭키 암호화
+ * - `TRIPLE_DES(key)`: Triple DES 암호화
+ *
+ * 주요 특징:
+ * - DB에 저장되는 값은 Base64 인코딩된 암호문이므로 SQL 로그에서 평문이 노출되지 않습니다.
+ * - 비결정적 암호화(AES GCM, CBC, Blowfish, TripleDES)는 매번 다른 암호문을 생성하므로
+ *   WHERE 조건 검색이 불가능합니다 (`assertFailsWith<AssertionError>` 로 검증).
+ * - 결정적 검색이 필요하다면 `10-exposed-r2dbc-jasypt` 또는 `12-exposed-r2dbc-tink` 모듈의
+ *   결정적 암호화 컬럼을 사용하세요.
+ * - `Encryptor.maxColLength(plaintextByteSize)` 로 암호문 최대 길이를 계산하여
+ *   컬럼 크기를 적절히 설정할 수 있습니다.
+ *
+ * 검증 항목:
+ * - 암호화 출력 길이 계산 (`maxColLength`)
+ * - 문자열 암호화 컬럼 삽입, 조회 (SQL 로그에 평문 미노출 확인)
+ * - Binary 암호화 컬럼 삽입, 조회, UPDATE
+ */
 class Ex01_EncryptedColumn: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

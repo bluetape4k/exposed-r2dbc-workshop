@@ -32,6 +32,12 @@ object UserTable: LongIdTable("users") {
     val updatedAt = timestamp("updated_at").nullable()
 }
 
+/**
+ * 사용자 정보를 담는 DTO입니다.
+ *
+ * Read Through / Write Through 캐시 전략에서 캐시와 DB 사이를 오가는 데이터 객체입니다.
+ * [HasIdentifier]를 구현하여 Redis 캐시 키로 `id`를 사용합니다.
+ */
 data class UserRecord(
     override val id: Long = 0L,
     val username: String,

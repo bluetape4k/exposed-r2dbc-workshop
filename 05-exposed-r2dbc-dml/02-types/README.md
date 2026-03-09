@@ -56,7 +56,7 @@ src/test/kotlin/exposed/r2dbc/examples/types/
 | `Ex07_UnsignedColumnType`   | `ubyte`, `ushort`, `uint`, `ulong` Unsigned 수형, 범위 초과 시 에러 검증 |
 | `Ex08_BlobColumnType`       | `blob()` 컬럼으로 바이너리 데이터 저장/조회, `ExposedBlob`, `blobParam`      |
 | `Ex09_JavaUUIDColumnType`   | `javaUUID()` 컬럼, `autoGenerate`, PK로 활용                       |
-| `Ex10_KotlinUUIDColumnType` | Kotlin `uuid()` 컬럼, `Uuid.generateV7()` 활용 (Kotlin 2.x)       |
+| `Ex10_KotlinUUIDColumnType` | Kotlin `kotlinUUID()` 컬럼, `Uuid.generateV7()` 활용 (`@OptIn(ExperimentalUuidApi::class)` 필요, Kotlin 2.x) |
 
 ## 핵심 코드 예제
 
@@ -96,9 +96,9 @@ object JavaUUIDTable: Table("test_java_uuid") {
     val id = javaUUID("id")
 }
 
-// Kotlin UUID (Kotlin 2.x)
+// Kotlin UUID (Kotlin 2.x, @OptIn(ExperimentalUuidApi::class) 필요)
 object KotlinUUIDTable: Table("test_kotlin_uuid") {
-    val id = uuid("id")
+    val id = kotlinUUID("id")
 }
 ```
 

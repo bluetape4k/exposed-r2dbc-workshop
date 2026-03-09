@@ -33,6 +33,13 @@ import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
 
+/**
+ * 멀티테넌트 환경에서 영화(Movie) 도메인의 데이터 접근 계층입니다.
+ *
+ * [R2dbcRepository]를 상속하여 기본 CRUD 기능을 제공하며,
+ * `bufferUntilChanged`를 활용하여 영화-배우 JOIN 결과를 영화 기준으로 그룹핑합니다.
+ * 테넌트별 스키마는 `suspendTransactionWithCurrentTenant` 컨텍스트로 자동 적용됩니다.
+ */
 @Repository
 class MovieR2dbcRepository: R2dbcRepository<Long, MovieTable, MovieRecord> {
 

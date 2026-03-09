@@ -23,6 +23,20 @@ import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * 투명한 데이터 압축을 VARBINARY 컬럼에 적용하는 커스텀 컬럼 타입 예제.
+ *
+ * `bluetape4k-exposed` 의 `compressedBinary()` 확장 함수를 사용하여
+ * INSERT 시 자동으로 데이터를 압축하고, SELECT 시 자동으로 압축을 해제합니다.
+ *
+ * 지원 압축 알고리즘:
+ * - [Compressors.LZ4]: 빠른 압축/해제 속도 (일반 텍스트 데이터에 권장)
+ * - [Compressors.Snappy]: Google Snappy - 빠른 속도와 적당한 압축률
+ * - [Compressors.Zstd]: Zstandard - 높은 압축률과 빠른 속도
+ *
+ * 내부 테이블 [T1]은 테스트 전용 private 스키마이며, 컬럼명(예: `lzData`, `snappyData`, `zstdData`)은
+ * 압축 알고리즘을 나타내는 약어입니다.
+ */
 class CompressedBinaryColumnTypeTest: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

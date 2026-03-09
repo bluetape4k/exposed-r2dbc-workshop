@@ -20,6 +20,20 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import kotlin.random.Random
 
+/**
+ * Snowflake 알고리즘으로 생성된 BIGINT를 기본 키로 사용하는 테이블 예제.
+ *
+ * `bluetape4k-exposed` 의 [SnowflakeIdTable]을 상속받아 `BIGINT` PRIMARY KEY를
+ * Snowflake ID 값으로 자동 채웁니다. Snowflake ID는 분산 환경에서 시간 순서가 보장되는 64비트 정수입니다.
+ *
+ * Snowflake ID 특성:
+ * - 64비트 정수 (BIGINT)
+ * - 시간 정렬 가능 (밀리초 단위)
+ * - 분산 환경에서도 전역 고유성 보장 (머신 ID 포함)
+ * - 초당 수백만 개의 ID 생성 가능
+ *
+ * @see KsuidTableTest 문자열 형식 정렬 ID가 필요한 경우
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 class SnowflakeIdTableTest: AbstractCustomIdTableTest() {
 

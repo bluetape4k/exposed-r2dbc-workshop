@@ -28,9 +28,27 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 /**
- * 사용자 정의 Enum 수형을 사용하는 방법인데,
- * JPA의  `@Enumerated(EnumType.STRING)` 과 같은 방식으로 사용하시던 분들은
- * Exposed의 column transformation 기능을 사용하는 것을 추천합니다.
+ * Exposed R2DBC에서 사용자 정의 Enum 컬럼 타입을 사용하는 방법 예제.
+ *
+ * JPA의 `@Enumerated(EnumType.STRING)` 과 같이 Enum 값을 문자열로 DB에 저장하거나,
+ * DB 네이티브 ENUM 타입을 활용하는 두 가지 방법을 보여줍니다.
+ *
+ * - **column transformation 방식** (권장): `customEnumeration()`으로 Enum을 VARCHAR에 매핑
+ * - **PostgreSQL 네이티브 ENUM 타입**: `EnumCodec`을 통해 PostgreSQL TYPE으로 등록
+ * - **MySQL ENUM 타입**: `customEnumeration()`과 SQL ENUM DDL을 함께 사용
+ *
+ * ```sql
+ * -- Postgres 네이티브 ENUM
+ * CREATE TYPE Status AS ENUM ('ACTIVE', 'INACTIVE');
+ *
+ * -- MySQL ENUM 컬럼
+ * CREATE TABLE IF NOT EXISTS tester (
+ *     id INT AUTO_INCREMENT PRIMARY KEY,
+ *     status ENUM('ACTIVE', 'INACTIVE') NOT NULL
+ * );
+ * ```
+ *
+ * @see org.jetbrains.exposed.v1.core.Table.customEnumeration
  */
 class Ex07_CustomEnumeration: AbstractR2dbcExposedTest() {
 
@@ -39,6 +57,12 @@ class Ex07_CustomEnumeration: AbstractR2dbcExposedTest() {
     private val supportsCustomEnumerationDB =
         TestDB.ALL_POSTGRES + TestDB.ALL_MYSQL_MARIADB
 
+    /**
+     * 테스트에서 사용하는 상태 열거형.
+     *
+     * DB에는 `"ACTIVE"` / `"INACTIVE"` 문자열로 저장됩니다.
+     * [toString]은 `"Status: ACTIVE"` 형태를 반환하지만 DB 저장 시에는 사용되지 않습니다.
+     */
     internal enum class Status {
         ACTIVE,
         INACTIVE;

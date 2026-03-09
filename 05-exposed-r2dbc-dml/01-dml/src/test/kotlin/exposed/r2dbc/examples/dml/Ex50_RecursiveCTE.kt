@@ -23,6 +23,21 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.io.Serializable
 
+/**
+ * Exposed R2DBC에서 재귀 CTE(Common Table Expression)를 사용하는 예제.
+ *
+ * 주요 학습 내용:
+ * - `withRecursive { }` 블록으로 재귀 CTE 정의
+ * - 앵커 쿼리(anchor query)와 재귀 쿼리(recursive query) 조합
+ * - 계층형 데이터 탐색 (예: 조직도, 트리 구조)
+ * - CTE 결과를 이후 쿼리에서 참조하는 방법
+ *
+ * 주의사항:
+ * - 재귀 CTE는 PostgreSQL, MySQL 8+, MariaDB, H2에서 지원됩니다.
+ * - 무한 재귀를 방지하기 위해 종료 조건을 반드시 포함해야 합니다.
+ *
+ * 모든 쿼리는 `withTables(testDB, ...)` 블록 내에서 실행됩니다.
+ */
 class Ex50_RecursiveCTE: AbstractR2dbcExposedTest() {
 
     companion object: KLogging()

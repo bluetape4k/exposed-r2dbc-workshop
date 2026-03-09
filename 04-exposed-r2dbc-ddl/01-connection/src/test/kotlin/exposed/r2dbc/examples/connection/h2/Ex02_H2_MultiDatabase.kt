@@ -40,6 +40,34 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import java.util.concurrent.Executors
 
+/**
+ * H2 인메모리 DB를 사용하는 다중 데이터베이스 트랜잭션 예제.
+ *
+ * 단일 JVM 프로세스 내에서 두 개의 독립된 H2 데이터베이스(`db1`, `db2`)를 동시에 연결하고,
+ * 각 데이터베이스에서 별도의 트랜잭션을 실행하는 방법을 보여줍니다.
+ *
+ * 주요 예제:
+ * - [transaction with separated database]: 두 DB에 각각 독립적으로 트랜잭션 실행
+ * - [simple insert in different databases]: 두 DB에 동일 테이블을 별도로 생성 및 데이터 삽입
+ * - [Embedded Inserts In Different Database]: 트랜잭션 내부에서 다른 DB로 전환하는 중첩 트랜잭션
+ * - [Coroutines With Multi Db]: `inTopLevelSuspendTransaction`으로 코루틴 환경에서의 다중 DB 전환
+ * - [TransactionManager.defaultDatabase] 설정 및 조회 동작 검증
+ *
+ * ```kotlin
+ * // 두 데이터베이스에 별도 트랜잭션 실행
+ * suspendTransaction(db = db1) { /* db1 operations */ }
+ * suspendTransaction(db = db2) { /* db2 operations */ }
+ *
+ * // 중첩 트랜잭션 (db1 내부에서 db2로 전환)
+ * suspendTransaction(db = db1) {
+ *     inTopLevelSuspendTransaction(db = db2) { /* db2 operations */ }
+ * }
+ * ```
+ *
+ * @see org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
+ * @see org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction
+ * @see org.jetbrains.exposed.v1.r2dbc.transactions.TransactionManager
+ */
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 class Ex02_H2_MultiDatabase {
 

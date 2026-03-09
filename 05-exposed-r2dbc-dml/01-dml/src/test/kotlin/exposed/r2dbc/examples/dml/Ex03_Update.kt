@@ -30,6 +30,20 @@ import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Exposed R2DBC에서 UPDATE 구문을 사용하는 다양한 방법을 보여주는 예제.
+ *
+ * 주요 학습 내용:
+ * - `update { }` 를 사용한 기본 행 수정
+ * - `where` 절을 활용한 조건부 업데이트
+ * - `batchUpdate()` 로 여러 행 일괄 수정
+ * - `update` 시 컬럼 표현식(`SqlExpressionBuilder`) 활용
+ * - JOIN을 포함한 업데이트 (MySQL/MariaDB)
+ * - `limit` 을 포함한 업데이트
+ *
+ * 모든 쿼리는 `withTables(testDB, ...)` 블록 내에서 실행되며,
+ * H2, PostgreSQL, MySQL, MariaDB에서 테스트됩니다.
+ */
 class Ex03_Update: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

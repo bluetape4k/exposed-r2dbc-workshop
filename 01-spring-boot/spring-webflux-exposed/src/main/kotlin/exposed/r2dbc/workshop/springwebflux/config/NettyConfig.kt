@@ -17,20 +17,32 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
 
 /**
- * Webflux 에서 사용하는 Netty 관련 설정을 제공합니다.
+ * Spring WebFlux 애플리케이션에서 사용하는 Netty 서버 관련 설정을 제공합니다.
+ *
+ * Netty 이벤트 루프, 커넥션 풀, 타임아웃 등을 설정하여
+ * 고성능 비동기 HTTP 서버를 구성합니다.
  */
 @Configuration
 class NettyConfig {
     companion object: KLogging()
 
+    /**
+     * [NettyReactiveWebServerFactory]에 [EventLoopNettyCustomizer]를 적용하여
+     * 커스텀 Netty 서버 설정을 등록합니다.
+     */
     @Bean
     fun nettyReactiveWebServerFactory(): NettyReactiveWebServerFactory {
         return NettyReactiveWebServerFactory().apply {
-            addServerCustomizers(EventLoopNettyCustomer())
+            addServerCustomizers(EventLoopNettyCustomizer())
         }
     }
 
-    class EventLoopNettyCustomer: NettyServerCustomizer {
+    /**
+     * Netty HTTP 서버에 SO_KEEPALIVE, SO_BACKLOG, 읽기/쓰기 타임아웃을 적용하는 커스터마이저입니다.
+     *
+     * [NettyServerCustomizer]를 구현하여 Netty 서버 옵션을 세밀하게 제어합니다.
+     */
+    class EventLoopNettyCustomizer: NettyServerCustomizer {
         override fun apply(httpServer: HttpServer): HttpServer {
             return httpServer
                 .option(ChannelOption.SO_KEEPALIVE, true)

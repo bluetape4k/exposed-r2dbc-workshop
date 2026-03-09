@@ -17,6 +17,13 @@ import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
 
+/**
+ * 멀티테넌트 환경에서 배우(Actor) 도메인의 데이터 접근 계층입니다.
+ *
+ * [R2dbcRepository]를 상속하여 기본 CRUD 기능을 제공하며,
+ * 테넌트별 스키마가 `suspendTransactionWithCurrentTenant` 컨텍스트로 자동 적용됩니다.
+ * 쿼리 파라미터 기반 검색 및 저장 기능을 포함합니다.
+ */
 @Repository
 class ActorR2dbcRepository: R2dbcRepository<Long, ActorTable, ActorRecord> {
 

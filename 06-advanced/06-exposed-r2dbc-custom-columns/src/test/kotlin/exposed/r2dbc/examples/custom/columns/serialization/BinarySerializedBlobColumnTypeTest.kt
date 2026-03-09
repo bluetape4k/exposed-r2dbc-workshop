@@ -17,6 +17,22 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.io.Serializable
 
+/**
+ * Kotlin 객체를 이진 직렬화(Binary Serialization)하여 BLOB 컬럼에 저장하는 예제.
+ *
+ * `bluetape4k-exposed` 의 `binarySerializedBlob()` 확장 함수를 사용하여
+ * INSERT 시 객체를 직렬화+압축하여 BLOB 컬럼에 저장하고, SELECT 시 자동으로 역직렬화합니다.
+ * [BinarySerializedBinaryColumnTypeTest]와 달리 최대 크기 제한 없이 대용량 객체를 저장할 수 있습니다.
+ *
+ * 지원 직렬화+압축 조합 ([BinarySerializers]):
+ * - [BinarySerializers.LZ4Fory]: LZ4 압축 + Fury 직렬화 (고성능)
+ * - [BinarySerializers.LZ4Kryo]: LZ4 압축 + Kryo 직렬화
+ * - [BinarySerializers.ZstdFory]: Zstd 압축 + Fury 직렬화 (높은 압축률)
+ * - [BinarySerializers.ZstdKryo]: Zstd 압축 + Kryo 직렬화
+ *
+ * 내부 테이블 [T1]은 테스트 전용 private 스키마입니다.
+ * [Embeddable2]는 스키마 진화(Schema Evolution)를 위해 `zipcode` 필드가 추가된 확장 모델입니다.
+ */
 class BinarySerializedBlobColumnTypeTest: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

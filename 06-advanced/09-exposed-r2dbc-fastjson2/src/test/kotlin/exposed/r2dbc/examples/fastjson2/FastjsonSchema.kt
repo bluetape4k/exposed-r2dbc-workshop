@@ -11,6 +11,30 @@ import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 
+/**
+ * Fastjson2 기반 JSON/JSONB 컬럼 테스트에 사용하는 공유 스키마 및 헬퍼 함수 모음.
+ *
+ * `bluetape4k-exposed` 의 `fastjson()` / `fastjsonb()` 확장 함수를 사용하여
+ * Kotlin 객체를 JSON(텍스트) 또는 JSONB(바이너리) 형식으로 컬럼에 저장합니다.
+ * Fastjson2는 Jackson 대비 직렬화/역직렬화 성능이 우수한 Alibaba의 고성능 JSON 라이브러리입니다.
+ *
+ * 제공 테이블:
+ * - [FastjsonTable]: JSON 컬럼 테이블 (`fastjson_table`)
+ * - [FastjsonBTable]: JSONB 컬럼 테이블 (`fastjson_b_table`)
+ * - [FastjsonArrayTable]: JSON 배열 컬럼 테이블 (`fastjson_arrays`)
+ * - [FastjsonBArrayTable]: JSONB 배열 컬럼 테이블 (`fastjson_b_arrays`)
+ *
+ * 제공 데이터 클래스:
+ * - [DataHolder]: 테스트용 복합 객체 (중첩 [User] 포함)
+ * - [User]: 사용자 정보 (이름, 팀)
+ * - [UserGroup]: 사용자 목록 그룹
+ *
+ * 제공 헬퍼 함수:
+ * - [withFastjsonTable]: [FastjsonTable]을 생성하고 초기 데이터를 삽입한 뒤 테스트 블록 실행
+ * - [withFastjsonBTable]: [FastjsonBTable]을 생성하고 초기 데이터를 삽입한 뒤 테스트 블록 실행
+ * - [withFastjsonArrays]: [FastjsonArrayTable]에 배열 데이터를 삽입한 뒤 테스트 블록 실행
+ * - [withFastjsonBArrays]: [FastjsonBArrayTable]에 배열 데이터를 삽입한 뒤 테스트 블록 실행
+ */
 @Suppress("UnusedReceiverParameter")
 object FastjsonSchema {
 

@@ -11,10 +11,10 @@ dependencies {
     implementation(Libs.exposed_r2dbc)
     implementation(Libs.bluetape4k_exposed_r2dbc)
 
-    // Fastjson 2
-    implementation(Libs.bluetape4k_exposed_fastjson2)
-    implementation(Libs.bluetape4k_fastjson2)
-    implementation(Libs.fastjson2_kotlin)
+    // Fastjson 2 (테스트에서만 사용)
+    testImplementation(Libs.bluetape4k_exposed_fastjson2)
+    testImplementation(Libs.bluetape4k_fastjson2)
+    testImplementation(Libs.fastjson2_kotlin)
 
     testImplementation(Libs.bluetape4k_junit5)
 

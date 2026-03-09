@@ -22,6 +22,21 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.*
 
+/**
+ * Exposed R2DBC에서 Java UUID를 기본키 컬럼 타입으로 사용하는 예제.
+ *
+ * 주요 학습 내용:
+ * - `javaUUID()` 컬럼 정의로 `java.util.UUID` 기반 기본키 생성
+ * - `UUIDTable` 상속 및 UUID 자동 생성
+ * - UUID를 기반으로 한 삽입, 조회, 삭제
+ * - `database-generated UUID` (DB 측 UUID 생성 함수 사용)
+ *
+ * 주의사항:
+ * - Java UUID는 모든 지원 DB (H2, PostgreSQL, MySQL, MariaDB)에서 사용 가능합니다.
+ * - DB에 따라 UUID 저장 방식이 다를 수 있습니다 (바이너리 vs 문자열).
+ *
+ * 모든 쿼리는 `withTables(testDB, ...)` 블록 내에서 실행됩니다.
+ */
 class Ex09_JavaUUIDColumnType: AbstractR2dbcExposedTest() {
 
     companion object: KLogging()

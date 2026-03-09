@@ -20,6 +20,18 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.*
 
+/**
+ * 클라이언트 측 기본값 생성 함수를 이용한 커스텀 ID 컬럼 예제.
+ *
+ * `bluetape4k-exposed` 확장이 제공하는 `timebasedGenerated()`, `snowflakeGenerated()`,
+ * `ksuidGenerated()`, `ksuidMillisGenerated()` 함수를 사용하여
+ * INSERT 시 자동으로 고유 ID 값을 생성하는 컬럼을 정의합니다.
+ *
+ * - [timebasedGenerated]: UUIDv1 기반의 시간 순서가 보장된 UUID 생성
+ * - [snowflakeGenerated]: Snowflake 알고리즘 기반 BIGINT ID 생성
+ * - [ksuidGenerated]: KSUID (K-Sortable Unique Identifier) 생성
+ * - [ksuidMillisGenerated]: 밀리초 정밀도의 KSUID 생성
+ */
 class CustomClientDefaultFunctionsTest: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()

@@ -31,6 +31,13 @@ import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
 
+/**
+ * 영화(Movie) 도메인의 데이터 접근 계층입니다.
+ *
+ * Exposed R2DBC DSL을 사용하여 [MovieTable], [ActorTable], [ActorInMovieTable]에 대한
+ * CRUD, 검색, JOIN 쿼리 기능을 제공합니다.
+ * `bufferUntilChanged`를 활용하여 JOIN 결과를 영화 기준으로 그룹핑합니다.
+ */
 @Repository
 class MovieRepository {
 

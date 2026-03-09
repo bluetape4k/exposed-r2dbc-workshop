@@ -14,6 +14,28 @@ import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
+/**
+ * Exposed R2DBC에서 데이터베이스 생성 및 삭제 DDL 예제.
+ *
+ * [SchemaUtils.createDatabase] / [SchemaUtils.dropDatabase] API를 사용하여
+ * 런타임에 데이터베이스를 동적으로 생성하고 삭제하는 방법을 보여줍니다.
+ *
+ * - H2, PostgreSQL 에서 지원됩니다. MySQL은 계정 권한이 필요하여 이 테스트에서 제외됩니다.
+ * - PostgreSQL은 `autoCommit = true` 상태에서만 DB 생성/삭제 DDL을 실행할 수 있습니다.
+ *
+ * ```sql
+ * -- Postgres
+ * CREATE DATABASE bluetape4k;
+ * DROP DATABASE bluetape4k;
+ *
+ * -- 데이터베이스 목록 조회
+ * SELECT datname FROM pg_database;
+ * ```
+ *
+ * @see SchemaUtils.createDatabase
+ * @see SchemaUtils.dropDatabase
+ * @see SchemaUtils.listDatabases
+ */
 class Ex01_CreateDatabase: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel() {

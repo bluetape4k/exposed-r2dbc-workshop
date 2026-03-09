@@ -66,6 +66,26 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.*
 
+/**
+ * Exposed R2DBC에서 INSERT 구문을 사용하는 다양한 방법을 보여주는 예제.
+ *
+ * 주요 학습 내용:
+ * - `insert { }` 를 사용한 기본 행 삽입 및 생성된 키(generated key) 조회
+ * - `insertAndGetId()` 로 자동 증가 ID 즉시 반환
+ * - `batchInsert()` 를 사용한 대량 삽입
+ * - `insertIgnore()` 로 중복 키 충돌 무시
+ * - `insert { } returning` 으로 삽입 후 컬럼값 즉시 반환 (PostgreSQL)
+ * - `databaseGenerated()` 컬럼: GENERATED ALWAYS AS (계산 컬럼)
+ * - Sequence 기반 ID 삽입
+ * - UUID를 기본키로 사용하는 삽입
+ *
+ * 주의사항:
+ * - Generated 컬럼은 자동 파생(auto-derived)되며 읽기 전용입니다.
+ * - `insertIgnore`는 MySQL/MariaDB/H2에서만 지원됩니다.
+ * - `returning`은 PostgreSQL/H2에서만 지원됩니다.
+ *
+ * 모든 쿼리는 `withTables(testDB, ...)` 또는 `withDb(testDB)` 블록 내에서 실행됩니다.
+ */
 class Ex02_Insert: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
@@ -373,7 +393,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `insert and get generted key 01`(testDB: TestDB) = runTest {
+    fun `insert and get generated key 01`(testDB: TestDB) = runTest {
 
         withTables(testDB, Cities) {
             val id: Int = Cities.insert {
@@ -868,7 +888,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
             try {
                 withContext(Dispatchers.IO) {
                     withDb(testDB) {
-                        // Todo Investigate whether calling commit in a tx is expected to enable auto-commit mode
+                        // TODO: Investigate whether calling commit in a tx is expected to enable auto-commit mode
                         // and whether it is Exposed's responsibility to revert or the user's
                         testTable.insert { it[foo] = 1 }
                         testTable.insert { it[foo] = 0 } // foo > 0 조건을 만족하지 않음 (예외 발생)
@@ -982,7 +1002,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
                     else                  -> SchemaUtils.create(generatedTable)
                 }
 
-                assertFailAndRollback("Generated columns are auto-drived and read-only") {
+                assertFailAndRollback("Generated columns are auto-derived and read-only") {
                     generatedTable.insert {
                         it[amount] = 99
                         it[computedAmount] = 100
