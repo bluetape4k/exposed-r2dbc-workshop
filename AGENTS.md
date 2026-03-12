@@ -19,6 +19,9 @@ Use the Gradle wrapper from repository root.
 - `./gradlew detekt`: run static analysis across modules.
 - `./gradlew :exposed-r2dbc-09-spring-05-exposed-r2dbc-repository-coroutines:test`: run one module’s tests.
 - `./gradlew :exposed-r2dbc-09-spring-07-spring-suspended-cache:bootRun`: run a Spring sample locally.
+- `./bin/repo-status`: compact repository status summary for Codex sessions.
+- `./bin/repo-diff`: compact diff summary with per-file churn instead of full patch output.
+- `./bin/repo-test-summary -- ./gradlew <task>`: compact Gradle test/task summary with failure highlights.
 
 ## Coding Style & Naming Conventions
 

@@ -25,6 +25,15 @@ Kotlin Exposed R2DBC 학습 워크샵 — JetBrains Exposed 프레임워크를 R
 
 # 빌드 캐시 제거
 ./gradlew clean
+
+# 저장소 상태 요약
+./bin/repo-status
+
+# diff 요약
+./bin/repo-diff
+
+# 테스트/Gradle 출력 요약
+./bin/repo-test-summary -- ./gradlew :05-exposed-dml:01-dml:test
 ```
 
 모듈 이름은 `settings.gradle.kts`의 `includeModules()` 함수로 결정됩니다. 각 하위 디렉토리 이름이 곧 Gradle 프로젝트 이름(`:dir-name`)이 됩니다.
