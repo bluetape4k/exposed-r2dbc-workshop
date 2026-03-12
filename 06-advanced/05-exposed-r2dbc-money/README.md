@@ -38,6 +38,36 @@ compositeMoney(precision: Int, scale: Int, columnName: String)
 
 이를 통해 전체 `MonetaryAmount`, 금액만, 또는 통화만으로 필터링하는 유연한 쿼리가 가능합니다.
 
+## 주의사항 및 제한사항
+
+### JSR-354 (JavaMoney API) 의존성
+
+`exposed-money`는 JSR-354 구현체인 `Moneta` 라이브러리에 의존합니다. `MonetaryAmount` 객체 생성 시
+`Money.of(amount, currency)` (Moneta) 또는 `moneyOf(amount, currency)` (bluetape4k 확장)를 사용합니다.
+
+```kotlin
+// Moneta 직접 사용
+val tenDollars = Money.of(BigDecimal.TEN, "USD")
+
+// bluetape4k 확장 (편의 함수)
+val tenDollars = moneyOf(BigDecimal.TEN, "USD")
+```
+
+### 통화 일관성 주의
+
+`compositeMoney`는 금액과 통화를 **별도 DB 컬럼**으로 저장합니다. 두 컬럼은 항상 함께 설정되어야 합니다:
+
+- `nullable()` 컬럼에서 금액만 NULL이면 `MonetaryAmount` 복원 불가
+- `currency` 컬럼의 `VARCHAR(3)` 값은 반드시 유효한 ISO 4217 통화 코드여야 합니다
+- 잘못된 통화 코드는 `UnknownCurrencyException`을 발생시킵니다
+
+### `compositeMoney` vs 직접 컬럼 정의
+
+| 방법                     | 장점                        | 단점                        |
+|------------------------|-----------------------------|----------------------------|
+| `compositeMoney()`     | 단일 속성으로 편리하게 접근           | 금액/통화 컬럼 이름에 `_C` 접미사 고정  |
+| 수동 (`decimal` + `currency`) | 컬럼 이름 자유롭게 지정 가능          | 코드가 더 복잡                  |
+
 ## 예제 개요
 
 ### `MoneyData.kt` - 테이블 및 엔티티 정의

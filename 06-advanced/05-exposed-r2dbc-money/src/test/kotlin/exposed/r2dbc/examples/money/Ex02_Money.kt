@@ -32,6 +32,40 @@ import java.math.BigDecimal
 import javax.money.CurrencyUnit
 import javax.money.MonetaryAmount
 
+/**
+ * `compositeMoney` 컬럼을 사용한 금전 데이터 CRUD 및 쿼리 예제.
+ *
+ * ## `compositeMoney` 기본 구조
+ *
+ * `compositeMoney(precision, scale, columnName)` 호출 시 DB에 두 컬럼이 생성됩니다:
+ * - `columnName` — `DECIMAL(precision, scale)` 금액 컬럼
+ * - `columnName_C` — `VARCHAR(3)` ISO 4217 통화 코드 컬럼
+ *
+ * 코드에서는 `CompositeColumn<MonetaryAmount?>` 하나로 접근합니다.
+ *
+ * ## 개별 구성 요소 접근
+ *
+ * ```kotlin
+ * // 전체 MonetaryAmount
+ * table.insert { it[composite_money] = Money.of(10, "USD") }
+ *
+ * // 금액과 통화 별도 접근
+ * it[composite_money.amount] = BigDecimal("10.00")
+ * it[composite_money.currency] = currencyUnitOf("USD")
+ * ```
+ *
+ * ## 주의사항 — 통화 일관성
+ *
+ * - 금액과 통화 컬럼은 항상 함께 설정/조회되어야 합니다.
+ * - `currency` 컬럼만 NULL이면 `MonetaryAmount` 객체를 복원할 수 없습니다.
+ * - `WHERE` 절에서 `composite_money eq value`는 내부적으로 금액과 통화 조건을 모두 생성합니다.
+ * - `ExposedR2dbcException`: 잘못된 통화 코드 또는 NULL 불일치 시 발생할 수 있습니다.
+ *
+ * ## 수동 복합 컬럼 구성
+ *
+ * 기존 `decimal` / `currency` 컬럼 조합에서 `compositeMoney`를 수동으로 생성할 수도 있습니다.
+ * `exposed-money`의 `currency()` 함수로 통화 컬럼을 독립적으로 정의한 뒤, `compositeMoney`에 연결합니다.
+ */
 class Ex02_Money: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
