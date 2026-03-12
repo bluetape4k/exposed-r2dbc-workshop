@@ -192,6 +192,76 @@ routing:
 
 ---
 
+## Read/Write 라우팅 아키텍처 상세
+
+### 컨텍스트 전파 체인
+
+HTTP 요청에서 실제 DB 커넥션까지 라우팅 정보가 전달되는 전체 흐름입니다.
+
+```
+HTTP Request
+    │  X-Tenant-Id: acme
+    │  X-Read-Only: true  (또는 /readonly 경로)
+    ▼
+TenantRoutingWebFilter
+    │  contextWrite {
+    │      TENANT    = "acme"
+    │      READ_ONLY = true
+    │  }
+    ▼
+RoutingMarkerController (suspend fun)
+    │  txExecutor.readOnly { ... }
+    ▼
+RoutingTransactionalExecutor
+    │  readOnlyOperator.execute(Mono) {   ← Spring TransactionalOperator
+    │      contextWrite(READ_ONLY, true)  ← Context에 힌트 추가
+    │  }
+    ▼
+DynamicRoutingConnectionFactory.create()
+    │  Mono.deferContextual { ctx ->
+    │      key = keyResolver.currentLookupKey(ctx)  // "acme:ro"
+    │      registry.get("acme:ro")
+    │  }
+    ▼
+ConnectionFactoryRegistry["acme:ro"]
+    │
+    ▼
+acme 테넌트의 읽기 전용 DB 인스턴스
+```
+
+### 테넌트 × 읽기/쓰기 커넥션 구성
+
+```
+ConnectionFactoryRegistry
+├── "default:rw"  →  H2 / PostgreSQL RW (default 테넌트 읽기+쓰기)
+├── "default:ro"  →  H2 / PostgreSQL RO (default 테넌트 읽기 전용)
+├── "acme:rw"     →  H2 / PostgreSQL RW (acme 테넌트 읽기+쓰기)
+└── "acme:ro"     →  H2 / PostgreSQL RO (acme 테넌트 읽기 전용)
+```
+
+`ro` URL을 생략하면 `rw` URL이 읽기 전용 커넥션으로도 재사용됩니다.
+
+### RoutingTransactionalExecutor 사용 패턴
+
+서비스/컨트롤러에서 `readWrite { }` / `readOnly { }` 블록으로 명시적으로 라우팅을 제어합니다.
+
+```kotlin
+// 읽기 전용 DB로 라우팅 (acme:ro)
+suspend fun getMarker(): RoutingMarkerRecord =
+    txExecutor.readOnly {
+        markerRepository.findByTenant(tenant)
+    }
+
+// 읽기-쓰기 DB로 라우팅 (acme:rw)
+suspend fun updateMarker(value: String): RoutingMarkerRecord =
+    txExecutor.readWrite {
+        markerRepository.upsert(tenant, value)
+    }
+```
+
+이 방식은 `@Transactional(readOnly = true)` 어노테이션을 사용하는 Spring MVC 패턴을
+Reactive/Coroutines 환경에서 구현한 것입니다.
+
 ## 참고 자료
 
 - [Spring WebFlux - Reactor Context](https://projectreactor.io/docs/core/release/reference/#context)

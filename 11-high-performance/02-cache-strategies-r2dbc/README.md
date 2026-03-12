@@ -174,6 +174,66 @@ DB 데이터를 읽기 전용으로 캐시합니다. `UserCredentialsCacheReposi
 - **Suspended Write Behind**: 대량 이벤트의 비동기 DB 반영 검증
 - **WebFlux 통합 테스트**: `WebTestClient`를 활용한 Reactive 엔드포인트 테스트
 
+## 캐시 전략 비교
+
+### 전략별 동작 흐름
+
+```
+[Read Through]
+Controller → Repository.get(id)
+                │
+                ├─ Cache HIT  → Redis에서 즉시 반환 (DB 호출 없음)
+                │
+                └─ Cache MISS → DB 조회 → Redis 저장 → 반환
+                                  (AbstractR2dbcRedissonRepository 자동 처리)
+
+[Write Through]
+Controller → Repository.put(entity)
+                │
+                ├─ Redis 저장 (즉시)
+                └─ DB 저장    (즉시 동기 반영)
+                   → 쓰기 지연(write lag) 없음, 일관성 보장
+
+[Write Behind]
+Controller → Repository.put(entity)
+                │
+                ├─ Redis 저장 (즉시)
+                └─ DB 저장    (비동기 배치, 수 초~수 분 후)
+                   → 쓰기 성능 극대화, 대량 이벤트 처리에 적합
+                   ⚠ 앱 크래시 시 미반영 데이터 유실 가능
+
+[Read-Only Cache]
+Controller → Repository.get(id)
+                │
+                ├─ Cache HIT  → Redis 반환
+                └─ Cache MISS → DB 조회 → Redis 저장 → 반환
+                   쓰기 연산 없음 (인증 정보, 코드 테이블 등 불변 데이터에 적합)
+```
+
+### 전략 선택 기준
+
+| 캐시 전략         | 구현 Repository                   | 적합한 데이터 유형              | 일관성 | 쓰기 성능 |
+|-----------------|-----------------------------------|-----------------------------|--------|---------|
+| Read Through    | `UserCacheRepository`             | 자주 읽히는 사용자 프로필         | 높음   | 중간    |
+| Write Through   | `UserCacheRepository`             | 읽기/쓰기 균형이 필요한 마스터 데이터 | 높음   | 낮음    |
+| Write Behind    | `UserEventCacheRepository`        | 대량 로그/이벤트, 분석 데이터      | 낮음   | 높음    |
+| Read-Only Cache | `UserCredentialsCacheRepository`  | 인증 정보, 코드 테이블 (불변)      | 높음   | N/A    |
+
+### Near Cache 효과
+
+`READ_WRITE_THROUGH_WITH_NEAR_CACHE` 설정을 사용하면 애플리케이션 내부에 Caffeine 로컬 캐시가 활성화됩니다.
+
+```
+[Near Cache 적용 시 조회 경로]
+Application Memory (Caffeine)  ← 1st 조회 (나노초 단위)
+        │
+        └─ MISS → Redis MapCache          ← 2nd 조회 (마이크로초 단위)
+                        │
+                        └─ MISS → DB (Exposed R2DBC)  ← 3rd 조회 (밀리초 단위)
+```
+
+동일 프로세스 내에서 반복 조회 시 Redis 라운드트립 없이 응답하여 **P99 레이턴시를 크게 낮출 수 있습니다**.
+
 ## 언제 어떤 모듈을 선택해야 하나?
 
 | 상황                               | 추천 모듈                                   |
