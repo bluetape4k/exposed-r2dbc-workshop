@@ -81,6 +81,65 @@ src/main/kotlin/exposed/r2dbc/multitenant/webflux/
 | KOREAN  | `korean`  | `korean`  | 한국어 (조니 뎁, 글래디에이터 등)          |
 | ENGLISH | `english` | `english` | 영어 (Johnny Depp, Gladiator 등) |
 
+## 멀티테넌시 격리 수준 옵션
+
+### 1. Schema-based (이 예제)
+
+각 테넌트가 **같은 DB 인스턴스의 별도 스키마**를 사용합니다.
+
+```
+PostgreSQL Instance
+├── Schema: korean
+│   ├── movies
+│   ├── actors
+│   └── actors_in_movies
+└── Schema: english
+    ├── movies
+    ├── actors
+    └── actors_in_movies
+```
+
+**장점**: 단일 DB 인스턴스 관리, 테넌트 간 완전한 데이터 격리, 운영 단순성
+**단점**: DB별 최대 스키마 수 제한, 테넌트가 매우 많으면 연결 풀 관리 복잡
+
+### 2. Row-based (미구현, 참고용)
+
+테넌트 식별자 컬럼(`tenant_id`)을 모든 테이블에 추가하여 하나의 스키마에서 분리합니다.
+
+```
+Schema: public
+└── actors  (tenant_id, id, first_name, last_name, ...)
+    ├── ROW: tenant_id="korean", id=1, first_name="조니"
+    └── ROW: tenant_id="english", id=1, first_name="Johnny"
+```
+
+**장점**: 구현 단순, 무제한 테넌트 수
+**단점**: 모든 쿼리에 `WHERE tenant_id = ?` 추가 필요, 데이터 격리 실수 위험
+
+### 3. Database-based (미구현, 참고용)
+
+테넌트마다 **별도 DB 인스턴스**를 사용합니다. 라우팅 DataSource(`DynamicRoutingConnectionFactory`)가 필요합니다.
+
+```
+App → ConnectionFactory Registry
+       ├── "korean" → ConnectionFactory(korean_db)
+       └── "english" → ConnectionFactory(english_db)
+```
+
+**장점**: 완전한 리소스 격리, DB 수준의 보안
+**단점**: 운영 복잡성 높음, 테넌트 수에 비례한 DB 인스턴스 비용
+
+### Tenant 컨텍스트 전파 방식: ThreadLocal vs CoroutineContext
+
+| 방식             | 사용 환경                  | 이 예제 채택 여부 |
+|----------------|--------------------------|------------|
+| `ThreadLocal`  | Spring MVC (블로킹)        | ❌ 사용 안 함  |
+| `ReactorContext` | Spring WebFlux (리액티브)  | ✅ 채택      |
+| `CoroutineContext` | Kotlin Coroutines      | ✅ 채택 (보조) |
+
+WebFlux 환경에서는 요청마다 스레드가 고정되지 않으므로 `ThreadLocal` 사용이 불가능합니다.
+대신 `ReactorContext`에 테넌트 정보를 저장하고, 코루틴 안에서 `coroutineContext[ReactorContext]`로 읽습니다.
+
 ## 핵심 구현
 
 ### 1. TenantFilter - 요청에서 테넌트 추출

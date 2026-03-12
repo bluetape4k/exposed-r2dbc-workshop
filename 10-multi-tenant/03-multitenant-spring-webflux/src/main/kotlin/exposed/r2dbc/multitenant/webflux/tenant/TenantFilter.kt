@@ -16,11 +16,34 @@ import reactor.core.publisher.Mono
  * 요청 헤더에서 `X-TENANT-ID` 를 읽어서 ReactorContext 에 TenantId 를 설정합니다.
  * 이를 사용하여, CoroutineScope 에서 TenantId 를 사용할 수 있습니다.
  *
+ * ## 테넌트 전파 흐름
+ * ```
+ * HTTP 요청 (X-TENANT-ID: korean)
+ *     │
+ *     ▼
+ * TenantFilter.filter()
+ *     │  chain.filter(exchange).contextWrite { it.put("TenantId", TenantId(tenant)) }
+ *     ▼
+ * ReactorContext ["TenantId" → TenantId(KOREAN)]
+ *     │
+ *     ▼
+ * Controller suspend fun  ← currentReactorTenant() 로 테넌트 읽기
+ *     │
+ *     ▼
+ * suspendTransactionWithCurrentTenant { SchemaUtils.setSchema("korean") }
+ * ```
+ *
+ * ## 기본값 처리
+ * - `X-TENANT-ID` 헤더가 없거나 빈 문자열이면 [Tenants.DEFAULT_TENANT] (KOREAN)을 사용합니다.
+ * - 알 수 없는 테넌트 ID는 `400 Bad Request`로 응답합니다.
+ *
  * ```kotlin
  * val tenantId = currentReactorTenant()
  * ```
  *
  * @see [currentReactorTenant]
+ * @see [TenantId]
+ * @see [Tenants]
  */
 @Component
 class TenantFilter: WebFilter {
