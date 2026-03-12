@@ -47,6 +47,48 @@
 | `timestampLiteral(Instant)`                    | 타임스탬프 리터럴        |
 | `timestampWithTimeZoneLiteral(OffsetDateTime)` | 시간대 포함 타임스탬프 리터럴 |
 
+## 타임존(TimeZone) 주의사항
+
+### `TIMESTAMP WITH TIME ZONE` DB별 동작 차이
+
+`timestampWithTimeZone` 컬럼은 DB마다 다르게 동작합니다.
+
+| DB         | 타임존 정보 보존 | 비고                                      |
+|------------|-------------|------------------------------------------|
+| PostgreSQL | 보존 안 됨     | UTC로 정규화하여 저장 — 원래 오프셋 유실              |
+| MySQL 8    | 보존 안 됨     | UTC로 정규화하여 저장 — 원래 오프셋 유실              |
+| H2         | 보존됨        | 원래 오프셋 그대로 저장                          |
+| MariaDB    | 미지원        | `UnsupportedByDialectException` 발생      |
+| MySQL V5   | 미지원        | `UnsupportedByDialectException` 발생      |
+
+> **권고사항**: PostgreSQL/MySQL에서 원래 타임존 오프셋을 보존해야 하는 경우,
+> `VARCHAR` 컬럼에 타임존 ID(`ZoneId.systemDefault().id`)를 별도로 저장하세요.
+
+### Nanos 정밀도 차이
+
+DB마다 소수점 이하 시간 정밀도가 다릅니다. `shouldTemporalEqualTo` 확장 함수가
+DB별 정밀도를 고려하여 비교합니다.
+
+| DB         | 최대 정밀도        |
+|------------|----------------|
+| PostgreSQL | 마이크로초 (6자리)   |
+| MySQL      | 마이크로초 (6자리)   |
+| MariaDB    | 마이크로초 (6자리)   |
+| H2         | 나노초 (9자리)     |
+| SQLServer  | 100나노초 단위 반올림 |
+| Oracle     | 밀리초 단위 반올림   |
+
+### 테스트 환경의 UTC 고정
+
+`AbstractR2dbcExposedTest`가 `TimeZone.setDefault(UTC)`를 초기화 시 설정합니다.
+타임존을 변경하는 테스트 내에서는 테스트 완료 후 반드시 원래 타임존으로 복원해야 합니다.
+
+```kotlin
+val systemTimeZone = TimeZone.getDefault()
+// ... 타임존 변경 후 작업 ...
+TimeZone.setDefault(systemTimeZone) // 반드시 복원
+```
+
 ## 예제 개요
 
 ### `Ex01_JavaTime.kt` - 기본 사용법 및 함수

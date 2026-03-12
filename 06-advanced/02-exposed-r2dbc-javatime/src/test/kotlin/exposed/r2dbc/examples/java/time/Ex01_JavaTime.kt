@@ -9,7 +9,6 @@ import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.logging.KotlinLogging
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
-import io.mockk.impl.InternalPlatform.time
 import kotlinx.coroutines.flow.all
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -75,7 +74,39 @@ import java.time.temporal.Temporal
 import java.util.*
 
 /**
- * Exposed에서 제공하는 Java Time 수형을 사용하는 테스트
+ * Exposed에서 제공하는 Java Time 수형을 사용하는 테스트.
+ *
+ * ## 타임존(TimeZone) 일관성 보장
+ *
+ * 모든 테스트는 [AbstractR2dbcExposedTest]에서 UTC 타임존으로 고정됩니다.
+ * 타임존을 변경하는 테스트는 완료 후 반드시 원래 타임존으로 복원해야 합니다.
+ *
+ * ## DB 별 `TIMESTAMP WITH TIME ZONE` 동작 차이
+ *
+ * | DB                  | 타임존 정보 보존 여부 | 저장 방식                   |
+ * |---------------------|----------------|--------------------------|
+ * | PostgreSQL          | 보존 안 됨 (UTC로 정규화) | UTC로 변환하여 저장            |
+ * | MySQL 8             | 보존 안 됨 (UTC로 정규화) | UTC로 변환하여 저장            |
+ * | H2 (file/memory)    | 보존됨           | 원래 오프셋 그대로 저장           |
+ * | MariaDB             | 미지원           | `UnsupportedByDialectException` |
+ * | MySQL V5            | 미지원           | `UnsupportedByDialectException` |
+ *
+ * > **주의**: PostgreSQL/MySQL에서 `timestampWithTimeZone` 컬럼에 저장 시 원래 오프셋이 유실됩니다.
+ * > 오프셋 정보를 보존해야 한다면 별도 `VARCHAR` 컬럼에 타임존 ID를 저장하는 방식을 고려하세요.
+ *
+ * ## Nanos 정밀도 차이
+ *
+ * DB마다 fractional seconds 지원 단위가 다릅니다.
+ * `shouldTemporalEqualTo` 확장 함수가 각 DB에 맞는 정밀도로 비교를 수행합니다.
+ *
+ * | DB          | 최대 정밀도        |
+ * |-------------|----------------|
+ * | PostgreSQL  | 마이크로초 (6자리)   |
+ * | MySQL       | 마이크로초 (6자리)   |
+ * | MariaDB     | 마이크로초 (6자리)   |
+ * | H2          | 나노초 (9자리)     |
+ * | SQLServer   | 100나노초 단위 반올림 |
+ * | Oracle      | 밀리초 단위 반올림   |
  */
 class Ex01_JavaTime: AbstractR2dbcExposedTest() {
 
