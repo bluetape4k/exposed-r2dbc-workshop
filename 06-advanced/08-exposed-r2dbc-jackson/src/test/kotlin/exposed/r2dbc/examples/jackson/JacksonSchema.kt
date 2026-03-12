@@ -13,10 +13,20 @@ import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 
 /**
- * Jackson 기반 JSON/JSONB 컬럼 테스트에 사용하는 공유 스키마 및 헬퍼 함수 모음.
+ * Jackson 2.x 기반 JSON/JSONB 컬럼 테스트에 사용하는 공유 스키마 및 헬퍼 함수 모음.
  *
  * `bluetape4k-exposed` 의 `jackson()` / `jacksonb()` 확장 함수를 사용하여
  * Kotlin 객체를 JSON(텍스트) 또는 JSONB(바이너리) 형식으로 컬럼에 저장합니다.
+ * `@Serializable` 어노테이션 없이 표준 Kotlin 데이터 클래스를 그대로 사용할 수 있습니다.
+ *
+ * ## ObjectMapper 설정 주의사항
+ *
+ * 내부적으로 `KotlinModule`이 자동 등록된 `ObjectMapper`를 사용합니다.
+ * - `DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES` 기본값은 `true`이므로
+ *   스키마 진화가 필요한 경우 `false`로 설정하거나 `@JsonIgnoreProperties(ignoreUnknown = true)`를 사용하세요.
+ * - `SerializationFeature.WRITE_DATES_AS_TIMESTAMPS` 기본값은 `true`이므로
+ *   날짜를 ISO 8601 문자열로 저장하려면 `false`로 설정하세요.
+ * - `ObjectMapper`는 스레드 안전(thread-safe)하므로 단일 인스턴스를 공유해도 됩니다.
  *
  * 제공 테이블:
  * - [JacksonTable]: JSON 컬럼 테이블 (`jackson_table`)

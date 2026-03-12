@@ -14,6 +14,33 @@
 
 이 모듈의 API는 `exposed-json`과 거의 동일하지만, 기본 구현은 Jackson의 `ObjectMapper`를 사용합니다.
 
+### Jackson ObjectMapper 설정 주의사항
+
+`bluetape4k-exposed` 의 Jackson 컬럼 타입은 내부적으로 `ObjectMapper` 인스턴스를 공유합니다.
+커스터마이징이 필요한 경우 아래 사항에 유의하세요:
+
+| 주의사항                              | 설명                                                                     |
+|-----------------------------------|------------------------------------------------------------------------|
+| **KotlinModule 등록**               | Kotlin 데이터 클래스 역직렬화를 위해 `KotlinModule`이 자동 등록됩니다                       |
+| **`@JsonIgnoreProperties(ignoreUnknown = true)`** | 스키마 변경 시 역직렬화 오류 방지를 위해 권장합니다                              |
+| **`WRITE_DATES_AS_TIMESTAMPS`**   | 기본값 `true` — `false`로 설정 시 날짜가 ISO 8601 문자열로 직렬화됩니다                   |
+| **`FAIL_ON_EMPTY_BEANS`**         | 기본값 `true` — 빈 객체 직렬화 시 예외 발생. 필요 시 `false`로 비활성화                     |
+| **`FAIL_ON_UNKNOWN_PROPERTIES`**  | 기본값 `true` — JSON에 알 수 없는 필드가 있으면 예외 발생. 스키마 진화 시 `false`로 설정 권장      |
+| **스레드 안전**                        | `ObjectMapper`는 스레드 안전(thread-safe)하므로 단일 인스턴스를 공유해도 됩니다              |
+
+### SerializationFeature 주요 옵션
+
+Jackson의 `SerializationFeature`와 `DeserializationFeature`는 직렬화/역직렬화 동작을 세밀하게 제어합니다:
+
+| 옵션                                          | 기본값     | 설명                                                |
+|---------------------------------------------|---------|---------------------------------------------------|
+| `SerializationFeature.INDENT_OUTPUT`        | `false` | JSON 출력을 보기 좋게 들여쓰기 (디버깅용)                        |
+| `SerializationFeature.WRITE_DATES_AS_TIMESTAMPS` | `true`  | 날짜를 타임스탬프 숫자로 직렬화 (`false` 시 ISO 8601)      |
+| `SerializationFeature.WRITE_ENUMS_USING_TO_STRING` | `false` | enum을 `toString()` 값으로 직렬화 (기본: `name()`)  |
+| `SerializationFeature.FAIL_ON_EMPTY_BEANS`  | `true`  | 매핑 가능한 속성이 없는 빈 객체 직렬화 시 예외 발생                    |
+| `DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES` | `true` | JSON에 알 수 없는 필드가 있을 때 예외 발생 (스키마 진화 시 주의) |
+| `DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS` | `false` | 부동소수점을 `BigDecimal`로 역직렬화 (정밀도 필요 시 사용)    |
+
 ### 컬럼 타입
 
 | 타입                  | 설명                                                                                      |
