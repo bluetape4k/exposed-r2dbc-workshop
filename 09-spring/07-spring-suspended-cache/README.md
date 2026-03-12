@@ -240,6 +240,52 @@ Redis는 Testcontainers를 통해 자동으로 실행됩니다.
 
 테스트는 `@RepeatedTest`로 반복 실행하여 첫 번째(cold) 조회와 이후(warm/cached) 조회의 성능 차이를 확인합니다.
 
+## Suspended Cache 작동 원리 (상세)
+
+### LettuceSuspendedCache 내부 흐름
+
+```
+[Controller suspend fun]
+        │
+        ▼
+[CachedCountryR2dbcRepository]
+        │
+        ├─ cache.get(code)          ← Redis GET "caches:country:code:<code>"
+        │       │
+        │       ├─ HIT  → 즉시 반환 (DB 호출 없음)
+        │       │
+        │       └─ MISS → delegate.findByCode(code)   ← Exposed R2DBC suspendTransaction
+        │                       │
+        │                       └─ cache.put(code, result)  ← Redis SET/SETEX (TTL 60s)
+        │
+        └─ cache.evict(code)        ← Redis DEL (업데이트 시 무효화)
+```
+
+### SCAN 기반 전체 캐시 삭제
+
+Redis의 `KEYS` 명령은 모든 키를 한 번에 스캔하므로 대규모 데이터셋에서 Redis 서버를 일시적으로 블로킹할 수 있습니다.
+`LettuceSuspendedCache.clear()`는 `SCAN` + `UNLINK` 패턴으로 이 문제를 해결합니다:
+
+```
+SCAN cursor MATCH "caches:country:code:*" COUNT 100
+    → 키 목록 100개씩 취득
+    → UNLINK key1 key2 ... (비동기 삭제, DEL보다 안전)
+    → cursor가 "0"이 될 때까지 반복
+```
+
+`UNLINK`는 `DEL`과 달리 백그라운드에서 메모리를 해제하므로 Redis 이벤트 루프를 차단하지 않습니다.
+
+### 직렬화/압축 전략
+
+| 설정                  | Codec              | 압축  | 특징                           |
+|---------------------|--------------------|-----|------------------------------|
+| `lz4Fory()`         | Fory (Java)        | LZ4 | 빠른 직렬화 + 중간 압축 (기본값)         |
+| `lz4Kryo5()`        | Kryo5              | LZ4 | Fory보다 약간 느리지만 더 광범위한 타입 지원  |
+| `snappyFory()`      | Fory               | Snappy | Google 압축 (네트워크 전송 최적화)   |
+| `zstdFory()`        | Fory               | Zstd | 높은 압축률 (저장 공간 절약)            |
+
+`CountryRecord`의 `description` 필드에 대용량 텍스트가 포함되므로 압축 효과가 큽니다.
+
 ## Further Reading
 
 - [Exppose with Spring Suspended Cache](https://debop.notion.site/Exposed-with-Suspended-Spring-Cache-1db2744526b080769d2ef307e4a3c6c9)

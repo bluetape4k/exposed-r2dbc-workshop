@@ -250,6 +250,54 @@ fun r2dbcDatabase(
 - **ConfigurationTest** - Spring 설정 로드 검증
 - **DomainSQLTest** - 도메인 SQL 쿼리 테스트
 
+## Spring DI + Exposed R2DBC 통합 패턴
+
+### 의존성 주입 구조
+
+```
+Spring Container
+    ├── R2dbcDatabase  ←── ExposedR2dbcConfig (ConnectionPool + CoroutineDispatcher)
+    ├── MovieR2dbcRepository  ←── @Repository (R2dbcRepository<Long, MovieTable, MovieRecord>)
+    ├── ActorR2dbcRepository  ←── @Repository
+    └── MovieController / ActorController / MovieActorsController
+            └── suspendTransaction { repository.xxx() }
+```
+
+### Repository 계층 설계
+
+`R2dbcRepository<ID, Table, Entity>` 인터페이스가 기본 CRUD를 제공합니다.
+구현 클래스에서 `override val table` 과 `override suspend fun ResultRow.toEntity()` 만 구현하면
+`findAll()`, `findById()`, `deleteById()` 등을 상속받습니다.
+
+```kotlin
+// 인터페이스 준수로 얻는 기본 기능
+interface R2dbcRepository<ID, T: IdTable<ID>, E> {
+    val table: T
+    suspend fun ResultRow.toEntity(): E
+    fun findAll(): Flow<E>                  // 자동 상속
+    suspend fun findById(id: ID): E?        // 자동 상속
+    suspend fun deleteById(id: ID): Int     // 자동 상속
+}
+```
+
+도메인별 쿼리(`searchMovies`, `getAllMoviesWithActors` 등)는 구현 클래스에 직접 추가합니다.
+
+### 트랜잭션 경계
+
+Controller에서 `suspendTransaction { }` 블록으로 트랜잭션 경계를 명시합니다.
+Repository 메서드 자체는 트랜잭션을 열지 않으므로, 여러 Repository 호출을 하나의 트랜잭션으로 묶을 수 있습니다.
+
+```kotlin
+// 여러 Repository 호출을 하나의 트랜잭션으로 묶는 예
+@PostMapping("/{movieId}/actors/{actorId}")
+suspend fun addActorToMovie(@PathVariable movieId: Long, @PathVariable actorId: Long) =
+    suspendTransaction {
+        val movie = movieRepository.findById(movieId) ?: error("Movie not found")
+        val actor = actorRepository.findById(actorId) ?: error("Actor not found")
+        actorInMovieRepository.link(movie, actor)
+    }
+```
+
 ## Further Reading
 
 - [ExposedRepostiroy with Coroutines](https://debop.notion.site/ExposedRepository-with-Coroutines-1c32744526b080a1a6cbe2c86c2cb889)
