@@ -31,11 +31,11 @@ object Containers: KLogging() {
     /** MariaDB Testcontainer 인스턴스. utf8mb4 인코딩으로 구성됩니다. */
     val MariaDB: MariaDBServer by lazy {
         MariaDBServer()
-            .withCommand(
-                "--character-set-server=utf8mb4",
-                "--collation-server=utf8mb4_bin"
-            )
             .apply {
+                withCommand(
+                    "--character-set-server=utf8mb4",
+                    "--collation-server=utf8mb4_bin"
+                )
                 start()
                 ShutdownQueue.register(this)
             }
@@ -44,11 +44,11 @@ object Containers: KLogging() {
     /** MySQL 5 Testcontainer 인스턴스. utf8mb4 인코딩으로 구성됩니다. */
     val MySql5: MySQL5Server by lazy {
         MySQL5Server()
-            .withCommand(
-                "--character-set-server=utf8mb4",
-                "--collation-server=utf8mb4_bin"
-            )
             .apply {
+                withCommand(
+                    "--character-set-server=utf8mb4",
+                    "--collation-server=utf8mb4_bin"
+                )
                 start()
                 ShutdownQueue.register(this)
             }
@@ -57,11 +57,11 @@ object Containers: KLogging() {
     /** MySQL 8 Testcontainer 인스턴스. utf8mb4 인코딩으로 구성됩니다. */
     val MySql8: MySQL8Server by lazy {
         MySQL8Server()
-            .withCommand(
-                "--character-set-server=utf8mb4",
-                "--collation-server=utf8mb4_bin"
-            )
             .apply {
+                withCommand(
+                    "--character-set-server=utf8mb4",
+                    "--collation-server=utf8mb4_bin"
+                )
                 start()
                 ShutdownQueue.register(this)
             }
