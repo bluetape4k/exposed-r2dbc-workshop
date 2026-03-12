@@ -19,7 +19,26 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 /**
- * Connection의 Transaction Isolation Level을 설정하는 방법에 대한 테스트 코드입니다.
+ * Exposed R2DBC에서 트랜잭션 격리 수준(Transaction Isolation Level)을 설정하는 예제.
+ *
+ * 주요 학습 내용:
+ * - `suspendTransaction(transactionIsolation = ...)` 으로 트랜잭션별 격리 수준 지정
+ * - `R2dbcDatabaseConfig { defaultR2dbcIsolationLevel = ... }` 으로 DB 기본값 설정
+ * - `inTopLevelSuspendTransaction(transactionIsolation = ...)` 으로 최상위 트랜잭션 격리 수준 지정
+ *
+ * 지원 격리 수준:
+ * - [IsolationLevel.READ_UNCOMMITTED]: 커밋되지 않은 데이터 읽기 허용 (Dirty Read 발생 가능)
+ * - [IsolationLevel.READ_COMMITTED]: 커밋된 데이터만 읽기 (기본값, Non-repeatable Read 발생 가능)
+ * - [IsolationLevel.REPEATABLE_READ]: 트랜잭션 내 반복 읽기 일관성 보장 (Phantom Read 발생 가능)
+ * - [IsolationLevel.SERIALIZABLE]: 완전 직렬화 수준 (가장 엄격, 성능 저하 가능)
+ *
+ * 주의사항:
+ * - PostgreSQL은 READ_UNCOMMITTED를 READ_COMMITTED로 처리합니다.
+ * - MySQL 8.0.3+ 에서는 `@@tx_isolation` 변수가 제거되어 `REPEATABLE_READ`가 기본값입니다.
+ * - `R2dbcDatabaseConfig`의 `defaultR2dbcIsolationLevel`은 전체 연결의 기본 격리 수준을 설정하며,
+ *   개별 `suspendTransaction`에서 재정의할 수 있습니다.
+ *
+ * 모든 쿼리는 `withDb(testDB)` 블록 내에서 실행됩니다.
  */
 class Ex01_TransactionIsolation: AbstractR2dbcExposedTest() {
 

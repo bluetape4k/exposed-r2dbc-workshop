@@ -5,7 +5,7 @@ import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.codec.Base58
-import io.bluetape4k.junit5.coroutines.runSuspendIO
+import kotlinx.coroutines.test.runTest
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.r2dbc.spi.IsolationLevel
 import kotlinx.coroutines.Dispatchers
@@ -126,7 +126,7 @@ class Ex05_NestedTransactions_Coroutines: AbstractR2dbcExposedTest() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `코루틴에서 중첩 트랜잭션 사용하기`(testDB: TestDB) = runSuspendIO {
+    fun `코루틴에서 중첩 트랜잭션 사용하기`(testDB: TestDB) = runTest {
         withTables(testDB, cities, configure = { useNestedTransactions = true }) {
             // 외부 트랜잭션
             cities.selectAll().toList().shouldBeEmpty()
@@ -157,7 +157,7 @@ class Ex05_NestedTransactions_Coroutines: AbstractR2dbcExposedTest() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `코루틴에서 중첩 트랜잭션 실패 후 외부 트랜잭션으로 복귀한다`(testDB: TestDB) = runSuspendIO {
+    fun `코루틴에서 중첩 트랜잭션 실패 후 외부 트랜잭션으로 복귀한다`(testDB: TestDB) = runTest {
         withTables(testDB, cities) {
             TransactionManager.currentOrNull().shouldNotBeNull()
 

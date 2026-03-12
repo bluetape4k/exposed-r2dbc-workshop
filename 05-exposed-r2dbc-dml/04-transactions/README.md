@@ -132,6 +132,34 @@ suspend fun <T> runWithSavepoint(
 }
 ```
 
+## 트랜잭션 격리 수준 DB별 지원 현황
+
+| 격리 수준              | H2  | PostgreSQL | MySQL 8 | MariaDB | 비고                              |
+|--------------------|-----|------------|---------|---------|-----------------------------------|
+| `READ_UNCOMMITTED` | O   | △ (사실상 RC) | O       | O       | PostgreSQL은 READ_COMMITTED로 처리 |
+| `READ_COMMITTED`   | O   | O          | O       | O       | 기본값 (대부분 DB)                  |
+| `REPEATABLE_READ`  | O   | △ (SSI)    | O       | O       | PostgreSQL은 Snapshot Isolation   |
+| `SERIALIZABLE`     | O   | O          | O       | O       | 가장 엄격한 격리 수준               |
+
+## Savepoint (중첩 트랜잭션) DB별 지원 현황
+
+| 기능                       | H2  | PostgreSQL | MySQL 8 | MariaDB | 비고                              |
+|--------------------------|-----|------------|---------|---------|-----------------------------------|
+| `SAVEPOINT`              | O   | O          | O       | O       | 모든 지원 DB에서 사용 가능           |
+| `RELEASE SAVEPOINT`      | O   | O          | O       | O       |                                   |
+| `ROLLBACK TO SAVEPOINT`  | O   | O          | O       | O       |                                   |
+| `useNestedTransactions`  | O   | O          | O       | O       | Exposed 설정 옵션                   |
+| Auto-commit + Savepoint  | △   | X          | △       | △       | auto-commit 모드에서 동작 DB마다 상이 |
+
+## 트랜잭션 실행 함수 비교
+
+| 함수                           | 설명                                          | 중첩 지원 |
+|------------------------------|---------------------------------------------|--------|
+| `suspendTransaction { }`     | 코루틴 트랜잭션. 새 트랜잭션 시작                       | Savepoint |
+| `inTopLevelSuspendTransaction { }` | 항상 최상위 트랜잭션으로 시작 (중첩 불가)              | X      |
+| `withDb(testDB) { }`         | DB 지정 후 트랜잭션 컨텍스트 진입 (테스트 헬퍼)           | Savepoint |
+| `withTables(testDB, *tables) { }` | 테이블 생성 후 트랜잭션 실행, 종료 후 자동 정리 (테스트 헬퍼) | Savepoint |
+
 ## 공유 테스트 인프라
 
 - `R2dbcExposedTestBase` - 멀티 DB 테스트 지원 베이스 클래스
