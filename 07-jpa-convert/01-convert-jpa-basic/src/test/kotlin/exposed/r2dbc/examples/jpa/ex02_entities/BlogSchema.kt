@@ -16,6 +16,37 @@ import org.jetbrains.exposed.v1.javatime.date
 import org.jetbrains.exposed.v1.jdbc.SizedIterable
 
 
+/**
+ * JPA → Exposed R2DBC 마이그레이션 예제 — 블로그 도메인 스키마
+ *
+ * ## 관계 유형별 JPA ↔ Exposed 대응
+ *
+ * ### 1:1 (One-to-One)
+ * | JPA                                  | Exposed R2DBC                                              |
+ * |--------------------------------------|------------------------------------------------------------|
+ * | `@OneToOne @MapsId`                  | `IdTable`에서 `id = reference("id", PostTable)` 로 PK = FK |
+ * | `@OneToOne mappedBy`                 | `val details by PostDetail backReferencedOn PostDetailTable.id` |
+ *
+ * ### 1:N (One-to-Many / Many-to-One)
+ * | JPA                                  | Exposed R2DBC                                              |
+ * |--------------------------------------|------------------------------------------------------------|
+ * | `@ManyToOne @JoinColumn`             | `val postId = reference("post_id", PostTable)`             |
+ * | `@OneToMany mappedBy`                | `val comments by PostComment referrersOn PostCommentTable.postId` |
+ *
+ * ### N:M (Many-to-Many)
+ * | JPA                                  | Exposed R2DBC                                              |
+ * |--------------------------------------|------------------------------------------------------------|
+ * | `@ManyToMany @JoinTable`             | `object PostTagTable : LongIdTable(…)` 연결 테이블 직접 정의 |
+ * | `@ManyToMany`                        | `val tags by Tag via PostTagTable`                         |
+ *
+ * ## Cascade 옵션
+ * - JPA `CascadeType.REMOVE` → Exposed `onDelete = ReferenceOption.CASCADE`
+ * - JPA `CascadeType.PERSIST` → Exposed에서는 명시적 insert 필요
+ *
+ * ## Lazy Loading
+ * - JPA는 기본적으로 `@ManyToOne`이 EAGER, `@OneToMany`가 LAZY
+ * - Exposed DAO는 항상 lazy — 프로퍼티 접근 시점에 SQL이 실행됩니다.
+ */
 object BlogSchema: KLoggingChannel() {
 
     val blogTables = arrayOf(

@@ -22,9 +22,28 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 /**
- * 사용자 정의 수형을 ID 나 컬럼 수형으로 사용하는 예제
+ * 사용자 정의 타입을 ID 또는 컬럼 타입으로 사용하는 예제.
  *
- * JPA 의 `@Convert` 와 유사합니다.
+ * ## JPA `@Convert` → Exposed [ColumnWithTransform] 전환
+ * JPA에서 `@Convert(converter = EmailConverter::class)`로 선언하던 커스텀 타입 변환을
+ * Exposed에서는 [ColumnWithTransform] + [ColumnTransformer]로 대체합니다.
+ *
+ * ```
+ * JPA                                         Exposed R2DBC
+ * -------------------------------------------  -----------------------------------------
+ * @EmbeddedId / @Id + @Convert                 IdTable<Email> + email("email_id").entityId()
+ * AttributeConverter.convertToDatabaseColumn   ColumnTransformer.unwrap(value: Email): String
+ * AttributeConverter.convertToEntityAttribute  ColumnTransformer.wrap(value: String): Email
+ * ```
+ *
+ * ## 핵심 패턴
+ * - [Email]을 PK로 사용할 경우 `IdTable<Email>`을 상속하고, `id` 컬럼을 커스텀 타입으로 정의합니다.
+ * - [Ssn]처럼 PK가 아닌 일반 컬럼에도 동일한 [ColumnWithTransform] 패턴을 적용할 수 있습니다.
+ * - Kotlin `value class`를 활용하면 DB 저장은 원시 타입으로, Kotlin 코드는 강타입으로 다룰 수 있습니다.
+ *
+ * @see CustomColumnTypes
+ * @see Email
+ * @see Ssn
  */
 class Ex01_CustomId: AbstractR2dbcExposedTest() {
 

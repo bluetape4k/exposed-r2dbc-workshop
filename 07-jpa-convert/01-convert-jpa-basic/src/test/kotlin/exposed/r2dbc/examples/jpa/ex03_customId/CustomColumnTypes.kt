@@ -9,7 +9,25 @@ import org.jetbrains.exposed.v1.core.VarCharColumnType
 import java.io.Serializable
 
 /**
- * `value class` 를 이용하여, 컬럼의 타입에 타입 안정성을 제공할 수 있습니다.
+ * Kotlin `value class`를 Exposed 컬럼 타입으로 사용하는 커스텀 타입 정의.
+ *
+ * ## JPA `@Convert` vs Exposed [ColumnWithTransform]
+ * | JPA                              | Exposed R2DBC                                      |
+ * |----------------------------------|----------------------------------------------------|
+ * | `@Convert(converter = …)`        | `ColumnWithTransform<DB타입, 도메인타입>` 상속       |
+ * | `AttributeConverter.convertToDB` | `ColumnTransformer.unwrap(value)` — 도메인 → DB     |
+ * | `AttributeConverter.convertToEntity` | `ColumnTransformer.wrap(value)` — DB → 도메인   |
+ * | `@Column(columnDefinition)`      | `registerColumn(name, CustomColumnType(…))`        |
+ *
+ * ## 사용 예
+ * ```kotlin
+ * object MyTable : Table() {
+ *     val email = email("email_col")   // Column<Email>
+ *     val ssn   = ssn("ssn_col")       // Column<Ssn>
+ * }
+ * ```
+ * - DB에는 `VARCHAR` / `CHAR` 원시값으로 저장되고, Kotlin 코드에서는 강타입([Email], [Ssn])으로 다룰 수 있습니다.
+ * - `value class`이므로 런타임 오버헤드가 없습니다.
  */
 @JvmInline
 value class Email(val value: String = EMPTY.value): Comparable<Email>, Serializable {

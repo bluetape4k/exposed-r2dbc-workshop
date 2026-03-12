@@ -214,6 +214,51 @@ object CustomIdTable: IdTable<Email>("emails") {
 
 모든 테스트는 `@ParameterizedTest` + `@MethodSource`로 H2, MySQL, PostgreSQL 등 여러 DB에서 자동 실행됩니다.
 
+## JPA → Exposed R2DBC 마이그레이션 체크리스트
+
+JPA 코드를 Exposed R2DBC로 전환할 때 단계별로 확인하세요.
+
+### 1단계: 테이블/엔티티 전환
+
+- [ ] `@Entity` + `@Table(name = "…")` → `object MyTable : LongIdTable("…")`
+- [ ] `@Id @GeneratedValue(IDENTITY)` → `LongIdTable` (자동 처리)
+- [ ] `@Id @GeneratedValue(UUID)` → `UUIDTable` 사용
+- [ ] `@Column(name, nullable, unique, length)` → `varchar(…).nullable()`, `.uniqueIndex()`
+- [ ] `@Enumerated(EnumType.STRING)` → `enumerationByName("col", length, Enum::class)`
+- [ ] `@Convert(converter = …)` → `ColumnWithTransform` + `ColumnTransformer` 구현
+
+### 2단계: 관계 매핑 전환
+
+- [ ] `@ManyToOne @JoinColumn` → `reference("fk_col", OtherTable)`
+- [ ] `@OneToMany(mappedBy)` → `val items by Item referrersOn ItemTable.parentId`
+- [ ] `@OneToOne @MapsId` → `IdTable`에서 `id = reference("id", ParentTable)`
+- [ ] `@OneToOne(mappedBy)` → `val detail by Detail backReferencedOn DetailTable.id`
+- [ ] `@ManyToMany @JoinTable` → 중간 `Table` 정의 후 `val tags by Tag via JoinTable`
+- [ ] `CascadeType.REMOVE` → `onDelete = ReferenceOption.CASCADE`
+
+### 3단계: 영속성 작업 전환
+
+- [ ] `entityManager.persist(entity)` → `MyTable.insert { it[col] = value }`
+- [ ] `entityManager.find(Entity::class, id)` → `MyTable.selectAll().where { MyTable.id eq id }.singleOrNull()`
+- [ ] `entityManager.merge(entity)` → `MyTable.update({ MyTable.id eq id }) { it[col] = value }`
+- [ ] `entityManager.remove(entity)` → `MyTable.deleteWhere { MyTable.id eq id }`
+- [ ] JPQL `SELECT e FROM Entity e WHERE …` → `MyTable.selectAll().where { … }`
+- [ ] DTO Projection (JPQL `new` 또는 `@Query`) → `ResultRow` 확장 함수로 변환
+
+### 4단계: 트랜잭션 전환
+
+- [ ] `@Transactional` (동기, Spring) → `suspendTransaction { … }` (R2DBC 코루틴)
+- [ ] `@Transactional(readOnly = true)` → `suspendTransaction(readOnly = true) { … }`
+- [ ] `TransactionTemplate` 수동 트랜잭션 → `suspendTransaction { … }` 블록
+- [ ] 중첩 트랜잭션(REQUIRES_NEW) → `inTopLevelSuspendTransaction { … }`
+
+### 5단계: 테스트 전환
+
+- [ ] `@DataJpaTest` + `TestEntityManager` → `AbstractR2dbcExposedTest` 상속
+- [ ] JUnit `@Transactional` 롤백 → `withTables(testDB, …) { }` 헬퍼 (자동 정리)
+- [ ] `H2Database` 인메모리 → `TestDB.H2` (또는 `USE_FAST_DB=true`)
+- [ ] 실 DB 연동 테스트 → `TestDB.POSTGRESQL` / `TestDB.MYSQL_V8` + Testcontainers
+
 ## Further Reading
 
 - [9.1 JPA 기본기능 구현하기](https://debop.notion.site/1c32744526b080458ca0f7eee791cab3?v=1c32744526b081ca8b00000c231b9b43)

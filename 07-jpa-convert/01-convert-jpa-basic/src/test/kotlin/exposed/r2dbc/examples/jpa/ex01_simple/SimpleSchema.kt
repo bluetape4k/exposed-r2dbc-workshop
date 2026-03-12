@@ -15,6 +15,26 @@ import org.jetbrains.exposed.v1.dao.LongEntityClass
 import org.jetbrains.exposed.v1.r2dbc.SizedIterable
 import java.io.Serializable
 
+/**
+ * JPA → Exposed R2DBC 마이그레이션 예제 — 단순 엔티티 스키마
+ *
+ * ## JPA 대응 매핑
+ * | JPA                         | Exposed R2DBC                         |
+ * |-----------------------------|---------------------------------------|
+ * | `@Entity` + `@Table`        | `object SimpleTable : LongIdTable(…)` |
+ * | `@Id @GeneratedValue`       | `LongIdTable` (BIGSERIAL/AUTO_INCREMENT 자동 생성) |
+ * | `@Column(nullable = false)` | `varchar(…)` (null 불허 기본값)       |
+ * | `@Column(nullable = true)`  | `text(…).nullable()`                  |
+ * | `EntityManager.persist()`   | `SimpleTable.insert { … }`            |
+ * | `EntityManager.find()`      | `SimpleTable.selectAll().where { … }` |
+ * | `@UniqueConstraint`         | `.uniqueIndex()`                      |
+ * | DTO Projection (JPQL)       | `ResultRow.toSimpleRecord()` 확장 함수|
+ *
+ * ## 핵심 차이점
+ * - JPA는 `EntityManager`를 통해 동기 방식으로 DB에 접근합니다.
+ * - Exposed R2DBC는 `suspendTransaction` 내에서 비동기(코루틴) 방식으로 접근합니다.
+ * - DAO 패턴: [LongEntity] + [LongEntityClass] 조합이 JPA의 `@Entity` + `Repository` 역할을 합니다.
+ */
 object SimpleSchema {
 
     /**
