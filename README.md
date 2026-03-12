@@ -1,13 +1,13 @@
 # Exposed R2DBC Workshop
 
-Kotlin Exposed의 R2DBC 기반 예제를 단계별로 정리한 멀티 모듈 워크숍입니다.  
+Kotlin Exposed의 R2DBC 기반 예제를 단계별로 정리한 멀티 모듈 워크숍입니다.
 Reactive SQL DSL, Coroutines, Spring WebFlux, 멀티테넌시, 캐시, 라우팅 같은 실전 패턴을 예제와 테스트 중심으로 학습할 수 있습니다.
 
 상세 설명은 [Kotlin Exposed Book](https://debop.notion.site/Kotlin-Exposed-Book-1ad2744526b080428173e9c907abdae2)에서 확인할 수 있습니다.
 
 ## 핵심 포인트
 
-- Kotlin `2.3.10`, JDK `21+`, Exposed `1.1.1`, Spring Boot `3.5.10`
+- Kotlin `2.2.21`, JDK `21+`, Exposed `1.1.1`, Spring Boot `3.5.10`
 - 대부분의 예제가 테스트 중심으로 구성되어 있어, 코드보다 테스트를 따라가며 학습하기 좋습니다.
 - H2, PostgreSQL, MySQL 기반 시나리오를 함께 검증합니다.
 - Spring/WebFlux 모듈은 REST API, 캐시, 멀티테넌시, 라우팅 예제를 포함합니다.
@@ -82,15 +82,112 @@ Reactive SQL DSL, Coroutines, Spring WebFlux, 멀티테넌시, 캐시, 라우팅
 - [11-high-performance/03-routing-datasource](11-high-performance/03-routing-datasource/README.md)
   tenant + read/write 분리 라우팅
 
+## 아키텍처 개요
+
+```text
++-------------------------------------------------------------+
+|                    Application Layer                         |
+|   Spring WebFlux Controller / Coroutine Service             |
++-------------------+-----------------------------------------+
+                    | suspendTransaction { }
++-------------------v-----------------------------------------+
+|                  Exposed R2DBC DSL Layer                     |
+|   Table DSL · Select/Insert/Update/Delete · Joins · CTE     |
+|   Column Types: json, money, crypt, datetime, uuid          |
++-------------------+-----------------------------------------+
+                    | R2DBC driver
++-------------------v-----------------------------------------+
+|            DynamicRoutingConnectionFactory                   |
+|        (read/write split, tenant routing)                   |
++--------+-----------------------+----------------------------+
+         | write                 | read
+    +----+------+          +-----+-----+
+    | Primary   |          | Replica   |
+    | DB        |          | DB        |
+    +-----------+          +-----------+
+```
+
+**멀티테넌시 흐름 (Schema-based):**
+
+```text
+HTTP Request
+  -> TenantFilter (X-TENANT-ID 헤더 추출)
+  -> ReactorContext 에 테넌트 ID 저장
+  -> Coroutine Context 로 전파 (ReactorContext -> CoroutineContext)
+  -> suspendTransactionWithCurrentTenant { SchemaUtils.setSchema(tenantId) }
+```
+
+## Exposed v1 주요 변경사항
+
+기존 `org.jetbrains.exposed` 패키지에서 `org.jetbrains.exposed.v1`로 패키지가 이전되었습니다.
+
+| 변경 전 | 변경 후 |
+|---------|---------|
+| `org.jetbrains.exposed.sql` | `org.jetbrains.exposed.v1.core` |
+| `org.jetbrains.exposed.dao` | `org.jetbrains.exposed.v1.dao` |
+| `Transaction.exec(...)` | `suspendTransaction { ... }` (R2DBC) |
+| `selectAll()` 즉시 결과 | `selectAll()` Flow 반환 |
+| `insert { }` 즉시 실행 | `insert { }` suspend 실행 |
+
+**중요:** R2DBC에서는 모든 DB 접근이 `suspendTransaction` 블록 내부에서 이루어져야 합니다.
+`withDb(testDB) { }` / `withTables(testDB, *tables) { }` 헬퍼를 활용하면 테스트 코드가 간결해집니다.
+
+## 새 예제 추가 가이드
+
+새로운 예제를 워크숍에 추가하는 방법입니다.
+
+### 1. 테이블 정의
+
+```kotlin
+// src/main/kotlin/.../MySchema.kt
+object MyTable : IntIdTable("my_table") {
+    val name = varchar("name", 100)
+    val createdAt = datetime("created_at").defaultExpression(CurrentDateTime)
+}
+```
+
+### 2. 예제 테스트 작성
+
+```kotlin
+// src/test/kotlin/.../Ex01_MyExample.kt
+class Ex01_MyExample : AbstractR2dbcExposedTest() {
+    companion object : KLoggingChannel()
+
+    @ParameterizedTest
+    @MethodSource(ENABLE_DIALECTS_METHOD)
+    fun `기능 설명`(testDB: TestDB) = runTest {
+        withTables(testDB, MyTable) {
+            MyTable.insert { it[name] = "test" }
+            val result = MyTable.selectAll().toList()
+            result shouldHaveSize 1
+        }
+    }
+}
+```
+
+### 3. 체크리스트
+
+- [ ] `AbstractR2dbcExposedTest` 상속
+- [ ] `companion object : KLoggingChannel()` 추가
+- [ ] `@ParameterizedTest @MethodSource(ENABLE_DIALECTS_METHOD)` 사용
+- [ ] `withTables(testDB, ...) { }` 로 격리 보장
+- [ ] 공개 API에 한국어 KDoc 작성
+- [ ] README.md 예제 섹션 업데이트
+
 ## 저장소 구조
 
 ```text
-00-shared/               공통 테스트/스키마/샘플 코드
-01-spring-boot/          Spring Boot 입문 예제
-03~05/                   SQL DSL, DDL, DML 중심 예제
-06-advanced/             확장 기능 예제
-07~08/                   JPA 변환, Coroutines, Virtual Threads
-09~11/                   Spring, 멀티테넌시, 고성능 시나리오
+00-shared/               공통 테스트 인프라, 스키마, 샘플 repository
+01-spring-boot/          Spring WebFlux + Exposed R2DBC 진입점
+03-exposed-r2dbc-basic/  SQL DSL 기초 예제
+04-exposed-r2dbc-ddl/    연결 관리, DDL, 스키마 제어
+05-exposed-r2dbc-dml/    SELECT/INSERT/UPDATE/DELETE, 함수, 타입, 트랜잭션
+06-advanced/             암호화, 날짜/시간, JSON, Money, 커스텀 컬럼, Jackson, Tink
+07-jpa-convert/          JPA -> Exposed R2DBC 마이그레이션 패턴
+08-r2dbc-coroutines/     Coroutines, Flow, Virtual Threads
+09-spring/               Repository 패턴, Redis 기반 Suspended Cache
+10-multi-tenant/         Schema 기반 멀티테넌시 + Spring WebFlux
+11-high-performance/     캐시 전략, 읽기/쓰기 분리 라우팅 DataSource
 ```
 
 ## 개발 팁
@@ -98,3 +195,4 @@ Reactive SQL DSL, Coroutines, Spring WebFlux, 멀티테넌시, 캐시, 라우팅
 - 새로운 예제를 추가할 때는 공개 API에 한국어 KDoc을 작성하세요.
 - DB 관련 테스트는 공유 상태를 만들지 않도록 테이블 생성/정리 범위를 좁게 유지하세요.
 - 회귀 실패 시에는 전체 빌드보다 먼저 해당 모듈의 `:module:test`를 재현하는 편이 빠릅니다.
+- `-PuseFastDB=true` 옵션으로 H2 only 모드를 활성화하면 Docker 없이 빠르게 개발할 수 있습니다.
