@@ -16,8 +16,34 @@ import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
  *
  * `bluetape4k-exposed` 의 `jackson()` / `jacksonb()` 확장 함수를 사용하여
  * Kotlin 객체를 JSON(텍스트) 또는 JSONB(바이너리) 형식으로 컬럼에 저장합니다.
- * Jackson 3.x 는 Jakarta EE 네임스페이스 기반의 최신 메이저 버전으로, 가상 스레드(Virtual Thread)
- * 환경에서도 안정적으로 동작하며 `jackson-databind3` 모듈을 사용합니다.
+ * `@Serializable` 어노테이션 없이 표준 Kotlin 데이터 클래스를 그대로 사용할 수 있습니다.
+ *
+ * ## Jackson 3.x 주요 변경 사항
+ *
+ * Jackson 3.x 는 Jackson 2.x 대비 다음과 같은 주요 변경점을 가집니다:
+ *
+ * - **Jakarta EE 네임스페이스**: `javax.*` → `jakarta.*` 네임스페이스로 마이그레이션
+ *   (Spring Boot 3.x, Jakarta EE 9+ 환경과 호환)
+ * - **Virtual Thread 안정성**: JDK 21 가상 스레드(Virtual Thread) 환경에서도 안정적으로 동작
+ * - **`jackson-databind3` 모듈**: 새로운 메이저 버전의 데이터바인딩 모듈
+ * - **성능 개선**: 내부 버퍼 관리 및 직렬화 파이프라인 최적화
+ * - **Kotlin 친화적**: `KotlinModule3` 을 통해 Kotlin 데이터 클래스, nullable 타입, 기본 파라미터 완벽 지원
+ * - **API 일관성**: Jackson 2.x와 거의 동일한 API를 유지하여 마이그레이션 부담 최소화
+ *
+ * ## Jackson 2.x vs Jackson 3.x 마이그레이션
+ *
+ * | 항목                 | Jackson 2.x               | Jackson 3.x                    |
+ * |--------------------|---------------------------|--------------------------------|
+ * | 네임스페이스            | `javax.*`                 | `jakarta.*`                    |
+ * | KotlinModule        | `KotlinModule`            | `KotlinModule3`                |
+ * | Spring Boot 호환     | Spring Boot 2.x           | Spring Boot 3.x+               |
+ * | Jakarta EE 호환      | Jakarta EE 8 이하           | Jakarta EE 9+                  |
+ * | Exposed 컬럼 함수     | `jackson()` / `jacksonb()` (jackson2 패키지) | `jackson()` / `jacksonb()` (jackson3 패키지) |
+ *
+ * > **참고**: 기존 Jackson 2.x 프로젝트에서 3.x로 전환 시 `javax` → `jakarta` 임포트 변경이 필요합니다.
+ *   `bluetape4k-exposed`는 두 버전 모두 지원하므로 프로젝트에 맞는 패키지를 선택하세요:
+ *   - Jackson 2.x: `io.bluetape4k.exposed.core.jackson.*`
+ *   - Jackson 3.x: `io.bluetape4k.exposed.core.jackson3.*`
  *
  * 제공 테이블:
  * - [JacksonTable]: JSON 컬럼 테이블 (`jackson_table`)

@@ -16,7 +16,19 @@ import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
  *
  * `bluetape4k-exposed` 의 `fastjson()` / `fastjsonb()` 확장 함수를 사용하여
  * Kotlin 객체를 JSON(텍스트) 또는 JSONB(바이너리) 형식으로 컬럼에 저장합니다.
- * Fastjson2는 Jackson 대비 직렬화/역직렬화 성능이 우수한 Alibaba의 고성능 JSON 라이브러리입니다.
+ * Fastjson2는 Alibaba가 개발한 고성능 JSON 라이브러리로, 다음 특징을 가집니다:
+ *
+ * ## Fastjson2 고성능 직렬화 특징
+ *
+ * - **고속 직렬화/역직렬화**: Jackson 대비 2~3배 빠른 처리 속도 (벤치마크 기준)
+ * - **낮은 메모리 사용량**: 바이트 레벨 최적화로 GC 압력 감소
+ * - **어노테이션 불필요**: 표준 Kotlin 데이터 클래스에 `@Serializable` 없이도 동작
+ * - **JSONB 지원**: 바이너리 JSON 포맷으로 저장 시 추가 파싱 오버헤드 감소
+ * - **JSONPath 지원**: `.extract<T>()`, `.contains()`, `.exists()` 등 Exposed JSON 쿼리 함수와 완벽 호환
+ * - **Kotlin 친화적**: Kotlin 기본 타입, nullable 타입, 컬렉션, data class 를 자연스럽게 처리
+ *
+ * > **참고**: 특수 직렬화가 필요한 경우 `@JSONField` 어노테이션을 사용할 수 있습니다.
+ *   JSON 스키마 진화 시 `@JSONType(ignores = ["oldField"])` 로 필드를 무시할 수 있습니다.
  *
  * 제공 테이블:
  * - [FastjsonTable]: JSON 컬럼 테이블 (`fastjson_table`)
