@@ -49,6 +49,48 @@
 | `timestampLiteral(Instant)`                    | 타임스탬프 리터럴        |
 | `timestampWithTimeZoneLiteral(OffsetDateTime)` | 시간대 포함 타임스탬프 리터럴 |
 
+## `java.time` 모듈과의 차이점
+
+`exposed-kotlin-datetime`과 `exposed-java-time`은 거의 동일한 API를 제공하지만 타입 시스템이 다릅니다.
+
+| 항목                   | `exposed-kotlin-datetime`               | `exposed-java-time`              |
+|----------------------|----------------------------------------|----------------------------------|
+| 날짜                   | `kotlinx.datetime.LocalDate`           | `java.time.LocalDate`            |
+| 날짜시간                 | `kotlinx.datetime.LocalDateTime`       | `java.time.LocalDateTime`        |
+| 타임스탬프                | `kotlin.time.Instant` (`@ExperimentalTime`) | `java.time.Instant`          |
+| 타임존 포함 타임스탬프         | `java.time.OffsetDateTime` (동일)       | `java.time.OffsetDateTime`       |
+| 멀티플랫폼 지원             | O (KMP)                                | X (JVM 전용)                      |
+
+> `kotlin.time.Instant`는 실험적 API이므로 `@file:OptIn(ExperimentalTime::class)` 어노테이션이 필요합니다.
+
+## 타임존(TimeZone) 주의사항
+
+### `TIMESTAMP WITH TIME ZONE` DB별 동작 차이
+
+`timestampWithTimeZone` 컬럼은 DB마다 다르게 동작합니다.
+
+| DB         | 타임존 정보 보존 | 비고                                      |
+|------------|-------------|------------------------------------------|
+| PostgreSQL | 보존 안 됨     | UTC로 정규화하여 저장 — 원래 오프셋 유실              |
+| MySQL 8    | 보존 안 됨     | UTC로 정규화하여 저장 — 원래 오프셋 유실              |
+| H2         | 보존됨        | 원래 오프셋 그대로 저장                          |
+| MariaDB    | 미지원        | `UnsupportedByDialectException` 발생      |
+| MySQL V5   | 미지원        | `UnsupportedByDialectException` 발생      |
+
+> **권고사항**: PostgreSQL/MySQL에서 원래 타임존 오프셋을 보존해야 하는 경우,
+> `VARCHAR` 컬럼에 타임존 ID(`ZoneId.systemDefault().id`)를 별도로 저장하세요.
+
+### Nanos 정밀도 차이
+
+| DB         | 최대 정밀도        |
+|------------|----------------|
+| PostgreSQL | 마이크로초 (6자리)   |
+| MySQL      | 마이크로초 (6자리)   |
+| MariaDB    | 마이크로초 (6자리)   |
+| H2         | 나노초 (9자리)     |
+| SQLServer  | 100나노초 단위 반올림 |
+| Oracle     | 밀리초 단위 반올림   |
+
 ## 예제 개요
 
 이 모듈의 예제는 `exposed-java-time` 모듈과 유사하며, `kotlinx.datetime`에 대한 병렬 기능을 보여줍니다.

@@ -96,6 +96,50 @@ import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
+/**
+ * `kotlinx.datetime` 타입을 Exposed 컬럼에 매핑하는 예제.
+ *
+ * `exposed-kotlin-datetime` 모듈은 `kotlinx.datetime` 라이브러리의 타입을 Exposed 컬럼 타입으로 지원합니다.
+ * Kotlin 멀티플랫폼 프로젝트나 `kotlinx.datetime` 표준 라이브러리를 선호하는 경우에 사용합니다.
+ *
+ * ## `kotlinx.datetime` vs `java.time` 비교
+ *
+ * | kotlinx.datetime 타입  | java.time 타입          | Exposed 컬럼 타입               |
+ * |-----------------------|------------------------|-------------------------------|
+ * | `LocalDate`           | `java.time.LocalDate`  | `date(name)`                  |
+ * | `LocalDateTime`       | `java.time.LocalDateTime` | `datetime(name)`           |
+ * | `LocalTime`           | `java.time.LocalTime`  | `time(name)`                  |
+ * | `kotlin.time.Instant` | `java.time.Instant`    | `timestamp(name)`             |
+ * | `Duration`            | `java.time.Duration`   | `duration(name)`              |
+ * | (없음)                 | `java.time.OffsetDateTime` | `timestampWithTimeZone(name)` |
+ *
+ * ## `timestampWithTimeZone` 주의사항
+ *
+ * `kotlinx.datetime`에는 타임존 오프셋을 포함하는 타입이 없으므로,
+ * `timestampWithTimeZone` 컬럼은 여전히 `java.time.OffsetDateTime`을 사용합니다.
+ *
+ * ## 타임존 오프셋 보존 여부 (DB별)
+ *
+ * | DB         | 오프셋 보존 여부 | 비고                                      |
+ * |------------|-------------|------------------------------------------|
+ * | PostgreSQL | 보존 안 됨   | UTC로 정규화하여 저장 — 원래 오프셋 유실            |
+ * | MySQL 8    | 보존 안 됨   | UTC로 정규화하여 저장 — 원래 오프셋 유실            |
+ * | H2         | 보존됨       | 원래 오프셋 그대로 저장                         |
+ * | MariaDB    | 미지원       | `UnsupportedByDialectException` 발생       |
+ * | MySQL V5   | 미지원       | `UnsupportedByDialectException` 발생       |
+ *
+ * ## `Instant` 사용
+ *
+ * `kotlin.time.Instant`는 `@ExperimentalTime` API이므로 파일 상단에
+ * `@file:OptIn(ExperimentalTime::class)` 어노테이션이 필요합니다.
+ * 현재 시각은 `Clock.System.now()`로 얻습니다.
+ *
+ * ## 멀티플랫폼 지원
+ *
+ * `kotlinx.datetime` 타입은 Kotlin 멀티플랫폼(KMP)을 공식 지원하므로,
+ * 멀티플랫폼 프로젝트에서 도메인 모델을 JVM/Native/JS에서 공유할 때 유리합니다.
+ * JVM 전용 프로젝트라면 `java.time` 기반 `exposed-java-time` 모듈을 사용해도 무방합니다.
+ */
 class Ex01_KotlinDateTime: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
