@@ -73,11 +73,12 @@ class Ex01_EncryptedColumn: AbstractR2dbcExposedTest() {
             encryptor.encrypt(str).toUtf8Bytes().size shouldBeEqualTo encryptor.maxColLength(str.toUtf8Bytes().size)
         }
 
+        // NOTE: 아래 password/salt/key 값은 테스트 전용입니다. 프로덕션에서는 반드시 충분한 엔트로피를 가진 값으로 교체하세요.
         val encryptors = arrayOf(
-            "AES_256_PBE_GCM" to Algorithms.AES_256_PBE_GCM("passwd", "12345678"),
-            "AES_256_PBE_CBC" to Algorithms.AES_256_PBE_CBC("passwd", "12345678"),
-            "BLOW_FISH" to Algorithms.BLOW_FISH("sadsad"),
-            "TRIPLE_DES" to Algorithms.TRIPLE_DES("1".repeat(24))
+            "AES_256_PBE_GCM" to Algorithms.AES_256_PBE_GCM("passwd", "12345678"),   // 테스트 전용 password/salt
+            "AES_256_PBE_CBC" to Algorithms.AES_256_PBE_CBC("passwd", "12345678"),   // 테스트 전용 password/salt
+            "BLOW_FISH" to Algorithms.BLOW_FISH("sadsad"),                            // 테스트 전용 key
+            "TRIPLE_DES" to Algorithms.TRIPLE_DES("1".repeat(24))                    // 테스트 전용 key (24바이트)
         )
         val testString = arrayOf(
             "1",
@@ -113,13 +114,14 @@ class Ex01_EncryptedColumn: AbstractR2dbcExposedTest() {
          * )
          * ```
          */
-        val nameEncryptor = Algorithms.AES_256_PBE_CBC("passwd", "5c0744940b5c369b")
+        // NOTE: 아래 password/salt/key 값은 테스트 전용입니다. 프로덕션에서는 반드시 안전한 키 관리 시스템을 사용하세요.
+        val nameEncryptor = Algorithms.AES_256_PBE_CBC("passwd", "5c0744940b5c369b") // 테스트 전용 password/salt
         val stringTable = object: IntIdTable("StringTable") {
             val name: Column<String> = encryptedVarchar("name", 80, nameEncryptor)
             val city: Column<String> =
-                encryptedVarchar("city", 80, Algorithms.AES_256_PBE_GCM("passwd", "5c0744940b5c369b"))
-            val address: Column<String> = encryptedVarchar("address", 100, Algorithms.BLOW_FISH("key"))
-            val age: Column<String> = encryptedVarchar("age", 100, Algorithms.TRIPLE_DES("1".repeat(24)))
+                encryptedVarchar("city", 80, Algorithms.AES_256_PBE_GCM("passwd", "5c0744940b5c369b")) // 테스트 전용
+            val address: Column<String> = encryptedVarchar("address", 100, Algorithms.BLOW_FISH("key"))  // 테스트 전용 key
+            val age: Column<String> = encryptedVarchar("age", 100, Algorithms.TRIPLE_DES("1".repeat(24))) // 테스트 전용 key
         }
 
         withTables(testDB, stringTable) {
@@ -194,10 +196,11 @@ class Ex01_EncryptedColumn: AbstractR2dbcExposedTest() {
          * )
          * ```
          */
+        // NOTE: 아래 password/salt/key 값은 테스트 전용입니다. 프로덕션에서는 반드시 안전한 키 관리 시스템을 사용하세요.
         val stringTable = object: IntIdTable("StringTable") {
-            val name: Column<String> = encryptedVarchar("name", 100, Algorithms.AES_256_PBE_GCM("passwd", "12345678"))
-            val city: Column<ByteArray> = encryptedBinary("city", 100, Algorithms.AES_256_PBE_CBC("passwd", "12345678"))
-            val address: Column<String> = encryptedVarchar("address", 100, Algorithms.BLOW_FISH("key"))
+            val name: Column<String> = encryptedVarchar("name", 100, Algorithms.AES_256_PBE_GCM("passwd", "12345678")) // 테스트 전용
+            val city: Column<ByteArray> = encryptedBinary("city", 100, Algorithms.AES_256_PBE_CBC("passwd", "12345678")) // 테스트 전용
+            val address: Column<String> = encryptedVarchar("address", 100, Algorithms.BLOW_FISH("key"))  // 테스트 전용 key
         }
 
         withTables(testDB, stringTable) {
