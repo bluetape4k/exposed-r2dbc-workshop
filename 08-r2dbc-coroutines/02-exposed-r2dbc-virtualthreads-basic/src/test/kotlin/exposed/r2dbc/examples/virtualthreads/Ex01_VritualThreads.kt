@@ -63,8 +63,10 @@ import java.util.concurrent.CopyOnWriteArrayList
  * @see virtualThreadTransaction
  * @see inTopLevelSuspendTransaction
  */
+// NOTE: 파일명 `Ex01_VritualThreads.kt`는 `Ex01_VirtualThreads.kt`의 오타입니다.
+//       `git mv`로 파일명을 수정해야 하지만, 클래스명은 아래에서 수정되었습니다.
 @EnabledOnJre(JRE.JAVA_21)
-class Ex01_VritualThreads: AbstractR2dbcExposedTest() {
+class Ex01_VirtualThreads: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
 
