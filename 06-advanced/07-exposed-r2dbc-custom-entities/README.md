@@ -5,6 +5,34 @@
 
 이 접근 방식은 `06-custom-columns` 모듈의 개념을 기반으로 하여, 커스텀 클라이언트 측 기본값 생성기를 편리하고 재사용 가능한 추상화로 패키징합니다.
 
+## ID 생성 전략 비교
+
+다양한 ID 생성 전략은 저장 타입, 정렬 가능 여부, 길이 등에서 차이가 있습니다. 용도에 맞는 전략을 선택하세요.
+
+| 기반 클래스                     | ID 타입          | 저장 타입       | 정렬 가능 | 길이    | 생성 방식           | 주요 용도                              |
+|----------------------------|----------------|-------------|-------|-------|-----------------|--------------------------------------|
+| `SnowflakeIdTable`         | `Long`         | `BIGINT`    | 밀리초   | 64bit | Snowflake 알고리즘   | 분산 시스템의 고성능 숫자 ID                  |
+| `KsuidTable`               | `String`       | `VARCHAR(27)` | 초 단위 | 27자  | KSUID (Base62)  | URL 친화적 정렬 가능 문자열 ID              |
+| `KsuidMillisTable`         | `String`       | `VARCHAR(27)` | 밀리초   | 27자  | KSUID Millis    | 밀리초 정밀도 KSUID                      |
+| `TimebasedUUIDTable`       | `java.util.UUID` | `UUID`    | 100ns | 36자  | UUIDv1           | UUID 표준 요구 시스템, RFC 4122 준수       |
+| `TimebasedUUIDBase62Table` | `String`       | `VARCHAR(22)` | 100ns | 22자  | UUIDv1 + Base62 | UUID의 컴팩트 문자열 표현 (URL 안전)         |
+
+### 전략 선택 가이드
+
+```
+숫자 ID가 필요한가?
+    YES → SnowflakeIdTable (Long, 64비트, 밀리초 정렬)
+
+문자열 ID가 필요한가?
+    정렬 가능 + UUID 표준 준수 필요?
+        YES → TimebasedUUIDTable (UUID, 36자, RFC 4122)
+        컴팩트 표현 필요?
+            YES → TimebasedUUIDBase62Table (String, 22자)
+    알파벳 정렬 + URL 친화적?
+        초 단위 정밀도 → KsuidTable (String, 27자)
+        밀리초 정밀도 → KsuidMillisTable (String, 27자)
+```
+
 ## 학습 목표
 
 - 커스텀 기본 `IdTable`과 `Entity` 클래스를 생성하는 방법 이해
@@ -114,7 +142,13 @@ transaction {
 ./gradlew :07-exposed-r2dbc-custom-entities:test
 
 # 특정 엔티티 타입 테스트 실행 (예: Snowflake)
-./gradlew :07-exposed-r2dbc-custom-entities:test --tests "exposed.examples.custom.entities.SnowflakeIdTableTest"
+./gradlew :07-exposed-r2dbc-custom-entities:test --tests "exposed.r2dbc.examples.custom.entities.SnowflakeIdTableTest"
+
+# KSUID 기반 테스트 실행
+./gradlew :07-exposed-r2dbc-custom-entities:test --tests "exposed.r2dbc.examples.custom.entities.KsuidTableTest"
+
+# 시간 기반 UUID 테스트 실행
+./gradlew :07-exposed-r2dbc-custom-entities:test --tests "exposed.r2dbc.examples.custom.entities.TimebasedUUIDTableTest"
 ```
 
 ## 참고 자료
