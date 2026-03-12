@@ -105,6 +105,67 @@ sales.select(sales.product, sales.amount, rowNum)
     .toFastList()
 ```
 
+## 함수 카테고리별 참조표
+
+### 수학 함수
+
+| 함수              | SQL 매핑           | 설명                       | 지원 DB              |
+|-----------------|------------------|--------------------------|---------------------|
+| `abs(col)`      | ABS(col)         | 절댓값                      | 전체                  |
+| `floor(col)`    | FLOOR(col)       | 내림                       | 전체                  |
+| `ceiling(col)`  | CEILING(col)     | 올림                       | 전체                  |
+| `round(col, n)` | ROUND(col, n)    | 반올림                      | 전체                  |
+| `sqrt(col)`     | SQRT(col)        | 제곱근                      | 전체                  |
+| `power(col, n)` | POWER(col, n)    | 거듭제곱                     | 전체                  |
+| `exp(col)`      | EXP(col)         | 자연지수                     | 전체                  |
+| `ln(col)`       | LN(col)          | 자연로그                     | 전체                  |
+| `log(base, col)`| LOG(base, col)   | 로그                       | PostgreSQL, MySQL    |
+| `mod(a, b)`     | MOD(a, b)        | 나머지                      | 전체                  |
+| `sign(col)`     | SIGN(col)        | 부호 (-1, 0, 1)             | 전체                  |
+
+### 집계 함수
+
+| 함수                | SQL 매핑              | 설명       |
+|-------------------|---------------------|----------|
+| `count(col)`      | COUNT(col)          | 행 수      |
+| `sum(col)`        | SUM(col)            | 합계       |
+| `avg(col)`        | AVG(col)            | 평균       |
+| `min(col)`        | MIN(col)            | 최솟값      |
+| `max(col)`        | MAX(col)            | 최댓값      |
+| `stdDevPop(col)`  | STDDEV_POP(col)     | 모집단 표준편차 |
+| `stdDevSamp(col)` | STDDEV_SAMP(col)    | 표본 표준편차  |
+| `varPop(col)`     | VAR_POP(col)        | 모집단 분산   |
+| `varSamp(col)`    | VAR_SAMP(col)       | 표본 분산    |
+
+### 윈도우 함수
+
+| 함수             | SQL 매핑          | 설명                        |
+|----------------|-----------------|---------------------------|
+| `rowNumber()`  | ROW_NUMBER()    | 파티션 내 행 번호                |
+| `rank()`       | RANK()           | 동일 값에 같은 순위, 건너뜀          |
+| `denseRank()`  | DENSE_RANK()    | 동일 값에 같은 순위, 건너뜀 없음       |
+| `lead(col, n)` | LEAD(col, n)    | 이후 n번째 행의 값               |
+| `lag(col, n)`  | LAG(col, n)     | 이전 n번째 행의 값               |
+| `firstValue()` | FIRST_VALUE()   | 파티션의 첫 번째 값               |
+| `lastValue()`  | LAST_VALUE()    | 파티션의 마지막 값                |
+| `ntile(n)`     | NTILE(n)        | n개 버킷으로 분류                |
+| `percentRank()`| PERCENT_RANK()  | 백분위 순위 (0.0~1.0)          |
+| `cumeDist()`   | CUME_DIST()     | 누적 분포 값 (0.0~1.0)         |
+
+### 삼각 함수
+
+| 함수           | SQL 매핑      | 설명       |
+|--------------|-------------|----------|
+| `sin(col)`   | SIN(col)    | 사인       |
+| `cos(col)`   | COS(col)    | 코사인      |
+| `tan(col)`   | TAN(col)    | 탄젠트      |
+| `asin(col)`  | ASIN(col)   | 역사인      |
+| `acos(col)`  | ACOS(col)   | 역코사인     |
+| `atan(col)`  | ATAN(col)   | 역탄젠트     |
+| `degrees(col)`| DEGREES(col)| 라디안→각도 변환 |
+| `radians(col)`| RADIANS(col)| 각도→라디안 변환 |
+| `pi()`       | PI()        | 원주율 상수   |
+
 ## 공유 테스트 인프라
 
 - `Ex00_FunctionBase` - 함수 평가용 베이스 클래스
