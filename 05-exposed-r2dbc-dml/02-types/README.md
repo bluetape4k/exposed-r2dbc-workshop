@@ -102,6 +102,28 @@ object KotlinUUIDTable: Table("test_kotlin_uuid") {
 }
 ```
 
+## DB별 타입 매핑 참조표
+
+Exposed 컬럼 타입이 각 DB에서 어떻게 매핑되는지 정리한 표입니다.
+
+| Exposed 타입                  | H2            | PostgreSQL       | MySQL / MariaDB  | 비고                                      |
+|-----------------------------|---------------|------------------|------------------|-------------------------------------------|
+| `bool("col")`               | BOOLEAN       | BOOLEAN          | TINYINT(1)       | MySQL은 TINYINT(1)로 저장                  |
+| `integer("col")`            | INT           | INT              | INT              |                                           |
+| `long("col")`               | BIGINT        | BIGINT           | BIGINT           |                                           |
+| `float("col")`              | FLOAT         | REAL             | FLOAT            |                                           |
+| `double("col")`             | DOUBLE        | DOUBLE PRECISION | DOUBLE           |                                           |
+| `decimal("col", p, s)`      | DECIMAL(p, s) | DECIMAL(p, s)    | DECIMAL(p, s)    |                                           |
+| `varchar("col", n)`         | VARCHAR(n)    | VARCHAR(n)       | VARCHAR(n)       |                                           |
+| `text("col")`               | CLOB          | TEXT             | TEXT             | H2는 CLOB 사용                             |
+| `binary("col", n)`          | BINARY(n)     | BYTEA            | BINARY(n)        |                                           |
+| `blob("col")`               | BLOB          | BYTEA            | BLOB             |                                           |
+| `javaUUID("col")`           | BINARY(16)    | UUID             | BINARY(16)       | PostgreSQL은 네이티브 UUID 타입 사용         |
+| `array<T>("col")`           | ARRAY         | ARRAY            | 미지원            | PostgreSQL/H2 전용                         |
+| `enumeration("col", E)`     | INT           | INT              | INT              | 열거형을 ordinal(정수)로 저장                |
+| `enumerationByName("col")`  | VARCHAR(n)    | VARCHAR(n)       | VARCHAR(n)       | 열거형을 이름(문자열)으로 저장               |
+| `customEnumeration()`       | VARCHAR/INT   | VARCHAR/INT      | VARCHAR/INT      | DB 네이티브 ENUM 타입 매핑 시 사용           |
+
 ## 공유 테스트 인프라
 
 이 모듈은 `00-shared/exposed-r2dbc-shared`의 `R2dbcExposedTestBase`를 상속하여 H2, MariaDB, MySQL, PostgreSQL에서 동일 테스트를 실행합니다.
