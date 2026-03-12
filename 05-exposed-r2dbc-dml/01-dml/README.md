@@ -178,6 +178,67 @@ cities.crossJoin(users)
     .toFastList()
 ```
 
+## 예제 테이블 구조 (ER 다이어그램)
+
+아래는 이 모듈에서 공통으로 사용되는 테이블 구조입니다.
+
+```
+Cities                    Users                     UserData
+┌──────────────┐          ┌──────────────────────┐  ┌──────────────────────┐
+│ id (PK, Int) │◄────┐    │ id (PK, VARCHAR(10)) │  │ user_id (FK → Users) │
+│ name VARCHAR │     └────│ city_id (FK)         │◄─│ comment VARCHAR      │
+└──────────────┘          │ name VARCHAR         │  │ value INT            │
+                          │ flags VARCHAR        │  └──────────────────────┘
+                          └──────────────────────┘
+
+Sales
+┌──────────────────────────┐
+│ year    INT              │
+│ month   INT              │
+│ product VARCHAR          │
+│ amount  DECIMAL          │
+└──────────────────────────┘
+
+SomeAmounts
+┌──────────────┐
+│ amount INT   │
+└──────────────┘
+```
+
+## Flow 수집 패턴
+
+Exposed R2DBC의 쿼리 결과는 Kotlin `Flow`로 반환됩니다. 상황에 맞게 수집 함수를 선택하세요.
+
+```kotlin
+// 전체 결과를 List로 수집
+val allUsers = users.selectAll().toList()
+
+// 단일 결과 (없으면 예외)
+val user = users.selectAll().where { users.id eq "andrey" }.single()
+
+// 단일 결과 (없으면 null)
+val userOrNull = users.selectAll().where { users.id eq "unknown" }.singleOrNull()
+
+// 첫 번째 결과 (없으면 예외)
+val first = users.selectAll().orderBy(users.name).first()
+
+// 첫 번째 결과 (없으면 null)
+val firstOrNull = users.selectAll().where { users.id eq "x" }.firstOrNull()
+
+// null을 제외하고 수집
+val names = users.selectAll()
+    .mapNotNull { it[users.name] }
+    .toList()
+
+// 집계 (count는 Long 반환)
+val count: Long = users.selectAll().count()
+
+// Flow를 이용한 변환 후 수집
+val cityNames: List<String> = cities.selectAll()
+    .map { it[cities.name] }
+    .toList()
+```
+
 ## 공유 테스트 인프라
 
 이 모듈은 `00-shared/exposed-r2dbc-shared`의 공통 테스트 인프라를 사용합니다.

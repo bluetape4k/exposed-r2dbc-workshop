@@ -6,11 +6,11 @@ import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.exposed.r2dbc.getInt
 import io.bluetape4k.exposed.r2dbc.getIntOrNull
 import io.bluetape4k.exposed.r2dbc.getString
-import io.bluetape4k.junit5.coroutines.runSuspendIO
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
 import org.amshove.kluent.shouldNotBeNull
@@ -26,21 +26,53 @@ import java.io.Serializable
 /**
  * Exposed R2DBC에서 재귀 CTE(Common Table Expression)를 사용하는 예제.
  *
- * 주요 학습 내용:
- * - `withRecursive { }` 블록으로 재귀 CTE 정의
- * - 앵커 쿼리(anchor query)와 재귀 쿼리(recursive query) 조합
- * - 계층형 데이터 탐색 (예: 조직도, 트리 구조)
- * - CTE 결과를 이후 쿼리에서 참조하는 방법
+ * ## 학습 내용
  *
- * 주의사항:
- * - 재귀 CTE는 PostgreSQL, MySQL 8+, MariaDB, H2에서 지원됩니다.
- * - 무한 재귀를 방지하기 위해 종료 조건을 반드시 포함해야 합니다.
+ * - Raw SQL로 `WITH RECURSIVE` 절 작성
+ * - 앵커 쿼리(anchor query)와 재귀 쿼리(recursive query)를 `UNION ALL`로 결합
+ * - 계층형 데이터(카테고리 트리, 조직도 등) 탐색
+ * - [org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction.exec] 메서드로 결과 행을 매핑
+ * - DB 방언(Dialect)별 SQL 차이: PostgreSQL vs MySQL/MariaDB
  *
- * 모든 쿼리는 `withTables(testDB, ...)` 블록 내에서 실행됩니다.
+ * ## 재귀 CTE 구조 (PostgreSQL 기준)
+ *
+ * ```sql
+ * -- PostgreSQL
+ * WITH RECURSIVE recursive_categories AS (
+ *     -- 앵커 쿼리: 최상위 노드 선택
+ *     SELECT id, parent_id, name, id::text AS path
+ *     FROM categories
+ *     WHERE parent_id IS NULL
+ *
+ *     UNION ALL
+ *
+ *     -- 재귀 쿼리: 자식 노드 반복 탐색
+ *     SELECT c.id, c.parent_id, c.name, rc.path || '.' || c.id
+ *     FROM categories c
+ *     JOIN recursive_categories rc ON c.parent_id = rc.id
+ *     WHERE POSITION('.' || c.id::text IN rc.path) = 0
+ * )
+ * SELECT * FROM recursive_categories;
+ * ```
+ *
+ * ## 지원 DB
+ *
+ * | DB          | 재귀 CTE 지원 | 비고                        |
+ * |-------------|------------|---------------------------|
+ * | PostgreSQL  | O          | `id::text` 캐스팅 사용          |
+ * | MySQL 8+    | O          | `CAST(id AS CHAR(255))` 사용 |
+ * | MariaDB     | O          | MySQL과 동일한 문법              |
+ * | H2          | X          | 이 예제에서는 제외                 |
+ *
+ * ## 주의사항
+ *
+ * - 무한 재귀를 방지하기 위해 종료 조건(`WHERE ... = 0`)을 반드시 포함해야 합니다.
+ * - `StatementType.SELECT`를 명시해야 Exposed가 올바른 Statement 타입으로 처리합니다.
+ * - 모든 쿼리는 `withTables(testDB, ...)` 블록 내에서 실행됩니다.
  */
 class Ex50_RecursiveCTE: AbstractR2dbcExposedTest() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     private val recursiveCTESupportedDb = TestDB.ALL_POSTGRES + TestDB.MYSQL_V8 + TestDB.MARIADB
 
@@ -58,7 +90,7 @@ class Ex50_RecursiveCTE: AbstractR2dbcExposedTest() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `exec recursive cte`(testDB: TestDB) = runSuspendIO {
+    fun `exec recursive cte`(testDB: TestDB) = runTest {
         Assumptions.assumeTrue { testDB in recursiveCTESupportedDb }
 
         withTables(testDB, Categories) {
