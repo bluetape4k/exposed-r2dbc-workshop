@@ -20,7 +20,20 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.sql.Types
 
 /**
- * R2DBC 연결에서 메타데이터 조회 API 사용 예제를 검증한다.
+ * [Ex01_Connection] - R2DBC 연결 메타데이터 조회 API 예제
+ *
+ * R2DBC 데이터베이스 연결 후 테이블 컬럼 메타데이터와 제약조건 정보를 조회하는 방법을 보여줍니다.
+ *
+ * ## 학습 내용
+ * - `connection().metadata { columns(Table) }` — 컬럼 메타데이터 조회
+ * - `connection().metadata { tableConstraints(listOf(Table)) }` — 테이블 제약조건 조회
+ * - H2 호환 모드별 (기본/Oracle) 컬럼 타입 차이 처리
+ * - Foreign Key 제약조건 메타데이터 확인
+ *
+ * ## 지원 DB
+ * H2, PostgreSQL, MySQL V8, MariaDB
+ *
+ * @see org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
  */
 class Ex01_Connection: AbstractR2dbcExposedTest() {
 

@@ -20,7 +20,22 @@ import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.api.Test
 
 /**
- * H2 R2DBC 풀 연결에서 동시 트랜잭션 동작을 검증한다.
+ * [Ex01_H2_ConnectionPool] - H2 R2DBC 커넥션 풀 동작 예제
+ *
+ * `r2dbc:pool:h2:mem:///...?maxSize=N` URL을 사용하여 H2 인메모리 DB에 커넥션 풀을 설정하고,
+ * 풀 크기를 초과하는 동시 트랜잭션이 올바르게 처리되는지 검증합니다.
+ *
+ * ## 학습 내용
+ * - R2DBC 커넥션 풀 URL 설정: `r2dbc:pool:h2:mem:///poolDB1?maxSize=10`
+ * - 풀 크기(maxSize)를 초과하는 동시 코루틴 트랜잭션의 순차 처리
+ * - `suspendTransaction`을 사용한 비동기 트랜잭션 실행
+ * - 커넥션이 재활용(pool)되어 모든 요청이 완료됨을 검증
+ *
+ * ## 지원 DB
+ * H2 (인메모리, 커넥션 풀 모드)
+ *
+ * @see org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
+ * @see org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
  */
 class Ex01_H2_ConnectionPool {
 

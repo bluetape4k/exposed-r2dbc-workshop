@@ -144,6 +144,29 @@ fun `suspend transactions exceeding pool size`() = runSuspendIO {
 
 ---
 
+## H2 인메모리 vs 파일 DB 연결 차이
+
+| 구분 | 인메모리 (mem) | 파일 (file) |
+|------|--------------|------------|
+| URL 형식 | `r2dbc:h2:mem:///dbname` | `r2dbc:h2:file:///path/to/db` |
+| 데이터 유지 | JVM 종료 시 사라짐 | 파일로 영구 저장 |
+| `DB_CLOSE_DELAY` | `-1` (연결 유지) | 불필요 |
+| 테스트 격리 | 높음 (각 이름별 독립) | 낮음 (파일 공유 가능) |
+| 권장 용도 | 단위 테스트, 예제 | 임시 통합 테스트 |
+
+```kotlin
+// 인메모리 (테스트 권장)
+R2dbcDatabase.connect("r2dbc:h2:mem:///mydb;DB_CLOSE_DELAY=-1;")
+
+// 커넥션 풀 + 인메모리
+R2dbcDatabase.connect("r2dbc:pool:h2:mem:///mydb?maxSize=10")
+
+// 파일 DB (영구 저장)
+R2dbcDatabase.connect("r2dbc:h2:file:///tmp/mydb")
+```
+
+---
+
 ## 참고 자료
 
 - [R2DBC 스펙](https://r2dbc.io/)
