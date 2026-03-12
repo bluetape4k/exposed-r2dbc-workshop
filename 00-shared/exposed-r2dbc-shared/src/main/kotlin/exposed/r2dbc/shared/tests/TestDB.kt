@@ -48,7 +48,10 @@ enum class TestDB(
     val dbConfig: R2dbcDatabaseConfig.Builder.() -> Unit = {},
 ) {
     /**
-     * H2 v2.+ 를 사용할 때
+     * H2 v2.x 인메모리 DB (기본 모드).
+     *
+     * Docker 불필요. 격리 수준: READ_COMMITTED.
+     * R2DBC URL: `r2dbc:h2:mem:///regular;DB_CLOSE_DELAY=-1;`
      */
     H2(
         connection = { "r2dbc:h2:mem:///regular;DB_CLOSE_DELAY=-1;" },
@@ -57,6 +60,14 @@ enum class TestDB(
             defaultR2dbcIsolationLevel = IsolationLevel.READ_COMMITTED
         }
     ),
+
+    /**
+     * H2 인메모리 DB — MySQL 호환 모드.
+     *
+     * Docker 불필요. MySQL 문법 및 동작을 에뮬레이션합니다.
+     * `convertInsertNullToZero` 플래그를 `false`로 설정하여 NULL 처리를 MySQL과 동일하게 맞춥니다.
+     * R2DBC URL: `r2dbc:h2:mem:///mysql;DB_CLOSE_DELAY=-1;MODE=MySQL;`
+     */
     H2_MYSQL(
         connection = { "r2dbc:h2:mem:///mysql;DB_CLOSE_DELAY=-1;MODE=MySQL;" },
         driver = "org.h2.Driver",
@@ -70,29 +81,64 @@ enum class TestDB(
                 }
         }
     ),
+
+    /**
+     * H2 인메모리 DB — MariaDB 호환 모드.
+     *
+     * Docker 불필요. `DATABASE_TO_LOWER=TRUE`로 식별자 소문자 처리.
+     * R2DBC URL: `r2dbc:h2:mem:///mariadb;MODE=MariaDB;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1;`
+     */
     H2_MARIADB(
         connection = {
             "r2dbc:h2:mem:///mariadb;MODE=MariaDB;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1;"
         },
         driver = "org.h2.Driver",
     ),
+
+    /**
+     * H2 인메모리 DB — PostgreSQL 호환 모드.
+     *
+     * Docker 불필요. `DEFAULT_NULL_ORDERING=HIGH`로 NULL 정렬을 PostgreSQL 기본값과 맞춥니다.
+     * R2DBC URL: `r2dbc:h2:mem:///psql;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1;`
+     */
     H2_PSQL(
         connection = {
             "r2dbc:h2:mem:///psql;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1;"
         },
         driver = "org.h2.Driver"
     ),
+
+    /**
+     * H2 인메모리 DB — Oracle 호환 모드.
+     *
+     * Docker 불필요. Oracle 문법 에뮬레이션. 실제 Oracle Driver 없이 Oracle 문법 테스트 가능.
+     * R2DBC URL: `r2dbc:h2:mem:///oracle;MODE=Oracle;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1;`
+     */
     H2_ORACLE(
         connection = {
             "r2dbc:h2:mem:///oracle;MODE=Oracle;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1;"
         },
         driver = "org.h2.Driver"
     ),
+
+    /**
+     * H2 인메모리 DB — MS SQL Server 호환 모드.
+     *
+     * Docker 불필요. MSSQL 문법 에뮬레이션.
+     * R2DBC URL: `r2dbc:h2:mem:///sqlserver;MODE=MSSQLServer;DB_CLOSE_DELAY=-1;`
+     */
     H2_SQLSERVER(
         connection = { "r2dbc:h2:mem:///sqlserver;MODE=MSSQLServer;DB_CLOSE_DELAY=-1;" },
         driver = "org.h2.Driver"
     ),
 
+    /**
+     * MariaDB 서버 연결 (Testcontainers 또는 외부 서버).
+     *
+     * `USE_TESTCONTAINERS=true`이면 Docker로 MariaDB 컨테이너를 자동 기동합니다.
+     * UTF-8, UTC, NULL zeroDateTime 처리, 배치 처리 옵션이 포함됩니다.
+     * R2DBC URL (Testcontainers): `r2dbc:mariadb://test:test@127.0.0.1:<port>/<db>?...`
+     */
     MARIADB(
         connection = {
             val options = "?useSSL=false" +
@@ -112,6 +158,12 @@ enum class TestDB(
         driver = "org.mariadb.jdbc.Driver",
     ),
 
+    /**
+     * MySQL 5.x 서버 연결 (Testcontainers 또는 외부 서버).
+     *
+     * `USE_TESTCONTAINERS=true`이면 Docker로 MySQL 5 컨테이너를 자동 기동합니다.
+     * R2DBC URL (Testcontainers): `r2dbc:mysql://test:test@127.0.0.1:<port>/<db>?...`
+     */
     MYSQL_V5(
         connection = {
             val options = "?useSSL=false" +
@@ -132,6 +184,14 @@ enum class TestDB(
         driver = "com.mysql.cj.jdbc.Driver",
     ),
 
+    /**
+     * MySQL 8.x 서버 연결 (Testcontainers 또는 외부 서버).
+     *
+     * `USE_TESTCONTAINERS=true`이면 Docker로 MySQL 8 컨테이너를 자동 기동합니다.
+     * `allowPublicKeyRetrieval=true` 옵션이 포함됩니다.
+     * 기본 활성 DB 중 하나로 포함됩니다 (`enabledDialects()` 기본값).
+     * R2DBC URL (Testcontainers): `r2dbc:mysql://test:test@127.0.0.1:<port>/<db>?...`
+     */
     MYSQL_V8(
         connection = {
             val options = "?useSSL=false" +
@@ -155,6 +215,13 @@ enum class TestDB(
         pass = if (USE_TESTCONTAINERS) "test" else "@exposed2025",
     ),
 
+    /**
+     * PostgreSQL 서버 연결 (Testcontainers 또는 외부 서버).
+     *
+     * `USE_TESTCONTAINERS=true`이면 Docker로 PostgreSQL 컨테이너를 자동 기동합니다.
+     * 기본 활성 DB 중 하나로 포함됩니다 (`enabledDialects()` 기본값).
+     * R2DBC URL (Testcontainers): `r2dbc:postgresql://test:test@127.0.0.1:<port>/postgres?lc_messages=en_US.UTF-8`
+     */
     POSTGRESQL(
         connection = {
             val options = "?lc_messages=en_US.UTF-8"

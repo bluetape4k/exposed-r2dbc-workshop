@@ -78,6 +78,55 @@
 
 ---
 
+## AbstractR2dbcExposedTest 사용 예제
+
+```kotlin
+class Ex01_Select : AbstractR2dbcExposedTest() {
+
+    companion object : KLoggingChannel()
+
+    @ParameterizedTest
+    @MethodSource(ENABLE_DIALECTS_METHOD)
+    fun `도시 목록 조회`(testDB: TestDB) = runTest {
+        withTables(testDB, DMLTestData.Cities) {
+            DMLTestData.Cities.insert { it[name] = "Seoul" }
+            DMLTestData.Cities.insert { it[name] = "Busan" }
+
+            val cities = DMLTestData.Cities.selectAll().toList()
+            cities shouldHaveSize 2
+        }
+    }
+}
+```
+
+---
+
+## withDb vs withTables
+
+| 함수 | 테이블 생성/정리 | 용도 |
+|------|----------------|------|
+| `withDb(testDB) { }` | 하지 않음 | 이미 존재하는 테이블 또는 스키마 수준 테스트 |
+| `withTables(testDB, *tables) { }` | 자동 생성 + 자동 정리 | 격리된 테이블 단위 테스트 (권장) |
+
+`withTables`는 실행 전 `SchemaUtils.create()`로 테이블을 생성하고,
+`finally` 블록에서 `SchemaUtils.drop()`으로 정리하여 테스트 간 격리를 보장합니다.
+
+```kotlin
+// withDb: 테이블 없이 연결만 열기
+withDb(testDB) { testDB ->
+    SchemaUtils.create(MyTable)
+    // 테이블 생성/정리를 직접 관리해야 함
+}
+
+// withTables: 자동 생성 + 자동 정리 (권장)
+withTables(testDB, MyTable) {
+    MyTable.insert { it[name] = "test" }
+    // 테스트 종료 후 MyTable 자동 drop
+}
+```
+
+---
+
 ## 테스트 실행
 
 ```bash

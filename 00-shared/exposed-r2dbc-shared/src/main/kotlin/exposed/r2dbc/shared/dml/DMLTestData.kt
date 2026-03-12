@@ -116,16 +116,40 @@ object DMLTestData {
     }
 
 
+    /**
+     * [ResultRow] Iterable 에서 도시 이름 목록을 추출합니다.
+     */
     fun Iterable<ResultRow>.toCityNameList(): List<String> =
         map { it[Cities.name] }
 
+    /**
+     * [ResultRow] Flow 에서 도시 이름 목록을 수집합니다 (suspend).
+     */
     suspend fun Flow<ResultRow>.toCityNameList(): List<String> =
         map { it[Cities.name] }.toList()
 
+    /**
+     * [ResultRow] Flow 를 도시 이름 [Flow]로 변환합니다.
+     */
     fun Flow<ResultRow>.toCityNames(): Flow<String> =
         map { it[Cities.name] }
 
 
+    /**
+     * [Cities], [Users], [UserData] 테이블을 생성하고 샘플 데이터를 삽입한 후 [statement]를 실행합니다.
+     *
+     * 삽입되는 도시: St. Petersburg, Munich, Prague
+     * 삽입되는 사용자: andrey(admin), sergey(admin+data), eugene(data), alex, smth(data)
+     *
+     * ```sql
+     * -- PostgreSQL
+     * INSERT INTO cities (name) VALUES ('St. Petersburg');
+     * INSERT INTO users (id, name, city_id, flags) VALUES ('andrey', 'Andrey', 1, 1);
+     * ```
+     *
+     * @param testDB 테스트 대상 DB
+     * @param statement 데이터가 준비된 트랜잭션에서 실행할 코드
+     */
     @Suppress("UnusedReceiverParameter")
     suspend fun AbstractR2dbcExposedTest.withCitiesAndUsers(
         testDB: TestDB,
@@ -215,6 +239,20 @@ object DMLTestData {
         }
     }
 
+    /**
+     * [Sales] 테이블을 생성하고 2018~2019년 판매 샘플 데이터를 삽입한 후 [statement]를 실행합니다.
+     *
+     * 삽입 데이터: tea/coffee 판매 기록 7건 (2018-11 ~ 2019-02), 일부 product=NULL 포함.
+     *
+     * ```sql
+     * -- PostgreSQL
+     * INSERT INTO sales (year, month, product, amount) VALUES (2018, 11, 'tea', 550.10);
+     * INSERT INTO sales (year, month, product, amount) VALUES (2019, 2, NULL, 10.20);
+     * ```
+     *
+     * @param dialect 테스트 대상 DB
+     * @param statement 데이터가 준비된 트랜잭션에서 실행할 코드
+     */
     @Suppress("UnusedReceiverParameter")
     suspend fun AbstractR2dbcExposedTest.withSales(
         dialect: TestDB,
@@ -245,6 +283,21 @@ object DMLTestData {
         }
     }
 
+    /**
+     * [SomeAmounts] 테이블을 생성하고 금액 샘플 데이터 3건을 삽입한 후 [statement]를 실행합니다.
+     *
+     * 삽입 데이터: 650.70, 1500.25, 1000.00
+     *
+     * ```sql
+     * -- PostgreSQL
+     * INSERT INTO someamounts (amount) VALUES (650.70);
+     * INSERT INTO someamounts (amount) VALUES (1500.25);
+     * INSERT INTO someamounts (amount) VALUES (1000.00);
+     * ```
+     *
+     * @param testDB 테스트 대상 DB
+     * @param statement 데이터가 준비된 트랜잭션에서 실행할 코드
+     */
     @Suppress("UnusedReceiverParameter")
     suspend fun AbstractR2dbcExposedTest.withSomeAmounts(
         testDB: TestDB,
@@ -266,6 +319,15 @@ object DMLTestData {
         }
     }
 
+    /**
+     * [Sales]와 [SomeAmounts] 테이블을 함께 생성하고 샘플 데이터를 삽입한 후 [statement]를 실행합니다.
+     *
+     * [withSales]와 [withSomeAmounts]의 데이터셋을 함께 제공합니다.
+     * GROUP BY, UNION, 집계 함수 예제 등 두 테이블을 동시에 사용하는 시나리오에 활용합니다.
+     *
+     * @param testDB 테스트 대상 DB
+     * @param statement 데이터가 준비된 트랜잭션에서 실행할 코드
+     */
     @Suppress("UnusedReceiverParameter")
     suspend fun AbstractR2dbcExposedTest.withSalesAndSomeAmounts(
         testDB: TestDB,
