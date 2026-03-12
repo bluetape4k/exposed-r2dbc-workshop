@@ -25,6 +25,20 @@
 
 **권장**: PostgreSQL처럼 데이터베이스에서 지원하고 JSON 데이터에 대한 쿼리를 수행해야 한다면 `jsonb`를 사용하세요.
 
+### DB별 JSON 지원 현황
+
+| DB         | `json` | `jsonb` | `.extract()` | `.contains()` | `.exists()` |
+|------------|--------|---------|--------------|---------------|-------------|
+| PostgreSQL | O      | O       | O            | O (`@>`)      | O           |
+| MySQL 8    | O      | X       | O            | O             | O           |
+| MariaDB    | O      | X       | O            | 제한적          | 제한적        |
+| H2         | O      | X       | X            | X             | X           |
+| SQLServer  | 미지원   | 미지원    | 미지원          | 미지원          | 미지원        |
+| Oracle     | 미지원   | 미지원    | 미지원          | 미지원          | 미지원        |
+
+> H2, SQLServer, Oracle에서는 대부분의 JSON 쿼리 함수가 `UnsupportedByDialectException`을 발생시킵니다.
+> 광범위한 JSON 쿼리가 필요하다면 PostgreSQL 또는 MySQL 8을 사용하세요.
+
 ### 쿼리 함수
 
 | 함수                            | 설명                                                                                            |
@@ -98,7 +112,20 @@ val isActive = UserTable.data.extract<Boolean>(".active", toScalar = true)
 val inactiveUsers = UserTable.selectAll().where { isActive eq false }.toList()
 ```
 
-### 4. `.contains()`로 필터링 (PostgreSQL & MySQL)
+### 4. JSONB GIN 인덱스 생성 (PostgreSQL)
+
+```kotlin
+// JSONB 컬럼에 GIN 인덱스를 생성하면 @> 연산자(contains) 쿼리 성능이 크게 향상됩니다.
+object UserTable: IntIdTable("users") {
+    val data = jsonb<DataHolder>("data", Json.Default)
+}
+
+// SchemaUtils.createIndex()를 직접 사용하거나 DDL에서 수동으로 생성:
+// CREATE INDEX ON users USING GIN (data);
+// CREATE INDEX ON users USING GIN (data jsonb_path_ops);  -- @> 연산만 최적화, 인덱스 크기 작음
+```
+
+### 5. `.contains()`로 필터링 (PostgreSQL & MySQL)
 
 ```kotlin
 // 데이터에 "active":false가 있는 모든 사용자 찾기

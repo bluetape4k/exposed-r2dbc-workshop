@@ -58,7 +58,42 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 /**
- * JSON 컬럼에 Kotlinx Serialization을 이용하여 JSON 객체를 저장/조회하는 예제
+ * `exposed-json` 모듈을 사용하여 JSON 컬럼에 `@Serializable` Kotlin 객체를 저장/조회하는 예제.
+ *
+ * `kotlinx.serialization` 라이브러리로 직렬화/역직렬화하며, Exposed는 `json<T>()` / `jsonb<T>()`
+ * 컬럼 타입을 통해 DB 네이티브 JSON 저장을 지원합니다.
+ *
+ * ## `json` vs `jsonb` 비교
+ *
+ * | 타입     | 저장 방식           | 쓰기 속도 | 쿼리 속도 | 인덱싱  | 지원 DB                                 |
+ * |--------|-------------------|---------|---------|--------|----------------------------------------|
+ * | `json`  | 텍스트 (원문 보존)     | 빠름      | 느림      | 불가    | PostgreSQL, MySQL 8, MariaDB, H2       |
+ * | `jsonb` | 바이너리 분해          | 약간 느림  | 빠름      | 가능    | PostgreSQL만 네이티브 지원; MySQL은 미지원      |
+ *
+ * ## DB별 JSON 지원 현황
+ *
+ * | DB         | `json` | `jsonb` | `.extract()` | `.contains()` | `.exists()` |
+ * |------------|--------|---------|--------------|---------------|-------------|
+ * | PostgreSQL | O      | O       | O            | O (`@>`)      | O           |
+ * | MySQL 8    | O      | X       | O            | O             | O           |
+ * | MariaDB    | O      | X       | O            | 제한적          | 제한적        |
+ * | H2         | O      | X       | X            | X             | X           |
+ * | SQLServer  | 미지원   | 미지원    | 미지원          | 미지원          | 미지원        |
+ * | Oracle     | 미지원   | 미지원    | 미지원          | 미지원          | 미지원        |
+ *
+ * ## `.extract()` 경로 문법 차이
+ *
+ * DB마다 JSON 경로 표현식 문법이 다릅니다:
+ * - **PostgreSQL**: 쉼표로 구분된 문자열 배열 사용 — `arrayOf("user", "name")`
+ * - **MySQL / MariaDB**: 점 표기법 문자열 사용 — `".user.name"`
+ *
+ * Exposed는 현재 DB 방언을 감지하여 자동으로 적절한 경로 형식으로 변환합니다.
+ *
+ * ## `AbstractR2dbcExposedTest`와의 관계
+ *
+ * 이 클래스는 `R2dbcExposedJsonTest`를 상속하며, `R2dbcExposedJsonTest`는
+ * `AbstractR2dbcExposedTest`를 상속합니다. 지원하지 않는 DB는 테스트에서
+ * `Assumptions.assumeTrue(...)` 또는 `expectException<UnsupportedByDialectException>`으로 처리합니다.
  */
 @Suppress("DEPRECATION")
 class Ex01_JsonColumn: R2dbcExposedJsonTest() {
