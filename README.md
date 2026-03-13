@@ -7,7 +7,7 @@ Reactive SQL DSL, Coroutines, Spring WebFlux, 멀티테넌시, 캐시, 라우팅
 
 ## 핵심 포인트
 
-- Kotlin `2.2.21`, JDK `21+`, Exposed `1.1.1`, Spring Boot `3.5.10`
+- Kotlin `2.3.20-RC3`, JDK `21+`, Exposed `1.1.1`, Spring Boot `3.5.10`
 - 대부분의 예제가 테스트 중심으로 구성되어 있어, 코드보다 테스트를 따라가며 학습하기 좋습니다.
 - H2, PostgreSQL, MySQL 기반 시나리오를 함께 검증합니다.
 - Spring/WebFlux 모듈은 REST API, 캐시, 멀티테넌시, 라우팅 예제를 포함합니다.
