@@ -10,14 +10,15 @@ import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.idgenerators.uuid.TimebasedUuid
 import io.bluetape4k.idgenerators.uuid.TimebasedUuid.Epoch
+import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flattenConcat
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldHaveSize
@@ -93,7 +94,7 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `fetchBatchedResults with where and set batchSize`(testDB: TestDB) = runTest {
+    fun `fetchBatchedResults with where and set batchSize`(testDB: TestDB) = runSuspendIO {
         val cities = DMLTestData.Cities
 
         withTables(testDB, cities) {
@@ -103,15 +104,21 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
                 this[cities.name] = name
             }
 
+            delay(10)
+
             // 50개의 도시 이름을 가져옵니다. (배치 사이즈: 25 - 2번 나눠서 가져옵니다.)
-            val batches = cities.selectAll().where { cities.id less 51 }.fetchBatchedResults(batchSize = BATCH_SIZE)
-                .map { it.toCityNameList() }.filterNot { it.isEmpty() }.toList()
+            val batches = cities.selectAll().where { cities.id less 51 }
+                .fetchBatchedResults(batchSize = BATCH_SIZE)
+                .map { it.toCityNameList() }
+                .filterNot { it.isEmpty() }
+                .toList()
 
             batches shouldHaveSize 2
 
             val expectedNames = names.take(50)
             batches shouldBeEqualTo listOf(
-                expectedNames.take(BATCH_SIZE), expectedNames.takeLast(BATCH_SIZE)
+                expectedNames.take(BATCH_SIZE),
+                expectedNames.takeLast(BATCH_SIZE)
             )
 
             batches.flatten() shouldBeEqualTo expectedNames
@@ -145,7 +152,7 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `when sortOrder is given, fetchBatchedResults should return batches in the given order`(testDB: TestDB) =
-        runTest {
+        runSuspendIO {
             val cities = DMLTestData.Cities
             withTables(testDB, cities) {
                 val names = List(100) { Epoch.nextIdAsString() }
@@ -153,15 +160,19 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
                     this[cities.name] = name
                 }
 
-                val batches = cities.selectAll().where { cities.id less 51 }
-                    .fetchBatchedResults(batchSize = BATCH_SIZE, sortOrder = SortOrder.DESC).map { it.toCityNameList() }
-                    .filterNot { it.isEmpty() }.toList()
+                val batches = cities.selectAll()
+                    .where { cities.id less 51 }
+                    .fetchBatchedResults(batchSize = BATCH_SIZE, sortOrder = SortOrder.DESC)
+                    .map { it.toCityNameList() }
+                    .filterNot { it.isEmpty() }
+                    .toList()
 
                 batches shouldHaveSize 2
 
                 val expectedNames = names.take(50).reversed()
                 batches shouldBeEqualTo listOf(
-                    expectedNames.take(BATCH_SIZE), expectedNames.takeLast(BATCH_SIZE)
+                    expectedNames.take(BATCH_SIZE),
+                    expectedNames.takeLast(BATCH_SIZE)
                 )
 
                 batches.flatten() shouldBeEqualTo expectedNames
@@ -185,7 +196,7 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `when batch size is greater than the amount of available items, fetchBatchedResults should return 1 batch`(
         testDB: TestDB,
-    ) = runTest {
+    ) = runSuspendIO {
         val cities = DMLTestData.Cities
         withTables(testDB, cities) {
             val names = List(25) { Epoch.nextIdAsString() }
@@ -194,7 +205,10 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
             }
 
             val batches =
-                cities.selectAll().fetchBatchedResults(batchSize = 100).map { it.toCityNameList() }.toList()
+                cities.selectAll()
+                    .fetchBatchedResults(batchSize = 100)
+                    .map { it.toCityNameList() }
+                    .toList()
 
             batches shouldHaveSize 1
             batches shouldBeEqualTo listOf(names)
@@ -217,13 +231,16 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `when there are no items, fetchBatchedResults should return an empty list`(testDB: TestDB) = runTest {
+    fun `when there are no items, fetchBatchedResults should return an empty list`(testDB: TestDB) = runSuspendIO {
         val cities = DMLTestData.Cities
         val users = DMLTestData.Users
 
         withTables(testDB, cities, users) {
             val batches =
-                cities.selectAll().fetchBatchedResults(batchSize = 100).flatMapConcat { it.toCityNames() }.toList()
+                cities.selectAll()
+                    .fetchBatchedResults(batchSize = 100)
+                    .flatMapConcat { it.toCityNames() }
+                    .toList()
 
             batches.shouldBeEmpty()
         }
@@ -243,23 +260,28 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `when there are no items of the given condition, should return an empty iterable`(testDB: TestDB) = runTest {
-        val cities = DMLTestData.Cities
-        val users = DMLTestData.Users
-        withTables(testDB, cities, users) {
-            val names = List(25) { UUID.randomUUID().toString() }
-            cities.batchInsert(names) { name -> this[cities.name] = name }
+    fun `when there are no items of the given condition, should return an empty iterable`(testDB: TestDB) =
+        runSuspendIO {
+            val cities = DMLTestData.Cities
+            val users = DMLTestData.Users
+            withTables(testDB, cities, users) {
+                val names = List(25) { UUID.randomUUID().toString() }
+                cities.batchInsert(names) { name -> this[cities.name] = name }
 
-            val batches = cities.selectAll().where { cities.id greater 50 }.fetchBatchedResults(batchSize = 100)
-                .map { it.toCityNameList() }.filterNot { it.isEmpty() }.toList()
+                val batches = cities.selectAll()
+                    .where { cities.id greater 50 }
+                    .fetchBatchedResults(batchSize = 100)
+                    .map { it.toCityNameList() }
+                    .filterNot { it.isEmpty() }
+                    .toList()
 
-            batches.shouldBeEmpty()
+                batches.shouldBeEmpty()
+            }
         }
-    }
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `autoIncrement 컬럼이 없으면 fetchBatchedResults를 사용할 수 없다`(testDB: TestDB) = runTest {
+    fun `autoIncrement 컬럼이 없으면 fetchBatchedResults를 사용할 수 없다`(testDB: TestDB) = runSuspendIO {
         withTables(testDB, DMLTestData.UserData) {
             expectException<UnsupportedOperationException> {
                 DMLTestData.UserData.selectAll().fetchBatchedResults().collect()
@@ -269,7 +291,7 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `batch size 가 0이거나 음수이면 fetchBatchedResults를 사용할 수 없다`(testDB: TestDB) = runTest {
+    fun `batch size 가 0이거나 음수이면 fetchBatchedResults를 사용할 수 없다`(testDB: TestDB) = runSuspendIO {
         withCitiesAndUsers(testDB) { cities, _, _ ->
             expectException<IllegalArgumentException> {
                 cities.selectAll().fetchBatchedResults(-1).toList()
@@ -312,7 +334,7 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `fetchBatchedResults with auto increment EntityID`(testDB: TestDB) = runTest {
+    fun `fetchBatchedResults with auto increment EntityID`(testDB: TestDB) = runSuspendIO {
         val tester1 = object: IntIdTable("table_1") {
             val data = varchar("data", 255)
         }
@@ -354,7 +376,7 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `fetchBatchedResults with alias`(testDB: TestDB) = runTest {
+    fun `fetchBatchedResults with alias`(testDB: TestDB) = runSuspendIO {
         // 많은 테스트에서 "tester" 테이블을 사용해서, Postgres에서 preparedStatement 를 캐싱합니다.
         // 이 때문에 테스트가 실패하는 경우가 있습니다. 그래서 테이블 이름을 랜덤하게 생성합니다.
         val tester = object: IntIdTable("tester_${Base58.randomString(4)}") {
