@@ -26,7 +26,7 @@ import java.time.Instant
  * - **Read Through**: `get(id)` 호출 시 캐시 Miss → DB 자동 조회 후 Redis 적재
  * - **Write Through**: `put(entity)` 호출 시 Redis 저장 + DB 즉시 반영
  * - **Near Cache**: 애플리케이션 내 Caffeine 로컬 캐시 → Redis 라운드트립 절감
- * - `deleteFromDBOnInvalidate = true`: 캐시 무효화 시 DB에서도 데이터를 삭제합니다.
+ * - `deleteFromDBOnInvalidate = false`: 캐시 무효화는 Redis/Caffeine 계층에만 적용하고 DB 데이터는 유지합니다.
  *
  * ## 캐시 키
  * `exposed:coroutines:users:<id>` 형태로 Redis에 저장됩니다.
@@ -38,7 +38,7 @@ import java.time.Instant
 class UserCacheRepository(redissonClient: RedissonClient): AbstractR2dbcRedissonRepository<Long, UserTable, UserRecord>(
     redissonClient = redissonClient,
     cacheName = "exposed:coroutines:users",
-    config = RedisCacheConfig.READ_WRITE_THROUGH_WITH_NEAR_CACHE.copy(deleteFromDBOnInvalidate = true)
+    config = RedisCacheConfig.READ_WRITE_THROUGH_WITH_NEAR_CACHE.copy(deleteFromDBOnInvalidate = false)
 ) {
     companion object: KLoggingChannel()
 

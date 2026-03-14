@@ -174,6 +174,32 @@ DB 데이터를 읽기 전용으로 캐시합니다. `UserCredentialsCacheReposi
 - **Suspended Write Behind**: 대량 이벤트의 비동기 DB 반영 검증
 - **WebFlux 통합 테스트**: `WebTestClient`를 활용한 Reactive 엔드포인트 테스트
 
+## Kotlin Benchmark
+
+이 모듈은 `kotlinx-benchmark` 기반의 JVM 벤치마크를 실행할 수 있습니다. 벤치마크는 Spring 컨텍스트를 `h2` 프로파일로 기동한 뒤,
+Redis + Exposed R2DBC 환경에서 다음 대표 시나리오를 측정합니다.
+
+- `userCacheHitReadThrough`: Near Cache/Redis 적중 조회
+- `userCacheMissReadThrough`: 캐시 무효화 후 DB 재적재 조회
+- `userCredentialsCacheHitReadOnly`: Read-Only 캐시 적중 조회
+
+### 실행 명령
+
+```bash
+# 빠른 smoke 프로파일 실행 + Markdown 저장
+./gradlew :02-cache-strategies-r2dbc:kotlinBenchmarkMarkdown
+
+# 전체 main 프로파일 실행 + Markdown 저장
+./gradlew :02-cache-strategies-r2dbc:saveMainBenchmarkMarkdown
+```
+
+### 생성 결과
+
+- JSON 원본: `build/reports/benchmarks/<profile>/<run-id>/*.json`
+- Markdown 요약: `build/reports/benchmarks/<profile>/benchmark-summary.md`
+
+Markdown 리포트는 benchmark 이름, mode, score, error, unit, parameter 정보를 표 형식으로 저장합니다.
+
 ## 캐시 전략 비교
 
 ### 전략별 동작 흐름

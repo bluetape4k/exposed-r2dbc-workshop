@@ -7,6 +7,7 @@ import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.info
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
@@ -21,13 +22,15 @@ import org.springframework.stereotype.Component
  * 생성합니다. DB I/O 바운드 작업이므로 [Dispatchers.IO] 컨텍스트를 사용합니다.
  */
 @Component
-class DataInitializer: ApplicationListener<ApplicationReadyEvent> {
+class DataInitializer(
+    private val r2dbcDatabase: R2dbcDatabase,
+): ApplicationListener<ApplicationReadyEvent> {
 
     companion object: KLoggingChannel()
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
         runBlocking(Dispatchers.IO) {
-            suspendTransaction {
+            suspendTransaction(db = r2dbcDatabase) {
                 this.createTables()
             }
         }

@@ -13,9 +13,12 @@ import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeLessOrEqualTo
 import org.amshove.kluent.shouldHaveSize
+import org.amshove.kluent.shouldNotBeNull
+import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.inList
 import org.jetbrains.exposed.v1.r2dbc.batchInsert
 import org.jetbrains.exposed.v1.r2dbc.deleteAll
+import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -134,5 +137,21 @@ class UserCacheRepositoryTest(
 
         val userFromDB = suspendTransaction { repository.findByIdFromDb(userId) }
         userFromDB shouldBeEqualTo updatedUser.copy(updatedAt = userFromDB!!.updatedAt)
+    }
+
+    @Test
+    fun `캐시 무효화는 DB 데이터를 삭제하지 않는다`() = runSuspendIO {
+        val userId = idsInDB.random()
+
+        repository.get(userId).shouldNotBeNull()
+        repository.invalidate(userId) shouldBeEqualTo 1L
+
+        suspendTransaction {
+            UserTable.selectAll()
+                .where { UserTable.id eq userId }
+                .count() shouldBeEqualTo 1L
+        }
+
+        repository.get(userId)?.id shouldBeEqualTo userId
     }
 }
