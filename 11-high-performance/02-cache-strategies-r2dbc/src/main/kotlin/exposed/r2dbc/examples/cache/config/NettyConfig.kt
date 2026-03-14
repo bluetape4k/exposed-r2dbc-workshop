@@ -66,7 +66,7 @@ class NettyConfig {
             loopResources = LoopResources.create(
                 "event-loop",
                 8,
-                kotlin.comparisons.maxOf(Runtimex.availableProcessors * 8, 64),
+                maxOf(Runtimex.availableProcessors * 8, 64),
                 true
             )
         }

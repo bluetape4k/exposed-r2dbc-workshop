@@ -1,5 +1,6 @@
 package exposed.r2dbc.examples.cache.config
 
+import io.bluetape4k.concurrent.virtualthread.VirtualThreadExecutor
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.testcontainers.storage.RedisServer
 import org.redisson.Redisson
@@ -28,6 +29,9 @@ class RedissonConfig {
                 .setTimeout(1000)
                 .setRetryAttempts(3)
                 .setRetryDelay { attempt -> Duration.ofMillis(attempt * 100L) }
+
+            executor = VirtualThreadExecutor
+            nettyThreads = 64
         }
 
         return Redisson.create(config)
