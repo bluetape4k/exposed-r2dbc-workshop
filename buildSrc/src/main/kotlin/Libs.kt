@@ -18,7 +18,7 @@ object Plugins {
         const val shadow = "9.2.2"              // https://plugins.gradle.org/plugin/com.gradleup.shadow
         const val kotlinx_benchmark = "0.4.14" // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-benchmark-plugin
 
-        const val spring_boot = "3.5.10"  // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies
+        const val spring_boot = "3.5.11"  // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies
         const val docker_compose = "0.17.19"  // https://plugins.gradle.org/plugin/com.avast.gradle.docker-compose
 
         // 참고: https://docs.gatling.io/reference/integrations/build-tools/gradle-plugin/
@@ -89,7 +89,7 @@ object Versions {
     const val springfox_swagger = "3.0.0"
     const val problem = "0.29.1"              // https://mvnrepository.com/artifact/org.zalando/problem-spring-web
 
-    const val bucket4j = "8.16.0"       // https://mvnrepository.com/artifact/com.bucket4j/bucket4j_jdk17-core
+    const val bucket4j = "8.16.1"       // https://mvnrepository.com/artifact/com.bucket4j/bucket4j_jdk17-core
     const val resilience4j = "2.3.0"   // https://mvnrepository.com/artifact/io.github.resilience4j/resilience4j-bom
     const val netty = "4.2.10.Final"  // https://mvnrepository.com/artifact/io.netty/netty-all
 
@@ -144,17 +144,16 @@ object Versions {
     const val ehcache = "3.11.1"        // https://mvnrepository.com/artifact/org.ehcache/ehcache
     const val cache2k = "2.6.1.Final"   // https://mvnrepository.com/artifact/org.cache2k/cache2k-core
 
-    const val pods4k = "0.7.0"              // https://mvnrepository.com/artifact/com.danrusu.pods4k/bom
     const val eclipse_collections = "13.0.0"  // https://mvnrepository.com/artifact/org.eclipse.collections/eclipse-collections
     const val jctools = "4.0.5"             // https://mvnrepository.com/artifact/org.jctools/jctools-core
 
-    const val ow2_asm = "9.9"               // https://mvnrepository.com/artifact/org.ow2.asm/asm
+    const val ow2_asm = "9.9.1"               // https://mvnrepository.com/artifact/org.ow2.asm/asm
 
-    const val junit_jupiter = "6.0.2"      // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
-    const val junit_platform = "6.0.2"     // https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher
-    const val assertj_core = "3.27.3"       // https://mvnrepository.com/artifact/org.assertj/assertj-core
+    const val junit_jupiter = "6.0.3"      // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+    const val junit_platform = "6.0.3"     // https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher
+    const val assertj_core = "3.27.7"       // https://mvnrepository.com/artifact/org.assertj/assertj-core
     const val kluent = "1.73"               // https://mvnrepository.com/artifact/org.amshove.kluent/kluent
-    const val mockk = "1.14.7"              // https://mvnrepository.com/artifact/io.mockk/mockk
+    const val mockk = "1.14.9"              // https://mvnrepository.com/artifact/io.mockk/mockk
     const val springmockk = "4.0.2"         // https://mvnrepository.com/artifact/com.ninja-squad/springmockk
     const val awaitility = "4.3.0"          // https://mvnrepository.com/artifact/org.awaitility/awaitility
     const val jmh = "1.37"                  // https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-core
@@ -163,15 +162,15 @@ object Versions {
     const val archunit = "1.4.0"           // https://mvnrepository.com/artifact/com.tngtech.archunit/archunit-junit5
     const val rest_assured = "5.5.6"        // https://mvnrepository.com/artifact/io.rest-assured/rest-assured
 
-    const val datafaker = "2.5.3"          // https://mvnrepository.com/artifact/net.datafaker/datafaker
-    const val snakeyaml = "2.5"            // https://mvnrepository.com/artifact/org.yaml/snakeyaml
+    const val datafaker = "2.5.4"          // https://mvnrepository.com/artifact/net.datafaker/datafaker
+    const val snakeyaml = "2.6"            // https://mvnrepository.com/artifact/org.yaml/snakeyaml
     const val random_beans = "3.9.0"
 
     const val logback_slack_appender = "1.6.1"  // https://mvnrepository.com/artifact/com.github.maricn/logback-slack-appender
 
     const val sentry_logback = "8.29.0"  // https://mvnrepository.com/artifact/io.sentry/sentry-logback
 
-    const val scrimage = "4.3.5"  // https://mvnrepository.com/artifact/com.sksamuel.scrimage/scrimage-core
+    const val scrimage = "4.3.8"  // https://mvnrepository.com/artifact/com.sksamuel.scrimage/scrimage-core
 
     // Gatling
     const val gatling = "3.14.9" // https://mvnrepository.com/artifact/io.gatling/gatling-core
@@ -1095,7 +1094,7 @@ object Libs {
 
     // 참고 : https://github.com/asyncer-io/r2dbc-mysql
     const val r2dbc_mysql = "io.asyncer:r2dbc-mysql:1.4.1"  // https://mvnrepository.com/artifact/io.asyncer/r2dbc-mysql
-    const val r2dbc_mariadb = "org.mariadb:r2dbc-mariadb:1.3.0" // https://github.com/mariadb-corporation/mariadb-connector-r2dbc
+    const val r2dbc_mariadb = "org.mariadb:r2dbc-mariadb:1.4.0" // https://github.com/mariadb-corporation/mariadb-connector-r2dbc
     // https://github.com/pgjdbc/r2dbc-postgresql
     const val r2dbc_postgresql = "org.postgresql:r2dbc-postgresql:1.1.1.RELEASE" // https://mvnrepository.com/artifact/org.postgresql/r2dbc-postgresql
 
@@ -1114,8 +1113,8 @@ object Libs {
     const val mybatis_dynamic_sql = "org.mybatis.dynamic-sql:mybatis-dynamic-sql:1.5.2"  // https://mvnrepository.com/artifact/org.mybatis.dynamic-sql/mybatis-dynamic-sql
 
     // MyBatis Mapping 에 사용한다
-    const val byte_buddy = "net.bytebuddy:byte-buddy:1.17.8"   // https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy
-    const val byte_buddy_agent = "net.bytebuddy:byte-buddy-agent:1.17.8"   // https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy-agent
+    const val byte_buddy = "net.bytebuddy:byte-buddy:1.18.7"   // https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy
+    const val byte_buddy_agent = "net.bytebuddy:byte-buddy-agent:1.18.7"   // https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy-agent
 
     const val hikaricp = "com.zaxxer:HikariCP:7.0.2"                    // https://mvnrepository.com/artifact/com.zaxxer/HikariCP
 
@@ -1138,7 +1137,7 @@ object Libs {
     // MyBatis 테스트 시에 h2 v2 를 사용한다
     const val h2_v2 = "com.h2database:h2:2.4.240"    // https://mvnrepository.com/artifact/com.h2database/h2
     const val hsqldb = "org.hsqldb:hsqldb:2.7.4"     // https://mvnrepository.com/artifact/org.hsqldb/hsqldb
-    const val flyway_core = "org.flywaydb:flyway-core:11.18.0"  // https://mvnrepository.com/artifact/org.flywaydb/flyway-core
+    const val flyway_core = "org.flywaydb:flyway-core:11.20.3"  // https://mvnrepository.com/artifact/org.flywaydb/flyway-core
 
     // UUID Generator
     const val java_uuid_generator = "com.fasterxml.uuid:java-uuid-generator:5.2.0"   // https://mvnrepository.com/artifact/com.fasterxml.uuid/java-uuid-generator
@@ -1164,7 +1163,7 @@ object Libs {
     // CSV parsers
     const val univocity_parsers = "com.univocity:univocity-parsers:2.9.1" // https://mvnrepository.com/artifact/com.univocity/univocity-parsers
 
-    const val objenesis = "org.objenesis:objenesis:3.4" // https://mvnrepository.com/artifact/org.objenesis/objenesis
+    const val objenesis = "org.objenesis:objenesis:3.5" // https://mvnrepository.com/artifact/org.objenesis/objenesis
 
     const val ow2_asm = "org.ow2.asm:asm:${Versions.ow2_asm}"
     const val ow2_asm_commons = "org.ow2.asm:asm-commons:${Versions.ow2_asm}"
