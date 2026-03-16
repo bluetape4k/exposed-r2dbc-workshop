@@ -117,7 +117,7 @@ object Versions {
     const val jackson_annotations = "2.21" // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
     const val jackson = "2.21.1" // https://mvnrepository.com/artifact/com.fasterxml.jackson/jackson-bom
     const val jackson3 = "3.1.0" // https://mvnrepository.com/artifact/tools.jackson/jackson-bom
-    const val fastjson2 = "2.0.60" // https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2
+    const val fastjson2 = "2.0.61" // https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2
 
     const val mongo_driver = "5.5.1"   // https://mvnrepository.com/artifact/org.mongodb/mongodb-driver-sync
     const val lettuce = "6.8.2.RELEASE" // https://mvnrepository.com/artifact/io.lettuce/lettuce-core
@@ -134,11 +134,11 @@ object Versions {
 
     const val exposed = "1.1.1"       // https://mvnrepository.com/artifact/org.jetbrains.exposed/exposed-core
     const val r2dbc = "1.0.0.RELEASE"        // https://mvnrepository.com/artifact/io.r2dbc/r2dbc-spi
-    const val agroal = "2.8"          // https://mvnrepository.com/artifact/io.agroal/agroal-api
+    const val agroal = "3.0"          // https://mvnrepository.com/artifact/io.agroal/agroal-api
 
     const val slf4j = "2.0.17"      // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
-    const val logback = "1.5.18"     // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
-    const val log4j = "2.25.1"      // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+    const val logback = "1.5.32"     // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+    const val log4j = "2.25.3"      // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
 
     const val caffeine = "3.2.3"        // https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
     const val ehcache = "3.11.1"        // https://mvnrepository.com/artifact/org.ehcache/ehcache
