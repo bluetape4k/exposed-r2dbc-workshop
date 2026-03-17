@@ -1,10 +1,5 @@
 import groovy.json.JsonSlurper
-import java.io.File
 import java.time.Instant
-import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.TaskAction
-import org.gradle.api.tasks.JavaExec
 
 plugins {
     kotlin("plugin.spring")
@@ -97,7 +92,7 @@ dependencies {
     implementation(Libs.springBootStarter("validation"))
     implementation(Libs.springBootStarter("webflux"))
 
-    testImplementation(Libs.bluetape4k_spring_tests)
+    testImplementation(Libs.bluetape4k_spring_boot3)
     testImplementation(Libs.springBootStarter("test")) {
         exclude(group = "junit", module = "junit")
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
@@ -105,7 +100,7 @@ dependencies {
     }
 
     // Jackson
-    implementation(Libs.bluetape4k_jackson)
+    implementation(Libs.bluetape4k_jackson2)
     implementation(Libs.jackson_core)
     implementation(Libs.jackson_module_kotlin)
     implementation(Libs.jackson_module_blackbird)

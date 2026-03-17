@@ -12,8 +12,8 @@ dependencies {
     implementation(Libs.bluetape4k_exposed_r2dbc)
 
     // Jackson (테스트에서만 사용)
-    testImplementation(Libs.bluetape4k_exposed_jackson)
-    testImplementation(Libs.bluetape4k_jackson)
+    testImplementation(Libs.bluetape4k_exposed_jackson2)
+    testImplementation(Libs.bluetape4k_jackson2)
     testImplementation(Libs.jackson_module_kotlin)
     testImplementation(Libs.jackson_module_blackbird)
 

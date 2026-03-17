@@ -50,7 +50,7 @@ dependencies {
     implementation(Libs.reactor_kotlin_extensions)
 
     testImplementation(Libs.bluetape4k_junit5)
-    testImplementation(Libs.bluetape4k_spring_tests)
+    testImplementation(Libs.bluetape4k_spring_boot3)
     testImplementation(Libs.springBootStarter("test")) {
         exclude(group = "junit", module = "junit")
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
