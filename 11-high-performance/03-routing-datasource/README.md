@@ -34,6 +34,47 @@ ConnectionFactoryRegistry       ← 키 → ConnectionFactory 매핑
 
 ---
 
+## 클래스 다이어그램
+
+```mermaid
+classDiagram
+    class DynamicRoutingConnectionFactory {
+        +create() Publisher~Connection~
+        -keyResolver RoutingKeyResolver
+        -registry ConnectionFactoryRegistry
+    }
+    class ContextAwareRoutingKeyResolver {
+        +currentLookupKey(context) String
+        -defaultTenant String
+    }
+    class ConnectionFactoryRegistry {
+        <<interface>>
+        +get(key) ConnectionFactory
+        +keys() Set~String~
+    }
+    class InMemoryConnectionFactoryRegistry {
+        -factories Map~String, ConnectionFactory~
+        +register(key, factory)
+        +get(key) ConnectionFactory
+    }
+    class TenantRoutingWebFilter {
+        +filter(exchange, chain) Mono~Void~
+        -defaultTenant String
+    }
+    class RoutingTransactionalExecutor {
+        +readWrite(block) T
+        +readOnly(block) T
+        -readWriteOperator TransactionalOperator
+        -readOnlyOperator TransactionalOperator
+    }
+
+    DynamicRoutingConnectionFactory --> ContextAwareRoutingKeyResolver: uses
+    DynamicRoutingConnectionFactory --> ConnectionFactoryRegistry: uses
+    InMemoryConnectionFactoryRegistry ..|> ConnectionFactoryRegistry
+    TenantRoutingWebFilter --> DynamicRoutingConnectionFactory: contextWrite
+    RoutingTransactionalExecutor --> DynamicRoutingConnectionFactory: routing hint
+```
+
 ## 핵심 구성 요소
 
 ### 1. `DynamicRoutingConnectionFactory`

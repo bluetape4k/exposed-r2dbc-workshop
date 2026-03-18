@@ -55,21 +55,26 @@ src/main/kotlin/exposed/r2dbc/multitenant/webflux/
 
 ### 멀티테넌시 요청 흐름
 
-```
-[HTTP Request]                    [WebFilter]                    [Controller]                [Repository]
-     │                                │                               │                          │
-     │  X-TENANT-ID: korean          │                               │                          │
-     ├──────────────────────────────→ │                               │                          │
-     │                                │  ReactorContext에             │                          │
-     │                                │  TenantId 저장                │                          │
-     │                                ├─────────────────────────────→ │                          │
-     │                                │                               │  suspendTransaction      │
-     │                                │                               │  WithCurrentTenant()     │
-     │                                │                               ├────────────────────────→ │
-     │                                │                               │  SET SCHEMA 'korean'     │
-     │                                │                               │  → DB 쿼리 실행           │
-     │                                │                               │ ←────────────────────────┤
-     │ ← ──────────────────────────── │ ←─────────────────────────────┤  한국어 데이터 반환       │
+```mermaid
+sequenceDiagram
+    participant Client as HTTP 클라이언트
+    participant Filter as TenantWebFilter
+    participant Ctx as ReactorContext
+    participant Controller as ActorController
+    participant Repo as ActorRepository
+    participant DB as R2dbcDatabase
+    Client ->> Filter: HTTP 요청 (X-TENANT-ID: korean)
+    Filter ->> Ctx: contextWrite(TenantId("korean"))
+    Filter ->> Controller: 요청 전달
+    Controller ->> Controller: suspendTransactionWithCurrentTenant { }
+    Controller ->> Ctx: currentReactorTenant() 조회
+    Ctx -->> Controller: Tenant("korean")
+    Controller ->> DB: SchemaUtils.setSchema("korean")
+    Controller ->> Repo: actorRepository.findAll()
+    Repo ->> DB: SELECT * FROM korean.actors
+    DB -->> Repo: 한국어 배우 데이터
+    Repo -->> Controller: List~ActorRecord~
+    Controller -->> Client: JSON 응답 (한국어 데이터)
 ```
 
 ### 테넌트 정의

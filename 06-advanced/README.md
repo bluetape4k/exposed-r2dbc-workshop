@@ -123,6 +123,33 @@ Jackson 3.x 버전을 사용하여 R2DBC 환경에서 JSON/JSONB 컬럼을 처�
 
 ---
 
+## 모듈 선택 가이드
+
+```mermaid
+flowchart TD
+    Start([고급 기능 선택]) --> Q1{데이터 타입?}
+    Q1 -->|날짜/시간| Q2{런타임?}
+    Q2 -->|JVM 전용| M02[02-javatime\njava.time API]
+    Q2 -->|Multiplatform| M03[03-kotlin-datetime\nkotlinx.datetime]
+    Q1 -->|JSON| Q3{직렬화 방식?}
+    Q3 -->|kotlinx . serialization| M04[04-json\n@Serializable 필요]
+Q3 -->|Jackson 2 .x|M08[08-jackson\n유연한 ObjectMapper]
+Q3 -->|고성능|M09[09-fastjson2\n2~3배 빠름]
+Q3 -->|Jakarta EE 9+|M11[11-jackson3\nVirtual Thread 안정]
+
+Q1 -->|암호화|Q4{WHERE 검색 필요?}
+Q4 -->|검색 불필요|Q5{라이브러리?}
+Q5 -->|Bouncy Castle|M01[01-crypt\n비결정적 암호화]
+Q5 -->|Google Tink AEAD|M12A[12-tink AEAD\n고보안]
+Q4 -->|검색 필요| Q6{라이브러리?}
+Q6 -->|Jasypt| M10[10-jasypt\n결정적 암호화]
+Q6 -->|Google Tink DAEAD|M12B[12-tink DAEAD\n결정적+검색]
+
+Q1 -->|통화/금액|M05[05-money\nJavaMoney JSR-354]
+Q1 -->|커스텀 ID/압축|M06[06-custom-columns\nSnowflake/LZ4/Kryo]
+Q1 -->|커스텀 Entity|M07[07-custom-entities\nSnowflake/KSUID/UUID]
+```
+
 ## JSON 모듈 비교
 
 | 모듈                              | JSON 라이브러리            | `@Serializable` 필요 | 특징                                      |

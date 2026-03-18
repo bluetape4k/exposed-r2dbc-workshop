@@ -78,6 +78,63 @@
 
 ---
 
+## 핵심 컴포넌트 구조
+
+```mermaid
+classDiagram
+    class AbstractR2dbcExposedTest {
+        +enableDialects() List~TestDB~
+        +withDb(testDB, block)
+        +withTables(testDB, tables, block)
+    }
+
+    class TestDB {
+        <<enumeration>>
+        H2
+        H2_MYSQL
+        H2_PSQL
+        H2_MARIADB
+        H2_ORACLE
+        H2_SQLSERVER
+        MARIADB
+        MYSQL_V5
+        MYSQL_V8
+        POSTGRESQL
+        +db() R2dbcDatabase
+    }
+
+    class Containers {
+        <<singleton>>
+        +mariadb MariaDBContainer
+        +mysql MySQLContainer
+        +postgresql PostgreSQLContainer
+    }
+
+    AbstractR2dbcExposedTest --> TestDB: uses
+    TestDB --> Containers: uses (for container DBs)
+```
+
+## withTables() 동작 흐름
+
+```mermaid
+sequenceDiagram
+    participant Test as 테스트 코드
+    participant WTF as withTables()
+    participant DB as DB 컨테이너
+    participant Schema as SchemaUtils
+    Test ->> WTF: withTables(testDB, MyTable) { ... }
+    WTF ->> DB: DB 연결 획득 (Semaphore 직렬화)
+    WTF ->> Schema: SchemaUtils.create(*tables)
+    Schema -->> WTF: 테이블 생성 완료
+    WTF ->> Test: 블록 실행
+    Test -->> WTF: 블록 완료
+    WTF ->> Schema: SchemaUtils.drop(*tables) [finally]
+    Schema -->> WTF: 테이블 정리 완료
+    WTF ->> DB: 연결 반환 (Semaphore 해제)
+```
+
+---
+
 ## AbstractR2dbcExposedTest 사용 예제
 
 ```kotlin

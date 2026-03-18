@@ -7,7 +7,7 @@ Reactive SQL DSL, Coroutines, Spring WebFlux, 멀티테넌시, 캐시, 라우팅
 
 ## 핵심 포인트
 
-- Kotlin `2.3.20-RC3`, JDK `21+`, Exposed `1.1.1`, Spring Boot `3.5.10`
+- Kotlin `2.3.20`, JDK `21+`, Exposed `1.1.1`, Spring Boot `3.5.11`, Bluetape4k `1.5.0-Beta1`
 - 대부분의 예제가 테스트 중심으로 구성되어 있어, 코드보다 테스트를 따라가며 학습하기 좋습니다.
 - H2, PostgreSQL, MySQL 기반 시나리오를 함께 검증합니다.
 - Spring/WebFlux 모듈은 REST API, 캐시, 멀티테넌시, 라우팅 예제를 포함합니다.
@@ -46,6 +46,20 @@ Reactive SQL DSL, Coroutines, Spring WebFlux, 멀티테넌시, 캐시, 라우팅
 
 ## 추천 학습 경로
 
+```mermaid
+flowchart LR
+    A["00-shared\n테스트 인프라"] --> B["01-spring-boot\nWebFlux 진입점"]
+    B --> C["03-basic\nSQL DSL 기초"]
+    C --> D["04-ddl\n연결/스키마"]
+    D --> E["05-dml\nCRUD/함수/트랜잭션"]
+    E --> F["06-advanced\n암호화/JSON/Money"]
+    F --> G["07-jpa-convert\nJPA 마이그레이션"]
+    G --> H["08-coroutines\nFlow/Virtual Threads"]
+    H --> I["09-spring\nRepository/Cache"]
+    I --> J["10-multi-tenant\n스키마 멀티테넌시"]
+    J --> K["11-high-performance\n캐시/라우팅"]
+```
+
 1. Spring 진입: [01-spring-boot/spring-webflux-exposed](01-spring-boot/spring-webflux-exposed/README.md)
 2. SQL DSL 기초: [03-exposed-r2dbc-basic/exposed-r2dbc-sql-example](03-exposed-r2dbc-basic/exposed-r2dbc-sql-example/README.md)
 3. DDL/DML 패턴: [04-exposed-r2dbc-ddl](04-exposed-r2dbc-ddl/01-connection/README.md), [05-exposed-r2dbc-dml](05-exposed-r2dbc-dml/01-dml/README.md)
@@ -57,19 +71,20 @@ Reactive SQL DSL, Coroutines, Spring WebFlux, 멀티테넌시, 캐시, 라우팅
 
 ## 모듈 맵
 
-| 그룹 | 설명 | 대표 문서 |
-|---|---|---|
-| `00-shared` | 공통 테스트 인프라, 스키마, 샘플 repository | [Shared](00-shared/exposed-r2dbc-shared/README.md) |
-| `01-spring-boot` | Spring WebFlux + Exposed R2DBC 기본 통합 | [Spring WebFlux](01-spring-boot/spring-webflux-exposed/README.md) |
-| `03-exposed-r2dbc-basic` | SQL DSL, 조인, 조건절 등 기본기 | [SQL Example](03-exposed-r2dbc-basic/exposed-r2dbc-sql-example/README.md) |
-| `04-exposed-r2dbc-ddl` | 연결 관리, DDL, 스키마 제어 | [Connection](04-exposed-r2dbc-ddl/01-connection/README.md) |
-| `05-exposed-r2dbc-dml` | CRUD, 함수, 타입, 트랜잭션 | [DML](05-exposed-r2dbc-dml/01-dml/README.md) |
-| `06-advanced` | 암호화, JSON, Money, Custom Column, Jackson/Tink | [Advanced](06-advanced/README.md) |
-| `07-jpa-convert` | JPA 패턴을 Exposed R2DBC로 전환 | [JPA Convert](07-jpa-convert/01-convert-jpa-basic/README.md) |
-| `08-r2dbc-coroutines` | Coroutines, Flow, Virtual Threads | [Coroutines](08-r2dbc-coroutines/01-exposed-r2dbc-coroutines-basic/README.md) |
-| `09-spring` | Repository 패턴, Redis 기반 suspended cache | [Spring Examples](09-spring/05-exposed-r2dbc-repository-coroutines/README.md) |
-| `10-multi-tenant` | Schema 기반 멀티테넌시 + WebFlux | [Multi-tenant](10-multi-tenant/03-multitenant-spring-webflux/README.md) |
-| `11-high-performance` | 캐시 전략, routing datasource, read/write 분리 | [High Performance](11-high-performance/README.md) |
+| 그룹                       | 설명                                            | 대표 문서                                                                         |
+|--------------------------|-----------------------------------------------|-------------------------------------------------------------------------------|
+| `00-shared`              | 공통 테스트 인프라, 스키마, 샘플 repository                | [Shared](00-shared/exposed-r2dbc-shared/README.md)                            |
+| `01-spring-boot`         | Spring WebFlux + Exposed R2DBC 기본 통합          | [Spring WebFlux](01-spring-boot/spring-webflux-exposed/README.md)             |
+| `02-alternatives-to-jpa` | JPA 대안 패턴 비교 (JDBC Template, JOOQ 등)          | [Alternatives](02-alternatives-to-jpa/README.md)                              |
+| `03-exposed-r2dbc-basic` | SQL DSL, 조인, 조건절 등 기본기                        | [SQL Example](03-exposed-r2dbc-basic/exposed-r2dbc-sql-example/README.md)     |
+| `04-exposed-r2dbc-ddl`   | 연결 관리, DDL, 스키마 제어                            | [Connection](04-exposed-r2dbc-ddl/01-connection/README.md)                    |
+| `05-exposed-r2dbc-dml`   | CRUD, 함수, 타입, 트랜잭션                            | [DML](05-exposed-r2dbc-dml/01-dml/README.md)                                  |
+| `06-advanced`            | 암호화, JSON, Money, Custom Column, Jackson/Tink | [Advanced](06-advanced/README.md)                                             |
+| `07-jpa-convert`         | JPA 패턴을 Exposed R2DBC로 전환                     | [JPA Convert](07-jpa-convert/01-convert-jpa-basic/README.md)                  |
+| `08-r2dbc-coroutines`    | Coroutines, Flow, Virtual Threads             | [Coroutines](08-r2dbc-coroutines/01-exposed-r2dbc-coroutines-basic/README.md) |
+| `09-spring`              | Repository 패턴, Redis 기반 suspended cache       | [Spring Examples](09-spring/05-exposed-r2dbc-repository-coroutines/README.md) |
+| `10-multi-tenant`        | Schema 기반 멀티테넌시 + WebFlux                     | [Multi-tenant](10-multi-tenant/03-multitenant-spring-webflux/README.md)       |
+| `11-high-performance`    | 캐시 전략, routing datasource, read/write 분리      | [High Performance](11-high-performance/README.md)                             |
 
 ## 주목할 예제
 

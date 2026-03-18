@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1773368098340,
+  "lastScanned": 1773841067425,
   "projectRoot": "/Users/debop/work/bluetape4k/exposed-r2dbc-workshop",
   "techStack": {
     "languages": [
@@ -48,42 +48,42 @@
       "path": "00-shared",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1773368098331,
+      "lastAccessed": 1773841067390,
       "keyFiles": []
     },
     "01-spring-boot": {
       "path": "01-spring-boot",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1773368098331,
+      "lastAccessed": 1773841067393,
       "keyFiles": []
     },
     "03-exposed-r2dbc-basic": {
       "path": "03-exposed-r2dbc-basic",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1773368098332,
+      "lastAccessed": 1773841067395,
       "keyFiles": []
     },
     "04-exposed-r2dbc-ddl": {
       "path": "04-exposed-r2dbc-ddl",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1773368098332,
+      "lastAccessed": 1773841067398,
       "keyFiles": []
     },
     "05-exposed-r2dbc-dml": {
       "path": "05-exposed-r2dbc-dml",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1773368098333,
+      "lastAccessed": 1773841067400,
       "keyFiles": []
     },
     "06-advanced": {
       "path": "06-advanced",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1773368098333,
+      "lastAccessed": 1773841067404,
       "keyFiles": [
         "README.md"
       ]
@@ -92,35 +92,35 @@
       "path": "07-jpa-convert",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1773368098333,
+      "lastAccessed": 1773841067404,
       "keyFiles": []
     },
     "08-r2dbc-coroutines": {
       "path": "08-r2dbc-coroutines",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1773368098333,
+      "lastAccessed": 1773841067406,
       "keyFiles": []
     },
     "09-spring": {
       "path": "09-spring",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1773368098334,
+      "lastAccessed": 1773841067406,
       "keyFiles": []
     },
     "10-multi-tenant": {
       "path": "10-multi-tenant",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1773368098334,
+      "lastAccessed": 1773841067408,
       "keyFiles": []
     },
     "11-high-performance": {
       "path": "11-high-performance",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1773368098334,
+      "lastAccessed": 1773841067408,
       "keyFiles": [
         "README.md"
       ]
@@ -129,7 +129,7 @@
       "path": "bin",
       "purpose": "Executable scripts",
       "fileCount": 3,
-      "lastAccessed": 1773368098334,
+      "lastAccessed": 1773841067409,
       "keyFiles": [
         "repo-diff",
         "repo-status",
@@ -140,14 +140,14 @@
       "path": "build",
       "purpose": "Build output",
       "fileCount": 0,
-      "lastAccessed": 1773368098334,
+      "lastAccessed": 1773841067410,
       "keyFiles": []
     },
     "buildSrc": {
       "path": "buildSrc",
       "purpose": null,
       "fileCount": 2,
-      "lastAccessed": 1773368098334,
+      "lastAccessed": 1773841067410,
       "keyFiles": [
         "build.gradle.kts",
         "gradle.properties"
@@ -157,31 +157,152 @@
       "path": "docs",
       "purpose": "Documentation",
       "fileCount": 0,
-      "lastAccessed": 1773368098334,
+      "lastAccessed": 1773841067410,
       "keyFiles": []
     },
     "gradle": {
       "path": "gradle",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1773368098334,
+      "lastAccessed": 1773841067411,
       "keyFiles": []
     },
     "buildSrc/build": {
       "path": "buildSrc/build",
       "purpose": "Build output",
       "fileCount": 0,
-      "lastAccessed": 1773368098336,
+      "lastAccessed": 1773841067423,
       "keyFiles": []
     },
     "buildSrc/src": {
       "path": "buildSrc/src",
       "purpose": "Source code",
       "fileCount": 0,
-      "lastAccessed": 1773368098336,
+      "lastAccessed": 1773841067424,
       "keyFiles": []
     }
   },
-  "hotPaths": [],
+  "hotPaths": [
+    {
+      "path": "CLAUDE.md",
+      "accessCount": 7,
+      "lastAccessed": 1773841859561,
+      "type": "file"
+    },
+    {
+      "path": "README.md",
+      "accessCount": 6,
+      "lastAccessed": 1773841834092,
+      "type": "file"
+    },
+    {
+      "path": "11-high-performance/03-routing-datasource/README.md",
+      "accessCount": 5,
+      "lastAccessed": 1773842000541,
+      "type": "file"
+    },
+    {
+      "path": "06-advanced/README.md",
+      "accessCount": 4,
+      "lastAccessed": 1773841976250,
+      "type": "file"
+    },
+    {
+      "path": "settings.gradle.kts",
+      "accessCount": 3,
+      "lastAccessed": 1773841460572,
+      "type": "file"
+    },
+    {
+      "path": "00-shared/exposed-r2dbc-shared/README.md",
+      "accessCount": 3,
+      "lastAccessed": 1773841904132,
+      "type": "file"
+    },
+    {
+      "path": "01-spring-boot/spring-webflux-exposed/README.md",
+      "accessCount": 3,
+      "lastAccessed": 1773841928469,
+      "type": "file"
+    },
+    {
+      "path": "10-multi-tenant/03-multitenant-spring-webflux/README.md",
+      "accessCount": 3,
+      "lastAccessed": 1773841938373,
+      "type": "file"
+    },
+    {
+      "path": "09-spring/05-exposed-r2dbc-repository-coroutines/README.md",
+      "accessCount": 3,
+      "lastAccessed": 1773841965201,
+      "type": "file"
+    },
+    {
+      "path": "00-shared/exposed-r2dbc-shared/src/main/kotlin/exposed/r2dbc/shared/tests/AbstractR2dbcExposedTest.kt",
+      "accessCount": 2,
+      "lastAccessed": 1773841478080,
+      "type": "file"
+    },
+    {
+      "path": "00-shared/exposed-r2dbc-shared/src/main/kotlin/exposed/r2dbc/shared/tests/TestDB.kt",
+      "accessCount": 2,
+      "lastAccessed": 1773841478114,
+      "type": "file"
+    },
+    {
+      "path": "00-shared/exposed-r2dbc-shared/src/main/kotlin/exposed/r2dbc/shared/tests/Containers.kt",
+      "accessCount": 2,
+      "lastAccessed": 1773841478567,
+      "type": "file"
+    },
+    {
+      "path": "01-spring-boot/spring-webflux-exposed/src/main/kotlin/exposed/r2dbc/workshop/springwebflux/domain/model/MovieSchema.kt",
+      "accessCount": 2,
+      "lastAccessed": 1773841488904,
+      "type": "file"
+    },
+    {
+      "path": "01-spring-boot/spring-webflux-exposed/src/main/kotlin/exposed/r2dbc/workshop/springwebflux/domain/repository/ActorRepository.kt",
+      "accessCount": 2,
+      "lastAccessed": 1773841489651,
+      "type": "file"
+    },
+    {
+      "path": "11-high-performance/README.md",
+      "accessCount": 2,
+      "lastAccessed": 1773841509953,
+      "type": "file"
+    },
+    {
+      "path": "00-shared/exposed-r2dbc-shared/src/main/kotlin/exposed/r2dbc/shared/tests/withDb.kt",
+      "accessCount": 1,
+      "lastAccessed": 1773841316096,
+      "type": "file"
+    },
+    {
+      "path": "00-shared/exposed-r2dbc-shared/src/main/kotlin/exposed/r2dbc/shared/tests/withTables.kt",
+      "accessCount": 1,
+      "lastAccessed": 1773841316323,
+      "type": "file"
+    },
+    {
+      "path": "10-multi-tenant/03-multitenant-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/webflux/tenant/SchemaSupport.kt",
+      "accessCount": 1,
+      "lastAccessed": 1773841490801,
+      "type": "file"
+    },
+    {
+      "path": "11-high-performance/03-routing-datasource/src/main/kotlin/exposed/r2dbc/examples/routing/config/RoutingR2dbcConfig.kt",
+      "accessCount": 1,
+      "lastAccessed": 1773841491562,
+      "type": "file"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "accessCount": 1,
+      "lastAccessed": 1773841890369,
+      "type": "file"
+    }
+  ],
   "userDirectives": []
 }

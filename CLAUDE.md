@@ -15,10 +15,10 @@ Kotlin Exposed R2DBC 학습 워크샵 — JetBrains Exposed 프레임워크를 R
 # 전체 테스트
 ./gradlew test
 
-# 특정 모듈 테스트 (프로젝트 이름은 디렉토리 이름 기준)
-./gradlew :01-dml:test
+# 특정 모듈 테스트 (프로젝트 이름은 디렉토리 이름 기준 — settings.gradle.kts의 includeModules() 참조)
 ./gradlew :exposed-r2dbc-shared:test
 ./gradlew :spring-webflux-exposed:test
+./gradlew :01-dml:test   # 05-exposed-r2dbc-dml/01-dml 디렉토리의 프로젝트명
 
 # 특정 테스트 클래스만 실행
 ./gradlew :01-dml:test --tests "exposed.r2dbc.examples.dml.Ex01_Select"
@@ -43,6 +43,7 @@ Kotlin Exposed R2DBC 학습 워크샵 — JetBrains Exposed 프레임워크를 R
 ```
 00-shared/exposed-r2dbc-shared/   # 공통 테스트 유틸리티 (모든 모듈에서 참조)
 01-spring-boot/spring-webflux-exposed/   # Spring WebFlux + Coroutines + Exposed R2DBC
+02-alternatives-to-jpa/           # JPA 대안 패턴 비교
 03-exposed-r2dbc-basic/           # SQL DSL 기본
 04-exposed-r2dbc-ddl/             # 연결 관리, 스키마 DDL
 05-exposed-r2dbc-dml/             # SELECT/INSERT/UPDATE/DELETE, 타입, 함수, 트랜잭션
@@ -67,7 +68,8 @@ Kotlin Exposed R2DBC 학습 워크샵 — JetBrains Exposed 프레임워크를 R
 **핵심 컴포넌트:**
 
 - `AbstractR2dbcExposedTest` — 모든 테스트 클래스의 기반. UTC 타임존 고정, `enableDialects()` 제공
-- `TestDB` — 지원 DB enum (H2, H2_MYSQL, H2_PSQL, H2_MARIADB, MARIADB, MYSQL_V8, POSTGRESQL)
+-
+`TestDB` — 지원 DB enum (H2, H2_MYSQL, H2_PSQL, H2_MARIADB, H2_ORACLE, H2_SQLSERVER, MARIADB, MYSQL_V5, MYSQL_V8, POSTGRESQL)
 - `Containers` — Testcontainers 기반 DB 컨테이너 싱글턴 (MariaDB, MySQL8, PostgreSQL)
 - `withDb(testDB) { }` — 트랜잭션 컨텍스트를 열고 코드 실행, DB별 세마포어로 직렬화
 - `withTables(testDB, *tables) { }` — 테이블 생성 후 코드 실행, 완료 후 자동 정리
@@ -134,7 +136,8 @@ companion object: KLoggingChannel() // 코루틴 환경 (채널 기반)
 
 ## Development Conventions
 
-- **언어**: Kotlin 2.3.x, JDK 21 필수 (Virtual Threads, ZGC 활용)
+- **언어**: Kotlin `2.3.20`, Spring Boot `3.5.11`, Exposed `1.1.1`, Bluetape4k
+  `1.5.0-Beta1`, JDK 21 필수 (Virtual Threads, ZGC 활용)
 - **Kotlin 옵션**: `-Xcontext-parameters`, `-Xinline-classes`, coroutines 실험적 API 전부 opt-in 처리됨
 - **KDoc 주석**: 코드에 KDoc 형식 주석 포함
 - **커밋 메시지**: 한국어, conventional commit 형식 (`feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`)

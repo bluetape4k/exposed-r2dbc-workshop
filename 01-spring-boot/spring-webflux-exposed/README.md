@@ -76,19 +76,68 @@ src/gatling/kotlin/
 
 ---
 
+## 레이어 구조
+
+```mermaid
+classDiagram
+    class MovieController {
+        +getMovieById(id) MovieRecord
+        +searchMovies(request) List~MovieRecord~
+        +createMovie(movie) MovieRecord
+        +deleteMovie(id) Int
+    }
+    class ActorController {
+        +getAllActors() List~ActorRecord~
+        +getActorById(id) ActorRecord
+        +createActor(actor) ActorRecord
+    }
+    class MovieRepository {
+        +findById(id) MovieRecord
+        +findAll() Flow~MovieRecord~
+        +create(movie) MovieRecord
+        +deleteById(id) Int
+    }
+    class ActorRepository {
+        +findById(id) ActorRecord
+        +findAll() Flow~ActorRecord~
+        +create(actor) ActorRecord
+    }
+    class MovieTable {
+        <<object>>
+        +id LongIdTable
+        +name varchar
+        +producerName varchar
+        +releaseDate datetime
+    }
+    class ActorTable {
+        <<object>>
+        +id LongIdTable
+        +firstName varchar
+        +lastName varchar
+        +birthday date
+    }
+
+    MovieController --> MovieRepository: uses
+    ActorController --> ActorRepository: uses
+    MovieRepository --> MovieTable: DSL
+    ActorRepository --> ActorTable: DSL
+```
+
 ## Spring WebFlux + Exposed R2DBC 통합 흐름
 
-```
-HTTP 요청
-    │
-    ▼
-[RestController] (suspend fun)
-    │  suspendTransaction { ... }
-    ▼
-[Repository] (suspend / Flow)
-    │  Exposed R2DBC DSL
-    ▼
-[R2dbcDatabase] ──► ConnectionPool ──► 실제 DB (H2 / MySQL / PostgreSQL)
+```mermaid
+sequenceDiagram
+    participant Client as HTTP 클라이언트
+    participant Controller as RestController
+    participant Repo as Repository
+    participant DB as R2dbcDatabase
+    Client ->> Controller: HTTP 요청 (suspend fun)
+    Controller ->> Controller: suspendTransaction { }
+    Controller ->> Repo: repository.findById(id)
+    Repo ->> DB: Exposed DSL (selectAll/insert/...)
+    DB -->> Repo: ResultRow / Flow
+    Repo -->> Controller: DTO (MovieRecord)
+    Controller -->> Client: JSON 응답
 ```
 
 1. WebFlux가 `suspend` 핸들러를 코루틴으로 실행합니다.
