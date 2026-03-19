@@ -149,3 +149,32 @@ companion object: KLoggingChannel() // 코루틴 환경 (채널 기반)
 - JDK 21+
 - Gradle 8.x+ (gradlew 래퍼 사용 권장)
 - Docker (Testcontainers 사용 — PostgreSQL, MySQL 8, MariaDB 컨테이너 자동 기동)
+
+## Claude Code 스킬
+
+이 프로젝트는 Claude Code(claude.ai/code) 사용자를 위한 전용 스킬을 포함합니다.
+
+### 프로젝트 스킬 (`.omc/skills/` — git 포함)
+
+| 스킬 | 용도 |
+|------|------|
+| `exposed-r2dbc` | 이 워크샵 전용 — `withDb`/`withTables`/`suspendTransaction` 패턴, Table 정의, DML(Flow API), 다중 DB 파라미터화 테스트 |
+
+프로젝트를 clone하면 oh-my-claudecode 설치 후 자동으로 사용 가능합니다.
+
+### 권장 유저 스킬 (`~/.claude/skills/` — 개인 설치)
+
+| 스킬 | 용도 | 출처 |
+|------|------|------|
+| `kotlin-expert` | Kotlin 언어 전반 (coroutines, Flow, DSL, null safety) | [0xfurai/claude-code-subagents](https://github.com/0xfurai/claude-code-subagents) + [Jeffallan/claude-skills](https://github.com/Jeffallan/claude-skills) 병합 |
+| `kotlin-spring` | Spring Boot + Kotlin + Coroutines | [Jeffallan/claude-skills](https://github.com/Jeffallan/claude-skills) |
+| `coroutines-kotlin` | Kotlin Coroutines/Flow 심화 | [Jeffallan/claude-skills](https://github.com/Jeffallan/claude-skills) |
+| `kotest` | Kotest + MockK + Spring Boot Test | 프로젝트 내 패턴 추출 |
+| `bluetape4k-patterns` | bluetape4k 공통 패턴 (로깅, validation 등) | 프로젝트 내 패턴 추출 |
+
+### oh-my-claudecode 설치
+
+```bash
+# oh-my-claudecode 설치 (Claude Code 확장)
+claude /oh-my-claudecode:omc-setup
+```

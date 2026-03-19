@@ -211,3 +211,27 @@ class Ex01_MyExample : AbstractR2dbcExposedTest() {
 - DB 관련 테스트는 공유 상태를 만들지 않도록 테이블 생성/정리 범위를 좁게 유지하세요.
 - 회귀 실패 시에는 전체 빌드보다 먼저 해당 모듈의 `:module:test`를 재현하는 편이 빠릅니다.
 - `-PuseFastDB=true` 옵션으로 H2 only 모드를 활성화하면 Docker 없이 빠르게 개발할 수 있습니다.
+
+## Claude Code 지원
+
+이 프로젝트는 [Claude Code](https://claude.ai/code) + [oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode) 사용자를 위한 전용 스킬을 포함합니다.
+
+### 프로젝트 전용 스킬
+
+`.omc/skills/exposed-r2dbc/` 에 위치하며, 이 저장소를 clone하면 자동으로 적용됩니다.
+
+- `withDb` / `withTables` / `suspendTransaction` 사용 패턴
+- `Table` 정의 및 컬럼 타입 참조
+- `TestDB` enum 및 다중 DB 파라미터화 테스트 구조
+- DML (INSERT / SELECT+Flow / UPDATE / DELETE) 패턴
+- MUST DO / MUST NOT DO 안티패턴
+
+### 빠른 시작
+
+```bash
+# oh-my-claudecode 설치
+claude /oh-my-claudecode:omc-setup
+
+# 스킬 확인
+claude /oh-my-claudecode:skill list
+```
