@@ -185,14 +185,14 @@
   "hotPaths": [
     {
       "path": "CLAUDE.md",
-      "accessCount": 7,
-      "lastAccessed": 1773841859561,
+      "accessCount": 9,
+      "lastAccessed": 1773923739610,
       "type": "file"
     },
     {
       "path": "README.md",
-      "accessCount": 6,
-      "lastAccessed": 1773841834092,
+      "accessCount": 8,
+      "lastAccessed": 1773923762266,
       "type": "file"
     },
     {
@@ -239,14 +239,14 @@
     },
     {
       "path": "00-shared/exposed-r2dbc-shared/src/main/kotlin/exposed/r2dbc/shared/tests/AbstractR2dbcExposedTest.kt",
-      "accessCount": 2,
-      "lastAccessed": 1773841478080,
+      "accessCount": 3,
+      "lastAccessed": 1773923258516,
       "type": "file"
     },
     {
       "path": "00-shared/exposed-r2dbc-shared/src/main/kotlin/exposed/r2dbc/shared/tests/TestDB.kt",
-      "accessCount": 2,
-      "lastAccessed": 1773841478114,
+      "accessCount": 3,
+      "lastAccessed": 1773923258922,
       "type": "file"
     },
     {
@@ -274,15 +274,15 @@
       "type": "file"
     },
     {
-      "path": "00-shared/exposed-r2dbc-shared/src/main/kotlin/exposed/r2dbc/shared/tests/withDb.kt",
-      "accessCount": 1,
-      "lastAccessed": 1773841316096,
+      "path": "00-shared/exposed-r2dbc-shared/src/main/kotlin/exposed/r2dbc/shared/tests/withTables.kt",
+      "accessCount": 2,
+      "lastAccessed": 1773923268971,
       "type": "file"
     },
     {
-      "path": "00-shared/exposed-r2dbc-shared/src/main/kotlin/exposed/r2dbc/shared/tests/withTables.kt",
-      "accessCount": 1,
-      "lastAccessed": 1773841316323,
+      "path": "00-shared/exposed-r2dbc-shared/src/main/kotlin/exposed/r2dbc/shared/tests/withDb.kt",
+      "accessCount": 2,
+      "lastAccessed": 1773923269014,
       "type": "file"
     },
     {
@@ -301,6 +301,24 @@
       "path": "CHANGELOG.md",
       "accessCount": 1,
       "lastAccessed": 1773841890369,
+      "type": "file"
+    },
+    {
+      "path": "",
+      "accessCount": 1,
+      "lastAccessed": 1773923256315,
+      "type": "directory"
+    },
+    {
+      "path": "00-shared/exposed-r2dbc-shared/src/main/kotlin/exposed/r2dbc/shared/tests/TestUtils.kt",
+      "accessCount": 1,
+      "lastAccessed": 1773923269343,
+      "type": "file"
+    },
+    {
+      "path": "00-shared/exposed-r2dbc-shared/src/main/kotlin/exposed/r2dbc/shared/samples/UserCities.kt",
+      "accessCount": 1,
+      "lastAccessed": 1773923287496,
       "type": "file"
     }
   ],
