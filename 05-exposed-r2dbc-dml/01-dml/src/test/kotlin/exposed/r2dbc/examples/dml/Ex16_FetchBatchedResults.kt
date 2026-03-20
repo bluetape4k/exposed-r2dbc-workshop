@@ -8,8 +8,7 @@ import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.expectException
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.idgenerators.uuid.TimebasedUuid
-import io.bluetape4k.idgenerators.uuid.TimebasedUuid.Epoch
+import io.bluetape4k.idgenerators.uuid.Uuid
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.delay
@@ -99,7 +98,7 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
 
         withTables(testDB, cities) {
             // 100개의 도시 이름을 저장합니다.
-            val names = List(100) { TimebasedUuid.Reordered.nextIdAsString() }
+            val names = List(100) { Uuid.V6.nextIdAsString() }
             cities.batchInsert(names) { name ->
                 this[cities.name] = name
             }
@@ -155,7 +154,7 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
         runSuspendIO {
             val cities = DMLTestData.Cities
             withTables(testDB, cities) {
-                val names = List(100) { Epoch.nextIdAsString() }
+                val names = List(100) { Uuid.V7.nextIdAsString() }
                 cities.batchInsert(names) { name ->
                     this[cities.name] = name
                 }
@@ -199,7 +198,7 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
     ) = runSuspendIO {
         val cities = DMLTestData.Cities
         withTables(testDB, cities) {
-            val names = List(25) { Epoch.nextIdAsString() }
+            val names = List(25) { Uuid.V7.nextIdAsString() }
             cities.batchInsert(names) { name ->
                 this[cities.name] = name
             }

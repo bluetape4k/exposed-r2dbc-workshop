@@ -6,7 +6,7 @@ import exposed.r2dbc.examples.cache.domain.model.toUserEventRecord
 import io.bluetape4k.exposed.r2dbc.redisson.repository.AbstractR2dbcRedissonRepository
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
-import io.bluetape4k.redis.redisson.cache.RedisCacheConfig
+import io.bluetape4k.redis.redisson.cache.RedissonCacheConfig
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.statements.BatchInsertStatement
 import org.jetbrains.exposed.v1.core.statements.UpdateStatement
@@ -19,15 +19,16 @@ import org.springframework.stereotype.Repository
 @Repository
 class UserEventCacheRepository(
     redissonClient: RedissonClient,
-): AbstractR2dbcRedissonRepository<Long, UserEventTable, UserEventRecord>(
+): AbstractR2dbcRedissonRepository<Long, UserEventRecord>(
     redissonClient = redissonClient,
     cacheName = "exposed:coroutines:user-events",
-    config = RedisCacheConfig.WRITE_BEHIND_WITH_NEAR_CACHE,
+    config = RedissonCacheConfig.WRITE_BEHIND_WITH_NEAR_CACHE,
 ) {
 
     companion object: KLoggingChannel()
 
-    override val entityTable = UserEventTable
+    override val table = UserEventTable
+    override fun extractId(entity: UserEventRecord): Long = entity.id
     override suspend fun ResultRow.toEntity(): UserEventRecord = toUserEventRecord()
 
     override fun doInsertEntity(

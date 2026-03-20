@@ -11,7 +11,7 @@ import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.codec.Base58
 import io.bluetape4k.exposed.r2dbc.statements.BatchInsertOnConflictDoNothing
 import io.bluetape4k.exposed.r2dbc.statements.BatchInsertOnConflictDoNothingExecutable
-import io.bluetape4k.idgenerators.uuid.TimebasedUuid
+import io.bluetape4k.idgenerators.uuid.Uuid
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import io.r2dbc.spi.R2dbcException
@@ -364,9 +364,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
 
         withTables(testDB, cities) {
             val batchSize = 100
-            val names = generateSequence {
-                TimebasedUuid.Reordered.nextIdAsString()
-            }.take(batchSize)
+            val names = generateSequence { Uuid.V7.nextIdAsString() }.take(batchSize)
 
             val inserted = cities.batchInsert(names) { name ->
                 this[cities.name] = name

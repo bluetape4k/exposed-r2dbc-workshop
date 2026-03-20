@@ -6,7 +6,7 @@ import exposed.r2dbc.shared.dml.DMLTestData.withCitiesAndUsers
 import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.idgenerators.uuid.TimebasedUuid.Epoch
+import io.bluetape4k.idgenerators.uuid.Uuid
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
@@ -433,7 +433,7 @@ class Ex13_Replace: AbstractR2dbcExposedTest() {
         withTables(testDB, cities) {
             val amountOfNames = 25
             val names = List(amountOfNames) { index ->
-                index + 1 to Epoch.nextIdAsString()
+                index + 1 to Uuid.V7.nextIdAsString()
             }.asSequence()
 
             cities.batchReplace(names) { (index, name) ->
@@ -446,7 +446,7 @@ class Ex13_Replace: AbstractR2dbcExposedTest() {
             namesFromDB1 shouldBeEqualTo names.unzip().second
 
             val namesToReplace = List(amountOfNames) { index ->
-                index + 1 to Epoch.nextIdAsString()
+                index + 1 to Uuid.V7.nextIdAsString()
             }.asSequence()
 
             cities.batchReplace(namesToReplace) { (index, name) ->

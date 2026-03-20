@@ -6,7 +6,7 @@ import exposed.r2dbc.examples.cache.domain.model.toUserRecord
 import io.bluetape4k.exposed.r2dbc.redisson.repository.AbstractR2dbcRedissonRepository
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
-import io.bluetape4k.redis.redisson.cache.RedisCacheConfig
+import io.bluetape4k.redis.redisson.cache.RedissonCacheConfig
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.statements.BatchInsertStatement
 import org.jetbrains.exposed.v1.core.statements.UpdateStatement
@@ -35,14 +35,15 @@ import java.time.Instant
  * @see UserRecord
  */
 @Repository
-class UserCacheRepository(redissonClient: RedissonClient): AbstractR2dbcRedissonRepository<Long, UserTable, UserRecord>(
+class UserCacheRepository(redissonClient: RedissonClient): AbstractR2dbcRedissonRepository<Long, UserRecord>(
     redissonClient = redissonClient,
     cacheName = "exposed:coroutines:users",
-    config = RedisCacheConfig.READ_WRITE_THROUGH_WITH_NEAR_CACHE.copy(deleteFromDBOnInvalidate = false)
+    config = RedissonCacheConfig.READ_WRITE_THROUGH_WITH_NEAR_CACHE.copy(deleteFromDBOnInvalidate = false)
 ) {
     companion object: KLoggingChannel()
 
-    override val entityTable = UserTable
+    override val table = UserTable
+    override fun extractId(entity: UserRecord): Long = entity.id
     override suspend fun ResultRow.toEntity() = toUserRecord()
 
     /**

@@ -13,11 +13,12 @@ import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import java.time.LocalDate
 
-class ActorR2dbcRepository: R2dbcRepository<Long, ActorTable, ActorRecord> {
+class ActorR2dbcRepository: R2dbcRepository<Long, ActorRecord> {
 
     companion object: KLogging()
 
     override val table = ActorTable
+    override fun extractId(entity: ActorRecord): Long = entity.id
     override suspend fun ResultRow.toEntity(): ActorRecord = toActorRecord()
 
     fun searchActors(params: Map<String, String?>): Flow<ActorRecord> {

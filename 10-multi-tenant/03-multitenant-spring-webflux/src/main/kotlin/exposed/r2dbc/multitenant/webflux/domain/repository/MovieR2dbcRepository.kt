@@ -41,7 +41,7 @@ import java.time.LocalDate
  * 테넌트별 스키마는 `suspendTransactionWithCurrentTenant` 컨텍스트로 자동 적용됩니다.
  */
 @Repository
-class MovieR2dbcRepository: R2dbcRepository<Long, MovieTable, MovieRecord> {
+class MovieR2dbcRepository: R2dbcRepository<Long, MovieRecord> {
 
     companion object: KLoggingChannel() {
         private val MovieActorJoin: Join by lazy {
@@ -64,7 +64,7 @@ class MovieR2dbcRepository: R2dbcRepository<Long, MovieTable, MovieRecord> {
     }
 
     override val table = MovieTable
-
+    override fun extractId(entity: MovieRecord): Long = entity.id
     override suspend fun ResultRow.toEntity(): MovieRecord = toMovieRecord()
 
     suspend fun save(movie: MovieRecord): MovieRecord {

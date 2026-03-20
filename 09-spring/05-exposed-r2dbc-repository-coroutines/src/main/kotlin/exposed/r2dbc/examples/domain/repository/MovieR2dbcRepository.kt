@@ -53,7 +53,7 @@ import java.time.LocalDate
  * @see R2dbcRepository
  */
 @Repository
-class MovieR2dbcRepository: R2dbcRepository<Long, MovieTable, MovieRecord> {
+class MovieR2dbcRepository: R2dbcRepository<Long, MovieRecord> {
 
     companion object: KLoggingChannel() {
         private val MovieActorJoin: Join by lazy {
@@ -76,7 +76,7 @@ class MovieR2dbcRepository: R2dbcRepository<Long, MovieTable, MovieRecord> {
     }
 
     override val table = MovieTable
-
+    override fun extractId(entity: MovieRecord): Long = entity.id
     override suspend fun ResultRow.toEntity(): MovieRecord = toMovieRecord()
 
     /**

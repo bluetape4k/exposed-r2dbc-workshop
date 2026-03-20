@@ -33,7 +33,7 @@ dependencies {
     implementation(Libs.bluetape4k_exposed_r2dbc)
     testImplementation(Libs.bluetape4k_junit5)
     implementation(Libs.bluetape4k_testcontainers)
-    testImplementation(Libs.bluetape4k_spring_boot3)
+    testImplementation(Libs.bluetape4k_spring_boot3_core)
 
     // Jackson
     implementation(Libs.bluetape4k_jackson2)

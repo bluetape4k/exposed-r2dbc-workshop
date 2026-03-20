@@ -4,7 +4,7 @@ import exposed.r2dbc.examples.dml.Ex22_ColumnWithTransform.TransformTable.simple
 import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.idgenerators.uuid.TimebasedUuid
+import io.bluetape4k.idgenerators.uuid.Uuid
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -331,7 +331,7 @@ class Ex22_ColumnWithTransform: AbstractR2dbcExposedTest() {
             val reference: Column<EntityID<CustomId>> = reference("reference", tester)
         }
 
-        val uuid = TimebasedUuid.Epoch.nextId()
+        val uuid = Uuid.V7.nextId()
         withTables(testDB, tester, referenceTester) {
             // CustomId 를 지정 (UUID 값만 저장됨)
             /**

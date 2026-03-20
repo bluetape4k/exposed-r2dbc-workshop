@@ -20,12 +20,12 @@ import java.time.LocalDate
  * 배우(Actor) 엔티티에 대한 Exposed R2DBC 저장소 구현체.
  */
 @Repository
-class ActorR2dbcRepository: R2dbcRepository<Long, ActorTable, ActorRecord> {
+class ActorR2dbcRepository: R2dbcRepository<Long, ActorRecord> {
 
     companion object: KLoggingChannel()
 
     override val table = ActorTable
-
+    override fun extractId(entity: ActorRecord): Long = entity.id
     override suspend fun ResultRow.toEntity(): ActorRecord = toActorRecord()
 
     /**

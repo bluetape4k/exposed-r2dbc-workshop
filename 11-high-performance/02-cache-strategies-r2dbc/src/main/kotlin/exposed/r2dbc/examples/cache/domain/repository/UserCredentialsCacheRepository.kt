@@ -6,7 +6,7 @@ import exposed.r2dbc.examples.cache.domain.model.UserCredentialsTable
 import exposed.r2dbc.examples.cache.domain.model.toUserCredentialsRecord
 import io.bluetape4k.exposed.r2dbc.redisson.repository.AbstractR2dbcRedissonRepository
 import io.bluetape4k.logging.coroutines.KLoggingChannel
-import io.bluetape4k.redis.redisson.cache.RedisCacheConfig
+import io.bluetape4k.redis.redisson.cache.RedissonCacheConfig
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.redisson.api.RedissonClient
 import org.springframework.stereotype.Repository
@@ -17,15 +17,16 @@ import org.springframework.stereotype.Repository
 @Repository
 class UserCredentialsCacheRepository(
     redissonClient: RedissonClient,
-): AbstractR2dbcRedissonRepository<String, UserCredentialsTable, UserCredentialsRecord>(
+): AbstractR2dbcRedissonRepository<String, UserCredentialsRecord>(
     redissonClient = redissonClient,
     cacheName = "exposed:coroutines:user-credentials",
-    config = RedisCacheConfig.READ_ONLY_WITH_NEAR_CACHE,
+    config = RedissonCacheConfig.READ_ONLY_WITH_NEAR_CACHE,
 ) {
 
     companion object: KLoggingChannel()
 
-    override val entityTable = UserCredentialsTable
+    override val table = UserCredentialsTable
+    override fun extractId(entity: UserCredentialsRecord): String = entity.id
     override suspend fun ResultRow.toEntity() = toUserCredentialsRecord()
 
     // READ-ONLY 이므로, doUpdateEntity, doInsertEntity 를 구현하지 않습니다.

@@ -25,12 +25,12 @@ import java.time.LocalDate
  * 쿼리 파라미터 기반 검색 및 저장 기능을 포함합니다.
  */
 @Repository
-class ActorR2dbcRepository: R2dbcRepository<Long, ActorTable, ActorRecord> {
+class ActorR2dbcRepository: R2dbcRepository<Long, ActorRecord> {
 
     companion object: KLoggingChannel()
 
     override val table = ActorTable
-
+    override fun extractId(entity: ActorRecord): Long = entity.id
     override suspend fun ResultRow.toEntity(): ActorRecord = toActorRecord()
 
     fun searchActors(params: Map<String, String?>): Flow<ActorRecord> {
