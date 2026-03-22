@@ -4,9 +4,6 @@ import exposed.r2dbc.examples.domain.model.MovieRecord
 import exposed.r2dbc.examples.domain.model.MovieWithActorRecord
 import exposed.r2dbc.examples.domain.repository.MovieR2dbcRepository
 import io.bluetape4k.logging.coroutines.KLoggingChannel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.toList
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.springframework.http.server.reactive.ServerHttpRequest
@@ -25,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/movies")
 class MovieController(
     private val movieRepository: MovieR2dbcRepository,
-): CoroutineScope by CoroutineScope(Dispatchers.IO + SupervisorJob()) {
+) {
 
     companion object: KLoggingChannel()
 
@@ -33,7 +30,7 @@ class MovieController(
      * 전체 영화 목록을 조회합니다.
      */
     @GetMapping
-    suspend fun getMoviews(): List<MovieRecord> =
+    suspend fun getMovies(): List<MovieRecord> =
         suspendTransaction {
             movieRepository.findAll().toList()
         }

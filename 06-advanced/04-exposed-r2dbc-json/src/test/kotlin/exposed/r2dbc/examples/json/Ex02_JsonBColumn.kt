@@ -245,7 +245,7 @@ class Ex02_JsonBColumn: R2dbcExposedJsonTest() {
     }
 
     /**
-     * JSONB 컬럼의 객체 내부의 속성을 잉용하여 검색하는 테스트
+     * JSONB 컬럼의 객체 내부의 속성을 이용하여 검색하는 테스트
      *
      * ```sql
      * -- Postgres:
@@ -404,7 +404,7 @@ class Ex02_JsonBColumn: R2dbcExposedJsonTest() {
      * ```
      *
      * ```sql
-     * -- Postgres:
+     * -- MySQL V8:
      * SELECT j_b_arrays.id, j_b_arrays.`groups`, j_b_arrays.numbers
      *   FROM j_b_arrays
      *  WHERE JSON_UNQUOTE(JSON_EXTRACT(j_b_arrays.`groups`, "$.users[0].team")) = 'Team A';

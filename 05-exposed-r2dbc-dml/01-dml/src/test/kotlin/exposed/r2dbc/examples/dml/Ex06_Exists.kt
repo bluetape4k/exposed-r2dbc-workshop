@@ -154,7 +154,7 @@ class Ex06_Exists: AbstractR2dbcExposedTest() {
                     .andWhere { userData.comment like "%here%" }
             )
             if (currentDialectTest is OracleDialect || currentDialect is SQLServerDialect) {
-                notExists = case().When(exists, booleanLiteral(true)).Else(booleanLiteral(false))
+                notExists = case().When(notExists, booleanLiteral(true)).Else(booleanLiteral(false))
             }
 
             users.select(notExists).first()[notExists].shouldBeTrue()

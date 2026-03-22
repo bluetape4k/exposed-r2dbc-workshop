@@ -9,10 +9,4 @@ import org.jetbrains.exposed.v1.core.Schema
  * 반환된 [Schema]는 `SchemaUtils.createSchema` 및 `SchemaUtils.setSchema`에 사용됩니다.
  */
 internal fun getSchemaDefinition(tenant: Tenants.Tenant): Schema =
-    Schema(
-        tenant.id,
-        defaultTablespace = "USERS",
-        temporaryTablespace = "TEMP ",
-        quota = "20M",
-        on = "USERS"
-    )
+    Schema(tenant.id)

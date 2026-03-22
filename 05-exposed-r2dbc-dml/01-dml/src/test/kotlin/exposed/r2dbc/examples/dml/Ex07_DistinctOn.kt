@@ -31,12 +31,12 @@ class Ex07_DistinctOn: AbstractR2dbcExposedTest() {
     companion object: KLoggingChannel()
 
     /**
-     * `withDistinctOn` (`DISTINCT ON`) 은 Postgres와 H2 에서민 지원됩니다.
+     * `withDistinctOn` (`DISTINCT ON`) 은 Postgres와 H2 에서만 지원됩니다.
      */
     private val distinctOnSupportedDb = TestDB.ALL_POSTGRES + TestDB.ALL_H2
 
     /**
-     * `withDistinctOn` (`DISTINCT ON`) 은 Postgres와 H2 에서민 지원됩니다.
+     * `withDistinctOn` (`DISTINCT ON`) 은 Postgres와 H2 에서만 지원됩니다.
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)

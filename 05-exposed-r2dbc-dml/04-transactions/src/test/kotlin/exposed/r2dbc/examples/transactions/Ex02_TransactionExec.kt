@@ -223,7 +223,7 @@ class Ex02_TransactionExec: AbstractR2dbcExposedTest() {
         }
 
         withTables(testDB, users) {
-            val statments = List(3) {
+            val statements = List(3) {
                 val name = faker.name().firstName()
                 val age = faker.number().numberBetween(18, 80)
 
@@ -232,7 +232,7 @@ class Ex02_TransactionExec: AbstractR2dbcExposedTest() {
                         "VALUES ('$name', $age)"
             }
 
-            execInBatch(statments)
+            execInBatch(statements)
 
             users.selectAll().count() shouldBeEqualTo 3
         }

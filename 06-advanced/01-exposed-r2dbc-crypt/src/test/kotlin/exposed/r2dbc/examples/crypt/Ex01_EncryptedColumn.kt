@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import nl.altindag.log.LogCaptor
-import org.amshove.kluent.internal.assertFailsWith
+import kotlin.test.assertFailsWith
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldContainNone
 import org.amshove.kluent.shouldNotBeEmpty

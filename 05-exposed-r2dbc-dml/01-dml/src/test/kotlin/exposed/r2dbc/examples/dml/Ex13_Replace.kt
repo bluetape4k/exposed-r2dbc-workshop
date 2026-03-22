@@ -228,7 +228,7 @@ class Ex13_Replace: AbstractR2dbcExposedTest() {
     }
 
     /**
-     * 복함 기본 키를 가진 테이블에 대한 REPLACE 문
+     * 복합 기본 키를 가진 테이블에 대한 REPLACE 문
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)

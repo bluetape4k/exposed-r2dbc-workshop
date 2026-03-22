@@ -99,7 +99,7 @@ class Ex03_Parameterization: AbstractR2dbcExposedTest() {
 
                 // NOTE: Postgres 는 Multiple parameters 는 $1, $2, $3, ... 로 사용합니다.
                 // NOTE: 단, R2DBC 에서 Postgres 는 Multi Statements 를 지원하지 않습니다.
-                var stmt = if (testDB in TestDB.ALL_POSTGRES) {
+                val stmt = if (testDB in TestDB.ALL_POSTGRES) {
                     """
                         INSERT INTO $table ($column) VALUES ($1);
                         INSERT INTO $table ($column) VALUES ($2);

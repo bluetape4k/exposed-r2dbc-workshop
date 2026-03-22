@@ -3,9 +3,6 @@ package exposed.r2dbc.examples.controller
 import exposed.r2dbc.examples.domain.model.ActorRecord
 import exposed.r2dbc.examples.domain.repository.ActorR2dbcRepository
 import io.bluetape4k.logging.coroutines.KLoggingChannel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.toList
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.springframework.http.server.reactive.ServerHttpRequest
@@ -24,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/actors")
 class ActorController(
     private val actorRepository: ActorR2dbcRepository,
-): CoroutineScope by CoroutineScope(Dispatchers.IO + SupervisorJob()) {
+) {
 
     companion object: KLoggingChannel()
 

@@ -5,9 +5,6 @@ import exposed.r2dbc.examples.domain.model.MovieWithActorRecord
 import exposed.r2dbc.examples.domain.model.MovieWithProducingActorRecord
 import exposed.r2dbc.examples.domain.repository.MovieR2dbcRepository
 import io.bluetape4k.logging.coroutines.KLoggingChannel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.toList
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.springframework.web.bind.annotation.GetMapping
@@ -22,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/movie-actors")
 class MovieActorsController(
     private val movieRepository: MovieR2dbcRepository,
-): CoroutineScope by CoroutineScope(Dispatchers.IO + SupervisorJob()) {
+) {
 
     companion object: KLoggingChannel()
 
