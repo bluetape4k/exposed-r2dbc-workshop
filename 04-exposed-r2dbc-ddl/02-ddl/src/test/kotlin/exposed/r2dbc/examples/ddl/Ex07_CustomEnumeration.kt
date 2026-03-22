@@ -278,10 +278,10 @@ class Ex07_CustomEnumeration: AbstractR2dbcExposedTest() {
 
         withTables(testDB, tester, referenceTable) {
             val active = Status.ACTIVE
-            val inavtive = Status.INACTIVE
+            val inactive = Status.INACTIVE
             val entry = tester.insert {
                 it[enumColumn] = active
-                it[enumNameColumn] = inavtive
+                it[enumNameColumn] = inactive
             }
             referenceTable.insert {
                 it[referenceColumn] = entry[tester.enumColumn]
@@ -291,8 +291,8 @@ class Ex07_CustomEnumeration: AbstractR2dbcExposedTest() {
             tester.selectAll().single()[tester.enumColumn] shouldBeEqualTo active
             referenceTable.selectAll().single()[referenceTable.referenceColumn] shouldBeEqualTo active
 
-            tester.selectAll().single()[tester.enumNameColumn] shouldBeEqualTo inavtive
-            referenceTable.selectAll().single()[referenceTable.referenceNameColumn] shouldBeEqualTo inavtive
+            tester.selectAll().single()[tester.enumNameColumn] shouldBeEqualTo inactive
+            referenceTable.selectAll().single()[referenceTable.referenceNameColumn] shouldBeEqualTo inactive
         }
     }
 }

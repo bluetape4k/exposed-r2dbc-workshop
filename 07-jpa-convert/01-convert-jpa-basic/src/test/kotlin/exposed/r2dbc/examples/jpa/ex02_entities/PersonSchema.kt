@@ -60,7 +60,7 @@ object PersonSchema: KLoggingChannel() {
      *      first_name VARCHAR(50) NOT NULL,
      *      last_name VARCHAR(50) NOT NULL,
      *      birth_date DATE NOT NULL,
-     *      employeed BOOLEAN DEFAULT TRUE NOT NULL,
+     *      employed BOOLEAN DEFAULT TRUE NOT NULL,
      *      occupation VARCHAR(255) NULL,
      *      address_id BIGINT NOT NULL,
      *
@@ -72,7 +72,7 @@ object PersonSchema: KLoggingChannel() {
         val firstName: Column<String> = varchar("first_name", 50)
         val lastName: Column<String> = varchar("last_name", 50)
         val birthDate: Column<LocalDate> = date("birth_date")
-        val employed: Column<Boolean> = bool("employeed").default(true)
+        val employed: Column<Boolean> = bool("employed").default(true)
         val occupation: Column<String?> = varchar("occupation", 255).nullable()
         val addressId: Column<EntityID<Long>> = reference("address_id", AddressTable)  // many to one
     }
@@ -87,7 +87,7 @@ object PersonSchema: KLoggingChannel() {
         val firstName = varchar("first_name", 50)
         val lastName = varchar("last_name", 50)
         val birthDate = date("birth_date")
-        val employed = bool("employeed").default(true)
+        val employed = bool("employed").default(true)
         val occupation = varchar("occupation", 255).nullable()
         val addressId = long("address_id")  // many to one
 

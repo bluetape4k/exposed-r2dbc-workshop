@@ -175,7 +175,7 @@ enum class TestDB(
 
             if (USE_TESTCONTAINERS) {
                 val port = Containers.MySql5.port
-                val databaseName = Containers.MariaDB.databaseName
+                val databaseName = Containers.MySql5.databaseName
                 "r2dbc:mysql://${MYSQL_V5.user}:${MYSQL_V5.pass}@127.0.0.1:$port/$databaseName$options"
             } else {
                 "r2dbc:mysql://localhost:3306/exposed$options"
@@ -204,7 +204,7 @@ enum class TestDB(
 
             if (USE_TESTCONTAINERS) {
                 val port = Containers.MySql8.port
-                val databaseName = Containers.MariaDB.databaseName
+                val databaseName = Containers.MySql8.databaseName
                 "r2dbc:mysql://${MYSQL_V8.user}:${MYSQL_V8.pass}@127.0.0.1:$port/$databaseName$options"
             } else {
                 "r2dbc:mysql://localhost:3306/exposed$options"
@@ -212,7 +212,7 @@ enum class TestDB(
         },
         driver = "com.mysql.cj.jdbc.Driver",
         user = if (USE_TESTCONTAINERS) "test" else "exposed",
-        pass = if (USE_TESTCONTAINERS) "test" else "@exposed2025",
+        pass = if (USE_TESTCONTAINERS) "test" else System.getenv("EXPOSED_MYSQL_PASS") ?: "test",
     ),
 
     /**

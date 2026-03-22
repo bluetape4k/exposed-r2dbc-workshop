@@ -1,7 +1,7 @@
 package exposed.r2dbc.workshop.springwebflux.domain.repository
 
 
-import exposed.r2dbc.shared.repository.MovieSchema.ActorTable
+import exposed.r2dbc.workshop.springwebflux.domain.model.MovieSchema.ActorTable
 import exposed.r2dbc.workshop.springwebflux.domain.model.ActorRecord
 import exposed.r2dbc.workshop.springwebflux.domain.model.toActorRecord
 import io.bluetape4k.logging.coroutines.KLoggingChannel

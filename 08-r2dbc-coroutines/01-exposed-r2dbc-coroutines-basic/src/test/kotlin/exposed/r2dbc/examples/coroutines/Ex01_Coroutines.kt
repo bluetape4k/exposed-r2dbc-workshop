@@ -35,6 +35,7 @@ import org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.transactionManager
 import org.jetbrains.exposed.v1.r2dbc.update
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
@@ -52,6 +53,12 @@ class Ex01_Coroutines: AbstractR2dbcExposedTest() {
 
         private val singleThreadDispatcher: ExecutorCoroutineDispatcher =
             Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+
+        @AfterAll
+        @JvmStatic
+        fun tearDown() {
+            singleThreadDispatcher.close()
+        }
     }
 
     /**

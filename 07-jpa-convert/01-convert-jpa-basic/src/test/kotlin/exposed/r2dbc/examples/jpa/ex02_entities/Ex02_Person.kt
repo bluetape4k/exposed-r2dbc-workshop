@@ -198,7 +198,7 @@ class Ex02_Person: AbstractR2dbcExposedTest() {
      * DELETE
      *   FROM persons
      *  WHERE ((persons.id >= 7) OR (persons.occupation IS NOT NULL))
-     *    AND (persons.employeed = TRUE)
+     *    AND (persons.employed = TRUE)
      * ```
      */
     @ParameterizedTest
@@ -221,7 +221,7 @@ class Ex02_Person: AbstractR2dbcExposedTest() {
      * DELETE
      *   FROM persons
      *  WHERE (persons.id >= 7)
-     *     OR ((persons.occupation IS NOT NULL) AND (persons.employeed = TRUE))
+     *     OR ((persons.occupation IS NOT NULL) AND (persons.employed = TRUE))
      * ```
      */
     @ParameterizedTest
@@ -266,14 +266,14 @@ class Ex02_Person: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * INSERT INTO persons (first_name, last_name, birth_date, employeed, occupation, address_id)
+     * INSERT INTO persons (first_name, last_name, birth_date, employed, occupation, address_id)
      * VALUES ('John', 'Doe', '2025-02-06', TRUE, 'Software Engineer', 1);
      *
      * SELECT persons.id,
      *        persons.first_name,
      *        persons.last_name,
      *        persons.birth_date,
-     *        persons.employeed,
+     *        persons.employed,
      *        persons.occupation,
      *        persons.address_id
      *   FROM persons
@@ -300,10 +300,10 @@ class Ex02_Person: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * INSERT INTO persons (first_name, last_name, birth_date, employeed, occupation, address_id)
+     * INSERT INTO persons (first_name, last_name, birth_date, employed, occupation, address_id)
      * VALUES ('Joe', 'Jones', '2025-02-06', TRUE, 'Developer', 1);
      *
-     * INSERT INTO persons (first_name, last_name, birth_date, employeed, occupation, address_id)
+     * INSERT INTO persons (first_name, last_name, birth_date, employed, occupation, address_id)
      * VALUES ('Sarah', 'Smith', '2025-02-06', TRUE, 'Architect', 2);
      * ```
      */
@@ -332,11 +332,11 @@ class Ex02_Person: AbstractR2dbcExposedTest() {
     /**
      * ```sql
      * -- PostgreSQL
-     * INSERT INTO persons (first_name, last_name, birth_date, employeed, occupation, address_id)
+     * INSERT INTO persons (first_name, last_name, birth_date, employed, occupation, address_id)
      * SELECT persons.first_name,
      *        persons.last_name,
      *        persons.birth_date,
-     *        persons.employeed,
+     *        persons.employed,
      *        persons.occupation,
      *        persons.address_id
      *   FROM persons
@@ -371,12 +371,12 @@ class Ex02_Person: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * INSERT INTO persons (id, first_name, last_name, birth_date, employeed, occupation, address_id)
+     * INSERT INTO persons (id, first_name, last_name, birth_date, employed, occupation, address_id)
      * SELECT (persons.id + 100),
      *        persons.first_name,
      *        persons.last_name,
      *        persons.birth_date,
-     *        persons.employeed,
+     *        persons.employed,
      *        persons.occupation,
      *        persons.address_id
      *   FROM persons

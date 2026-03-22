@@ -65,7 +65,7 @@ object PersonSchema {
      * 사람 정보를 저장하는 테이블.
      *
      * [AddressTable]을 외래키로 참조하며, `id`와 `address_id` 쌍에 유니크 제약이 적용됩니다.
-     * DB 컬럼명 `"employeed"`는 기존 스키마 호환성을 위해 유지하며,
+     * DB 컬럼명 `"employed"`는 기존 스키마 호환성을 위해 유지하며,
      * Kotlin 프로퍼티명은 올바른 철자인 `employed`를 사용합니다.
      *
      * ```sql
@@ -75,7 +75,7 @@ object PersonSchema {
      *      first_name VARCHAR(50) NOT NULL,
      *      last_name VARCHAR(50) NOT NULL,
      *      birth_date DATE NOT NULL,
-     *      employeed BOOLEAN DEFAULT TRUE NOT NULL,
+     *      employed BOOLEAN DEFAULT TRUE NOT NULL,
      *      occupation VARCHAR(255) NULL,
      *      address_id BIGINT NOT NULL,
      *
@@ -92,10 +92,10 @@ object PersonSchema {
         val birthDate = date("birth_date")
 
         /**
-         * 고용 여부 컬럼. DB 컬럼명은 기존 스키마 호환성을 위해 `"employeed"` 유지.
+         * 고용 여부 컬럼. DB 컬럼명은 기존 스키마 호환성을 위해 `"employed"` 유지.
          * Kotlin 프로퍼티명은 올바른 철자인 `employed`를 사용합니다.
          */
-        val employed = bool("employeed").default(true)
+        val employed = bool("employed").default(true)
         val occupation = varchar("occupation", 255).nullable()
         val addressId = reference("address_id", AddressTable)  // many to one
 
@@ -111,7 +111,7 @@ object PersonSchema {
      * `id` 컬럼에 `autoIncrement()`를 지정하지 않아 INSERT-SELECT 시
      * ID 값을 직접 지정할 수 있습니다.
      *
-     * DB 컬럼명 `"employeed"`는 기존 스키마 호환성을 위해 유지하며,
+     * DB 컬럼명 `"employed"`는 기존 스키마 호환성을 위해 유지하며,
      * Kotlin 프로퍼티명은 올바른 철자인 `employed`를 사용합니다.
      */
     object PersonTableDML: Table("persons") {
@@ -121,10 +121,10 @@ object PersonSchema {
         val birthDate = date("birth_date")
 
         /**
-         * 고용 여부 컬럼. DB 컬럼명은 기존 스키마 호환성을 위해 `"employeed"` 유지.
+         * 고용 여부 컬럼. DB 컬럼명은 기존 스키마 호환성을 위해 `"employed"` 유지.
          * Kotlin 프로퍼티명은 올바른 철자인 `employed`를 사용합니다.
          */
-        val employed = bool("employeed").default(true)
+        val employed = bool("employed").default(true)
         val occupation = varchar("occupation", 255).nullable()
         val addressId = long("address_id")  // many to one
 
@@ -138,7 +138,7 @@ object PersonSchema {
      * @property firstName 이름
      * @property lastName 성
      * @property birthDate 생년월일
-     * @property employed 고용 여부 (DB 컬럼명: `employeed`)
+     * @property employed 고용 여부 (DB 컬럼명: `employed`)
      * @property occupation 직업
      * @property address 주소 ID (외래키)
      */
@@ -161,7 +161,7 @@ object PersonSchema {
      * @property firstName 이름
      * @property lastName 성
      * @property birthDate 생년월일
-     * @property employed 고용 여부 (DB 컬럼명: `employeed`)
+     * @property employed 고용 여부 (DB 컬럼명: `employed`)
      * @property occupation 직업
      * @property address 주소 정보 ([AddressRecord])
      */
