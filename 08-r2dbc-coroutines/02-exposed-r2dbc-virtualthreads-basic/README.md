@@ -8,6 +8,29 @@ Exposed R2DBC + Java 21 Virtual Threads 환경에서 비동기 데이터베이�
 
 ---
 
+## 실행 흐름
+
+```mermaid
+sequenceDiagram
+    participant C as 호출자 (Coroutine)
+    participant VT as Virtual Thread Dispatcher
+    participant ST as suspendTransaction
+    participant DB as R2DBC Database
+
+    C ->> VT: runSuspendVT { }
+    VT ->> VT: VirtualThread 할당
+    VT ->> ST: virtualThreadTransaction { }
+    ST ->> DB: BEGIN (on Virtual Thread)
+    ST ->> DB: SQL 실행
+    DB -->> ST: 결과
+    ST ->> DB: COMMIT
+    ST -->> VT: 결과 반환
+    VT -->> C: 결과 반환
+    Note right of VT: 블로킹 허용<br/>(Virtual Thread 특성)
+```
+
+---
+
 ## 학습 목표
 
 - Java 21 Virtual Threads와 Exposed R2DBC 통합 방법 이해
