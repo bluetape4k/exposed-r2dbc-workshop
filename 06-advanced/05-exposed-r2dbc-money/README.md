@@ -38,6 +38,42 @@ compositeMoney(precision: Int, scale: Int, columnName: String)
 
 이를 통해 전체 `MonetaryAmount`, 금액만, 또는 통화만으로 필터링하는 유연한 쿼리가 가능합니다.
 
+## 구조 다이어그램
+
+```mermaid
+classDiagram
+    class CompositeMoney {
+        <<Exposed 확장>>
+        +compositeMoney(precision, scale, name) CompositeColumn~MonetaryAmount?~
+        +amount: Column~BigDecimal?~
+        +currency: Column~CurrencyUnit?~
+    }
+    class MonetaryAmount {
+        <<interface — JSR-354>>
+        +getNumber(): NumberValue
+        +getCurrency(): CurrencyUnit
+    }
+    class Money {
+        <<Moneta 구현체>>
+        +of(amount, currency): Money
+        +getNumber(): NumberValue
+        +getCurrency(): CurrencyUnit
+    }
+    class CurrencyUnit {
+        <<JSR-354>>
+        +currencyCode: String
+        note: ISO 4217 코드 (USD, KRW 등)
+    }
+
+    CompositeMoney --> MonetaryAmount : Column 값 타입
+    Money ..|> MonetaryAmount : 구현
+    Money --> CurrencyUnit : 포함
+    CompositeMoney --> CurrencyUnit : currency 컬럼
+```
+
+> `compositeMoney`는 단일 속성이 DB의 두 컬럼(`DECIMAL` + `VARCHAR(3)`)으로 분리 저장됨
+> `amount`·`currency` 서브컬럼에 직접 접근하여 개별 필터링 가능
+
 ## 주의사항 및 제한사항
 
 ### JSR-354 (JavaMoney API) 의존성
