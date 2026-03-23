@@ -29,6 +29,53 @@ Redisson + Exposed 를 활용한 캐시 전략의 **Kotlin Coroutines 기반 비
 | DB         | H2 (기본) / MySQL / PostgreSQL (Testcontainers) |
 | Test       | JUnit 5, Kluent, Awaitility, Reactor Test     |
 
+## 구조 다이어그램
+
+```mermaid
+classDiagram
+    class AbstractR2dbcRedissonRepository~K, V~ {
+        <<abstract>>
+        +get(key: K): V?
+        +put(key: K, value: V)
+        +evict(key: K)
+        +evictAll(keys: Collection~K~)
+        +clear()
+    }
+    class UserCacheRepository {
+        +strategy: READ_WRITE_THROUGH_WITH_NEAR_CACHE
+        +get(id: Long): UserRecord?
+        +put(id: Long, user: UserRecord)
+        +evict(id: Long)
+    }
+    class UserCredentialsCacheRepository {
+        +strategy: READ_ONLY
+        +get(id: Long): UserCredentialsRecord?
+        +evict(id: Long)
+    }
+    class UserEventCacheRepository {
+        +strategy: WRITE_BEHIND
+        +put(id: Long, event: UserEventRecord)
+        +flush()
+    }
+
+    AbstractR2dbcRedissonRepository <|-- UserCacheRepository
+    AbstractR2dbcRedissonRepository <|-- UserCredentialsCacheRepository
+    AbstractR2dbcRedissonRepository <|-- UserEventCacheRepository
+```
+
+## 캐시 조회 흐름
+
+```mermaid
+flowchart TD
+    REQ["캐시 조회 요청\nget(key)"] --> L1{L1 캐시\n(Caffeine\nNear Cache) HIT?}
+    L1 -->|HIT| R1["L1에서 즉시 반환\n(나노초 단위)"]
+    L1 -->|MISS| L2{L2 캐시\n(Redisson\nMapCache) HIT?}
+    L2 -->|HIT| FILL1["L1에 저장 후 반환\n(마이크로초 단위)"]
+    L2 -->|MISS| DB["DB 조회\nsuspendTransaction\n(Exposed R2DBC)"]
+    DB --> FILL2["L2(Redisson)에 저장\n(TTL 적용)"]
+    FILL2 --> FILL1
+```
+
 ## 프로젝트 구조
 
 ```
