@@ -60,6 +60,38 @@ Jackson의 `SerializationFeature`와 `DeserializationFeature`는 직렬화/역�
 | `.contains(value, path)`      | JSON 문서에 주어진 JSON 형식 문자열이 값으로 포함되어 있는지 확인 |
 | `.exists(path, optional)`     | 주어진 JSONPath 표현식에 값이 존재하는지 확인             |
 
+## 구조 다이어그램
+
+```mermaid
+classDiagram
+    class JacksonColumn~T~ {
+        <<bluetape4k-exposed>>
+        +jackson(name) Column~T~
+        -objectMapper: ObjectMapper
+    }
+    class JacksonBColumn~T~ {
+        +jacksonb(name) Column~T~
+        note: PostgreSQL JSONB 전용
+    }
+    class ObjectMapper {
+        <<Jackson (com.fasterxml.jackson)>>
+        +writeValueAsString(value): String
+        +readValue(json, klass): T
+    }
+    class KotlinModule {
+        <<Jackson 확장>>
+        +Kotlin 데이터 클래스 지원
+        note: 자동 등록됨
+    }
+
+    JacksonColumn <|-- JacksonBColumn : json → jsonb 확장
+    JacksonColumn --> ObjectMapper : 직렬화/역직렬화
+    ObjectMapper --> KotlinModule : 등록
+```
+
+> `@Serializable` 불필요 — Jackson `ObjectMapper`가 표준 Kotlin 데이터 클래스를 직접 처리
+> `KotlinModule`이 자동 등록되어 data class·nullable·default 파라미터 지원
+
 ## 예제 개요
 
 ### `JacksonSchema.kt`
