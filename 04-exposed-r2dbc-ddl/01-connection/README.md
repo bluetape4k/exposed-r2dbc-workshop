@@ -25,6 +25,33 @@ Exposed R2DBC에서 데이터베이스 연결을 구성하고, 연결 메타데�
 
 ---
 
+## 실행 흐름
+
+```mermaid
+sequenceDiagram
+    participant App as 애플리케이션
+    participant CF as ConnectionFactory
+    participant DB as Database (Exposed)
+    participant Pool as ConnectionPool
+
+    App ->> CF: ConnectionFactories.get(url)
+    CF -->> Pool: ConnectionPool 생성
+    App ->> DB: R2dbcDatabase.connect(connectionFactory)
+    DB -->> App: R2dbcDatabase 인스턴스
+
+    App ->> DB: suspendTransaction { }
+    DB ->> Pool: acquire connection
+    Pool -->> DB: R2DBC Connection
+    DB ->> DB: SQL 실행 (SELECT / INSERT / UPDATE / DELETE)
+    DB ->> Pool: release connection
+    DB -->> App: 결과 반환
+```
+
+> `r2dbc:pool:h2:mem:///poolDB?maxSize=10` URL 스킴을 사용하면 `ConnectionPool`이 자동 활성화됩니다.
+> 풀 크기를 초과하는 동시 `suspendTransaction` 요청은 커넥션이 반환될 때까지 대기한 후 재활용됩니다.
+
+---
+
 ## 프로젝트 구조
 
 ```
