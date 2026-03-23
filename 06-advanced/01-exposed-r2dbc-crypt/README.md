@@ -77,6 +77,32 @@ DAO API와 암호화 컬럼을 통합하여 엔티티처럼 사용하는 방법�
 - **CRUD 작업**: 엔티티 생성(`ETest.new { ... }`), 읽기(`ETest.all()`), 업데이트가 원활하게 작동합니다. 암호화와 복호화는 개발자에게 완전히 투명합니다.
 - **검색 제한**: 암호화된 속성으로 엔티티 찾기(`ETest.find { TestTable.varchar eq "value" }`)가 실패함을 강조합니다.
 
+## 실행 흐름
+
+```mermaid
+sequenceDiagram
+    participant App as 애플리케이션
+    participant Col as EncryptedColumn
+    participant Enc as Encryptor (AES/Blowfish/TripleDES)
+    participant DB as Database
+
+    Note over App,DB: 저장 (INSERT)
+    App ->> Col: insert { it[name] = "plain text" }
+    Col ->> Enc: encrypt("plain text")
+    Enc -->> Col: Base64(ciphertext)
+    Col ->> DB: INSERT 'Base64(ciphertext)'
+
+    Note over App,DB: 조회 (SELECT)
+    DB -->> Col: 'Base64(ciphertext)'
+    Col ->> Enc: decrypt("Base64(ciphertext)")
+    Enc -->> Col: "plain text"
+    Col -->> App: "plain text"
+
+    Note over App,DB: 검색 제한 (비결정적 암호화)
+    App -x Col: where { name eq encrypt("plain text") }
+    Note right of Col: 매번 다른 암호문 생성 → WHERE 검색 불가
+```
+
 ## 코드 예제
 
 ### 1. 암호화 컬럼이 있는 테이블 정의 (DSL)
