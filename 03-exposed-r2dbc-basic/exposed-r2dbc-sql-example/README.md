@@ -5,6 +5,57 @@ R2DBC 환경에서 비동기로 SELECT, INSERT, UPDATE, DELETE를 수행합니�
 
 ---
 
+## 구조 다이어그램
+
+```mermaid
+erDiagram
+    cities {
+        int id PK "SERIAL, auto increment"
+        varchar(50) name "NOT NULL"
+    }
+    users {
+        varchar(10) id PK
+        varchar(50) name "NOT NULL"
+        int city_id FK "NULL, references cities(id)"
+    }
+    cities ||--o{ users : "city_id"
+```
+
+```mermaid
+classDiagram
+    class Query {
+        +where(op: Op~Boolean~) Query
+        +andWhere(op: Op~Boolean~) Query
+        +orWhere(op: Op~Boolean~) Query
+        +orderBy(column, order) Query
+        +groupBy(vararg columns) Query
+        +limit(n: Int) Query
+        +toList() List~ResultRow~
+        +single() ResultRow
+        +firstOrNull() ResultRow?
+        +count() Long
+        +collect(action) Unit
+        +map(transform) List~T~
+    }
+    class Table {
+        +selectAll() Query
+        +select(vararg columns) Query
+        +insert(body: InsertStatement) InsertStatement
+        +update(where, body: UpdateStatement) Int
+        +deleteWhere(op: Op~Boolean~) Int
+        +innerJoin(other: Table) Join
+    }
+    class Join {
+        +select(vararg columns) Query
+        +selectAll() Query
+    }
+    Table --> Query : "selectAll() / select()"
+    Table --> Join : "innerJoin() / leftJoin()"
+    Join --> Query : "select() / selectAll()"
+```
+
+---
+
 ## 학습 목표
 
 - Exposed DSL로 테이블을 정의하는 방법 이해
