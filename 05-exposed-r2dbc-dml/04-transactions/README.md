@@ -21,6 +21,44 @@ Exposed R2DBC의 **트랜잭션(Transaction)
 | 컨테이너 | Testcontainers                                  |
 | 테스트  | JUnit 5 + Kluent + ParameterizedTest (멀티 DB 지원) |
 
+## 실행 흐름
+
+### R2DBC suspendTransaction 흐름
+
+```mermaid
+sequenceDiagram
+    participant C as Coroutine (호출자)
+    participant T as suspendTransaction
+    participant DB as R2DBC Database
+
+    C ->> T: suspendTransaction(db)
+    T ->> DB: BEGIN
+    T ->> DB: SQL 실행 (INSERT/SELECT...)
+    alt 정상 완료
+        T ->> DB: COMMIT
+        T -->> C: 결과 반환
+    else 예외 발생
+        T ->> DB: ROLLBACK
+        T -->> C: 예외 전파
+    end
+```
+
+### 중첩 트랜잭션 / Savepoint 흐름
+
+```mermaid
+flowchart TD
+    A["suspendTransaction (외부)"] --> B["SQL 실행 1"]
+    B --> C{"중첩 트랜잭션?"}
+    C -->|yes| D["SAVEPOINT sp1"]
+    D --> E["SQL 실행 2"]
+    E --> G{예외 발생?}
+    G -->|rollback| H["ROLLBACK TO sp1\n(SQL 2만 취소)"]
+    G -->|정상| I["RELEASE sp1"]
+    H --> J["외부 COMMIT\n(SQL 1만 저장)"]
+    I --> J
+    C -->|no| K["동일 트랜잭션 공유\n(외부와 같은 범위)"]
+```
+
 ## 프로젝트 구조
 
 ```
