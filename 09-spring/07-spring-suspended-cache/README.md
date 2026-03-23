@@ -21,6 +21,29 @@ Spring WebFlux + Exposed R2DBC 환경에서 Lettuce 기반의 Suspended Cache를
 | 컨테이너      | Testcontainers (DB + Redis)    |
 | 서버        | Netty (Reactive)               |
 
+## 실행 흐름
+
+```mermaid
+sequenceDiagram
+    participant C as Controller/Service
+    participant Cache as LettuceSuspendedCache (Redis)
+    participant Repo as DefaultCountryR2dbcRepository
+    participant DB as R2DBC Database
+
+    C ->> Cache: cache.get(code)
+    alt 캐시 HIT
+        Cache -->> C: 캐시된 결과 반환
+    else 캐시 MISS
+        Cache -->> C: null
+        C ->> Repo: delegate.findByCode(code) (suspend)
+        Repo ->> DB: suspendTransaction { SELECT }
+        DB -->> Repo: ResultRow
+        Repo -->> C: CountryRecord
+        C ->> Cache: cache.put(code, result) (TTL 60s)
+        Cache -->> C: 새로 조회한 결과 반환
+    end
+```
+
 ## 프로젝트 구조
 
 ```
