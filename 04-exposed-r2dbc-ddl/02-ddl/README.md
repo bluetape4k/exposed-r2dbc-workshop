@@ -26,6 +26,71 @@ Exposed R2DBC로 데이터베이스 스키마를 정의하고 관리하는 방�
 
 ---
 
+## 구조 다이어그램
+
+```mermaid
+classDiagram
+    class Table {
+        <<abstract>>
+        +tableName: String
+        +columns: List~Column~
+        +primaryKey: PrimaryKey?
+        +indices: List~Index~
+        +foreignKey(vararg columns)
+        +index(customIndexName, isUnique, vararg columns)
+        +uniqueIndex(customIndexName, vararg columns)
+    }
+    class IntIdTable {
+        +id: Column~EntityID~Int~~
+    }
+    class LongIdTable {
+        +id: Column~EntityID~Long~~
+    }
+    class UUIDTable {
+        +id: Column~EntityID~UUID~~
+    }
+    class IdTable~T~ {
+        <<abstract>>
+        +id: Column~EntityID~T~~
+    }
+    class SchemaUtils {
+        +create(vararg tables)$
+        +drop(vararg tables)$
+        +createMissing(vararg tables)$
+        +addMissingColumnsStatements(vararg tables)$
+        +addMissingColumns(vararg tables)$
+        +createSequence(vararg seq)$
+        +dropSequence(vararg seq)$
+    }
+
+    IdTable~T~ <|-- IntIdTable
+    IdTable~T~ <|-- LongIdTable
+    IdTable~T~ <|-- UUIDTable
+    Table <|-- IdTable~T~
+    SchemaUtils ..> Table : 관리
+```
+
+```mermaid
+flowchart TD
+    A["테이블 정의\nobject MyTable : IntIdTable()"] --> B["suspendTransaction { }"]
+    B --> C["SchemaUtils.create(MyTable)"]
+    C --> D{테이블 존재?}
+    D -->|없음| E["CREATE TABLE IF NOT EXISTS 실행"]
+    D -->|있음| F["스킵 (IF NOT EXISTS)"]
+    E --> G["컬럼 / 인덱스 / FK 생성"]
+    G --> H["완료"]
+    F --> H
+
+    B2["suspendTransaction { }"] --> C2["SchemaUtils.createMissing(MyTable)"]
+    C2 --> D2{누락 테이블/컬럼 존재?}
+    D2 -->|있음| E2["누락 항목만 ALTER / CREATE"]
+    D2 -->|없음| F2["스킵"]
+    E2 --> H2["완료"]
+    F2 --> H2
+```
+
+---
+
 ## 프로젝트 구조
 
 ```
