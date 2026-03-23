@@ -10,6 +10,48 @@
 - 직렬화를 사용하여 임의의 Kotlin 객체를 바이너리 컬럼에 저장하는 방법 학습
 - 직렬화와 압축 같은 여러 변환 조합
 
+## 구조 다이어그램
+
+```mermaid
+classDiagram
+    class Column~T~ {
+        <<Exposed 기반>>
+        +columnType: IColumnType~T~
+        +name: String
+        +clientDefault(expr: () -> T): Column~T~
+    }
+    class IColumnType~T~ {
+        <<interface>>
+        +valueFromDB(value: Any): T
+        +notNullValueToDB(value: T): Any
+        +sqlType(): String
+    }
+    class CompressedColumnType~T~ {
+        +sqlType(): String → VARBINARY/BLOB
+        +valueFromDB(): ByteArray → decompress
+        +notNullValueToDB(): compress → ByteArray
+    }
+    class EncryptedColumnType~T~ {
+        +sqlType(): String → VARCHAR
+        +valueFromDB(): String → decrypt
+        +notNullValueToDB(): encrypt → String
+        note: 결정적 암호화 (검색 가능)
+    }
+    class BinarySerializedColumnType~T~ {
+        +sqlType(): String → BLOB
+        +valueFromDB(): ByteArray → deserialize
+        +notNullValueToDB(): serialize → ByteArray
+    }
+
+    Column --> IColumnType : 사용
+    IColumnType <|.. CompressedColumnType : 구현
+    IColumnType <|.. EncryptedColumnType : 구현
+    IColumnType <|.. BinarySerializedColumnType : 구현
+```
+
+> `IColumnType`의 `valueFromDB`/`notNullValueToDB`를 오버라이드하여 투명한 변환(압축·암호화·직렬화) 구현
+> `clientDefault { }` 확장으로 INSERT 전 애플리케이션 측 ID 자동 생성(Snowflake, KSUID 등)
+
 ---
 
 ## 1. 커스텀 클라이언트 측 기본값 생성기
