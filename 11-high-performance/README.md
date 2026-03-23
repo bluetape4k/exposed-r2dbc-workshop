@@ -3,6 +3,23 @@
 Exposed R2DBC 환경에서 성능과 확장성을 높이기 위한 예제를 모아둔 섹션입니다.  
 이 디렉터리의 예제는 단순 CRUD보다 캐시, 라우팅, 읽기/쓰기 분리처럼 운영 환경에 가까운 주제를 다룹니다.
 
+## 고성능 전략 개요
+
+```mermaid
+flowchart TD
+    App["애플리케이션"] --> CF["DynamicRoutingConnectionFactory"]
+    CF --> Strat{"라우팅 전략"}
+    Strat -->|쓰기 요청| PDB["Primary DB (쓰기)"]
+    Strat -->|읽기 요청| RDB["Replica DB (읽기)"]
+    Strat -->|테넌트 기반| TDB["Tenant-specific DB"]
+
+    App --> Cache["캐시 계층"]
+    Cache --> L1["L1: 인메모리 (Caffeine)"]
+    Cache --> L2["L2: Redis (Lettuce Coroutines)"]
+    L1 -->|MISS| L2
+    L2 -->|MISS| PDB
+```
+
 ## 학습 목표
 
 - Redis/Redisson 기반 캐시 계층을 Coroutines와 함께 적용한다.
