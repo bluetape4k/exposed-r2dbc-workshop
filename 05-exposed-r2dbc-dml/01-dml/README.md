@@ -185,13 +185,13 @@ cities.crossJoin(users)
 ```mermaid
 erDiagram
     Cities {
-        int city_id PK
+        int city_id PK "auto_increment"
         varchar name
     }
     Users {
         varchar id PK
         varchar name
-        int city_id FK
+        int city_id FK "nullable"
         int flags
     }
     UserData {
@@ -202,7 +202,7 @@ erDiagram
     Sales {
         int year
         int month
-        varchar product
+        varchar product "nullable"
         decimal amount
     }
     SomeAmounts {
