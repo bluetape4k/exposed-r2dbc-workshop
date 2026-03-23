@@ -20,6 +20,104 @@ Exposed R2DBC DSL에서 지원하는 **다양한 컬럼 타입(Column Types)
 | 컨테이너 | Testcontainers                                  |
 | 테스트  | JUnit 5 + Kluent + ParameterizedTest (멀티 DB 지원) |
 
+## 구조 다이어그램
+
+```mermaid
+classDiagram
+    class Column~T~ {
+        <<abstract>>
+        +columnType: IColumnType
+        +name: String
+    }
+
+    class BooleanColumn {
+        +bool(name): Column~Boolean~
+        +booleanParam(value): Expression
+    }
+
+    class CharColumn {
+        +char(name, length): Column~String~
+    }
+
+    class VarCharColumn {
+        +varchar(name, length): Column~String~
+        +length: Int
+    }
+
+    class TextColumn {
+        +text(name): Column~String~
+        +mediumText(name): Column~String~
+        +largeText(name): Column~String~
+    }
+
+    class IntegerColumn {
+        +byte(name): Column~Byte~
+        +short(name): Column~Short~
+        +integer(name): Column~Int~
+        +long(name): Column~Long~
+    }
+
+    class FloatColumn {
+        +float(name): Column~Float~
+    }
+
+    class DoubleColumn {
+        +double(name): Column~Double~
+    }
+
+    class DecimalColumn {
+        +decimal(name, precision, scale): Column~BigDecimal~
+        +precision: Int
+        +scale: Int
+    }
+
+    class UnsignedColumn {
+        +ubyte(name): Column~UByte~
+        +ushort(name): Column~UShort~
+        +uint(name): Column~UInt~
+        +ulong(name): Column~ULong~
+    }
+
+    class ArrayColumn~T~ {
+        +array~T~(name): Column~List~T~~
+        +anyFrom(column): Op
+        +allFrom(column): Op
+        +slice(column, lower, upper): Op
+    }
+
+    class BlobColumn {
+        +blob(name): Column~ExposedBlob~
+        +blobParam(value): Expression
+    }
+
+    class JavaUUIDColumn {
+        +javaUUID(name): Column~UUID~
+        +autoGenerate(): Column~UUID~
+    }
+
+    class KotlinUUIDColumn {
+        +kotlinUUID(name): Column~Uuid~
+        +Uuid.generateV7(): Uuid
+    }
+
+    Column <|-- BooleanColumn
+    Column <|-- CharColumn
+    Column <|-- VarCharColumn
+    Column <|-- TextColumn
+    Column <|-- IntegerColumn
+    Column <|-- FloatColumn
+    Column <|-- DoubleColumn
+    Column <|-- DecimalColumn
+    Column <|-- UnsignedColumn
+    Column <|-- ArrayColumn
+    Column <|-- BlobColumn
+    Column <|-- JavaUUIDColumn
+    Column <|-- KotlinUUIDColumn
+
+    note for ArrayColumn "PostgreSQL / H2 전용"
+    note for KotlinUUIDColumn "@OptIn(ExperimentalUuidApi) 필요 (Kotlin 2.x)"
+```
+
 ## 프로젝트 구조
 
 ```
