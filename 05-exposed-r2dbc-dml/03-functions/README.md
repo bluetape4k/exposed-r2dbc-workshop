@@ -20,6 +20,39 @@ Exposed R2DBC DSL에서 사용 가능한 **SQL 함수(Functions)
 | 컨테이너 | Testcontainers                                  |
 | 테스트  | JUnit 5 + Kluent + ParameterizedTest (멀티 DB 지원) |
 
+## 함수 카테고리
+
+```mermaid
+flowchart TD
+    F["Exposed R2DBC\n함수 라이브러리"]
+
+    F --> C1["문자열 & 조건 함수\n(Ex01_Functions)"]
+    F --> C2["수학 함수\n(Ex02_MathFunction)"]
+    F --> C3["통계 함수\n(Ex03_StatisticsFunction)"]
+    F --> C4["삼각 함수\n(Ex04_TrigonometricalFunction)"]
+    F --> C5["윈도우 함수\n(Ex05_WindowFunction)"]
+
+    C1 --> C1a["upper / lower / concat\ncharLength / substring / trim"]
+    C1 --> C1b["bitwiseAnd / bitwiseOr / bitwiseXor"]
+    C1 --> C1c["case/when / Coalesce"]
+    C1 --> C1d["CustomFunction / CustomOperator"]
+
+    C2 --> C2a["abs / ceil / floor / round"]
+    C2 --> C2b["sqrt / exp / power / sign"]
+
+    C3 --> C3a["stdDevPop / stdDevSamp"]
+    C3 --> C3b["varPop / varSamp"]
+
+    C4 --> C4a["sin / cos / tan / cot"]
+    C4 --> C4b["asin / acos / atan"]
+    C4 --> C4c["degrees / radians / pi"]
+
+    C5 --> C5a["순위: rowNumber / rank\ndenseRank / ntile"]
+    C5 --> C5b["값 접근: lead / lag\nfirstValue / lastValue / nthValue"]
+    C5 --> C5c["분포: percentRank / cumeDist"]
+    C5 --> C5d["집계 OVER: sum / avg\ncount / min / max"]
+```
+
 ## 프로젝트 구조
 
 ```
