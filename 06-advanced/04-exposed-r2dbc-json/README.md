@@ -66,6 +66,31 @@
 
 `Ex01_JsonColumn.kt`와 유사하지만 더 성능이 좋은 `jsonb` 컬럼 타입을 사용합니다. 코드는 거의 동일하며, 주요 차이점은 테이블 정의와 기본 데이터베이스 성능 및 기능에 있음을 보여줍니다.
 
+## 구조 다이어그램
+
+```mermaid
+classDiagram
+    class JsonColumn~T~ {
+        <<Exposed 확장>>
+        +json(name, jsonMapper) Column~T~
+    }
+    class JsonBColumn~T~ {
+        +jsonb(name, jsonMapper) Column~T~
+        note: PostgreSQL 전용 (인덱싱/연산 지원)
+    }
+    class KotlinxJsonMapper~T~ {
+        <<kotlinx.serialization>>
+        +serialize(value: T): String
+        +deserialize(value: String): T
+    }
+
+    JsonColumn <|-- JsonBColumn : json → jsonb 확장
+    JsonColumn --> KotlinxJsonMapper : 직렬화/역직렬화
+```
+
+> `json`: 모든 DB(H2, MySQL, MariaDB, PostgreSQL) 지원 — 텍스트 저장, 쿼리 느림
+> `jsonb`: PostgreSQL 전용 — 바이너리 저장, 인덱싱·`@>` 연산 지원, 쿼리 빠름
+
 ## 코드 예제
 
 ### 1. `jsonb` 컬럼이 있는 테이블 정의
