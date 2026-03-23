@@ -7,6 +7,41 @@ Tink는 Google이 개발한 고수준 암호화 라이브러리로, 안전한 �
 - **DAEAD** (Deterministic Authenticated Encryption with Associated Data): 결정적 암호화로 동일 평문이 항상 동일 암호문을 생성 → `WHERE` 절 검색 가능
 - **AEAD** (Authenticated Encryption with Associated Data): 비결정적 암호화로 매번 다른 암호문을 생성 → 보안 강도가 더 높지만 `WHERE` 절 검색 불가
 
+## 실행 흐름
+
+```mermaid
+sequenceDiagram
+    participant App as 애플리케이션
+    participant Col as TinkColumn
+    participant Tink as Google Tink
+    participant DB as Database
+
+    Note over App,DB: 저장 (INSERT) — AEAD 비결정적 암호화 (AES256_GCM / CHACHA20_POLY1305)
+    App ->> Col: insert { it[secret] = "민감한 데이터" }
+    Col ->> Tink: aead.encrypt("민감한 데이터".toByteArray())
+    Tink -->> Col: ciphertext (매번 다른 바이트)
+    Col ->> DB: INSERT Base64(ciphertext)
+
+    Note over App,DB: 저장 (INSERT) — DAEAD 결정적 암호화 (AES256_SIV)
+    App ->> Col: insert { it[email] = "user@example.com" }
+    Col ->> Tink: daead.encryptDeterministically("user@example.com".toByteArray())
+    Tink -->> Col: deterministicCiphertext (항상 동일)
+    Col ->> DB: INSERT Base64(deterministicCiphertext)
+
+    Note over App,DB: 조회 (SELECT)
+    DB -->> Col: Base64(ciphertext)
+    Col ->> Tink: aead.decrypt(ciphertext)
+    Tink -->> Col: "민감한 데이터".toByteArray()
+    Col -->> App: "민감한 데이터"
+
+    Note over App,DB: WHERE 검색 — DAEAD만 가능
+    App ->> Col: where { email eq "user@example.com" }
+    Col ->> Tink: daead.encryptDeterministically("user@example.com".toByteArray())
+    Tink -->> Col: deterministicCiphertext
+    Col ->> DB: WHERE email = Base64(deterministicCiphertext)
+    DB -->> App: 결과 행 반환
+```
+
 ## 학습 목표
 
 - Tink DAEAD/AEAD 암호화 컬럼 정의 방법 이해

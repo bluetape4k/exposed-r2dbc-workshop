@@ -5,6 +5,41 @@
 
 이 모듈은 비결정적 암호화 방식(기본 `exposed-crypt` 모듈 등)에서 암호화된 데이터를 직접 쿼리할 수 없는 제한을 해결합니다.
 
+## 실행 흐름
+
+```mermaid
+sequenceDiagram
+    participant App as 애플리케이션
+    participant Col as JasyptColumn
+    participant Enc as Jasypt Encryptor
+    participant DB as Database
+
+    Note over App,DB: 저장 (INSERT) — 결정적 암호화 (DeterministicAES / DeterministicRC4)
+    App ->> Col: insert { it[name] = "홍길동" }
+    Col ->> Enc: encrypt("홍길동")
+    Enc -->> Col: "UPq8X_QFkR-tsUFSOwffVQ=="
+    Col ->> DB: INSERT 'UPq8X_QFkR-tsUFSOwffVQ=='
+
+    Note over App,DB: 저장 (INSERT) — 비결정적 암호화 (TripleDES / RC2)
+    App ->> Col: insert { it[address] = "서울시 강남구" }
+    Col ->> Enc: encrypt("서울시 강남구")
+    Enc -->> Col: "<매번 다른 암호문>"
+    Col ->> DB: INSERT '<매번 다른 암호문>'
+
+    Note over App,DB: 조회 (SELECT)
+    DB -->> Col: "UPq8X_QFkR-tsUFSOwffVQ=="
+    Col ->> Enc: decrypt("UPq8X_QFkR-tsUFSOwffVQ==")
+    Enc -->> Col: "홍길동"
+    Col -->> App: "홍길동"
+
+    Note over App,DB: WHERE 검색 — 결정적 암호화만 가능
+    App ->> Col: where { name eq "홍길동" }
+    Col ->> Enc: encrypt("홍길동")
+    Enc -->> Col: "UPq8X_QFkR-tsUFSOwffVQ=="
+    Col ->> DB: WHERE name = 'UPq8X_QFkR-tsUFSOwffVQ=='
+    DB -->> App: 결과 행 반환
+```
+
 ## 학습 목표
 
 - Jasypt 암호화 컬럼(`jasyptVarChar`, `jasyptBinary`) 정의 방법 이해

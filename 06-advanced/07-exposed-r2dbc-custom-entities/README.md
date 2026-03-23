@@ -5,6 +5,81 @@
 
 이 접근 방식은 `06-custom-columns` 모듈의 개념을 기반으로 하여, 커스텀 클라이언트 측 기본값 생성기를 편리하고 재사용 가능한 추상화로 패키징합니다.
 
+## 구조 다이어그램
+
+```mermaid
+classDiagram
+    class IdTable~ID~ {
+        <<abstract>>
+        +id: Column~EntityID~ID~~
+    }
+    class SnowflakeIdTable {
+        <<abstract>>
+        +id: Column~EntityID~Long~~
+        clientDefault: SnowflakeId
+    }
+    class KsuidTable {
+        <<abstract>>
+        +id: Column~EntityID~String~~
+        clientDefault: KSUID (Base62, 27자)
+    }
+    class KsuidMillisTable {
+        <<abstract>>
+        +id: Column~EntityID~String~~
+        clientDefault: KSUID Millis (27자)
+    }
+    class TimebasedUUIDTable {
+        <<abstract>>
+        +id: Column~EntityID~UUID~~
+        clientDefault: UUIDv1 (RFC 4122)
+    }
+    class TimebasedUUIDBase62Table {
+        <<abstract>>
+        +id: Column~EntityID~String~~
+        clientDefault: UUIDv1 + Base62 (22자)
+    }
+    class T1["T1 : SnowflakeIdTable"] {
+        +name: Column~String~
+        +age: Column~Int~
+    }
+
+    IdTable <|-- SnowflakeIdTable
+    IdTable <|-- KsuidTable
+    IdTable <|-- KsuidMillisTable
+    IdTable <|-- TimebasedUUIDTable
+    IdTable <|-- TimebasedUUIDBase62Table
+    SnowflakeIdTable <|-- T1
+```
+
+```mermaid
+erDiagram
+    T_SNOWFLAKE {
+        BIGINT id PK "Snowflake ID (자동 생성)"
+        VARCHAR name "255"
+        INT age
+    }
+    T_KSUID {
+        VARCHAR id PK "KSUID Base62 (27자)"
+        VARCHAR name "255"
+        INT age
+    }
+    T_KSUID_MILLIS {
+        VARCHAR id PK "KSUID Millis (27자)"
+        VARCHAR name "255"
+        INT age
+    }
+    T_TIMEBASED_UUID {
+        UUID id PK "UUIDv1 (RFC 4122)"
+        VARCHAR name "255"
+        INT age
+    }
+    T_TIMEBASED_UUID_BASE62 {
+        VARCHAR id PK "UUIDv1+Base62 (22자)"
+        VARCHAR name "255"
+        INT age
+    }
+```
+
 ## ID 생성 전략 비교
 
 다양한 ID 생성 전략은 저장 타입, 정렬 가능 여부, 길이 등에서 차이가 있습니다. 용도에 맞는 전략을 선택하세요.
