@@ -47,6 +47,40 @@
 | `timestampLiteral(Instant)`                    | 타임스탬프 리터럴        |
 | `timestampWithTimeZoneLiteral(OffsetDateTime)` | 시간대 포함 타임스탬프 리터럴 |
 
+## 구조 다이어그램
+
+```mermaid
+classDiagram
+    class JavaTimeColumn {
+        <<exposed-java-time 확장>>
+    }
+    class DateColumn {
+        +date(name) Column~LocalDate~
+    }
+    class TimeColumn {
+        +time(name) Column~LocalTime~
+    }
+    class DateTimeColumn {
+        +datetime(name) Column~LocalDateTime~
+    }
+    class TimestampColumn {
+        +timestamp(name) Column~Instant~
+    }
+    class TimestampWithTimeZoneColumn {
+        +timestampWithTimeZone(name) Column~OffsetDateTime~
+    }
+    class DurationColumn {
+        +duration(name) Column~Duration~
+    }
+
+    JavaTimeColumn <|-- DateColumn
+    JavaTimeColumn <|-- TimeColumn
+    JavaTimeColumn <|-- DateTimeColumn
+    JavaTimeColumn <|-- TimestampColumn
+    JavaTimeColumn <|-- TimestampWithTimeZoneColumn
+    JavaTimeColumn <|-- DurationColumn
+```
+
 ## 타임존(TimeZone) 주의사항
 
 ### `TIMESTAMP WITH TIME ZONE` DB별 동작 차이
