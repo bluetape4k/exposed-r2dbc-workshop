@@ -34,6 +34,40 @@ Exposed가 제공하는 동일한 강력한 JSON 쿼리 함수 세트를 사용�
 | `.contains(value, path)`      | JSON 문서에 주어진 JSON 값이 포함되어 있는지 확인 |
 | `.exists(path, optional)`     | 주어진 JSONPath 표현식에 키나 값이 존재하는지 확인 |
 
+## 구조 다이어그램
+
+```mermaid
+classDiagram
+    class FastjsonColumn~T~ {
+        <<bluetape4k-exposed>>
+        +fastjson(name) Column~T~
+    }
+    class FastjsonBColumn~T~ {
+        +fastjsonb(name) Column~T~
+        note: PostgreSQL JSONB 전용
+    }
+    class FastJson2Serializer~T~ {
+        +serialize(value: T): String
+        +deserialize(value: String): T
+    }
+    class JSONWriter {
+        <<Fastjson2 (com.alibaba.fastjson2)>>
+        +toJSONString(value): String
+    }
+    class JSONReader {
+        <<Fastjson2 (com.alibaba.fastjson2)>>
+        +read(json, klass): T
+    }
+
+    FastjsonColumn <|-- FastjsonBColumn : json → jsonb 확장
+    FastjsonColumn --> FastJson2Serializer : 위임
+    FastJson2Serializer --> JSONWriter : 직렬화
+    FastJson2Serializer --> JSONReader : 역직렬화
+```
+
+> 어노테이션 불필요 — Fastjson2 리플렉션 기반으로 표준 Kotlin 데이터 클래스·POJO 처리
+> Jackson 대비 직렬화/역직렬화 속도 우위, JSON 처리 성능이 중요한 서비스에 적합
+
 ## 예제 개요
 
 ### `FastjsonSchema.kt`
