@@ -20,6 +20,42 @@ Exposed R2DBC + Kotlin Coroutines 환경에서 비동기 데이터베이스 작�
 | 컨테이너 | Testcontainers                                  |
 | 테스트  | JUnit 5 + Kluent + ParameterizedTest (멀티 DB 지원) |
 
+## 실행 흐름
+
+### Coroutine + R2DBC 트랜잭션
+
+```mermaid
+sequenceDiagram
+    participant T as runTest / TestScope
+    participant W as withTables / withDb
+    participant ST as suspendTransaction
+    participant DB as R2DBC DB
+
+    T ->> W: withTables(testDB, *tables)
+    W ->> DB: SchemaUtils.create(*tables)
+    W ->> ST: suspendTransaction { ... }
+    ST ->> DB: BEGIN
+    ST ->> DB: DML 실행
+    DB -->> ST: Flow / Result
+    ST ->> DB: COMMIT
+    ST -->> W: 결과
+    W ->> DB: SchemaUtils.drop(*tables)
+    W -->> T: 완료
+```
+
+### Flow 수집 패턴
+
+```mermaid
+flowchart TD
+    Q["Table.selectAll()"] --> F["Flow~ResultRow~"]
+    F --> L[".toList() — 전체 수집"]
+    F --> S[".single() — 단일 (없으면 예외)"]
+    F --> SN[".singleOrNull() — 단일 (없으면 null)"]
+    F --> FI[".first() — 첫 번째 (없으면 예외)"]
+    F --> FN[".firstOrNull() — 첫 번째 (없으면 null)"]
+    F --> C[".count() — 개수 (Long)"]
+```
+
 ## 핵심 개념
 
 ### `suspendTransaction` vs `transaction`
