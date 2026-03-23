@@ -182,27 +182,45 @@ cities.crossJoin(users)
 
 아래는 이 모듈에서 공통으로 사용되는 테이블 구조입니다.
 
-```
-Cities                    Users                     UserData
-┌──────────────┐          ┌──────────────────────┐  ┌──────────────────────┐
-│ id (PK, Int) │◄────┐    │ id (PK, VARCHAR(10)) │  │ user_id (FK → Users) │
-│ name VARCHAR │     └────│ city_id (FK)         │◄─│ comment VARCHAR      │
-└──────────────┘          │ name VARCHAR         │  │ value INT            │
-                          │ flags VARCHAR        │  └──────────────────────┘
-                          └──────────────────────┘
+```mermaid
+erDiagram
+    Cities {
+        int city_id PK
+        varchar name
+    }
+    Users {
+        varchar id PK
+        varchar name
+        int city_id FK
+        int flags
+    }
+    UserData {
+        varchar user_id FK
+        varchar comment
+        int value
+    }
+    Sales {
+        int year
+        int month
+        varchar product
+        decimal amount
+    }
+    SomeAmounts {
+        decimal amount
+    }
+    Orgs {
+        int id PK
+        varchar uid UK
+        varchar name
+    }
+    OrgMemberships {
+        int id PK
+        varchar org FK
+    }
 
-Sales
-┌──────────────────────────┐
-│ year    INT              │
-│ month   INT              │
-│ product VARCHAR          │
-│ amount  DECIMAL          │
-└──────────────────────────┘
-
-SomeAmounts
-┌──────────────┐
-│ amount INT   │
-└──────────────┘
+    Cities ||--o{ Users : "city_id → Cities.city_id"
+    Users ||--o{ UserData : "user_id → Users.id"
+    Orgs ||--o{ OrgMemberships : "org → Orgs.uid"
 ```
 
 ## Flow 수집 패턴
