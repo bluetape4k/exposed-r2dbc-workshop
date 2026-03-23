@@ -29,6 +29,33 @@ Jackson 2.x 모듈과 동일한 쿼리 함수를 사용할 수 있습니다:
 | `.contains(value, path)`      | JSON 문서에 주어진 JSON 값이 포함되어 있는지 확인 |
 | `.exists(path, optional)`     | 주어진 JSONPath 표현식에 값이 존재하는지 확인    |
 
+## 구조 다이어그램
+
+```mermaid
+classDiagram
+    class Jackson3Column~T~ {
+        <<bluetape4k-exposed>>
+        +jackson(name) Column~T~
+        -mapper: JsonMapper
+        note: tools.jackson 패키지 (Jackson 3.x)
+    }
+    class Jackson3BColumn~T~ {
+        +jacksonb(name) Column~T~
+        note: PostgreSQL JSONB 전용
+    }
+    class JsonMapper {
+        <<Jackson 3 (tools.jackson.databind)>>
+        +writeValueAsString(value): String
+        +readValue(json, klass): T
+    }
+
+    Jackson3Column <|-- Jackson3BColumn : json → jsonb 확장
+    Jackson3Column --> JsonMapper : 직렬화/역직렬화
+```
+
+> Jackson 2.x(`com.fasterxml.jackson`) → Jackson 3.x(`tools.jackson`) 패키지 변경
+> `JsonMapper`가 Jackson 3.x의 핵심 진입점 — Jackson 2.x의 `ObjectMapper`를 대체
+
 ## 예제 개요
 
 ### `JacksonColumnTest.kt` (DSL & DAO with `json`)
