@@ -13,6 +13,29 @@ JPA의 기본 패턴(Entity, 관계 매핑,
 | 컨테이너 | Testcontainers                                  |
 | 테스트  | JUnit 5 + Kluent + ParameterizedTest (멀티 DB 지원) |
 
+## JPA → Exposed R2DBC 마이그레이션 경로
+
+```mermaid
+flowchart LR
+    subgraph JPA ["JPA (기존)"]
+        JE["@Entity\n@Table(name='...')"]
+        JR["JpaRepository~T,ID~"]
+        JQ["JPQL / @Query"]
+        JT["@Transactional"]
+    end
+    subgraph Exposed ["Exposed R2DBC (전환 후)"]
+        ET["object MyTable\n: IntIdTable('...')"]
+        EQ["Table.selectAll()\n.where { ... }"]
+        EC["Table.insert { }\nTable.update { }"]
+        EST["suspendTransaction { }"]
+    end
+
+    JE -->|"컬럼 정의 이전"| ET
+    JR -->|"CRUD 메서드 이전"| EQ
+    JQ -->|"쿼리 이전"| EC
+    JT -->|"트랜잭션 이전"| EST
+```
+
 ## 프로젝트 구조
 
 ```
