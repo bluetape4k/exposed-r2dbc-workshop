@@ -49,6 +49,40 @@
 | `timestampLiteral(Instant)`                    | 타임스탬프 리터럴        |
 | `timestampWithTimeZoneLiteral(OffsetDateTime)` | 시간대 포함 타임스탬프 리터럴 |
 
+## 구조 다이어그램
+
+```mermaid
+classDiagram
+    class KotlinDateTimeColumn {
+        <<exposed-kotlin-datetime 확장>>
+    }
+    class KotlinLocalDateColumn {
+        +date(name) Column~kotlinx.datetime.LocalDate~
+    }
+    class KotlinLocalTimeColumn {
+        +time(name) Column~kotlinx.datetime.LocalTime~
+    }
+    class KotlinLocalDateTimeColumn {
+        +datetime(name) Column~kotlinx.datetime.LocalDateTime~
+    }
+    class KotlinInstantColumn {
+        +timestamp(name) Column~kotlin.time.Instant~
+    }
+    class KotlinTimestampWithTimeZoneColumn {
+        +timestampWithTimeZone(name) Column~OffsetDateTime~
+    }
+    class KotlinDurationColumn {
+        +duration(name) Column~kotlin.time.Duration~
+    }
+
+    KotlinDateTimeColumn <|-- KotlinLocalDateColumn
+    KotlinDateTimeColumn <|-- KotlinLocalTimeColumn
+    KotlinDateTimeColumn <|-- KotlinLocalDateTimeColumn
+    KotlinDateTimeColumn <|-- KotlinInstantColumn
+    KotlinDateTimeColumn <|-- KotlinTimestampWithTimeZoneColumn
+    KotlinDateTimeColumn <|-- KotlinDurationColumn
+```
+
 ## `java.time` 모듈과의 차이점
 
 `exposed-kotlin-datetime`과 `exposed-java-time`은 거의 동일한 API를 제공하지만 타입 시스템이 다릅니다.
