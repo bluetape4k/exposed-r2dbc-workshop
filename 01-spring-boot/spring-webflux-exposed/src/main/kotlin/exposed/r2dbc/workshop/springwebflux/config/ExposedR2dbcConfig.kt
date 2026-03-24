@@ -30,7 +30,7 @@ import kotlin.math.max
  *
  * 기본 디스패처는 [Dispatchers.IO]를 사용하며, 가상 스레드 기반으로 전환도 가능합니다.
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 class ExposedR2dbcConfig {
 
     companion object: KLoggingChannel()

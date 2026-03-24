@@ -1,10 +1,12 @@
 package exposed.r2dbc.shared.dml
 
 import exposed.r2dbc.shared.dml.DMLTestData.Users.Flags
+import exposed.r2dbc.shared.dml.DMLTestData.withSales
+import exposed.r2dbc.shared.dml.DMLTestData.withSomeAmounts
 import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.idgenerators.uuid.TimebasedUuid
+import io.bluetape4k.idgenerators.uuid.Uuid
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
@@ -376,7 +378,7 @@ object DMLTestData {
     object Orgs: IntIdTable() {
         val uid = varchar("uid", 36)
             .uniqueIndex()
-            .clientDefault { TimebasedUuid.Reordered.nextIdAsString() }
+            .clientDefault { Uuid.V7.nextIdAsString() }
         val name = varchar("name", 255)
     }
 

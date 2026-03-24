@@ -22,7 +22,7 @@ import kotlin.time.toJavaDuration
  * 이벤트 루프 스레드 수, 커넥션 풀, SO_KEEPALIVE/SO_BACKLOG,
  * 읽기·쓰기 타임아웃을 구성하여 고성능 비동기 서버를 설정합니다.
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 class NettyConfig {
     companion object: KLoggingChannel()
 

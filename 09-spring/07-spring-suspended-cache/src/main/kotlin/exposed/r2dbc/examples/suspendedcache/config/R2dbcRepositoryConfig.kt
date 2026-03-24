@@ -8,7 +8,7 @@ import io.bluetape4k.logging.coroutines.KLoggingChannel
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 class R2dbcRepositoryConfig(
     private val suspendedCacheManager: LettuceSuspendedCacheManager,
 ) {
@@ -21,9 +21,9 @@ class R2dbcRepositoryConfig(
     }
 
     @Bean(name = ["cachedCountryR2dbcRepository"])
-    fun cachedCountryR2dbcRepository(): CountryR2dbcRepository {
+    fun cachedCountryR2dbcRepository(countryR2dbcRepository: CountryR2dbcRepository): CountryR2dbcRepository {
         return CachedCountryR2dbcRepository(
-            DefaultCountryR2dbcRepository(),
+            delegate = countryR2dbcRepository,
             cacheManager = suspendedCacheManager,
         )
     }

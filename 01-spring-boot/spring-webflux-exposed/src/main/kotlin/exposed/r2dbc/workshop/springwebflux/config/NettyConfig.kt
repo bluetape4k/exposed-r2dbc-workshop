@@ -22,7 +22,7 @@ import kotlin.time.toJavaDuration
  * Netty 이벤트 루프, 커넥션 풀, 타임아웃 등을 설정하여
  * 고성능 비동기 HTTP 서버를 구성합니다.
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 class NettyConfig {
     companion object: KLogging()
 

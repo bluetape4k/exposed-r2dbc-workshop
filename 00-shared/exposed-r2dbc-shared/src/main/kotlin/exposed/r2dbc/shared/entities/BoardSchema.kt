@@ -3,7 +3,7 @@ package exposed.r2dbc.shared.entities
 import io.bluetape4k.exposed.dao.entityToStringBuilder
 import io.bluetape4k.exposed.dao.idEquals
 import io.bluetape4k.exposed.dao.idHashCode
-import io.bluetape4k.idgenerators.uuid.TimebasedUuid
+import io.bluetape4k.idgenerators.uuid.Uuid
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
@@ -76,7 +76,7 @@ class BoardSchema: KLoggingChannel() {
      * ```
      */
     object Categories: IntIdTable("categories") {
-        val uniqueId = varchar("uniqueId", 22).clientDefault { TimebasedUuid.Reordered.nextIdAsString() }.uniqueIndex()
+        val uniqueId = varchar("uniqueId", 22).clientDefault { Uuid.V7.nextIdAsString() }.uniqueIndex()
         val title = varchar("title", 50)
     }
 

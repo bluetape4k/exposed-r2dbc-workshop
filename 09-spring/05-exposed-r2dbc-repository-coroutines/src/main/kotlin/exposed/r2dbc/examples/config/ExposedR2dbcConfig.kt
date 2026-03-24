@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Primary
 import org.springframework.context.annotation.Profile
 import java.time.Duration
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 class ExposedR2dbcConfig {
 
     companion object: KLoggingChannel()
