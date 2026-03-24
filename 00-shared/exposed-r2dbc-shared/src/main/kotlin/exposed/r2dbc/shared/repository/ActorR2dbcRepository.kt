@@ -2,7 +2,7 @@ package exposed.r2dbc.shared.repository
 
 import exposed.r2dbc.shared.repository.MovieSchema.ActorTable
 import io.bluetape4k.exposed.r2dbc.repository.R2dbcRepository
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -15,7 +15,7 @@ import java.time.LocalDate
 
 class ActorR2dbcRepository: R2dbcRepository<Long, ActorRecord> {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     override val table = ActorTable
     override fun extractId(entity: ActorRecord): Long = entity.id

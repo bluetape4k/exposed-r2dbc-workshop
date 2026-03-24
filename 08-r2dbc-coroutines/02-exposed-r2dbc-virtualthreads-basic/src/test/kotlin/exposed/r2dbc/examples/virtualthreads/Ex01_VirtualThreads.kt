@@ -78,7 +78,11 @@ class Ex01_VirtualThreads: AbstractR2dbcExposedTest() {
         val name = varchar("name", 50).nullable()
     }
 
-    data class VRecord(val id: Int, val name: String?): Serializable
+    data class VRecord(val id: Int, val name: String?): Serializable {
+        companion object {
+            private const val serialVersionUID = 1L
+        }
+    }
 
     fun ResultRow.toVRecord(): VRecord = VRecord(this[VTester.id].value, this[VTester.name])
 

@@ -89,6 +89,10 @@ object SimpleSchema {
         val name: String,
         val description: String?,
     ): Serializable {
+        companion object {
+            private const val serialVersionUID = 1L
+        }
+
         fun withId(id: Long) = copy(id = id)
     }
 

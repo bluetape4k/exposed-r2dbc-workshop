@@ -145,7 +145,11 @@ object PersonSchema: KLoggingChannel() {
         val employed: Boolean? = null,
         val occupation: String? = null,
         val address: Long? = null,
-    ): Serializable
+    ): Serializable {
+        companion object {
+            private const val serialVersionUID = 1L
+        }
+    }
 
     /**
      * 연관 엔티티([Address])를 포함하는 가변 데이터 클래스. JPA의 Fetch Join 결과 매핑에 해당합니다.
@@ -158,7 +162,11 @@ object PersonSchema: KLoggingChannel() {
         var employed: Boolean? = null,
         var occupation: String? = null,
         var address: Address? = null,
-    ): Serializable
+    ): Serializable {
+        companion object {
+            private const val serialVersionUID = 1L
+        }
+    }
 
     suspend fun withPersons(
         testDB: TestDB,

@@ -74,7 +74,11 @@ class BinarySerializedBlobColumnTypeTest: AbstractR2dbcExposedTest() {
         val name: String,
         val age: Int,
         val address: String,
-    ): Serializable
+    ): Serializable {
+        companion object {
+            private const val serialVersionUID = 1L
+        }
+    }
 
     // Schema evolution을 위해 추가된 필드
     data class Embeddable2(
@@ -82,7 +86,11 @@ class BinarySerializedBlobColumnTypeTest: AbstractR2dbcExposedTest() {
         val age: Int,
         val address: String,
         val zipcode: String,
-    ): Serializable
+    ): Serializable {
+        companion object {
+            private const val serialVersionUID = 1L
+        }
+    }
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)

@@ -86,7 +86,11 @@ class Ex50_RecursiveCTE: AbstractR2dbcExposedTest() {
         val parentId: Int?,
         val name: String,
         val path: String,
-    ): Serializable
+    ): Serializable {
+        companion object {
+            private const val serialVersionUID = 1L
+        }
+    }
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)

@@ -33,7 +33,11 @@ data class ActorRecord(
 data class MovieActorRecord(
     val movieId: Long,
     val actorId: Long,
-): Serializable
+): Serializable {
+    companion object {
+        private const val serialVersionUID = 1L
+    }
+}
 
 
 /**
@@ -42,7 +46,11 @@ data class MovieActorRecord(
 data class MovieActorCountRecord(
     val movieName: String,
     val actorCount: Int,
-): Serializable
+): Serializable {
+    companion object {
+        private const val serialVersionUID = 1L
+    }
+}
 
 
 /**
@@ -54,7 +62,11 @@ data class MovieWithActorRecord(
     val releaseDate: String,
     val actors: MutableList<ActorRecord> = mutableListOf(),
     val id: Long? = null,
-): Serializable
+): Serializable {
+    companion object {
+        private const val serialVersionUID = 1L
+    }
+}
 
 
 /**
@@ -63,4 +75,8 @@ data class MovieWithActorRecord(
 data class MovieWithProducingActorRecord(
     val movieName: String,
     val producerActorName: String,
-): Serializable
+): Serializable {
+    companion object {
+        private const val serialVersionUID = 1L
+    }
+}

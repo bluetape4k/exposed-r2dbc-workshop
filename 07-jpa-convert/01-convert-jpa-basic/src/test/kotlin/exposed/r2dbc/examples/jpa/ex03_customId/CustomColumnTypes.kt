@@ -32,6 +32,7 @@ import java.io.Serializable
 @JvmInline
 value class Email(val value: String = EMPTY.value): Comparable<Email>, Serializable {
     companion object {
+        private const val serialVersionUID = 1L
         val emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex()
         val EMPTY = Email("")
     }
@@ -60,6 +61,7 @@ class StringToEmailTransformer: ColumnTransformer<String, Email> {
 @JvmInline
 value class Ssn(val value: String): Serializable, Comparable<Ssn> {
     companion object {
+        private const val serialVersionUID = 1L
         val ssnRegex = "^(\\d{6})(\\d{7})$".toRegex()
         val EMPTY = Ssn("")
         const val SSN_LENGTH = 14

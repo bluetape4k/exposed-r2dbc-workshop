@@ -41,7 +41,11 @@ class Ex22_ColumnWithTransform: AbstractR2dbcExposedTest() {
     companion object: KLoggingChannel()
 
     @JvmInline
-    value class Holder(val value: Int): Serializable
+    value class Holder(val value: Int): Serializable {
+        companion object {
+            private const val serialVersionUID = 1L
+        }
+    }
 
     // Holder <-> Int 변환을 수행하는 [ColumnTransformer] 구현
     class HolderTransformer: ColumnTransformer<Int, Holder> {
@@ -290,7 +294,11 @@ class Ex22_ColumnWithTransform: AbstractR2dbcExposedTest() {
     }
 
     @JvmInline
-    value class CustomId(val id: UUID): Serializable
+    value class CustomId(val id: UUID): Serializable {
+        companion object {
+            private const val serialVersionUID = 1L
+        }
+    }
 
     /**
      * value class 를 entity id 로 사용하는 예제 (`transform` 함수를 이용해 wrapping, unwrapping을 수행)

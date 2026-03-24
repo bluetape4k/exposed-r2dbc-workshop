@@ -150,7 +150,11 @@ object PersonSchema {
         val employed: Boolean? = null,
         val occupation: String? = null,
         val address: Long? = null,
-    ): Serializable
+    ): Serializable {
+        companion object {
+            private const val serialVersionUID = 1L
+        }
+    }
 
     /**
      * 주소 정보를 포함한 사람 정보 데이터 클래스.
@@ -173,7 +177,11 @@ object PersonSchema {
         var employed: Boolean? = null,
         var occupation: String? = null,
         var address: AddressRecord? = null,
-    ): Serializable
+    ): Serializable {
+        companion object {
+            private const val serialVersionUID = 1L
+        }
+    }
 
     /**
      * `addresses` 테이블 조회 결과를 담는 데이터 클래스.
@@ -190,7 +198,11 @@ object PersonSchema {
         val city: String? = null,
         val state: String? = null,
         val zip: String? = null,
-    ): Serializable
+    ): Serializable {
+        companion object {
+            private const val serialVersionUID = 1L
+        }
+    }
 
     /**
      * 테스트용 Person/Address 테이블을 생성하고 빈 상태로 블록을 실행합니다.

@@ -11,6 +11,10 @@ data class MovieRecord(
     val releaseDate: String,
     val id: Long? = null,
 ): Serializable {
+    companion object {
+        private const val serialVersionUID = 1L
+    }
+
     fun withId(id: Long) = copy(id = id)
 }
 
@@ -23,6 +27,10 @@ data class ActorRecord(
     val birthday: String? = null,
     val id: Long? = null,
 ): Serializable {
+    companion object {
+        private const val serialVersionUID = 1L
+    }
+
     fun withId(id: Long) = copy(id = id)
 }
 
@@ -32,7 +40,11 @@ data class ActorRecord(
 data class MovieActorRecord(
     val movieId: Long,
     val actorId: Long,
-): Serializable
+): Serializable {
+    companion object {
+        private const val serialVersionUID = 1L
+    }
+}
 
 
 /**
@@ -41,7 +53,11 @@ data class MovieActorRecord(
 data class MovieActorCountRecord(
     val movieName: String,
     val actorCount: Int,
-): Serializable
+): Serializable {
+    companion object {
+        private const val serialVersionUID = 1L
+    }
+}
 
 /**
  * 영화 정보와 해당 영화에 출연한 배우 정보를 나타내는 DTO
@@ -52,7 +68,11 @@ data class MovieWithActorRecord(
     val releaseDate: String,
     val actors: MutableList<ActorRecord> = mutableListOf(),
     val id: Long? = null,
-): Serializable
+): Serializable {
+    companion object {
+        private const val serialVersionUID = 1L
+    }
+}
 
 /**
  * 영화 제목과 영화를 제작한 배우의 이름을 나타내는 DTO
@@ -60,4 +80,8 @@ data class MovieWithActorRecord(
 data class MovieWithProducingActorRecord(
     val movieName: String,
     val producerActorName: String,
-): Serializable
+): Serializable {
+    companion object {
+        private const val serialVersionUID = 1L
+    }
+}

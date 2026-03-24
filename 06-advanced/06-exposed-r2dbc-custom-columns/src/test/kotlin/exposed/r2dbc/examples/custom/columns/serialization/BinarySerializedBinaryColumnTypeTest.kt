@@ -93,14 +93,22 @@ class BinarySerializedBinaryColumnTypeTest: AbstractR2dbcExposedTest() {
         val name: String,
         val age: Int,
         val address: String,
-    ): Serializable
+    ): Serializable {
+        companion object {
+            private const val serialVersionUID = 1L
+        }
+    }
 
     data class Embeddable2(
         val name: String,
         val age: Int,
         val address: String,
         val zipcode: String,
-    ): Serializable
+    ): Serializable {
+        companion object {
+            private const val serialVersionUID = 1L
+        }
+    }
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
