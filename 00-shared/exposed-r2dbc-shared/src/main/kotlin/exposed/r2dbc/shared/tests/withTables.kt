@@ -1,11 +1,15 @@
 package exposed.r2dbc.shared.tests
 
+import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.warn
 import org.jetbrains.exposed.v1.core.DatabaseConfig
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.transactionManager
+
+private object WithTablesLogger : KLogging()
 
 /**
  * 테스트 실행 전/후 테이블을 생성/정리하면서 [statement]를 수행합니다.
@@ -41,8 +45,8 @@ suspend fun withTables(
                 SchemaUtils.drop(*tables)
                 commit()
             } catch (ex: Throwable) {
-                println("Failed to drop tables: ${ex.message}")
-                val database = testDB.db!!
+                WithTablesLogger.log.warn(ex) { "Failed to drop tables" }
+                val database = checkNotNull(testDB.db) { "Database for $testDB not initialized" }
                 val recoveryFailure = runCatching {
                     inTopLevelSuspendTransaction(
                         transactionIsolation = database.transactionManager.defaultIsolationLevel!!,

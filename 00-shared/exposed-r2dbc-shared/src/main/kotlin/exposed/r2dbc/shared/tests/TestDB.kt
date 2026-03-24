@@ -242,6 +242,7 @@ enum class TestDB(
     );
 
     /** 이 [TestDB]에 해당하는 [R2dbcDatabase] 인스턴스. 최초 연결 시 설정됩니다. */
+    @Volatile
     var db: R2dbcDatabase? = null
 
     /**

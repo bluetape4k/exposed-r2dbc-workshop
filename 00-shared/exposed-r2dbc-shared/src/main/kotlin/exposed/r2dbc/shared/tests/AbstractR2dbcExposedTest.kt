@@ -1,7 +1,7 @@
 package exposed.r2dbc.shared.tests
 
 import io.bluetape4k.junit5.faker.Fakers
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import org.jetbrains.exposed.v1.core.Schema
 import java.util.*
 
@@ -47,7 +47,7 @@ abstract class AbstractR2dbcExposedTest {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
     }
 
-    companion object: KLogging() {
+    companion object: KLoggingChannel() {
         @JvmStatic
         val faker = Fakers.faker
 

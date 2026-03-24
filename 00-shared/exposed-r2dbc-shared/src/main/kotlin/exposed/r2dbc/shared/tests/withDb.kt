@@ -45,7 +45,6 @@ suspend fun withDb(
     configure: (DatabaseConfig.Builder.() -> Unit)? = null,
     statement: suspend R2dbcTransaction.(TestDB) -> Unit,
 ) {
-
     acquireSemaphoreSuspending(testDB)
     try {
         val unregistered = testDB !in registeredOnShutdown || testDB.db == null

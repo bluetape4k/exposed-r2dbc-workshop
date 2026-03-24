@@ -305,7 +305,7 @@ object DMLTestData {
     ) {
         val someAmounts = SomeAmounts
 
-        withTables(testDB, someAmounts) {
+        withTables(testDB, someAmounts) { db ->
             suspend fun insertAmount(amount: BigDecimal) {
                 someAmounts.insert {
                     it[SomeAmounts.amount] = amount
@@ -315,7 +315,7 @@ object DMLTestData {
             insertAmount("1500.25".toBigDecimal())
             insertAmount("1000.00".toBigDecimal())
 
-            statement(it, someAmounts)
+            statement(db, someAmounts)
         }
     }
 

@@ -48,6 +48,10 @@ object OrderSchema {
         val quantity: Int? = null,
         val description: String? = null,
     ): Comparable<OrderRecord>, Serializable {
+        companion object {
+            private const val serialVersionUID = 1L
+        }
+
         override fun compareTo(other: OrderRecord): Int =
             orderId?.compareTo(other.orderId ?: 0)
                 ?: itemId?.compareTo(other.itemId ?: 0)
