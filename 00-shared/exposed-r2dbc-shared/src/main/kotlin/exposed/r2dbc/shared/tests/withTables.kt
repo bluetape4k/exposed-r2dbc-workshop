@@ -2,6 +2,7 @@ package exposed.r2dbc.shared.tests
 
 import io.bluetape4k.logging.KLogging
 import io.bluetape4k.logging.warn
+import io.bluetape4k.support.requireNotNull
 import org.jetbrains.exposed.v1.core.DatabaseConfig
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
@@ -46,7 +47,7 @@ suspend fun withTables(
                 commit()
             } catch (ex: Throwable) {
                 WithTablesLogger.log.warn(ex) { "Failed to drop tables" }
-                val database = checkNotNull(testDB.db) { "Database for $testDB not initialized" }
+                val database = testDB.db.requireNotNull("testDB.db")
                 val recoveryFailure = runCatching {
                     inTopLevelSuspendTransaction(
                         transactionIsolation = database.transactionManager.defaultIsolationLevel!!,

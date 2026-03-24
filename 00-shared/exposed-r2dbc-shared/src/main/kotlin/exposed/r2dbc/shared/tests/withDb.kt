@@ -1,5 +1,6 @@
 package exposed.r2dbc.shared.tests
 
+import io.bluetape4k.support.requireNotNull
 import io.bluetape4k.utils.Runtimex
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -59,7 +60,7 @@ suspend fun withDb(
             testDB.db = testDB.connect(configure ?: {})
         }
 
-        val registeredDb = testDB.db!!
+        val registeredDb = testDB.db.requireNotNull("testDB.db")
         val database = when {
             configure == null -> registeredDb
             unregistered -> registeredDb

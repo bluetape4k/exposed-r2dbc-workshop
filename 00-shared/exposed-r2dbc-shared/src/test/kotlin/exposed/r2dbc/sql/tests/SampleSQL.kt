@@ -1,7 +1,7 @@
 package exposed.r2dbc.sql.tests
 
 import io.bluetape4k.junit5.coroutines.runSuspendTest
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 
 class SampleSQL {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     object Users: Table() {
         val id: Column<String> = varchar("id", 10)

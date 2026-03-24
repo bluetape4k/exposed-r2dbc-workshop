@@ -4,7 +4,7 @@ import exposed.r2dbc.shared.repository.MovieSchema.ActorTable
 import exposed.r2dbc.shared.repository.MovieSchema.withMovieAndActors
 import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
@@ -25,7 +25,7 @@ import org.junit.jupiter.params.provider.MethodSource
 
 class ActorRepositoryTest: AbstractR2dbcExposedTest() {
 
-    companion object: KLogging() {
+    companion object: KLoggingChannel() {
         fun newActorRecord(): ActorRecord = ActorRecord(
             id = 0L,
             firstName = faker.name().firstName(),

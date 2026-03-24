@@ -4,7 +4,7 @@ import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withDb
 import exposed.r2dbc.shared.tests.withTables
-import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.coroutines.test.runTest
@@ -40,7 +40,7 @@ import kotlin.uuid.Uuid
 @OptIn(ExperimentalUuidApi::class)
 class Ex10_KotlinUUIDColumnType: AbstractR2dbcExposedTest() {
 
-    companion object: KLogging()
+    companion object: KLoggingChannel()
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
