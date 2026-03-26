@@ -9,14 +9,13 @@ import kotlinx.coroutines.flow.first
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.ReferenceOption.CASCADE
 import org.jetbrains.exposed.v1.core.Table
-import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.javatime.date
 import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
+import org.jetbrains.exposed.v1.r2dbc.andWhere
 import org.jetbrains.exposed.v1.r2dbc.batchInsert
-import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.select
 import java.time.LocalDate
 
@@ -123,15 +122,19 @@ object MovieSchema: KLogging() {
             val movieId =
                 MovieTable.select(MovieTable.id).where { MovieTable.name eq movie.name }.first()[MovieTable.id]
 
-            movie.actors.forEach { actor ->
-                val actorId = ActorTable.select(ActorTable.id)
-                    .where { (ActorTable.firstName eq actor.firstName) and (ActorTable.lastName eq actor.lastName) }
+            val actorIds = movie.actors.map { actor ->
+                ActorTable
+                    .select(ActorTable.id)
+                    .where { ActorTable.firstName eq actor.firstName }
+                    .andWhere { ActorTable.lastName eq actor.lastName }
                     .first()[ActorTable.id]
+            }
 
-                ActorInMovieTable.insert {
-                    it[ActorInMovieTable.actorId] = actorId.value
-                    it[ActorInMovieTable.movieId] = movieId.value
-                }
+            val movieActorIds = actorIds.map { movieId to it }
+
+            ActorInMovieTable.batchInsert(movieActorIds) {
+                this[ActorInMovieTable.movieId] = it.first.value
+                this[ActorInMovieTable.actorId] = it.second.value
             }
         }
     }

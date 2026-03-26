@@ -10,12 +10,11 @@ import io.bluetape4k.logging.info
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
+import org.jetbrains.exposed.v1.r2dbc.andWhere
 import org.jetbrains.exposed.v1.r2dbc.batchInsert
-import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.select
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
@@ -128,17 +127,19 @@ class DataInitializer(private val database: R2dbcDatabase): ApplicationListener<
                 .limit(1)
                 .first()[MovieTable.id]
 
-            movie.actors.forEach { actor ->
-                val actorId = ActorTable
+            val actorIds = movie.actors.map { actor ->
+                ActorTable
                     .select(ActorTable.id)
-                    .where { (ActorTable.firstName eq actor.firstName) and (ActorTable.lastName eq actor.lastName) }
-                    .limit(1)
+                    .where { ActorTable.firstName eq actor.firstName }
+                    .andWhere { ActorTable.lastName eq actor.lastName }
                     .first()[ActorTable.id]
+            }
 
-                ActorInMovieTable.insert {
-                    it[ActorInMovieTable.actorId] = actorId.value
-                    it[ActorInMovieTable.movieId] = movieId.value
-                }
+            val movieActorIds = actorIds.map { movieId to it }
+
+            ActorInMovieTable.batchInsert(movieActorIds) {
+                this[ActorInMovieTable.movieId] = it.first.value
+                this[ActorInMovieTable.actorId] = it.second.value
             }
         }
     }

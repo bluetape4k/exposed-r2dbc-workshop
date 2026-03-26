@@ -14,7 +14,6 @@ import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.andWhere
 import org.jetbrains.exposed.v1.r2dbc.batchInsert
-import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.select
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
@@ -163,18 +162,19 @@ class DataInitializer: ApplicationListener<ApplicationReadyEvent> {
                 .limit(1)
                 .first()[MovieTable.id]
 
-            movie.actors.forEach { actor ->
-                val actorId = ActorTable
+            val actorIds = movie.actors.map { actor ->
+                ActorTable
                     .select(ActorTable.id)
                     .where { ActorTable.firstName eq actor.firstName }
                     .andWhere { ActorTable.lastName eq actor.lastName }
-                    .limit(1)
                     .first()[ActorTable.id]
+            }
 
-                ActorInMovieTable.insert {
-                    it[ActorInMovieTable.actorId] = actorId.value
-                    it[ActorInMovieTable.movieId] = movieId.value
-                }
+            val movieActorIds = actorIds.map { movieId to it }
+
+            ActorInMovieTable.batchInsert(movieActorIds) {
+                this[ActorInMovieTable.movieId] = it.first.value
+                this[ActorInMovieTable.actorId] = it.second.value
             }
         }
     }
