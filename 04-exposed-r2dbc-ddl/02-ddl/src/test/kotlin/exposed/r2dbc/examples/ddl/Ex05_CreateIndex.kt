@@ -70,7 +70,6 @@ class Ex05_CreateIndex: AbstractR2dbcExposedTest() {
      * CREATE INDEX tester_by_name ON tester ("name");
      * ```
      */
-    @Suppress("DEPRECATION")
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `표준 인덱스 정의`(testDB: TestDB) = runTest {
@@ -80,12 +79,12 @@ class Ex05_CreateIndex: AbstractR2dbcExposedTest() {
 
             override val primaryKey = PrimaryKey(id)
 
-            // 인덱스 정의 
+            // 인덱스 정의
             val byName = index("tester_by_name", isUnique = false, name)
         }
 
         withDb(testDB) {
-            SchemaUtils.createMissingTablesAndColumns(tester)
+            SchemaUtils.create(tester)
 
             val ddl = tester.ddl.single()
             log.info { "tester ddl: $ddl" }
@@ -118,7 +117,6 @@ class Ex05_CreateIndex: AbstractR2dbcExposedTest() {
      * CREATE INDEX tester_by_name ON tester (`name`) USING HASH;
      * ```
      */
-    @Suppress("DEPRECATION")
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `Hash Index 생성하기`(testDB: TestDB) = runTest {
@@ -133,7 +131,7 @@ class Ex05_CreateIndex: AbstractR2dbcExposedTest() {
         }
 
         withDb(testDB) {
-            SchemaUtils.createMissingTablesAndColumns(tester)
+            SchemaUtils.create(tester)
 
             val ddl = tester.ddl.single()
             log.info { "tester ddl: $ddl" }
@@ -166,7 +164,6 @@ class Ex05_CreateIndex: AbstractR2dbcExposedTest() {
      *      ADD CONSTRAINT tester_another_value_unique UNIQUE (another_value);
      * ```
      */
-    @Suppress("DEPRECATION")
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `특정 조건일 때만 인덱싱되는 partial index 생성`(testDB: TestDB) = runTest {
@@ -190,7 +187,7 @@ class Ex05_CreateIndex: AbstractR2dbcExposedTest() {
         }
 
         withDb(testDB) {
-            SchemaUtils.createMissingTablesAndColumns(tester)
+            SchemaUtils.create(tester)
 
             log.info { "tester ddl: ${tester.ddl.single()}" }
             tester.exists().shouldBeTrue()

@@ -599,10 +599,10 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
         withDb(testDB) {
             if (testDB == TestDB.MYSQL_V5) {
                 expectException<UnsupportedByDialectException> {
-                    SchemaUtils.createMissingTablesAndColumns(defaultTester)
+                    SchemaUtils.create(defaultTester)
                 }
             } else {
-                SchemaUtils.createMissingTablesAndColumns(defaultTester)
+                SchemaUtils.create(defaultTester)
                 defaultTester.exists().shouldBeTrue()
 
                 // ensure defaults match returned metadata defaults

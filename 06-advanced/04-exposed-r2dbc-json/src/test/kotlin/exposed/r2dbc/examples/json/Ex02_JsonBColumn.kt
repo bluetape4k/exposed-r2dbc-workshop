@@ -542,10 +542,10 @@ class Ex02_JsonBColumn: R2dbcExposedJsonTest() {
         withDb(testDB) {
             if (testDB in binaryJsonNotSupportedDB) {
                 expectException<UnsupportedByDialectException> {
-                    SchemaUtils.createMissingTablesAndColumns(defaultTester)
+                    SchemaUtils.create(defaultTester)
                 }
             } else {
-                SchemaUtils.createMissingTablesAndColumns(defaultTester)
+                SchemaUtils.create(defaultTester)
                 defaultTester.exists().shouldBeTrue()
 
                 // ensure defaults match returned metadata defaults

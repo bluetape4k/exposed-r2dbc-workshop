@@ -12,6 +12,7 @@ import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IdTable
+import org.jetbrains.exposed.v1.migration.r2dbc.MigrationUtils
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.exists
 import org.jetbrains.exposed.v1.r2dbc.insert
@@ -61,7 +62,6 @@ class Ex03_CreateMissingTableAndColumns: AbstractR2dbcExposedTest() {
      * ALTER TABLE tester ADD CONSTRAINT tester_time_unique UNIQUE ("time");
      * ```
      */
-    @Suppress("DEPRECATION")
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `누락된 테이블과 컬럼을 생성 - 01`(testDB: TestDB) = runTest {
@@ -85,7 +85,9 @@ class Ex03_CreateMissingTableAndColumns: AbstractR2dbcExposedTest() {
             SchemaUtils.create(testerV1)
 
             // V2 테이블의 uniqueIndex 를 추가합니다.
-            SchemaUtils.createMissingTablesAndColumns(testerV2)
+            val stmts = MigrationUtils.statementsRequiredForDatabaseMigration(testerV2)
+            execInBatch(stmts)
+            commit()
 
             testerV2.exists().shouldBeTrue()
             SchemaUtils.drop(testerV2)
@@ -109,7 +111,6 @@ class Ex03_CreateMissingTableAndColumns: AbstractR2dbcExposedTest() {
      * CREATE INDEX users2_camelcased ON users2 ("camelCased");
      * ```
      */
-    @Suppress("DEPRECATION")
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `누락된 테이블과 컬럼을 생성 - 02`(testDB: TestDB) = runTest {
@@ -128,12 +129,12 @@ class Ex03_CreateMissingTableAndColumns: AbstractR2dbcExposedTest() {
         withDb(testDB) {
             tester.exists().shouldBeFalse()
 
-            SchemaUtils.createMissingTablesAndColumns(tester)
+            SchemaUtils.create(tester)
             tester.exists().shouldBeTrue()
 
             try {
                 // 아무런 작업도 하지 않습니다.
-                SchemaUtils.createMissingTablesAndColumns(tester)
+                execInBatch(MigrationUtils.statementsRequiredForDatabaseMigration(tester))
             } finally {
                 SchemaUtils.drop(tester)
             }
@@ -160,7 +161,6 @@ class Ex03_CreateMissingTableAndColumns: AbstractR2dbcExposedTest() {
      *      ALTER COLUMN idcol DROP DEFAULT;
      * ```
      */
-    @Suppress("DEPRECATION")
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `같은 테이블에 대한 매핑 중 autoIncrement를 없앨 수 있다`(testDB: TestDB) = runTest {
@@ -182,12 +182,13 @@ class Ex03_CreateMissingTableAndColumns: AbstractR2dbcExposedTest() {
             try {
                 t1.exists().shouldBeFalse()
 
-                SchemaUtils.createMissingTablesAndColumns(t1)
+                SchemaUtils.create(t1)
                 t1.exists().shouldBeTrue()
                 t1.insert { it[text] = "ABC" }
 
                 // t2 로 테이블 (`tester`) 를 변경하면, `id` 컬럼이 autoIncrement 가 아니게 됩니다.
-                SchemaUtils.createMissingTablesAndColumns(t2)
+                execInBatch(MigrationUtils.statementsRequiredForDatabaseMigration(t2))
+                commit()
 
                 assertFailAndRollback("Can't insert without primaryKey value") {
                     t2.insert { it[text] = "ABC" }
