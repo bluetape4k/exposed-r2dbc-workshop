@@ -169,7 +169,7 @@ class Ex01_VirtualThreads: AbstractR2dbcExposedTest() {
             val recordCount = 10
             val results = CopyOnWriteArrayList<Int>()
 
-            val vtScope = CoroutineScope(Dispatchers.newVT)
+            val vtScope = CoroutineScope(Dispatchers.newVT())
             List(recordCount) { index ->
                 vtScope.launch {
                     inTopLevelSuspendTransaction(
