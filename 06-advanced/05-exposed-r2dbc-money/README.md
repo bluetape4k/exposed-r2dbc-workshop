@@ -62,8 +62,8 @@ classDiagram
     class CurrencyUnit {
         <<JSR-354>>
         +currencyCode: String
-        note: ISO 4217 코드 (USD, KRW 등)
     }
+    note for CurrencyUnit "ISO 4217 코드 (USD, KRW 등)"
 
     CompositeMoney --> MonetaryAmount : Column 값 타입
     Money ..|> MonetaryAmount : 구현

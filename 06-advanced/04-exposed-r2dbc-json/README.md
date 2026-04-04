@@ -76,8 +76,8 @@ classDiagram
     }
     class JsonBColumn~T~ {
         +jsonb(name, jsonMapper) Column~T~
-        note: PostgreSQL 전용 (인덱싱/연산 지원)
     }
+    note for JsonBColumn "PostgreSQL 전용 (인덱싱/연산 지원)"
     class KotlinxJsonMapper~T~ {
         <<kotlinx.serialization>>
         +serialize(value: T): String

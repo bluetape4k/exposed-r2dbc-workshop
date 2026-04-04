@@ -67,9 +67,9 @@ classDiagram
 
 ```mermaid
 flowchart TD
-    REQ["캐시 조회 요청\nget(key)"] --> L1{L1 캐시\n(Caffeine\nNear Cache) HIT?}
+    REQ["캐시 조회 요청\nget(key)"] --> L1{"L1 캐시\n(Caffeine\nNear Cache) HIT?"}
     L1 -->|HIT| R1["L1에서 즉시 반환\n(나노초 단위)"]
-    L1 -->|MISS| L2{L2 캐시\n(Redisson\nMapCache) HIT?}
+    L1 -->|MISS| L2{"L2 캐시\n(Redisson\nMapCache) HIT?"}
     L2 -->|HIT| FILL1["L1에 저장 후 반환\n(마이크로초 단위)"]
     L2 -->|MISS| DB["DB 조회\nsuspendTransaction\n(Exposed R2DBC)"]
     DB --> FILL2["L2(Redisson)에 저장\n(TTL 적용)"]

@@ -71,8 +71,8 @@ classDiagram
     }
     class JacksonBColumn~T~ {
         +jacksonb(name) Column~T~
-        note: PostgreSQL JSONB 전용
     }
+    note for JacksonBColumn "PostgreSQL JSONB 전용"
     class ObjectMapper {
         <<Jackson (com.fasterxml.jackson)>>
         +writeValueAsString(value): String
@@ -81,8 +81,8 @@ classDiagram
     class KotlinModule {
         <<Jackson 확장>>
         +Kotlin 데이터 클래스 지원
-        note: 자동 등록됨
     }
+    note for KotlinModule "자동 등록됨"
 
     JacksonColumn <|-- JacksonBColumn : json → jsonb 확장
     JacksonColumn --> ObjectMapper : 직렬화/역직렬화

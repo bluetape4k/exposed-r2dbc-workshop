@@ -35,8 +35,8 @@ classDiagram
         +sqlType(): String → VARCHAR
         +valueFromDB(): String → decrypt
         +notNullValueToDB(): encrypt → String
-        note: 결정적 암호화 (검색 가능)
     }
+    note for EncryptedColumnType "결정적 암호화 (검색 가능)"
     class BinarySerializedColumnType~T~ {
         +sqlType(): String → BLOB
         +valueFromDB(): ByteArray → deserialize

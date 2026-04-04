@@ -37,12 +37,12 @@ classDiagram
         <<bluetape4k-exposed>>
         +jackson(name) Column~T~
         -mapper: JsonMapper
-        note: tools.jackson 패키지 (Jackson 3.x)
     }
+    note for Jackson3Column "tools.jackson 패키지 (Jackson 3.x)"
     class Jackson3BColumn~T~ {
         +jacksonb(name) Column~T~
-        note: PostgreSQL JSONB 전용
     }
+    note for Jackson3BColumn "PostgreSQL JSONB 전용"
     class JsonMapper {
         <<Jackson 3 (tools.jackson.databind)>>
         +writeValueAsString(value): String

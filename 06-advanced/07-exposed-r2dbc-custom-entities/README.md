@@ -21,22 +21,22 @@ classDiagram
     class KsuidTable {
         <<abstract>>
         +id: Column~EntityID~String~~
-        clientDefault: KSUID (Base62, 27자)
+        clientDefault: KSUID-Base62 27자
     }
     class KsuidMillisTable {
         <<abstract>>
         +id: Column~EntityID~String~~
-        clientDefault: KSUID Millis (27자)
+        clientDefault: KSUID-Millis 27자
     }
     class TimebasedUUIDTable {
         <<abstract>>
         +id: Column~EntityID~UUID~~
-        clientDefault: UUIDv1 (RFC 4122)
+        clientDefault: UUIDv1 RFC4122
     }
     class TimebasedUUIDBase62Table {
         <<abstract>>
         +id: Column~EntityID~String~~
-        clientDefault: UUIDv1 + Base62 (22자)
+        clientDefault: UUIDv1+Base62 22자
     }
     class T1["T1 : SnowflakeIdTable"] {
         +name: Column~String~

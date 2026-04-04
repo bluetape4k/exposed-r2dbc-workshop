@@ -44,8 +44,8 @@ classDiagram
     }
     class FastjsonBColumn~T~ {
         +fastjsonb(name) Column~T~
-        note: PostgreSQL JSONB 전용
     }
+    note for FastjsonBColumn "PostgreSQL JSONB 전용"
     class FastJson2Serializer~T~ {
         +serialize(value: T): String
         +deserialize(value: String): T

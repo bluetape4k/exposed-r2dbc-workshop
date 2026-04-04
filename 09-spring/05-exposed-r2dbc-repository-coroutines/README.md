@@ -50,43 +50,43 @@ src/main/kotlin/exposed/r2dbc/examples/
 ```mermaid
 classDiagram
     class ExposedR2dbcRepository~T, ID~ {
-<<interface>>
-+table IdTable~ID~
-+toEntity(row) T
-+findAll() Flow~T~
-+findById(id) T?
-+deleteById(id) Int
-}
-class MovieR2dbcRepository {
-+table MovieTable
-+toEntity(row) MovieRecord
-+save(movie) MovieRecord
-+searchMovies(params) Flow~MovieRecord~
-+getAllMoviesWithActors() Flow~MovieWithActorRecord~
-+getMovieWithActors(id) MovieWithActorRecord?
-}
-class ActorR2dbcRepository {
-+table ActorTable
-+toEntity(row) ActorRecord
-+save(actor) ActorRecord
-+searchActors(params) Flow~ActorRecord~
-}
-class MovieController {
-+getMovieWithActors(id) MovieWithActorRecord?
-+searchMovies(params) List~MovieRecord~
-+createMovie(movie) MovieRecord
-+deleteMovie(id) Int
-}
-class ActorController {
-+getAllActors() List~ActorRecord~
-+getActorById(id) ActorRecord?
-+createActor(actor) ActorRecord
-}
+        <<interface>>
+        +table IdTable~ID~
+        +toEntity(row) T
+        +findAll() Flow~T~
+        +findById(id) T?
+        +deleteById(id) Int
+    }
+    class MovieR2dbcRepository {
+        +table MovieTable
+        +toEntity(row) MovieRecord
+        +save(movie) MovieRecord
+        +searchMovies(params) Flow~MovieRecord~
+        +getAllMoviesWithActors() Flow~MovieWithActorRecord~
+        +getMovieWithActors(id) MovieWithActorRecord?
+    }
+    class ActorR2dbcRepository {
+        +table ActorTable
+        +toEntity(row) ActorRecord
+        +save(actor) ActorRecord
+        +searchActors(params) Flow~ActorRecord~
+    }
+    class MovieController {
+        +getMovieWithActors(id) MovieWithActorRecord?
+        +searchMovies(params) List~MovieRecord~
+        +createMovie(movie) MovieRecord
+        +deleteMovie(id) Int
+    }
+    class ActorController {
+        +getAllActors() List~ActorRecord~
+        +getActorById(id) ActorRecord?
+        +createActor(actor) ActorRecord
+    }
 
-MovieR2dbcRepository ..|> ExposedR2dbcRepository
-ActorR2dbcRepository ..|> ExposedR2dbcRepository
-MovieController --> MovieR2dbcRepository: uses
-ActorController --> ActorR2dbcRepository: uses
+    MovieR2dbcRepository ..|> ExposedR2dbcRepository
+    ActorR2dbcRepository ..|> ExposedR2dbcRepository
+    MovieController --> MovieR2dbcRepository: uses
+    ActorController --> ActorR2dbcRepository: uses
 ```
 
 ## Spring + Coroutine 브릿지 패턴 (`DataInitializer`)
