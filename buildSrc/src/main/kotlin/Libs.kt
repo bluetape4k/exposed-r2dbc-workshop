@@ -132,7 +132,7 @@ object Versions {
     const val hibernate_validator = "8.0.3.Final" // https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator
     const val querydsl = "5.1.0"                  // https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa
 
-    const val exposed = "1.1.1"       // https://mvnrepository.com/artifact/org.jetbrains.exposed/exposed-core
+    const val exposed = "1.2.0"       // https://mvnrepository.com/artifact/org.jetbrains.exposed/exposed-core
     const val r2dbc = "1.0.0.RELEASE"        // https://mvnrepository.com/artifact/io.r2dbc/r2dbc-spi
     const val agroal = "3.0"          // https://mvnrepository.com/artifact/io.agroal/agroal-api
 
@@ -665,7 +665,7 @@ object Libs {
     val netty_transport_classes_kqueue = netty("transport-classes-kqueue")
     val netty_transport_native_epoll = netty("transport-native-epoll")
     val netty_transport_native_kqueue = netty("transport-native-kqueue")
-    
+
     // gRPC
     fun grpc(module: String) = "io.grpc:grpc-$module:${Versions.grpc}"
     val grpc_bom = grpc("bom")
@@ -1123,7 +1123,7 @@ object Libs {
     const val pgjdbc_ng = "com.impossibl.pgjdbc-ng:pgjdbc-ng:0.8.9"  // https://mvnrepository.com/artifact/com.impossibl.pgjdbc-ng/pgjdbc-ng
     const val oracle_ojdbc8 = "com.oracle.ojdbc:ojdbc8:19.3.0.0"
     const val clickhouse_jdbc = "com.clickhouse:clickhouse-jdbc:0.9.5" // https://mvnrepository.com/artifact/com.clickhouse/clickhouse-jdbc
-    
+
     const val h2 = "com.h2database:h2:1.4.197"
 
     // MyBatis 테스트 시에 h2 v2 를 사용한다
