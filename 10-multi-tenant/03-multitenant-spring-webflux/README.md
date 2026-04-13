@@ -37,8 +37,8 @@ src/main/kotlin/exposed/r2dbc/multitenant/webflux/
 │   ├── TenantId.kt                        # CoroutineContext Element + 테넌트 전파 유틸리티
 │   ├── TenantFilter.kt                    # WebFilter - 요청 헤더에서 테넌트 추출 → ReactorContext 저장
 │   ├── SchemaSupport.kt                   # 테넌트별 Schema 정의 생성
-│   ├── TenantInitializer.kt              # 애플리케이션 시작 시 테넌트별 스키마 초기화
-│   └── DataInitializer.kt                # 테넌트별 샘플 데이터 삽입 (한국어/영어)
+│   ├── TenantInitializer.kt               # 애플리케이션 시작 시 테넌트별 스키마 초기화
+│   └── DataInitializer.kt                 # 테넌트별 샘플 데이터 삽입 (한국어/영어)
 ├── controller/
 │   └── ActorController.kt                 # 배우 조회 API (/actors) - 테넌트 인식
 └── domain/
@@ -53,56 +53,162 @@ src/main/kotlin/exposed/r2dbc/multitenant/webflux/
 
 ## 아키텍처
 
-### 멀티테넌시 요청 흐름
+이 예제는 4가지 핵심 메커니즘으로 멀티테넌시를 구현합니다:
+
+1. **HTTP 헤더 기반 테넌트 식별**: `X-TENANT-ID` 헤더로 테넌트 지정
+2. **ReactorContext를 통한 컨텍스트 전파**: Reactive 환경에서 테넌트 정보 저장
+3. **Suspend Function을 통한 비동기 처리**: Kotlin Coroutines으로 안전한 타입
+4. **Schema-based 데이터 격리**: 테넌트별 별도 스키마에서 쿼리 실행
+
+### 시스템 전체 아키텍처
+
+```mermaid
+graph LR
+    Client["Client<br/>X-TENANT-ID"]
+
+    subgraph WebFlux["WebFlux"]
+        direction TB
+        Filter["TenantFilter"]
+        Controller["Controller"]
+    end
+
+    subgraph Context["Context"]
+        Ctx["TenantId"]
+    end
+
+    subgraph Transaction["R2DBC"]
+        direction TB
+        Txn["Tenant Tx"]
+        Repo["Repository"]
+    end
+
+    subgraph Database["PostgreSQL"]
+        direction TB
+        DBRoot["schema switch"]
+        KoreanSchema["korean schema"]
+        EnglishSchema["english schema"]
+    end
+
+    Client -->|header| Filter
+    Filter --> Controller
+    Filter -. store .-> Ctx
+    Controller -. read .-> Ctx
+    Controller --> Txn
+    Txn --> Repo
+    Repo -->|query| DBRoot
+    DBRoot --> KoreanSchema
+    DBRoot --> EnglishSchema
+    Controller -->|response| Client
+
+    style WebFlux fill:#e1f5ff
+    style Context fill:#fff3e0
+    style Transaction fill:#f3e5f5
+    style Database fill:#e8f5e9
+    style DBRoot fill:#dcedc8,stroke:#558b2f,color:#111827
+    style KoreanSchema fill:#c8e6c9
+    style EnglishSchema fill:#a5d6a7
+```
+
+### 멀티테넌시 요청 흐름 (시퀀스)
 
 ```mermaid
 sequenceDiagram
-    participant Client as HTTP 클라이언트
+    participant Client as 클라이언트
     participant Filter as TenantWebFilter
-    participant Ctx as ReactorContext
-    participant Controller as ActorController
+    participant Chain as FilterChain
+    participant Reactor as ReactorContext
+    participant Ctrl as ActorController
+    participant Txn as suspendTransaction
     participant Repo as ActorRepository
-    participant DB as R2dbcDatabase
-    Client ->> Filter: HTTP 요청 (X-TENANT-ID: korean)
-    Filter ->> Ctx: contextWrite(TenantId("korean"))
-    Filter ->> Controller: 요청 전달
-    Controller ->> Controller: suspendTransactionWithCurrentTenant { }
-    Controller ->> Ctx: currentReactorTenant() 조회
-    Ctx -->> Controller: Tenant("korean")
-    Controller ->> DB: SchemaUtils.setSchema("korean")
-    Controller ->> Repo: actorRepository.findAll()
-    Repo ->> DB: SELECT * FROM korean.actors
-    DB -->> Repo: 한국어 배우 데이터
-    Repo -->> Controller: List~ActorRecord~
-    Controller -->> Client: JSON 응답 (한국어 데이터)
+    participant DB as PostgreSQL
+
+    Client ->>+ Filter: GET /actors<br/>X-TENANT-ID: korean
+    Filter ->> Filter: extract tenant from header
+    Filter ->>+ Reactor: contextWrite(TenantId("korean"))
+    Reactor -->>- Filter: 저장 완료
+    Filter ->>+ Chain: filter(exchange)
+    Chain ->>+ Ctrl: route to controller
+    
+    Ctrl ->>+ Txn: suspendTransactionWithCurrentTenant
+    Txn ->> Txn: readReactorContext()
+    Txn ->> Reactor: TenantId 조회
+    Reactor -->> Txn: Tenant("korean")
+    Txn ->> DB: SET SCHEMA korean
+    DB -->> Txn: schema changed
+    
+    Txn ->>+ Repo: findAll()
+    Repo ->>+ DB: SELECT * FROM korean.actors
+    DB -->>- Repo: resultSet (한국어 배우)
+    Repo -->>- Txn: List~ActorRecord~
+    
+    Txn -->>- Ctrl: transaction complete
+    Ctrl ->>- Chain: JSON response
+    Chain -->>- Filter: response ready
+    Filter -->>- Client: 200 OK<br/>[{한국 배우들}]
 ```
 
-### 테넌트 정의
+### 스키마 격리 구조
 
-두 개의 테넌트를 사용하며, 각 테넌트는 별도의 DB 스키마를 가집니다:
+```mermaid
+graph TB
+    App["Spring Application"]
 
-| 테넌트     | ID        | 스키마       | 데이터 언어                        |
-|---------|-----------|-----------|-------------------------------|
-| KOREAN  | `korean`  | `korean`  | 한국어 (조니 뎁, 글래디에이터 등)          |
-| ENGLISH | `english` | `english` | 영어 (Johnny Depp, Gladiator 등) |
+    subgraph DB["PostgreSQL Instance"]
+        direction LR
 
-## 멀티테넌시 격리 수준 옵션
+        subgraph Korean["🇰🇷 Schema: korean<br/>(한국어 데이터)"]
+            K_M["movies<br/>id (PK)<br/>name: 글래디에이터"]
+            K_A["actors<br/>id (PK)<br/>first_name: 조니"]
+            K_R["actors_in_movies<br/>movie_id (FK)<br/>actor_id (FK)"]
+        end
+
+        subgraph English["🇬🇧 Schema: english<br/>(영어 데이터)"]
+            E_M["movies<br/>id (PK)<br/>name: Gladiator"]
+            E_A["actors<br/>id (PK)<br/>first_name: Johnny"]
+            E_R["actors_in_movies<br/>movie_id (FK)<br/>actor_id (FK)"]
+        end
+    end
+
+    App -->|SET SCHEMA korean| Korean
+    App -->|SET SCHEMA english| English
+
+    K_A --- K_R
+    K_M --- K_R
+    E_A --- E_R
+    E_M --- E_R
+
+    style App fill:#e3f2fd
+    style Korean fill:#c8e6c9
+    style English fill:#bbdefb
+    style K_M fill:#81c784
+    style K_A fill:#81c784
+    style K_R fill:#81c784
+    style E_M fill:#64b5f6
+    style E_A fill:#64b5f6
+    style E_R fill:#64b5f6
+```
+
+## 멀티테넌시 격리 수준
+
+멀티테넌시는 **데이터 격리 수준**에 따라 3가지로 분류됩니다. 이 예제는 **Schema-based** 격리를 구현합니다.
+
+### 격리 수준 비교
+
+| 구분 | Schema-based<br/>(이 예제) | Row-based | Database-based |
+|-----|---|---|---|
+| **데이터 격리** | 테넌트별 스키마 | 테넌트ID 컬럼 | 테넌트별 DB 인스턴스 |
+| **구조** | 같은 DB, 여러 스키마 | 같은 스키마, 행별 분리 | 여러 DB |
+| **격리 수준** | ⭐⭐⭐ 높음 | ⭐ 낮음 | ⭐⭐⭐⭐⭐ 최고 |
+| **성능** | ⭐⭐⭐ 우수 | ⭐⭐ 중간 | ⭐⭐ 중간 |
+| **구현 복잡도** | ⭐⭐ 중간 | ⭐ 낮음 | ⭐⭐⭐⭐ 높음 |
+| **테넌트 수** | 수십~수백 | 무제한 | 소수 |
+| **비용** | 낮음 | 낮음 | 높음 |
 
 ### 1. Schema-based (이 예제)
 
 각 테넌트가 **같은 DB 인스턴스의 별도 스키마**를 사용합니다.
 
-```
-PostgreSQL Instance
-├── Schema: korean
-│   ├── movies
-│   ├── actors
-│   └── actors_in_movies
-└── Schema: english
-    ├── movies
-    ├── actors
-    └── actors_in_movies
-```
+위의 `스키마 격리 구조` 다이어그램처럼, 애플리케이션은 하나의 PostgreSQL 인스턴스를 공유하지만 트랜잭션 시작 시 현재 tenant에 맞는 schema를 선택합니다.
 
 **장점**: 단일 DB 인스턴스 관리, 테넌트 간 완전한 데이터 격리, 운영 단순성
 **단점**: DB별 최대 스키마 수 제한, 테넌트가 매우 많으면 연결 풀 관리 복잡
@@ -144,6 +250,23 @@ App → ConnectionFactory Registry
 
 WebFlux 환경에서는 요청마다 스레드가 고정되지 않으므로 `ThreadLocal` 사용이 불가능합니다.
 대신 `ReactorContext`에 테넌트 정보를 저장하고, 코루틴 안에서 `coroutineContext[ReactorContext]`로 읽습니다.
+
+## 테넌트 정의
+
+두 개의 테넌트를 사용하며, 각 테넌트는 별도의 DB 스키마를 가집니다:
+
+| 테넌트     | ID        | 스키마       | 데이터 언어                        |
+|---------|-----------|-----------|-------------------------------|
+| KOREAN  | `korean`  | `korean`  | 한국어 (조니 뎁, 글래디에이터 등)          |
+| ENGLISH | `english` | `english` | 영어 (Johnny Depp, Gladiator 등) |
+
+## 데이터베이스 스키마
+
+각 테넌트(`korean`, `english`)마다 동일한 테이블 구조를 별도 스키마로 생성합니다:
+
+- **movies** - 영화 정보 (`id`, `name`, `producer_name`, `release_date`)
+- **actors** - 배우 정보 (`id`, `first_name`, `last_name`, `birthday`)
+- **actors_in_movies** - 영화-배우 다대다 관계 (`movie_id`, `actor_id`)
 
 ## 핵심 구현
 
@@ -238,14 +361,6 @@ Tenants.Tenant.entries.forEach { tenant ->
     dataInitializer.initialize(tenant)  // 스키마 생성 + 샘플 데이터
 }
 ```
-
-## 데이터베이스 스키마
-
-각 테넌트(`korean`, `english`)마다 동일한 테이블 구조를 별도 스키마로 생성합니다:
-
-- **movies** - 영화 정보 (`id`, `name`, `producer_name`, `release_date`)
-- **actors** - 배우 정보 (`id`, `first_name`, `last_name`, `birthday`)
-- **actors_in_movies** - 영화-배우 다대다 관계 (`movie_id`, `actor_id`)
 
 ## API 엔드포인트
 
