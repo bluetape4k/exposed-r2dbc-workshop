@@ -35,45 +35,57 @@ Redisson + Exposed 를 활용한 캐시 전략의 **Kotlin Coroutines 기반 비
 classDiagram
     class AbstractR2dbcRedissonRepository~K, V~ {
         <<abstract>>
-        +get(key: K): V?
-        +put(key: K, value: V)
-        +evict(key: K)
-        +evictAll(keys: Collection~K~)
-        +clear()
+        +get(key: K) V?
+        +put(key: K, value: V) void
+        +evict(key: K) void
+        +evictAll(keys: Collection~K~) void
+        +clear() void
     }
+
     class UserCacheRepository {
         +strategy: READ_WRITE_THROUGH_WITH_NEAR_CACHE
-        +get(id: Long): UserRecord?
-        +put(id: Long, user: UserRecord)
-        +evict(id: Long)
+        +get(id: Long) UserRecord?
+        +put(id: Long, user: UserRecord) void
+        +evict(id: Long) void
     }
+
     class UserCredentialsCacheRepository {
         +strategy: READ_ONLY
-        +get(id: Long): UserCredentialsRecord?
-        +evict(id: Long)
+        +get(id: Long) UserCredentialsRecord?
+        +evict(id: Long) void
     }
+
     class UserEventCacheRepository {
         +strategy: WRITE_BEHIND
-        +put(id: Long, event: UserEventRecord)
-        +flush()
+        +put(id: Long, event: UserEventRecord) void
+        +flush() void
     }
 
     AbstractR2dbcRedissonRepository <|-- UserCacheRepository
     AbstractR2dbcRedissonRepository <|-- UserCredentialsCacheRepository
     AbstractR2dbcRedissonRepository <|-- UserEventCacheRepository
+
+    note for UserCacheRepository "Near Cache(Caffeine)\n+ Redis(MapCache)"
+    note for UserCredentialsCacheRepository "읽기 전용 캐시\n(인증정보, 코드표)"
+    note for UserEventCacheRepository "비동기 배치 쓰기\n(이벤트, 로그)"
 ```
 
 ## 캐시 조회 흐름
 
 ```mermaid
 flowchart TD
-    REQ["캐시 조회 요청\nget(key)"] --> L1{"L1 캐시\n(Caffeine\nNear Cache) HIT?"}
-    L1 -->|HIT| R1["L1에서 즉시 반환\n(나노초 단위)"]
-    L1 -->|MISS| L2{"L2 캐시\n(Redisson\nMapCache) HIT?"}
-    L2 -->|HIT| FILL1["L1에 저장 후 반환\n(마이크로초 단위)"]
-    L2 -->|MISS| DB["DB 조회\nsuspendTransaction\n(Exposed R2DBC)"]
-    DB --> FILL2["L2(Redisson)에 저장\n(TTL 적용)"]
+    REQ["cache.get(key)"] --> L1{L1 Caffeine<br/>Near Cache<br/>HIT?}
+    L1 -->|HIT| RET1["즉시 반환<br/>나노초 ⚡"]
+    L1 -->|MISS| L2{L2 Redisson<br/>MapCache<br/>HIT?}
+    L2 -->|HIT| FILL1["L1 동기화<br/>+ 반환<br/>마이크로초 ⚡"]
+    L2 -->|MISS| DB["DB 조회<br/>suspendTransaction<br/>Exposed R2DBC"]
+    DB --> FILL2["L2 저장<br/>TTL 적용"]
     FILL2 --> FILL1
+    
+    style RET1 fill:#c8e6c9
+    style FILL1 fill:#bbdefb
+    style FILL2 fill:#fff9c4
+    style DB fill:#ffccbc
 ```
 
 ## 프로젝트 구조
@@ -251,36 +263,46 @@ Markdown 리포트는 benchmark 이름, mode, score, error, unit, parameter 정�
 
 ### 전략별 동작 흐름
 
-```
-[Read Through]
-Controller → Repository.get(id)
-                │
-                ├─ Cache HIT  → Redis에서 즉시 반환 (DB 호출 없음)
-                │
-                └─ Cache MISS → DB 조회 → Redis 저장 → 반환
-                                  (AbstractR2dbcRedissonRepository 자동 처리)
+```mermaid
+graph TD
+    subgraph RT["Read Through"]
+        RT1["get(id)"] --> RT2{Cache<br/>HIT?}
+        RT2 -->|YES| RT3["Redis<br/>반환"]
+        RT2 -->|NO| RT4["DB 조회"]
+        RT4 --> RT5["Redis 저장"]
+        RT5 --> RT6["반환"]
+    end
 
-[Write Through]
-Controller → Repository.put(entity)
-                │
-                ├─ Redis 저장 (즉시)
-                └─ DB 저장    (즉시 동기 반영)
-                   → 쓰기 지연(write lag) 없음, 일관성 보장
+    subgraph WT["Write Through"]
+        WT1["put(entity)"] --> WT2["Redis<br/>저장"]
+        WT2 --> WT3["DB 저장<br/>동기"]
+        WT3 --> WT4["완료"]
+        note1["일관성 보장<br/>쓰기지연 없음"]
+    end
 
-[Write Behind]
-Controller → Repository.put(entity)
-                │
-                ├─ Redis 저장 (즉시)
-                └─ DB 저장    (비동기 배치, 수 초~수 분 후)
-                   → 쓰기 성능 극대화, 대량 이벤트 처리에 적합
-                   ⚠ 앱 크래시 시 미반영 데이터 유실 가능
+    subgraph WB["Write Behind"]
+        WB1["put(entity)"] --> WB2["Redis<br/>저장"]
+        WB2 --> WB3["즉시<br/>반환"]
+        WB2 -.->|비동기| WB4["DB 저장<br/>배치처리"]
+        note2["고성능<br/>일관성 약함"]
+    end
 
-[Read-Only Cache]
-Controller → Repository.get(id)
-                │
-                ├─ Cache HIT  → Redis 반환
-                └─ Cache MISS → DB 조회 → Redis 저장 → 반환
-                   쓰기 연산 없음 (인증 정보, 코드 테이블 등 불변 데이터에 적합)
+    subgraph RO["Read-Only Cache"]
+        RO1["get(id)"] --> RO2{Cache<br/>HIT?}
+        RO2 -->|YES| RO3["Redis<br/>반환"]
+        RO2 -->|NO| RO4["DB 조회"]
+        RO4 --> RO5["Redis 저장"]
+        RO5 --> RO6["반환"]
+        note3["쓰기 없음<br/>불변 데이터"]
+    end
+
+    style RT3 fill:#c8e6c9
+    style RT6 fill:#c8e6c9
+    style WT4 fill:#bbdefb
+    style WB3 fill:#fff9c4
+    style WB4 fill:#ffccbc,stroke-dasharray: 5 5
+    style RO3 fill:#c8e6c9
+    style RO6 fill:#c8e6c9
 ```
 
 ### 전략 선택 기준
@@ -296,13 +318,18 @@ Controller → Repository.get(id)
 
 `READ_WRITE_THROUGH_WITH_NEAR_CACHE` 설정을 사용하면 애플리케이션 내부에 Caffeine 로컬 캐시가 활성화됩니다.
 
-```
-[Near Cache 적용 시 조회 경로]
-Application Memory (Caffeine)  ← 1st 조회 (나노초 단위)
-        │
-        └─ MISS → Redis MapCache          ← 2nd 조회 (마이크로초 단위)
-                        │
-                        └─ MISS → DB (Exposed R2DBC)  ← 3rd 조회 (밀리초 단위)
+```mermaid
+graph LR
+    REQ["cache.get(key)"] -->|L1| L1["Caffeine<br/>Near Cache"]
+    L1 -->|HIT| RET1["반환<br/>⚡ 나노초"]
+    L1 -->|MISS| L2["Redis<br/>MapCache"]
+    L2 -->|HIT| RET2["반환<br/>⚡ 마이크로초"]
+    L2 -->|MISS| L3["DB<br/>Exposed R2DBC"]
+    L3 --> RET3["반환<br/>⏱ 밀리초"]
+
+    style RET1 fill:#c8e6c9
+    style RET2 fill:#bbdefb
+    style RET3 fill:#ffccbc
 ```
 
 동일 프로세스 내에서 반복 조회 시 Redis 라운드트립 없이 응답하여 **P99 레이턴시를 크게 낮출 수 있습니다**.
