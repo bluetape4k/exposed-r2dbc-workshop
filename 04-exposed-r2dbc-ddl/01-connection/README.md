@@ -1,76 +1,124 @@
-# 01 Connection Management (커넥션 관리)
+> 한국어 버전: [README.ko.md](README.ko.md)
 
-Exposed R2DBC에서 데이터베이스 연결을 구성하고, 연결 메타데이터를 조회하고, 커넥션 풀을 활용하는 방법을 학습합니다.
+# 01 Connection Management
 
----
-
-## 학습 목표
-
-- `R2dbcDatabase.connect(url)`로 R2DBC 데이터베이스 연결 구성
-- `connection().metadata { }` API로 컬럼 메타데이터·테이블 제약조건 조회
-- `r2dbc:pool:` URL 스킴으로 내장 커넥션 풀 활성화
-- 풀 크기를 초과하는 동시 `suspendTransaction` 실행 시 커넥션 재활용 동작 검증
+Learn how to configure database connections, query connection metadata, and use connection pooling with Exposed R2DBC.
 
 ---
 
-## 기술 스택
+## Learning Objectives
 
-| 구분   | 기술                                              |
-|------|-------------------------------------------------|
-| ORM  | Exposed R2DBC DSL                               |
-| 비동기  | Kotlin Coroutines                               |
-| DB   | H2 (기본), MariaDB, MySQL 8, PostgreSQL           |
-| 컨테이너 | Testcontainers                                  |
-| 테스트  | JUnit 5 + Kluent + ParameterizedTest (멀티 DB 지원) |
+- Configure an R2DBC database connection with `R2dbcDatabase.connect(url)`
+- Query column metadata and table constraints via the `connection().metadata { }` API
+- Activate the built-in connection pool using the `r2dbc:pool:` URL scheme
+- Verify connection reuse behavior when concurrent `suspendTransaction` calls exceed pool size
 
 ---
 
-## 실행 흐름
+## Technology Stack
+
+| Category  | Technology                                              |
+|-----------|---------------------------------------------------------|
+| ORM       | Exposed R2DBC DSL                                       |
+| Async     | Kotlin Coroutines                                       |
+| DB        | H2 (default), MariaDB, MySQL 8, PostgreSQL              |
+| Container | Testcontainers                                          |
+| Testing   | JUnit 5 + Kluent + ParameterizedTest (multi-DB support) |
+
+---
+
+## Execution Flow
 
 ```mermaid
 sequenceDiagram
-    participant App as 애플리케이션
+    participant App as Application
     participant CF as ConnectionFactory
     participant DB as Database (Exposed)
     participant Pool as ConnectionPool
 
     App ->> CF: ConnectionFactories.get(url)
-    CF -->> Pool: ConnectionPool 생성
+    CF -->> Pool: Create ConnectionPool
     App ->> DB: R2dbcDatabase.connect(connectionFactory)
-    DB -->> App: R2dbcDatabase 인스턴스
+    DB -->> App: R2dbcDatabase instance
 
     App ->> DB: suspendTransaction { }
     DB ->> Pool: acquire connection
     Pool -->> DB: R2DBC Connection
-    DB ->> DB: SQL 실행 (SELECT / INSERT / UPDATE / DELETE)
+    DB ->> DB: Execute SQL (SELECT / INSERT / UPDATE / DELETE)
     DB ->> Pool: release connection
-    DB -->> App: 결과 반환
+    DB -->> App: Return result
 ```
 
-> `r2dbc:pool:h2:mem:///poolDB?maxSize=10` URL 스킴을 사용하면 `ConnectionPool`이 자동 활성화됩니다.
-> 풀 크기를 초과하는 동시 `suspendTransaction` 요청은 커넥션이 반환될 때까지 대기한 후 재활용됩니다.
+> Using the `r2dbc:pool:h2:mem:///poolDB?maxSize=10` URL scheme automatically activates `ConnectionPool`.
+> Concurrent `suspendTransaction` requests that exceed the pool size wait until a connection is returned and then reuse it.
 
 ---
 
-## 프로젝트 구조
+## Project Structure
 
 ```
 src/test/kotlin/exposed/r2dbc/examples/connection/
-├── Ex01_Connection.kt            # 컬럼 메타데이터 및 테이블 제약조건 조회
+├── Ex01_Connection.kt            # Column metadata and table constraint queries
 └── h2/
-    ├── Ex01_H2_ConnectionPool.kt # H2 R2DBC 커넥션 풀 동작 검증
-    └── Ex02_H2_MultiDatabase.kt  # H2 다중 데이터베이스 연결
+    ├── Ex01_H2_ConnectionPool.kt # H2 R2DBC connection pool behavior verification
+    └── Ex02_H2_MultiDatabase.kt  # H2 multi-database connections
 ```
 
 ---
 
-## 예제 상세
+## Connection Class Hierarchy
 
-### `Ex01_Connection` — 메타데이터 조회
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+classDiagram
+    class R2dbcDatabase {
+        +connect(url: String)
+        +connect(connectionFactory)
+        +connect(pool, config)
+    }
+    class ConnectionFactory {
+        <<interface>>
+        +create()
+        +getMetadata()
+    }
+    class ConnectionPool {
+        +acquire()
+        +disposeLater()
+        +getMetrics()
+    }
+    class ConnectionFactoryOptions {
+        +builder()
+        +option(option, value)
+        +build()
+    }
+    class DatabaseMetadataImpl {
+        +columns(tables)
+        +tableConstraints(tables)
+        +version String
+        +databaseProductName String
+    }
 
-R2DBC 연결에서 `connection().metadata { }` API를 통해 테이블 컬럼과 제약조건 정보를 읽어옵니다.
+    R2dbcDatabase --> ConnectionFactory : uses
+    ConnectionPool ..|> ConnectionFactory : implements
+    ConnectionFactoryOptions --> ConnectionFactory : configures
+    R2dbcDatabase --> DatabaseMetadataImpl : exposes via connection().metadata
 
-#### 테이블 정의
+    style R2dbcDatabase fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    style ConnectionFactory fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    style ConnectionPool fill:#E0F2F1,stroke:#80CBC4,color:#00695C
+    style ConnectionFactoryOptions fill:#FFF3E0,stroke:#FFCC80,color:#E65100
+    style DatabaseMetadataImpl fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
+```
+
+---
+
+## Example Details
+
+### `Ex01_Connection` — Metadata Queries
+
+Read table column and constraint information from an R2DBC connection via the `connection().metadata { }` API.
+
+#### Table Definition
 
 ```kotlin
 object People: LongIdTable() {
@@ -80,7 +128,7 @@ object People: LongIdTable() {
 }
 ```
 
-#### 컬럼 메타데이터 조회
+#### Column Metadata Query
 
 ```kotlin
 withTables(TestDB.H2, People) {
@@ -88,29 +136,29 @@ withTables(TestDB.H2, People) {
         columns(People)[People]!!
     }.toSet()
 
-    // 예상 ColumnMetadata: id(BIGINT), firstName(VARCHAR 80, nullable),
-    //                      lastName(VARCHAR 42, default="Doe"), age(INT, default=18)
+    // Expected ColumnMetadata: id(BIGINT), firstName(VARCHAR 80, nullable),
+    //                          lastName(VARCHAR 42, default="Doe"), age(INT, default=18)
     columnMetadata shouldContainSame expected
 }
 ```
 
-#### 테이블 제약조건 조회
+#### Table Constraint Query
 
 ```kotlin
 withTables(testDB, parent, child) {
     val constraints = connection().metadata {
         tableConstraints(listOf(child))
     }
-    // parent(unique), child(FK → parent.scale) 2개 키 반환
+    // Returns 2 keys: parent(unique), child(FK -> parent.scale)
     constraints.keys shouldHaveSize 2
 }
 ```
 
 ---
 
-### `Ex01_H2_ConnectionPool` — H2 커넥션 풀
+### `Ex01_H2_ConnectionPool` — H2 Connection Pool
 
-`r2dbc:pool:h2:mem:///` URL 스킴을 사용하면 R2DBC 내장 커넥션 풀이 자동으로 활성화됩니다.
+Using the `r2dbc:pool:h2:mem:///` URL scheme automatically activates the R2DBC built-in connection pool.
 
 ```kotlin
 private val h2PoolDB1 by lazy {
@@ -118,7 +166,7 @@ private val h2PoolDB1 by lazy {
 }
 ```
 
-#### 풀 크기 초과 시 커넥션 재활용 검증
+#### Verifying Connection Reuse When Pool Size Is Exceeded
 
 ```kotlin
 @Test
@@ -135,7 +183,7 @@ fun `suspend transactions exceeding pool size`() = runSuspendIO {
     }
     jobs.joinAll()
 
-    // 풀 크기(10)를 초과해도 커넥션이 재활용되어 모든 insert가 완료됨
+    // Even when pool size (10) is exceeded, connections are reused and all inserts complete
     suspendTransaction(db = h2PoolDB1) {
         TestTable.selectAll().count() shouldBeEqualTo exceedsPoolSize.toLong()
     }
@@ -144,58 +192,58 @@ fun `suspend transactions exceeding pool size`() = runSuspendIO {
 
 ---
 
-## 지원 DB 및 R2DBC URL 형식
+## Supported DBs and R2DBC URL Formats
 
-| 데이터베이스     | R2DBC URL 형식                             | 풀 지원               |
-|------------|------------------------------------------|--------------------|
-| H2 인메모리    | `r2dbc:h2:mem:///dbname`                 | `r2dbc:pool:h2:...` |
-| PostgreSQL | `r2dbc:postgresql://host/dbname`         | `r2dbc:pool:postgresql:...` |
-| MySQL      | `r2dbc:mysql://host/dbname`              | `r2dbc:pool:mysql:...` |
-| MariaDB    | `r2dbc:mariadb://host/dbname`            | `r2dbc:pool:mariadb:...` |
+| Database       | R2DBC URL Format                         | Pool Support                  |
+|----------------|------------------------------------------|-------------------------------|
+| H2 in-memory   | `r2dbc:h2:mem:///dbname`                 | `r2dbc:pool:h2:...`           |
+| PostgreSQL     | `r2dbc:postgresql://host/dbname`         | `r2dbc:pool:postgresql:...`   |
+| MySQL          | `r2dbc:mysql://host/dbname`              | `r2dbc:pool:mysql:...`        |
+| MariaDB        | `r2dbc:mariadb://host/dbname`            | `r2dbc:pool:mariadb:...`      |
 
 ---
 
-## 테스트 실행
+## Running Tests
 
 ```bash
-# 이 모듈의 모든 테스트 실행
+# Run all tests in this module
 ./gradlew :01-connection:test
 
-# H2만 빠르게 테스트
+# Fast test with H2 only
 ./gradlew :01-connection:test -PuseFastDB=true
 
-# 특정 테스트만 실행
+# Run specific tests
 ./gradlew :01-connection:test --tests "exposed.r2dbc.examples.connection.Ex01_Connection"
 ./gradlew :01-connection:test --tests "exposed.r2dbc.examples.connection.h2.Ex01_H2_ConnectionPool"
 ```
 
 ---
 
-## H2 인메모리 vs 파일 DB 연결 차이
+## H2 In-Memory vs File DB Connection Differences
 
-| 구분 | 인메모리 (mem) | 파일 (file) |
-|------|--------------|------------|
-| URL 형식 | `r2dbc:h2:mem:///dbname` | `r2dbc:h2:file:///path/to/db` |
-| 데이터 유지 | JVM 종료 시 사라짐 | 파일로 영구 저장 |
-| `DB_CLOSE_DELAY` | `-1` (연결 유지) | 불필요 |
-| 테스트 격리 | 높음 (각 이름별 독립) | 낮음 (파일 공유 가능) |
-| 권장 용도 | 단위 테스트, 예제 | 임시 통합 테스트 |
+| Aspect          | In-Memory (mem)                  | File (file)                      |
+|-----------------|----------------------------------|----------------------------------|
+| URL Format      | `r2dbc:h2:mem:///dbname`         | `r2dbc:h2:file:///path/to/db`    |
+| Data Persistence | Lost when JVM exits             | Permanently stored on disk       |
+| `DB_CLOSE_DELAY` | `-1` (keep connection alive)   | Not needed                       |
+| Test Isolation  | High (independent per name)      | Low (file can be shared)         |
+| Recommended For | Unit tests, examples             | Temporary integration tests      |
 
 ```kotlin
-// 인메모리 (테스트 권장)
+// In-memory (recommended for tests)
 R2dbcDatabase.connect("r2dbc:h2:mem:///mydb;DB_CLOSE_DELAY=-1;")
 
-// 커넥션 풀 + 인메모리
+// Connection pool + in-memory
 R2dbcDatabase.connect("r2dbc:pool:h2:mem:///mydb?maxSize=10")
 
-// 파일 DB (영구 저장)
+// File DB (persistent storage)
 R2dbcDatabase.connect("r2dbc:h2:file:///tmp/mydb")
 ```
 
 ---
 
-## 참고 자료
+## References
 
-- [R2DBC 스펙](https://r2dbc.io/)
-- [Exposed R2DBC 가이드](https://github.com/JetBrains/Exposed)
+- [R2DBC Specification](https://r2dbc.io/)
+- [Exposed R2DBC Guide](https://github.com/JetBrains/Exposed)
 - [Kotlin Exposed Book](https://debop.notion.site/Kotlin-Exposed-Book-1ad2744526b080428173e9c907abdae2)

@@ -1,53 +1,56 @@
+> 한국어 버전: [README.ko.md](README.ko.md)
+
 # 05-exposed-r2dbc-repository-coroutines
 
-Spring WebFlux + Exposed R2DBC + Kotlin Coroutines를 활용한 비동기 Repository 패턴 예제입니다.
-`ExposedR2dbcRepository` 인터페이스를 구현하여 영화(Movie)와 배우(Actor) 도메인을 CRUD하는 REST API를 제공합니다.
+An example of the async Repository pattern using Spring WebFlux + Exposed R2DBC + Kotlin Coroutines.
+Implements the `ExposedR2dbcRepository` interface to provide a REST API for CRUD operations on Movie and Actor domains.
 
-## 문서
+## Documentation
 
 * [ExposedRepository with Coroutines](https://debop.notion.site/ExposedRepository-with-Coroutines-1c32744526b080a1a6cbe2c86c2cb889)
 
-## 기술 스택
+## Tech Stack
 
-| 구분        | 기술                             |
-|-----------|--------------------------------|
-| Framework | Spring Boot (WebFlux)          |
-| ORM       | Exposed R2DBC                  |
-| 비동기       | Kotlin Coroutines + Flow       |
-| DB        | H2 (기본), MySQL 8, PostgreSQL   |
-| DB 컨테이너   | Testcontainers                 |
-| API 문서    | SpringDoc OpenAPI (Swagger UI) |
-| 서버        | Netty (Reactive)               |
+| Category    | Technology                             |
+|-------------|----------------------------------------|
+| Framework   | Spring Boot (WebFlux)                  |
+| ORM         | Exposed R2DBC                          |
+| Async       | Kotlin Coroutines + Flow               |
+| DB          | H2 (default), MySQL 8, PostgreSQL      |
+| DB Container| Testcontainers                         |
+| API Docs    | SpringDoc OpenAPI (Swagger UI)         |
+| Server      | Netty (Reactive)                       |
 
-## 프로젝트 구조
+## Project Structure
 
 ```
 src/main/kotlin/exposed/r2dbc/examples/
-├── ExposedR2dbcRepositoryApp.kt          # Spring Boot 애플리케이션 진입점
+├── ExposedR2dbcRepositoryApp.kt          # Spring Boot application entry point
 ├── config/
-│   ├── ExposedR2dbcConfig.kt             # R2DBC Database 및 ConnectionPool 설정
-│   ├── NettyConfig.kt                    # Netty 서버 튜닝 (이벤트 루프, 커넥션 등)
-│   └── SwaggerConfig.kt                  # OpenAPI(Swagger) 문서 설정
+│   ├── ExposedR2dbcConfig.kt             # R2DBC Database and ConnectionPool configuration
+│   ├── NettyConfig.kt                    # Netty server tuning (event loop, connections, etc.)
+│   └── SwaggerConfig.kt                  # OpenAPI (Swagger) documentation configuration
 ├── controller/
-│   ├── IndexController.kt                # 빌드 정보 조회 (/)
-│   ├── MovieController.kt                # 영화 CRUD API (/movies)
-│   ├── ActorController.kt                # 배우 CRUD API (/actors)
-│   └── MovieActorsController.kt          # 영화-배우 관계 조회 API (/movie-actors)
+│   ├── IndexController.kt                # Build info endpoint (/)
+│   ├── MovieController.kt                # Movie CRUD API (/movies)
+│   ├── ActorController.kt                # Actor CRUD API (/actors)
+│   └── MovieActorsController.kt          # Movie-Actor relationship API (/movie-actors)
 ├── domain/
 │   ├── model/
-│   │   ├── MovieSchema.kt                # Exposed 테이블 정의 (MovieTable, ActorTable, ActorInMovieTable)
-│   │   ├── MovieDtos.kt                  # DTO 클래스들 (MovieRecord, ActorRecord 등)
-│   │   └── Mappers.kt                    # ResultRow → DTO 변환 확장 함수
+│   │   ├── MovieSchema.kt                # Exposed table definitions (MovieTable, ActorTable, ActorInMovieTable)
+│   │   ├── MovieDtos.kt                  # DTO classes (MovieRecord, ActorRecord, etc.)
+│   │   └── Mappers.kt                    # ResultRow → DTO conversion extension functions
 │   └── repository/
-│       ├── MovieR2dbcRepository.kt       # 영화 Repository (ExposedR2dbcRepository 구현)
-│       └── ActorR2dbcRepository.kt       # 배우 Repository (ExposedR2dbcRepository 구현)
+│       ├── MovieR2dbcRepository.kt       # Movie Repository (implements ExposedR2dbcRepository)
+│       └── ActorR2dbcRepository.kt       # Actor Repository (implements ExposedR2dbcRepository)
 └── utils/
-    └── DataInitializer.kt                # 애플리케이션 시작 시 샘플 데이터 삽입 (runBlocking 브릿지 패턴)
+    └── DataInitializer.kt                # Insert sample data on application startup (runBlocking bridge pattern)
 ```
 
-## Repository 클래스 구조
+## Repository Class Structure
 
 ```mermaid
+%%{init: {"theme": "neutral"}}%%
 classDiagram
     class ExposedR2dbcRepository~T, ID~ {
         <<interface>>
@@ -87,20 +90,86 @@ classDiagram
     ActorR2dbcRepository ..|> ExposedR2dbcRepository
     MovieController --> MovieR2dbcRepository: uses
     ActorController --> ActorR2dbcRepository: uses
+
+    style ExposedR2dbcRepository fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    style MovieR2dbcRepository fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    style ActorR2dbcRepository fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    style MovieController fill:#FFF3E0,stroke:#FFCC80,color:#E65100
+    style ActorController fill:#FFF3E0,stroke:#FFCC80,color:#E65100
 ```
 
-## Spring + Coroutine 브릿지 패턴 (`DataInitializer`)
+## HTTP Request Flow
 
-`ApplicationListener<ApplicationReadyEvent>`의 `onApplicationEvent`는 일반(non-suspend) 함수입니다.
-Exposed R2DBC의 `suspendTransaction`을 사용하려면 `runBlocking`으로 코루틴 세계를 브릿지해야 합니다.
+```mermaid
+sequenceDiagram
+    participant Client as HTTP Client
+    participant MC as MovieController
+    participant MR as MovieR2dbcRepository
+    participant ST as suspendTransaction
+    participant DB as R2DBC Database
+
+    Client ->> MC: GET /movies/{id}
+    MC ->> ST: suspendTransaction { }
+    ST ->> DB: BEGIN
+    ST ->> MR: getMovieWithActors(id)
+    MR ->> DB: SELECT movies JOIN actors_in_movies JOIN actors
+    DB -->> MR: ResultRow Flow
+    MR -->> ST: MovieWithActorRecord
+    ST ->> DB: COMMIT
+    ST -->> MC: MovieWithActorRecord
+    MC -->> Client: 200 JSON response
+
+    Client ->> MC: POST /movies
+    MC ->> ST: suspendTransaction { }
+    ST ->> MR: save(movie)
+    MR ->> DB: INSERT INTO movies ...
+    DB -->> MR: generated id
+    MR -->> ST: MovieRecord
+    ST ->> DB: COMMIT
+    ST -->> MC: MovieRecord
+    MC -->> Client: 201 JSON response
+```
+
+## Movie/Actor ERD
+
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+erDiagram
+    movies {
+        bigint id PK
+        varchar name
+        varchar producer_name
+        date release_date
+    }
+    actors {
+        bigint id PK
+        varchar first_name
+        varchar last_name
+        date birthday
+    }
+    actors_in_movies {
+        bigint movie_id FK
+        bigint actor_id FK
+    }
+
+    movies ||--o{ actors_in_movies : "1:N"
+    actors ||--o{ actors_in_movies : "1:N"
+    actors_in_movies }o--|| movies : ""
+    actors_in_movies }o--|| actors : ""
+```
+
+## Spring + Coroutine Bridge Pattern (`DataInitializer`)
+
+`onApplicationEvent` in `ApplicationListener<ApplicationReadyEvent>` is a regular (non-suspend) function.
+To use `suspendTransaction` from Exposed R2DBC, you must bridge to the coroutine world with `runBlocking`.
 
 ```kotlin
 @Component
 class DataInitializer: ApplicationListener<ApplicationReadyEvent> {
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
-        // runBlocking: 현재 스레드를 블로킹하고 코루틴을 실행
-        // Dispatchers.IO: I/O 집약적 초기화 작업에 최적화된 스레드 풀 사용
+        // runBlocking: blocks the current thread and runs coroutines
+        // Dispatchers.IO: thread pool optimized for I/O-intensive initialization
         runBlocking(Dispatchers.IO) {
             suspendTransaction {
                 createTables()
@@ -111,18 +180,18 @@ class DataInitializer: ApplicationListener<ApplicationReadyEvent> {
 }
 ```
 
-> **주의**: `runBlocking`은 초기화 로직에서만 사용합니다. 서비스/레포지토리 레이어에서는
-> `suspend fun`과 `suspendTransaction`을 직접 사용해야 합니다.
+> **Note**: Use `runBlocking` only in initialization logic. In service/repository layers,
+> use `suspend fun` and `suspendTransaction` directly.
 
-## 데이터베이스 스키마
+## Database Schema
 
 ![MovieSchema](MovieSchema.png)
 
-### 테이블 구조
+### Table Structure
 
-- **movies** - 영화 정보 (`id`, `name`, `producer_name`, `release_date`)
-- **actors** - 배우 정보 (`id`, `first_name`, `last_name`, `birthday`)
-- **actors_in_movies** - 영화-배우 다대다 관계 (`movie_id`, `actor_id`)
+- **movies** - Movie info (`id`, `name`, `producer_name`, `release_date`)
+- **actors** - Actor info (`id`, `first_name`, `last_name`, `birthday`)
+- **actors_in_movies** - Many-to-many relationship between movies and actors (`movie_id`, `actor_id`)
 
 ```kotlin
 object MovieTable: LongIdTable("movies") {
@@ -144,12 +213,12 @@ object ActorInMovieTable: Table("actors_in_movies") {
 }
 ```
 
-## 핵심 구현 패턴
+## Core Implementation Patterns
 
-### 1. ExposedR2dbcRepository 기반 Repository
+### 1. Repository Based on ExposedR2dbcRepository
 
-`ExposedR2dbcRepository<T, ID>` 인터페이스를 구현하여 기본 CRUD(`findAll`, `findById`,
-`deleteById` 등)를 상속받고, 도메인별 커스텀 쿼리 메서드를 추가합니다.
+Implement `ExposedR2dbcRepository<T, ID>` to inherit basic CRUD (`findAll`, `findById`, `deleteById`, etc.)
+and add domain-specific custom query methods.
 
 ```kotlin
 @Repository
@@ -169,9 +238,9 @@ class MovieR2dbcRepository: ExposedR2dbcRepository<MovieRecord, Long> {
 }
 ```
 
-### 2. Coroutine 기반 Controller
+### 2. Coroutine-Based Controller
 
-Spring WebFlux의 `suspend` 함수를 활용하여 비동기 API 엔드포인트를 구현합니다. 모든 DB 접근은 `suspendTransaction` 블록 내에서 수행됩니다.
+Implement async API endpoints using Spring WebFlux's `suspend` functions. All DB access is performed inside a `suspendTransaction` block.
 
 ```kotlin
 @RestController
@@ -186,9 +255,9 @@ class MovieController(private val movieRepository: MovieR2dbcRepository) {
 }
 ```
 
-### 3. Flow를 활용한 Join 쿼리 + bufferUntilChanged
+### 3. Join Query with Flow + bufferUntilChanged
 
-영화-배우 관계(다대다 Join)를 조회할 때, `Flow`의 `bufferUntilChanged`를 사용하여 동일 영화에 속하는 배우들을 그룹핑합니다.
+When querying the many-to-many movie-actor relationship, use Flow's `bufferUntilChanged` to group actors belonging to the same movie.
 
 ```kotlin
 fun getAllMoviesWithActors(): Flow<MovieWithActorRecord> {
@@ -204,10 +273,10 @@ fun getAllMoviesWithActors(): Flow<MovieWithActorRecord> {
 }
 ```
 
-### 4. R2DBC ConnectionPool 설정
+### 4. R2DBC ConnectionPool Configuration
 
-`ConnectionFactoryOptions`를 Profile별(H2/MySQL/PostgreSQL)로 구성하고,
-`ConnectionPool`로 래핑하여 `R2dbcDatabase`에 연결합니다.
+Configure `ConnectionFactoryOptions` per profile (H2/MySQL/PostgreSQL),
+wrap with `ConnectionPool`, and connect to `R2dbcDatabase`.
 
 ```kotlin
 @Bean
@@ -224,79 +293,79 @@ fun r2dbcDatabase(
 }
 ```
 
-## API 엔드포인트
+## API Endpoints
 
 ### Movies (`/movies`)
 
-| Method | Path                                       | 설명               |
-|--------|--------------------------------------------|------------------|
-| GET    | `/movies`                                  | 전체 영화 목록 조회      |
-| GET    | `/movies/{id}`                             | 영화 상세 조회 (배우 포함) |
-| GET    | `/movies/search?name=...&producerName=...` | 영화 검색            |
-| POST   | `/movies`                                  | 영화 등록            |
-| DELETE | `/movies/{id}`                             | 영화 삭제            |
+| Method | Path                                       | Description                        |
+|--------|--------------------------------------------|------------------------------------|
+| GET    | `/movies`                                  | Get all movies                     |
+| GET    | `/movies/{id}`                             | Get movie details (with actors)    |
+| GET    | `/movies/search?name=...&producerName=...` | Search movies                      |
+| POST   | `/movies`                                  | Create a movie                     |
+| DELETE | `/movies/{id}`                             | Delete a movie                     |
 
 ### Actors (`/actors`)
 
-| Method | Path                                        | 설명          |
-|--------|---------------------------------------------|-------------|
-| GET    | `/actors`                                   | 전체 배우 목록 조회 |
-| GET    | `/actors/{id}`                              | 배우 상세 조회    |
-| GET    | `/actors/search?firstName=...&lastName=...` | 배우 검색       |
-| POST   | `/actors`                                   | 배우 등록       |
-| DELETE | `/actors/{id}`                              | 배우 삭제       |
+| Method | Path                                        | Description        |
+|--------|---------------------------------------------|--------------------|
+| GET    | `/actors`                                   | Get all actors     |
+| GET    | `/actors/{id}`                              | Get actor details  |
+| GET    | `/actors/search?firstName=...&lastName=...` | Search actors      |
+| POST   | `/actors`                                   | Create an actor    |
+| DELETE | `/actors/{id}`                              | Delete an actor    |
 
 ### Movie-Actors (`/movie-actors`)
 
-| Method | Path                             | 설명                |
-|--------|----------------------------------|-------------------|
-| GET    | `/movie-actors/{movieId}`        | 특정 영화의 배우 목록 조회   |
-| GET    | `/movie-actors/count`            | 영화별 출연 배우 수 조회    |
-| GET    | `/movie-actors/acting-producers` | 제작자가 직접 출연한 영화 조회 |
+| Method | Path                             | Description                              |
+|--------|----------------------------------|------------------------------------------|
+| GET    | `/movie-actors/{movieId}`        | Get actors for a specific movie          |
+| GET    | `/movie-actors/count`            | Get actor count per movie                |
+| GET    | `/movie-actors/acting-producers` | Get movies where producer also acted     |
 
-## 실행 방법
+## Running the Application
 
-### 기본 실행 (H2 인메모리)
+### Default Run (H2 In-Memory)
 
 ```bash
 ./gradlew :05-exposed-r2dbc-repository-coroutines:bootRun
 ```
 
-### Profile 지정 실행
+### Run with Specific Profile
 
 ```bash
-# PostgreSQL (Testcontainers 자동 실행)
+# PostgreSQL (Testcontainers auto-starts)
 ./gradlew :05-exposed-r2dbc-repository-coroutines:bootRun --args='--spring.profiles.active=postgres'
 
-# MySQL (Testcontainers 자동 실행)
+# MySQL (Testcontainers auto-starts)
 ./gradlew :05-exposed-r2dbc-repository-coroutines:bootRun --args='--spring.profiles.active=mysql'
 ```
 
-### Swagger UI 접속
+### Swagger UI
 
-애플리케이션 실행 후 http://localhost:8080/webjars/swagger-ui/index.html 에서 API 문서를 확인할 수 있습니다.
+After starting the application, access API docs at http://localhost:8080/webjars/swagger-ui/index.html.
 
-## 테스트
+## Testing
 
 ```bash
 ./gradlew :05-exposed-r2dbc-repository-coroutines:test
 ```
 
-테스트는 `@ActiveProfiles("h2")`로 H2 인메모리 DB를 사용하며, `@SpringBootTest`로 전체 애플리케이션 컨텍스트를 로드합니다.
+Tests use H2 in-memory DB with `@ActiveProfiles("h2")` and load the full application context with `@SpringBootTest`.
 
-### 테스트 목록
+### Test List
 
-- **MovieR2dbcRepositoryTest** - 영화 CRUD, 검색, Join 쿼리, 배우 수 집계, 제작자 겸 배우 조회
-- **ActorR2dbcRepositoryTest** - 배우 CRUD, 검색
-- **MovieControllerTest** - 영화 API 엔드포인트 통합 테스트
-- **ActorControllerTest** - 배우 API 엔드포인트 통합 테스트
-- **MovieActorsControllerTest** - 영화-배우 관계 API 통합 테스트
-- **ConfigurationTest** - Spring 설정 로드 검증
-- **DomainSQLTest** - 도메인 SQL 쿼리 테스트
+- **MovieR2dbcRepositoryTest** - Movie CRUD, search, join queries, actor count aggregation, producer-actor overlap queries
+- **ActorR2dbcRepositoryTest** - Actor CRUD, search
+- **MovieControllerTest** - Movie API endpoint integration tests
+- **ActorControllerTest** - Actor API endpoint integration tests
+- **MovieActorsControllerTest** - Movie-Actor relationship API integration tests
+- **ConfigurationTest** - Spring configuration load verification
+- **DomainSQLTest** - Domain SQL query tests
 
-## Spring DI + Exposed R2DBC 통합 패턴
+## Spring DI + Exposed R2DBC Integration Patterns
 
-### 의존성 주입 구조
+### Dependency Injection Structure
 
 ```
 Spring Container
@@ -307,32 +376,32 @@ Spring Container
             └── suspendTransaction { repository.xxx() }
 ```
 
-### Repository 계층 설계
+### Repository Layer Design
 
-`R2dbcRepository<ID, Table, Entity>` 인터페이스가 기본 CRUD를 제공합니다.
-구현 클래스에서 `override val table` 과 `override suspend fun ResultRow.toEntity()` 만 구현하면
-`findAll()`, `findById()`, `deleteById()` 등을 상속받습니다.
+The `R2dbcRepository<ID, Table, Entity>` interface provides basic CRUD.
+Implementing classes only need to provide `override val table` and `override suspend fun ResultRow.toEntity()`
+to inherit `findAll()`, `findById()`, `deleteById()`, etc.
 
 ```kotlin
-// 인터페이스 준수로 얻는 기본 기능
+// Base functionality from interface compliance
 interface R2dbcRepository<ID, T: IdTable<ID>, E> {
     val table: T
     suspend fun ResultRow.toEntity(): E
-    fun findAll(): Flow<E>                  // 자동 상속
-    suspend fun findById(id: ID): E?        // 자동 상속
-    suspend fun deleteById(id: ID): Int     // 자동 상속
+    fun findAll(): Flow<E>                  // inherited automatically
+    suspend fun findById(id: ID): E?        // inherited automatically
+    suspend fun deleteById(id: ID): Int     // inherited automatically
 }
 ```
 
-도메인별 쿼리(`searchMovies`, `getAllMoviesWithActors` 등)는 구현 클래스에 직접 추가합니다.
+Domain-specific queries (`searchMovies`, `getAllMoviesWithActors`, etc.) are added directly to the implementation class.
 
-### 트랜잭션 경계
+### Transaction Boundaries
 
-Controller에서 `suspendTransaction { }` 블록으로 트랜잭션 경계를 명시합니다.
-Repository 메서드 자체는 트랜잭션을 열지 않으므로, 여러 Repository 호출을 하나의 트랜잭션으로 묶을 수 있습니다.
+The Controller explicitly defines transaction boundaries with `suspendTransaction { }` blocks.
+Repository methods themselves do not open transactions, so multiple Repository calls can be wrapped in a single transaction.
 
 ```kotlin
-// 여러 Repository 호출을 하나의 트랜잭션으로 묶는 예
+// Example: wrapping multiple Repository calls in a single transaction
 @PostMapping("/{movieId}/actors/{actorId}")
 suspend fun addActorToMovie(@PathVariable movieId: Long, @PathVariable actorId: Long) =
     suspendTransaction {
@@ -344,7 +413,7 @@ suspend fun addActorToMovie(@PathVariable movieId: Long, @PathVariable actorId: 
 
 ## Further Reading
 
-- [ExposedRepostiroy with Coroutines](https://debop.notion.site/ExposedRepository-with-Coroutines-1c32744526b080a1a6cbe2c86c2cb889)
+- [ExposedRepository with Coroutines](https://debop.notion.site/ExposedRepository-with-Coroutines-1c32744526b080a1a6cbe2c86c2cb889)
 - [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
 - [Spring WebFlux](https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html)
 - [Exposed Wiki: Coroutines (if available)](https://github.com/JetBrains/Exposed/wiki/Coroutines)

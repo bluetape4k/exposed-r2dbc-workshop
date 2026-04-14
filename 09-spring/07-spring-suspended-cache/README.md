@@ -1,27 +1,28 @@
+> 한국어 버전: [README.ko.md](README.ko.md)
+
 # 07-spring-suspended-cache
 
-Spring WebFlux + Exposed R2DBC 환경에서 Lettuce 기반의 Suspended Cache를 Coroutines로 구현하는 예제입니다. 동일한
-`CountryR2dbcRepository` 인터페이스를 DB 직접 조회(Default)와 Redis 캐시 적용(Cached) 두 가지 방식으로 구현하여 캐시 유무에 따른 성능 차이를 비교할 수 있습니다.
+An example implementing a Lettuce-based Suspended Cache with Coroutines in a Spring WebFlux + Exposed R2DBC environment. The same `CountryR2dbcRepository` interface is implemented in two ways — direct DB query (Default) and Redis cache (Cached) — to compare performance differences with and without caching.
 
-## 문서
+## Documentation
 
 * [Exposed with Spring Suspended Cache](https://debop.notion.site/Exposed-with-Suspended-Spring-Cache-1db2744526b080769d2ef307e4a3c6c9)
 
-## 기술 스택
+## Tech Stack
 
-| 구분        | 기술                             |
-|-----------|--------------------------------|
-| Framework | Spring Boot (WebFlux)          |
-| ORM       | Exposed R2DBC                  |
-| 비동기       | Kotlin Coroutines              |
-| Cache     | Lettuce (Redis Coroutines API) |
-| Codec     | Fory, Kryo5                    |
-| 압축        | LZ4, Snappy, Zstd              |
-| DB        | H2 (기본), MySQL 8, PostgreSQL   |
-| 컨테이너      | Testcontainers (DB + Redis)    |
-| 서버        | Netty (Reactive)               |
+| Category    | Technology                             |
+|-------------|----------------------------------------|
+| Framework   | Spring Boot (WebFlux)                  |
+| ORM         | Exposed R2DBC                          |
+| Async       | Kotlin Coroutines                      |
+| Cache       | Lettuce (Redis Coroutines API)         |
+| Codec       | Fory, Kryo5                            |
+| Compression | LZ4, Snappy, Zstd                      |
+| DB          | H2 (default), MySQL 8, PostgreSQL      |
+| Container   | Testcontainers (DB + Redis)            |
+| Server      | Netty (Reactive)                       |
 
-## 실행 흐름
+## Execution Flow
 
 ```mermaid
 sequenceDiagram
@@ -31,58 +32,156 @@ sequenceDiagram
     participant DB as R2DBC Database
 
     C ->> Cache: cache.get(code)
-    alt 캐시 HIT
-        Cache -->> C: 캐시된 결과 반환
-    else 캐시 MISS
+    alt Cache HIT
+        Cache -->> C: return cached result
+    else Cache MISS
         Cache -->> C: null
         C ->> Repo: delegate.findByCode(code) (suspend)
         Repo ->> DB: suspendTransaction { SELECT }
         DB -->> Repo: ResultRow
         Repo -->> C: CountryRecord
         C ->> Cache: cache.put(code, result) (TTL 60s)
-        Cache -->> C: 새로 조회한 결과 반환
+        Cache -->> C: return freshly fetched result
     end
 ```
 
-## 프로젝트 구조
+## Cache Class Structure
+
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+classDiagram
+    class CountryR2dbcRepository {
+        <<interface>>
+        +findAll() Flow~CountryRecord~
+        +findByCode(code) CountryRecord?
+        +save(record) CountryRecord
+        +update(record) Int
+        +deleteByCode(code) Int
+    }
+    class DefaultCountryR2dbcRepository {
+        +table CountryTable
+        +findAll() Flow~CountryRecord~
+        +findByCode(code) CountryRecord?
+        +save(record) CountryRecord
+        +update(record) Int
+    }
+    class CachedCountryR2dbcRepository {
+        -delegate CountryR2dbcRepository
+        -cacheManager LettuceSuspendedCacheManager
+        -cache LettuceSuspendedCache
+        +findByCode(code) CountryRecord?
+        +update(record) Int
+        +evictAll()
+    }
+    class LettuceSuspendedCache~K,V~ {
+        +name String
+        +commands RedisCoroutinesCommands
+        +ttlSeconds Long
+        +get(key) V?
+        +put(key, value)
+        +evict(key)
+        +clear()
+    }
+    class LettuceSuspendedCacheManager {
+        -redisClient RedisClient
+        -ttlSeconds Long
+        -codec LettuceBinaryCodec
+        +getCache(name) LettuceSuspendedCache
+    }
+
+    CountryR2dbcRepository <|.. DefaultCountryR2dbcRepository
+    CountryR2dbcRepository <|.. CachedCountryR2dbcRepository
+    CachedCountryR2dbcRepository --> DefaultCountryR2dbcRepository : delegates
+    CachedCountryR2dbcRepository --> LettuceSuspendedCacheManager : uses
+    LettuceSuspendedCacheManager --> LettuceSuspendedCache : creates
+
+    note for CachedCountryR2dbcRepository "Decorator pattern\nCache-Aside strategy"
+    note for LettuceSuspendedCache "Lettuce Coroutines API\nsuspend fun based"
+
+    style CountryR2dbcRepository fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    style DefaultCountryR2dbcRepository fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    style CachedCountryR2dbcRepository fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
+    style LettuceSuspendedCache fill:#FFF3E0,stroke:#FFCC80,color:#E65100
+    style LettuceSuspendedCacheManager fill:#E0F2F1,stroke:#80CBC4,color:#00695C
+```
+
+## Cache-Aside Pattern Flow
+
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+flowchart TD
+    Request["Request: findByCode(code)"]
+    CacheGet["Redis GET\ncaches:country:code:{code}"]
+    CacheHit{"Cache HIT?"}
+    ReturnCached["Return cached result\nimmediate response"]
+    DBQuery["DB query\nsuspendTransaction SELECT"]
+    CachePut["Redis SET\n(TTL 60s)"]
+    ReturnDB["Return DB result"]
+
+    UpdateReq["Request: update(record)"]
+    CacheEvict["Redis DEL\ncache invalidation"]
+    DBUpdate["DB update\nsuspendTransaction UPDATE"]
+
+    Request --> CacheGet
+    CacheGet --> CacheHit
+    CacheHit -- HIT --> ReturnCached
+    CacheHit -- MISS --> DBQuery
+    DBQuery --> CachePut
+    CachePut --> ReturnDB
+
+    UpdateReq --> CacheEvict
+    CacheEvict --> DBUpdate
+
+    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
+    classDef red    fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
+    class Request,UpdateReq blue
+    class CacheGet,CachePut,CacheEvict orange
+    class DBQuery,DBUpdate green
+    class ReturnCached,ReturnDB green
+    class CacheHit orange
+```
+
+## Project Structure
 
 ```
 src/main/kotlin/exposed/r2dbc/examples/suspendedcache/
-├── SpringSuspendedCacheApplication.kt           # Spring Boot 애플리케이션 진입점
+├── SpringSuspendedCacheApplication.kt           # Spring Boot application entry point
 ├── cache/
-│   ├── LettuceSuspendedCache.kt                 # Lettuce Coroutines 기반 캐시 구현
-│   └── LettuceSuspendedCacheManager.kt          # 캐시 인스턴스 관리 매니저
+│   ├── LettuceSuspendedCache.kt                 # Lettuce Coroutines-based cache implementation
+│   └── LettuceSuspendedCacheManager.kt          # Cache instance manager
 ├── config/
-│   ├── ExposedR2dbcConfig.kt                    # R2DBC Database 및 ConnectionPool 설정
-│   ├── LettuceCacheConfig.kt                    # Redis 클라이언트 및 CacheManager 설정
-│   ├── NettyConfig.kt                           # Netty 서버 튜닝
-│   └── R2dbcRepositoryConfig.kt                 # Repository Bean 등록 (Default/Cached)
+│   ├── ExposedR2dbcConfig.kt                    # R2DBC Database and ConnectionPool configuration
+│   ├── LettuceCacheConfig.kt                    # Redis client and CacheManager configuration
+│   ├── NettyConfig.kt                           # Netty server tuning
+│   └── R2dbcRepositoryConfig.kt                 # Repository Bean registration (Default/Cached)
 ├── controller/
-│   ├── DefaultCountryController.kt              # DB 직접 조회 API (/default/countries)
-│   └── CachedCountryController.kt               # Redis 캐시 적용 API (/cached/countries)
+│   ├── DefaultCountryController.kt              # Direct DB query API (/default/countries)
+│   └── CachedCountryController.kt               # Redis cache API (/cached/countries)
 ├── domain/
 │   ├── model/
-│   │   └── CountrySchema.kt                     # CountryTable 정의 + CountryRecord DTO + Mapper
+│   │   └── CountrySchema.kt                     # CountryTable definition + CountryRecord DTO + Mapper
 │   └── repository/
-│       ├── CountryR2dbcRepository.kt            # Repository 인터페이스
-│       ├── DefaultCountryR2dbcRepository.kt     # DB 직접 조회 구현
-│       └── CachedCountryR2dbcRepository.kt      # Redis 캐시 + DB 조회 (Decorator 패턴)
+│       ├── CountryR2dbcRepository.kt            # Repository interface
+│       ├── DefaultCountryR2dbcRepository.kt     # Direct DB query implementation
+│       └── CachedCountryR2dbcRepository.kt      # Redis cache + DB query (Decorator pattern)
 └── utils/
-    └── DataPopulator.kt                         # 애플리케이션 시작 시 249개 국가 코드 샘플 데이터 삽입 (runBlocking 브릿지 패턴)
+    └── DataPopulator.kt                         # Insert 249 country code sample data on startup (runBlocking bridge pattern)
 ```
 
-## Spring + Coroutine 브릿지 패턴 (`DataPopulator`)
+## Spring + Coroutine Bridge Pattern (`DataPopulator`)
 
-`ApplicationListener<ApplicationReadyEvent>`의 `onApplicationEvent`는 일반(non-suspend) 함수입니다.
-Exposed R2DBC의 `suspendTransaction`을 사용하려면 `runBlocking`으로 코루틴 세계를 브릿지해야 합니다.
+`onApplicationEvent` in `ApplicationListener<ApplicationReadyEvent>` is a regular (non-suspend) function.
+To use `suspendTransaction` from Exposed R2DBC, you must bridge to the coroutine world with `runBlocking`.
 
 ```kotlin
 @Component
 class DataPopulator: ApplicationListener<ApplicationReadyEvent> {
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
-        // runBlocking: 현재 스레드를 블로킹하고 코루틴을 실행 (초기화 전용 패턴)
-        // Dispatchers.IO: 249개 국가 코드 데이터 삽입에 최적화된 I/O 스레드 풀 사용
+        // runBlocking: blocks the current thread and runs coroutines (initialization-only pattern)
+        // Dispatchers.IO: thread pool optimized for inserting 249 country code data
         runBlocking(Dispatchers.IO) {
             suspendTransaction {
                 createTables()
@@ -93,15 +192,15 @@ class DataPopulator: ApplicationListener<ApplicationReadyEvent> {
 }
 ```
 
-> **주의**: `runBlocking`은 초기화 로직에서만 사용합니다. Repository/Service 레이어에서는
-> `suspend fun`과 `suspendTransaction`을 직접 사용해야 합니다.
+> **Note**: Use `runBlocking` only in initialization logic. In the Repository/Service layer,
+> use `suspend fun` and `suspendTransaction` directly.
 
-## 아키텍처
+## Architecture
 
-### Decorator 패턴을 활용한 캐시 계층 분리
+### Cache Layer Separation Using Decorator Pattern
 
-캐시 로직을 Repository 구현에서 분리하여 Decorator 패턴으로 적용합니다.
-`CachedCountryR2dbcRepository`는 `DefaultCountryR2dbcRepository`를 래핑하여 Redis 캐시를 투명하게 적용합니다.
+Cache logic is separated from the Repository implementation and applied via the Decorator pattern.
+`CachedCountryR2dbcRepository` wraps `DefaultCountryR2dbcRepository` to transparently apply Redis caching.
 
 ```
 [Controller] → [CachedCountryR2dbcRepository] → [Redis Cache]
@@ -109,7 +208,7 @@ class DataPopulator: ApplicationListener<ApplicationReadyEvent> {
               [DefaultCountryR2dbcRepository] → [R2DBC Database]
 ```
 
-### Bean 등록 구조
+### Bean Registration Structure
 
 ```kotlin
 @Configuration
@@ -125,9 +224,9 @@ class R2dbcRepositoryConfig(private val suspendedCacheManager: LettuceSuspendedC
 }
 ```
 
-Controller에서 `@Qualifier`로 원하는 Repository를 선택합니다.
+Controllers select the desired Repository with `@Qualifier`.
 
-## 데이터베이스 스키마
+## Database Schema
 
 ### CountryTable
 
@@ -139,14 +238,14 @@ object CountryTable: IntIdTable("countries") {
 }
 ```
 
-- 249개 ISO 국가 코드를 샘플 데이터로 삽입
-- `description`에 대용량 텍스트를 포함하여 캐시 효과를 체감할 수 있도록 구성
+- 249 ISO country codes inserted as sample data
+- `description` contains large text to make cache effects perceptible
 
-## 핵심 구현
+## Core Implementation
 
 ### 1. LettuceSuspendedCache
 
-Lettuce의 `RedisCoroutinesCommands`를 사용하여 `suspend` 함수로 Redis 캐시를 조작합니다. TTL 기반 자동 만료를 지원합니다.
+Uses Lettuce's `RedisCoroutinesCommands` to operate Redis cache with `suspend` functions. Supports TTL-based automatic expiration.
 
 ```kotlin
 class LettuceSuspendedCache<K: Any, V: Any>(
@@ -175,7 +274,7 @@ class LettuceSuspendedCache<K: Any, V: Any>(
 
 ### 2. LettuceSuspendedCacheManager
 
-캐시 인스턴스를 이름(name)별로 관리하며, `LettuceBinaryCodec`(LZ4 + Fory 직렬화)을 적용합니다.
+Manages cache instances by name and applies `LettuceBinaryCodec` (LZ4 + Fory serialization).
 
 ```kotlin
 @Bean
@@ -183,18 +282,18 @@ fun lettuceSuspendedCacheManager(redisClient: RedisClient): LettuceSuspendedCach
     return LettuceSuspendedCacheManager(
         redisClient = redisClient,
         ttlSeconds = 60L,
-        codec = LettuceBinaryCodecs.lz4Fory(),   // LZ4 압축 + Fory 직렬화
+        codec = LettuceBinaryCodecs.lz4Fory(),   // LZ4 compression + Fory serialization
     )
 }
 ```
 
 ### 3. CachedCountryR2dbcRepository
 
-Cache-Aside 패턴을 구현합니다:
+Implements the Cache-Aside pattern:
 
-- **Read**: 캐시 조회 -> miss 시 DB 조회 후 캐시 저장
-- **Update**: 캐시 무효화 후 DB 업데이트
-- **Evict All**: 해당 캐시 이름 패턴의 모든 키 삭제
+- **Read**: Check cache → if miss, query DB and store in cache
+- **Update**: Invalidate cache then update DB
+- **Evict All**: Delete all keys matching the cache name pattern
 
 ```kotlin
 class CachedCountryR2dbcRepository(
@@ -214,58 +313,58 @@ class CachedCountryR2dbcRepository(
 }
 ```
 
-## API 엔드포인트
+## API Endpoints
 
-### Default (DB 직접 조회)
+### Default (Direct DB Query)
 
-| Method | Path                        | 설명                 |
-|--------|-----------------------------|--------------------|
-| GET    | `/default/countries/{code}` | 국가 코드로 조회 (캐시 미적용) |
+| Method | Path                        | Description                    |
+|--------|-----------------------------|--------------------------------|
+| GET    | `/default/countries/{code}` | Query by country code (no cache) |
 
-### Cached (Redis 캐시 적용)
+### Cached (Redis Cache Applied)
 
-| Method | Path                       | 설명                      |
-|--------|----------------------------|-------------------------|
-| GET    | `/cached/countries/{code}` | 국가 코드로 조회 (Redis 캐시 적용) |
+| Method | Path                       | Description                         |
+|--------|----------------------------|-------------------------------------|
+| GET    | `/cached/countries/{code}` | Query by country code (Redis cache) |
 
-동일한 API 구조로 `/default`와 `/cached` 경로를 비교하여 캐시 적용 효과를 확인할 수 있습니다.
+Compare `/default` and `/cached` paths with the same API structure to observe caching effects.
 
-## 실행 방법
+## Running the Application
 
 ```bash
-# 기본 실행 (H2 + Redis via Testcontainers)
+# Default run (H2 + Redis via Testcontainers)
 ./gradlew :07-spring-suspended-cache:bootRun
 
-# PostgreSQL 사용
+# Use PostgreSQL
 ./gradlew :07-spring-suspended-cache:bootRun --args='--spring.profiles.active=postgres'
 
-# MySQL 사용
+# Use MySQL
 ./gradlew :07-spring-suspended-cache:bootRun --args='--spring.profiles.active=mysql'
 ```
 
-Redis는 Testcontainers를 통해 자동으로 실행됩니다.
+Redis starts automatically via Testcontainers.
 
-## 테스트
+## Testing
 
 ```bash
 ./gradlew :07-spring-suspended-cache:test
 ```
 
-### 테스트 목록
+### Test List
 
-- **DefaultCountryR2dbcRepositoryTest** - DB 직접 조회 Repository 테스트 (반복 로드, 업데이트)
-- **CachedCountryR2dbcRepositoryTest** - 캐시 적용 Repository 테스트 (반복 로드, 업데이트, 캐시 전체 삭제)
-- **DefaultCountryControllerTest** - DB 직접 조회 API 테스트 (순차/병렬 조회)
-- **CachedCountryControllerTest** - 캐시 적용 API 테스트 (순차/병렬 조회)
-- **ExposedR2dbcConfigTest** - R2DBC 설정 로드 검증
-- **LettuceCacheConfigTest** - Redis 캐시 설정 로드 검증
-- **R2dbcRepositoryConfigTest** - Repository Bean 등록 검증
+- **DefaultCountryR2dbcRepositoryTest** - Direct DB query Repository tests (repeated load, update)
+- **CachedCountryR2dbcRepositoryTest** - Cached Repository tests (repeated load, update, full cache eviction)
+- **DefaultCountryControllerTest** - Direct DB query API tests (sequential/parallel queries)
+- **CachedCountryControllerTest** - Cached API tests (sequential/parallel queries)
+- **ExposedR2dbcConfigTest** - R2DBC configuration load verification
+- **LettuceCacheConfigTest** - Redis cache configuration load verification
+- **R2dbcRepositoryConfigTest** - Repository Bean registration verification
 
-테스트는 `@RepeatedTest`로 반복 실행하여 첫 번째(cold) 조회와 이후(warm/cached) 조회의 성능 차이를 확인합니다.
+Tests use `@RepeatedTest` to verify performance differences between the first (cold) query and subsequent (warm/cached) queries.
 
-## Suspended Cache 작동 원리 (상세)
+## How Suspended Cache Works (Detail)
 
-### LettuceSuspendedCache 내부 흐름
+### LettuceSuspendedCache Internal Flow
 
 ```
 [Controller suspend fun]
@@ -275,43 +374,43 @@ Redis는 Testcontainers를 통해 자동으로 실행됩니다.
         │
         ├─ cache.get(code)          ← Redis GET "caches:country:code:<code>"
         │       │
-        │       ├─ HIT  → 즉시 반환 (DB 호출 없음)
+        │       ├─ HIT  → return immediately (no DB call)
         │       │
         │       └─ MISS → delegate.findByCode(code)   ← Exposed R2DBC suspendTransaction
         │                       │
         │                       └─ cache.put(code, result)  ← Redis SET/SETEX (TTL 60s)
         │
-        └─ cache.evict(code)        ← Redis DEL (업데이트 시 무효화)
+        └─ cache.evict(code)        ← Redis DEL (invalidate on update)
 ```
 
-### SCAN 기반 전체 캐시 삭제
+### SCAN-Based Full Cache Eviction
 
-Redis의 `KEYS` 명령은 모든 키를 한 번에 스캔하므로 대규모 데이터셋에서 Redis 서버를 일시적으로 블로킹할 수 있습니다.
-`LettuceSuspendedCache.clear()`는 `SCAN` + `UNLINK` 패턴으로 이 문제를 해결합니다:
+Redis's `KEYS` command scans all keys at once and can temporarily block the Redis server on large datasets.
+`LettuceSuspendedCache.clear()` solves this with a `SCAN` + `UNLINK` pattern:
 
 ```
 SCAN cursor MATCH "caches:country:code:*" COUNT 100
-    → 키 목록 100개씩 취득
-    → UNLINK key1 key2 ... (비동기 삭제, DEL보다 안전)
-    → cursor가 "0"이 될 때까지 반복
+    → get 100 keys at a time
+    → UNLINK key1 key2 ... (async deletion, safer than DEL)
+    → repeat until cursor is "0"
 ```
 
-`UNLINK`는 `DEL`과 달리 백그라운드에서 메모리를 해제하므로 Redis 이벤트 루프를 차단하지 않습니다.
+Unlike `DEL`, `UNLINK` releases memory in the background and does not block the Redis event loop.
 
-### 직렬화/압축 전략
+### Serialization/Compression Strategy
 
-| 설정                  | Codec              | 압축  | 특징                           |
-|---------------------|--------------------|-----|------------------------------|
-| `lz4Fory()`         | Fory (Java)        | LZ4 | 빠른 직렬화 + 중간 압축 (기본값)         |
-| `lz4Kryo5()`        | Kryo5              | LZ4 | Fory보다 약간 느리지만 더 광범위한 타입 지원  |
-| `snappyFory()`      | Fory               | Snappy | Google 압축 (네트워크 전송 최적화)   |
-| `zstdFory()`        | Fory               | Zstd | 높은 압축률 (저장 공간 절약)            |
+| Setting             | Codec        | Compression | Characteristics                              |
+|---------------------|--------------|-------------|----------------------------------------------|
+| `lz4Fory()`         | Fory (Java)  | LZ4         | Fast serialization + moderate compression (default) |
+| `lz4Kryo5()`        | Kryo5        | LZ4         | Slightly slower than Fory but wider type support |
+| `snappyFory()`      | Fory         | Snappy      | Google compression (network transfer optimized) |
+| `zstdFory()`        | Fory         | Zstd        | High compression ratio (saves storage space) |
 
-`CountryRecord`의 `description` 필드에 대용량 텍스트가 포함되므로 압축 효과가 큽니다.
+Since `CountryRecord`'s `description` field contains large text, the compression effect is significant.
 
 ## Further Reading
 
-- [Exppose with Spring Suspended Cache](https://debop.notion.site/Exposed-with-Suspended-Spring-Cache-1db2744526b080769d2ef307e4a3c6c9)
+- [Exposed with Spring Suspended Cache](https://debop.notion.site/Exposed-with-Suspended-Spring-Cache-1db2744526b080769d2ef307e4a3c6c9)
 - [Spring Caching Abstraction](https://docs.spring.io/spring-framework/docs/current/reference/html/integration.html#cache)
 - [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
 - [Spring WebFlux](https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html)

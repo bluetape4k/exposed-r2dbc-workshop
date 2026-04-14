@@ -1,28 +1,30 @@
-# 02 Column Types (컬럼 타입)
+> 한국어 버전: [README.ko.md](README.ko.md)
 
-Exposed R2DBC DSL에서 지원하는 **다양한 컬럼 타입(Column Types)
-** 의 사용법을 다루는 예제 모듈입니다. Boolean, Char, Numeric, Double, Array, Unsigned, Blob, UUID 등 SQL 데이터 타입별로 테이블 정의, INSERT, SELECT, 타입 변환 패턴을 9개의 테스트 파일로 학습할 수 있습니다.
+# 02 Column Types
 
-## 학습 목표
+An example module covering the usage of **various column types** supported by the Exposed R2DBC DSL. Learn table definitions, INSERT, SELECT, and type conversion patterns for Boolean, Char, Numeric, Double, Array, Unsigned, Blob, UUID, and other SQL data types across 9 test files.
 
-- 다양한 SQL 컬럼 타입을 Exposed DSL로 정의하는 방법 이해
-- Boolean, String, Numeric 타입의 활용
-- Array, Blob, UUID 등 고급 타입 사용법
-- 데이터베이스별 타입 지원 차이점 파악
+## Learning Objectives
 
-## 기술 스택
+- Understand how to define various SQL column types using the Exposed DSL
+- Use Boolean, String, and Numeric types effectively
+- Learn advanced types: Array, Blob, UUID, etc.
+- Understand differences in type support across databases
 
-| 구분   | 기술                                              |
-|------|-------------------------------------------------|
-| ORM  | Exposed R2DBC DSL                               |
-| 비동기  | Kotlin Coroutines                               |
-| DB   | H2 (기본), MariaDB, MySQL 8, PostgreSQL           |
-| 컨테이너 | Testcontainers                                  |
-| 테스트  | JUnit 5 + Kluent + ParameterizedTest (멀티 DB 지원) |
+## Tech Stack
 
-## 구조 다이어그램
+| Category  | Technology                                                  |
+|-----------|-------------------------------------------------------------|
+| ORM       | Exposed R2DBC DSL                                           |
+| Async     | Kotlin Coroutines                                           |
+| DB        | H2 (default), MariaDB, MySQL 8, PostgreSQL                  |
+| Container | Testcontainers                                              |
+| Testing   | JUnit 5 + Kluent + ParameterizedTest (multi-DB support)     |
+
+## Structure Diagram
 
 ```mermaid
+%%{init: {"theme": "neutral"}}%%
 classDiagram
     class Column~T~ {
         <<abstract>>
@@ -31,73 +33,73 @@ classDiagram
     }
 
     class BooleanColumn {
-        +bool(name): Column~Boolean~
-        +booleanParam(value): Expression
+        +bool(name)
+        +booleanParam(value)
     }
 
     class CharColumn {
-        +char(name, length): Column~String~
+        +char(name, length)
     }
 
     class VarCharColumn {
-        +varchar(name, length): Column~String~
+        +varchar(name, length)
         +length: Int
     }
 
     class TextColumn {
-        +text(name): Column~String~
-        +mediumText(name): Column~String~
-        +largeText(name): Column~String~
+        +text(name)
+        +mediumText(name)
+        +largeText(name)
     }
 
     class IntegerColumn {
-        +byte(name): Column~Byte~
-        +short(name): Column~Short~
-        +integer(name): Column~Int~
-        +long(name): Column~Long~
+        +byte(name)
+        +short(name)
+        +integer(name)
+        +long(name)
     }
 
     class FloatColumn {
-        +float(name): Column~Float~
+        +float(name)
     }
 
     class DoubleColumn {
-        +double(name): Column~Double~
+        +double(name)
     }
 
     class DecimalColumn {
-        +decimal(name, precision, scale): Column~BigDecimal~
+        +decimal(name, precision, scale)
         +precision: Int
         +scale: Int
     }
 
     class UnsignedColumn {
-        +ubyte(name): Column~UByte~
-        +ushort(name): Column~UShort~
-        +uint(name): Column~UInt~
-        +ulong(name): Column~ULong~
+        +ubyte(name)
+        +ushort(name)
+        +uint(name)
+        +ulong(name)
     }
 
     class ArrayColumn~T~ {
-        +array~T~(name): Column~List~T~~
-        +anyFrom(column): Op
-        +allFrom(column): Op
-        +slice(column, lower, upper): Op
+        +array(name)
+        +anyFrom(column)
+        +allFrom(column)
+        +slice(column, lower, upper)
     }
 
     class BlobColumn {
-        +blob(name): Column~ExposedBlob~
-        +blobParam(value): Expression
+        +blob(name)
+        +blobParam(value)
     }
 
     class JavaUUIDColumn {
-        +javaUUID(name): Column~UUID~
-        +autoGenerate(): Column~UUID~
+        +javaUUID(name)
+        +autoGenerate()
     }
 
     class KotlinUUIDColumn {
-        +kotlinUUID(name): Column~Uuid~
-        +Uuid.generateV7(): Uuid
+        +kotlinUUID(name)
+        +generateV7()
     }
 
     Column <|-- BooleanColumn
@@ -114,51 +116,154 @@ classDiagram
     Column <|-- JavaUUIDColumn
     Column <|-- KotlinUUIDColumn
 
-    note for ArrayColumn "PostgreSQL / H2 전용"
-    note for KotlinUUIDColumn "@OptIn(ExperimentalUuidApi) 필요 (Kotlin 2.x)"
+    note for ArrayColumn "PostgreSQL / H2 only"
+    note for KotlinUUIDColumn "Requires @OptIn(ExperimentalUuidApi) (Kotlin 2.x)"
+
+    style Column fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    style BooleanColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    style IntegerColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    style DecimalColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    style ArrayColumn fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
+    style BlobColumn fill:#FFF3E0,stroke:#FFCC80,color:#E65100
+    style JavaUUIDColumn fill:#E0F2F1,stroke:#80CBC4,color:#00695C
+    style KotlinUUIDColumn fill:#E0F2F1,stroke:#80CBC4,color:#00695C
 ```
 
-## 프로젝트 구조
+## Kotlin Type → DB Type Mapping Flow
+
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+flowchart LR
+    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
+    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
+    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
+    classDef red    fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
+
+    subgraph Kotlin["Kotlin Types"]
+        K1["Boolean"]
+        K2["String"]
+        K3["Int / Long / Short / Byte"]
+        K4["Float / Double"]
+        K5["BigDecimal"]
+        K6["UByte / UShort / UInt / ULong"]
+        K7["List~T~"]
+        K8["ByteArray"]
+        K9["java.util.UUID"]
+        K10["kotlin.uuid.Uuid"]
+    end
+
+    subgraph Exposed["Exposed DSL Column Functions"]
+        E1["bool(name)"]
+        E2["char / varchar / text / mediumText / largeText"]
+        E3["byte / short / integer / long"]
+        E4["float / double"]
+        E5["decimal(name, precision, scale)"]
+        E6["ubyte / ushort / uint / ulong"]
+        E7["array~T~(name)"]
+        E8["blob(name)"]
+        E9["javaUUID(name)"]
+        E10["kotlinUUID(name)"]
+    end
+
+    subgraph DB["Physical DB Types (representative)"]
+        D1["BOOLEAN / TINYINT(1)"]
+        D2["CHAR / VARCHAR / TEXT / CLOB"]
+        D3["TINYINT / SMALLINT / INT / BIGINT"]
+        D4["FLOAT / REAL / DOUBLE PRECISION"]
+        D5["DECIMAL(p,s)"]
+        D6["TINYINT UNSIGNED ~ BIGINT UNSIGNED"]
+        D7["ARRAY (PG/H2 only)"]
+        D8["BLOB / BYTEA"]
+        D9["BINARY(16) / UUID"]
+        D10["BINARY(16) / UUID"]
+    end
+
+    K1 --> E1 --> D1
+    K2 --> E2 --> D2
+    K3 --> E3 --> D3
+    K4 --> E4 --> D4
+    K5 --> E5 --> D5
+    K6 --> E6 --> D6
+    K7 --> E7 --> D7
+    K8 --> E8 --> D8
+    K9 --> E9 --> D9
+    K10 --> E10 --> D10
+
+    class K1 blue
+    class K2 blue
+    class K3 blue
+    class K4 blue
+    class K5 blue
+    class K6 blue
+    class K7 blue
+    class K8 blue
+    class K9 blue
+    class K10 blue
+    class E1 green
+    class E2 green
+    class E3 green
+    class E4 green
+    class E5 green
+    class E6 green
+    class E7 green
+    class E8 green
+    class E9 green
+    class E10 green
+    class D1 teal
+    class D2 teal
+    class D3 teal
+    class D4 teal
+    class D5 teal
+    class D6 teal
+    class D7 purple
+    class D8 orange
+    class D9 teal
+    class D10 teal
+```
+
+## Project Structure
 
 ```
 src/test/kotlin/exposed/r2dbc/examples/types/
-├── Ex01_BooleanColumnType.kt    # Boolean 컬럼: bool(), nullable boolean, booleanParam
-├── Ex02_CharColumnType.kt       # Char/String 컬럼: char(), varchar(), text(), mediumText(), largeText()
-├── Ex03_NumericColumnType.kt    # 숫자 컬럼: short, int, long, float, decimal, byte + Param 함수
-├── Ex04_DoubleColumnType.kt     # Double 컬럼: double(), 정밀도 처리
-├── Ex05_ArrayColumnType.kt      # 배열 컬럼: array(), anyFrom, allFrom, slice (PostgreSQL/H2)
-├── Ex07_UnsignedColumnType.kt   # Unsigned 수형: ubyte, ushort, uint, ulong + 범위 검증
-├── Ex08_BlobColumnType.kt       # Blob 컬럼: blob(), ExposedBlob, 바이너리 데이터 처리
-├── Ex09_JavaUUIDColumnType.kt   # Java UUID 컬럼: javaUUID(), autoGenerate
-└── Ex10_KotlinUUIDColumnType.kt # Kotlin UUID 컬럼: uuid(), Uuid.generateV7()
+├── Ex01_BooleanColumnType.kt    # Boolean column: bool(), nullable boolean, booleanParam
+├── Ex02_CharColumnType.kt       # Char/String columns: char(), varchar(), text(), mediumText(), largeText()
+├── Ex03_NumericColumnType.kt    # Numeric columns: short, int, long, float, decimal, byte + Param functions
+├── Ex04_DoubleColumnType.kt     # Double column: double(), floating-point precision handling
+├── Ex05_ArrayColumnType.kt      # Array column: array(), anyFrom, allFrom, slice (PostgreSQL/H2)
+├── Ex07_UnsignedColumnType.kt   # Unsigned integers: ubyte, ushort, uint, ulong + out-of-range validation
+├── Ex08_BlobColumnType.kt       # Blob column: blob(), ExposedBlob, binary data handling
+├── Ex09_JavaUUIDColumnType.kt   # Java UUID column: javaUUID(), autoGenerate
+└── Ex10_KotlinUUIDColumnType.kt # Kotlin UUID column: uuid(), Uuid.generateV7()
 ```
 
-> **참고**: 이 모듈은 `src/main`이 없고, 모든 코드가 `src/test`에 위치합니다. 학습/실습 목적의 테스트 전용 모듈입니다.
+> **Note**: This module has no `src/main`. All code lives in `src/test` — it is a test-only learning module.
 
-## 예제 카테고리
+## Example Categories
 
-### 기본 데이터 타입
+### Basic Data Types
 
-| 파일                       | 설명                                                                                 |
-|--------------------------|------------------------------------------------------------------------------------|
-| `Ex01_BooleanColumnType` | `bool()` 컬럼 정의, nullable boolean, `booleanParam` 활용, 조건절에서 boolean 비교              |
-| `Ex02_CharColumnType`    | `char()`, `varchar()`, `text()`, `mediumText()`, `largeText()` 등 문자열 컬럼 타입 비교      |
-| `Ex03_NumericColumnType` | `short`, `integer`, `long`, `float`, `decimal`, `byte` 수형 및 각 타입별 Param/Literal 함수 |
-| `Ex04_DoubleColumnType`  | `double()` 컬럼의 INSERT/SELECT, 부동소수점 정밀도 처리                                         |
+| File                       | Description                                                                                     |
+|----------------------------|-------------------------------------------------------------------------------------------------|
+| `Ex01_BooleanColumnType`   | `bool()` column definition, nullable boolean, `booleanParam`, boolean comparison in WHERE       |
+| `Ex02_CharColumnType`      | Comparison of `char()`, `varchar()`, `text()`, `mediumText()`, `largeText()` string column types |
+| `Ex03_NumericColumnType`   | Numeric types: `short`, `integer`, `long`, `float`, `decimal`, `byte` + Param/Literal functions |
+| `Ex04_DoubleColumnType`    | INSERT/SELECT with `double()` column, floating-point precision handling                          |
 
-### 고급 데이터 타입
+### Advanced Data Types
 
-| 파일                          | 설명                                                            |
-|-----------------------------|---------------------------------------------------------------|
-| `Ex05_ArrayColumnType`      | PostgreSQL/H2 배열 컬럼, `anyFrom`/`allFrom` 연산자, `slice` 배열 슬라이싱 |
-| `Ex07_UnsignedColumnType`   | `ubyte`, `ushort`, `uint`, `ulong` Unsigned 수형, 범위 초과 시 에러 검증 |
-| `Ex08_BlobColumnType`       | `blob()` 컬럼으로 바이너리 데이터 저장/조회, `ExposedBlob`, `blobParam`      |
-| `Ex09_JavaUUIDColumnType`   | `javaUUID()` 컬럼, `autoGenerate`, PK로 활용                       |
-| `Ex10_KotlinUUIDColumnType` | Kotlin `kotlinUUID()` 컬럼, `Uuid.generateV7()` 활용 (`@OptIn(ExperimentalUuidApi::class)` 필요, Kotlin 2.x) |
+| File                          | Description                                                               |
+|-------------------------------|---------------------------------------------------------------------------|
+| `Ex05_ArrayColumnType`        | PostgreSQL/H2 array columns, `anyFrom`/`allFrom` operators, `slice`       |
+| `Ex07_UnsignedColumnType`     | `ubyte`, `ushort`, `uint`, `ulong` unsigned integers, out-of-range errors |
+| `Ex08_BlobColumnType`         | Binary data storage/retrieval with `blob()`, `ExposedBlob`, `blobParam`   |
+| `Ex09_JavaUUIDColumnType`     | `javaUUID()` column, `autoGenerate`, use as PK                            |
+| `Ex10_KotlinUUIDColumnType`   | Kotlin `kotlinUUID()` column, `Uuid.generateV7()` (`@OptIn(ExperimentalUuidApi::class)` required, Kotlin 2.x) |
 
-## 핵심 코드 예제
+## Core Code Examples
 
-### Boolean 컬럼
+### Boolean Column
 
 ```kotlin
 object TestTable: IntIdTable("bool_table") {
@@ -166,13 +271,13 @@ object TestTable: IntIdTable("bool_table") {
     val nullableFlag = bool("nullable_flag").nullable()
 }
 
-// boolean 조건절 활용
+// Use boolean in WHERE condition
 TestTable.selectAll()
     .where { TestTable.flag eq booleanParam(true) }
     .single()
 ```
 
-### Array 컬럼 (PostgreSQL/H2)
+### Array Column (PostgreSQL/H2)
 
 ```kotlin
 object ArrayTable: IntIdTable("array_table") {
@@ -180,13 +285,13 @@ object ArrayTable: IntIdTable("array_table") {
     val strings = array<String>("strings", TextColumnType())
 }
 
-// anyFrom으로 배열 내 값 검색
+// Search for a value within an array using anyFrom
 ArrayTable.selectAll()
     .where { intLiteral(5) eq anyFrom(ArrayTable.numbers) }
     .toFastList()
 ```
 
-### UUID 컬럼
+### UUID Column
 
 ```kotlin
 // Java UUID
@@ -194,45 +299,45 @@ object JavaUUIDTable: Table("test_java_uuid") {
     val id = javaUUID("id")
 }
 
-// Kotlin UUID (Kotlin 2.x, @OptIn(ExperimentalUuidApi::class) 필요)
+// Kotlin UUID (Kotlin 2.x, requires @OptIn(ExperimentalUuidApi::class))
 object KotlinUUIDTable: Table("test_kotlin_uuid") {
     val id = kotlinUUID("id")
 }
 ```
 
-## DB별 타입 매핑 참조표
+## DB Type Mapping Reference
 
-Exposed 컬럼 타입이 각 DB에서 어떻게 매핑되는지 정리한 표입니다.
+How Exposed column types map to each database:
 
-| Exposed 타입                  | H2            | PostgreSQL       | MySQL / MariaDB  | 비고                                      |
-|-----------------------------|---------------|------------------|------------------|-------------------------------------------|
-| `bool("col")`               | BOOLEAN       | BOOLEAN          | TINYINT(1)       | MySQL은 TINYINT(1)로 저장                  |
-| `integer("col")`            | INT           | INT              | INT              |                                           |
-| `long("col")`               | BIGINT        | BIGINT           | BIGINT           |                                           |
-| `float("col")`              | FLOAT         | REAL             | FLOAT            |                                           |
-| `double("col")`             | DOUBLE        | DOUBLE PRECISION | DOUBLE           |                                           |
-| `decimal("col", p, s)`      | DECIMAL(p, s) | DECIMAL(p, s)    | DECIMAL(p, s)    |                                           |
-| `varchar("col", n)`         | VARCHAR(n)    | VARCHAR(n)       | VARCHAR(n)       |                                           |
-| `text("col")`               | CLOB          | TEXT             | TEXT             | H2는 CLOB 사용                             |
-| `binary("col", n)`          | BINARY(n)     | BYTEA            | BINARY(n)        |                                           |
-| `blob("col")`               | BLOB          | BYTEA            | BLOB             |                                           |
-| `javaUUID("col")`           | BINARY(16)    | UUID             | BINARY(16)       | PostgreSQL은 네이티브 UUID 타입 사용         |
-| `array<T>("col")`           | ARRAY         | ARRAY            | 미지원            | PostgreSQL/H2 전용                         |
-| `enumeration("col", E)`     | INT           | INT              | INT              | 열거형을 ordinal(정수)로 저장                |
-| `enumerationByName("col")`  | VARCHAR(n)    | VARCHAR(n)       | VARCHAR(n)       | 열거형을 이름(문자열)으로 저장               |
-| `customEnumeration()`       | VARCHAR/INT   | VARCHAR/INT      | VARCHAR/INT      | DB 네이티브 ENUM 타입 매핑 시 사용           |
+| Exposed Type                | H2            | PostgreSQL       | MySQL / MariaDB  | Notes                                          |
+|-----------------------------|---------------|------------------|------------------|------------------------------------------------|
+| `bool("col")`               | BOOLEAN       | BOOLEAN          | TINYINT(1)       | MySQL stores as TINYINT(1)                     |
+| `integer("col")`            | INT           | INT              | INT              |                                                |
+| `long("col")`               | BIGINT        | BIGINT           | BIGINT           |                                                |
+| `float("col")`              | FLOAT         | REAL             | FLOAT            |                                                |
+| `double("col")`             | DOUBLE        | DOUBLE PRECISION | DOUBLE           |                                                |
+| `decimal("col", p, s)`      | DECIMAL(p, s) | DECIMAL(p, s)    | DECIMAL(p, s)    |                                                |
+| `varchar("col", n)`         | VARCHAR(n)    | VARCHAR(n)       | VARCHAR(n)       |                                                |
+| `text("col")`               | CLOB          | TEXT             | TEXT             | H2 uses CLOB                                   |
+| `binary("col", n)`          | BINARY(n)     | BYTEA            | BINARY(n)        |                                                |
+| `blob("col")`               | BLOB          | BYTEA            | BLOB             |                                                |
+| `javaUUID("col")`           | BINARY(16)    | UUID             | BINARY(16)       | PostgreSQL uses native UUID type               |
+| `array<T>("col")`           | ARRAY         | ARRAY            | Not supported    | PostgreSQL/H2 only                             |
+| `enumeration("col", E)`     | INT           | INT              | INT              | Enum stored as ordinal (integer)               |
+| `enumerationByName("col")`  | VARCHAR(n)    | VARCHAR(n)       | VARCHAR(n)       | Enum stored as name (string)                   |
+| `customEnumeration()`       | VARCHAR/INT   | VARCHAR/INT      | VARCHAR/INT      | Use when mapping to DB-native ENUM type        |
 
-## 공유 테스트 인프라
+## Shared Test Infrastructure
 
-이 모듈은 `00-shared/exposed-r2dbc-shared`의 `R2dbcExposedTestBase`를 상속하여 H2, MariaDB, MySQL, PostgreSQL에서 동일 테스트를 실행합니다.
+This module extends `R2dbcExposedTestBase` from `00-shared/exposed-r2dbc-shared` to run the same tests against H2, MariaDB, MySQL, and PostgreSQL.
 
-## 테스트 실행
+## Running Tests
 
 ```bash
-# 전체 Column Types 테스트 실행
+# Run all Column Types tests
 ./gradlew :02-types:test
 
-# 특정 테스트 클래스 실행
+# Run a specific test class
 ./gradlew :02-types:test --tests "exposed.r2dbc.examples.types.Ex05_ArrayColumnType"
 ```
 

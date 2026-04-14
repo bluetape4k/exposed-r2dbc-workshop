@@ -1,111 +1,162 @@
-# 01 Exposed R2DBC Crypt (투명한 컬럼 암호화)
+> 한국어 버전: [README.ko.md](README.ko.md)
 
-이 모듈은 `exposed-crypt` 확장을 사용하여 데이터베이스 컬럼을 투명하게 암호화/복호화하는 방법을 학습합니다. 개인정보, 비밀, 금융 데이터 등 민감한 정보를 저장 시 보호하는 데 유용합니다.
+# 01 Exposed R2DBC Crypt (Transparent Column Encryption)
 
-## 학습 목표
+This module covers transparent encryption and decryption of database columns using the `exposed-crypt` extension. It is useful for protecting sensitive information such as personal data, secrets, and financial data at rest.
 
-- 암호화된 컬럼을 Exposed 테이블에 정의하는 방법 이해
-- 다양한 암호화 알고리즘(`AES`, `Blowfish`, `Triple DES`) 사용법 학습
-- DSL과 DAO 스타일 모두에서 암호화 컬럼 적용
-- 암호화 컬럼 검색의 제한 사항 인식
+## Learning Objectives
 
-## 핵심 개념
+- Understand how to define encrypted columns in an Exposed table
+- Learn how to use various encryption algorithms (`AES`, `Blowfish`, `Triple DES`)
+- Apply encrypted columns in both DSL and DAO styles
+- Recognize the limitations of searching encrypted columns
 
-이 기능의 핵심은 암호화와 복호화를 자동으로 처리하는 커스텀 컬럼 타입입니다.
+## Core Concepts
 
-- `encryptedVarchar(name: String, colLength: Int, encryptor: Encryptor)`: 내용을 암호화된 문자열로 저장하는 `VARCHAR` 컬럼을 정의합니다.
-- `encryptedBinary(name: String, colLength: Int, encryptor: Encryptor)`: 내용을 암호화된 바이너리 데이터로 저장하는 `VARBINARY` 또는
-  `BYTEA` 컬럼을 정의합니다.
-- `Encryptor`: 암호화/복호화 로직을 위한 인터페이스입니다. `org.jetbrains.exposed.v1.crypt.Algorithms` 객체에서 여러 구현체를 제공합니다.
+The heart of this feature is a custom column type that automatically handles encryption and decryption.
 
-**중요 사항**: Exposed의 기본
-`Encryptor` 구현은 동일한 평문에 대해 매번 다른 암호문을 생성하는 알고리즘을 사용합니다. 이는 패턴 분석을 방지하기 위한 보안 기능입니다. 하지만 이러한 컬럼에서 직접 동등성 검사(
-`where { table.column eq "value" }`)를 수행할 수 **없습니다**. 검색 가능한 암호화를 위해서는 Jasypt와 같은 결정적 암호화 알고리즘이 필요합니다 (
-`10-exposed-jasypt` 예제 참조).
+- `encryptedVarchar(name: String, colLength: Int, encryptor: Encryptor)`: Defines a `VARCHAR` column that stores its content as an encrypted string.
+- `encryptedBinary(name: String, colLength: Int, encryptor: Encryptor)`: Defines a `VARBINARY` or `BYTEA` column that stores its content as encrypted binary data.
+- `Encryptor`: An interface for encryption/decryption logic. Several implementations are provided by the `org.jetbrains.exposed.v1.crypt.Algorithms` object.
 
-## 지원 암호화 알고리즘
+**Important**: The default `Encryptor` implementations in Exposed use algorithms that generate a different ciphertext each time for the same plaintext. This is a security feature to prevent pattern analysis. However, this means you **cannot** perform direct equality checks (`where { table.column eq "value" }`) on these columns. Deterministic encryption algorithms such as Jasypt are needed for searchable encryption (see the `10-exposed-jasypt` example).
 
-`org.jetbrains.exposed.v1.crypt.Algorithms` 객체가 제공하는 알고리즘과 각 특성입니다.
+## Supported Encryption Algorithms
 
-| 알고리즘                            | 모드  | 비결정적 | 키 파라미터                    | 보안 수준 | 특징                            |
-|----------------------------------|-----|--------|------------------------------|---------|-------------------------------|
-| `AES_256_PBE_GCM(password, salt)` | GCM | 예     | 비밀번호 + 솔트 (8바이트 이상)       | 높음     | AEAD 인증 암호화, IV 포함            |
-| `AES_256_PBE_CBC(password, salt)` | CBC | 예     | 비밀번호 + 솔트 (8바이트 이상)       | 중간     | 패딩 오라클 취약점 주의                |
-| `BLOW_FISH(key)`                  | ECB | 예     | 키 (임의 길이, 최대 56바이트)       | 낮음     | 구형 알고리즘, 신규 프로젝트 사용 비권장      |
-| `TRIPLE_DES(key)`                 | CBC | 예     | 키 (정확히 24바이트)              | 낮음     | 구형 알고리즘, 신규 프로젝트 사용 비권장      |
+Algorithms provided by the `org.jetbrains.exposed.v1.crypt.Algorithms` object and their characteristics:
 
-> **권장 알고리즘**: 신규 프로젝트에는 `AES_256_PBE_GCM`을 사용하세요. GCM 모드는 인증(AEAD)을 내장하여
-> 암호문 변조를 감지할 수 있습니다.
+| Algorithm                          | Mode | Non-deterministic | Key Parameters                    | Security Level | Notes                                      |
+|------------------------------------|------|-------------------|-----------------------------------|----------------|--------------------------------------------|
+| `AES_256_PBE_GCM(password, salt)`  | GCM  | Yes               | Password + Salt (8+ bytes)        | High           | AEAD authenticated encryption, includes IV |
+| `AES_256_PBE_CBC(password, salt)`  | CBC  | Yes               | Password + Salt (8+ bytes)        | Medium         | Beware of padding oracle vulnerabilities   |
+| `BLOW_FISH(key)`                   | ECB  | Yes               | Key (arbitrary length, max 56B)   | Low            | Legacy algorithm, not recommended for new projects |
+| `TRIPLE_DES(key)`                  | CBC  | Yes               | Key (exactly 24 bytes)            | Low            | Legacy algorithm, not recommended for new projects |
 
-## 보안 주의사항
+> **Recommended Algorithm**: Use `AES_256_PBE_GCM` for new projects. GCM mode includes built-in authentication (AEAD) that can detect ciphertext tampering.
 
-> **경고**: 프로덕션 환경에서 암호화 컬럼을 사용할 때 아래 사항을 반드시 준수하세요.
+## Security Notes
 
-1. **하드코딩 금지**: 예제 코드의 `"passwd"`, `"12345678"`, `"key"` 등은 테스트 전용입니다.
-   실제 환경에서는 충분한 엔트로피를 가진 값을 환경 변수 또는 Vault, AWS KMS 같은 키 관리 시스템에서 주입하세요.
+> **Warning**: When using encrypted columns in production, you must follow these rules.
 
-2. **솔트(salt) 관리**: AES PBE 계열은 솔트를 암호문에 포함하지 않으므로, 복호화에 동일한 솔트가 필요합니다.
-   솔트를 분실하면 기존 데이터를 복호화할 수 없습니다.
+1. **No hardcoding**: Values like `"passwd"`, `"12345678"`, `"key"` in example code are for testing only.
+   In real environments, inject values with sufficient entropy from environment variables or a key management system such as Vault or AWS KMS.
 
-3. **컬럼 크기 계산**: 암호화 후 Base64 인코딩으로 평문보다 길어집니다.
-   `Encryptor.maxColLength(plaintextByteSize)` 를 이용해 컬럼 크기를 적절히 산정하세요.
+2. **Salt management**: AES PBE variants do not include the salt in the ciphertext, so the same salt is required for decryption.
+   Losing the salt makes existing data unrecoverable.
 
-4. **비결정적 암호화와 검색**: Exposed 기본 Encryptor는 비결정적(매번 다른 암호문)이므로 `WHERE` 절 검색이 불가합니다.
-   암호화된 컬럼에 대한 검색이 필요하다면 결정적 암호화 모듈을 사용하세요:
-   - `10-exposed-r2dbc-jasypt`: Jasypt 기반 결정적 암호화
-   - `12-exposed-r2dbc-tink`: Google Tink 기반 결정적 암호화
+3. **Column size calculation**: After encryption and Base64 encoding, data is longer than the plaintext.
+   Use `Encryptor.maxColLength(plaintextByteSize)` to appropriately size the column.
 
-5. **키 교체(Rotation)**: 키를 교체해야 할 경우 기존 데이터를 일괄 재암호화해야 합니다.
-   운영 환경에서는 키 교체 절차를 사전에 계획하세요.
+4. **Non-deterministic encryption and search**: The default Exposed `Encryptor` is non-deterministic (different ciphertext each time), so `WHERE` clause searches are not possible.
+   If you need to search encrypted columns, use a deterministic encryption module:
+   - `10-exposed-r2dbc-jasypt`: Jasypt-based deterministic encryption
+   - `12-exposed-r2dbc-tink`: Google Tink-based deterministic encryption
 
-## 예제 개요
+5. **Key rotation**: If a key needs to be rotated, all existing data must be re-encrypted in bulk.
+   Plan your key rotation procedure in advance for production environments.
 
-### `Ex01_EncryptedColumn.kt` (DSL 스타일)
+## Example Overview
 
-DSL API를 사용한 암호화 컬럼의 기본 사용법을 보여줍니다.
+### `Ex01_EncryptedColumn.kt` (DSL Style)
 
-- **테이블 정의**: 다양한 암호화 알고리즘(`AES_256_PBE_CBC`, `AES_256_PBE_GCM`, `BLOW_FISH`, `TRIPLE_DES`)을 사용하는 여러 컬럼이 있는 테이블 정의 방법
-- **Insert & Update**: 값을 삽입하거나 업데이트하면 데이터베이스로 전송되기 전에 자동으로 암호화됩니다. 애플리케이션 코드는 평문만 다룹니다.
-- **Select**: 데이터를 조회하면 컬럼 값이 자동으로 복호화됩니다.
-- **검색 제한**: 암호화된 컬럼에서 `where` 절을 사용한 `select` 쿼리가 예상대로 작동하지 않음을 명시적으로 보여줍니다.
+Demonstrates basic usage of encrypted columns using the DSL API.
 
-### `Ex02_EncryptedColumnWithEntity.kt` (DAO 스타일)
+- **Table definition**: How to define a table with columns using various encryption algorithms (`AES_256_PBE_CBC`, `AES_256_PBE_GCM`, `BLOW_FISH`, `TRIPLE_DES`)
+- **Insert & Update**: When a value is inserted or updated, it is automatically encrypted before being sent to the database. Application code only handles plaintext.
+- **Select**: When data is fetched, column values are automatically decrypted.
+- **Search limitation**: Explicitly shows that `select` queries using a `where` clause on an encrypted column do not work as expected.
 
-DAO API와 암호화 컬럼을 통합하여 엔티티처럼 사용하는 방법을 보여줍니다.
+### `Ex02_EncryptedColumnWithEntity.kt` (DAO Style)
 
-- **엔티티 정의**: `encryptedVarchar`와 `encryptedBinary` 컬럼에 매핑되는 속성을 가진 `IntEntity` 정의
-- **CRUD 작업**: 엔티티 생성(`ETest.new { ... }`), 읽기(`ETest.all()`), 업데이트가 원활하게 작동합니다. 암호화와 복호화는 개발자에게 완전히 투명합니다.
-- **검색 제한**: 암호화된 속성으로 엔티티 찾기(`ETest.find { TestTable.varchar eq "value" }`)가 실패함을 강조합니다.
+Shows how to integrate the DAO API with encrypted columns to use them like entity properties.
 
-## 실행 흐름
+- **Entity definition**: Defines an `IntEntity` with properties mapped to `encryptedVarchar` and `encryptedBinary` columns.
+- **CRUD operations**: Entity creation (`ETest.new { ... }`), reading (`ETest.all()`), and updates work seamlessly. Encryption and decryption are completely transparent to the developer.
+- **Search limitation**: Highlights that finding entities by an encrypted property (`ETest.find { TestTable.varchar eq "value" }`) fails.
+
+## Class Structure Diagram
+
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+classDiagram
+    class Encryptor {
+        <<interface>>
+        +encrypt(str: String) String
+        +decrypt(str: String) String
+        +maxColLength(inputByteSize: Int) Int
+    }
+    class Algorithms {
+        <<object>>
+        +AES_256_PBE_GCM(password, salt) Encryptor
+        +AES_256_PBE_CBC(password, salt) Encryptor
+        +BLOW_FISH(key) Encryptor
+        +TRIPLE_DES(key) Encryptor
+    }
+    class EncryptedVarcharColumnType {
+        <<ColumnType>>
+        +encryptor: Encryptor
+        +colLength: Int
+        +valueFromDB(value: Any) String
+        +notNullValueToDB(value: String) Any
+    }
+    class EncryptedBinaryColumnType {
+        <<ColumnType>>
+        +encryptor: Encryptor
+        +colLength: Int
+        +valueFromDB(value: Any) ByteArray
+        +notNullValueToDB(value: ByteArray) Any
+    }
+    class Table {
+        +encryptedVarchar(name, colLength, encryptor) Column~String~
+        +encryptedBinary(name, colLength, encryptor) Column~ByteArray~
+    }
+
+    Encryptor <|.. Algorithms : creates
+    EncryptedVarcharColumnType --> Encryptor : uses
+    EncryptedBinaryColumnType --> Encryptor : uses
+    Table --> EncryptedVarcharColumnType : column type
+    Table --> EncryptedBinaryColumnType : column type
+
+    style Encryptor fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    style Algorithms fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    style EncryptedVarcharColumnType fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
+    style EncryptedBinaryColumnType fill:#FFF3E0,stroke:#FFCC80,color:#E65100
+    style Table fill:#E0F2F1,stroke:#80CBC4,color:#00695C
+```
+
+> Non-deterministic encryption: same plaintext generates a different ciphertext each time — AES_256_PBE_GCM recommended (includes AEAD authentication)
+
+> Encrypted columns cannot be searched with `WHERE` clause equality — see `jasypt` module for deterministic encryption
+
+## Execution Flow
 
 ```mermaid
 sequenceDiagram
-    participant App as 애플리케이션
+    participant App as Application
     participant Col as EncryptedColumn
     participant Enc as Encryptor (AES/Blowfish/TripleDES)
     participant DB as Database
 
-    Note over App,DB: 저장 (INSERT)
+    Note over App,DB: Write (INSERT)
     App ->> Col: insert { it[name] = "plain text" }
     Col ->> Enc: encrypt("plain text")
     Enc -->> Col: Base64(ciphertext)
     Col ->> DB: INSERT 'Base64(ciphertext)'
 
-    Note over App,DB: 조회 (SELECT)
+    Note over App,DB: Read (SELECT)
     DB -->> Col: 'Base64(ciphertext)'
     Col ->> Enc: decrypt("Base64(ciphertext)")
     Enc -->> Col: "plain text"
     Col -->> App: "plain text"
 
-    Note over App,DB: 검색 제한 (비결정적 암호화)
+    Note over App,DB: Search limitation (non-deterministic encryption)
     App -x Col: where { name eq encrypt("plain text") }
-    Note right of Col: 매번 다른 암호문 생성 → WHERE 검색 불가
+    Note right of Col: Different ciphertext each time → WHERE search not possible
 ```
 
-## 코드 예제
+## Code Examples
 
-### 1. 암호화 컬럼이 있는 테이블 정의 (DSL)
+### 1. Defining a Table with Encrypted Columns (DSL)
 
 ```kotlin
 val nameEncryptor = Algorithms.AES_256_PBE_CBC("passwd", "5c0744940b5c369b")
@@ -118,7 +169,7 @@ object StringTable: IntIdTable("StringTable") {
 }
 ```
 
-### 2. 엔티티에서 암호화 컬럼 사용 (DAO)
+### 2. Using Encrypted Columns in an Entity (DAO)
 
 ```kotlin
 object TestTable: IntIdTable() {
@@ -134,25 +185,25 @@ class ETest(id: EntityID<Int>): IntEntity(id) {
   var binary: ByteArray by TestTable.binary
 }
 
-// 사용은 투명합니다
+// Usage is transparent
 val entity = ETest.new {
   varchar = "my secret value"
   binary = "another secret".toByteArray()
 }
 
-println(entity.varchar) // "my secret value" 출력
+println(entity.varchar) // prints "my secret value"
 ```
 
-## 테스트 실행
+## Running Tests
 
 ```bash
-# 이 모듈의 모든 테스트 실행
+# Run all tests in this module
 ./gradlew :01-exposed-r2dbc-crypt:test
 
-# 특정 테스트 클래스 실행
+# Run a specific test class
 ./gradlew :01-exposed-r2dbc-crypt:test --tests "exposed.examples.crypt.Ex01_EncryptedColumn"
 ```
 
-## 참고 자료
+## References
 
-- [Exposed Crypt 모듈](https://debop.notion.site/Exposed-Crypt-1c32744526b0802da419d5ce74d2c5f3)
+- [Exposed Crypt Module](https://debop.notion.site/Exposed-Crypt-1c32744526b0802da419d5ce74d2c5f3)

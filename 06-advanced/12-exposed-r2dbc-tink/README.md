@@ -1,109 +1,171 @@
-# 12 Exposed R2DBC Tink (Google Tink 기반 암호화)
+> 한국어 버전: [README.ko.md](README.ko.md)
 
-이 모듈은 **Google Tink** 암호화 라이브러리를 Exposed R2DBC와 통합하여 데이터베이스 컬럼을 투명하게 암호화/복호화하는 방법을 학습합니다.
+# 12 Exposed R2DBC Tink (Google Tink-based Encryption)
 
-Tink는 Google이 개발한 고수준 암호화 라이브러리로, 안전한 암호화 알고리즘을 쉽게 사용할 수 있도록 설계되었습니다. 이 모듈은 두 가지 암호화 방식을 지원합니다:
+This module covers how to integrate the **Google Tink** encryption library with Exposed R2DBC to transparently encrypt and decrypt database columns.
 
-- **DAEAD** (Deterministic Authenticated Encryption with Associated Data): 결정적 암호화로 동일 평문이 항상 동일 암호문을 생성 → `WHERE` 절 검색 가능
-- **AEAD** (Authenticated Encryption with Associated Data): 비결정적 암호화로 매번 다른 암호문을 생성 → 보안 강도가 더 높지만 `WHERE` 절 검색 불가
+Tink is a high-level cryptographic library developed by Google, designed to make safe encryption algorithms easy to use. This module supports two encryption modes:
 
-## 실행 흐름
+- **DAEAD** (Deterministic Authenticated Encryption with Associated Data): Deterministic encryption — the same plaintext always produces the same ciphertext → searchable in `WHERE` clauses
+- **AEAD** (Authenticated Encryption with Associated Data): Non-deterministic encryption — produces a different ciphertext each time → stronger security but not searchable in `WHERE` clauses
+
+## Execution Flow
 
 ```mermaid
 sequenceDiagram
-    participant App as 애플리케이션
+    participant App as Application
     participant Col as TinkColumn
     participant Tink as Google Tink
     participant DB as Database
 
-    Note over App,DB: 저장 (INSERT) — AEAD 비결정적 암호화 (AES256_GCM / CHACHA20_POLY1305)
-    App ->> Col: insert { it[secret] = "민감한 데이터" }
-    Col ->> Tink: aead.encrypt("민감한 데이터".toByteArray())
-    Tink -->> Col: ciphertext (매번 다른 바이트)
+    Note over App,DB: INSERT — AEAD non-deterministic encryption (AES256_GCM / CHACHA20_POLY1305)
+    App ->> Col: insert { it[secret] = "sensitive data" }
+    Col ->> Tink: aead.encrypt("sensitive data".toByteArray())
+    Tink -->> Col: ciphertext (different bytes each time)
     Col ->> DB: INSERT Base64(ciphertext)
 
-    Note over App,DB: 저장 (INSERT) — DAEAD 결정적 암호화 (AES256_SIV)
+    Note over App,DB: INSERT — DAEAD deterministic encryption (AES256_SIV)
     App ->> Col: insert { it[email] = "user@example.com" }
     Col ->> Tink: daead.encryptDeterministically("user@example.com".toByteArray())
-    Tink -->> Col: deterministicCiphertext (항상 동일)
+    Tink -->> Col: deterministicCiphertext (always the same)
     Col ->> DB: INSERT Base64(deterministicCiphertext)
 
-    Note over App,DB: 조회 (SELECT)
+    Note over App,DB: SELECT
     DB -->> Col: Base64(ciphertext)
     Col ->> Tink: aead.decrypt(ciphertext)
-    Tink -->> Col: "민감한 데이터".toByteArray()
-    Col -->> App: "민감한 데이터"
+    Tink -->> Col: "sensitive data".toByteArray()
+    Col -->> App: "sensitive data"
 
-    Note over App,DB: WHERE 검색 — DAEAD만 가능
+    Note over App,DB: WHERE search — DAEAD only
     App ->> Col: where { email eq "user@example.com" }
     Col ->> Tink: daead.encryptDeterministically("user@example.com".toByteArray())
     Tink -->> Col: deterministicCiphertext
     Col ->> DB: WHERE email = Base64(deterministicCiphertext)
-    DB -->> App: 결과 행 반환
+    DB -->> App: matching rows returned
 ```
 
-## 학습 목표
+## Structure Diagram
 
-- Tink DAEAD/AEAD 암호화 컬럼 정의 방법 이해
-- 문자열 및 바이너리 데이터의 투명한 암호화 및 복호화 수행
-- DAEAD 결정적 암호화로 암호화된 컬럼을 `WHERE` 절에서 직접 쿼리
-- AEAD 비결정적 암호화와 DAEAD 결정적 암호화의 트레이드오프 이해
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+classDiagram
+    class IColumnType~T~ {
+        <<interface>>
+        +valueFromDB(value: Any): T
+        +notNullValueToDB(value: T): Any
+        +sqlType(): String
+    }
+    class TinkDaeadVarCharColumn {
+        <<bluetape4k-exposed>>
+        +sqlType(): String
+        +valueFromDB(enc): String
+        +notNullValueToDB(plain): String
+        -daead: DeterministicAead
+    }
+    class TinkAeadVarCharColumn {
+        <<bluetape4k-exposed>>
+        +sqlType(): String
+        +valueFromDB(enc): String
+        +notNullValueToDB(plain): String
+        -aead: Aead
+    }
+    class TinkAeadBinaryColumn {
+        <<bluetape4k-exposed>>
+        +sqlType(): String
+        +valueFromDB(enc): ByteArray
+        +notNullValueToDB(bin): ByteArray
+        -aead: Aead
+    }
+    class DeterministicAead {
+        <<Google Tink Interface>>
+        +encryptDeterministically(plaintext, aad): ByteArray
+        +decryptDeterministically(ciphertext, aad): ByteArray
+    }
+    class Aead {
+        <<Google Tink Interface>>
+        +encrypt(plaintext, aad): ByteArray
+        +decrypt(ciphertext, aad): ByteArray
+    }
+    note for TinkDaeadVarCharColumn "Deterministic encryption — searchable in WHERE clause"
+    note for TinkAeadVarCharColumn "Non-deterministic — stronger security, not searchable"
 
-## 핵심 개념
+    IColumnType <|.. TinkDaeadVarCharColumn
+    IColumnType <|.. TinkAeadVarCharColumn
+    IColumnType <|.. TinkAeadBinaryColumn
+    TinkDaeadVarCharColumn --> DeterministicAead : delegates to
+    TinkAeadVarCharColumn --> Aead : delegates to
+    TinkAeadBinaryColumn --> Aead : delegates to
+
+    style IColumnType fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    style TinkDaeadVarCharColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    style TinkAeadVarCharColumn fill:#FFF3E0,stroke:#FFCC80,color:#E65100
+    style TinkAeadBinaryColumn fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
+    style DeterministicAead fill:#E0F2F1,stroke:#80CBC4,color:#00695C
+    style Aead fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
+```
+
+## Learning Objectives
+
+- Understand how to define Tink DAEAD/AEAD encryption columns
+- Perform transparent encryption and decryption of string and binary data
+- Query encrypted columns directly in `WHERE` clauses using DAEAD deterministic encryption
+- Understand the trade-offs between AEAD non-deterministic and DAEAD deterministic encryption
+
+## Core Concepts
 
 ### DAEAD vs AEAD
 
-| 방식        | 결정성   | WHERE 검색 | 보안 강도 | 권장 용도                     |
-|-----------|-------|----------|-------|---------------------------|
-| **DAEAD** | 결정적   | 가능       | 보통    | 검색 가능한 개인정보 (이름, 이메일 등)   |
-| **AEAD**  | 비결정적  | 불가       | 높음    | 검색 불필요한 민감 데이터 (주소, 비밀번호) |
+| Mode       | Determinism     | WHERE Search | Security Level | Recommended Use                               |
+|------------|-----------------|--------------|----------------|-----------------------------------------------|
+| **DAEAD**  | Deterministic   | Possible     | Moderate       | Searchable PII (names, email addresses, etc.) |
+| **AEAD**   | Non-deterministic | Not possible | High          | Sensitive data that doesn't need searching (addresses, passwords) |
 
-### 컬럼 타입
+### Column Types
 
-| 함수                                              | 암호화 방식  | 저장 타입      | 설명                          |
-|-------------------------------------------------|---------|------------|-----------------------------|
-| `tinkDaeadVarChar(name, length)`                | DAEAD   | `VARCHAR`  | 결정적 암호화 문자열 컬럼 (검색 가능)      |
-| `tinkAeadVarChar(name, length, algorithm)`      | AEAD    | `VARCHAR`  | 비결정적 암호화 문자열 컬럼 (검색 불가)     |
-| `tinkAeadBinary(name, length, algorithm)`       | AEAD    | `VARBINARY`| 비결정적 암호화 바이너리 컬럼 (검색 불가)    |
+| Function                                          | Encryption Mode | Storage Type | Description                                 |
+|---------------------------------------------------|-----------------|--------------|---------------------------------------------|
+| `tinkDaeadVarChar(name, length)`                  | DAEAD           | `VARCHAR`    | Deterministic encrypted string column (searchable) |
+| `tinkAeadVarChar(name, length, algorithm)`        | AEAD            | `VARCHAR`    | Non-deterministic encrypted string column (not searchable) |
+| `tinkAeadBinary(name, length, algorithm)`         | AEAD            | `VARBINARY`  | Non-deterministic encrypted binary column (not searchable) |
 
-### 지원 알고리즘 (`TinkAeads`)
+### Supported Algorithms (`TinkAeads`)
 
-| 알고리즘                          | 설명                                   |
-|-------------------------------|--------------------------------------|
-| `TinkAeads.AES256_GCM`        | AES-256 GCM 모드 (기본값) - 범용 고성능 암호화    |
-| `TinkAeads.CHACHA20_POLY1305` | ChaCha20-Poly1305 - 소프트웨어 기반 고성능 암호화 |
+| Algorithm                       | Description                                           |
+|---------------------------------|-------------------------------------------------------|
+| `TinkAeads.AES256_GCM`          | AES-256 GCM mode (default) — general purpose, high-performance encryption |
+| `TinkAeads.CHACHA20_POLY1305`   | ChaCha20-Poly1305 — software-based high-performance encryption |
 
-## 예제 개요
+## Example Overview
 
 ### `TinkColumnTypeTest.kt`
 
-Exposed DSL에서 Tink 암호화 컬럼의 CRUD 동작과 검색 가능성을 검증합니다.
+Validates CRUD behavior and searchability of Tink encryption columns in Exposed DSL.
 
-#### 테이블 정의 예시
+#### Example Table Definition
 
 ```kotlin
 val stringTable = object: IntIdTable("string_table") {
-    // DAEAD: 결정적 암호화 → WHERE 절 검색 가능, 인덱스 활용 가능
+    // DAEAD: deterministic encryption — searchable in WHERE clause, indexable
     val name    = tinkDaeadVarChar("name", 255).nullable().index()
     val city    = tinkDaeadVarChar("city", 255).nullable().index()
 
-    // AEAD: 비결정적 암호화 → WHERE 절 검색 불가, 보안 강도 높음
+    // AEAD: non-deterministic encryption — not searchable in WHERE clause, stronger security
     val address = tinkAeadBinary("address", 255, TinkAeads.AES256_GCM).nullable()
     val age     = tinkAeadVarChar("age", 255, TinkAeads.CHACHA20_POLY1305).nullable()
 }
 ```
 
-#### 테스트 시나리오
+#### Test Scenarios
 
-| 테스트                                            | 설명                                                     |
-|------------------------------------------------|--------------------------------------------------------|
-| `문자열에 대해 암호화,복호화 하기`                           | INSERT → SELECT 시 투명한 복호화 확인, DAEAD 검색 가능/AEAD 검색 불가 확인 |
-| `암호화된 컬럼을 Update 하기`                           | UPDATE 후 암호화된 값이 정상적으로 갱신되는지 확인                         |
-| `nullable encrypted columns keep null values` | nullable 암호화 컬럼에 `null` 값이 그대로 보존되는지 확인                 |
+| Test                                             | Description                                                               |
+|--------------------------------------------------|---------------------------------------------------------------------------|
+| `encrypt and decrypt for strings`                | Verify transparent decryption on INSERT → SELECT; confirm DAEAD searchable, AEAD not searchable |
+| `update an encrypted column`                     | Confirm encrypted value is correctly updated after UPDATE                 |
+| `nullable encrypted columns keep null values`    | Confirm that `null` values are preserved in nullable encrypted columns    |
 
-## 코드 예제
+## Code Examples
 
-### 1. 테이블 정의
+### 1. Table Definition
 
 ```kotlin
 import io.bluetape4k.exposed.core.tink.tinkAeadBinary
@@ -112,86 +174,86 @@ import io.bluetape4k.exposed.core.tink.tinkDaeadVarChar
 import io.bluetape4k.tink.aead.TinkAeads
 
 object UserSecrets: IntIdTable("user_secrets") {
-    // DAEAD: 이메일은 로그인 검색이 필요하므로 결정적 암호화 사용
+    // DAEAD: email requires login search — use deterministic encryption
     val email = tinkDaeadVarChar("email", 255).index()
 
-    // AEAD: 주소는 검색 불필요 → 비결정적 암호화로 더 높은 보안
+    // AEAD: address does not need searching — non-deterministic for stronger security
     val address = tinkAeadVarChar("address", 512, TinkAeads.AES256_GCM).nullable()
 
-    // AEAD Binary: 바이너리 데이터 암호화
+    // AEAD Binary: encrypt binary data
     val profileImage = tinkAeadBinary("profile_image", 65535).nullable()
 }
 ```
 
-### 2. 데이터 삽입 (암호화 투명 처리)
+### 2. Insert data (encryption handled transparently)
 
 ```kotlin
 val id = UserSecrets.insertAndGetId {
     it[email] = "user@example.com"
-    it[address] = "서울특별시 강남구 테헤란로 123"
+    it[address] = "123 Teheran-ro, Gangnam-gu, Seoul"
     it[profileImage] = imageBytes
 }
 ```
 
-### 3. 조회 (복호화 투명 처리)
+### 3. Retrieve data (decryption handled transparently)
 
 ```kotlin
 val row = UserSecrets.selectAll().where { UserSecrets.id eq id }.single()
 
-row[UserSecrets.email]   // "user@example.com" (자동 복호화)
-row[UserSecrets.address] // "서울특별시 강남구 테헤란로 123" (자동 복호화)
+row[UserSecrets.email]   // "user@example.com" (auto-decrypted)
+row[UserSecrets.address] // "123 Teheran-ro, Gangnam-gu, Seoul" (auto-decrypted)
 ```
 
-### 4. DAEAD 컬럼으로 WHERE 검색 (결정적 암호화만 가능)
+### 4. WHERE search with DAEAD columns (deterministic encryption only)
 
 ```kotlin
-// DAEAD 컬럼은 암호화된 상태로 동등 비교가 가능합니다
+// DAEAD columns support equality comparison while encrypted
 val user = UserSecrets.selectAll()
     .where { UserSecrets.email eq "user@example.com" }
     .single()
 
-// AEAD 컬럼은 매번 다른 암호문이 생성되어 WHERE 검색이 불가합니다
+// AEAD columns produce a different ciphertext each time — WHERE search is not possible
 UserSecrets.selectAll()
-    .where { UserSecrets.address eq "서울특별시 강남구 테헤란로 123" }
-    .toList()   // 항상 빈 결과 반환
+    .where { UserSecrets.address eq "123 Teheran-ro, Gangnam-gu, Seoul" }
+    .toList()   // always returns empty result
 ```
 
-## DAEAD vs AEAD 선택 기준
+## DAEAD vs AEAD Selection Guide
 
 ```
-검색이 필요한가?
+Is searching required?
     YES → DAEAD (tinkDaeadVarChar)
-           예: 이름, 이메일, 전화번호, 주민번호 앞자리
+           e.g. names, email addresses, phone numbers, partial IDs
     NO  → AEAD (tinkAeadVarChar / tinkAeadBinary)
-           예: 비밀번호 힌트, 전체 주소, 카드번호, 생체정보
+           e.g. password hints, full addresses, card numbers, biometric data
 ```
 
-> **참고**: DAEAD는 동일 평문이 항상 동일 암호문을 생성하므로 빈도 분석 등의 통계적 공격에 취약합니다. 검색이 꼭 필요한 경우에만 사용하세요.
+> **Note**: DAEAD always produces the same ciphertext for the same plaintext, making it vulnerable to statistical attacks such as frequency analysis. Use it only when searching is strictly required.
 
-## 다른 암호화 모듈과 비교
+## Comparison with Other Encryption Modules
 
-| 모듈                         | 암호화 방식 | WHERE 검색 | 라이브러리       |
-|----------------------------|--------|----------|-------------|
-| `01-exposed-r2dbc-crypt`   | 비결정적   | 불가       | Bouncy Castle |
-| `10-exposed-r2dbc-jasypt`  | 결정적    | 가능       | Jasypt      |
-| `12-exposed-r2dbc-tink`    | 결정적/비결정적 선택 가능 | DAEAD만 가능 | Google Tink |
-| `06-exposed-r2dbc-custom-columns` | 커스텀 구현 | 구현에 따라 다름 | AES 직접 구현 |
+| Module                              | Encryption Type         | WHERE Search | Library           |
+|-------------------------------------|-------------------------|--------------|-------------------|
+| `01-exposed-r2dbc-crypt`            | Non-deterministic       | Not possible | Bouncy Castle     |
+| `10-exposed-r2dbc-jasypt`           | Deterministic           | Possible     | Jasypt            |
+| `12-exposed-r2dbc-tink`             | Deterministic or non-deterministic (selectable) | DAEAD only | Google Tink |
+| `06-exposed-r2dbc-custom-columns`   | Custom implementation   | Depends on implementation | Direct AES |
 
-## 테스트 실행
+## Running the Tests
 
 ```bash
-# 이 모듈의 모든 테스트 실행
+# Run all tests in this module
 ./gradlew :12-exposed-r2dbc-tink:test
 
-# 특정 테스트 클래스 실행
+# Run a specific test class
 ./gradlew :12-exposed-r2dbc-tink:test --tests "exposed.r2dbc.examples.tink.TinkColumnTypeTest"
 
-# H2만 사용하는 빠른 테스트
+# Fast test using H2 only
 ./gradlew :12-exposed-r2dbc-tink:test -PuseFastDB=true
 ```
 
-## 참고 자료
+## References
 
-- [Google Tink 공식 문서](https://developers.google.com/tink)
+- [Google Tink Official Docs](https://developers.google.com/tink)
 - [Exposed Crypt](https://debop.notion.site/Exposed-Crypt-1c32744526b0802da419d5ce74d2c5f3)
 - [Exposed Jasypt](https://debop.notion.site/Exposed-Jasypt-1c32744526b080f08ab2f3e21149e9d7)

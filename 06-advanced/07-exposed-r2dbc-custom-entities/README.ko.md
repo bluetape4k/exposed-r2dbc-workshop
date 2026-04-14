@@ -1,0 +1,295 @@
+> English version: [README.md](README.md)
+
+# 07 Exposed R2DBC Custom Entities (ID 생성 전략)
+
+이 모듈은 Exposed의 강력한 패턴을 보여줍니다: 특정 기본 키 전략을 캡슐화하는 재사용 가능한 기본 `Table`과 `Entity` 클래스를 생성하는 것입니다. 모든 테이블에 대해
+`id` 컬럼과 그 기본 생성기를 수동으로 정의하는 대신, 미리 구성된 기본 클래스에서 상속받기만 하면 됩니다.
+
+이 접근 방식은 `06-custom-columns` 모듈의 개념을 기반으로 하여, 커스텀 클라이언트 측 기본값 생성기를 편리하고 재사용 가능한 추상화로 패키징합니다.
+
+## 구조 다이어그램
+
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+classDiagram
+    class IdTable~ID~ {
+        <<abstract>>
+        +id: Column~EntityID~ID~~
+    }
+    class SnowflakeIdTable {
+        <<abstract>>
+        +id: Column~EntityID~Long~~
+        clientDefault: SnowflakeId
+    }
+    class KsuidTable {
+        <<abstract>>
+        +id: Column~EntityID~String~~
+        clientDefault: KSUID-Base62 27자
+    }
+    class KsuidMillisTable {
+        <<abstract>>
+        +id: Column~EntityID~String~~
+        clientDefault: KSUID-Millis 27자
+    }
+    class TimebasedUUIDTable {
+        <<abstract>>
+        +id: Column~EntityID~UUID~~
+        clientDefault: UUIDv1 RFC4122
+    }
+    class TimebasedUUIDBase62Table {
+        <<abstract>>
+        +id: Column~EntityID~String~~
+        clientDefault: UUIDv1+Base62 22자
+    }
+    class T1["T1 : SnowflakeIdTable"] {
+        +name: Column~String~
+        +age: Column~Int~
+    }
+
+    IdTable <|-- SnowflakeIdTable
+    IdTable <|-- KsuidTable
+    IdTable <|-- KsuidMillisTable
+    IdTable <|-- TimebasedUUIDTable
+    IdTable <|-- TimebasedUUIDBase62Table
+    SnowflakeIdTable <|-- T1
+
+    style IdTable fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    style SnowflakeIdTable fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    style KsuidTable fill:#FFF3E0,stroke:#FFCC80,color:#E65100
+    style KsuidMillisTable fill:#FFF3E0,stroke:#FFCC80,color:#E65100
+    style TimebasedUUIDTable fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
+    style TimebasedUUIDBase62Table fill:#E0F2F1,stroke:#80CBC4,color:#00695C
+    style T1 fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+```
+
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+erDiagram
+    T_SNOWFLAKE {
+        BIGINT id PK "Snowflake ID (자동 생성)"
+        VARCHAR name "255"
+        INT age
+    }
+    T_KSUID {
+        VARCHAR id PK "KSUID Base62 (27자)"
+        VARCHAR name "255"
+        INT age
+    }
+    T_KSUID_MILLIS {
+        VARCHAR id PK "KSUID Millis (27자)"
+        VARCHAR name "255"
+        INT age
+    }
+    T_TIMEBASED_UUID {
+        UUID id PK "UUIDv1 (RFC 4122)"
+        VARCHAR name "255"
+        INT age
+    }
+    T_TIMEBASED_UUID_BASE62 {
+        VARCHAR id PK "UUIDv1+Base62 (22자)"
+        VARCHAR name "255"
+        INT age
+    }
+```
+
+## ID 생성 흐름
+
+```mermaid
+sequenceDiagram
+    participant App as 애플리케이션
+    participant Table as CustomIdTable
+    participant Gen as ID 생성기
+    participant DB as Database
+
+    Note over App,DB: DAO — Product.new { ... }
+    App ->> Table: Product.new { name = "Laptop" }
+    Table ->> Gen: clientDefault lambda 호출
+    Gen -->> Table: generatedId (예: 1234567890L)
+    Table ->> DB: INSERT INTO products (id, name) VALUES (1234567890, 'Laptop')
+
+    Note over App,DB: DSL — Products.insert { ... }
+    App ->> Table: Products.insert { it[name] = "Mouse" }
+    Table ->> Gen: clientDefault lambda 호출
+    Gen -->> Table: generatedId
+    Table ->> DB: INSERT INTO products (id, name) VALUES (generatedId, 'Mouse')
+```
+
+## ID 선택 플로우차트
+
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+flowchart TD
+    A[ID 전략 선택] --> B{ID 타입}
+    B --> C[숫자 Long] --> D[SnowflakeIdTable\n밀리초 정렬, 64bit]
+    B --> E{문자열 String}
+    E --> F{UUID 표준 필요?}
+    F --> G[예] --> H{컴팩트 표현?}
+    H --> I[아니오] --> J[TimebasedUUIDTable\nUUID 36자, RFC 4122]
+    H --> K[예] --> L[TimebasedUUIDBase62Table\nString 22자]
+    F --> M[아니오] --> N{밀리초 정밀도?}
+    N --> O[아니오] --> P[KsuidTable\n초 단위, 27자]
+    N --> Q[예] --> R[KsuidMillisTable\n밀리초, 27자]
+
+    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
+    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
+    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
+
+    class A blue
+    class B,E,F,H,N purple
+    class D,G,I green
+    class J,L purple
+    class P,R orange
+    class C,K,M,O,Q teal
+```
+
+## ID 생성 전략 비교
+
+다양한 ID 생성 전략은 저장 타입, 정렬 가능 여부, 길이 등에서 차이가 있습니다. 용도에 맞는 전략을 선택하세요.
+
+| 기반 클래스                     | ID 타입          | 저장 타입       | 정렬 가능 | 길이    | 생성 방식           | 주요 용도                              |
+|----------------------------|----------------|-------------|-------|-------|-----------------|--------------------------------------|
+| `SnowflakeIdTable`         | `Long`         | `BIGINT`    | 밀리초   | 64bit | Snowflake 알고리즘   | 분산 시스템의 고성능 숫자 ID                  |
+| `KsuidTable`               | `String`       | `VARCHAR(27)` | 초 단위 | 27자  | KSUID (Base62)  | URL 친화적 정렬 가능 문자열 ID              |
+| `KsuidMillisTable`         | `String`       | `VARCHAR(27)` | 밀리초   | 27자  | KSUID Millis    | 밀리초 정밀도 KSUID                      |
+| `TimebasedUUIDTable`       | `java.util.UUID` | `UUID`    | 100ns | 36자  | UUIDv1           | UUID 표준 요구 시스템, RFC 4122 준수       |
+| `TimebasedUUIDBase62Table` | `String`       | `VARCHAR(22)` | 100ns | 22자  | UUIDv1 + Base62 | UUID의 컴팩트 문자열 표현 (URL 안전)         |
+
+### 전략 선택 가이드
+
+```
+숫자 ID가 필요한가?
+    YES → SnowflakeIdTable (Long, 64비트, 밀리초 정렬)
+
+문자열 ID가 필요한가?
+    정렬 가능 + UUID 표준 준수 필요?
+        YES → TimebasedUUIDTable (UUID, 36자, RFC 4122)
+        컴팩트 표현 필요?
+            YES → TimebasedUUIDBase62Table (String, 22자)
+    알파벳 정렬 + URL 친화적?
+        초 단위 정밀도 → KsuidTable (String, 27자)
+        밀리초 정밀도 → KsuidMillisTable (String, 27자)
+```
+
+## 학습 목표
+
+- 커스텀 기본 `IdTable`과 `Entity` 클래스를 생성하는 방법 이해
+- Snowflake, KSUID, 시간 기반 UUID 같은 일반적인 ID 생성 전략을 추상화하는 방법 학습
+- 커스텀 기본 클래스 상속을 통한 테이블 정의 간소화
+- DSL과 DAO 패턴 모두에서 이러한 커스텀 엔티티를 원활하게 사용
+
+## 제공되는 예제
+
+이 모듈은 다양한 ID 생성 요구에 대해 즉시 사용할 수 있는 여러 기본 테이블/엔티티 쌍을 제공합니다.
+
+### SnowflakeIdTable / SnowflakeIdEntity
+
+| 항목        | 설명                                             |
+|-----------|------------------------------------------------|
+| **ID 타입** | `Long`                                         |
+| **생성기**   | Snowflake 알고리즘을 사용하여 k-ordered 고유 `Long` ID 생성 |
+| **용도**    | 대략 시간 순서의 고유 숫자 ID가 필요한 분산 시스템에 적합             |
+
+### KsuidTable / KsuidEntity
+
+| 항목        | 설명                                      |
+|-----------|-----------------------------------------|
+| **ID 타입** | `String` (varchar 27)                   |
+| **생성기**   | K-Sortable Unique Identifier (KSUID) 생성 |
+| **용도**    | 고유하면서도 생성 시간별로 사전식 정렬 가능한 ID가 필요할 때 탁월  |
+
+### KsuidMillisTable / KsuidMillisEntity
+
+| 항목        | 설명                        |
+|-----------|---------------------------|
+| **ID 타입** | `String` (varchar 27)     |
+| **생성기**   | 밀리초 정밀도의 KSUID 생성         |
+| **용도**    | KSUID와 유사하지만 더 미세한 시간 해상도 |
+
+### TimebasedUUIDTable / TimebasedUUIDEntity
+
+| 항목        | 설명                          |
+|-----------|-----------------------------|
+| **ID 타입** | `java.util.UUID`            |
+| **생성기**   | 시간 기반(버전 1) UUID 생성         |
+| **용도**    | 시간 순서인 표준 UUID 형식이 필요할 때 유용 |
+
+### TimebasedUUIDBase62Table / TimebasedUUIDBase62Entity
+
+| 항목        | 설명                                                       |
+|-----------|----------------------------------------------------------|
+| **ID 타입** | `String` (varchar 22)                                    |
+| **생성기**   | 시간 기반 UUID를 생성하고 Base62로 인코딩하여 더 짧고 URL 친화적인 문자열 표현 제공   |
+| **용도**    | 시간 순서 UUID가 필요하지만 표준 36자 UUID 문자열보다 더 컴팩트한 문자열 형식이 필요할 때 |
+
+## 작동 원리
+
+이러한 기본 테이블은 일반적으로 `IdTable`을 상속받는 `abstract class`로 구현됩니다. `id` 컬럼은 재정의되어 원하는 타입과 `clientDefault` 생성기로 구성됩니다. 해당
+`Entity`와 `EntityClass`도 생성되어 추상화를 완성합니다.
+
+## 코드 예제: SnowflakeIdTable 사용
+
+`SnowflakeIdTable`을 상속받으면 `id` 컬럼과 자동 생성을 무료로 얻을 수 있습니다.
+
+```kotlin
+import io.bluetape4k.exposed.dao.id.SnowflakeIdTable
+import io.bluetape4k.exposed.dao.id.SnowflakeIdEntity
+import io.bluetape4k.exposed.dao.id.SnowflakeIdEntityClass
+import io.bluetape4k.exposed.dao.id.SnowflakeIdEntityID
+
+// 1. SnowflakeIdTable을 상속받아 테이블 정의
+object Products: SnowflakeIdTable("products") {
+    val name = varchar("name", 255)
+    val price = integer("price")
+}
+
+// 2. SnowflakeIdEntity를 상속받아 엔티티 정의
+class Product(id: SnowflakeIdEntityID): SnowflakeIdEntity(id) {
+    companion object: SnowflakeIdEntityClass<Product>(Products)
+
+    var name by Products.name
+    var price by Products.price
+}
+
+// 3. 사용. ID가 자동으로 생성됩니다
+transaction {
+    // DAO 스타일
+    val newProduct = Product.new {
+        name = "Laptop"
+        price = 1200
+    }
+    // ID가 이미 할당됨: newProduct.id
+
+    // DSL 스타일
+    Products.insert {
+        it[name] = "Mouse"
+        it[price] = 25
+    }
+    // Snowflake ID가 자동으로 생성되어 삽입됨
+}
+```
+
+이 패턴은 상용구 코드를 크게 줄이고, 사용하는 모든 테이블에서 일관된 기본 키 전략을 보장합니다.
+
+## 테스트 실행
+
+이 모듈의 테스트는 각 커스텀 ID 테이블 타입에 대한 레코드 생성, 배치 삽입, 조회를 표준 및 코루틴 컨텍스트 모두에서 보여줍니다.
+
+```bash
+# 이 모듈의 모든 테스트 실행
+./gradlew :07-exposed-r2dbc-custom-entities:test
+
+# 특정 엔티티 타입 테스트 실행 (예: Snowflake)
+./gradlew :07-exposed-r2dbc-custom-entities:test --tests "exposed.r2dbc.examples.custom.entities.SnowflakeIdTableTest"
+
+# KSUID 기반 테스트 실행
+./gradlew :07-exposed-r2dbc-custom-entities:test --tests "exposed.r2dbc.examples.custom.entities.KsuidTableTest"
+
+# 시간 기반 UUID 테스트 실행
+./gradlew :07-exposed-r2dbc-custom-entities:test --tests "exposed.r2dbc.examples.custom.entities.TimebasedUUIDTableTest"
+```
+
+## 참고 자료
+
+- [Custom IdTable & Entities](https://debop.notion.site/Custom-Table-Entities-1c32744526b0804bad10ea3a0dce6c13)

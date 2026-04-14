@@ -1,63 +1,65 @@
-# 02 R2DBC Virtual Threads Basic (가상 스레드 기본)
+> 한국어 버전: [README.ko.md](README.ko.md)
 
-Exposed R2DBC + Java 21 Virtual Threads 환경에서 비동기 데이터베이스 작업을 수행하는 방법을 학습합니다.
-`runSuspendVT`, `virtualThreadTransaction`, `inTopLevelSuspendTransaction` 등 Virtual Threads 전용 API를 통해
-블로킹 스타일 코드로 고성능 비동기 처리를 구현합니다.
+# 02 R2DBC Virtual Threads Basic
 
-> **요구 사항**: JDK 21 이상 (`@EnabledOnJre(JRE.JAVA_21)` 조건 적용)
+Learn how to perform asynchronous database operations in an Exposed R2DBC + Java 21 Virtual Threads environment.
+Use Virtual Threads-specific APIs such as `runSuspendVT`, `virtualThreadTransaction`, and `inTopLevelSuspendTransaction`
+to achieve high-performance async processing with blocking-style code.
+
+> **Requirement**: JDK 21 or later (`@EnabledOnJre(JRE.JAVA_21)` condition applied)
 
 ---
 
-## 실행 흐름
+## Execution Flow
 
 ```mermaid
 sequenceDiagram
-    participant C as 호출자 (Coroutine)
+    participant C as Caller (Coroutine)
     participant VT as Virtual Thread Dispatcher
     participant ST as suspendTransaction
     participant DB as R2DBC Database
 
     C ->> VT: runSuspendVT { }
-    VT ->> VT: VirtualThread 할당
+    VT ->> VT: Allocate VirtualThread
     VT ->> ST: virtualThreadTransaction { }
     ST ->> DB: BEGIN (on Virtual Thread)
-    ST ->> DB: SQL 실행
-    DB -->> ST: 결과
+    ST ->> DB: Execute SQL
+    DB -->> ST: Result
     ST ->> DB: COMMIT
-    ST -->> VT: 결과 반환
-    VT -->> C: 결과 반환
-    Note right of VT: 블로킹 허용<br/>(Virtual Thread 특성)
+    ST -->> VT: return result
+    VT -->> C: return result
+    Note right of VT: Blocking allowed<br/>(Virtual Thread characteristic)
 ```
 
 ---
 
-## 학습 목표
+## Learning Objectives
 
-- Java 21 Virtual Threads와 Exposed R2DBC 통합 방법 이해
-- `runSuspendVT` / `virtualThreadTransaction` / `inTopLevelSuspendTransaction` API 활용
-- `Dispatchers.newVT` 디스패처로 Virtual Threads 기반 병렬 처리 구현
-- 기존 `suspendTransaction` 대비 Virtual Threads 트랜잭션의 차이점 파악
-- MariaDB 계열 중첩 트랜잭션 제한 사항 파악
-
----
-
-## 핵심 API
-
-| API | 설명 |
-|-----|------|
-| `runSuspendVT { }` | Virtual Thread 기반 코루틴 테스트 실행기 (JUnit 5 전용) |
-| `virtualThreadTransaction { }` | 현재 트랜잭션 내에서 Virtual Thread로 새 트랜잭션 생성·실행 |
-| `inTopLevelSuspendTransaction { }` | 독립적인 최상위 suspend 트랜잭션 (기존 트랜잭션과 무관하게 새 트랜잭션 시작) |
-| `Dispatchers.newVT` | Virtual Thread 기반 코루틴 디스패처 (`CoroutineScope(Dispatchers.newVT)`) |
-| `suspendTransaction { }` | 일반 suspend 트랜잭션 (비교 기준) |
+- Understand how to integrate Java 21 Virtual Threads with Exposed R2DBC
+- Use `runSuspendVT` / `virtualThreadTransaction` / `inTopLevelSuspendTransaction` APIs
+- Implement parallel processing based on Virtual Threads using the `Dispatchers.newVT` dispatcher
+- Understand the differences between Virtual Thread transactions and standard `suspendTransaction`
+- Identify nested transaction limitations for MariaDB-compatible databases
 
 ---
 
-## 코드 예제
+## Core APIs
 
-### 1. 기본 Virtual Thread 트랜잭션
+| API | Description |
+|-----|-------------|
+| `runSuspendVT { }` | Virtual Thread-based coroutine test runner (JUnit 5 only) |
+| `virtualThreadTransaction { }` | Create and execute a new transaction on a Virtual Thread within the current transaction |
+| `inTopLevelSuspendTransaction { }` | Independent top-level suspend transaction (starts a new transaction regardless of existing one) |
+| `Dispatchers.newVT` | Virtual Thread-based coroutine dispatcher (`CoroutineScope(Dispatchers.newVT)`) |
+| `suspendTransaction { }` | Standard suspend transaction (baseline for comparison) |
 
-`runSuspendVT`로 테스트를 실행하고, `virtualThreadTransaction`으로 중첩 트랜잭션을 생성합니다.
+---
+
+## Code Examples
+
+### 1. Basic Virtual Thread Transaction
+
+Run the test with `runSuspendVT` and create a nested transaction with `virtualThreadTransaction`.
 
 ```kotlin
 @EnabledOnJre(JRE.JAVA_21)
@@ -67,7 +69,7 @@ class Ex01_VirtualThreads: AbstractR2dbcExposedTest() {
         val name = varchar("name", 50).nullable()
     }
 
-    // 현재 트랜잭션 내에서 Virtual Thread 기반 새 트랜잭션으로 조회
+    // Query via a new VT-based transaction within the current transaction
     suspend fun R2dbcTransaction.getTesterById(id: Int): ResultRow? =
         virtualThreadTransaction {
             VTester.selectAll()
@@ -77,7 +79,7 @@ class Ex01_VirtualThreads: AbstractR2dbcExposedTest() {
 
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `virtual threads 를 이용하여 순차 작업 수행하기`(testDB: TestDB) = runSuspendVT {
+    fun `perform sequential operations using virtual threads`(testDB: TestDB) = runSuspendVT {
         withTables(testDB, VTester) {
             val id = VTester.insertAndGetId { }
             getTesterById(id.value)!![VTester.id].value shouldBeEqualTo id.value
@@ -86,21 +88,21 @@ class Ex01_VirtualThreads: AbstractR2dbcExposedTest() {
 }
 ```
 
-### 2. 중첩 트랜잭션 비동기 실행
+### 2. Async Nested Transaction Execution
 
-`coroutineScope` + `async`로 병렬 INSERT를 수행한 뒤, `inTopLevelSuspendTransaction`으로 독립 트랜잭션에서 조회합니다.
+Perform parallel INSERTs with `coroutineScope` + `async`, then query in an independent transaction using `inTopLevelSuspendTransaction`.
 
 ```kotlin
 @ParameterizedTest
 @MethodSource(ENABLE_DIALECTS_METHOD)
-fun `중첩된 virtual thread 용 트랜잭션을 async로 실행`(testDB: TestDB) = runSuspendVT {
-    // MariaDB 계열은 중첩 트랜잭션 미지원 → 스킵
+fun `execute nested virtual thread transactions async`(testDB: TestDB) = runSuspendVT {
+    // MariaDB-compatible DBs do not support nested transactions → skip
     Assumptions.assumeTrue { testDB !in TestDB.ALL_MARIADB_LIKE }
 
     withTables(testDB, VTester) {
         val recordCount = 5
 
-        // 병렬 INSERT (suspendTransaction)
+        // Parallel INSERT (suspendTransaction)
         List(recordCount) { index ->
             coroutineScope {
                 async {
@@ -112,7 +114,7 @@ fun `중첩된 virtual thread 용 트랜잭션을 async로 실행`(testDB: TestD
             }
         }.awaitAll()
 
-        // 병렬 SELECT (inTopLevelSuspendTransaction)
+        // Parallel SELECT (inTopLevelSuspendTransaction)
         val rows = List(recordCount) { index ->
             coroutineScope {
                 async {
@@ -129,14 +131,14 @@ fun `중첩된 virtual thread 용 트랜잭션을 async로 실행`(testDB: TestD
 }
 ```
 
-### 3. `Dispatchers.newVT` 기반 병렬 처리
+### 3. Parallel Processing with `Dispatchers.newVT`
 
-`CoroutineScope(Dispatchers.newVT)`로 Virtual Thread 디스패처를 생성하고, `launch`로 병렬 INSERT를 수행합니다.
+Create a Virtual Thread dispatcher with `CoroutineScope(Dispatchers.newVT)` and perform parallel INSERTs with `launch`.
 
 ```kotlin
 @ParameterizedTest
 @MethodSource(ENABLE_DIALECTS_METHOD)
-fun `다수의 비동기 작업을 수행 후 대기`(testDB: TestDB) = runSuspendVT {
+fun `perform multiple async operations and wait`(testDB: TestDB) = runSuspendVT {
     withTables(testDB, VTester) {
         val recordCount = 10
         val results = CopyOnWriteArrayList<Int>()
@@ -161,14 +163,14 @@ fun `다수의 비동기 작업을 수행 후 대기`(testDB: TestDB) = runSuspe
 }
 ```
 
-### 4. 조건부 조회
+### 4. Conditional Query
 
-일반 `selectAll().where { }` 조회를 Virtual Thread 환경에서 실행합니다.
+Execute a standard `selectAll().where { }` query in a Virtual Thread environment.
 
 ```kotlin
 @ParameterizedTest
 @MethodSource(ENABLE_DIALECTS_METHOD)
-fun `virtual threads 환경에서 조건 조회`(testDB: TestDB) = runSuspendVT {
+fun `conditional query in virtual threads environment`(testDB: TestDB) = runSuspendVT {
     withTables(testDB, VTester) {
         listOf("alpha", "beta", "gamma").forEach { name ->
             VTester.insert { it[VTester.name] = name }
@@ -185,100 +187,179 @@ fun `virtual threads 환경에서 조건 조회`(testDB: TestDB) = runSuspendVT 
 
 ---
 
-## Virtual Thread (JDK 21) 활용 이점
+## Benefits of Virtual Threads (JDK 21)
 
-JDK 21의 Virtual Threads(Project Loom)는 기존 플랫폼 스레드의 한계를 극복합니다.
+Java 21's Virtual Threads (Project Loom) overcome the limitations of traditional platform threads.
 
-### 성능 비교
+### Performance Comparison
 
-| 특성             | 플랫폼 스레드         | Virtual Threads      |
-|------------------|----------------------|----------------------|
-| 생성 비용         | 높음 (~1ms)          | 매우 낮음 (~수 마이크로초) |
-| 메모리 사용       | ~1MB/스레드          | ~수 KB/스레드         |
-| 컨텍스트 스위칭   | OS 수준, 비용 높음   | JVM 수준, 비용 낮음   |
-| 최대 동시 스레드  | 수천 개              | 수백만 개             |
-| 블로킹 I/O       | 스레드 점유          | 자동 언마운트·재마운트  |
-| JDK 요구사항     | 모든 버전             | 21+                  |
+| Property           | Platform Threads          | Virtual Threads              |
+|--------------------|---------------------------|------------------------------|
+| Creation cost      | High (~1ms)               | Very low (~microseconds)     |
+| Memory usage       | ~1MB/thread               | ~a few KB/thread             |
+| Context switching  | OS level, high cost       | JVM level, low cost          |
+| Max concurrent     | Thousands                 | Millions                     |
+| Blocking I/O       | Thread occupied           | Auto unmount/remount         |
+| JDK requirement    | All versions              | 21+                          |
 
-### R2DBC + Virtual Threads 조합의 이점
+### Benefits of R2DBC + Virtual Threads Combination
 
 ```
-기존 플랫폼 스레드 모델:
+Traditional Platform Thread Model:
 ┌─────────────────────────────────────────────────┐
-│ Thread Pool (수백 개 한계)                       │
-│  [Thread-1] → SQL wait → [Thread-1 block]       │
-│  [Thread-2] → SQL wait → [Thread-2 block]       │
-│  ...         (I/O 대기 중 스레드 낭비)           │
+│ Thread Pool (limited to hundreds)               │
+│  [Thread-1] → SQL wait → [Thread-1 blocked]    │
+│  [Thread-2] → SQL wait → [Thread-2 blocked]    │
+│  ...         (threads wasted during I/O wait)  │
 └─────────────────────────────────────────────────┘
 
-Virtual Threads 모델 (JDK 21+):
+Virtual Threads Model (JDK 21+):
 ┌─────────────────────────────────────────────────┐
-│ Carrier Thread Pool (CPU 코어 수)                │
-│  [Carrier-1] ← 마운트 → [VThread-1] SQL 실행    │
-│               ← SQL wait 발생                    │
-│  [Carrier-1] ← 마운트 → [VThread-2] 다른 작업   │
-│               (VThread-1은 suspend, 스레드 해제) │
-│  ...         (수백만 VThread 동시 처리 가능)     │
+│ Carrier Thread Pool (number of CPU cores)       │
+│  [Carrier-1] ← mount → [VThread-1] run SQL     │
+│               ← SQL wait occurs                 │
+│  [Carrier-1] ← mount → [VThread-2] other work  │
+│               (VThread-1 suspended, thread free)│
+│  ...         (millions of VThreads concurrently)│
 └─────────────────────────────────────────────────┘
 ```
 
-### Coroutine Scope + Virtual Threads 관리 다이어그램
+### Coroutine Scope + Virtual Threads Management Diagram
 
 ```
-runSuspendVT { }                         ← Virtual Thread 기반 코루틴 테스트 실행기
+runSuspendVT { }                         ← Virtual Thread-based coroutine test runner
 │
-├── withTables(testDB, VTester)          ← 테이블 생성, 트랜잭션 컨텍스트 시작
+├── withTables(testDB, VTester)          ← create table, start transaction context
 │   │
-│   ├── virtualThreadTransaction { }     ← 현재 트랜잭션에서 새 VT 트랜잭션 생성
-│   │   └── VTester.selectAll()          ← R2DBC 비동기 SQL (VT에서 실행)
+│   ├── virtualThreadTransaction { }     ← create new VT transaction from current transaction
+│   │   └── VTester.selectAll()          ← R2DBC async SQL (runs on VT)
 │   │
 │   ├── CoroutineScope(Dispatchers.newVT)
 │   │   ├── launch { inTopLevelSuspendTransaction { VTester.insert { } } }
 │   │   ├── launch { inTopLevelSuspendTransaction { VTester.insert { } } }
-│   │   └── ... (수백만 개 동시 실행 가능)
+│   │   └── ... (millions can run simultaneously)
 │   │
-│   └── joinAll(...)                     ← 모든 VT 작업 완료 대기
+│   └── joinAll(...)                     ← wait for all VT work to complete
 │
-└── 테이블 자동 정리 (DROP)
+└── auto-cleanup tables (DROP)
 
-핵심 API 역할:
-  Dispatchers.newVT        → Virtual Thread 기반 코루틴 디스패처
-  virtualThreadTransaction → 현재 트랜잭션 컨텍스트에서 VT로 분기
-  inTopLevelSuspendTransaction → 독립 커넥션·독립 트랜잭션 (병렬 I/O에 적합)
-  runSuspendVT             → JUnit 5 테스트를 VT 코루틴으로 실행
+Core API roles:
+  Dispatchers.newVT        → Virtual Thread-based coroutine dispatcher
+  virtualThreadTransaction → branch to VT from current transaction context
+  inTopLevelSuspendTransaction → independent connection and transaction (suited for parallel I/O)
+  runSuspendVT             → run JUnit 5 test as VT coroutine
 ```
 
-### 언제 Virtual Threads를 선택해야 하나?
+## Platform Thread vs Virtual Thread Comparison
 
-- **I/O 집약적 작업**: DB 쿼리, 외부 API 호출 등 대기 시간이 긴 작업이 많을 때
-- **높은 동시성 요구**: 수천~수백만 개의 동시 요청을 처리해야 할 때
-- **기존 블로킹 코드 활용**: 레거시 JDBC 라이브러리 등 블로킹 API를 그대로 사용해야 할 때
-- **Kotlin 코루틴과 병행**: `Dispatchers.newVT`로 기존 코루틴 코드에 자연스럽게 통합
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+flowchart TB
+    subgraph PT ["Platform Thread Model"]
+        direction TB
+        PT_Pool["OS Thread Pool\n(limited to hundreds)"]
+        PT1["Thread-1\n[SQL wait -> blocked]"]
+        PT2["Thread-2\n[SQL wait -> blocked]"]
+        PT3["Thread-N\n[idle waste]"]
+        PT_Pool --> PT1
+        PT_Pool --> PT2
+        PT_Pool --> PT3
+    end
+
+    subgraph VT ["Virtual Thread Model (JDK 21+)"]
+        direction TB
+        Carrier["Carrier Thread Pool\n(number of CPU cores)"]
+        VT1["VThread-1\n[running SQL]"]
+        VT2["VThread-2\n[other work]"]
+        VTN["VThread-N\n[millions possible]"]
+        Carrier -->|mount| VT1
+        Carrier -->|mount when VT1 suspends| VT2
+        Carrier -.->|async remount| VTN
+    end
+
+    PT -->|"upgrade to JDK 21"| VT
+
+    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    class PT_Pool,PT1,PT2,PT3 blue
+    class Carrier,VT1,VT2,VTN green
+```
+
+## Virtual Thread API Class Structure
+
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+classDiagram
+    class CoroutineDispatcher {
+        <<abstract>>
+        +dispatch(context, block)
+    }
+    class VirtualThreadDispatcher {
+        <<bluetape4k>>
+        +newVT() CoroutineDispatcher
+        +dispatch(context, block)
+    }
+    class R2dbcTransaction {
+        +virtualThreadTransaction(block)
+        +maxAttempts Int
+    }
+    class InTopLevelSuspendTransaction {
+        <<suspend fun>>
+        +db R2dbcDatabase
+        +transactionIsolation IsolationLevel
+        +statement suspend block
+    }
+    class RunSuspendVT {
+        <<JUnit5 extension>>
+        +invoke(testBody) Unit
+    }
+
+    CoroutineDispatcher <|-- VirtualThreadDispatcher
+    R2dbcTransaction --> VirtualThreadDispatcher : uses
+    InTopLevelSuspendTransaction --> VirtualThreadDispatcher : dispatches on
+    RunSuspendVT --> VirtualThreadDispatcher : wraps test
+
+    note for VirtualThreadDispatcher "Created via Dispatchers.newVT\nBased on JDK 21 Virtual Threads"
+    note for RunSuspendVT "Used together with @EnabledOnJre(JRE.JAVA_21)"
+
+    style CoroutineDispatcher fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    style VirtualThreadDispatcher fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    style R2dbcTransaction fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
+    style InTopLevelSuspendTransaction fill:#FFF3E0,stroke:#FFCC80,color:#E65100
+    style RunSuspendVT fill:#E0F2F1,stroke:#80CBC4,color:#00695C
+```
+
+### When Should You Choose Virtual Threads?
+
+- **I/O-intensive workloads**: When many tasks involve long wait times such as DB queries or external API calls
+- **High concurrency requirements**: When you need to handle thousands to millions of concurrent requests
+- **Leveraging existing blocking code**: When you must use blocking APIs like legacy JDBC libraries
+- **Combined with Kotlin Coroutines**: Naturally integrates into existing coroutine code via `Dispatchers.newVT`
 
 ---
 
-## 주의 사항
+## Cautions
 
-- **JDK 21 필수**: 테스트 클래스에 `@EnabledOnJre(JRE.JAVA_21)` 적용되어 있어, JDK 21 미만에서는 자동 스킵됩니다.
-- **MariaDB 계열 중첩 트랜잭션 미지원**: `Assumptions.assumeTrue { testDB !in TestDB.ALL_MARIADB_LIKE }` 조건으로 MariaDB에서는 중첩 트랜잭션 테스트를 스킵합니다.
-- **CopyOnWriteArrayList 사용**: 여러 Virtual Thread에서 동시에 결과를 수집할 때 스레드 안전한 컬렉션을 사용해야 합니다.
-- **maxAttempts 설정**: 병렬 트랜잭션에서 충돌이 발생할 수 있으므로 `maxAttempts = 5~10` 재시도 설정을 권장합니다.
+- **JDK 21 required**: Tests have `@EnabledOnJre(JRE.JAVA_21)`, so they are automatically skipped on JDK versions below 21.
+- **MariaDB-compatible nested transactions not supported**: Tests for nested transactions are skipped on MariaDB via `Assumptions.assumeTrue { testDB !in TestDB.ALL_MARIADB_LIKE }`.
+- **Use CopyOnWriteArrayList**: When collecting results from multiple Virtual Threads simultaneously, use a thread-safe collection.
+- **Set maxAttempts**: Conflicts can occur in parallel transactions, so setting `maxAttempts = 5~10` retries is recommended.
 
 ---
 
-## 테스트 실행
+## Running Tests
 
 ```bash
-# 이 모듈의 모든 테스트 실행
+# Run all tests in this module
 ./gradlew :02-exposed-r2dbc-virtualthreads-basic:test
 
-# H2만 사용하는 빠른 테스트
+# Fast test using only H2
 ./gradlew :02-exposed-r2dbc-virtualthreads-basic:test -PuseFastDB=true
 ```
 
 ---
 
-## 참고 자료
+## References
 
 - [JEP 444: Virtual Threads](https://openjdk.org/jeps/444)
 - [Virtual Threads — Java 21 Guide](https://docs.oracle.com/en/java/javase/21/core/virtual-threads.html)

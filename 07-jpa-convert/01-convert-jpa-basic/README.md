@@ -1,93 +1,100 @@
+> 한국어 버전: [README.ko.md](README.ko.md)
+
 # 01-convert-jpa-basic
 
-JPA의 기본 패턴(Entity, 관계 매핑,
-`@Convert` 등)을 Exposed R2DBC DSL로 변환하는 방법을 보여주는 예제 모듈입니다. Simple Entity, Blog(1:1, 1:N, N:M 관계), Person(Many-to-One + CRUD 심화), Task(Enum 매핑), Custom Column Type(value class)까지 JPA에서 흔히 사용하는 기본 패턴들을 Exposed로 어떻게 구현하는지 단계별로 학습할 수 있습니다.
+An example module demonstrating how to convert common JPA patterns (Entity, relationship mapping, `@Convert`, etc.) to Exposed R2DBC DSL. Covers step-by-step learning of how to implement common JPA patterns in Exposed: Simple Entity, Blog (1:1, 1:N, N:M relationships), Person (Many-to-One + advanced CRUD), Task (Enum mapping), and Custom Column Type (value class).
 
-## 기술 스택
+## Tech Stack
 
-| 구분   | 기술                                              |
-|------|-------------------------------------------------|
-| ORM  | Exposed R2DBC + Exposed DAO + Exposed JDBC      |
-| 비동기  | Kotlin Coroutines                               |
-| DB   | H2 (기본), MariaDB, MySQL 8, PostgreSQL           |
-| 컨테이너 | Testcontainers                                  |
-| 테스트  | JUnit 5 + Kluent + ParameterizedTest (멀티 DB 지원) |
+| Category  | Technology                                              |
+|-----------|---------------------------------------------------------|
+| ORM       | Exposed R2DBC + Exposed DAO + Exposed JDBC              |
+| Async     | Kotlin Coroutines                                       |
+| DB        | H2 (default), MariaDB, MySQL 8, PostgreSQL              |
+| Container | Testcontainers                                          |
+| Test      | JUnit 5 + Kluent + ParameterizedTest (multi-DB support) |
 
-## JPA → Exposed R2DBC 마이그레이션 경로
+## JPA → Exposed R2DBC Migration Path
 
 ```mermaid
+%%{init: {"theme": "neutral"}}%%
 flowchart LR
-    subgraph JPA ["JPA (기존)"]
+    subgraph JPA ["JPA (Before)"]
         JE["@Entity\n@Table(name='...')"]
         JR["JpaRepository~T,ID~"]
         JQ["JPQL / @Query"]
         JT["@Transactional"]
     end
-    subgraph Exposed ["Exposed R2DBC (전환 후)"]
+    subgraph Exposed ["Exposed R2DBC (After)"]
         ET["object MyTable\n: IntIdTable('...')"]
         EQ["Table.selectAll()\n.where { ... }"]
         EC["Table.insert { }\nTable.update { }"]
         EST["suspendTransaction { }"]
     end
 
-    JE -->|"컬럼 정의 이전"| ET
-    JR -->|"CRUD 메서드 이전"| EQ
-    JQ -->|"쿼리 이전"| EC
-    JT -->|"트랜잭션 이전"| EST
+    JE -->|"migrate column definitions"| ET
+    JR -->|"migrate CRUD methods"| EQ
+    JQ -->|"migrate queries"| EC
+    JT -->|"migrate transactions"| EST
+
+    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    class JE,JR,JQ,JT blue
+    class ET,EQ,EC,EST green
 ```
 
-## 프로젝트 구조
+## Project Structure
 
 ```
 src/test/kotlin/exposed/r2dbc/examples/jpa/
 ├── ex01_simple/
-│   ├── SimpleSchema.kt          # 단순 엔티티: Table + Entity(DAO) + DTO + Mapper
-│   └── Ex01_Simple_DSL.kt       # DSL 기본 CRUD: batchInsert, select, limit, inList, projection
+│   ├── SimpleSchema.kt          # Simple entity: Table + Entity(DAO) + DTO + Mapper
+│   └── Ex01_Simple_DSL.kt       # Basic DSL CRUD: batchInsert, select, limit, inList, projection
 │
 ├── ex02_entities/
-│   ├── BlogSchema.kt            # 블로그 스키마: Post, PostDetail(1:1), PostComment(1:N), Tag(N:M)
-│   ├── Ex01_Blog.kt             # 블로그 테이블 생성, One-to-One 관계 insert/select
-│   ├── PersonSchema.kt          # Person-Address 스키마: Many-to-One 관계 + INSERT SELECT용 DML 테이블
-│   ├── Ex02_Person.kt           # Person CRUD 심화: count, delete, insert, batchInsert, INSERT SELECT
-│   └── Ex03_Task.kt             # Enum 컬럼 매핑 (enumerationByName)
+│   ├── BlogSchema.kt            # Blog schema: Post, PostDetail(1:1), PostComment(1:N), Tag(N:M)
+│   ├── Ex01_Blog.kt             # Blog table creation, One-to-One relationship insert/select
+│   ├── PersonSchema.kt          # Person-Address schema: Many-to-One relationship + DML table for INSERT SELECT
+│   ├── Ex02_Person.kt           # Person advanced CRUD: count, delete, insert, batchInsert, INSERT SELECT
+│   └── Ex03_Task.kt             # Enum column mapping (enumerationByName)
 │
 └── ex03_customId/
-    ├── CustomColumnTypes.kt     # value class 기반 커스텀 컬럼 타입 (Email, Ssn)
-    └── Ex01_CustomId.kt         # 커스텀 타입을 PK 및 컬럼으로 사용하는 예제
+    ├── CustomColumnTypes.kt     # Custom column types based on value class (Email, Ssn)
+    └── Ex01_CustomId.kt         # Example using custom types as PK and column
 ```
 
-> **참고**: 이 모듈은 `src/main`이 없고, 모든 코드가 `src/test`에 위치합니다. 학습/실습 목적의 테스트 전용 모듈입니다.
+> **Note**: This module has no `src/main`; all code resides in `src/test`. It is a test-only module for learning and practice.
 
-## 예제 상세
+## Example Details
 
-### ex01_simple - 기본 CRUD (DSL)
+### ex01_simple - Basic CRUD (DSL)
 
-JPA의 가장 단순한 `@Entity` + `@Id` + `@Column`을 Exposed로 변환하는 예제입니다.
+An example converting the simplest JPA `@Entity` + `@Id` + `@Column` to Exposed.
 
-**JPA 대응 관계:**
+**JPA Mapping:**
 
 | JPA                      | Exposed                                            |
 |--------------------------|----------------------------------------------------|
 | `@Entity` + `@Table`     | `object SimpleTable: LongIdTable("simple_entity")` |
-| `@Id @GeneratedValue`    | `LongIdTable`의 자동 생성 id                            |
+| `@Id @GeneratedValue`    | Auto-generated id in `LongIdTable`                 |
 | `@Column(unique=true)`   | `varchar("name", 255).uniqueIndex()`               |
 | `@Column(nullable=true)` | `text("description").nullable()`                   |
-| Entity class             | `LongEntity` (DAO) 또는 `data class` (DTO)           |
+| Entity class             | `LongEntity` (DAO) or `data class` (DTO)           |
 
-**핵심 포인트:**
+**Key Points:**
 
-- **DSL**: SQL에 가까운 타입 안전 쿼리 빌더, `ResultRow`를 직접 다룸
-- **DAO**: JPA Entity와 유사한 객체 지향 접근, 자동 변경 감지(dirty checking) 지원
-- **Record**: `data class` 기반 DTO, 불변 객체로 캐시나 전송에 적합
+- **DSL**: Type-safe query builder close to SQL, handles `ResultRow` directly
+- **DAO**: Object-oriented access similar to JPA Entity, supports automatic dirty checking
+- **Record**: `data class`-based DTO, immutable object suitable for caching or transfer
 
 ```kotlin
-// Table 정의 (JPA의 @Entity + @Table)
+// Table definition (JPA's @Entity + @Table)
 object SimpleTable: LongIdTable("simple_entity") {
     val name = varchar("name", 255).uniqueIndex()
     val description = text("description").nullable()
 }
 
-// Entity 정의 (JPA의 Entity 클래스)
+// Entity definition (JPA's Entity class)
 class SimpleEntity(id: EntityID<Long>): LongEntity(id) {
     companion object: LongEntityClass<SimpleEntity>(SimpleTable)
 
@@ -95,72 +102,72 @@ class SimpleEntity(id: EntityID<Long>): LongEntity(id) {
     var description by SimpleTable.description
 }
 
-// Record 정의 (JPA의 DTO Projection)
+// Record definition (JPA's DTO Projection)
 data class SimpleRecord(val id: Long, val name: String, val description: String?)
 ```
 
-**테스트 내용:**
+**Test Coverage:**
 
-- `batchInsert` - 대량 데이터 삽입
-- `select` + `limit` + `offset` - 페이징 조회
-- `inList` - IN 절 조회
-- `ResultRow` → DTO 변환 (projection)
+- `batchInsert` - Bulk data insertion
+- `select` + `limit` + `offset` - Pagination
+- `inList` - IN clause query
+- `ResultRow` → DTO conversion (projection)
 
-### ex02_entities - 복합 엔티티 및 관계 매핑
+### ex02_entities - Composite Entities and Relationship Mapping
 
-#### Blog 도메인 (1:1, 1:N, N:M)
+#### Blog Domain (1:1, 1:N, N:M)
 
-Post, PostDetail, PostComment, Tag 등 여러 엔티티 간의 관계를 정의합니다.
+Defines relationships among multiple entities: Post, PostDetail, PostComment, Tag.
 
-**스키마 구조:**
+**Schema Structure:**
 
 ```
-posts (1) ←──→ (1) post_details        (One-to-One: 공유 PK)
-posts (1) ←──→ (N) post_comments       (One-to-Many: FK 참조)
-posts (N) ←──→ (N) tags                (Many-to-Many: post_tags 중간 테이블)
+posts (1) ←──→ (1) post_details        (One-to-One: shared PK)
+posts (1) ←──→ (N) post_comments       (One-to-Many: FK reference)
+posts (N) ←──→ (N) tags                (Many-to-Many: post_tags join table)
 ```
 
-**JPA vs Exposed 관계 매핑:**
+**JPA vs Exposed Relationship Mapping:**
 
 ```kotlin
-// JPA: @OneToOne + 공유 PK
-// Exposed: backReferencedOn (1:1 역방향 참조)
+// JPA: @OneToOne + shared PK
+// Exposed: backReferencedOn (1:1 reverse reference)
 val details: PostDetail by PostDetail backReferencedOn PostDetailTable.id
 
 // JPA: @OneToMany(mappedBy = "post")
-// Exposed: referrersOn (1:N 참조)
+// Exposed: referrersOn (1:N reference)
 val comments: SizedIterable<PostComment> by PostComment referrersOn PostCommentTable.postId
 
 // JPA: @ManyToMany + @JoinTable
-// Exposed: via (M:N 중간 테이블)
+// Exposed: via (M:N join table)
 val tags: SizedIterable<Tag> by Tag via PostTagTable
 ```
 
-**테스트 내용 (Ex01_Blog):**
+**Test Coverage (Ex01_Blog):**
 
 ![Blog ERD](./src/test/kotlin/exposed/r2dbc/examples/jpa/ex02_entities/BlogSchema_ERD_Dark.png)
 
-- 블로그 테이블 생성 및 `exists()` 검증
-- One-to-One 관계 insert (Post + PostDetail 공유 PK)
+- Blog table creation and `exists()` verification
+- One-to-One relationship insert (Post + PostDetail shared PK)
 
-#### Person 도메인 (Many-to-One + CRUD 심화)
+#### Person Domain (Many-to-One + Advanced CRUD)
 
-Person-Address 관계 CRUD와 다양한 SQL 패턴을 Exposed DSL로 구현합니다.
+Implements Person-Address relationship CRUD and various SQL patterns using Exposed DSL.
 
-**테스트 내용 (Ex02_Person):**
+**Test Coverage (Ex02_Person):**
 
 ![Person ERD](./src/test/kotlin/exposed/r2dbc/examples/jpa/ex02_entities/PersonSchema.png)
 
-- `count` / `countDistinct` - 집계 함수
-- `deleteWhere` - 조건부 삭제 (`AND`, `OR`, `LIMIT` 다양한 조합)
-- `insertAndGetId` - 단건 삽입 후 ID 반환
-- `batchInsert` - DTO(`PersonRecord`) 기반 대량 삽입
-- `insert(select(...))` - INSERT SELECT 패턴
-- `PersonTableDML` - AutoIncrement 없이 같은 물리 테이블을 참조하여 ID 직접 지정 (INSERT SELECT에서 `id + 100` 패턴)
+- `count` / `countDistinct` - Aggregate functions
+- `deleteWhere` - Conditional delete (various combinations of `AND`, `OR`, `LIMIT`)
+- `insertAndGetId` - Single insert then return ID
+- `batchInsert` - Bulk insert based on DTO (`PersonRecord`)
+- `insert(select(...))` - INSERT SELECT pattern
+- `PersonTableDML` - Reference the same physical table without AutoIncrement to specify IDs directly (the `id + 100` pattern in INSERT SELECT)
 
-#### Task (Enum 매핑)
+#### Task (Enum Mapping)
 
-JPA의 `@Enumerated(EnumType.STRING)`을 Exposed의 `enumerationByName`으로 변환합니다.
+Converts JPA's `@Enumerated(EnumType.STRING)` to Exposed's `enumerationByName`.
 
 ```kotlin
 // JPA
@@ -172,115 +179,201 @@ val status: TaskStatusType
 val status = enumerationByName("status", 10, TaskStatusType::class)
 ```
 
-### ex03_customId - 사용자 정의 컬럼 타입 (JPA @Convert)
+### ex03_customId - Custom Column Types (JPA @Convert)
 
-JPA의 `@Convert` + `AttributeConverter`를 Exposed의 `ColumnWithTransform`으로 변환합니다. Kotlin
-`value class`를 활용하여 타입 안전성을 제공합니다.
+Converts JPA's `@Convert` + `AttributeConverter` to Exposed's `ColumnWithTransform`. Uses Kotlin `value class` for type safety.
 
-**JPA 대응 관계:**
+**JPA Mapping:**
 
 | JPA                                          | Exposed                                |
 |----------------------------------------------|----------------------------------------|
-| `@Convert(converter = EmailConverter.class)` | `email("email_id")` (커스텀 컬럼 함수)        |
+| `@Convert(converter = EmailConverter.class)` | `email("email_id")` (custom column function) |
 | `AttributeConverter<String, Email>`          | `ColumnTransformer<String, Email>`     |
 | `@Embeddable` value type                     | `value class Email(val value: String)` |
 
-**커스텀 타입 정의:**
+**Custom Type Definition:**
 
 ```kotlin
-// value class로 타입 안전성 확보
+// Type safety via value class
 @JvmInline
 value class Email(val value: String): Comparable<Email>, Serializable
 
-// 커스텀 컬럼 타입 등록 함수
+// Custom column type registration function
 fun Table.email(name: String, length: Int = 64): Column<Email> =
     registerColumn(name, EmailColumnType(length))
 
-// ColumnWithTransform으로 DB↔Kotlin 타입 변환
+// DB↔Kotlin type conversion with ColumnWithTransform
 open class EmailColumnType(length: Int = 64):
     ColumnWithTransform<String, Email>(VarCharColumnType(length), StringToEmailTransformer())
 ```
 
-**커스텀 타입을 PK로 사용:**
+**Using Custom Type as PK:**
 
 ```kotlin
 object CustomIdTable: IdTable<Email>("emails") {
     override val id: Column<EntityID<Email>> = email("email_id").entityId()
     val name = varchar("name", 255)
-    val ssn = ssn("ssn").uniqueIndex()   // Ssn도 커스텀 타입
+    val ssn = ssn("ssn").uniqueIndex()   // Ssn is also a custom type
 }
 ```
 
-## JPA vs Exposed 주요 개념 매핑 요약
+## JPA Entity vs Exposed Table Comparison
 
-| JPA                          | Exposed DSL (R2DBC)     | Exposed DAO                         |
-|------------------------------|-------------------------|-------------------------------------|
-| `@Entity`                    | `Table` / `IdTable`     | `Entity` + `EntityClass`            |
-| `@Id` + `@GeneratedValue`    | `LongIdTable`           | `LongEntity`                        |
-| `@Column`                    | `varchar()`, `text()` 등 | `var name by Table.name`            |
-| `@Enumerated(STRING)`        | `enumerationByName()`   | `enumerationByName()`               |
-| `@Convert`                   | Custom `ColumnType`     | Custom `ColumnType`                 |
-| `@OneToOne`                  | `reference()`           | `referencedOn` / `backReferencedOn` |
-| `@OneToMany`                 | FK `reference()`        | `referrersOn`                       |
-| `@ManyToOne`                 | `reference()`           | `referencedOn`                      |
-| `@ManyToMany` + `@JoinTable` | 중간 테이블 정의               | `via`                               |
-| `EntityManager.persist()`    | `Table.insert {}`       | `Entity.new {}`                     |
-| `EntityManager.find()`       | `Table.selectAll()`     | `Entity.findById()`                 |
-| JPQL / Criteria API          | DSL 체이닝                 | `Entity.find {}`                    |
-| `@UniqueConstraint`          | `.uniqueIndex()`        | `.uniqueIndex()`                    |
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+classDiagram
+    class JpaEntity {
+        <<JPA Entity>>
+        +Long id
+        +String name
+        +String description
+        +persist()
+        +find()
+        +merge()
+        +remove()
+    }
+    class ExposedTable {
+        <<Exposed DSL>>
+        +Column~Long~ id
+        +Column~String~ name
+        +Column~String~ description
+        +insert()
+        +selectAll()
+        +update()
+        +deleteWhere()
+    }
+    class ExposedEntity {
+        <<Exposed DAO>>
+        +EntityID~Long~ id
+        +String name
+        +String description
+    }
 
-## 테스트 실행
+    note for JpaEntity "Annotation-based\n@Entity @Table @Id @Column"
+    note for ExposedTable "DSL-based\nobject MyTable : LongIdTable"
+    note for ExposedEntity "DAO-based\nclass MyEntity : LongEntity"
+
+    style JpaEntity fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    style ExposedTable fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    style ExposedEntity fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
+```
+
+## Blog Domain ERD
+
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+erDiagram
+    posts {
+        int id PK
+        varchar title
+        text content
+    }
+    post_details {
+        int id PK,FK
+        text detail_content
+    }
+    post_comments {
+        int id PK
+        int post_id FK
+        varchar comment
+    }
+    tags {
+        int id PK
+        varchar name
+    }
+    post_tags {
+        int post_id FK
+        int tag_id FK
+    }
+    persons {
+        int id PK
+        varchar name
+        int address_id FK
+    }
+    addresses {
+        int id PK
+        varchar city
+        varchar street
+    }
+
+    posts ||--|| post_details : "1:1 shared PK"
+    posts ||--o{ post_comments : "1:N"
+    posts }o--o{ tags : "N:M via post_tags"
+    post_tags }o--|| posts : ""
+    post_tags }o--|| tags : ""
+    persons }o--|| addresses : "ManyToOne"
+```
+
+## JPA vs Exposed Key Concept Mapping Summary
+
+| JPA                          | Exposed DSL (R2DBC)       | Exposed DAO                         |
+|------------------------------|---------------------------|-------------------------------------|
+| `@Entity`                    | `Table` / `IdTable`       | `Entity` + `EntityClass`            |
+| `@Id` + `@GeneratedValue`    | `LongIdTable`             | `LongEntity`                        |
+| `@Column`                    | `varchar()`, `text()` etc | `var name by Table.name`            |
+| `@Enumerated(STRING)`        | `enumerationByName()`     | `enumerationByName()`               |
+| `@Convert`                   | Custom `ColumnType`       | Custom `ColumnType`                 |
+| `@OneToOne`                  | `reference()`             | `referencedOn` / `backReferencedOn` |
+| `@OneToMany`                 | FK `reference()`          | `referrersOn`                       |
+| `@ManyToOne`                 | `reference()`             | `referencedOn`                      |
+| `@ManyToMany` + `@JoinTable` | Define join table         | `via`                               |
+| `EntityManager.persist()`    | `Table.insert {}`         | `Entity.new {}`                     |
+| `EntityManager.find()`       | `Table.selectAll()`       | `Entity.findById()`                 |
+| JPQL / Criteria API          | DSL chaining              | `Entity.find {}`                    |
+| `@UniqueConstraint`          | `.uniqueIndex()`          | `.uniqueIndex()`                    |
+
+## Running Tests
 
 ```bash
 ./gradlew :01-convert-jpa-basic:test
 ```
 
-모든 테스트는 `@ParameterizedTest` + `@MethodSource`로 H2, MySQL, PostgreSQL 등 여러 DB에서 자동 실행됩니다.
+All tests run automatically across multiple DBs (H2, MySQL, PostgreSQL, etc.) using `@ParameterizedTest` + `@MethodSource`.
 
-## JPA → Exposed R2DBC 마이그레이션 체크리스트
+## JPA → Exposed R2DBC Migration Checklist
 
-JPA 코드를 Exposed R2DBC로 전환할 때 단계별로 확인하세요.
+Check each step when migrating JPA code to Exposed R2DBC.
 
-### 1단계: 테이블/엔티티 전환
+### Step 1: Table/Entity Migration
 
 - [ ] `@Entity` + `@Table(name = "…")` → `object MyTable : LongIdTable("…")`
-- [ ] `@Id @GeneratedValue(IDENTITY)` → `LongIdTable` (자동 처리)
-- [ ] `@Id @GeneratedValue(UUID)` → `UUIDTable` 사용
+- [ ] `@Id @GeneratedValue(IDENTITY)` → `LongIdTable` (handled automatically)
+- [ ] `@Id @GeneratedValue(UUID)` → use `UUIDTable`
 - [ ] `@Column(name, nullable, unique, length)` → `varchar(…).nullable()`, `.uniqueIndex()`
 - [ ] `@Enumerated(EnumType.STRING)` → `enumerationByName("col", length, Enum::class)`
-- [ ] `@Convert(converter = …)` → `ColumnWithTransform` + `ColumnTransformer` 구현
+- [ ] `@Convert(converter = …)` → implement `ColumnWithTransform` + `ColumnTransformer`
 
-### 2단계: 관계 매핑 전환
+### Step 2: Relationship Mapping Migration
 
 - [ ] `@ManyToOne @JoinColumn` → `reference("fk_col", OtherTable)`
 - [ ] `@OneToMany(mappedBy)` → `val items by Item referrersOn ItemTable.parentId`
-- [ ] `@OneToOne @MapsId` → `IdTable`에서 `id = reference("id", ParentTable)`
+- [ ] `@OneToOne @MapsId` → `id = reference("id", ParentTable)` in `IdTable`
 - [ ] `@OneToOne(mappedBy)` → `val detail by Detail backReferencedOn DetailTable.id`
-- [ ] `@ManyToMany @JoinTable` → 중간 `Table` 정의 후 `val tags by Tag via JoinTable`
+- [ ] `@ManyToMany @JoinTable` → define a join `Table`, then `val tags by Tag via JoinTable`
 - [ ] `CascadeType.REMOVE` → `onDelete = ReferenceOption.CASCADE`
 
-### 3단계: 영속성 작업 전환
+### Step 3: Persistence Operations Migration
 
 - [ ] `entityManager.persist(entity)` → `MyTable.insert { it[col] = value }`
 - [ ] `entityManager.find(Entity::class, id)` → `MyTable.selectAll().where { MyTable.id eq id }.singleOrNull()`
 - [ ] `entityManager.merge(entity)` → `MyTable.update({ MyTable.id eq id }) { it[col] = value }`
 - [ ] `entityManager.remove(entity)` → `MyTable.deleteWhere { MyTable.id eq id }`
 - [ ] JPQL `SELECT e FROM Entity e WHERE …` → `MyTable.selectAll().where { … }`
-- [ ] DTO Projection (JPQL `new` 또는 `@Query`) → `ResultRow` 확장 함수로 변환
+- [ ] DTO Projection (JPQL `new` or `@Query`) → convert via `ResultRow` extension function
 
-### 4단계: 트랜잭션 전환
+### Step 4: Transaction Migration
 
-- [ ] `@Transactional` (동기, Spring) → `suspendTransaction { … }` (R2DBC 코루틴)
+- [ ] `@Transactional` (sync, Spring) → `suspendTransaction { … }` (R2DBC coroutine)
 - [ ] `@Transactional(readOnly = true)` → `suspendTransaction(readOnly = true) { … }`
-- [ ] `TransactionTemplate` 수동 트랜잭션 → `suspendTransaction { … }` 블록
-- [ ] 중첩 트랜잭션(REQUIRES_NEW) → `inTopLevelSuspendTransaction { … }`
+- [ ] `TransactionTemplate` manual transaction → `suspendTransaction { … }` block
+- [ ] Nested transaction (REQUIRES_NEW) → `inTopLevelSuspendTransaction { … }`
 
-### 5단계: 테스트 전환
+### Step 5: Test Migration
 
-- [ ] `@DataJpaTest` + `TestEntityManager` → `AbstractR2dbcExposedTest` 상속
-- [ ] JUnit `@Transactional` 롤백 → `withTables(testDB, …) { }` 헬퍼 (자동 정리)
-- [ ] `H2Database` 인메모리 → `TestDB.H2` (또는 `USE_FAST_DB=true`)
-- [ ] 실 DB 연동 테스트 → `TestDB.POSTGRESQL` / `TestDB.MYSQL_V8` + Testcontainers
+- [ ] `@DataJpaTest` + `TestEntityManager` → extend `AbstractR2dbcExposedTest`
+- [ ] JUnit `@Transactional` rollback → `withTables(testDB, …) { }` helper (auto cleanup)
+- [ ] `H2Database` in-memory → `TestDB.H2` (or `USE_FAST_DB=true`)
+- [ ] Real DB integration tests → `TestDB.POSTGRESQL` / `TestDB.MYSQL_V8` + Testcontainers
 
 ## Further Reading
 

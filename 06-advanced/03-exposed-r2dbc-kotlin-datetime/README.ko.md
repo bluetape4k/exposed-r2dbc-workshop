@@ -1,0 +1,282 @@
+> English version: [README.md](README.md)
+
+# 03 Exposed R2DBC Kotlin DateTime (kotlinx.datetime 통합)
+
+이 모듈은 `kotlinx.datetime` 라이브러리와 Exposed의 통합 방법을 학습합니다. 현대적인 멀티플랫폼 Kotlin 프로젝트에서 날짜와 시간을 처리하는 권장 방법입니다.
+
+## 학습 목표
+
+- 데이터베이스 날짜/시간 타입을 `LocalDate`, `LocalDateTime`, `Instant` 같은 `kotlinx.datetime` 객체로 매핑하는 방법 이해
+- 날짜/시간 조작을 위한 내장 SQL 함수(`year()`, `month()`, `day()` 등) 사용
+- `CurrentDateTime` 같은 표현식을 사용하여 날짜/시간 컬럼의 서버 측 기본값 정의
+- 타입 안전한 비교를 위해 `WHERE` 절에서 날짜/시간 리터럴 올바르게 사용
+- 다양한 데이터베이스 백엔드 간의 날짜/시간 처리 차이 인식
+
+## 주요 컬럼 타입 및 함수
+
+`exposed-kotlin-datetime` 모듈은 `exposed-java-time` 모듈과 유사한 컬럼 타입과 함수 세트를 `kotlinx.datetime` 라이브러리용으로 제공합니다.
+
+### 컬럼 타입
+
+| 타입                            | 설명           | Kotlin 타입                        |
+|-------------------------------|--------------|----------------------------------|
+| `date(name)`                  | 날짜           | `kotlinx.datetime.LocalDate`     |
+| `time(name)`                  | 시간           | `kotlinx.datetime.LocalTime`     |
+| `datetime(name)`              | 날짜시간         | `kotlinx.datetime.LocalDateTime` |
+| `timestamp(name)`             | 타임스탬프        | `kotlinx.datetime.Instant`       |
+| `timestampWithTimeZone(name)` | 시간대 포함 타임스탬프 | `java.time.OffsetDateTime`       |
+| `duration(name)`              | 기간           | `kotlin.time.Duration`           |
+
+> **참고**: `kotlinx.datetime`에는 네이티브 offset-aware 타입이 없으므로 `timestampWithTimeZone`은 `java.time.OffsetDateTime`에 매핑됩니다.
+
+### 기본값 표현식
+
+데이터베이스 생성 기본값을 설정하기 위한 표현식입니다.
+
+| 표현식                                    | 설명                                    |
+|----------------------------------------|---------------------------------------|
+| `CurrentDate`                          | 데이터베이스의 `CURRENT_DATE` 함수             |
+| `CurrentDateTime` / `CurrentTimestamp` | 데이터베이스의 `CURRENT_TIMESTAMP` 또는 동등한 함수 |
+| `CurrentTimestampWithTimeZone`         | `CURRENT_TIMESTAMP WITH TIME ZONE`    |
+
+### 쿼리용 리터럴
+
+다양한 데이터베이스 방언에서 올바른 SQL 생성을 보장하기 위해 `WHERE` 절에서 비교할 때 사용합니다.
+
+| 함수                                             | 설명               |
+|------------------------------------------------|------------------|
+| `dateLiteral(LocalDate)`                       | 날짜 리터럴           |
+| `timeLiteral(LocalTime)`                       | 시간 리터럴           |
+| `dateTimeLiteral(LocalDateTime)`               | 날짜시간 리터럴         |
+| `timestampLiteral(Instant)`                    | 타임스탬프 리터럴        |
+| `timestampWithTimeZoneLiteral(OffsetDateTime)` | 시간대 포함 타임스탬프 리터럴 |
+
+## 구조 다이어그램
+
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+classDiagram
+    class KotlinDateTimeColumn {
+        <<exposed-kotlin-datetime 확장>>
+    }
+    class KotlinLocalDateColumn {
+        +date(name) Column~kotlinx.datetime.LocalDate~
+    }
+    class KotlinLocalTimeColumn {
+        +time(name) Column~kotlinx.datetime.LocalTime~
+    }
+    class KotlinLocalDateTimeColumn {
+        +datetime(name) Column~kotlinx.datetime.LocalDateTime~
+    }
+    class KotlinInstantColumn {
+        +timestamp(name) Column~kotlin.time.Instant~
+    }
+    class KotlinTimestampWithTimeZoneColumn {
+        +timestampWithTimeZone(name) Column~OffsetDateTime~
+    }
+    class KotlinDurationColumn {
+        +duration(name) Column~kotlin.time.Duration~
+    }
+
+    KotlinDateTimeColumn <|-- KotlinLocalDateColumn
+    KotlinDateTimeColumn <|-- KotlinLocalTimeColumn
+    KotlinDateTimeColumn <|-- KotlinLocalDateTimeColumn
+    KotlinDateTimeColumn <|-- KotlinInstantColumn
+    KotlinDateTimeColumn <|-- KotlinTimestampWithTimeZoneColumn
+    KotlinDateTimeColumn <|-- KotlinDurationColumn
+
+    style KotlinDateTimeColumn fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    style KotlinLocalDateColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    style KotlinLocalTimeColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    style KotlinLocalDateTimeColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    style KotlinInstantColumn fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
+    style KotlinTimestampWithTimeZoneColumn fill:#FFF3E0,stroke:#FFCC80,color:#E65100
+    style KotlinDurationColumn fill:#E0F2F1,stroke:#80CBC4,color:#00695C
+```
+
+## 날짜/시간 처리 흐름
+
+```mermaid
+sequenceDiagram
+    participant App as 애플리케이션
+    participant Col as KotlinDateTimeColumn
+    participant DB as Database
+
+    Note over App,DB: INSERT — kotlinx.datetime 값 저장
+    App ->> Col: insert { it[local_time] = Clock.System.now().toLocalDateTime(UTC) }
+    Col ->> DB: INSERT '2025-04-14T12:00:00'
+
+    Note over App,DB: SELECT — 날짜 부분 함수 사용
+    App ->> Col: select(local_time.year(), local_time.month())
+    Col ->> DB: SELECT YEAR(local_time), MONTH(local_time)
+    DB -->> App: year=2025, month=4
+
+    Note over App,DB: WHERE — dateLiteral로 비교
+    App ->> Col: where { date less dateLiteral(LocalDate(3000, 1, 1)) }
+    Col ->> DB: WHERE date < DATE '3000-01-01'
+    DB -->> App: 조건에 맞는 행 반환
+```
+
+## 컬럼 타입 선택 흐름
+
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+flowchart TD
+    A[날짜/시간 데이터 저장 필요] --> B{어떤 정보가 필요?}
+    B --> C[날짜만] --> D[date → LocalDate]
+    B --> E[시간만] --> F[time → LocalTime]
+    B --> G[날짜+시간] --> H{타임존 필요?}
+    H --> I[아니오] --> J[datetime → LocalDateTime]
+    H --> K[예, UTC 기준] --> L[timestamp → Instant]
+    H --> M[예, 오프셋 보존] --> N[timestampWithTimeZone → OffsetDateTime]
+    B --> O[경과 시간] --> P[duration → Duration]
+    N --> Q{DB 선택}
+    Q --> R[H2: 오프셋 보존됨]
+    Q --> S[PostgreSQL/MySQL: UTC 정규화]
+    Q --> T[MariaDB/MySQL V5: 미지원 예외]
+
+    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
+    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
+    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
+    classDef red    fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
+
+    class A blue
+    class B,H,Q purple
+    class D,F,J green
+    class L teal
+    class N orange
+    class P teal
+    class R green
+    class S,T orange
+```
+
+## `java.time` 모듈과의 차이점
+
+`exposed-kotlin-datetime`과 `exposed-java-time`은 거의 동일한 API를 제공하지만 타입 시스템이 다릅니다.
+
+| 항목                   | `exposed-kotlin-datetime`               | `exposed-java-time`              |
+|----------------------|----------------------------------------|----------------------------------|
+| 날짜                   | `kotlinx.datetime.LocalDate`           | `java.time.LocalDate`            |
+| 날짜시간                 | `kotlinx.datetime.LocalDateTime`       | `java.time.LocalDateTime`        |
+| 타임스탬프                | `kotlin.time.Instant` (`@ExperimentalTime`) | `java.time.Instant`          |
+| 타임존 포함 타임스탬프         | `java.time.OffsetDateTime` (동일)       | `java.time.OffsetDateTime`       |
+| 멀티플랫폼 지원             | O (KMP)                                | X (JVM 전용)                      |
+
+> `kotlin.time.Instant`는 실험적 API이므로 `@file:OptIn(ExperimentalTime::class)` 어노테이션이 필요합니다.
+
+## 타임존(TimeZone) 주의사항
+
+### `TIMESTAMP WITH TIME ZONE` DB별 동작 차이
+
+`timestampWithTimeZone` 컬럼은 DB마다 다르게 동작합니다.
+
+| DB         | 타임존 정보 보존 | 비고                                      |
+|------------|-------------|------------------------------------------|
+| PostgreSQL | 보존 안 됨     | UTC로 정규화하여 저장 — 원래 오프셋 유실              |
+| MySQL 8    | 보존 안 됨     | UTC로 정규화하여 저장 — 원래 오프셋 유실              |
+| H2         | 보존됨        | 원래 오프셋 그대로 저장                          |
+| MariaDB    | 미지원        | `UnsupportedByDialectException` 발생      |
+| MySQL V5   | 미지원        | `UnsupportedByDialectException` 발생      |
+
+> **권고사항**: PostgreSQL/MySQL에서 원래 타임존 오프셋을 보존해야 하는 경우,
+> `VARCHAR` 컬럼에 타임존 ID(`ZoneId.systemDefault().id`)를 별도로 저장하세요.
+
+### Nanos 정밀도 차이
+
+| DB         | 최대 정밀도        |
+|------------|----------------|
+| PostgreSQL | 마이크로초 (6자리)   |
+| MySQL      | 마이크로초 (6자리)   |
+| MariaDB    | 마이크로초 (6자리)   |
+| H2         | 나노초 (9자리)     |
+| SQLServer  | 100나노초 단위 반올림 |
+| Oracle     | 밀리초 단위 반올림   |
+
+## 예제 개요
+
+이 모듈의 예제는 `exposed-java-time` 모듈과 유사하며, `kotlinx.datetime`에 대한 병렬 기능을 보여줍니다.
+
+### `Ex01_KotlinDateTime.kt` - 기본 사용법 및 함수
+
+핵심 기능을 보여줍니다:
+
+- 쿼리에서 날짜 부분 추출 함수(`.year()`, `.month()`) 사용
+- 나노초 정밀도를 포함한 `kotlinx.datetime` 타입 저장 및 조회
+- `timestampWithTimeZone`을 통한 시간대 작업
+
+### `Ex02_Defaults.kt` - 기본값
+
+`kotlinx.datetime` 컬럼의 기본값 설정 방법을 살펴봅니다.
+
+- `default(value)`: 상수, 클라이언트 측 기본값
+- `clientDefault { ... }`: 람다로 생성되는 클라이언트 측 기본값
+- `defaultExpression(...)`: `CurrentDateTime` 같은 데이터베이스 함수를 사용한 서버 측 기본값
+
+### `Ex03_DateTimeLiteral.kt` - 리터럴로 쿼리하기
+
+`WHERE` 절에서 `kotlinx.datetime` 값을 올바르게 사용하는 방법을 보여줍니다. `dateLiteral`,
+`dateTimeLiteral` 등의 리터럴 함수로 감싸서 적절한 SQL 포맷팅을 보장합니다.
+
+## 코드 예제
+
+### 1. `kotlinx.datetime` 컬럼이 있는 테이블 정의
+
+```kotlin
+import kotlinx.datetime.LocalDateTime
+import org.jetbrains.exposed.v1.datetime.datetime
+import org.jetbrains.exposed.v1.datetime.CurrentDateTime
+
+object CitiesTime: IntIdTable("CitiesTime") {
+  val name: Column<String> = varchar("name", 50)
+
+  // nullable kotlinx.datetime.LocalDateTime 컬럼
+  val local_time: Column<LocalDateTime?> = datetime("local_time").nullable()
+}
+
+object TableWithDBDefault: IntIdTable() {
+  // 서버 측 기본값이 있는 non-nullable kotlinx.datetime.LocalDateTime 컬럼
+  val t1: Column<LocalDateTime> = datetime("t1").defaultExpression(CurrentDateTime)
+}
+```
+
+### 2. `kotlinx.datetime` 값 삽입 및 조회
+
+```kotlin
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.exposed.v1.datetime.dateLiteral
+
+// 값 삽입
+val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+val cityID = CitiesTime.insertAndGetId {
+  it[name] = "Tunisia"
+  it[local_time] = now
+}
+
+// 날짜 부분 함수를 사용한 조회
+val insertedMonth = CitiesTime.select(CitiesTime.local_time.month())
+  .where { CitiesTime.id eq cityID }
+  .single()[CitiesTime.local_time.month()]
+
+// WHERE 절에서 리터럴을 사용한 조회
+val result = TableWithDate.selectAll()
+  .where { TableWithDate.date less dateLiteral(LocalDate(3000, 1, 1)) }
+  .firstOrNull()
+```
+
+## 테스트 실행
+
+```bash
+# 이 모듈의 모든 테스트 실행
+./gradlew :03-exposed-r2dbc-kotlin-datetime:test
+
+# 특정 테스트 클래스 실행
+./gradlew :03-exposed-r2dbc-kotlin-datetime:test --tests "exposed.examples.kotlin.datetime.Ex01_KotlinDateTime"
+```
+
+## 참고 자료
+
+- [Exposed Kotlin DateTime Module](https://debop.notion.site/Exposed-Kotlin-DateTime-1c32744526b0807bb3e8f149ef88f5f5)

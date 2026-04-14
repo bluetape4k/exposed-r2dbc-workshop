@@ -1,141 +1,201 @@
-# 11 Exposed R2DBC Jackson 3 (Jackson 3.x 기반 JSON)
+> 한국어 버전: [README.ko.md](README.ko.md)
 
-이 모듈은 **Jackson 3.x** 라이브러리를 사용하여 Exposed에서 `JSON`과
-`JSONB` 컬럼 타입을 처리하는 방법을 학습합니다. Jackson 2.x 기반 모듈과 동일한 기능을 제공하지만, Jackson 3.x의 새로운 기능과 개선사항을 활용합니다.
+# 11 Exposed R2DBC Jackson 3 (Jackson 3.x-based JSON)
 
-## 학습 목표
+This module covers how to use `JSON` and `JSONB` column types in Exposed with the **Jackson 3.x** library. It provides the same functionality as the Jackson 2.x-based module but leverages the new features and improvements in Jackson 3.x.
 
-- Jackson 3.x를 사용하여 Kotlin 데이터 클래스에 매핑되는 `json`과 `jsonb` 컬럼 정의
-- Jackson 3.x로 복잡하고 중첩된 객체 저장 및 조회
-- `.extract<T>()`, `.contains()`, `.exists()`를 포함한 Exposed의 전체 JSON 쿼리 함수 사용
-- DSL과 DAO 프로그래밍 스타일 모두에서 Jackson 3.x 기반 JSON 컬럼 적용
+## Learning Objectives
 
-## 핵심 개념
+- Define `json` and `jsonb` columns mapped to Kotlin data classes using Jackson 3.x
+- Store and retrieve complex nested objects with Jackson 3.x
+- Use Exposed's full JSON query functions including `.extract<T>()`, `.contains()`, and `.exists()`
+- Apply Jackson 3.x-based JSON columns in both DSL and DAO programming styles
 
-### 컬럼 타입
+## Core Concepts
 
-| 타입                  | 설명                                                             |
-|---------------------|----------------------------------------------------------------|
-| `jackson<T>(name)`  | 표준 `JSON` 텍스트 컬럼에 Jackson 3.x 호환 객체 `T`를 저장하는 컬럼 정의            |
-| `jacksonb<T>(name)` | 최적화된 `JSONB` (바이너리 JSON) 컬럼에 Jackson 3.x 호환 객체 `T`를 저장하는 컬럼 정의 |
+### Column Types
 
-### 쿼리 함수
+| Type                  | Description                                                                    |
+|-----------------------|--------------------------------------------------------------------------------|
+| `jackson<T>(name)`    | Defines a column storing Jackson 3.x-compatible object `T` in a standard `JSON` text column |
+| `jacksonb<T>(name)`   | Defines a column storing Jackson 3.x-compatible object `T` in an optimized `JSONB` (binary JSON) column |
 
-Jackson 2.x 모듈과 동일한 쿼리 함수를 사용할 수 있습니다:
+### Query Functions
 
-| 함수                            | 설명                               |
-|-------------------------------|----------------------------------|
-| `.extract<T>(path, toScalar)` | JSON 문서에서 특정 경로의 값 추출            |
-| `.contains(value, path)`      | JSON 문서에 주어진 JSON 값이 포함되어 있는지 확인 |
-| `.exists(path, optional)`     | 주어진 JSONPath 표현식에 값이 존재하는지 확인    |
+The same query functions as the Jackson 2.x module are available:
 
-## 구조 다이어그램
+| Function                       | Description                                              |
+|--------------------------------|----------------------------------------------------------|
+| `.extract<T>(path, toScalar)`  | Extracts the value at a specific path from the JSON document |
+| `.contains(value, path)`       | Checks if the JSON document contains the given JSON value |
+| `.exists(path, optional)`      | Checks whether a value exists at the given JSONPath expression |
+
+## Structure Diagram
 
 ```mermaid
+%%{init: {"theme": "neutral"}}%%
 classDiagram
     class Jackson3Column~T~ {
         <<bluetape4k-exposed>>
         +jackson(name) Column~T~
         -mapper: JsonMapper
     }
-    note for Jackson3Column "tools.jackson 패키지 (Jackson 3.x)"
+    note for Jackson3Column "tools.jackson package (Jackson 3.x)"
     class Jackson3BColumn~T~ {
         +jacksonb(name) Column~T~
     }
-    note for Jackson3BColumn "PostgreSQL JSONB 전용"
+    note for Jackson3BColumn "PostgreSQL JSONB only"
     class JsonMapper {
         <<Jackson 3 (tools.jackson.databind)>>
         +writeValueAsString(value): String
         +readValue(json, klass): T
     }
 
-    Jackson3Column <|-- Jackson3BColumn : json → jsonb 확장
-    Jackson3Column --> JsonMapper : 직렬화/역직렬화
+    Jackson3Column <|-- Jackson3BColumn : json to jsonb extension
+    Jackson3Column --> JsonMapper : serialization/deserialization
+
+    style Jackson3Column fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    style Jackson3BColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    style JsonMapper fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
 ```
 
-> Jackson 2.x(`com.fasterxml.jackson`) → Jackson 3.x(`tools.jackson`) 패키지 변경
-> `JsonMapper`가 Jackson 3.x의 핵심 진입점 — Jackson 2.x의 `ObjectMapper`를 대체
+> Jackson 2.x (`com.fasterxml.jackson`) → Jackson 3.x (`tools.jackson`) package change
+> `JsonMapper` is the main entry point in Jackson 3.x — replaces `ObjectMapper` from Jackson 2.x
 
-## 예제 개요
+## JSON Serialization Flow
+
+```mermaid
+sequenceDiagram
+    participant App as Application
+    participant Col as Jackson3Column
+    participant JM as JsonMapper
+    participant DB as Database
+
+    Note over App,DB: INSERT — Kotlin object to JSON string
+    App ->> Col: insert { it[data] = UserData(info=User("test","A"), logins=5) }
+    Col ->> JM: writeValueAsString(userData)
+    JM -->> Col: '{"info":{"name":"test","team":"A"},"logins":5,"active":true}'
+    Col ->> DB: INSERT json_text
+
+    Note over App,DB: SELECT — JSON string to Kotlin object
+    DB -->> Col: json_text
+    Col ->> JM: readValue(json, UserData::class)
+    JM -->> Col: UserData object
+    Col -->> App: UserData object
+
+    Note over App,DB: JSON path extraction (DB side)
+    App ->> Col: data.extract(".info.name")
+    Col ->> DB: JSON_EXTRACT(data, '$.info.name')
+    DB -->> App: "test"
+```
+
+## Jackson 2.x vs 3.x Differences
+
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+flowchart LR
+    subgraph Jackson2
+        A1["Package: com.fasterxml.jackson"]
+        A2["Core class: ObjectMapper"]
+        A3["Module: 08-exposed-r2dbc-jackson"]
+    end
+    subgraph Jackson3
+        B1["Package: tools.jackson"]
+        B2["Core class: JsonMapper"]
+        B3["Module: 11-exposed-r2dbc-jackson3 (this module)"]
+    end
+    A1 -.->|package change| B1
+    A2 -.->|class change| B2
+
+    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
+    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
+    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
+
+    class A1,A2,A3 blue
+    class B1,B2,B3 teal
+```
+
+## Example Overview
 
 ### `JacksonColumnTest.kt` (DSL & DAO with `json`)
 
-Jackson 3.x를 사용한 `json` (텍스트 기반 JSON) 컬럼 타입의 사용법을 보여줍니다. 표준 CRUD 작업과 `.extract()`, `.contains()`,
-`.exists()`를 사용한 JSON 특정 쿼리를 다룹니다. DAO 패턴과의 통합도 보여줍니다.
+Demonstrates usage of the `json` (text-based JSON) column type using Jackson 3.x. Covers standard CRUD operations and JSON-specific queries using `.extract()`, `.contains()`, and `.exists()`. Also shows integration with the DAO pattern.
 
 ### `JacksonBColumnTest.kt` (DSL & DAO with `jsonb`)
 
-`JacksonColumnTest.kt`와 유사하지만 `jacksonb` 컬럼 타입에 초점을 맞춥니다. 코드는 유사하게 구성되어 `json`과 `jsonb` 타입 간의 일관된 API를 강조합니다.
+Similar to `JacksonColumnTest.kt` but focused on the `jacksonb` column type. The code is similarly structured to highlight the consistent API between `json` and `jsonb` types.
 
-## 코드 예제
+## Code Examples
 
-### 1. Jackson 3.x로 `jacksonb` 컬럼이 있는 테이블 정의
+### 1. Define a table with a `jacksonb` column using Jackson 3.x
 
 ```kotlin
 import io.bluetape4k.exposed.core.jackson3.jacksonb
-import com.fasterxml.jackson.annotation.JsonCreator // Jackson 3 어노테이션 예시
+import com.fasterxml.jackson.annotation.JsonCreator // Jackson 3 annotation example
 
-// 표준 데이터 클래스
+// Standard data classes
 data class User(val name: String, val team: String?)
 data class UserData(val info: User, val logins: Int, val active: Boolean)
 
 object UsersTable: IntIdTable("users") {
-    // 컬럼이 UserData 객체를 Jackson 3.x를 사용하여 JSONB로 저장
+    // Column stores UserData objects as JSONB using Jackson 3.x
     val data = jacksonb<UserData>("data")
 }
 ```
 
-### 2. Jackson 3.x로 삽입 및 쿼리 (DSL)
+### 2. Insert and query with Jackson 3.x (DSL)
 
 ```kotlin
 val userData = UserData(info = User("test", "A"), logins = 5, active = true)
 
-// 데이터 삽입
+// Insert data
 UsersTable.insert {
     it[data] = userData
 }
 
-// 중첩된 값 추출 후 WHERE 절에서 사용
-// 참고: 경로 문법은 데이터베이스마다 다를 수 있음
+// Extract nested value and use in WHERE clause
+// Note: path syntax may vary by database
 val username = UsersTable.data.extract<String>(".info.name")
 val userRecord = UsersTable.selectAll().where { username eq "test" }.single()
 
-// 읽을 때 전체 객체가 자동으로 역직렬화됨
+// Entire object is automatically deserialized on read
 val retrievedData = userRecord[UsersTable.data]
 retrievedData.logins shouldBeEqualTo 5
 ```
 
-### 3. 엔티티에서 Jackson 3.x 컬럼 사용 (DAO)
+### 3. Use a Jackson 3.x column in an entity (DAO)
 
 ```kotlin
 class UserEntity(id: EntityID<Int>): IntEntity(id) {
     companion object: IntEntityClass<UserEntity>(UsersTable)
 
-    // 속성이 JSON으로/에서 자동 매핑됨
+    // Property is automatically mapped to/from JSON
     var data by UsersTable.data
 }
 
-// 새 엔티티 생성
+// Create a new entity
 val entity = UserEntity.new {
     data = UserData(info = User("dao_user", "B"), logins = 1, active = true)
 }
 
-// 속성 접근
-println(entity.data.info.name) // "dao_user" 출력
+// Access property
+println(entity.data.info.name) // prints "dao_user"
 ```
 
-## 테스트 실행
+## Running the Tests
 
-**참고**: JSON/JSONB 기능은 데이터베이스에 따라 크게 달라집니다. 많은 테스트가 제한된 지원을 가진 데이터베이스(예: H2)에서는 건너뜁니다. 최상의 결과를 위해 PostgreSQL에서 실행하세요.
+**Note**: JSON/JSONB features vary significantly by database. Many tests are skipped on databases with limited support (e.g. H2). For best results, run with PostgreSQL.
 
 ```bash
-# 이 모듈의 모든 테스트 실행
+# Run all tests in this module
 ./gradlew :11-exposed-r2dbc-jackson3:test
 
-# JSONB 컬럼 타입 테스트
+# Test the JSONB column type
 ./gradlew :11-exposed-r2dbc-jackson3:test --tests "exposed.examples.jackson3.JacksonBColumnTest"
 ```
 
-## 참고 자료
+## References
 
 - [Exposed Jackson](https://debop.notion.site/Exposed-Jackson-1c32744526b0809599a7db2e629a597a)

@@ -1,42 +1,45 @@
+> 한국어 버전: [README.ko.md](README.ko.md)
+
 # 03 Routing DataSource (Exposed R2DBC + Spring WebFlux)
 
-`exposed-workshop`의 `03-routing-datasource` 설계를 바탕으로, Exposed R2DBC + Spring WebFlux 환경에서
-**테넌트(multi-tenant) + 읽기/쓰기(read/write) 분리 라우팅**을 구현한 예제입니다.
+Based on the `03-routing-datasource` design from `exposed-workshop`, this example implements
+**tenant (multi-tenant) + read/write separation routing** in an Exposed R2DBC + Spring WebFlux environment.
 
-하나의 애플리케이션에서 여러 테넌트의 데이터베이스를 분리 관리하고, 읽기 요청은 읽기 전용 DB로,
-쓰기 요청은 읽기/쓰기 DB로 자동 라우팅하는 방법을 학습합니다.
+It demonstrates how to manage separate databases for multiple tenants within a single application,
+automatically routing read requests to read-only DBs and write requests to read/write DBs.
 
 ---
 
-## 아키텍처
+## Architecture
 
 ```
 HTTP Request
     │
     ▼
-TenantRoutingWebFilter          ← X-Tenant-Id 헤더, /readonly 경로 감지
+TenantRoutingWebFilter          ← Detects X-Tenant-Id header, /readonly path
     │  contextWrite(TENANT, READ_ONLY)
     ▼
-RoutingMarkerController         ← suspend 핸들러
+RoutingMarkerController         ← suspend handler
     │  txExecutor.readWrite() / txExecutor.readOnly()
     ▼
-RoutingTransactionalExecutor    ← TransactionalOperator + READ_ONLY 힌트를 Reactor Context에 추가
+RoutingTransactionalExecutor    ← Adds TransactionalOperator + READ_ONLY hint to Reactor Context
     │
     ▼
 DynamicRoutingConnectionFactory ← Mono.deferContextual { keyResolver.currentLookupKey(ctx) }
-    │  키 예: "acme:ro", "default:rw"
+    │  Key examples: "acme:ro", "default:rw"
     ▼
-ConnectionFactoryRegistry       ← 키 → ConnectionFactory 매핑
+ConnectionFactoryRegistry       ← key → ConnectionFactory mapping
     │
     ▼
-실제 DB (H2 / PostgreSQL 등)
+Actual DB (H2 / PostgreSQL, etc.)
 ```
 
 ---
 
-## 클래스 다이어그램
+## Class Diagram
 
 ```mermaid
+%%{init: {"theme": "neutral"}}%%
 classDiagram
     class DynamicRoutingConnectionFactory {
         +create() Publisher~Connection~
@@ -73,13 +76,89 @@ classDiagram
     InMemoryConnectionFactoryRegistry ..|> ConnectionFactoryRegistry
     TenantRoutingWebFilter --> DynamicRoutingConnectionFactory: contextWrite
     RoutingTransactionalExecutor --> DynamicRoutingConnectionFactory: routing hint
+
+    style DynamicRoutingConnectionFactory fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    style ContextAwareRoutingKeyResolver fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    style ConnectionFactoryRegistry fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
+    style InMemoryConnectionFactoryRegistry fill:#FFF3E0,stroke:#FFCC80,color:#E65100
+    style TenantRoutingWebFilter fill:#E0F2F1,stroke:#80CBC4,color:#00695C
+    style RoutingTransactionalExecutor fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
 ```
 
-## 핵심 구성 요소
+## Request → Routing → DB Selection Flow (sequenceDiagram)
+
+```mermaid
+sequenceDiagram
+    participant Client as HTTP Client
+    participant Filter as TenantRoutingWebFilter
+    participant Controller as RoutingMarkerController
+    participant Executor as RoutingTransactionalExecutor
+    participant Factory as DynamicRoutingConnectionFactory
+    participant Registry as ConnectionFactoryRegistry
+    participant DB as Actual DB
+
+    Client ->> Filter: GET /routing/marker/readonly\nX-Tenant-Id: acme
+    Filter ->> Filter: TENANT="acme", READ_ONLY=true
+    Filter ->> Controller: contextWrite(TENANT, READ_ONLY)
+    Controller ->> Executor: txExecutor.readOnly { ... }
+    Executor ->> Factory: readOnlyOperator.execute(Mono)\ncontextWrite(READ_ONLY, true)
+    Factory ->> Factory: Mono.deferContextual\nkeyResolver.currentLookupKey(ctx)
+    Note right of Factory: key = "acme:ro"
+    Factory ->> Registry: get("acme:ro")
+    Registry -->> Factory: ConnectionFactory (acme RO)
+    Factory ->> DB: create() → Connection
+    DB -->> Controller: Query result
+    Controller -->> Client: JSON response\n{tenant:"acme", readOnly:true}
+```
+
+## Routing Key Determination Flow (flowchart)
+
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+flowchart TD
+    Req["HTTP Request"] --> H1{"X-Tenant-Id\nheader present?"}
+
+    H1 -->|yes| TenantVal["tenant = header value"]
+    H1 -->|no| TenantDef["tenant = defaultTenant\n(application.yml)"]
+
+    TenantVal --> H2{"Read-only\ndetermination"}
+    TenantDef --> H2
+
+    H2 --> RO1{"X-Read-Only: true\nheader?"}
+    RO1 -->|yes| ReadOnly["READ_ONLY = true"]
+    RO1 -->|no| RO2{"Path contains\n/readonly?"}
+    RO2 -->|yes| ReadOnly
+    RO2 -->|no| ReadWrite["READ_ONLY = false"]
+
+    ReadOnly --> KeyRO["Routing key\ntenant:ro\nexample: acme:ro"]
+    ReadWrite --> KeyRW["Routing key\ntenant:rw\nexample: acme:rw"]
+
+    KeyRO --> Registry{"ConnectionFactoryRegistry"}
+    KeyRW --> Registry
+
+    Registry -->|key found| CF["Return ConnectionFactory"]
+    Registry -->|key not found| Err["IllegalStateException\nNo ConnectionFactory for key=..."]
+
+    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
+    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
+    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
+    classDef red    fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
+
+    class TenantVal,TenantDef teal
+    class ReadOnly orange
+    class ReadWrite green
+    class KeyRO,KeyRW blue
+    class CF purple
+    class Err red
+```
+
+## Key Components
 
 ### 1. `DynamicRoutingConnectionFactory`
 
-`ConnectionFactory` 인터페이스를 구현하며, `Mono.deferContextual`을 통해 **Reactor Context에서 라우팅 키를 읽어** 대상 `ConnectionFactory`로 위임합니다.
+Implements the `ConnectionFactory` interface and delegates to the target `ConnectionFactory` by **reading the routing key from the Reactor Context** via `Mono.deferContextual`.
 
 ```kotlin
 override fun create(): Publisher<out Connection> =
@@ -93,7 +172,7 @@ override fun create(): Publisher<out Connection> =
 
 ### 2. `ContextAwareRoutingKeyResolver`
 
-Reactor Context에서 `TENANT`와 `READ_ONLY` 값을 읽어 `<tenant>:<rw|ro>` 형태의 라우팅 키를 계산합니다.
+Reads `TENANT` and `READ_ONLY` values from the Reactor Context to compute a routing key in the form `<tenant>:<rw|ro>`.
 
 ```kotlin
 override fun currentLookupKey(context: ContextView): String {
@@ -107,12 +186,12 @@ override fun currentLookupKey(context: ContextView): String {
 
 ### 3. `TenantRoutingWebFilter`
 
-모든 요청에 대해 다음 두 정보를 Reactor Context에 적재합니다.
+Loads the following two pieces of information into the Reactor Context for every request.
 
-| 소스                             | Context 키              | 설명                                |
-|----------------------------------|------------------------|-------------------------------------|
-| `X-Tenant-Id` 헤더               | `RoutingContextKeys.TENANT`    | 테넌트 ID (기본값: `"default"`)   |
-| `X-Read-Only: true` 헤더 또는 `/readonly` 경로 | `RoutingContextKeys.READ_ONLY` | 읽기 전용 여부 |
+| Source                                          | Context Key                    | Description                          |
+|-------------------------------------------------|-------------------------------|--------------------------------------|
+| `X-Tenant-Id` header                           | `RoutingContextKeys.TENANT`   | Tenant ID (default: `"default"`)     |
+| `X-Read-Only: true` header or `/readonly` path | `RoutingContextKeys.READ_ONLY` | Whether read-only                   |
 
 ```kotlin
 override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> = mono {
@@ -134,35 +213,35 @@ override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Vo
 
 ### 4. `RoutingTransactionalExecutor`
 
-`TransactionalOperator`와 라우팅 힌트(`READ_ONLY`)를 Reactor Context에 함께 적용하는 실행기입니다.
-서비스 레이어에서 `readWrite { }` / `readOnly { }` 블록으로 명시적 라우팅을 제어합니다.
+An executor that applies both `TransactionalOperator` and the routing hint (`READ_ONLY`) to the Reactor Context.
+The service layer uses `readWrite { }` / `readOnly { }` blocks for explicit routing control.
 
 ```kotlin
-// read-write 트랜잭션
+// read-write transaction
 suspend fun <T: Any> readWrite(block: suspend () -> T): T =
     execute(readOnly = false, operator = readWriteOperator, block = block)
 
-// read-only 트랜잭션
+// read-only transaction
 suspend fun <T: Any> readOnly(block: suspend () -> T): T =
     execute(readOnly = true, operator = readOnlyOperator, block = block)
 ```
 
 ### 5. `ConnectionFactoryRegistry`
 
-라우팅 키(`<tenant>:<rw|ro>`)와 `ConnectionFactory`를 등록/조회하는 레지스트리입니다.
-`InMemoryConnectionFactoryRegistry`가 기본 구현체로 제공됩니다.
+A registry for registering and looking up `ConnectionFactory` instances by routing key (`<tenant>:<rw|ro>`).
+`InMemoryConnectionFactoryRegistry` is provided as the default implementation.
 
 ### 6. `RoutingR2dbcConfig`
 
-`application.yml`의 `routing.r2dbc.*` 설정을 읽어 다음을 구성합니다:
+Reads `routing.r2dbc.*` settings from `application.yml` to configure:
 
-- 테넌트별 `ConnectionFactory` 쌍(`rw`, `ro`) → `ConnectionFactoryRegistry`에 등록
-- `DynamicRoutingConnectionFactory`를 `@Primary` Bean으로 등록
-- Exposed `R2dbcDatabase` 연결 구성
+- Per-tenant `ConnectionFactory` pair (`rw`, `ro`) → registered in `ConnectionFactoryRegistry`
+- `DynamicRoutingConnectionFactory` registered as the `@Primary` Bean
+- Exposed `R2dbcDatabase` connection setup
 
 ---
 
-## 설정 (`application.yml`)
+## Configuration (`application.yml`)
 
 ```yaml
 routing:
@@ -177,30 +256,30 @@ routing:
         ro: r2dbc:h2:mem:///acme-ro?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
 ```
 
-`ro`를 생략하면 `rw` URL을 재사용합니다.
+If `ro` is omitted, the `rw` URL is reused.
 
 ---
 
-## 라우팅 규칙
+## Routing Rules
 
-| 조건                                             | 라우팅 키       | 연결 대상          |
-|--------------------------------------------------|----------------|--------------------|
-| 헤더·경로 없음                                    | `default:rw`   | 기본 테넌트 RW DB  |
-| `X-Tenant-Id: acme`                              | `acme:rw`      | acme 테넌트 RW DB  |
-| `X-Tenant-Id: acme` + `/readonly` 경로           | `acme:ro`      | acme 테넌트 RO DB  |
-| `X-Tenant-Id: acme` + `X-Read-Only: true` 헤더   | `acme:ro`      | acme 테넌트 RO DB  |
+| Condition                                             | Routing Key  | Connection Target       |
+|-------------------------------------------------------|--------------|-------------------------|
+| No header or path                                     | `default:rw` | Default tenant RW DB    |
+| `X-Tenant-Id: acme`                                   | `acme:rw`    | acme tenant RW DB       |
+| `X-Tenant-Id: acme` + `/readonly` path               | `acme:ro`    | acme tenant RO DB       |
+| `X-Tenant-Id: acme` + `X-Read-Only: true` header     | `acme:ro`    | acme tenant RO DB       |
 
 ---
 
-## API 엔드포인트
+## API Endpoints
 
-| 메서드  | 경로                        | 라우팅  | 설명                          |
-|--------|-----------------------------|--------|-------------------------------|
-| `GET`  | `/routing/marker`           | RW     | 현재 테넌트의 read-write 마커 조회 |
-| `GET`  | `/routing/marker/readonly`  | RO     | 현재 테넌트의 read-only 마커 조회  |
-| `PATCH`| `/routing/marker`           | RW     | 현재 테넌트의 read-write 마커 갱신 |
+| Method  | Path                        | Routing | Description                              |
+|---------|-----------------------------|---------|------------------------------------------|
+| `GET`   | `/routing/marker`           | RW      | Get current tenant's read-write marker   |
+| `GET`   | `/routing/marker/readonly`  | RO      | Get current tenant's read-only marker    |
+| `PATCH` | `/routing/marker`           | RW      | Update current tenant's read-write marker |
 
-응답 예시:
+Response example:
 
 ```json
 {
@@ -212,20 +291,20 @@ routing:
 
 ---
 
-## 테스트 케이스
+## Test Cases
 
-| 테스트                                    | 검증 내용                                             |
-|-------------------------------------------|------------------------------------------------------|
-| 기본 tenant의 read-write 마커를 조회한다   | 헤더 없이 GET → `tenant="default"`, `readOnly=false`  |
-| acme tenant의 read-only 마커를 조회한다   | `X-Tenant-Id: acme` + `/readonly` → `acme:ro` 라우팅 |
-| tenant 헤더 미지정은 기본 tenant와 동일하다 | 헤더 없음 ≡ `X-Tenant-Id: default`                   |
-| 마커 갱신 후 같은 tenant RW에서 변경값 조회 | PATCH → GET으로 갱신 결과 확인                         |
+| Test                                          | Verification                                                |
+|-----------------------------------------------|-------------------------------------------------------------|
+| Get read-write marker for default tenant      | GET without header → `tenant="default"`, `readOnly=false`   |
+| Get read-only marker for acme tenant          | `X-Tenant-Id: acme` + `/readonly` → `acme:ro` routing      |
+| Missing tenant header equals default tenant  | No header ≡ `X-Tenant-Id: default`                         |
+| Get updated value from same tenant RW after update | PATCH → GET to verify update result                   |
 
-테스트는 `@SpringBootTest(webEnvironment = RANDOM_PORT)` + `WebTestClient`로 실제 HTTP 통신을 검증합니다.
+Tests use `@SpringBootTest(webEnvironment = RANDOM_PORT)` + `WebTestClient` to verify real HTTP communication.
 
 ---
 
-## 테스트 실행
+## Running Tests
 
 ```bash
 ./gradlew :03-routing-datasource:test
@@ -233,16 +312,16 @@ routing:
 
 ---
 
-## Read/Write 라우팅 아키텍처 상세
+## Read/Write Routing Architecture Details
 
-### 컨텍스트 전파 체인
+### Context Propagation Chain
 
-HTTP 요청에서 실제 DB 커넥션까지 라우팅 정보가 전달되는 전체 흐름입니다.
+The complete flow of routing information from the HTTP request to the actual DB connection.
 
 ```
 HTTP Request
     │  X-Tenant-Id: acme
-    │  X-Read-Only: true  (또는 /readonly 경로)
+    │  X-Read-Only: true  (or /readonly path)
     ▼
 TenantRoutingWebFilter
     │  contextWrite {
@@ -255,7 +334,7 @@ RoutingMarkerController (suspend fun)
     ▼
 RoutingTransactionalExecutor
     │  readOnlyOperator.execute(Mono) {   ← Spring TransactionalOperator
-    │      contextWrite(READ_ONLY, true)  ← Context에 힌트 추가
+    │      contextWrite(READ_ONLY, true)  ← Add hint to Context
     │  }
     ▼
 DynamicRoutingConnectionFactory.create()
@@ -267,43 +346,42 @@ DynamicRoutingConnectionFactory.create()
 ConnectionFactoryRegistry["acme:ro"]
     │
     ▼
-acme 테넌트의 읽기 전용 DB 인스턴스
+Read-only DB instance for acme tenant
 ```
 
-### 테넌트 × 읽기/쓰기 커넥션 구성
+### Tenant × Read/Write Connection Configuration
 
 ```
 ConnectionFactoryRegistry
-├── "default:rw"  →  H2 / PostgreSQL RW (default 테넌트 읽기+쓰기)
-├── "default:ro"  →  H2 / PostgreSQL RO (default 테넌트 읽기 전용)
-├── "acme:rw"     →  H2 / PostgreSQL RW (acme 테넌트 읽기+쓰기)
-└── "acme:ro"     →  H2 / PostgreSQL RO (acme 테넌트 읽기 전용)
+├── "default:rw"  →  H2 / PostgreSQL RW (default tenant read+write)
+├── "default:ro"  →  H2 / PostgreSQL RO (default tenant read-only)
+├── "acme:rw"     →  H2 / PostgreSQL RW (acme tenant read+write)
+└── "acme:ro"     →  H2 / PostgreSQL RO (acme tenant read-only)
 ```
 
-`ro` URL을 생략하면 `rw` URL이 읽기 전용 커넥션으로도 재사용됩니다.
+If the `ro` URL is omitted, the `rw` URL is also reused for read-only connections.
 
-### RoutingTransactionalExecutor 사용 패턴
+### RoutingTransactionalExecutor Usage Pattern
 
-서비스/컨트롤러에서 `readWrite { }` / `readOnly { }` 블록으로 명시적으로 라우팅을 제어합니다.
+The service/controller explicitly controls routing using `readWrite { }` / `readOnly { }` blocks.
 
 ```kotlin
-// 읽기 전용 DB로 라우팅 (acme:ro)
+// Route to read-only DB (acme:ro)
 suspend fun getMarker(): RoutingMarkerRecord =
     txExecutor.readOnly {
         markerRepository.findByTenant(tenant)
     }
 
-// 읽기-쓰기 DB로 라우팅 (acme:rw)
+// Route to read-write DB (acme:rw)
 suspend fun updateMarker(value: String): RoutingMarkerRecord =
     txExecutor.readWrite {
         markerRepository.upsert(tenant, value)
     }
 ```
 
-이 방식은 `@Transactional(readOnly = true)` 어노테이션을 사용하는 Spring MVC 패턴을
-Reactive/Coroutines 환경에서 구현한 것입니다.
+This approach is the Reactive/Coroutines equivalent of using the `@Transactional(readOnly = true)` annotation in Spring MVC patterns.
 
-## 참고 자료
+## References
 
 - [Spring WebFlux - Reactor Context](https://projectreactor.io/docs/core/release/reference/#context)
 - [R2DBC Connection Factory](https://r2dbc.io/spec/1.0.0.RELEASE/spec/html/)

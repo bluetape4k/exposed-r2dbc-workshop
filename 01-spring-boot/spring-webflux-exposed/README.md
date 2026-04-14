@@ -1,24 +1,49 @@
+> 한국어 버전: [README.ko.md](README.ko.md)
+
 # 01 Spring Boot: Spring WebFlux with Exposed R2DBC
 
-초보자를 위한 **Spring WebFlux + Exposed R2DBC** 예제입니다.
-영화(Movie)와 배우(Actor) 도메인을 다루며, **비동기 REST API**를 Kotlin Coroutines + Exposed R2DBC로 구현하는 흐름을 학습합니다.
+A beginner-friendly **Spring WebFlux + Exposed R2DBC** example.
+Using a Movie and Actor domain, this module teaches you how to build an **asynchronous REST API** with Kotlin Coroutines + Exposed R2DBC.
 
 ---
 
-## 이 모듈에서 배우는 것
+## What You Will Learn
 
-- Spring WebFlux + Coroutines 기반 비동기 REST API 구조
-- Exposed R2DBC DSL로 데이터 저장/조회 (`suspend` 함수, `Flow`)
-- 영화-배우 **다대다 관계** 모델링 및 JOIN 쿼리
-- `bufferUntilChanged`로 JOIN 결과를 그룹핑하는 패턴
-- Spring Profile(`h2`, `mysql`, `postgres`)로 멀티 DB 전환
-- Gatling을 활용한 부하 테스트
+- Asynchronous REST API architecture with Spring WebFlux + Coroutines
+- Storing and querying data with the Exposed R2DBC DSL (`suspend` functions, `Flow`)
+- Modeling a **many-to-many relationship** between movies and actors with JOIN queries
+- Grouping JOIN results with `bufferUntilChanged`
+- Switching between multiple databases using Spring Profiles (`h2`, `mysql`, `postgres`)
+- Load testing with Gatling
 
 ---
 
-## Movie 스키마
+## Movie Schema
 
 ![Movie Schema](MovieSchema_Dark.png)
+
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+erDiagram
+    movies {
+        bigint id PK "auto increment"
+        varchar name "NOT NULL, indexed"
+        varchar producer_name "NOT NULL, indexed"
+        timestamp release_date "NOT NULL"
+    }
+    actors {
+        bigint id PK "auto increment"
+        varchar first_name "NOT NULL, indexed"
+        varchar last_name "NOT NULL, indexed"
+        date birthday "NULL"
+    }
+    actors_in_movies {
+        bigint movie_id FK "NOT NULL, CASCADE DELETE"
+        bigint actor_id FK "NOT NULL, CASCADE DELETE"
+    }
+    movies ||--o{ actors_in_movies : "has"
+    actors ||--o{ actors_in_movies : "appears in"
+```
 
 ```kotlin
 object MovieTable: LongIdTable("movies") {
@@ -33,7 +58,7 @@ object ActorTable: LongIdTable("actors") {
     val birthday  = date("birthday").nullable()
 }
 
-// 영화-배우 다대다 관계 조인 테이블
+// Many-to-many join table for movies and actors
 object ActorInMovieTable: Table("actors_in_movies") {
     val movieId = reference("movie_id", MovieTable, onDelete = ReferenceOption.CASCADE)
     val actorId = reference("actor_id", ActorTable, onDelete = ReferenceOption.CASCADE)
@@ -43,64 +68,65 @@ object ActorInMovieTable: Table("actors_in_movies") {
 
 ---
 
-## 프로젝트 구조
+## Project Structure
 
 ```
 src/main/kotlin/exposed/r2dbc/workshop/springwebflux/
-├── SpringWebfluxApplication.kt                     # Spring Boot 애플리케이션 진입점
+├── SpringWebfluxApplication.kt                     # Spring Boot application entry point
 ├── config/
-│   ├── ExposedR2dbcConfig.kt                       # R2DBC Database 및 ConnectionPool 설정
-│   ├── NettyConfig.kt                              # Netty 서버 튜닝
-│   └── SwaggerConfig.kt                            # OpenAPI(Swagger) 문서 설정
+│   ├── ExposedR2dbcConfig.kt                       # R2DBC Database and ConnectionPool configuration
+│   ├── NettyConfig.kt                              # Netty server tuning
+│   └── SwaggerConfig.kt                            # OpenAPI (Swagger) documentation setup
 ├── controller/
-│   ├── IndexController.kt                          # 빌드 정보 조회 (/)
-│   ├── MovieController.kt                          # 영화 CRUD API (/movies)
-│   ├── ActorController.kt                          # 배우 CRUD API (/actors)
-│   └── MovieActorsController.kt                    # 영화-배우 관계 API (/movie-actors)
+│   ├── IndexController.kt                          # Build info endpoint (/)
+│   ├── MovieController.kt                          # Movie CRUD API (/movies)
+│   ├── ActorController.kt                          # Actor CRUD API (/actors)
+│   └── MovieActorsController.kt                    # Movie-Actor relationship API (/movie-actors)
 ├── domain/
 │   ├── model/
-│   │   ├── MovieSchema.kt                          # Exposed 테이블 정의
-│   │   ├── MovieDtos.kt                            # DTO (MovieRecord, ActorRecord 등)
-│   │   └── Mappers.kt                              # ResultRow → DTO 변환 확장 함수
+│   │   ├── MovieSchema.kt                          # Exposed table definitions
+│   │   ├── MovieDtos.kt                            # DTOs (MovieRecord, ActorRecord, etc.)
+│   │   └── Mappers.kt                              # ResultRow -> DTO extension functions
 │   └── repository/
-│       ├── MovieRepository.kt                      # 영화 Repository (suspend + Flow)
-│       └── ActorRepository.kt                      # 배우 Repository (suspend + Flow)
+│       ├── MovieRepository.kt                      # Movie repository (suspend + Flow)
+│       └── ActorRepository.kt                      # Actor repository (suspend + Flow)
 └── utils/
-    └── DataInitializer.kt                          # 애플리케이션 시작 시 샘플 데이터 삽입
+    └── DataInitializer.kt                          # Insert sample data on application startup
 
 src/gatling/kotlin/
-├── MovieSimulation.kt                              # 영화 API 부하 테스트
-├── ActorSimulation.kt                              # 배우 API 부하 테스트
-└── MovieActorsSimulation.kt                        # 영화-배우 관계 API 부하 테스트
+├── MovieSimulation.kt                              # Load test for Movie API
+├── ActorSimulation.kt                              # Load test for Actor API
+└── MovieActorsSimulation.kt                        # Load test for Movie-Actor relationship API
 ```
 
 ---
 
-## 레이어 구조
+## Layer Structure
 
 ```mermaid
+%%{init: {"theme": "neutral"}}%%
 classDiagram
     class MovieController {
-        +getMovieById(id) MovieRecord
-        +searchMovies(request) List~MovieRecord~
-        +createMovie(movie) MovieRecord
-        +deleteMovie(id) Int
+        +getMovieById(id)
+        +searchMovies(request)
+        +createMovie(movie)
+        +deleteMovie(id)
     }
     class ActorController {
-        +getAllActors() List~ActorRecord~
-        +getActorById(id) ActorRecord
-        +createActor(actor) ActorRecord
+        +getAllActors()
+        +getActorById(id)
+        +createActor(actor)
     }
     class MovieRepository {
-        +findById(id) MovieRecord
-        +findAll() Flow~MovieRecord~
-        +create(movie) MovieRecord
-        +deleteById(id) Int
+        +findById(id)
+        +findAll()
+        +create(movie)
+        +deleteById(id)
     }
     class ActorRepository {
-        +findById(id) ActorRecord
-        +findAll() Flow~ActorRecord~
-        +create(actor) ActorRecord
+        +findById(id)
+        +findAll()
+        +create(actor)
     }
     class MovieTable {
         <<object>>
@@ -121,61 +147,68 @@ classDiagram
     ActorController --> ActorRepository: uses
     MovieRepository --> MovieTable: DSL
     ActorRepository --> ActorTable: DSL
+
+    style MovieController fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    style ActorController fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    style MovieRepository fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    style ActorRepository fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    style MovieTable fill:#FFF3E0,stroke:#FFCC80,color:#E65100
+    style ActorTable fill:#FFF3E0,stroke:#FFCC80,color:#E65100
 ```
 
-## Spring WebFlux + Exposed R2DBC 통합 흐름
+## Spring WebFlux + Exposed R2DBC Integration Flow
 
 ```mermaid
 sequenceDiagram
-    participant Client as HTTP 클라이언트
+    participant Client as HTTP Client
     participant Controller as RestController
     participant Repo as Repository
     participant DB as R2dbcDatabase
-    Client ->> Controller: HTTP 요청 (suspend fun)
+    Client ->> Controller: HTTP request (suspend fun)
     Controller ->> Controller: suspendTransaction { }
     Controller ->> Repo: repository.findById(id)
     Repo ->> DB: Exposed DSL (selectAll/insert/...)
     DB -->> Repo: ResultRow / Flow
     Repo -->> Controller: DTO (MovieRecord)
-    Controller -->> Client: JSON 응답
+    Controller -->> Client: JSON response
 ```
 
-1. WebFlux가 `suspend` 핸들러를 코루틴으로 실행합니다.
-2. Controller에서 `suspendTransaction { }` 블록 안에 Repository 호출을 감쌉니다.
-3. Repository는 Exposed DSL(`selectAll`, `insert`, `deleteWhere` 등)을 사용해 쿼리를 생성합니다.
-4. `R2dbcDatabase`는 `ConnectionPool`을 통해 비동기 DB 연결을 관리합니다.
+1. WebFlux executes `suspend` handlers as coroutines.
+2. The Controller wraps repository calls inside `suspendTransaction { }`.
+3. The Repository builds queries using the Exposed DSL (`selectAll`, `insert`, `deleteWhere`, etc.).
+4. `R2dbcDatabase` manages asynchronous DB connections via `ConnectionPool`.
 
 ---
 
-## R2DBC 설정 (`application.yml` + `ExposedR2dbcConfig`)
+## R2DBC Configuration (`application.yml` + `ExposedR2dbcConfig`)
 
 ### application.yml
 
 ```yaml
 spring:
   profiles:
-    default: "h2"    # h2 | mysql | postgres 를 선택할 수 있습니다.
+    default: "h2"    # Choose from: h2 | mysql | postgres
 
   exposed:
-    generate-ddl: true   # 애플리케이션 시작 시 DDL 자동 생성
-    show-sql: true       # 실행 SQL 로깅 활성화
+    generate-ddl: true   # Auto-generate DDL on application startup
+    show-sql: true       # Enable SQL logging
 
 server:
   port: 8080
-  shutdown: graceful     # Graceful Shutdown 활성화
+  shutdown: graceful     # Enable graceful shutdown
 
 app:
   virtualthread:
-    enabled: true        # Java 21 가상 스레드 활성화 여부
+    enabled: true        # Enable Java 21 virtual threads
 ```
 
-### ExposedR2dbcConfig (Profile별 ConnectionFactory)
+### ExposedR2dbcConfig (ConnectionFactory per Profile)
 
 ```kotlin
 @Configuration
 class ExposedR2dbcConfig {
 
-    // H2 인메모리 DB (기본 프로파일)
+    // H2 in-memory DB (default profile)
     @Bean @Profile("h2")
     fun h2ConnectionFactoryOptions(): ConnectionFactoryOptions =
         ConnectionFactoryOptions.builder()
@@ -185,7 +218,7 @@ class ExposedR2dbcConfig {
             .option(Option.valueOf("DB_CLOSE_DELAY"), "-1")
             .build()
 
-    // PostgreSQL (Testcontainers 자동 기동)
+    // PostgreSQL (auto-started via Testcontainers)
     @Bean @Profile("postgres")
     fun postgresConnectionFactoryOptions(): ConnectionFactoryOptions {
         val postgres = PostgreSQLServer.Launcher.postgres
@@ -199,11 +232,11 @@ class ExposedR2dbcConfig {
             .build()
     }
 
-    // MySQL (Testcontainers 자동 기동)
+    // MySQL (auto-started via Testcontainers)
     @Bean @Profile("mysql")
     fun mysqlConnectionFactoryOptions(): ConnectionFactoryOptions { ... }
 
-    // ConnectionPool: 모든 Profile에 공통 적용
+    // ConnectionPool: shared by all profiles
     @Bean @Primary
     fun connectionPool(options: ConnectionFactoryOptions): ConnectionPool =
         ConnectionPool(
@@ -215,7 +248,7 @@ class ExposedR2dbcConfig {
                 .build()
         )
 
-    // Exposed R2dbcDatabase 빈 등록
+    // Register Exposed R2dbcDatabase bean
     @Bean
     fun r2dbcDatabase(pool: ConnectionPool, options: ConnectionFactoryOptions,
                       dispatcher: CoroutineDispatcher): R2dbcDatabase =
@@ -223,33 +256,33 @@ class ExposedR2dbcConfig {
 }
 ```
 
-> **포인트**: H2/MySQL/PostgreSQL 각각의 `@Profile` 빈이 `ConnectionFactoryOptions`를 제공하고,
-> `connectionPool` + `r2dbcDatabase` 빈이 이를 공통으로 사용합니다.
+> **Key point**: Each `@Profile` bean (H2/MySQL/PostgreSQL) provides its own `ConnectionFactoryOptions`,
+> and the `connectionPool` + `r2dbcDatabase` beans consume them in a shared way.
 
 ---
 
-## 핵심 구현 패턴
+## Core Implementation Patterns
 
-### 1. `suspend` 함수 기반 Repository
+### 1. Repository Based on `suspend` Functions
 
-Exposed R2DBC는 `suspend` 함수와 `Flow`를 직접 반환합니다. `Mono`/`Flux`로 변환 없이 Coroutines 스타일로 작성합니다.
+Exposed R2DBC returns `suspend` functions and `Flow` directly — no need to wrap them in `Mono`/`Flux`.
 
 ```kotlin
 @Repository
 class MovieRepository {
 
-    // 단건 조회 - suspend
+    // Single lookup - suspend
     suspend fun findById(movieId: Long): MovieRecord? =
         MovieTable.selectAll()
             .where { MovieTable.id eq movieId }
             .firstOrNull()
             ?.toMovieRecord()
 
-    // 전체 조회 - Flow (스트리밍)
+    // List all - Flow (streaming)
     fun findAll(): Flow<MovieRecord> =
         MovieTable.selectAll().map { it.toMovieRecord() }
 
-    // 생성 - suspend, insertAndGetId로 자동 생성 ID 반환
+    // Create - suspend, returns auto-generated ID via insertAndGetId
     suspend fun create(movie: MovieRecord): MovieRecord {
         val id = MovieTable.insertAndGetId {
             it[name] = movie.name
@@ -261,16 +294,16 @@ class MovieRepository {
         return movie.copy(id = id.value)
     }
 
-    // 삭제 - suspend, 영향받은 행 수 반환
+    // Delete - suspend, returns number of affected rows
     suspend fun deleteById(movieId: Long): Int =
         MovieTable.deleteWhere { MovieTable.id eq movieId }
 }
 ```
 
-### 2. `suspendTransaction`을 사용하는 Controller
+### 2. Controller Using `suspendTransaction`
 
-모든 DB 접근은 `suspendTransaction { }` 블록 안에서 수행해야 합니다.
-WebFlux `suspend` 핸들러와 자연스럽게 결합됩니다.
+All DB access must be performed inside a `suspendTransaction { }` block.
+This integrates naturally with WebFlux `suspend` handlers.
 
 ```kotlin
 @RestController
@@ -306,17 +339,16 @@ class MovieController(
 }
 ```
 
-### 3. `bufferUntilChanged`로 JOIN 결과 그룹핑
+### 3. Grouping JOIN Results with `bufferUntilChanged`
 
-영화-배우 다대다 조인 결과를 영화 기준으로 그룹핑합니다.
-DB에서 정렬된 결과를 스트림으로 받아 키가 바뀔 때마다 묶어서 emit합니다.
+Groups many-to-many JOIN results by movie. Receives sorted results as a stream and emits a group each time the key changes.
 
 ```kotlin
 fun getAllMoviesWithActors(): Flow<MovieWithActorRecord> =
     MovieActorJoin
         .select(MovieTable.id, MovieTable.name, ..., ActorTable.id, ...)
         .map { row -> row.toMovieRecord() to row.toActorRecord() }
-        .bufferUntilChanged { it.first.id }  // 동일 movieId가 바뀔 때마다 emit
+        .bufferUntilChanged { it.first.id }  // emit when movieId changes
         .mapNotNull { pairs ->
             val movie = pairs.first().first
             val actors = pairs.map { it.second }
@@ -324,7 +356,7 @@ fun getAllMoviesWithActors(): Flow<MovieWithActorRecord> =
         }
 ```
 
-생성되는 SQL:
+Generated SQL:
 
 ```sql
 SELECT movies.id, movies."name", movies.producer_name, movies.release_date,
@@ -334,9 +366,9 @@ SELECT movies.id, movies."name", movies.producer_name, movies.release_date,
          INNER JOIN actors ON actors.id = actors_in_movies.actor_id
 ```
 
-### 4. 조건절 제작자-배우 동시 참여 JOIN
+### 4. JOIN with Producer-Actor Co-appearance Condition
 
-추가 조인 조건(`ON` 절에 커스텀 조건)을 지정하는 패턴:
+Pattern for specifying an additional custom condition in the `ON` clause:
 
 ```kotlin
 private val moviesWithActingProducersJoin: Join by lazy {
@@ -347,13 +379,13 @@ private val moviesWithActingProducersJoin: Join by lazy {
             onColumn = { ActorTable.id },
             otherColumn = { ActorInMovieTable.actorId }
         ) {
-            // ON 절에 추가 조건: 제작자 이름 = 배우 이름
+            // Additional ON condition: producer name equals actor first name
             MovieTable.producerName eq ActorTable.firstName
         }
 }
 ```
 
-생성되는 SQL:
+Generated SQL:
 
 ```sql
 SELECT movies."name", actors.first_name, actors.last_name
@@ -365,72 +397,72 @@ SELECT movies."name", actors.first_name, actors.last_name
 
 ---
 
-## API 엔드포인트
+## API Endpoints
 
 ### Movies (`/movies`)
 
-| Method   | Path            | 설명                          |
-|----------|-----------------|-------------------------------|
-| `GET`    | `/movies`       | 전체 영화 목록 조회 (쿼리 파라미터 검색 지원) |
-| `GET`    | `/movies/{id}`  | 영화 단건 조회                 |
-| `POST`   | `/movies`       | 영화 등록                      |
-| `DELETE` | `/movies/{id}`  | 영화 삭제                      |
+| Method   | Path            | Description                              |
+|----------|-----------------|------------------------------------------|
+| `GET`    | `/movies`       | List all movies (supports query params)  |
+| `GET`    | `/movies/{id}`  | Get a single movie by ID                 |
+| `POST`   | `/movies`       | Create a movie                           |
+| `DELETE` | `/movies/{id}`  | Delete a movie                           |
 
-쿼리 파라미터 예시: `GET /movies?name=Inception&producerName=Nolan`
+Query parameter example: `GET /movies?name=Inception&producerName=Nolan`
 
 ### Actors (`/actors`)
 
-| Method   | Path            | 설명                          |
-|----------|-----------------|-------------------------------|
-| `GET`    | `/actors`       | 전체 배우 목록 조회 (쿼리 파라미터 검색 지원) |
-| `GET`    | `/actors/{id}`  | 배우 단건 조회                 |
-| `POST`   | `/actors`       | 배우 등록                      |
-| `DELETE` | `/actors/{id}`  | 배우 삭제                      |
+| Method   | Path            | Description                              |
+|----------|-----------------|------------------------------------------|
+| `GET`    | `/actors`       | List all actors (supports query params)  |
+| `GET`    | `/actors/{id}`  | Get a single actor by ID                 |
+| `POST`   | `/actors`       | Create an actor                          |
+| `DELETE` | `/actors/{id}`  | Delete an actor                          |
 
 ### Movie-Actors (`/movie-actors`)
 
-| Method | Path                             | 설명                         |
-|--------|----------------------------------|------------------------------|
-| `GET`  | `/movie-actors/{movieId}`        | 특정 영화의 배우 목록 조회    |
-| `GET`  | `/movie-actors/count`            | 영화별 출연 배우 수 집계      |
-| `GET`  | `/movie-actors/acting-producers` | 제작자가 직접 출연한 영화 조회 |
+| Method | Path                             | Description                                    |
+|--------|----------------------------------|------------------------------------------------|
+| `GET`  | `/movie-actors/{movieId}`        | List actors for a specific movie               |
+| `GET`  | `/movie-actors/count`            | Count actors per movie                         |
+| `GET`  | `/movie-actors/acting-producers` | List movies where the producer also acts       |
 
 ---
 
-## 실행 방법
+## Running the Application
 
-### 기본 실행 (H2 인메모리)
+### Default (H2 in-memory)
 
 ```bash
 ./gradlew :spring-webflux-exposed:bootRun
 ```
 
-### Profile 지정 실행
+### With a Specific Profile
 
 ```bash
-# PostgreSQL (Testcontainers 자동 실행)
+# PostgreSQL (auto-started via Testcontainers)
 ./gradlew :spring-webflux-exposed:bootRun --args='--spring.profiles.active=postgres'
 
-# MySQL (Testcontainers 자동 실행)
+# MySQL (auto-started via Testcontainers)
 ./gradlew :spring-webflux-exposed:bootRun --args='--spring.profiles.active=mysql'
 ```
 
 ### Swagger UI
 
-애플리케이션 실행 후 http://localhost:8080/webjars/swagger-ui/index.html 에서 API 문서를 확인할 수 있습니다.
+After starting the application, visit http://localhost:8080/webjars/swagger-ui/index.html to view the API documentation.
 
 ---
 
-## 테스트
+## Tests
 
 ```bash
 ./gradlew :spring-webflux-exposed:test
 ```
 
-### 테스트 구조
+### Test Structure
 
 ```kotlin
-// 통합 테스트 기반 클래스: H2 프로파일로 전체 Spring 컨텍스트 로드
+// Integration test base class: loads full Spring context with H2 profile
 @ActiveProfiles("h2")
 @SpringBootTest(
     classes = [SpringWebfluxApplication::class],
@@ -444,34 +476,34 @@ abstract class AbstractSpringWebfluxTest {
 }
 ```
 
-### 테스트 목록
+### Test List
 
-- **MovieControllerTest** — 영화 CRUD API 통합 테스트 (`WebTestClient` 사용)
-- **ActorControllerTest** — 배우 CRUD API 통합 테스트
-- **MovieActorsControllerTest** — 영화-배우 관계 API 통합 테스트
-- **MovieRepositoryTest** — 영화 Repository 단위 테스트
-- **ActorRepositoryTest** — 배우 Repository 단위 테스트
-- **DomainSQLTest** — 도메인 SQL 쿼리 검증
-- **ConfigurationTest** — Spring 설정 로드 검증
+- **MovieControllerTest** — Integration tests for Movie CRUD API (using `WebTestClient`)
+- **ActorControllerTest** — Integration tests for Actor CRUD API
+- **MovieActorsControllerTest** — Integration tests for Movie-Actor relationship API
+- **MovieRepositoryTest** — Unit tests for Movie repository
+- **ActorRepositoryTest** — Unit tests for Actor repository
+- **DomainSQLTest** — Domain SQL query validation
+- **ConfigurationTest** — Spring configuration load validation
 
-### 부하 테스트 (Gatling)
+### Load Tests (Gatling)
 
 ```bash
-# 영화 API 부하 테스트
+# Load test for Movie API
 ./gradlew :spring-webflux-exposed:gatlingRun-MovieSimulation
 
-# 배우 API 부하 테스트
+# Load test for Actor API
 ./gradlew :spring-webflux-exposed:gatlingRun-ActorSimulation
 
-# 영화-배우 관계 API 부하 테스트
+# Load test for Movie-Actor relationship API
 ./gradlew :spring-webflux-exposed:gatlingRun-MovieActorsSimulation
 ```
 
 ---
 
-## 참고 자료
+## References
 
 - [Spring WebFlux](https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html)
-- [Kotlin Coroutines 가이드](https://kotlinlang.org/docs/coroutines-guide.html)
+- [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
 - [Exposed R2DBC](https://github.com/JetBrains/Exposed)
 - [Kotlin Exposed Book](https://debop.notion.site/Kotlin-Exposed-Book-1ad2744526b080428173e9c907abdae2)

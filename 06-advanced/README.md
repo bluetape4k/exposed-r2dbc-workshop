@@ -1,182 +1,199 @@
-# 06 Advanced (고급 기능)
+> 한국어 버전: [README.ko.md](README.ko.md)
 
-이 디렉토리는 Exposed R2DBC의 고급 기능을 다루는 모듈들을 포함합니다. 암호화, 날짜/시간, JSON, 커스텀 컬럼 타입, 다양한 JSON 라이브러리 통합 등 실무에서 자주 필요한 고급 패턴을 학습합니다.
+# 06 Advanced
 
-## 모듈 목록
+This directory contains modules covering advanced features of Exposed R2DBC. Learn advanced patterns frequently needed in production — encryption, date/time, JSON, custom column types, and various JSON library integrations.
 
-### [01 Exposed R2DBC Crypt (투명한 컬럼 암호화)](01-exposed-r2dbc-crypt/README.md)
+## Module List
 
-`exposed-crypt` 확장을 사용하여 R2DBC 환경에서 데이터베이스 컬럼을 투명하게 암호화/복호화합니다.
+### [01 Exposed R2DBC Crypt (Transparent Column Encryption)](01-exposed-r2dbc-crypt/README.md)
 
-| 특징          | 설명                                                         |
-|-------------|------------------------------------------------------------|
-| 지원 알고리즘     | `AES_256_PBE_CBC`, `AES_256_PBE_GCM`, `BLOW_FISH`, `TRIPLE_DES` |
-| DSL/DAO 지원  | 두 스타일 모두 지원                                                |
-| WHERE 검색    | 비결정적 암호화로 **불가** → 검색 필요 시 `10-exposed-r2dbc-jasypt` 참조    |
+Transparently encrypt and decrypt database columns in an R2DBC environment using the `exposed-crypt` extension.
+
+| Feature            | Description                                                               |
+|--------------------|---------------------------------------------------------------------------|
+| Supported algorithms | `AES_256_PBE_CBC`, `AES_256_PBE_GCM`, `BLOW_FISH`, `TRIPLE_DES`        |
+| DSL/DAO support    | Both styles supported                                                     |
+| WHERE search       | **Not possible** with non-deterministic encryption → see `10-exposed-r2dbc-jasypt` if search is needed |
 
 ---
 
-### [02 Exposed R2DBC JavaTime (java.time 통합)](02-exposed-r2dbc-javatime/README.md)
+### [02 Exposed R2DBC JavaTime (java.time Integration)](02-exposed-r2dbc-javatime/README.md)
 
-Java 8의 `java.time` (JSR-310) API와 Exposed R2DBC의 통합 방법을 학습합니다.
+Learn how to integrate Java 8's `java.time` (JSR-310) API with Exposed R2DBC.
 
-| 컬럼 타입                          | Java 타입                    |
-|--------------------------------|----------------------------|
-| `date(name)`                   | `java.time.LocalDate`      |
-| `time(name)`                   | `java.time.LocalTime`      |
-| `datetime(name)`               | `java.time.LocalDateTime`  |
-| `timestamp(name)`              | `java.time.Instant`        |
-| `timestampWithTimeZone(name)`  | `java.time.OffsetDateTime` |
-| `duration(name)`               | `java.time.Duration`       |
+| Column Type                        | Java Type                    |
+|------------------------------------|------------------------------|
+| `date(name)`                       | `java.time.LocalDate`        |
+| `time(name)`                       | `java.time.LocalTime`        |
+| `datetime(name)`                   | `java.time.LocalDateTime`    |
+| `timestamp(name)`                  | `java.time.Instant`          |
+| `timestampWithTimeZone(name)`      | `java.time.OffsetDateTime`   |
+| `duration(name)`                   | `java.time.Duration`         |
 
 ---
 
 ### [03 Exposed R2DBC Kotlinx-Datetime](03-exposed-r2dbc-kotlin-datetime/README.md)
 
-`kotlinx.datetime` 라이브러리와 Exposed R2DBC의 통합 방법을 학습합니다. Kotlin Multiplatform 프로젝트에 적합합니다.
+Learn how to integrate the `kotlinx.datetime` library with Exposed R2DBC. Ideal for Kotlin Multiplatform projects.
 
 ---
 
-### [04 Exposed R2DBC JSON (JSON/JSONB 지원)](04-exposed-r2dbc-json/README.md)
+### [04 Exposed R2DBC JSON (JSON/JSONB Support)](04-exposed-r2dbc-json/README.md)
 
-`exposed-json` 모듈(`kotlinx.serialization` 기반)을 사용하여 R2DBC 환경에서 JSON/JSONB 컬럼을 다룹니다.
+Work with JSON/JSONB columns in an R2DBC environment using the `exposed-json` module (based on `kotlinx.serialization`).
 
-| 기능                    | 설명               |
-|-----------------------|------------------|
-| `.extract<T>(path)`   | JSON 필드 추출       |
-| `.contains(value)`    | JSON 포함 여부 확인    |
-| `.exists(path)`       | JSONPath 존재 여부 확인 |
-
----
-
-### [05 Exposed R2DBC Money (금융 데이터 처리)](05-exposed-r2dbc-money/README.md)
-
-`exposed-money` 모듈을 사용하여 JavaMoney(`javax.money`) API로 통화 값을 안전하게 처리합니다. `compositeMoney`가 금액(`DECIMAL`)과 통화(`VARCHAR`) 컬럼을 단일 속성으로 관리합니다.
+| Feature                  | Description                    |
+|--------------------------|--------------------------------|
+| `.extract<T>(path)`      | Extract a JSON field           |
+| `.contains(value)`       | Check if JSON contains a value |
+| `.exists(path)`          | Check if a JSONPath exists     |
 
 ---
 
-### [06 커스텀 컬럼 타입](06-exposed-r2dbc-custom-columns/README.md)
+### [05 Exposed R2DBC Money (Financial Data)](05-exposed-r2dbc-money/README.md)
 
-사용자 정의 컬럼 타입을 구현하는 방법을 학습합니다.
-
-| 기능             | 설명                                    |
-|----------------|---------------------------------------|
-| **커스텀 ID 생성기** | Snowflake, KSUID, TimebasedUUID 자동 생성 |
-| **투명한 압축**     | LZ4, Snappy, Zstd를 이용한 자동 압축/해제       |
-| **결정적 암호화**    | AES 등 결정적 암호화로 `WHERE` 절 검색 가능        |
-| **바이너리 직렬화**   | Kryo/Fory 기반 객체 직렬화 + 압축 조합           |
+Safely handle monetary values using the JavaMoney (`javax.money`) API via the `exposed-money` module. `compositeMoney` manages both the amount (`DECIMAL`) and currency (`VARCHAR`) columns as a single property.
 
 ---
 
-### [07 커스텀 Entity (ID 생성 전략)](07-exposed-r2dbc-custom-entities/README.md)
+### [06 Custom Column Types](06-exposed-r2dbc-custom-columns/README.md)
 
-Snowflake, KSUID, Time-based UUID 등 다양한 ID 생성 전략을 캡슐화한 커스텀 기반 테이블/엔티티 클래스를 구현합니다.
+Learn how to implement user-defined column types.
 
-| 기반 클래스                     | ID 타입            | 생성 전략               |
-|----------------------------|------------------|---------------------|
-| `SnowflakeIdTable`         | `Long`           | Snowflake 알고리즘      |
-| `KsuidTable`               | `String (27자)`   | KSUID               |
-| `KsuidMillisTable`         | `String (27자)`   | 밀리초 정밀도 KSUID       |
-| `TimebasedUUIDTable`       | `java.util.UUID` | 시간 기반(버전 1) UUID    |
-| `TimebasedUUIDBase62Table` | `String (22자)`   | 시간 기반 UUID + Base62 |
+| Feature                  | Description                                                  |
+|--------------------------|--------------------------------------------------------------|
+| **Custom ID generator**  | Auto-generate Snowflake, KSUID, TimebasedUUID IDs            |
+| **Transparent compression** | Automatic compress/decompress using LZ4, Snappy, Zstd     |
+| **Deterministic encryption** | AES-based deterministic encryption enabling `WHERE` search |
+| **Binary serialization** | Object serialization with Kryo/Fory combined with compression |
 
 ---
 
-### [08 Exposed R2DBC Jackson (Jackson 기반 JSON)](08-exposed-r2dbc-jackson/README.md)
+### [07 Custom Entity (ID Generation Strategies)](07-exposed-r2dbc-custom-entities/README.md)
 
-Jackson 2.x 라이브러리를 사용하여 R2DBC 환경에서 JSON/JSONB 컬럼을 처리합니다. `@Serializable` 어노테이션 없이 표준 Kotlin 데이터 클래스를 사용할 수 있습니다.
+Implement custom base table/entity classes encapsulating various ID generation strategies: Snowflake, KSUID, Time-based UUID, etc.
+
+| Base Class                     | ID Type            | Generation Strategy           |
+|--------------------------------|--------------------|-------------------------------|
+| `SnowflakeIdTable`             | `Long`             | Snowflake algorithm           |
+| `KsuidTable`                   | `String (27 chars)` | KSUID                        |
+| `KsuidMillisTable`             | `String (27 chars)` | Millisecond-precision KSUID  |
+| `TimebasedUUIDTable`           | `java.util.UUID`   | Time-based (version 1) UUID  |
+| `TimebasedUUIDBase62Table`     | `String (22 chars)` | Time-based UUID + Base62     |
+
+---
+
+### [08 Exposed R2DBC Jackson (Jackson-Based JSON)](08-exposed-r2dbc-jackson/README.md)
+
+Handle JSON/JSONB columns in an R2DBC environment using Jackson 2.x. Use standard Kotlin data classes without the `@Serializable` annotation.
 
 ---
 
 ### [09 Exposed R2DBC Fastjson2](09-exposed-r2dbc-fastjson2/README.md)
 
-Alibaba Fastjson2 라이브러리를 사용하여 JSON 컬럼을 처리합니다. 뛰어난 JSON 직렬화 성능이 필요한 애플리케이션에 적합합니다.
+Handle JSON columns using Alibaba's Fastjson2 library. Suitable for applications requiring high JSON serialization throughput.
 
 ---
 
-### [10 Exposed R2DBC Jasypt (결정적 암호화)](10-exposed-r2dbc-jasypt/README.md)
+### [10 Exposed R2DBC Jasypt (Deterministic Encryption)](10-exposed-r2dbc-jasypt/README.md)
 
-Jasypt를 사용하여 R2DBC 환경에서 **결정적(검색 가능한)** 암호화를 구현합니다. 동일 평문이 항상 동일 암호문을 생성하므로 `WHERE` 절에서 직접 쿼리할 수 있습니다.
+Implement **deterministic (searchable)** encryption in an R2DBC environment using Jasypt. The same plaintext always produces the same ciphertext, enabling direct `WHERE` clause queries.
 
-| 컬럼 타입                                       | 설명                      |
-|---------------------------------------------|-------------------------|
-| `jasyptVarChar(name, length, encryptor)`    | 검색 가능한 암호화 문자열          |
-| `jasyptBinary(name, length, encryptor)`     | 검색 가능한 암호화 바이너리         |
+| Column Type                                      | Description                         |
+|--------------------------------------------------|-------------------------------------|
+| `jasyptVarChar(name, length, encryptor)`         | Searchable encrypted string         |
+| `jasyptBinary(name, length, encryptor)`          | Searchable encrypted binary         |
 
 ---
 
 ### [11 Exposed R2DBC Jackson 3](11-exposed-r2dbc-jackson3/README.md)
 
-Jackson 3.x 버전을 사용하여 R2DBC 환경에서 JSON/JSONB 컬럼을 처리합니다.
+Handle JSON/JSONB columns in an R2DBC environment using Jackson 3.x.
 
 ---
 
-### [12 Exposed R2DBC Tink (Google Tink 기반 암호화)](12-exposed-r2dbc-tink/README.md)
+### [12 Exposed R2DBC Tink (Google Tink Encryption)](12-exposed-r2dbc-tink/README.md)
 
-**Google Tink** 암호화 라이브러리를 Exposed R2DBC와 통합합니다. DAEAD(결정적, 검색 가능)와 AEAD(비결정적, 고보안) 두 가지 암호화 방식을 선택적으로 사용할 수 있습니다.
+Integrate the **Google Tink** encryption library with Exposed R2DBC. Choose between DAEAD (deterministic, searchable) and AEAD (non-deterministic, high security) encryption modes.
 
-| 컬럼 타입                                               | 암호화 방식  | WHERE 검색 |
-|-----------------------------------------------------|---------|----------|
-| `tinkDaeadVarChar(name, length)`                    | DAEAD   | 가능       |
-| `tinkAeadVarChar(name, length, algorithm)`          | AEAD    | 불가       |
-| `tinkAeadBinary(name, length, algorithm)`           | AEAD    | 불가       |
+| Column Type                                          | Encryption Mode | WHERE Search |
+|------------------------------------------------------|-----------------|--------------|
+| `tinkDaeadVarChar(name, length)`                     | DAEAD           | Possible     |
+| `tinkAeadVarChar(name, length, algorithm)`           | AEAD            | Not possible |
+| `tinkAeadBinary(name, length, algorithm)`            | AEAD            | Not possible |
 
 ---
 
-## 모듈 선택 가이드
+## Module Selection Guide
 
 ```mermaid
+%%{init: {"theme": "neutral"}}%%
 flowchart TD
-    Start([고급 기능 선택]) --> Q1{데이터 타입?}
-    Q1 -->|날짜/시간| Q2{런타임?}
-    Q2 -->|JVM 전용| M02[02-javatime\njava.time API]
+    Start([Select Advanced Feature]) --> Q1{Data type?}
+    Q1 -->|Date/Time| Q2{Runtime?}
+    Q2 -->|JVM only| M02[02-javatime\njava.time API]
     Q2 -->|Multiplatform| M03[03-kotlin-datetime\nkotlinx.datetime]
-    Q1 -->|JSON| Q3{직렬화 방식?}
-    Q3 -->|kotlinx . serialization| M04[04-json\n@Serializable 필요]
-Q3 -->|Jackson 2 .x|M08[08-jackson\n유연한 ObjectMapper]
-Q3 -->|고성능|M09[09-fastjson2\n2~3배 빠름]
-Q3 -->|Jakarta EE 9+|M11[11-jackson3\nVirtual Thread 안정]
+    Q1 -->|JSON| Q3{Serialization?}
+    Q3 -->|kotlinx . serialization| M04[04-json\nRequires @Serializable]
+    Q3 -->|Jackson 2 .x| M08[08-jackson\nFlexible ObjectMapper]
+    Q3 -->|High performance| M09[09-fastjson2\n2-3x faster]
+    Q3 -->|Jakarta EE 9+| M11[11-jackson3\nVirtual Thread stable]
 
-Q1 -->|암호화|Q4{WHERE 검색 필요?}
-Q4 -->|검색 불필요|Q5{라이브러리?}
-Q5 -->|Bouncy Castle|M01[01-crypt\n비결정적 암호화]
-Q5 -->|Google Tink AEAD|M12A[12-tink AEAD\n고보안]
-Q4 -->|검색 필요| Q6{라이브러리?}
-Q6 -->|Jasypt| M10[10-jasypt\n결정적 암호화]
-Q6 -->|Google Tink DAEAD|M12B[12-tink DAEAD\n결정적+검색]
+    Q1 -->|Encryption| Q4{WHERE search needed?}
+    Q4 -->|No search| Q5{Library?}
+    Q5 -->|Bouncy Castle| M01[01-crypt\nNon-deterministic]
+    Q5 -->|Google Tink AEAD| M12A[12-tink AEAD\nHigh security]
+    Q4 -->|Search needed| Q6{Library?}
+    Q6 -->|Jasypt| M10[10-jasypt\nDeterministic]
+    Q6 -->|Google Tink DAEAD| M12B[12-tink DAEAD\nDeterministic+searchable]
 
-Q1 -->|통화/금액|M05[05-money\nJavaMoney JSR-354]
-Q1 -->|커스텀 ID/압축|M06[06-custom-columns\nSnowflake/LZ4/Kryo]
-Q1 -->|커스텀 Entity|M07[07-custom-entities\nSnowflake/KSUID/UUID]
+    Q1 -->|Currency/Amount| M05[05-money\nJavaMoney JSR-354]
+    Q1 -->|Custom ID/Compression| M06[06-custom-columns\nSnowflake/LZ4/Kryo]
+    Q1 -->|Custom Entity| M07[07-custom-entities\nSnowflake/KSUID/UUID]
+
+    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
+    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
+    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
+    classDef red    fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
+
+    class M02,M03 blue
+    class M04,M08,M09,M11 green
+    class M01,M12A,M12B red
+    class M10 orange
+    class M05 teal
+    class M06,M07 purple
 ```
 
-## JSON 모듈 비교
+## JSON Module Comparison
 
-| 모듈                              | JSON 라이브러리            | `@Serializable` 필요 | 특징                                      |
-|---------------------------------|------------------------|--------------------|-----------------------------------------|
-| `04-exposed-r2dbc-json`         | `kotlinx.serialization` | 필요                 | Kotlin Multiplatform 호환, 컴파일 타임 직렬화     |
-| `08-exposed-r2dbc-jackson`      | Jackson 2.x            | 불필요                | 풍부한 생태계, `ObjectMapper` 커스터마이징 용이       |
-| `09-exposed-r2dbc-fastjson2`    | Fastjson2 (Alibaba)    | 불필요                | Jackson 대비 2~3배 빠른 처리 속도, 낮은 GC 압력      |
-| `11-exposed-r2dbc-jackson3`     | Jackson 3.x            | 불필요                | Jakarta EE 9+ 호환, Virtual Thread 안정적 지원 |
+| Module                          | JSON Library              | `@Serializable` Required | Features                                                  |
+|---------------------------------|---------------------------|--------------------------|-----------------------------------------------------------|
+| `04-exposed-r2dbc-json`         | `kotlinx.serialization`   | Required                 | Kotlin Multiplatform compatible, compile-time serialization |
+| `08-exposed-r2dbc-jackson`      | Jackson 2.x               | Not required             | Rich ecosystem, easy `ObjectMapper` customization          |
+| `09-exposed-r2dbc-fastjson2`    | Fastjson2 (Alibaba)       | Not required             | 2–3x faster than Jackson, lower GC pressure               |
+| `11-exposed-r2dbc-jackson3`     | Jackson 3.x               | Not required             | Jakarta EE 9+ compatible, stable Virtual Thread support   |
 
 ---
 
-## 암호화 모듈 비교
+## Encryption Module Comparison
 
-| 모듈                              | 암호화 방식         | WHERE 검색          | 라이브러리       |
-|---------------------------------|----------------|-------------------|-------------|
-| `01-exposed-r2dbc-crypt`        | 비결정적           | 불가                | Bouncy Castle |
-| `10-exposed-r2dbc-jasypt`       | 결정적            | 가능                | Jasypt      |
-| `12-exposed-r2dbc-tink`         | 결정적/비결정적 선택 가능 | DAEAD만 가능         | Google Tink |
-| `06-exposed-r2dbc-custom-columns` | 커스텀 구현       | 구현에 따라 다름         | AES 직접 구현  |
+| Module                              | Encryption Mode        | WHERE Search       | Library        |
+|-------------------------------------|------------------------|--------------------|----------------|
+| `01-exposed-r2dbc-crypt`            | Non-deterministic      | Not possible       | Bouncy Castle  |
+| `10-exposed-r2dbc-jasypt`           | Deterministic          | Possible           | Jasypt         |
+| `12-exposed-r2dbc-tink`             | Deterministic or non-deterministic (selectable) | DAEAD only | Google Tink |
+| `06-exposed-r2dbc-custom-columns`   | Custom implementation  | Depends on impl.   | Custom AES     |
 
-## 테스트 실행
+## Running Tests
 
 ```bash
-# 고급 기능 모듈 전체 테스트
+# Test all advanced feature modules
 ./gradlew :01-exposed-r2dbc-crypt:test
 ./gradlew :12-exposed-r2dbc-tink:test
 
-# H2만 사용하는 빠른 테스트
+# Fast test using H2 only
 ./gradlew :12-exposed-r2dbc-tink:test -PuseFastDB=true
 ```

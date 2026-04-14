@@ -1,28 +1,30 @@
-# 01 R2DBC Coroutines Basic (코루틴 기본)
+> 한국어 버전: [README.ko.md](README.ko.md)
 
-Exposed R2DBC + Kotlin Coroutines 환경에서 비동기 데이터베이스 작업을 수행하는 방법을 학습합니다. R2DBC의 비동기 API를 코루틴으로 래핑하여 가독성 높은 비동기 코드를 작성합니다.
+# 01 R2DBC Coroutines Basic
 
-## 학습 목표
+Learn how to perform asynchronous database operations in an Exposed R2DBC + Kotlin Coroutines environment. Write readable asynchronous code by wrapping the R2DBC async API with coroutines.
 
-- `suspendTransaction`으로 비동기 트랜잭션 수행
-- `suspendTransactionAsync`로 병렬 트랜잭션 실행
-- Flow를 사용한 반응형 결과 스트리밍
-- Coroutine Dispatcher와 Exposed R2DBC 통합
-- 코루틴 컨텍스트 내에서의 예외 처리
+## Learning Objectives
 
-## 기술 스택
+- Perform async transactions with `suspendTransaction`
+- Execute parallel transactions with `suspendTransactionAsync`
+- Stream reactive results using Flow
+- Integrate Coroutine Dispatcher with Exposed R2DBC
+- Handle exceptions within a coroutine context
 
-| 구분   | 기술                                              |
-|------|-------------------------------------------------|
-| ORM  | Exposed R2DBC DSL                               |
-| 비동기  | Kotlin Coroutines + Flow                        |
-| DB   | H2 (기본), MariaDB, MySQL 8, PostgreSQL           |
-| 컨테이너 | Testcontainers                                  |
-| 테스트  | JUnit 5 + Kluent + ParameterizedTest (멀티 DB 지원) |
+## Tech Stack
 
-## 실행 흐름
+| Category  | Technology                                              |
+|-----------|---------------------------------------------------------|
+| ORM       | Exposed R2DBC DSL                                       |
+| Async     | Kotlin Coroutines + Flow                                |
+| DB        | H2 (default), MariaDB, MySQL 8, PostgreSQL              |
+| Container | Testcontainers                                          |
+| Test      | JUnit 5 + Kluent + ParameterizedTest (multi-DB support) |
 
-### Coroutine + R2DBC 트랜잭션
+## Execution Flow
+
+### Coroutine + R2DBC Transaction
 
 ```mermaid
 sequenceDiagram
@@ -35,81 +37,110 @@ sequenceDiagram
     W ->> DB: SchemaUtils.create(*tables)
     W ->> ST: suspendTransaction { ... }
     ST ->> DB: BEGIN
-    ST ->> DB: DML 실행
+    ST ->> DB: Execute DML
     DB -->> ST: Flow / Result
     ST ->> DB: COMMIT
-    ST -->> W: 결과
+    ST -->> W: result
     W ->> DB: SchemaUtils.drop(*tables)
-    W -->> T: 완료
+    W -->> T: done
 ```
 
-### Flow 수집 패턴
+### Flow Collection Patterns
 
 ```mermaid
+%%{init: {"theme": "neutral"}}%%
 flowchart TD
     Q["Table.selectAll()"] --> F["Flow~ResultRow~"]
-    F --> L[".toList() — 전체 수집"]
-    F --> S[".single() — 단일 (없으면 예외)"]
-    F --> SN[".singleOrNull() — 단일 (없으면 null)"]
-    F --> FI[".first() — 첫 번째 (없으면 예외)"]
-    F --> FN[".firstOrNull() — 첫 번째 (없으면 null)"]
-    F --> C[".count() — 개수 (Long)"]
+    F --> L[".toList() — collect all"]
+    F --> S[".single() — single (exception if none)"]
+    F --> SN[".singleOrNull() — single (null if none)"]
+    F --> FI[".first() — first (exception if none)"]
+    F --> FN[".firstOrNull() — first (null if none)"]
+    F --> C[".count() — count (Long)"]
+
+    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
+    class Q blue
+    class F teal
+    class L,S,SN,FI,FN,C green
 ```
 
-## 핵심 개념
+## Coroutine State Diagram
+
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+stateDiagram-v2
+    [*] --> Created : launch / async
+    Created --> Running : Dispatcher scheduling
+    Running --> Suspended : suspend fun called\n(waiting for DB, IO)
+    Suspended --> Running : resume (result received)
+    Running --> Completed : block finishes normally
+    Running --> Cancelled : cancel() / exception
+    Completed --> [*]
+    Cancelled --> [*]
+
+    state Running {
+        [*] --> Executing
+        Executing --> SuspendTransaction : enter suspendTransaction
+        SuspendTransaction --> Executing : transaction completed
+    }
+```
+
+## Key Concepts
 
 ### `suspendTransaction` vs `transaction`
 
-| 특성                  | `transaction { }`              | `suspendTransaction { }`           |
-|-----------------------|--------------------------------|------------------------------------|
-| 실행 방식             | 동기 (블로킹)                  | 비동기 (코루틴 suspend)             |
-| 스레드 점유           | 트랜잭션 내내 스레드 점유      | suspend 시 스레드 해제              |
-| 사용 위치             | 일반 함수 (`fun`)              | suspend 함수 또는 코루틴 내부       |
-| R2DBC 호환            | 불가 (R2DBC는 비동기 전용)     | 가능                                |
-| 중첩 지원             | `nestedTransactionMode` 설정   | `inTopLevelSuspendTransaction` 사용 |
-| Spring 통합           | `@Transactional` 대응          | `@Transactional` + 코루틴 지원     |
+| Property              | `transaction { }`                       | `suspendTransaction { }`              |
+|-----------------------|-----------------------------------------|---------------------------------------|
+| Execution mode        | Synchronous (blocking)                  | Asynchronous (coroutine suspend)      |
+| Thread occupancy      | Thread held throughout transaction      | Thread released on suspend            |
+| Usage location        | Regular function (`fun`)               | suspend function or inside coroutine  |
+| R2DBC compatibility   | Not compatible (R2DBC is async-only)    | Compatible                            |
+| Nested support        | `nestedTransactionMode` setting         | Use `inTopLevelSuspendTransaction`    |
+| Spring integration    | Corresponds to `@Transactional`         | `@Transactional` + coroutine support  |
 
 ```kotlin
-// 동기 (JDBC only) - R2DBC에서 사용 불가
+// Synchronous (JDBC only) - cannot be used with R2DBC
 transaction {
-    MyTable.selectAll().toList()   // 블로킹 호출
+    MyTable.selectAll().toList()   // blocking call
 }
 
-// 비동기 (R2DBC) - 코루틴 환경에서 사용
+// Asynchronous (R2DBC) - for use in coroutine context
 suspend fun query() = suspendTransaction {
     MyTable.selectAll().toList()   // suspend / non-blocking
 }
 ```
 
-### Coroutine Scope 관리 다이어그램
+### Coroutine Scope Management Diagram
 
 ```
 runTest / runSuspendIO
 │
-├── withTables(testDB, MyTable)          ← 테이블 생성, 트랜잭션 컨텍스트 시작
+├── withTables(testDB, MyTable)          ← create table, start transaction context
 │   │
-│   ├── suspendTransaction { }           ← 새 트랜잭션 시작 (기존 컨텍스트 재사용)
-│   │   └── MyTable.insert { }           ← R2DBC 비동기 SQL 실행
+│   ├── suspendTransaction { }           ← start new transaction (reuse existing context)
+│   │   └── MyTable.insert { }           ← R2DBC async SQL execution
 │   │
 │   ├── CoroutineScope(Dispatchers.IO)
 │   │   └── async {
-│   │       inTopLevelSuspendTransaction { }  ← 독립된 최상위 트랜잭션 (새 커넥션)
+│   │       inTopLevelSuspendTransaction { }  ← independent top-level transaction (new connection)
 │   │           └── MyTable.insert { }
 │   │       }
 │   │
-│   └── awaitAll(...)                    ← 모든 비동기 작업 완료 대기
+│   └── awaitAll(...)                    ← wait for all async work to complete
 │
-└── 테이블 자동 정리 (DROP)
+└── auto-cleanup tables (DROP)
 ```
 
-**핵심 규칙:**
-- `suspendTransaction`: 현재 코루틴 컨텍스트의 DB 커넥션을 재사용 (중첩 가능)
-- `inTopLevelSuspendTransaction`: 항상 새 커넥션·새 트랜잭션 생성 (독립 실행에 적합)
-- `withContext(dispatcher)`: 디스패처를 바꿔 다른 스레드 풀에서 트랜잭션 실행
+**Key Rules:**
+- `suspendTransaction`: reuses the DB connection from the current coroutine context (nestable)
+- `inTopLevelSuspendTransaction`: always creates a new connection and transaction (suited for independent execution)
+- `withContext(dispatcher)`: run transaction on a different thread pool by switching dispatcher
 
 ### suspendTransaction
 
-코루틴 환경에서 트랜잭션을 수행하는 `suspend` 함수입니다.
+A `suspend` function that performs a transaction in a coroutine context.
 
 ```kotlin
 suspend fun getUsers(): List<UserRecord> = suspendTransaction {
@@ -119,7 +150,7 @@ suspend fun getUsers(): List<UserRecord> = suspendTransaction {
 
 ### suspendTransactionAsync
 
-여러 트랜잭션을 병렬로 실행합니다.
+Executes multiple transactions in parallel.
 
 ```kotlin
 val usersDeferred = suspendTransactionAsync {
@@ -133,9 +164,9 @@ val ordersDeferred = suspendTransactionAsync {
 val (users, orders) = awaitAll(usersDeferred, ordersDeferred)
 ```
 
-### Flow 스트리밍
+### Flow Streaming
 
-대용량 결과를 효율적으로 처리하기 위해 Flow를 사용합니다.
+Use Flow to efficiently process large result sets.
 
 ```kotlin
 fun streamUsers(): Flow<UserRecord> = Users
@@ -144,9 +175,9 @@ fun streamUsers(): Flow<UserRecord> = Users
     .map { it.toUserRecord() }
 ```
 
-## 코드 예제
+## Code Examples
 
-### 기본 CRUD with Coroutines
+### Basic CRUD with Coroutines
 
 ```kotlin
 suspend fun createUser(name: String, email: String): Long = suspendTransaction {
@@ -174,17 +205,17 @@ suspend fun deleteUser(id: Long): Int = suspendTransaction {
 }
 ```
 
-### 병렬 트랜잭션 실행
+### Parallel Transaction Execution
 
 ```kotlin
 suspend fun parallelOperations() = coroutineScope {
     val insertJob = suspendTransactionAsync {
-        // INSERT 작업
+        // INSERT operation
         Users.insert { it[name] = "User1" }
     }
     
     val updateJob = suspendTransactionAsync {
-        // UPDATE 작업
+        // UPDATE operation
         Users.update({ Users.id eq 1 }) { it[name] = "Updated" }
     }
     
@@ -192,7 +223,7 @@ suspend fun parallelOperations() = coroutineScope {
 }
 ```
 
-### 예외 처리
+### Exception Handling
 
 ```kotlin
 suspend fun safeOperation(): Result<UserRecord> = runCatching {
@@ -207,33 +238,33 @@ suspend fun safeOperation(): Result<UserRecord> = runCatching {
 }
 ```
 
-## 예제 테스트 구성
+## Example Test Structure
 
-이 모듈은 코루틴 트랜잭션의 핵심 패턴을 `ParameterizedTest` 기반으로 멀티 DB 환경에서 검증합니다.
+This module validates core coroutine transaction patterns against multiple DBs using `ParameterizedTest`.
 
-- `Ex01_Coroutines`: 순차/병렬 트랜잭션, 중첩 트랜잭션, 비동기 작업 조합
-- `Ex02_CoroutinesFlow`: Flow 기반 결과 수집, `inTopLevelSuspendTransaction` 병렬 실행
+- `Ex01_Coroutines`: Sequential/parallel transactions, nested transactions, async operation combinations
+- `Ex02_CoroutinesFlow`: Flow-based result collection, parallel execution with `inTopLevelSuspendTransaction`
 
-특히 `Ex02_CoroutinesFlow`는 다음 두 가지 실무 패턴을 최소 예제로 보여줍니다.
+`Ex02_CoroutinesFlow` in particular demonstrates two practical patterns as minimal examples:
 
-1. `selectAll()` 결과를 Flow 연산(`map`, `toList`)으로 안전하게 수집
-2. 복수 코루틴에서 독립 트랜잭션을 병렬 실행한 뒤 결과를 일관성 있게 검증
+1. Safely collecting `selectAll()` results via Flow operations (`map`, `toList`)
+2. Running independent transactions in parallel from multiple coroutines and verifying results consistently
 
-## 테스트 실행
+## Running Tests
 
 ```bash
-# 이 모듈의 모든 테스트 실행
+# Run all tests in this module
 ./gradlew :01-exposed-r2dbc-coroutines-basic:test
 
-# 특정 테스트만 실행
+# Run a specific test
 ./gradlew :01-exposed-r2dbc-coroutines-basic:test --tests "exposed.r2dbc.examples.coroutines.Ex01_Coroutines"
 
-# Flow 예제 테스트만 실행
+# Run only the Flow example tests
 ./gradlew :01-exposed-r2dbc-coroutines-basic:test --tests "exposed.r2dbc.examples.coroutines.Ex02_CoroutinesFlow"
 ```
 
-## 참고 자료
+## References
 
-- [Kotlin Coroutines 가이드](https://kotlinlang.org/docs/coroutines-guide.html)
+- [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
 - [Exposed R2DBC](https://github.com/JetBrains/Exposed)
 - [Kotlin Exposed Book](https://debop.notion.site/Kotlin-Exposed-Book-1ad2744526b080428173e9c907abdae2)

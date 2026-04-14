@@ -1,157 +1,212 @@
-# 04 Transaction Management (트랜잭션 관리)
+> 한국어 버전: [README.ko.md](README.ko.md)
 
-Exposed R2DBC의 **트랜잭션(Transaction)
-** 관리 기능을 다루는 예제 모듈입니다. 트랜잭션 격리 수준, Raw SQL 실행, 파라미터 바인딩, 쿼리 타임아웃, 중첩 트랜잭션(Savepoint) 등 트랜잭션 제어의 핵심 패턴을 6개의 테스트 파일로 학습할 수 있습니다.
+# 04 Transaction Management
 
-## 학습 목표
+An example module covering **Transaction** management in Exposed R2DBC. Learn the core patterns of transaction control — isolation levels, raw SQL execution, parameter binding, query timeouts, and nested transactions (Savepoints) — across 6 test files.
 
-- 트랜잭션 격리 수준(Isolation Level) 설정 방법 이해
-- Raw SQL 실행 및 파라미터 바인딩
-- 쿼리 타임아웃 설정 및 예외 처리
-- 중첩 트랜잭션과 Savepoint 활용
-- Coroutine 기반 트랜잭션 제어 패턴 습득
+## Learning Objectives
 
-## 기술 스택
+- Understand how to configure transaction isolation levels
+- Execute raw SQL and bind parameters
+- Configure query timeouts and handle exceptions
+- Use nested transactions and Savepoints
+- Master coroutine-based transaction control patterns
 
-| 구분   | 기술                                              |
-|------|-------------------------------------------------|
-| ORM  | Exposed R2DBC DSL                               |
-| 비동기  | Kotlin Coroutines                               |
-| DB   | H2 (기본), MariaDB, MySQL 8, PostgreSQL           |
-| 컨테이너 | Testcontainers                                  |
-| 테스트  | JUnit 5 + Kluent + ParameterizedTest (멀티 DB 지원) |
+## Tech Stack
 
-## 실행 흐름
+| Category  | Technology                                                  |
+|-----------|-------------------------------------------------------------|
+| ORM       | Exposed R2DBC DSL                                           |
+| Async     | Kotlin Coroutines                                           |
+| DB        | H2 (default), MariaDB, MySQL 8, PostgreSQL                  |
+| Container | Testcontainers                                              |
+| Testing   | JUnit 5 + Kluent + ParameterizedTest (multi-DB support)     |
 
-### R2DBC suspendTransaction 흐름
+## Execution Flow
+
+### R2DBC suspendTransaction Flow
 
 ```mermaid
 sequenceDiagram
-    participant C as Coroutine (호출자)
+    participant C as Coroutine (Caller)
     participant T as suspendTransaction
     participant DB as R2DBC Database
 
     C ->> T: suspendTransaction(db)
     T ->> DB: BEGIN
-    T ->> DB: SQL 실행 (INSERT/SELECT...)
-    alt 정상 완료
+    T ->> DB: Execute SQL (INSERT/SELECT...)
+    alt Normal completion
         T ->> DB: COMMIT
-        T -->> C: 결과 반환
-    else 예외 발생
+        T -->> C: Return result
+    else Exception raised
         T ->> DB: ROLLBACK
-        T -->> C: 예외 전파
+        T -->> C: Propagate exception
     end
 ```
 
-### 중첩 트랜잭션 / Savepoint 흐름
+### Nested Transaction / Savepoint Flow
 
 ```mermaid
+%%{init: {"theme": "neutral"}}%%
 flowchart TD
-    A["suspendTransaction (외부)"] --> B["SQL 실행 1"]
-    B --> C{"중첩 트랜잭션?"}
+    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
+    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
+    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
+    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
+    classDef red    fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
+
+    A["suspendTransaction (outer)"] --> B["Execute SQL 1"]
+    B --> C{"Nested transaction?"}
     C -->|yes| D["SAVEPOINT sp1"]
-    D --> E["SQL 실행 2"]
-    E --> G{예외 발생?}
-    G -->|rollback| H["ROLLBACK TO sp1\n(SQL 2만 취소)"]
-    G -->|정상| I["RELEASE sp1"]
-    H --> J["외부 COMMIT\n(SQL 1만 저장)"]
+    D --> E["Execute SQL 2"]
+    E --> G{Exception raised?}
+    G -->|rollback| H["ROLLBACK TO sp1\n(Cancel SQL 2 only)"]
+    G -->|normal| I["RELEASE sp1"]
+    H --> J["Outer COMMIT\n(Persist SQL 1 only)"]
     I --> J
-    C -->|no| K["동일 트랜잭션 공유\n(외부와 같은 범위)"]
+    C -->|no| K["Share outer transaction\n(same scope)"]
+
+    class A blue
+    class B green
+    class C orange
+    class D purple
+    class E green
+    class G orange
+    class H red
+    class I teal
+    class J teal
+    class K blue
 ```
 
-## 프로젝트 구조
+## Transaction State Diagram
+
+```mermaid
+%%{init: {"theme": "neutral"}}%%
+stateDiagram-v2
+    [*] --> IDLE : Acquire DB connection
+
+    IDLE --> ACTIVE : Call suspendTransaction\nExecute BEGIN
+
+    ACTIVE --> ACTIVE : Execute SQL\n(SELECT/INSERT/UPDATE/DELETE)
+
+    ACTIVE --> SAVEPOINT : useNestedTransactions=true\nInner suspendTransaction called
+
+    SAVEPOINT --> SAVEPOINT : Execute inner SQL
+
+    SAVEPOINT --> ACTIVE : RELEASE SAVEPOINT\n(Inner completed normally)
+
+    SAVEPOINT --> ACTIVE : ROLLBACK TO SAVEPOINT\n(Inner exception raised)
+
+    ACTIVE --> COMMITTED : COMMIT\n(Normal completion)
+
+    ACTIVE --> ROLLEDBACK : ROLLBACK\n(Exception raised)
+
+    COMMITTED --> IDLE : Return connection
+    ROLLEDBACK --> IDLE : Return connection
+
+    ACTIVE --> TIMEOUT : queryTimeout exceeded
+
+    TIMEOUT --> ROLLEDBACK : Auto ROLLBACK
+
+    COMMITTED --> [*]
+    ROLLEDBACK --> [*]
+```
+
+## Project Structure
 
 ```
 src/test/kotlin/exposed/r2dbc/examples/transactions/
-├── Ex01_TransactionIsolation.kt           # 트랜잭션 격리 수준 설정 (READ_UNCOMMITTED ~ SERIALIZABLE)
-├── Ex02_TransactionExec.kt                # Transaction.exec()으로 Raw SQL 실행, batchInsert + exec 조합
-├── Ex03_Parameterization.kt               # exec()에 파라미터 바인딩: ColumnType + 값 매핑
-├── Ex04_QueryTimeout.kt                   # 쿼리 타임아웃 설정 및 타임아웃 초과 시 예외 처리
-├── Ex05_NestedTransactions.kt             # 중첩 트랜잭션: useNestedTransactions, 내부 롤백 시 외부 유지
-└── Ex05_NestedTransactions_Coroutines.kt  # Coroutine 기반 중첩 트랜잭션: Savepoint + withContext 활용
+├── Ex01_TransactionIsolation.kt           # Set isolation levels (READ_UNCOMMITTED ~ SERIALIZABLE)
+├── Ex02_TransactionExec.kt                # Raw SQL via Transaction.exec(), batchInsert + exec combination
+├── Ex03_Parameterization.kt               # Parameter binding in exec(): ColumnType + value mapping
+├── Ex04_QueryTimeout.kt                   # Query timeout configuration and exception handling on timeout
+├── Ex05_NestedTransactions.kt             # Nested transactions: useNestedTransactions, outer survives inner rollback
+└── Ex05_NestedTransactions_Coroutines.kt  # Coroutine-based nested transactions: Savepoint + withContext
 ```
 
-> **참고**: 이 모듈은 `src/main`이 없고, 모든 코드가 `src/test`에 위치합니다. 학습/실습 목적의 테스트 전용 모듈입니다.
+> **Note**: This module has no `src/main`. All code lives in `src/test` — it is a test-only learning module.
 
-## 예제 상세
+## Example Details
 
-### Ex01_TransactionIsolation - 트랜잭션 격리 수준
+### Ex01_TransactionIsolation - Transaction Isolation Levels
 
-R2DBC 환경에서 트랜잭션 격리 수준(Isolation Level)을 설정하는 방법을 다룹니다.
+How to configure transaction isolation levels in an R2DBC environment.
 
-| 격리 수준              | 설명                  |
-|--------------------|---------------------|
-| `READ_UNCOMMITTED` | 커밋되지 않은 데이터 읽기 허용   |
-| `READ_COMMITTED`   | 커밋된 데이터만 읽기         |
-| `REPEATABLE_READ`  | 트랜잭션 내 반복 읽기 일관성 보장 |
-| `SERIALIZABLE`     | 완전 직렬화 수준           |
+| Isolation Level    | Description                                              |
+|--------------------|----------------------------------------------------------|
+| `READ_UNCOMMITTED` | Allows reading uncommitted data                          |
+| `READ_COMMITTED`   | Reads only committed data                                |
+| `REPEATABLE_READ`  | Guarantees consistent repeated reads within a transaction |
+| `SERIALIZABLE`     | Full serialization level                                 |
 
 ```kotlin
 suspendTransaction(
     transactionIsolation = IsolationLevel.READ_COMMITTED,
     db = database
 ) {
-    // 트랜잭션 본문
+    // transaction body
 }
 ```
 
-### Ex02_TransactionExec - Raw SQL 실행
+### Ex02_TransactionExec - Raw SQL Execution
 
-`Transaction.exec()`을 사용하여 Exposed DSL 외의 Raw SQL을 직접 실행합니다.
+Execute raw SQL outside the Exposed DSL using `Transaction.exec()`.
 
 ```kotlin
-// Raw SQL로 데이터 조회
-val result = exec(
+// Query data with raw SQL
+val result = transaction.exec(
     stmt = "SELECT * FROM exec_table WHERE amount > ?",
     args = listOf(IntegerColumnType() to 100),
     explicitStatementType = StatementType.SELECT
 ) { row -> row.getInt("amount") }
 ```
 
-### Ex03_Parameterization - 파라미터 바인딩
+### Ex03_Parameterization - Parameter Binding
 
-`Transaction.exec()` 사용 시 SQL Injection 방지를 위한 파라미터 바인딩 패턴입니다.
+Safe parameter binding to prevent SQL injection when using `Transaction.exec()`.
 
 ```kotlin
-// ColumnType과 값을 매핑하여 안전한 파라미터 바인딩
-exec(
+// Safe parameter binding via ColumnType + value mapping
+transaction.exec(
     stmt = "INSERT INTO tmp (username) VALUES (?)",
     args = listOf(VarCharColumnType() to "John \"Johny\" Johnson"),
     explicitStatementType = StatementType.INSERT
 )
 ```
 
-### Ex04_QueryTimeout - 쿼리 타임아웃
+### Ex04_QueryTimeout - Query Timeout
 
-쿼리 실행 시간 제한을 설정하고, 타임아웃 초과 시 예외 처리 패턴을 다룹니다.
+Set a time limit for query execution and handle exceptions when the timeout is exceeded.
 
 ```kotlin
 withDb(testDB) {
-    this.queryTimeout = 3  // 3초 타임아웃
-    exec("SELECT pg_sleep(10)")  // 타임아웃 초과 → 예외 발생
+    this.queryTimeout = 3  // 3-second timeout
+    // Exceeds timeout → exception raised:
+    transaction.exec("SELECT pg_sleep(10)")
 }
 ```
 
-### Ex05_NestedTransactions - 중첩 트랜잭션
+### Ex05_NestedTransactions - Nested Transactions
 
-`useNestedTransactions = true` 설정으로 내부 트랜잭션 롤백 시에도 외부 트랜잭션이 유지되는 패턴입니다.
+With `useNestedTransactions = true`, the outer transaction is preserved even when the inner transaction rolls back.
 
 ```kotlin
 withTables(testDB, cities, configure = { useNestedTransactions = true }) {
-    cities.insert { it[name] = "city1" }  // 외부 트랜잭션
+    cities.insert { it[name] = "city1" }  // outer transaction
 
     suspendTransaction {
-        cities.insert { it[name] = "city2" }  // 내부 트랜잭션
-        rollback()  // 내부만 롤백
+        cities.insert { it[name] = "city2" }  // inner transaction
+        rollback()  // rollback inner only
     }
 
-    cityCounts() shouldBeEqualTo 1  // city1만 남음
+    cityCounts() shouldBeEqualTo 1  // only city1 remains
 }
 ```
 
-### Ex05_NestedTransactions_Coroutines - Savepoint 기반 중첩 트랜잭션
+### Ex05_NestedTransactions_Coroutines - Savepoint-Based Nested Transactions
 
-Coroutine `withContext`와 Savepoint를 직접 사용하여 더 세밀한 트랜잭션 제어를 구현합니다.
+Finer-grained transaction control using coroutine `withContext` and Savepoints directly.
 
 ```kotlin
 suspend fun <T> runWithSavepoint(
@@ -170,46 +225,46 @@ suspend fun <T> runWithSavepoint(
 }
 ```
 
-## 트랜잭션 격리 수준 DB별 지원 현황
+## Transaction Isolation Level Support by DB
 
-| 격리 수준              | H2  | PostgreSQL | MySQL 8 | MariaDB | 비고                              |
-|--------------------|-----|------------|---------|---------|-----------------------------------|
-| `READ_UNCOMMITTED` | O   | △ (사실상 RC) | O       | O       | PostgreSQL은 READ_COMMITTED로 처리 |
-| `READ_COMMITTED`   | O   | O          | O       | O       | 기본값 (대부분 DB)                  |
-| `REPEATABLE_READ`  | O   | △ (SSI)    | O       | O       | PostgreSQL은 Snapshot Isolation   |
-| `SERIALIZABLE`     | O   | O          | O       | O       | 가장 엄격한 격리 수준               |
+| Isolation Level    | H2  | PostgreSQL     | MySQL 8 | MariaDB | Notes                                    |
+|--------------------|-----|----------------|---------|---------|------------------------------------------|
+| `READ_UNCOMMITTED` | O   | △ (acts as RC) | O       | O       | PostgreSQL treats as READ_COMMITTED      |
+| `READ_COMMITTED`   | O   | O              | O       | O       | Default for most DBs                     |
+| `REPEATABLE_READ`  | O   | △ (SSI)        | O       | O       | PostgreSQL uses Snapshot Isolation       |
+| `SERIALIZABLE`     | O   | O              | O       | O       | Strictest isolation level                |
 
-## Savepoint (중첩 트랜잭션) DB별 지원 현황
+## Savepoint (Nested Transaction) Support by DB
 
-| 기능                       | H2  | PostgreSQL | MySQL 8 | MariaDB | 비고                              |
-|--------------------------|-----|------------|---------|---------|-----------------------------------|
-| `SAVEPOINT`              | O   | O          | O       | O       | 모든 지원 DB에서 사용 가능           |
-| `RELEASE SAVEPOINT`      | O   | O          | O       | O       |                                   |
-| `ROLLBACK TO SAVEPOINT`  | O   | O          | O       | O       |                                   |
-| `useNestedTransactions`  | O   | O          | O       | O       | Exposed 설정 옵션                   |
-| Auto-commit + Savepoint  | △   | X          | △       | △       | auto-commit 모드에서 동작 DB마다 상이 |
+| Feature                   | H2  | PostgreSQL | MySQL 8 | MariaDB | Notes                                      |
+|---------------------------|-----|------------|---------|---------|---------------------------------------------|
+| `SAVEPOINT`               | O   | O          | O       | O       | Available on all supported DBs              |
+| `RELEASE SAVEPOINT`       | O   | O          | O       | O       |                                             |
+| `ROLLBACK TO SAVEPOINT`   | O   | O          | O       | O       |                                             |
+| `useNestedTransactions`   | O   | O          | O       | O       | Exposed configuration option                |
+| Auto-commit + Savepoint   | △   | X          | △       | △       | Behavior varies by DB in auto-commit mode   |
 
-## 트랜잭션 실행 함수 비교
+## Transaction Function Comparison
 
-| 함수                           | 설명                                          | 중첩 지원 |
-|------------------------------|---------------------------------------------|--------|
-| `suspendTransaction { }`     | 코루틴 트랜잭션. 새 트랜잭션 시작                       | Savepoint |
-| `inTopLevelSuspendTransaction { }` | 항상 최상위 트랜잭션으로 시작 (중첩 불가)              | X      |
-| `withDb(testDB) { }`         | DB 지정 후 트랜잭션 컨텍스트 진입 (테스트 헬퍼)           | Savepoint |
-| `withTables(testDB, *tables) { }` | 테이블 생성 후 트랜잭션 실행, 종료 후 자동 정리 (테스트 헬퍼) | Savepoint |
+| Function                             | Description                                               | Nesting Support |
+|--------------------------------------|-----------------------------------------------------------|-----------------|
+| `suspendTransaction { }`            | Coroutine transaction; starts a new transaction           | Savepoint       |
+| `inTopLevelSuspendTransaction { }`  | Always starts a top-level transaction (no nesting)        | X               |
+| `withDb(testDB) { }`                | Enter transaction context with specified DB (test helper) | Savepoint       |
+| `withTables(testDB, *tables) { }`   | Create tables, run transaction, auto-cleanup (test helper)| Savepoint       |
 
-## 공유 테스트 인프라
+## Shared Test Infrastructure
 
-- `R2dbcExposedTestBase` - 멀티 DB 테스트 지원 베이스 클래스
-- `DMLTestData.Cities` - 중첩 트랜잭션 테스트에 사용하는 도시 테이블
+- `R2dbcExposedTestBase` — Base class for multi-DB test support
+- `DMLTestData.Cities` — City table used in nested transaction tests
 
-## 테스트 실행
+## Running Tests
 
 ```bash
-# 전체 Transactions 테스트 실행
+# Run all Transactions tests
 ./gradlew :04-transactions:test
 
-# 특정 테스트 클래스 실행
+# Run a specific test class
 ./gradlew :04-transactions:test --tests "exposed.r2dbc.examples.transactions.Ex05_NestedTransactions"
 ```
 
