@@ -2,12 +2,12 @@ package exposed.r2dbc.examples.cache.domain.model
 
 import exposed.r2dbc.examples.cache.utils.faker
 import io.bluetape4k.codec.Base58
-import io.bluetape4k.exposed.core.HasIdentifier
 import io.bluetape4k.exposed.core.dao.id.TimebasedUUIDBase62Table
-import io.bluetape4k.idgenerators.uuid.TimebasedUuid
+import io.bluetape4k.idgenerators.uuid.Uuid
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.javatime.CurrentTimestamp
 import org.jetbrains.exposed.v1.javatime.timestamp
+import java.io.Serializable
 import java.time.Instant
 
 /**
@@ -31,13 +31,13 @@ object UserCredentialsTable: TimebasedUUIDBase62Table("user_credentials") {
  * [HasIdentifier]를 구현하여 Redis 캐시 키로 `id`(TimebasedUUID Base62)를 사용합니다.
  */
 data class UserCredentialsRecord(
-    override val id: String,
+    val id: String,
     val username: String,
     val email: String,
     val lastLoginAt: Instant? = null,
     val createdAt: Instant? = null,
     val updatedAt: Instant? = null,
-): HasIdentifier<String>
+): Serializable
 
 fun ResultRow.toUserCredentialsRecord() = UserCredentialsRecord(
     id = this[UserCredentialsTable.id].value,
@@ -49,7 +49,7 @@ fun ResultRow.toUserCredentialsRecord() = UserCredentialsRecord(
 )
 
 fun newUserCredentialsRecord() = UserCredentialsRecord(
-    id = TimebasedUuid.Reordered.nextIdAsString(),
+    id = Uuid.V7.nextIdAsString(),
     username = faker.credentials().username() + "." + Base58.randomString(4),
     email = faker.internet().emailAddress(),
     lastLoginAt = Instant.now(),

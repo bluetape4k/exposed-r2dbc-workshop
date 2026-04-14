@@ -39,7 +39,7 @@ class UserCacheRepositoryTest(
     @BeforeEach
     fun beforeEach() {
         runBlocking(Dispatchers.IO) {
-            repository.invalidateAll()
+            repository.clear()
             idsInDB.clear()
 
             suspendTransaction {
@@ -93,14 +93,14 @@ class UserCacheRepositoryTest(
         val userIdToSearch = idsInDB.shuffled().take(5)
 
         // DB에 있는 User를 검색
-        val users = repository.getAll(userIdToSearch, 1)
+        val users = repository.getAll(userIdToSearch).map { it.value }
         users shouldHaveSize userIdToSearch.size
         users.forEach {
             log.debug { "Found user: $it" }
         }
 
         // 캐시에서 검색
-        val users2 = repository.getAll(userIdToSearch)
+        val users2 = repository.getAll(userIdToSearch).map { it.value }
         users2 shouldHaveSize userIdToSearch.size
     }
 
@@ -133,7 +133,7 @@ class UserCacheRepositoryTest(
         ).also {
             it.avatar = faker.image().base64JPG().toByteArray()
         }
-        repository.put(updatedUser)
+        repository.put(updatedUser.id, updatedUser)
 
         val userFromDB = suspendTransaction { repository.findByIdFromDb(userId) }
         userFromDB shouldBeEqualTo updatedUser.copy(updatedAt = userFromDB!!.updatedAt)
@@ -144,7 +144,7 @@ class UserCacheRepositoryTest(
         val userId = idsInDB.random()
 
         repository.get(userId).shouldNotBeNull()
-        repository.invalidate(userId) shouldBeEqualTo 1L
+        repository.invalidate(userId)
 
         suspendTransaction {
             UserTable.selectAll()

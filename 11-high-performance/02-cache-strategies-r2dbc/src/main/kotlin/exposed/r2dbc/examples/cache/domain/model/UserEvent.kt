@@ -1,11 +1,11 @@
 package exposed.r2dbc.examples.cache.domain.model
 
 import exposed.r2dbc.examples.cache.utils.faker
-import io.bluetape4k.exposed.core.HasIdentifier
 import io.bluetape4k.idgenerators.snowflake.Snowflakers
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
 import org.jetbrains.exposed.v1.javatime.timestamp
+import java.io.Serializable
 import java.time.Instant
 
 /**
@@ -52,13 +52,13 @@ object UserEventTable: LongIdTable("user_action") {
  * `id`는 Snowflake 알고리즘으로 자동 생성되어 분산 환경에서도 유일성이 보장됩니다.
  */
 data class UserEventRecord(
-    override val id: Long = Snowflakers.Global.nextId(),
+    val id: Long = Snowflakers.Global.nextId(),
     val username: String,
     val eventSource: String,
     val eventType: UserEventType,
     val eventDetails: String?,
     val eventTime: Instant,
-): HasIdentifier<Long>
+): Serializable
 
 fun ResultRow.toUserEventRecord() = UserEventRecord(
     id = this[UserEventTable.id].value,

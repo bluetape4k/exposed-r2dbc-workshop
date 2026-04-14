@@ -30,7 +30,7 @@ class UserEventCacheRepositoryTest(
     @BeforeEach
     fun setup() {
         runBlocking {
-            repository.invalidateAll()
+            repository.clear()
             suspendTransaction {
                 UserEventTable.deleteAll()
             }
@@ -49,7 +49,7 @@ class UserEventCacheRepositoryTest(
             .chunked(100)
             .collect { chunk ->
                 log.debug { "put all ${chunk.size} items" }
-                repository.putAll(chunk)
+                repository.putAll(chunk.associateBy { it.id })
             }
 
         // Write-Behind 이므로, DB에 반영되기까지 시간이 걸린다.

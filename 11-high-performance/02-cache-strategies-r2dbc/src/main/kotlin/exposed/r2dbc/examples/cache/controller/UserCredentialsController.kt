@@ -45,7 +45,7 @@ class UserCredentialsController(
     @GetMapping("/all")
     suspend fun getAll(@RequestParam(name = "ids") ids: List<String>): List<UserCredentialsRecord> {
         log.debug { "Getting all user credentials with ids: $ids" }
-        return repository.getAll(ids)
+        return repository.getAll(ids).map { it.value }
     }
 
     /**
@@ -57,7 +57,8 @@ class UserCredentialsController(
             return 0
         }
         log.debug { "Invalidating cache for ids: $ids" }
-        return repository.invalidate(*ids.toTypedArray())
+        repository.invalidateAll(ids)
+        return ids.size.toLong()
     }
 
     /**
@@ -66,7 +67,7 @@ class UserCredentialsController(
     @DeleteMapping("/invalidate/all")
     suspend fun invalidateAll() {
         log.debug { "Invalidating all user credentials cache" }
-        repository.invalidateAll()
+        repository.clear()
 
     }
 

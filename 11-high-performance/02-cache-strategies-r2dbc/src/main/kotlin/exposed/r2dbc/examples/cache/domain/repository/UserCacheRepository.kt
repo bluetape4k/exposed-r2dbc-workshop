@@ -37,8 +37,10 @@ import java.time.Instant
 @Repository
 class UserCacheRepository(redissonClient: RedissonClient): AbstractR2dbcRedissonRepository<Long, UserRecord>(
     redissonClient = redissonClient,
-    cacheName = "exposed:coroutines:users",
-    config = RedissonCacheConfig.READ_WRITE_THROUGH_WITH_NEAR_CACHE.copy(deleteFromDBOnInvalidate = false)
+    config = RedissonCacheConfig.READ_WRITE_THROUGH_WITH_NEAR_CACHE.copy(
+        name = "exposed:coroutines:users",
+        deleteFromDBOnInvalidate = false
+    )
 ) {
     companion object: KLoggingChannel()
 
@@ -46,53 +48,30 @@ class UserCacheRepository(redissonClient: RedissonClient): AbstractR2dbcRedisson
     override fun extractId(entity: UserRecord): Long = entity.id
     override suspend fun ResultRow.toEntity() = toUserRecord()
 
-    /**
-     * 새 [UserRecord]를 DB에 삽입합니다.
-     *
-     * [entity.id]가 0이 아닌 경우 명시적 ID를 지정하고, 0이면 DB 자동 생성 ID를 사용합니다.
-     * `createdAt`은 현재 시각(UTC)으로 자동 설정됩니다.
-     *
-     * @param statement 배치 삽입 구문
-     * @param entity 삽입할 사용자 정보
-     */
-    override fun doInsertEntity(
-        statement: BatchInsertStatement,
-        entity: UserRecord,
-    ) {
+    override fun BatchInsertStatement.insertEntity(entity: UserRecord) {
         log.debug { "Insert entity: $entity" }
         if (entity.id != 0L) {
-            statement[UserTable.id] = entity.id
+            this[UserTable.id] = entity.id
         }
-        statement[UserTable.username] = entity.username
-        statement[UserTable.firstName] = entity.firstName
-        statement[UserTable.lastName] = entity.lastName
-        statement[UserTable.address] = entity.address
-        statement[UserTable.zipcode] = entity.zipcode
-        statement[UserTable.birthDate] = entity.birthDate
-        statement[UserTable.avatar] = entity.avatar?.let { ExposedBlob(it) }
-        statement[UserTable.createdAt] = Instant.now()
+        this[UserTable.username] = entity.username
+        this[UserTable.firstName] = entity.firstName
+        this[UserTable.lastName] = entity.lastName
+        this[UserTable.address] = entity.address
+        this[UserTable.zipcode] = entity.zipcode
+        this[UserTable.birthDate] = entity.birthDate
+        this[UserTable.avatar] = entity.avatar?.let { ExposedBlob(it) }
+        this[UserTable.createdAt] = Instant.now()
     }
 
-    /**
-     * 기존 [UserRecord]를 DB에서 갱신합니다.
-     *
-     * `updatedAt`은 현재 시각(UTC)으로 자동 설정됩니다.
-     *
-     * @param statement 업데이트 구문
-     * @param entity 갱신할 사용자 정보
-     */
-    override fun doUpdateEntity(
-        statement: UpdateStatement,
-        entity: UserRecord,
-    ) {
+    override fun UpdateStatement.updateEntity(entity: UserRecord) {
         log.debug { "Update entity: $entity" }
-        statement[UserTable.username] = entity.username
-        statement[UserTable.firstName] = entity.firstName
-        statement[UserTable.lastName] = entity.lastName
-        statement[UserTable.address] = entity.address
-        statement[UserTable.zipcode] = entity.zipcode
-        statement[UserTable.birthDate] = entity.birthDate
-        statement[UserTable.avatar] = entity.avatar?.let { ExposedBlob(it) }
-        statement[UserTable.updatedAt] = Instant.now()
+        this[UserTable.username] = entity.username
+        this[UserTable.firstName] = entity.firstName
+        this[UserTable.lastName] = entity.lastName
+        this[UserTable.address] = entity.address
+        this[UserTable.zipcode] = entity.zipcode
+        this[UserTable.birthDate] = entity.birthDate
+        this[UserTable.avatar] = entity.avatar?.let { ExposedBlob(it) }
+        this[UserTable.updatedAt] = Instant.now()
     }
 }

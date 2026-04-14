@@ -1,17 +1,16 @@
 package exposed.r2dbc.multitenant.webflux.domain.model
 
-import io.bluetape4k.exposed.core.HasIdentifier
 import java.io.Serializable
 
 /**
  * 영화 정보를 나타내는 DTO
  */
 data class MovieRecord(
-    override val id: Long,
+    val id: Long = 0L,
     val name: String,
     val producerName: String,
     val releaseDate: String,
-): HasIdentifier<Long> {
+): Serializable {
     fun withId(id: Long) = copy(id = id)
 }
 
@@ -19,11 +18,11 @@ data class MovieRecord(
  * 영화 배우 정보를 담는 DTO
  */
 data class ActorRecord(
-    override val id: Long,
+    val id: Long = 0L,
     val firstName: String,
     val lastName: String,
     val birthday: String? = null,
-): HasIdentifier<Long> {
+): Serializable {
     fun withId(id: Long) = copy(id = id)
 }
 
@@ -55,12 +54,12 @@ data class MovieActorCountRecord(
  * 영화 정보와 해당 영화에 출연한 배우 정보를 나타내는 DTO
  */
 data class MovieWithActorRecord(
-    override val id: Long,
+    val id: Long = 0L,
     val name: String,
     val producerName: String,
     val releaseDate: String,
     val actors: MutableList<ActorRecord> = mutableListOf(),
-): HasIdentifier<Long>
+): Serializable
 
 /**
  * 영화 제목과 영화를 제작한 배우의 이름을 나타내는 DTO

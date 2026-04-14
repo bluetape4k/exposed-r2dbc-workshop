@@ -2,12 +2,12 @@ package exposed.r2dbc.examples.cache.domain.model
 
 import exposed.r2dbc.examples.cache.utils.faker
 import io.bluetape4k.codec.Base58
-import io.bluetape4k.exposed.core.HasIdentifier
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
 import org.jetbrains.exposed.v1.javatime.CurrentTimestamp
 import org.jetbrains.exposed.v1.javatime.date
 import org.jetbrains.exposed.v1.javatime.timestamp
+import java.io.Serializable
 import java.time.Instant
 import java.time.LocalDate
 
@@ -39,7 +39,7 @@ object UserTable: LongIdTable("users") {
  * [HasIdentifier]를 구현하여 Redis 캐시 키로 `id`를 사용합니다.
  */
 data class UserRecord(
-    override val id: Long = 0L,
+    val id: Long = 0L,
     val username: String,
     val firstName: String,
     val lastName: String,
@@ -48,7 +48,7 @@ data class UserRecord(
     val birthDate: LocalDate? = null,
     val createdAt: Instant? = null,
     val updatedAt: Instant? = null,
-): HasIdentifier<Long> {
+): Serializable {
     var avatar: ByteArray? = null
 
     fun withId(id: Long) = copy(id = id)
