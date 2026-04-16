@@ -264,36 +264,43 @@ classDiagram
 %%{init: {"theme": "neutral"}}%%
 erDiagram
     posts {
-        int id PK
+        bigint id PK
         varchar title
-        text content
     }
     post_details {
-        int id PK,FK
-        text detail_content
+        bigint id PK,FK
+        date created_on
+        varchar created_by
     }
     post_comments {
-        int id PK
-        int post_id FK
-        varchar comment
+        bigint id PK
+        bigint post_id FK
+        varchar review
     }
     tags {
-        int id PK
+        bigint id PK
         varchar name
     }
     post_tags {
-        int post_id FK
-        int tag_id FK
+        bigint id PK
+        bigint post_id FK
+        bigint tag_id FK
     }
     persons {
-        int id PK
-        varchar name
-        int address_id FK
+        bigint id PK
+        varchar first_name
+        varchar last_name
+        date birth_date
+        boolean employed
+        varchar occupation
+        bigint address_id FK
     }
     addresses {
-        int id PK
-        varchar city
+        bigint id PK
         varchar street
+        varchar city
+        varchar state
+        varchar zip
     }
 
     posts ||--|| post_details : "1:1 shared PK"

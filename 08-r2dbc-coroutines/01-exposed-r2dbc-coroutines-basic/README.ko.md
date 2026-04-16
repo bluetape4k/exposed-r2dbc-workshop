@@ -7,7 +7,7 @@ Exposed R2DBC + Kotlin Coroutines 환경에서 비동기 데이터베이스 작�
 ## 학습 목표
 
 - `suspendTransaction`으로 비동기 트랜잭션 수행
-- `suspendTransactionAsync`로 병렬 트랜잭션 실행
+- `inTopLevelSuspendTransaction` + `async`로 병렬 트랜잭션 실행
 - Flow를 사용한 반응형 결과 스트리밍
 - Coroutine Dispatcher와 Exposed R2DBC 통합
 - 코루틴 컨텍스트 내에서의 예외 처리
@@ -148,17 +148,23 @@ suspend fun getUsers(): List<UserRecord> = suspendTransaction {
 }
 ```
 
-### suspendTransactionAsync
+### async 를 이용한 병렬 트랜잭션
 
-여러 트랜잭션을 병렬로 실행합니다.
+`inTopLevelSuspendTransaction` + `async`를 사용하여 여러 트랜잭션을 병렬로 실행합니다.
 
 ```kotlin
-val usersDeferred = suspendTransactionAsync {
-    Users.selectAll().toFastList()
+val ioScope = CoroutineScope(Dispatchers.IO)
+
+val usersDeferred = ioScope.async {
+    inTopLevelSuspendTransaction(db = db) {
+        Users.selectAll().toList()
+    }
 }
 
-val ordersDeferred = suspendTransactionAsync {
-    Orders.selectAll().toFastList()
+val ordersDeferred = ioScope.async {
+    inTopLevelSuspendTransaction(db = db) {
+        Orders.selectAll().toList()
+    }
 }
 
 val (users, orders) = awaitAll(usersDeferred, ordersDeferred)
@@ -166,13 +172,14 @@ val (users, orders) = awaitAll(usersDeferred, ordersDeferred)
 
 ### Flow 스트리밍
 
-대용량 결과를 효율적으로 처리하기 위해 Flow를 사용합니다.
+`selectAll()`은 `Flow<ResultRow>`를 직접 반환합니다. 트랜잭션 컨텍스트 안에서 수집합니다.
 
 ```kotlin
-fun streamUsers(): Flow<UserRecord> = Users
-    .selectAll()
-    .asFlow()
-    .map { it.toUserRecord() }
+suspend fun streamUsers(): List<UserRecord> = suspendTransaction {
+    Users.selectAll()
+        .map { it.toUserRecord() }
+        .toList()
+}
 ```
 
 ## 코드 예제
@@ -208,17 +215,23 @@ suspend fun deleteUser(id: Long): Int = suspendTransaction {
 ### 병렬 트랜잭션 실행
 
 ```kotlin
-suspend fun parallelOperations() = coroutineScope {
-    val insertJob = suspendTransactionAsync {
-        // INSERT 작업
-        Users.insert { it[name] = "User1" }
+suspend fun parallelOperations(db: R2dbcDatabase) {
+    val ioScope = CoroutineScope(Dispatchers.IO)
+
+    val insertJob = ioScope.async {
+        inTopLevelSuspendTransaction(db = db) {
+            // INSERT 작업
+            Users.insert { it[name] = "User1" }
+        }
     }
-    
-    val updateJob = suspendTransactionAsync {
-        // UPDATE 작업
-        Users.update({ Users.id eq 1 }) { it[name] = "Updated" }
+
+    val updateJob = ioScope.async {
+        inTopLevelSuspendTransaction(db = db) {
+            // UPDATE 작업
+            Users.update({ Users.id eq 1 }) { it[name] = "Updated" }
+        }
     }
-    
+
     val (insertResult, updateResult) = awaitAll(insertJob, updateJob)
 }
 ```

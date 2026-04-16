@@ -250,11 +250,18 @@ WebFlux 환경에서는 요청마다 스레드가 고정되지 않으므로 `Thr
 ```kotlin
 @Component
 class TenantFilter: WebFilter {
-    override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> = mono {
-        val tenantId = exchange.request.headers.getFirst("X-TENANT-ID")
-        val tenant = Tenants.getById(tenantId ?: Tenants.DEFAULT_TENANT.id)
+    companion object {
+        const val TENANT_HEADER = "X-TENANT-ID"
+    }
 
-        chain.filter(exchange)
+    override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> = mono {
+        val tenantId = exchange.request.headers.getFirst(TENANT_HEADER)
+        val resolvedTenantId = tenantId?.takeIf { it.isNotBlank() } ?: Tenants.DEFAULT_TENANT.id
+        val tenant = Tenants.findById(resolvedTenantId)
+            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown tenant id: $resolvedTenantId")
+
+        chain
+            .filter(exchange)
             .contextWrite { it.put(TenantId.TENANT_ID_KEY, TenantId(tenant)) }
             .awaitSingleOrNull()
     }

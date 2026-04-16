@@ -105,12 +105,13 @@ flowchart TD
 ## 프로젝트 구조
 
 ```
-src/main/kotlin/exposed/examples/cache/coroutines/
+src/main/kotlin/exposed/r2dbc/examples/cache/
 ├── CacheStrategyApplication.kt          # WebFlux Reactive 애플리케이션
 ├── config/
-│   ├── ExposedConfig.kt                 # Exposed Database 설정
+│   ├── ExposedR2dbcConfig.kt            # Exposed R2DBC Database 설정
 │   ├── RedissonConfig.kt                # Redisson 클라이언트 설정
-│   └── NettyConfig.kt                   # Netty Event Loop / Connection Pool 설정
+│   ├── NettyConfig.kt                   # Netty Event Loop / Connection Pool 설정
+│   └── SwaggerConfig.kt                 # Swagger/OpenAPI 설정
 ├── controller/
 │   ├── IndexController.kt               # 헬스체크 등 기본 엔드포인트
 │   ├── UserController.kt                # User CRUD - suspend 함수 (Read/Write Through)
@@ -122,19 +123,20 @@ src/main/kotlin/exposed/examples/cache/coroutines/
 │   │   ├── UserCredentials.kt           # UserCredentialsTable, UserCredentialsRecord
 │   │   └── UserEvent.kt                 # UserEventTable, UserEventRecord
 │   └── repository/
-│       ├── UserCacheRepository.kt               # Suspended Read/Write Through 캐시 저장소
-│       ├── UserCredentialsCacheRepository.kt     # Suspended Read-Only 캐시 저장소
-│       └── UserEventCacheRepository.kt           # Suspended Write Behind 캐시 저장소
+│       ├── UserCacheRepository.kt               # Read/Write Through + Near Cache 저장소
+│       ├── UserCredentialsCacheRepository.kt     # Read-Only 캐시 저장소
+│       └── UserEventCacheRepository.kt           # Write Behind 캐시 저장소
 └── utils/
-    └── DataFakers.kt                    # 테스트 데이터 생성 유틸
+    ├── DataFakers.kt                    # 테스트 데이터 생성 유틸
+    └── DataInitializer.kt               # 애플리케이션 시작 시 DB 테이블 생성
 ```
 
 ## Coroutines 기반 캐시 Repository
 
-### AbstractSuspendedExposedCacheRepository
+### AbstractR2dbcRedissonRepository
 
-`01-cache-strategies`의 `AbstractExposedCacheRepository`와 달리 모든 캐시 조회/저장 메서드가
-`suspend` 함수로 제공됩니다. 이를 통해 Redis I/O와 DB I/O를 **Coroutine Dispatcher** 위에서 비동기적으로 처리합니다.
+`01-cache-strategies`의 `AbstractExposedCacheRepository`와 달리, 이 모듈은 `AbstractR2dbcRedissonRepository`를 사용하며
+모든 캐시 조회/저장 메서드가 `suspend` 함수로 제공됩니다. 이를 통해 Redis I/O와 DB I/O를 **Coroutine Dispatcher** 위에서 비동기적으로 처리합니다.
 
 ```kotlin
 // Blocking 버전 (01-cache-strategies)
@@ -165,13 +167,40 @@ suspend fun get(@PathVariable id: Long): UserRecord? {
 WebFlux 환경에서 Netty의 Event Loop 및 Connection Pool을 세밀하게 튜닝합니다.
 
 ```kotlin
- @01-spring-boot/spring-webflux-exposed/src/test/kotlin/exposed/r2dbc/workshop/springwebflux/config/ConfigurationTest.kt
+@Configuration(proxyBeanMethods = false)
 class NettyConfig {
-    // Event Loop 스레드 수: CPU 코어 * 8 (최소 64)
-    // 최대 연결 수: 8,000
-    // 최대 유휴 시간: 30초
-    // SO_BACKLOG: 8,000
-    // Read/Write Timeout: 10초
+    @Bean
+    fun nettyReactiveWebServerFactory(): NettyReactiveWebServerFactory =
+        NettyReactiveWebServerFactory().apply {
+            addServerCustomizers(EventLoopNettyCustomizer())
+        }
+
+    @Bean
+    fun reactorResourceFactory(): ReactorResourceFactory =
+        ReactorResourceFactory().apply {
+            isUseGlobalResources = false
+            connectionProvider = ConnectionProvider.builder("http")
+                .maxConnections(8_000)
+                .maxIdleTime(30.seconds.toJavaDuration())
+                .build()
+            loopResources = LoopResources.create(
+                "event-loop",
+                maxOf(Runtimex.availableProcessors * 8, 64),
+                true
+            )
+        }
+
+    class EventLoopNettyCustomizer : NettyServerCustomizer {
+        override fun apply(httpServer: HttpServer): HttpServer =
+            httpServer
+                .option(ChannelOption.SO_KEEPALIVE, true)
+                .option(ChannelOption.SO_BACKLOG, 8_000)
+                .option(ChannelOption.SO_LINGER, 0)
+                .doOnConnection { conn ->
+                    conn.addHandlerLast(ReadTimeoutHandler(30))
+                    conn.addHandlerLast(WriteTimeoutHandler(30))
+                }
+    }
 }
 ```
 
@@ -182,7 +211,7 @@ class NettyConfig {
 | `maxConnections`   | `8,000`             | 최대 동시 연결 수   |
 | `maxIdleTime`      | `30s`               | 유휴 연결 해제 시간  |
 | Event Loop 스레드     | `CPU * 8` (최소 `64`) | I/O 처리 스레드 수 |
-| Read/Write Timeout | `10s`               | 요청/응답 타임아웃   |
+| Read/Write Timeout | `30s`               | 요청/응답 타임아웃   |
 
 ## 캐시 전략 (01-cache-strategies 와 동일)
 

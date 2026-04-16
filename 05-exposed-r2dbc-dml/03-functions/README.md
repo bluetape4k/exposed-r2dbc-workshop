@@ -271,7 +271,7 @@ val rowNum = rowNumber().over()
     .orderBy(sales.amount, SortOrder.DESC)
 
 sales.select(sales.product, sales.amount, rowNum)
-    .toFastList()
+    .toList()
 ```
 
 ## Function Reference Tables

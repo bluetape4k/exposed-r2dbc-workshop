@@ -3,7 +3,7 @@
 # 05-exposed-r2dbc-repository-coroutines
 
 Spring WebFlux + Exposed R2DBC + Kotlin Coroutines를 활용한 비동기 Repository 패턴 예제입니다.
-`ExposedR2dbcRepository` 인터페이스를 구현하여 영화(Movie)와 배우(Actor) 도메인을 CRUD하는 REST API를 제공합니다.
+`R2dbcRepository` 인터페이스(`io.bluetape4k.exposed.r2dbc.repository`)를 구현하여 영화(Movie)와 배우(Actor) 도메인을 CRUD하는 REST API를 제공합니다.
 
 ## 문서
 
@@ -41,8 +41,8 @@ src/main/kotlin/exposed/r2dbc/examples/
 │   │   ├── MovieDtos.kt                  # DTO 클래스들 (MovieRecord, ActorRecord 등)
 │   │   └── Mappers.kt                    # ResultRow → DTO 변환 확장 함수
 │   └── repository/
-│       ├── MovieR2dbcRepository.kt       # 영화 Repository (ExposedR2dbcRepository 구현)
-│       └── ActorR2dbcRepository.kt       # 배우 Repository (ExposedR2dbcRepository 구현)
+│       ├── MovieR2dbcRepository.kt       # 영화 Repository (R2dbcRepository 구현)
+│       └── ActorR2dbcRepository.kt       # 배우 Repository (R2dbcRepository 구현)
 └── utils/
     └── DataInitializer.kt                # 애플리케이션 시작 시 샘플 데이터 삽입 (runBlocking 브릿지 패턴)
 ```
@@ -52,9 +52,10 @@ src/main/kotlin/exposed/r2dbc/examples/
 ```mermaid
 %%{init: {"theme": "neutral"}}%%
 classDiagram
-    class ExposedR2dbcRepository~T, ID~ {
+    class R2dbcRepository~ID, T~ {
         <<interface>>
         +table IdTable~ID~
+        +extractId(entity) ID
         +toEntity(row) T
         +findAll() Flow~T~
         +findById(id) T?
@@ -62,6 +63,7 @@ classDiagram
     }
     class MovieR2dbcRepository {
         +table MovieTable
+        +extractId(entity) Long
         +toEntity(row) MovieRecord
         +save(movie) MovieRecord
         +searchMovies(params) Flow~MovieRecord~
@@ -70,6 +72,7 @@ classDiagram
     }
     class ActorR2dbcRepository {
         +table ActorTable
+        +extractId(entity) Long
         +toEntity(row) ActorRecord
         +save(actor) ActorRecord
         +searchActors(params) Flow~ActorRecord~
@@ -86,12 +89,12 @@ classDiagram
         +createActor(actor) ActorRecord
     }
 
-    MovieR2dbcRepository ..|> ExposedR2dbcRepository
-    ActorR2dbcRepository ..|> ExposedR2dbcRepository
+    MovieR2dbcRepository ..|> R2dbcRepository
+    ActorR2dbcRepository ..|> R2dbcRepository
     MovieController --> MovieR2dbcRepository: uses
     ActorController --> ActorR2dbcRepository: uses
 
-    style ExposedR2dbcRepository fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    style R2dbcRepository fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
     style MovieR2dbcRepository fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
     style ActorR2dbcRepository fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
     style MovieController fill:#FFF3E0,stroke:#FFCC80,color:#E65100
@@ -215,15 +218,16 @@ object ActorInMovieTable: Table("actors_in_movies") {
 
 ## 핵심 구현 패턴
 
-### 1. ExposedR2dbcRepository 기반 Repository
+### 1. R2dbcRepository 기반 Repository
 
-`ExposedR2dbcRepository<T, ID>` 인터페이스를 구현하여 기본 CRUD(`findAll`, `findById`,
+`R2dbcRepository<ID, T>` 인터페이스(`io.bluetape4k.exposed.r2dbc.repository`)를 구현하여 기본 CRUD(`findAll`, `findById`,
 `deleteById` 등)를 상속받고, 도메인별 커스텀 쿼리 메서드를 추가합니다.
 
 ```kotlin
 @Repository
-class MovieR2dbcRepository: ExposedR2dbcRepository<MovieRecord, Long> {
-    override val table: IdTable<Long> = MovieTable
+class MovieR2dbcRepository: R2dbcRepository<Long, MovieRecord> {
+    override val table = MovieTable
+    override fun extractId(entity: MovieRecord): Long = entity.id
     override suspend fun ResultRow.toEntity(): MovieRecord = toMovieRecord()
 
     suspend fun save(movie: MovieRecord): MovieRecord {
@@ -370,7 +374,7 @@ fun r2dbcDatabase(
 ```
 Spring Container
     ├── R2dbcDatabase  ←── ExposedR2dbcConfig (ConnectionPool + CoroutineDispatcher)
-    ├── MovieR2dbcRepository  ←── @Repository (R2dbcRepository<Long, MovieTable, MovieRecord>)
+    ├── MovieR2dbcRepository  ←── @Repository (R2dbcRepository<Long, MovieRecord>)
     ├── ActorR2dbcRepository  ←── @Repository
     └── MovieController / ActorController / MovieActorsController
             └── suspendTransaction { repository.xxx() }
@@ -378,14 +382,15 @@ Spring Container
 
 ### Repository 계층 설계
 
-`R2dbcRepository<ID, Table, Entity>` 인터페이스가 기본 CRUD를 제공합니다.
-구현 클래스에서 `override val table` 과 `override suspend fun ResultRow.toEntity()` 만 구현하면
+`R2dbcRepository<ID, E>` 인터페이스(`io.bluetape4k.exposed.r2dbc.repository`)가 기본 CRUD를 제공합니다.
+구현 클래스에서 `override val table`, `override fun extractId()`, `override suspend fun ResultRow.toEntity()` 를 구현하면
 `findAll()`, `findById()`, `deleteById()` 등을 상속받습니다.
 
 ```kotlin
 // 인터페이스 준수로 얻는 기본 기능
-interface R2dbcRepository<ID, T: IdTable<ID>, E> {
-    val table: T
+interface R2dbcRepository<ID, E> {
+    val table: IdTable<ID>
+    fun extractId(entity: E): ID
     suspend fun ResultRow.toEntity(): E
     fun findAll(): Flow<E>                  // 자동 상속
     suspend fun findById(id: ID): E?        // 자동 상속
@@ -413,7 +418,7 @@ suspend fun addActorToMovie(@PathVariable movieId: Long, @PathVariable actorId: 
 
 ## Further Reading
 
-- [ExposedRepostiroy with Coroutines](https://debop.notion.site/ExposedRepository-with-Coroutines-1c32744526b080a1a6cbe2c86c2cb889)
+- [ExposedRepository with Coroutines](https://debop.notion.site/ExposedRepository-with-Coroutines-1c32744526b080a1a6cbe2c86c2cb889)
 - [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
 - [Spring WebFlux](https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html)
 - [Exposed Wiki: Coroutines (if available)](https://github.com/JetBrains/Exposed/wiki/Coroutines)

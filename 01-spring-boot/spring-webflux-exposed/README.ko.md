@@ -46,23 +46,26 @@ erDiagram
 ```
 
 ```kotlin
-object MovieTable: LongIdTable("movies") {
-    val name         = varchar("name", 255).index()
-    val producerName = varchar("producer_name", 255).index()
-    val releaseDate  = datetime("release_date")
-}
+object MovieSchema {
 
-object ActorTable: LongIdTable("actors") {
-    val firstName = varchar("first_name", 255).index()
-    val lastName  = varchar("last_name", 255).index()
-    val birthday  = date("birthday").nullable()
-}
+    object MovieTable: LongIdTable("movies") {
+        val name         = varchar("name", 255).index()
+        val producerName = varchar("producer_name", 255).index()
+        val releaseDate  = datetime("release_date")
+    }
 
-// 영화-배우 다대다 관계 조인 테이블
-object ActorInMovieTable: Table("actors_in_movies") {
-    val movieId = reference("movie_id", MovieTable, onDelete = ReferenceOption.CASCADE)
-    val actorId = reference("actor_id", ActorTable, onDelete = ReferenceOption.CASCADE)
-    override val primaryKey = PrimaryKey(movieId, actorId)
+    object ActorTable: LongIdTable("actors") {
+        val firstName = varchar("first_name", 255).index()
+        val lastName  = varchar("last_name", 255).index()
+        val birthday  = date("birthday").nullable()
+    }
+
+    // 영화-배우 다대다 관계 조인 테이블
+    object ActorInMovieTable: Table("actors_in_movies") {
+        val movieId = reference("movie_id", MovieTable, onDelete = ReferenceOption.CASCADE)
+        val actorId = reference("actor_id", ActorTable, onDelete = ReferenceOption.CASCADE)
+        override val primaryKey = PrimaryKey(movieId, actorId)
+    }
 }
 ```
 
@@ -250,9 +253,17 @@ class ExposedR2dbcConfig {
 
     // Exposed R2dbcDatabase 빈 등록
     @Bean
-    fun r2dbcDatabase(pool: ConnectionPool, options: ConnectionFactoryOptions,
-                      dispatcher: CoroutineDispatcher): R2dbcDatabase =
-        R2dbcDatabase.connect(pool, R2dbcDatabaseConfig { this.dispatcher = dispatcher })
+    fun r2dbcDatabase(
+        connectionPool: ConnectionPool,
+        connectionFactoryOptions: ConnectionFactoryOptions,
+        databaseCoroutineDispatcher: CoroutineDispatcher,
+    ): R2dbcDatabase {
+        val config = R2dbcDatabaseConfig {
+            this.dispatcher = databaseCoroutineDispatcher
+            this.connectionFactoryOptions = connectionFactoryOptions
+        }
+        return R2dbcDatabase.connect(connectionPool, config)
+    }
 }
 ```
 
@@ -310,7 +321,7 @@ WebFlux `suspend` 핸들러와 자연스럽게 결합됩니다.
 @RequestMapping("/movies")
 class MovieController(
     private val movieRepository: MovieRepository,
-): CoroutineScope by CoroutineScope(Dispatchers.IO + SupervisorJob()) {
+) {
 
     companion object: KLoggingChannel()
 

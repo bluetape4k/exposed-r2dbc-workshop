@@ -171,13 +171,17 @@ private val h2PoolDB1 by lazy {
 ```kotlin
 @Test
 fun `suspend transactions exceeding pool size`() = runSuspendIO {
+    suspendTransaction(db = h2PoolDB1) {
+        SchemaUtils.create(TestTable)
+    }
+
     val exceedsPoolSize = (maximumPoolSize * 2 + 1).coerceAtMost(50)
 
     val jobs = List(exceedsPoolSize) { index ->
         launch {
-            suspendTransaction {
+            suspendTransaction(db = h2PoolDB1) {
                 delay(100)
-                TestTable.insertAndGetId { it[testValue] = "test$index" }
+                TestTable.insertAndGetId { it[TestTable.testValue] = "test$index" }
             }
         }
     }
@@ -186,6 +190,7 @@ fun `suspend transactions exceeding pool size`() = runSuspendIO {
     // 풀 크기(10)를 초과해도 커넥션이 재활용되어 모든 insert가 완료됨
     suspendTransaction(db = h2PoolDB1) {
         TestTable.selectAll().count() shouldBeEqualTo exceedsPoolSize.toLong()
+        SchemaUtils.drop(TestTable)
     }
 }
 ```

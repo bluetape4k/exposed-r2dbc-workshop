@@ -37,7 +37,7 @@ sequenceDiagram
 
 - Java 21 Virtual Threads와 Exposed R2DBC 통합 방법 이해
 - `runSuspendVT` / `virtualThreadTransaction` / `inTopLevelSuspendTransaction` API 활용
-- `Dispatchers.newVT` 디스패처로 Virtual Threads 기반 병렬 처리 구현
+- `Dispatchers.newVT()` 디스패처로 Virtual Threads 기반 병렬 처리 구현
 - 기존 `suspendTransaction` 대비 Virtual Threads 트랜잭션의 차이점 파악
 - MariaDB 계열 중첩 트랜잭션 제한 사항 파악
 
@@ -50,7 +50,7 @@ sequenceDiagram
 | `runSuspendVT { }` | Virtual Thread 기반 코루틴 테스트 실행기 (JUnit 5 전용) |
 | `virtualThreadTransaction { }` | 현재 트랜잭션 내에서 Virtual Thread로 새 트랜잭션 생성·실행 |
 | `inTopLevelSuspendTransaction { }` | 독립적인 최상위 suspend 트랜잭션 (기존 트랜잭션과 무관하게 새 트랜잭션 시작) |
-| `Dispatchers.newVT` | Virtual Thread 기반 코루틴 디스패처 (`CoroutineScope(Dispatchers.newVT)`) |
+| `Dispatchers.newVT()` | Virtual Thread 기반 코루틴 디스패처 (`CoroutineScope(Dispatchers.newVT())`) |
 | `suspendTransaction { }` | 일반 suspend 트랜잭션 (비교 기준) |
 
 ---
@@ -131,9 +131,9 @@ fun `중첩된 virtual thread 용 트랜잭션을 async로 실행`(testDB: TestD
 }
 ```
 
-### 3. `Dispatchers.newVT` 기반 병렬 처리
+### 3. `Dispatchers.newVT()` 기반 병렬 처리
 
-`CoroutineScope(Dispatchers.newVT)`로 Virtual Thread 디스패처를 생성하고, `launch`로 병렬 INSERT를 수행합니다.
+`CoroutineScope(Dispatchers.newVT())`로 Virtual Thread 디스패처를 생성하고, `launch`로 병렬 INSERT를 수행합니다.
 
 ```kotlin
 @ParameterizedTest
@@ -143,7 +143,7 @@ fun `다수의 비동기 작업을 수행 후 대기`(testDB: TestDB) = runSuspe
         val recordCount = 10
         val results = CopyOnWriteArrayList<Int>()
 
-        val vtScope = CoroutineScope(Dispatchers.newVT)
+        val vtScope = CoroutineScope(Dispatchers.newVT())
         List(recordCount) { index ->
             vtScope.launch {
                 inTopLevelSuspendTransaction(
@@ -234,7 +234,7 @@ runSuspendVT { }                         ← Virtual Thread 기반 코루틴 테
 │   ├── virtualThreadTransaction { }     ← 현재 트랜잭션에서 새 VT 트랜잭션 생성
 │   │   └── VTester.selectAll()          ← R2DBC 비동기 SQL (VT에서 실행)
 │   │
-│   ├── CoroutineScope(Dispatchers.newVT)
+│   ├── CoroutineScope(Dispatchers.newVT())
 │   │   ├── launch { inTopLevelSuspendTransaction { VTester.insert { } } }
 │   │   ├── launch { inTopLevelSuspendTransaction { VTester.insert { } } }
 │   │   └── ... (수백만 개 동시 실행 가능)
@@ -244,7 +244,7 @@ runSuspendVT { }                         ← Virtual Thread 기반 코루틴 테
 └── 테이블 자동 정리 (DROP)
 
 핵심 API 역할:
-  Dispatchers.newVT        → Virtual Thread 기반 코루틴 디스패처
+  Dispatchers.newVT()      → Virtual Thread 기반 코루틴 디스패처
   virtualThreadTransaction → 현재 트랜잭션 컨텍스트에서 VT로 분기
   inTopLevelSuspendTransaction → 독립 커넥션·독립 트랜잭션 (병렬 I/O에 적합)
   runSuspendVT             → JUnit 5 테스트를 VT 코루틴으로 실행
@@ -319,7 +319,7 @@ classDiagram
     InTopLevelSuspendTransaction --> VirtualThreadDispatcher : dispatches on
     RunSuspendVT --> VirtualThreadDispatcher : wraps test
 
-    note for VirtualThreadDispatcher "Dispatchers.newVT 로 생성\nJDK 21 Virtual Threads 기반"
+    note for VirtualThreadDispatcher "Dispatchers.newVT() 로 생성\nJDK 21 Virtual Threads 기반"
     note for RunSuspendVT "@EnabledOnJre(JRE.JAVA_21) 와 함께 사용"
 
     style CoroutineDispatcher fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
@@ -334,7 +334,7 @@ classDiagram
 - **I/O 집약적 작업**: DB 쿼리, 외부 API 호출 등 대기 시간이 긴 작업이 많을 때
 - **높은 동시성 요구**: 수천~수백만 개의 동시 요청을 처리해야 할 때
 - **기존 블로킹 코드 활용**: 레거시 JDBC 라이브러리 등 블로킹 API를 그대로 사용해야 할 때
-- **Kotlin 코루틴과 병행**: `Dispatchers.newVT`로 기존 코루틴 코드에 자연스럽게 통합
+- **Kotlin 코루틴과 병행**: `Dispatchers.newVT()`로 기존 코루틴 코드에 자연스럽게 통합
 
 ---
 

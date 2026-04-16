@@ -3,7 +3,7 @@
 # 05-exposed-r2dbc-repository-coroutines
 
 An example of the async Repository pattern using Spring WebFlux + Exposed R2DBC + Kotlin Coroutines.
-Implements the `ExposedR2dbcRepository` interface to provide a REST API for CRUD operations on Movie and Actor domains.
+Implements the `R2dbcRepository` interface (from `io.bluetape4k.exposed.r2dbc.repository`) to provide a REST API for CRUD operations on Movie and Actor domains.
 
 ## Documentation
 
@@ -41,8 +41,8 @@ src/main/kotlin/exposed/r2dbc/examples/
 │   │   ├── MovieDtos.kt                  # DTO classes (MovieRecord, ActorRecord, etc.)
 │   │   └── Mappers.kt                    # ResultRow → DTO conversion extension functions
 │   └── repository/
-│       ├── MovieR2dbcRepository.kt       # Movie Repository (implements ExposedR2dbcRepository)
-│       └── ActorR2dbcRepository.kt       # Actor Repository (implements ExposedR2dbcRepository)
+│       ├── MovieR2dbcRepository.kt       # Movie Repository (implements R2dbcRepository)
+│       └── ActorR2dbcRepository.kt       # Actor Repository (implements R2dbcRepository)
 └── utils/
     └── DataInitializer.kt                # Insert sample data on application startup (runBlocking bridge pattern)
 ```
@@ -52,9 +52,10 @@ src/main/kotlin/exposed/r2dbc/examples/
 ```mermaid
 %%{init: {"theme": "neutral"}}%%
 classDiagram
-    class ExposedR2dbcRepository~T, ID~ {
+    class R2dbcRepository~ID, T~ {
         <<interface>>
         +table IdTable~ID~
+        +extractId(entity) ID
         +toEntity(row) T
         +findAll() Flow~T~
         +findById(id) T?
@@ -62,6 +63,7 @@ classDiagram
     }
     class MovieR2dbcRepository {
         +table MovieTable
+        +extractId(entity) Long
         +toEntity(row) MovieRecord
         +save(movie) MovieRecord
         +searchMovies(params) Flow~MovieRecord~
@@ -70,6 +72,7 @@ classDiagram
     }
     class ActorR2dbcRepository {
         +table ActorTable
+        +extractId(entity) Long
         +toEntity(row) ActorRecord
         +save(actor) ActorRecord
         +searchActors(params) Flow~ActorRecord~
@@ -86,12 +89,12 @@ classDiagram
         +createActor(actor) ActorRecord
     }
 
-    MovieR2dbcRepository ..|> ExposedR2dbcRepository
-    ActorR2dbcRepository ..|> ExposedR2dbcRepository
+    MovieR2dbcRepository ..|> R2dbcRepository
+    ActorR2dbcRepository ..|> R2dbcRepository
     MovieController --> MovieR2dbcRepository: uses
     ActorController --> ActorR2dbcRepository: uses
 
-    style ExposedR2dbcRepository fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
+    style R2dbcRepository fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
     style MovieR2dbcRepository fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
     style ActorR2dbcRepository fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
     style MovieController fill:#FFF3E0,stroke:#FFCC80,color:#E65100
@@ -215,15 +218,16 @@ object ActorInMovieTable: Table("actors_in_movies") {
 
 ## Core Implementation Patterns
 
-### 1. Repository Based on ExposedR2dbcRepository
+### 1. Repository Based on R2dbcRepository
 
-Implement `ExposedR2dbcRepository<T, ID>` to inherit basic CRUD (`findAll`, `findById`, `deleteById`, etc.)
+Implement `R2dbcRepository<ID, T>` (from `io.bluetape4k.exposed.r2dbc.repository`) to inherit basic CRUD (`findAll`, `findById`, `deleteById`, etc.)
 and add domain-specific custom query methods.
 
 ```kotlin
 @Repository
-class MovieR2dbcRepository: ExposedR2dbcRepository<MovieRecord, Long> {
-    override val table: IdTable<Long> = MovieTable
+class MovieR2dbcRepository: R2dbcRepository<Long, MovieRecord> {
+    override val table = MovieTable
+    override fun extractId(entity: MovieRecord): Long = entity.id
     override suspend fun ResultRow.toEntity(): MovieRecord = toMovieRecord()
 
     suspend fun save(movie: MovieRecord): MovieRecord {
@@ -370,7 +374,7 @@ Tests use H2 in-memory DB with `@ActiveProfiles("h2")` and load the full applica
 ```
 Spring Container
     ├── R2dbcDatabase  ←── ExposedR2dbcConfig (ConnectionPool + CoroutineDispatcher)
-    ├── MovieR2dbcRepository  ←── @Repository (R2dbcRepository<Long, MovieTable, MovieRecord>)
+    ├── MovieR2dbcRepository  ←── @Repository (R2dbcRepository<Long, MovieRecord>)
     ├── ActorR2dbcRepository  ←── @Repository
     └── MovieController / ActorController / MovieActorsController
             └── suspendTransaction { repository.xxx() }
@@ -378,14 +382,15 @@ Spring Container
 
 ### Repository Layer Design
 
-The `R2dbcRepository<ID, Table, Entity>` interface provides basic CRUD.
-Implementing classes only need to provide `override val table` and `override suspend fun ResultRow.toEntity()`
+The `R2dbcRepository<ID, E>` interface (from `io.bluetape4k.exposed.r2dbc.repository`) provides basic CRUD.
+Implementing classes need to provide `override val table`, `override fun extractId()`, and `override suspend fun ResultRow.toEntity()`
 to inherit `findAll()`, `findById()`, `deleteById()`, etc.
 
 ```kotlin
 // Base functionality from interface compliance
-interface R2dbcRepository<ID, T: IdTable<ID>, E> {
-    val table: T
+interface R2dbcRepository<ID, E> {
+    val table: IdTable<ID>
+    fun extractId(entity: E): ID
     suspend fun ResultRow.toEntity(): E
     fun findAll(): Flow<E>                  // inherited automatically
     suspend fun findById(id: ID): E?        // inherited automatically

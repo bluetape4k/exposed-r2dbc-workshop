@@ -11,7 +11,7 @@ Learn how to define and manage database schemas with Exposed R2DBC. Perform DDL 
 - Understand how to define tables with the Exposed DSL
 - Define various column types and constraints
 - Index strategies and sequence creation
-- Schema migration strategies (`createMissing`, `addMissingColumnsStatements`)
+- Schema migration strategies (`MigrationUtils.statementsRequiredForDatabaseMigration`, `execInBatch`)
 - DDL execution patterns in an R2DBC environment
 
 ---
@@ -191,13 +191,11 @@ sequenceDiagram
 src/test/kotlin/exposed/r2dbc/examples/ddl/
 ├── Ex01_CreateDatabase.kt             # Database connection and creation
 ├── Ex02_CreateTable.kt                # Table creation (SchemaUtils.create)
-├── Ex03_CreateMissingTableAndColumns.kt # Auto-add missing tables and columns
+├── Ex03_CreateMissingTableAndColumns.kt # Auto-add missing tables and columns (MigrationUtils)
 ├── Ex04_ColumnDefinition.kt           # Various column type definitions
 ├── Ex05_CreateIndex.kt                # Index creation strategies
 ├── Ex06_Sequence.kt                   # Sequence creation and usage
 ├── Ex07_CustomEnumeration.kt          # Custom enumeration columns
-├── Ex09_JavaUUIDColumnType.kt         # Java UUID column type
-├── Ex10_KotlinUUIDColumnType.kt       # Kotlin UUID column type
 └── Ex10_DDL_Examples.kt               # Comprehensive DDL examples
 ```
 
@@ -421,16 +419,14 @@ suspendTransaction {
 #### Incremental Migration (Add Only Missing Tables/Columns)
 
 ```kotlin
-suspendTransaction {
-    // Create only non-existent tables
-    SchemaUtils.createMissing(Users, Orders)
+withDb(testDB) {
+    // Create base table (V1)
+    SchemaUtils.create(testerV1)
 
-    // Preview SQL statements for missing columns (before applying)
-    val statements = SchemaUtils.addMissingColumnsStatements(Users)
-    statements.forEach { log.debug { it } }
-
-    // Automatically add missing columns
-    SchemaUtils.addMissingColumns(Users)
+    // Generate migration statements for V2 schema changes (e.g., adding uniqueIndex)
+    val stmts = MigrationUtils.statementsRequiredForDatabaseMigration(testerV2)
+    execInBatch(stmts)
+    commit()
 }
 ```
 
@@ -450,13 +446,11 @@ suspendTransaction {
 |----------------------------------------|-------------------------------------------------------|
 | `Ex01_CreateDatabase.kt`               | R2DBC connection, checking DB existence               |
 | `Ex02_CreateTable.kt`                  | `SchemaUtils.create` / `drop`                         |
-| `Ex03_CreateMissingTableAndColumns.kt` | `createMissing`, `addMissingColumnsStatements`        |
+| `Ex03_CreateMissingTableAndColumns.kt` | `MigrationUtils.statementsRequiredForDatabaseMigration` + `execInBatch` |
 | `Ex04_ColumnDefinition.kt`             | Column types, nullable, default, check constraints    |
 | `Ex05_CreateIndex.kt`                  | Single/composite indexes, uniqueIndex                 |
 | `Ex06_Sequence.kt`                     | Sequence creation, nextVal, autoIncrement integration |
 | `Ex07_CustomEnumeration.kt`            | `customEnumeration` (MySQL/MariaDB ENUM)              |
-| `Ex09_JavaUUIDColumnType.kt`           | `java.util.UUID` column type                          |
-| `Ex10_KotlinUUIDColumnType.kt`         | `kotlin.uuid.Uuid` column type (Kotlin 2.0+)          |
 | `Ex10_DDL_Examples.kt`                 | Comprehensive DDL examples (FK, CHECK, isolation, etc.) |
 
 ---

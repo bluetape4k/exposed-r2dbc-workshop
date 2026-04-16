@@ -37,7 +37,7 @@ sequenceDiagram
 
 - Understand how to integrate Java 21 Virtual Threads with Exposed R2DBC
 - Use `runSuspendVT` / `virtualThreadTransaction` / `inTopLevelSuspendTransaction` APIs
-- Implement parallel processing based on Virtual Threads using the `Dispatchers.newVT` dispatcher
+- Implement parallel processing based on Virtual Threads using the `Dispatchers.newVT()` dispatcher
 - Understand the differences between Virtual Thread transactions and standard `suspendTransaction`
 - Identify nested transaction limitations for MariaDB-compatible databases
 
@@ -50,7 +50,7 @@ sequenceDiagram
 | `runSuspendVT { }` | Virtual Thread-based coroutine test runner (JUnit 5 only) |
 | `virtualThreadTransaction { }` | Create and execute a new transaction on a Virtual Thread within the current transaction |
 | `inTopLevelSuspendTransaction { }` | Independent top-level suspend transaction (starts a new transaction regardless of existing one) |
-| `Dispatchers.newVT` | Virtual Thread-based coroutine dispatcher (`CoroutineScope(Dispatchers.newVT)`) |
+| `Dispatchers.newVT()` | Virtual Thread-based coroutine dispatcher (`CoroutineScope(Dispatchers.newVT())`) |
 | `suspendTransaction { }` | Standard suspend transaction (baseline for comparison) |
 
 ---
@@ -131,9 +131,9 @@ fun `execute nested virtual thread transactions async`(testDB: TestDB) = runSusp
 }
 ```
 
-### 3. Parallel Processing with `Dispatchers.newVT`
+### 3. Parallel Processing with `Dispatchers.newVT()`
 
-Create a Virtual Thread dispatcher with `CoroutineScope(Dispatchers.newVT)` and perform parallel INSERTs with `launch`.
+Create a Virtual Thread dispatcher with `CoroutineScope(Dispatchers.newVT())` and perform parallel INSERTs with `launch`.
 
 ```kotlin
 @ParameterizedTest
@@ -143,7 +143,7 @@ fun `perform multiple async operations and wait`(testDB: TestDB) = runSuspendVT 
         val recordCount = 10
         val results = CopyOnWriteArrayList<Int>()
 
-        val vtScope = CoroutineScope(Dispatchers.newVT)
+        val vtScope = CoroutineScope(Dispatchers.newVT())
         List(recordCount) { index ->
             vtScope.launch {
                 inTopLevelSuspendTransaction(
@@ -234,7 +234,7 @@ runSuspendVT { }                         ← Virtual Thread-based coroutine test
 │   ├── virtualThreadTransaction { }     ← create new VT transaction from current transaction
 │   │   └── VTester.selectAll()          ← R2DBC async SQL (runs on VT)
 │   │
-│   ├── CoroutineScope(Dispatchers.newVT)
+│   ├── CoroutineScope(Dispatchers.newVT())
 │   │   ├── launch { inTopLevelSuspendTransaction { VTester.insert { } } }
 │   │   ├── launch { inTopLevelSuspendTransaction { VTester.insert { } } }
 │   │   └── ... (millions can run simultaneously)
@@ -244,7 +244,7 @@ runSuspendVT { }                         ← Virtual Thread-based coroutine test
 └── auto-cleanup tables (DROP)
 
 Core API roles:
-  Dispatchers.newVT        → Virtual Thread-based coroutine dispatcher
+  Dispatchers.newVT()      → Virtual Thread-based coroutine dispatcher
   virtualThreadTransaction → branch to VT from current transaction context
   inTopLevelSuspendTransaction → independent connection and transaction (suited for parallel I/O)
   runSuspendVT             → run JUnit 5 test as VT coroutine
@@ -319,7 +319,7 @@ classDiagram
     InTopLevelSuspendTransaction --> VirtualThreadDispatcher : dispatches on
     RunSuspendVT --> VirtualThreadDispatcher : wraps test
 
-    note for VirtualThreadDispatcher "Created via Dispatchers.newVT\nBased on JDK 21 Virtual Threads"
+    note for VirtualThreadDispatcher "Created via Dispatchers.newVT()\nBased on JDK 21 Virtual Threads"
     note for RunSuspendVT "Used together with @EnabledOnJre(JRE.JAVA_21)"
 
     style CoroutineDispatcher fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
@@ -334,7 +334,7 @@ classDiagram
 - **I/O-intensive workloads**: When many tasks involve long wait times such as DB queries or external API calls
 - **High concurrency requirements**: When you need to handle thousands to millions of concurrent requests
 - **Leveraging existing blocking code**: When you must use blocking APIs like legacy JDBC libraries
-- **Combined with Kotlin Coroutines**: Naturally integrates into existing coroutine code via `Dispatchers.newVT`
+- **Combined with Kotlin Coroutines**: Naturally integrates into existing coroutine code via `Dispatchers.newVT()`
 
 ---
 

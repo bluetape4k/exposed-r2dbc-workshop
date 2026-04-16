@@ -11,7 +11,7 @@ Exposed R2DBC로 데이터베이스 스키마를 정의하고 관리하는 방�
 - Exposed DSL로 테이블 정의하는 방법 이해
 - 다양한 컬럼 타입과 제약조건 정의
 - 인덱스 전략과 시퀀스 생성
-- 스키마 마이그레이션 전략 (`createMissing`, `addMissingColumnsStatements`)
+- 스키마 마이그레이션 전략 (`MigrationUtils.statementsRequiredForDatabaseMigration`, `execInBatch`)
 - R2DBC 환경에서의 DDL 실행 패턴
 
 ---
@@ -191,13 +191,11 @@ sequenceDiagram
 src/test/kotlin/exposed/r2dbc/examples/ddl/
 ├── Ex01_CreateDatabase.kt             # 데이터베이스 연결 및 생성
 ├── Ex02_CreateTable.kt                # 테이블 생성 (SchemaUtils.create)
-├── Ex03_CreateMissingTableAndColumns.kt # 누락된 테이블·컬럼 자동 추가
+├── Ex03_CreateMissingTableAndColumns.kt # 누락된 테이블·컬럼 자동 추가 (MigrationUtils)
 ├── Ex04_ColumnDefinition.kt           # 다양한 컬럼 타입 정의
 ├── Ex05_CreateIndex.kt                # 인덱스 생성 전략
 ├── Ex06_Sequence.kt                   # 시퀀스 생성 및 활용
 ├── Ex07_CustomEnumeration.kt          # 커스텀 열거형 컬럼
-├── Ex09_JavaUUIDColumnType.kt         # Java UUID 컬럼 타입
-├── Ex10_KotlinUUIDColumnType.kt       # Kotlin UUID 컬럼 타입
 └── Ex10_DDL_Examples.kt               # DDL 종합 예제 모음
 ```
 
@@ -421,16 +419,14 @@ suspendTransaction {
 #### 증분 마이그레이션 (누락된 테이블/컬럼만 추가)
 
 ```kotlin
-suspendTransaction {
-    // 존재하지 않는 테이블만 생성
-    SchemaUtils.createMissing(Users, Orders)
+withDb(testDB) {
+    // V1 기본 테이블 생성
+    SchemaUtils.create(testerV1)
 
-    // 누락된 컬럼 추가 SQL 문 조회 (실행 전 검토)
-    val statements = SchemaUtils.addMissingColumnsStatements(Users)
-    statements.forEach { log.debug { it } }
-
-    // 누락된 컬럼 자동 추가
-    SchemaUtils.addMissingColumns(Users)
+    // V2 스키마 변경에 필요한 마이그레이션 SQL 생성 (예: uniqueIndex 추가)
+    val stmts = MigrationUtils.statementsRequiredForDatabaseMigration(testerV2)
+    execInBatch(stmts)
+    commit()
 }
 ```
 
@@ -450,13 +446,11 @@ suspendTransaction {
 |--------------------------------------|------------------------------------------------|
 | `Ex01_CreateDatabase.kt`             | R2DBC 연결, DB 존재 확인                            |
 | `Ex02_CreateTable.kt`                | `SchemaUtils.create` / `drop`                  |
-| `Ex03_CreateMissingTableAndColumns.kt` | `createMissing`, `addMissingColumnsStatements` |
+| `Ex03_CreateMissingTableAndColumns.kt` | `MigrationUtils.statementsRequiredForDatabaseMigration` + `execInBatch` |
 | `Ex04_ColumnDefinition.kt`           | 컬럼 타입, nullable, default, check 제약           |
 | `Ex05_CreateIndex.kt`                | 단일/복합 인덱스, uniqueIndex                        |
 | `Ex06_Sequence.kt`                   | Sequence 생성, nextVal, autoIncrement 연동        |
 | `Ex07_CustomEnumeration.kt`          | `customEnumeration` (MySQL/MariaDB ENUM)       |
-| `Ex09_JavaUUIDColumnType.kt`         | `java.util.UUID` 컬럼 타입                        |
-| `Ex10_KotlinUUIDColumnType.kt`       | `kotlin.uuid.Uuid` 컬럼 타입 (Kotlin 2.0+)       |
 | `Ex10_DDL_Examples.kt`               | DDL 종합 예제 (외래키, CHECK, 트랜잭션 격리 수준 등)     |
 
 ---

@@ -194,20 +194,20 @@ override fun currentLookupKey(context: ContextView): String {
 | `X-Read-Only: true` 헤더 또는 `/readonly` 경로 | `RoutingContextKeys.READ_ONLY` | 읽기 전용 여부 |
 
 ```kotlin
-override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> = mono {
+override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> {
     val tenant = exchange.request.headers.getFirst(TENANT_HEADER)
-        ?.takeIf { it.isNotBlank() } ?: defaultTenant
+        ?.takeIf { it.isNotBlank() }
+        ?: defaultTenant
 
     val readOnly = exchange.request.headers.getFirst(READ_ONLY_HEADER)
         ?.toBooleanStrictOrNull()
         ?: exchange.request.path.value().endsWith("/readonly")
 
-    chain.filter(exchange)
+    return chain.filter(exchange)
         .contextWrite {
             it.put(RoutingContextKeys.TENANT, tenant)
-              .put(RoutingContextKeys.READ_ONLY, readOnly)
+                .put(RoutingContextKeys.READ_ONLY, readOnly)
         }
-        .awaitSingleOrNull()
 }
 ```
 
@@ -367,15 +367,26 @@ ConnectionFactoryRegistry
 
 ```kotlin
 // 읽기 전용 DB로 라우팅 (acme:ro)
-suspend fun getMarker(): RoutingMarkerRecord =
+@GetMapping("/marker/readonly")
+suspend fun getReadOnlyMarker(): RoutingMarkerResponse =
     txExecutor.readOnly {
-        markerRepository.findByTenant(tenant)
+        RoutingMarkerResponse(
+            tenant = currentTenant(),
+            readOnly = true,
+            marker = markerRepository.findCurrentMarker(),
+        )
     }
 
 // 읽기-쓰기 DB로 라우팅 (acme:rw)
-suspend fun updateMarker(value: String): RoutingMarkerRecord =
+@PatchMapping("/marker")
+suspend fun updateMarker(@RequestBody request: UpdateMarkerRequest): RoutingMarkerResponse =
     txExecutor.readWrite {
-        markerRepository.upsert(tenant, value)
+        markerRepository.resetAndInsert(request.marker)
+        RoutingMarkerResponse(
+            tenant = currentTenant(),
+            readOnly = false,
+            marker = markerRepository.findCurrentMarker(),
+        )
     }
 ```
 

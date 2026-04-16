@@ -53,18 +53,14 @@ sequenceDiagram
 classDiagram
     class CountryR2dbcRepository {
         <<interface>>
-        +findAll() Flow~CountryRecord~
         +findByCode(code) CountryRecord?
-        +save(record) CountryRecord
         +update(record) Int
-        +deleteByCode(code) Int
+        +evictCacheAll()
     }
     class DefaultCountryR2dbcRepository {
-        +table CountryTable
-        +findAll() Flow~CountryRecord~
         +findByCode(code) CountryRecord?
-        +save(record) CountryRecord
         +update(record) Int
+        +evictCacheAll()
     }
     class CachedCountryR2dbcRepository {
         -delegate CountryR2dbcRepository
@@ -72,7 +68,7 @@ classDiagram
         -cache LettuceSuspendedCache
         +findByCode(code) CountryRecord?
         +update(record) Int
-        +evictAll()
+        +evictCacheAll()
     }
     class LettuceSuspendedCache~K,V~ {
         +name String
@@ -87,7 +83,7 @@ classDiagram
         -redisClient RedisClient
         -ttlSeconds Long
         -codec LettuceBinaryCodec
-        +getCache(name) LettuceSuspendedCache
+        +getOrCreate(name, ttlSeconds) LettuceSuspendedCache
     }
 
     CountryR2dbcRepository <|.. DefaultCountryR2dbcRepository
@@ -266,16 +262,23 @@ class LettuceSuspendedCache<K: Any, V: Any>(
     }
 
     suspend fun clear() {
-        commands.keys("$name:*")
-            .chunked(100, true)
-            .collect { keys -> commands.del(*keys.toTypedArray()) }
+        val scanArgs = KeyScanArgs.Builder.matches("$name:*").limit(100)
+        var cursor: ScanCursor = ScanCursor.INITIAL
+        do {
+            val result = if (cursor == ScanCursor.INITIAL) commands.scan(scanArgs)
+                         else commands.scan(cursor, scanArgs) ?: break
+            result.keys.chunked(100).forEach { keys ->
+                if (keys.isNotEmpty()) commands.unlink(*keys.toTypedArray())
+            }
+            cursor = result
+        } while (!cursor.isFinished)
     }
 }
 ```
 
 ### 2. LettuceSuspendedCacheManager
 
-캐시 인스턴스를 이름(name)별로 관리하며, `LettuceBinaryCodec`(LZ4 + Fory 직렬화)을 적용합니다.
+캐시 인스턴스를 이름(name)별로 `getOrCreate()`로 관리하며, `LettuceBinaryCodec`(LZ4 + Fory 직렬화)을 적용합니다.
 
 ```kotlin
 @Bean
@@ -284,6 +287,14 @@ fun lettuceSuspendedCacheManager(redisClient: RedisClient): LettuceSuspendedCach
         redisClient = redisClient,
         ttlSeconds = 60L,
         codec = LettuceBinaryCodecs.lz4Fory(),   // LZ4 압축 + Fory 직렬화
+    )
+}
+
+// 캐시 인식 Repository 내부에서의 사용:
+private val cache: LettuceSuspendedCache<String, CountryRecord> by lazy {
+    cacheManager.getOrCreate(
+        name = CACHE_NAME,
+        ttlSeconds = 60,
     )
 }
 ```
@@ -387,13 +398,13 @@ Redis는 Testcontainers를 통해 자동으로 실행됩니다.
 ### SCAN 기반 전체 캐시 삭제
 
 Redis의 `KEYS` 명령은 모든 키를 한 번에 스캔하므로 대규모 데이터셋에서 Redis 서버를 일시적으로 블로킹할 수 있습니다.
-`LettuceSuspendedCache.clear()`는 `SCAN` + `UNLINK` 패턴으로 이 문제를 해결합니다:
+`LettuceSuspendedCache.clear()`는 커서 기반 `SCAN` + `UNLINK` 패턴(`KeyScanArgs` 사용)으로 이 문제를 해결합니다:
 
 ```
 SCAN cursor MATCH "caches:country:code:*" COUNT 100
-    → 키 목록 100개씩 취득
+    → KeyScanArgs.Builder.matches(...).limit(100) 으로 키 목록 100개씩 취득
     → UNLINK key1 key2 ... (비동기 삭제, DEL보다 안전)
-    → cursor가 "0"이 될 때까지 반복
+    → cursor.isFinished 될 때까지 반복
 ```
 
 `UNLINK`는 `DEL`과 달리 백그라운드에서 메모리를 해제하므로 Redis 이벤트 루프를 차단하지 않습니다.
@@ -411,7 +422,7 @@ SCAN cursor MATCH "caches:country:code:*" COUNT 100
 
 ## Further Reading
 
-- [Exppose with Spring Suspended Cache](https://debop.notion.site/Exposed-with-Suspended-Spring-Cache-1db2744526b080769d2ef307e4a3c6c9)
+- [Exposed with Spring Suspended Cache](https://debop.notion.site/Exposed-with-Suspended-Spring-Cache-1db2744526b080769d2ef307e4a3c6c9)
 - [Spring Caching Abstraction](https://docs.spring.io/spring-framework/docs/current/reference/html/integration.html#cache)
 - [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
 - [Spring WebFlux](https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html)

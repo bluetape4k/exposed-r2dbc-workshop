@@ -127,7 +127,7 @@ users.selectAll()
 users.selectAll()
     .where { users.id inList listOf("andrey", "alex") }
     .orderBy(users.name)
-    .toFastList()
+    .toList()
 
 // inSubQuery로 서브쿼리 활용
 val subQuery = cities.select(cities.id).where { cities.id eq 2 }
@@ -171,13 +171,13 @@ users.innerJoin(cities)
 cities.innerJoin(users).innerJoin(userData)
     .selectAll()
     .orderBy(users.id)
-    .toFastList()
+    .toList()
 
 // CROSS JOIN
 cities.crossJoin(users)
     .select(users.name, cities.name)
     .where { cities.name eq "St. Petersburg" }
-    .toFastList()
+    .toList()
 ```
 
 ## 예제 테이블 구조 (ER 다이어그램)

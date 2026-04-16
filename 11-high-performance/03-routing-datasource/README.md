@@ -194,20 +194,20 @@ Loads the following two pieces of information into the Reactor Context for every
 | `X-Read-Only: true` header or `/readonly` path | `RoutingContextKeys.READ_ONLY` | Whether read-only                   |
 
 ```kotlin
-override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> = mono {
+override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> {
     val tenant = exchange.request.headers.getFirst(TENANT_HEADER)
-        ?.takeIf { it.isNotBlank() } ?: defaultTenant
+        ?.takeIf { it.isNotBlank() }
+        ?: defaultTenant
 
     val readOnly = exchange.request.headers.getFirst(READ_ONLY_HEADER)
         ?.toBooleanStrictOrNull()
         ?: exchange.request.path.value().endsWith("/readonly")
 
-    chain.filter(exchange)
+    return chain.filter(exchange)
         .contextWrite {
             it.put(RoutingContextKeys.TENANT, tenant)
-              .put(RoutingContextKeys.READ_ONLY, readOnly)
+                .put(RoutingContextKeys.READ_ONLY, readOnly)
         }
-        .awaitSingleOrNull()
 }
 ```
 
@@ -367,15 +367,26 @@ The service/controller explicitly controls routing using `readWrite { }` / `read
 
 ```kotlin
 // Route to read-only DB (acme:ro)
-suspend fun getMarker(): RoutingMarkerRecord =
+@GetMapping("/marker/readonly")
+suspend fun getReadOnlyMarker(): RoutingMarkerResponse =
     txExecutor.readOnly {
-        markerRepository.findByTenant(tenant)
+        RoutingMarkerResponse(
+            tenant = currentTenant(),
+            readOnly = true,
+            marker = markerRepository.findCurrentMarker(),
+        )
     }
 
 // Route to read-write DB (acme:rw)
-suspend fun updateMarker(value: String): RoutingMarkerRecord =
+@PatchMapping("/marker")
+suspend fun updateMarker(@RequestBody request: UpdateMarkerRequest): RoutingMarkerResponse =
     txExecutor.readWrite {
-        markerRepository.upsert(tenant, value)
+        markerRepository.resetAndInsert(request.marker)
+        RoutingMarkerResponse(
+            tenant = currentTenant(),
+            readOnly = false,
+            marker = markerRepository.findCurrentMarker(),
+        )
     }
 ```
 

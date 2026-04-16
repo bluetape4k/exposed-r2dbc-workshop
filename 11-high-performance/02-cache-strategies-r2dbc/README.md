@@ -105,12 +105,13 @@ flowchart TD
 ## Project Structure
 
 ```
-src/main/kotlin/exposed/examples/cache/coroutines/
+src/main/kotlin/exposed/r2dbc/examples/cache/
 ├── CacheStrategyApplication.kt          # WebFlux Reactive application
 ├── config/
-│   ├── ExposedConfig.kt                 # Exposed Database configuration
+│   ├── ExposedR2dbcConfig.kt            # Exposed R2DBC Database configuration
 │   ├── RedissonConfig.kt                # Redisson client configuration
-│   └── NettyConfig.kt                   # Netty Event Loop / Connection Pool configuration
+│   ├── NettyConfig.kt                   # Netty Event Loop / Connection Pool configuration
+│   └── SwaggerConfig.kt                 # Swagger/OpenAPI configuration
 ├── controller/
 │   ├── IndexController.kt               # Health check and basic endpoints
 │   ├── UserController.kt                # User CRUD - suspend functions (Read/Write Through)
@@ -122,19 +123,20 @@ src/main/kotlin/exposed/examples/cache/coroutines/
 │   │   ├── UserCredentials.kt           # UserCredentialsTable, UserCredentialsRecord
 │   │   └── UserEvent.kt                 # UserEventTable, UserEventRecord
 │   └── repository/
-│       ├── UserCacheRepository.kt               # Suspended Read/Write Through cache repository
-│       ├── UserCredentialsCacheRepository.kt     # Suspended Read-Only cache repository
-│       └── UserEventCacheRepository.kt           # Suspended Write Behind cache repository
+│       ├── UserCacheRepository.kt               # Read/Write Through + Near Cache repository
+│       ├── UserCredentialsCacheRepository.kt     # Read-Only cache repository
+│       └── UserEventCacheRepository.kt           # Write Behind cache repository
 └── utils/
-    └── DataFakers.kt                    # Test data generation utility
+    ├── DataFakers.kt                    # Test data generation utility
+    └── DataInitializer.kt               # DB table initialization on application startup
 ```
 
 ## Coroutines-based Cache Repository
 
-### AbstractSuspendedExposedCacheRepository
+### AbstractR2dbcRedissonRepository
 
-Unlike `AbstractExposedCacheRepository` in `01-cache-strategies`, all cache read/write methods are
-provided as `suspend` functions. This allows Redis I/O and DB I/O to be processed asynchronously on a **Coroutine Dispatcher**.
+Unlike `AbstractExposedCacheRepository` in `01-cache-strategies`, this module uses `AbstractR2dbcRedissonRepository`
+which provides all cache read/write operations as `suspend` functions. This allows Redis I/O and DB I/O to be processed asynchronously on a **Coroutine Dispatcher**.
 
 ```kotlin
 // Blocking version (01-cache-strategies)
@@ -165,13 +167,40 @@ suspend fun get(@PathVariable id: Long): UserRecord? {
 Fine-tune Netty's Event Loop and Connection Pool in the WebFlux environment.
 
 ```kotlin
- @01-spring-boot/spring-webflux-exposed/src/test/kotlin/exposed/r2dbc/workshop/springwebflux/config/ConfigurationTest.kt
+@Configuration(proxyBeanMethods = false)
 class NettyConfig {
-    // Event Loop thread count: CPU cores * 8 (minimum 64)
-    // Max connections: 8,000
-    // Max idle time: 30 seconds
-    // SO_BACKLOG: 8,000
-    // Read/Write Timeout: 10 seconds
+    @Bean
+    fun nettyReactiveWebServerFactory(): NettyReactiveWebServerFactory =
+        NettyReactiveWebServerFactory().apply {
+            addServerCustomizers(EventLoopNettyCustomizer())
+        }
+
+    @Bean
+    fun reactorResourceFactory(): ReactorResourceFactory =
+        ReactorResourceFactory().apply {
+            isUseGlobalResources = false
+            connectionProvider = ConnectionProvider.builder("http")
+                .maxConnections(8_000)
+                .maxIdleTime(30.seconds.toJavaDuration())
+                .build()
+            loopResources = LoopResources.create(
+                "event-loop",
+                maxOf(Runtimex.availableProcessors * 8, 64),
+                true
+            )
+        }
+
+    class EventLoopNettyCustomizer : NettyServerCustomizer {
+        override fun apply(httpServer: HttpServer): HttpServer =
+            httpServer
+                .option(ChannelOption.SO_KEEPALIVE, true)
+                .option(ChannelOption.SO_BACKLOG, 8_000)
+                .option(ChannelOption.SO_LINGER, 0)
+                .doOnConnection { conn ->
+                    conn.addHandlerLast(ReadTimeoutHandler(30))
+                    conn.addHandlerLast(WriteTimeoutHandler(30))
+                }
+    }
 }
 ```
 
@@ -182,7 +211,7 @@ class NettyConfig {
 | `maxConnections`   | `8,000`              | Maximum concurrent connections |
 | `maxIdleTime`      | `30s`                | Idle connection release time |
 | Event Loop threads | `CPU * 8` (min `64`) | I/O processing thread count |
-| Read/Write Timeout | `10s`                | Request/response timeout |
+| Read/Write Timeout | `30s`                | Request/response timeout |
 
 ## Cache Strategies (same as 01-cache-strategies)
 

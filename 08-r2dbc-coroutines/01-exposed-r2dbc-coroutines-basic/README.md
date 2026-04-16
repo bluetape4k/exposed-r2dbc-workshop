@@ -7,7 +7,7 @@ Learn how to perform asynchronous database operations in an Exposed R2DBC + Kotl
 ## Learning Objectives
 
 - Perform async transactions with `suspendTransaction`
-- Execute parallel transactions with `suspendTransactionAsync`
+- Execute parallel transactions with `inTopLevelSuspendTransaction` + `async`
 - Stream reactive results using Flow
 - Integrate Coroutine Dispatcher with Exposed R2DBC
 - Handle exceptions within a coroutine context
@@ -148,17 +148,23 @@ suspend fun getUsers(): List<UserRecord> = suspendTransaction {
 }
 ```
 
-### suspendTransactionAsync
+### Parallel Transactions with async
 
-Executes multiple transactions in parallel.
+Executes multiple transactions in parallel using `inTopLevelSuspendTransaction` + `async`.
 
 ```kotlin
-val usersDeferred = suspendTransactionAsync {
-    Users.selectAll().toFastList()
+val ioScope = CoroutineScope(Dispatchers.IO)
+
+val usersDeferred = ioScope.async {
+    inTopLevelSuspendTransaction(db = db) {
+        Users.selectAll().toList()
+    }
 }
 
-val ordersDeferred = suspendTransactionAsync {
-    Orders.selectAll().toFastList()
+val ordersDeferred = ioScope.async {
+    inTopLevelSuspendTransaction(db = db) {
+        Orders.selectAll().toList()
+    }
 }
 
 val (users, orders) = awaitAll(usersDeferred, ordersDeferred)
@@ -166,13 +172,14 @@ val (users, orders) = awaitAll(usersDeferred, ordersDeferred)
 
 ### Flow Streaming
 
-Use Flow to efficiently process large result sets.
+`selectAll()` returns a `Flow<ResultRow>` directly. Collect it inside a transaction context.
 
 ```kotlin
-fun streamUsers(): Flow<UserRecord> = Users
-    .selectAll()
-    .asFlow()
-    .map { it.toUserRecord() }
+suspend fun streamUsers(): List<UserRecord> = suspendTransaction {
+    Users.selectAll()
+        .map { it.toUserRecord() }
+        .toList()
+}
 ```
 
 ## Code Examples
@@ -208,17 +215,23 @@ suspend fun deleteUser(id: Long): Int = suspendTransaction {
 ### Parallel Transaction Execution
 
 ```kotlin
-suspend fun parallelOperations() = coroutineScope {
-    val insertJob = suspendTransactionAsync {
-        // INSERT operation
-        Users.insert { it[name] = "User1" }
+suspend fun parallelOperations(db: R2dbcDatabase) {
+    val ioScope = CoroutineScope(Dispatchers.IO)
+
+    val insertJob = ioScope.async {
+        inTopLevelSuspendTransaction(db = db) {
+            // INSERT operation
+            Users.insert { it[name] = "User1" }
+        }
     }
-    
-    val updateJob = suspendTransactionAsync {
-        // UPDATE operation
-        Users.update({ Users.id eq 1 }) { it[name] = "Updated" }
+
+    val updateJob = ioScope.async {
+        inTopLevelSuspendTransaction(db = db) {
+            // UPDATE operation
+            Users.update({ Users.id eq 1 }) { it[name] = "Updated" }
+        }
     }
-    
+
     val (insertResult, updateResult) = awaitAll(insertJob, updateJob)
 }
 ```
