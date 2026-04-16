@@ -241,7 +241,7 @@ val result = UserTable.selectAll().where { userIsInactive }.toList()
 ./gradlew :04-exposed-r2dbc-json:test
 
 # JSONB 컬럼 타입 테스트
-./gradlew :04-exposed-r2dbc-json:test --tests "exposed.examples.json.Ex02_JsonBColumn"
+./gradlew :04-exposed-r2dbc-json:test --tests "exposed.r2dbc.examples.json.Ex02_JsonBColumn"
 ```
 
 ## 참고 자료

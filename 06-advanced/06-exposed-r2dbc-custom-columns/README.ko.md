@@ -296,7 +296,7 @@ retrievedProfile.settings["theme"] shouldBeEqualTo "dark"
 ./gradlew :06-exposed-r2dbc-custom-columns:test
 
 # 특정 기능 테스트 실행 (예: 압축)
-./gradlew :06-exposed-r2dbc-custom-columns:test --tests "exposed.examples.custom.columns.compress.*"
+./gradlew :06-exposed-r2dbc-custom-columns:test --tests "exposed.r2dbc.examples.custom.columns.compress.*"
 ```
 
 ## 참고 자료

@@ -115,7 +115,14 @@ Unlike many standard encryption schemes that add randomness (salting, IV) to pro
 
 ### Encryptors
 
-The `Encryptors` enum (e.g., `Encryptors.AES`, `Encryptors.RC4`) specifies the encryption algorithm and implicitly handles key management configuration for Jasypt.
+The `Encryptors` enum specifies the encryption algorithm and implicitly handles key management configuration for Jasypt:
+
+| Encryptor                    | Type             | WHERE Searchable |
+|------------------------------|------------------|-----------------|
+| `Encryptors.DeterministicAES` | Deterministic    | Yes             |
+| `Encryptors.DeterministicRC4` | Deterministic    | Yes             |
+| `Encryptors.TripleDES`        | Non-deterministic | No             |
+| `Encryptors.RC2`              | Non-deterministic | No             |
 
 ## Example Overview
 
@@ -145,13 +152,14 @@ import io.bluetape4k.crypto.encrypt.Encryptors
 object UserSecrets: IntIdTable("user_secrets") {
   val username = varchar("username", 255)
 
-  // Encrypted string column for API keys using AES
-  // This column is searchable
-  val apiKey = jasyptVarChar("api_key", 512, Encryptors.AES)
+  // Encrypted string column — deterministic AES (searchable in WHERE clause)
+  val name = jasyptVarChar("name", 255, Encryptors.DeterministicAES).nullable().index()
 
-  // Encrypted binary column for secret tokens using RC4
-  // This column is also searchable
-  val secretToken = jasyptBinary("secret_token", 256, Encryptors.RC4)
+  // Encrypted string column — deterministic RC4 (searchable in WHERE clause)
+  val city = jasyptVarChar("city", 255, Encryptors.DeterministicRC4).nullable().index()
+
+  // Encrypted binary column — TripleDES (non-deterministic, not searchable)
+  val address = jasyptBinary("address", 255, Encryptors.TripleDES).nullable()
 }
 ```
 
@@ -159,21 +167,30 @@ object UserSecrets: IntIdTable("user_secrets") {
 
 ```kotlin
 // Insert an encrypted record
+val insertedName = "John"
+val insertedCity = "Seoul"
+val insertedAddress = "123 Teheran-ro, Gangnam-gu, Seoul"
+
 val id = UserSecrets.insertAndGetId {
-  it[username] = "john.doe"
-  it[apiKey] = "my_super_secret_api_key_123"
-  it[secretToken] = "binary_token_data".toByteArray()
+    it[name] = insertedName
+    it[city] = insertedCity
+    it[address] = insertedAddress.toByteArray()
 }
 
-// Retrieve and verify
-val retrievedUser = UserSecrets.selectAll().where { UserSecrets.id eq id }.single()
-retrievedUser[UserSecrets.username] shouldBeEqualTo "john.doe"
-retrievedUser[UserSecrets.apiKey] shouldBeEqualTo "my_super_secret_api_key_123"
-retrievedUser[UserSecrets.secretToken].toUtf8String() shouldBeEqualTo "binary_token_data"
+// Retrieve and verify (values are transparently decrypted)
+val row = UserSecrets.selectAll().where { UserSecrets.id eq id }.single()
+row[UserSecrets.name] shouldBeEqualTo insertedName
+row[UserSecrets.city] shouldBeEqualTo insertedCity
+row[UserSecrets.address]?.toUtf8String() shouldBeEqualTo insertedAddress
 
-// Query by encrypted column (works because encryption is deterministic)
-val userByApiKey = UserSecrets.selectAll().where { UserSecrets.apiKey eq "my_super_secret_api_key_123" }.single()
-userByApiKey[UserSecrets.username] shouldBeEqualTo "john.doe"
+// Query by deterministically-encrypted column (DeterministicAES / DeterministicRC4 only)
+UserSecrets.selectAll()
+    .where { UserSecrets.name eq insertedName }
+    .count() shouldBeEqualTo 1L
+
+UserSecrets.selectAll()
+    .where { UserSecrets.city eq insertedCity }
+    .count() shouldBeEqualTo 1L
 ```
 
 ## Running the Tests
@@ -183,7 +200,7 @@ userByApiKey[UserSecrets.username] shouldBeEqualTo "john.doe"
 ./gradlew :10-exposed-r2dbc-jasypt:test
 
 # Run a specific test class
-./gradlew :10-exposed-r2dbc-jasypt:test --tests "exposed.examples.jasypt.JasyptColumnTypeTest"
+./gradlew :10-exposed-r2dbc-jasypt:test --tests "exposed.r2dbc.examples.jasypt.JasyptColumnTypeTest"
 ```
 
 ## References

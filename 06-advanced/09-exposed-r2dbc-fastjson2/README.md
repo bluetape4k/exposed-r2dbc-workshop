@@ -85,21 +85,21 @@ sequenceDiagram
     participant DB as Database
 
     Note over App,DB: INSERT — Kotlin object to JSON string
-    App ->> Col: insert { it[data] = UserData(info=User("test","A"), logins=5) }
-    Col ->> FJ: JSON.toJSONString(userData)
-    FJ -->> Col: '{"info":{"name":"test","team":"A"},"logins":5,"active":true}'
+    App ->> Col: insert { it[fastjsonColumn] = DataHolder(user=User("Admin",null), logins=10) }
+    Col ->> FJ: JSON.toJSONString(dataHolder)
+    FJ -->> Col: '{"user":{"name":"Admin","team":null},"logins":10,"active":true}'
     Col ->> DB: INSERT json_text
 
     Note over App,DB: SELECT — JSON string to Kotlin object
     DB -->> Col: json_text
-    Col ->> FJ: JSON.parseObject(json, UserData::class.java)
-    FJ -->> Col: UserData object
-    Col -->> App: UserData object
+    Col ->> FJ: JSON.parseObject(json, DataHolder::class.java)
+    FJ -->> Col: DataHolder object
+    Col -->> App: DataHolder object
 
     Note over App,DB: JSON path extraction (DB side)
-    App ->> Col: data.extract(".info.name")
-    Col ->> DB: JSON_EXTRACT(data, '$.info.name')
-    DB -->> App: "test"
+    App ->> Col: fastjsonColumn.extract(".user.name")
+    Col ->> DB: JSON_EXTRACT(fastjson_column, '$.user.name')
+    DB -->> App: "Admin"
 ```
 
 ## JSON Library Comparison
@@ -148,56 +148,63 @@ Similar to `FastjsonColumnTest.kt` but focused on the `fastjsonb` column type. T
 ### 1. Define a table with a `fastjsonb` column
 
 ```kotlin
+import io.bluetape4k.exposed.core.fastjson2.fastjson
 import io.bluetape4k.exposed.core.fastjson2.fastjsonb
-import com.alibaba.fastjson.annotation.JSONField // optional, for customization
+import com.alibaba.fastjson2.annotation.JSONField // optional, for customization
 
 // Standard data classes
 data class User(val name: String, val team: String?)
-data class UserData(val info: User, val logins: Int, val active: Boolean)
+data class DataHolder(val user: User, val logins: Int, val active: Boolean, val team: String?)
 
-object UsersTable: IntIdTable("users") {
-  // Column stores UserData objects as JSONB using Fastjson2
-  val data = fastjsonb<UserData>("data")
+object FastjsonTable: IntIdTable("fastjson_table") {
+    // Column stores DataHolder objects as JSON using Fastjson2
+    val fastjsonColumn = fastjson<DataHolder>("fastjson_column")
+}
+
+object FastjsonBTable: IntIdTable("fastjson_b_table") {
+    // Column stores DataHolder objects as JSONB using Fastjson2 (PostgreSQL)
+    val fastjsonBColumn = fastjsonb<DataHolder>("fastjson_b_column")
 }
 ```
 
 ### 2. Insert and query with Fastjson2 (DSL)
 
 ```kotlin
-val userData = UserData(info = User("test", "A"), logins = 5, active = true)
+val user = User("Admin", null)
+val data = DataHolder(user, logins = 10, active = true, team = null)
 
 // Insert data
-UsersTable.insert {
-  it[data] = userData
+FastjsonTable.insert {
+    it[fastjsonColumn] = data
 }
 
 // Extract nested value and use in WHERE clause
 // Note: path syntax may vary by database
-val username = UsersTable.data.extract<String>(".info.name")
-val userRecord = UsersTable.selectAll().where { username eq "test" }.single()
+val username = FastjsonTable.fastjsonColumn.extract<String>(".user.name")
+val row = FastjsonTable.selectAll().where { username eq "Admin" }.single()
 
 // Entire object is automatically deserialized on read
-val retrievedData = userRecord[UsersTable.data]
-retrievedData.logins shouldBeEqualTo 5
+val retrieved = row[FastjsonTable.fastjsonColumn]
+retrieved.logins shouldBeEqualTo 10
 ```
 
 ### 3. Use a Fastjson2 column in an entity (DAO)
 
 ```kotlin
-class UserEntity(id: EntityID<Int>): IntEntity(id) {
-  companion object: IntEntityClass<UserEntity>(UsersTable)
+class FastjsonEntity(id: EntityID<Int>): IntEntity(id) {
+    companion object: IntEntityClass<FastjsonEntity>(FastjsonTable)
 
-  // Property is automatically mapped to/from JSON
-  var data by UsersTable.data
+    // Property is automatically mapped to/from JSON
+    var fastjsonColumn by FastjsonTable.fastjsonColumn
 }
 
 // Create a new entity
-val entity = UserEntity.new {
-  data = UserData(info = User("dao_user", "B"), logins = 1, active = true)
+val entity = FastjsonEntity.new {
+    fastjsonColumn = DataHolder(User("dao_user", "B"), logins = 1, active = true, team = "B")
 }
 
 // Access property
-println(entity.data.info.name) // prints "dao_user"
+println(entity.fastjsonColumn.user.name) // prints "dao_user"
 ```
 
 ## Running the Tests
@@ -209,7 +216,7 @@ println(entity.data.info.name) // prints "dao_user"
 ./gradlew :09-exposed-r2dbc-fastjson2:test
 
 # Test the FastjsonB column type
-./gradlew :09-exposed-r2dbc-fastjson2:test --tests "exposed.examples.fastjson2.FastjsonBColumnTest"
+./gradlew :09-exposed-r2dbc-fastjson2:test --tests "exposed.r2dbc.examples.fastjson2.FastjsonBColumnTest"
 ```
 
 ## References

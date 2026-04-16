@@ -193,7 +193,7 @@ println(entity.data.info.name) // prints "dao_user"
 ./gradlew :11-exposed-r2dbc-jackson3:test
 
 # Test the JSONB column type
-./gradlew :11-exposed-r2dbc-jackson3:test --tests "exposed.examples.jackson3.JacksonBColumnTest"
+./gradlew :11-exposed-r2dbc-jackson3:test --tests "exposed.r2dbc.examples.jackson3.JacksonBColumnTest"
 ```
 
 ## References

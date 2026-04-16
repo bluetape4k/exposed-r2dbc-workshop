@@ -274,7 +274,7 @@ val result = TableWithDate.selectAll()
 ./gradlew :03-exposed-r2dbc-kotlin-datetime:test
 
 # 특정 테스트 클래스 실행
-./gradlew :03-exposed-r2dbc-kotlin-datetime:test --tests "exposed.examples.kotlin.datetime.Ex01_KotlinDateTime"
+./gradlew :03-exposed-r2dbc-kotlin-datetime:test --tests "exposed.r2dbc.examples.kotlin.datetime.Ex01_KotlinDateTime"
 ```
 
 ## 참고 자료

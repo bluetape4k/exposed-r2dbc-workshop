@@ -256,7 +256,7 @@ val usdAccounts = AccountTable.selectAll().where { AccountTable.composite_money.
 ./gradlew :05-exposed-r2dbc-money:test
 
 # Run a specific test class
-./gradlew :05-exposed-r2dbc-money:test --tests "exposed.examples.money.Ex02_Money"
+./gradlew :05-exposed-r2dbc-money:test --tests "exposed.r2dbc.examples.money.Ex02_Money"
 ```
 
 ## References

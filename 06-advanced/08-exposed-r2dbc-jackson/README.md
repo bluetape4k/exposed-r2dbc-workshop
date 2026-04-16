@@ -109,21 +109,21 @@ sequenceDiagram
     participant DB as Database
 
     Note over App,DB: INSERT — Kotlin object to JSON string
-    App ->> Col: insert { it[data] = UserData(info=User("test","A"), logins=5) }
-    Col ->> OM: writeValueAsString(userData)
-    OM -->> Col: '{"info":{"name":"test","team":"A"},"logins":5,"active":true}'
+    App ->> Col: insert { it[jacksonColumn] = DataHolder(user=User("Admin",null), logins=10) }
+    Col ->> OM: writeValueAsString(dataHolder)
+    OM -->> Col: '{"user":{"name":"Admin","team":null},"logins":10,"active":true}'
     Col ->> DB: INSERT json_text
 
     Note over App,DB: SELECT — JSON string to Kotlin object
-    DB -->> Col: '{"info":{"name":"test","team":"A"},"logins":5,"active":true}'
-    Col ->> OM: readValue(json, UserData::class)
-    OM -->> Col: UserData(info=User("test","A"), logins=5, active=true)
-    Col -->> App: UserData object
+    DB -->> Col: '{"user":{"name":"Admin","team":null},"logins":10,"active":true}'
+    Col ->> OM: readValue(json, DataHolder::class)
+    OM -->> Col: DataHolder(user=User("Admin",null), logins=10, active=true)
+    Col -->> App: DataHolder object
 
     Note over App,DB: JSON path extraction (DB side)
-    App ->> Col: data.extract(".info.name")
-    Col ->> DB: JSON_EXTRACT(data, '$.info.name')
-    DB -->> App: "test"
+    App ->> Col: jacksonColumn.extract(".user.name")
+    Col ->> DB: JSON_EXTRACT(jackson_column, '$.user.name')
+    DB -->> App: "Admin"
 ```
 
 ## Table Structure (ER Diagram)
@@ -133,20 +133,20 @@ sequenceDiagram
 erDiagram
     JACKSON_TABLE {
         INT id PK
-        JSON data "UserData JSON column"
+        JSON jackson_column "DataHolder JSON column"
     }
     JACKSON_B_TABLE {
         INT id PK
-        JSONB data "UserData JSONB column (PostgreSQL)"
+        JSONB jackson_b_column "DataHolder JSONB column (PostgreSQL)"
     }
-    USER_DATA {
+    DATA_HOLDER {
         String name
         String team_nullable
         INT logins
         BOOLEAN active
     }
-    JACKSON_TABLE ||--|| USER_DATA : "stored in data field"
-    JACKSON_B_TABLE ||--|| USER_DATA : "stored in data field"
+    JACKSON_TABLE ||--|| DATA_HOLDER : "stored in jackson_column"
+    JACKSON_B_TABLE ||--|| DATA_HOLDER : "stored in jackson_b_column"
 ```
 
 ## Example Overview
@@ -173,55 +173,62 @@ Similar to `JacksonColumnTest.kt` but uses the higher-performance `jacksonb` col
 ### 1. Define a table with a `jacksonb` column
 
 ```kotlin
+import io.bluetape4k.exposed.core.jackson.jackson
 import io.bluetape4k.exposed.core.jackson.jacksonb
 
 // Standard data classes — no @Serializable needed
 data class User(val name: String, val team: String?)
-data class UserData(val info: User, val logins: Int, val active: Boolean)
+data class DataHolder(val user: User, val logins: Int, val active: Boolean, val team: String?)
 
-object UsersTable: IntIdTable("users") {
-  // Column stores UserData objects as JSONB using Jackson
-  val data = jacksonb<UserData>("data")
+object JacksonTable: IntIdTable("jackson_table") {
+    // Column stores DataHolder objects as JSON using Jackson
+    val jacksonColumn = jackson<DataHolder>("jackson_column")
+}
+
+object JacksonBTable: IntIdTable("jackson_b_table") {
+    // Column stores DataHolder objects as JSONB using Jackson (PostgreSQL)
+    val jacksonBColumn = jacksonb<DataHolder>("jackson_b_column")
 }
 ```
 
 ### 2. Insert and query with Jackson (DSL)
 
 ```kotlin
-val userData = UserData(info = User("test", "A"), logins = 5, active = true)
+val user = User("Admin", null)
+val data = DataHolder(user, logins = 10, active = true, team = null)
 
 // Insert data
-UsersTable.insert {
-  it[data] = userData
+JacksonTable.insert {
+    it[jacksonColumn] = data
 }
 
 // Extract nested value and use in WHERE clause
 // Note: path syntax may vary by database
-val username = UsersTable.data.extract<String>(".info.name")
-val userRecord = UsersTable.selectAll().where { username eq "test" }.single()
+val username = JacksonTable.jacksonColumn.extract<String>(".user.name")
+val row = JacksonTable.selectAll().where { username eq "Admin" }.single()
 
 // Entire object is automatically deserialized on read
-val retrievedData = userRecord[UsersTable.data]
-retrievedData.logins shouldBeEqualTo 5
+val retrieved = row[JacksonTable.jacksonColumn]
+retrieved.logins shouldBeEqualTo 10
 ```
 
 ### 3. Use a Jackson column in an entity (DAO)
 
 ```kotlin
-class UserEntity(id: EntityID<Int>): IntEntity(id) {
-  companion object: IntEntityClass<UserEntity>(UsersTable)
+class JacksonEntity(id: EntityID<Int>): IntEntity(id) {
+    companion object: IntEntityClass<JacksonEntity>(JacksonTable)
 
-  // Property is automatically mapped to/from JSON
-  var data by UsersTable.data
+    // Property is automatically mapped to/from JSON
+    var jacksonColumn by JacksonTable.jacksonColumn
 }
 
 // Create a new entity
-val entity = UserEntity.new {
-  data = UserData(info = User("dao_user", "B"), logins = 1, active = true)
+val entity = JacksonEntity.new {
+    jacksonColumn = DataHolder(User("dao_user", "B"), logins = 1, active = true, team = "B")
 }
 
 // Access property
-println(entity.data.info.name) // prints "dao_user"
+println(entity.jacksonColumn.user.name) // prints "dao_user"
 ```
 
 ## Running the Tests
@@ -233,7 +240,7 @@ println(entity.data.info.name) // prints "dao_user"
 ./gradlew :08-exposed-r2dbc-jackson:test
 
 # Test the JSONB column type
-./gradlew :08-exposed-r2dbc-jackson:test --tests "exposed.examples.jackson.JacksonBColumnTest"
+./gradlew :08-exposed-r2dbc-jackson:test --tests "exposed.r2dbc.examples.jackson.JacksonBColumnTest"
 ```
 
 ## References

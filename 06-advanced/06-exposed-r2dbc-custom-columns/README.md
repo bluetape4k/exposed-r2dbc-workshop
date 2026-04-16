@@ -294,7 +294,7 @@ retrievedProfile.settings["theme"] shouldBeEqualTo "dark"
 ./gradlew :06-exposed-r2dbc-custom-columns:test
 
 # Run tests for a specific feature (e.g., compression)
-./gradlew :06-exposed-r2dbc-custom-columns:test --tests "exposed.examples.custom.columns.compress.*"
+./gradlew :06-exposed-r2dbc-custom-columns:test --tests "exposed.r2dbc.examples.custom.columns.compress.*"
 ```
 
 ## References

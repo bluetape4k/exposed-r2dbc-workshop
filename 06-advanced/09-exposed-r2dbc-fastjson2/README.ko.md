@@ -87,21 +87,21 @@ sequenceDiagram
     participant DB as Database
 
     Note over App,DB: INSERT — Kotlin 객체 → JSON 문자열
-    App ->> Col: insert { it[data] = UserData(info=User("test","A"), logins=5) }
-    Col ->> FJ: JSON.toJSONString(userData)
-    FJ -->> Col: '{"info":{"name":"test","team":"A"},"logins":5,"active":true}'
+    App ->> Col: insert { it[fastjsonColumn] = DataHolder(user=User("Admin",null), logins=10) }
+    Col ->> FJ: JSON.toJSONString(dataHolder)
+    FJ -->> Col: '{"user":{"name":"Admin","team":null},"logins":10,"active":true}'
     Col ->> DB: INSERT json_text
 
     Note over App,DB: SELECT — JSON 문자열 → Kotlin 객체
     DB -->> Col: json_text
-    Col ->> FJ: JSON.parseObject(json, UserData::class.java)
-    FJ -->> Col: UserData 객체
-    Col -->> App: UserData 객체
+    Col ->> FJ: JSON.parseObject(json, DataHolder::class.java)
+    FJ -->> Col: DataHolder 객체
+    Col -->> App: DataHolder 객체
 
     Note over App,DB: JSON 경로 추출 (DB 측)
-    App ->> Col: data.extract(".info.name")
-    Col ->> DB: JSON_EXTRACT(data, '$.info.name')
-    DB -->> App: "test"
+    App ->> Col: fastjsonColumn.extract(".user.name")
+    Col ->> DB: JSON_EXTRACT(fastjson_column, '$.user.name')
+    DB -->> App: "Admin"
 ```
 
 ## JSON 라이브러리 비교
@@ -152,56 +152,63 @@ flowchart LR
 ### 1. `fastjsonb` 컬럼이 있는 테이블 정의
 
 ```kotlin
+import io.bluetape4k.exposed.core.fastjson2.fastjson
 import io.bluetape4k.exposed.core.fastjson2.fastjsonb
-import com.alibaba.fastjson.annotation.JSONField // 선택사항, 커스터마이징용
+import com.alibaba.fastjson2.annotation.JSONField // 선택사항, 커스터마이징용
 
 // 표준 데이터 클래스
 data class User(val name: String, val team: String?)
-data class UserData(val info: User, val logins: Int, val active: Boolean)
+data class DataHolder(val user: User, val logins: Int, val active: Boolean, val team: String?)
 
-object UsersTable: IntIdTable("users") {
-  // 컬럼이 UserData 객체를 Fastjson2를 사용하여 JSONB로 저장
-  val data = fastjsonb<UserData>("data")
+object FastjsonTable: IntIdTable("fastjson_table") {
+    // DataHolder 객체를 Fastjson2를 사용하여 JSON으로 저장
+    val fastjsonColumn = fastjson<DataHolder>("fastjson_column")
+}
+
+object FastjsonBTable: IntIdTable("fastjson_b_table") {
+    // DataHolder 객체를 Fastjson2를 사용하여 JSONB로 저장 (PostgreSQL)
+    val fastjsonBColumn = fastjsonb<DataHolder>("fastjson_b_column")
 }
 ```
 
 ### 2. Fastjson2로 삽입 및 쿼리 (DSL)
 
 ```kotlin
-val userData = UserData(info = User("test", "A"), logins = 5, active = true)
+val user = User("Admin", null)
+val data = DataHolder(user, logins = 10, active = true, team = null)
 
 // 데이터 삽입
-UsersTable.insert {
-  it[data] = userData
+FastjsonTable.insert {
+    it[fastjsonColumn] = data
 }
 
 // 중첩된 값 추출 후 WHERE 절에서 사용
 // 참고: 경로 문법은 데이터베이스마다 다를 수 있음
-val username = UsersTable.data.extract<String>(".info.name")
-val userRecord = UsersTable.selectAll().where { username eq "test" }.single()
+val username = FastjsonTable.fastjsonColumn.extract<String>(".user.name")
+val row = FastjsonTable.selectAll().where { username eq "Admin" }.single()
 
 // 읽을 때 전체 객체가 자동으로 역직렬화됨
-val retrievedData = userRecord[UsersTable.data]
-retrievedData.logins shouldBeEqualTo 5
+val retrieved = row[FastjsonTable.fastjsonColumn]
+retrieved.logins shouldBeEqualTo 10
 ```
 
 ### 3. 엔티티에서 Fastjson2 컬럼 사용 (DAO)
 
 ```kotlin
-class UserEntity(id: EntityID<Int>): IntEntity(id) {
-  companion object: IntEntityClass<UserEntity>(UsersTable)
+class FastjsonEntity(id: EntityID<Int>): IntEntity(id) {
+    companion object: IntEntityClass<FastjsonEntity>(FastjsonTable)
 
-  // 속성이 JSON으로/에서 자동 매핑됨
-  var data by UsersTable.data
+    // 속성이 JSON으로/에서 자동 매핑됨
+    var fastjsonColumn by FastjsonTable.fastjsonColumn
 }
 
 // 새 엔티티 생성
-val entity = UserEntity.new {
-  data = UserData(info = User("dao_user", "B"), logins = 1, active = true)
+val entity = FastjsonEntity.new {
+    fastjsonColumn = DataHolder(User("dao_user", "B"), logins = 1, active = true, team = "B")
 }
 
 // 속성 접근
-println(entity.data.info.name) // "dao_user" 출력
+println(entity.fastjsonColumn.user.name) // "dao_user" 출력
 ```
 
 ## 테스트 실행
@@ -213,7 +220,7 @@ println(entity.data.info.name) // "dao_user" 출력
 ./gradlew :09-exposed-r2dbc-fastjson2:test
 
 # FastjsonB 컬럼 타입 테스트
-./gradlew :09-exposed-r2dbc-fastjson2:test --tests "exposed.examples.fastjson2.FastjsonBColumnTest"
+./gradlew :09-exposed-r2dbc-fastjson2:test --tests "exposed.r2dbc.examples.fastjson2.FastjsonBColumnTest"
 ```
 
 ## 참고 자료

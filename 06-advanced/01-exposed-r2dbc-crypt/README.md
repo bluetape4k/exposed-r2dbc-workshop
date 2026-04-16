@@ -201,7 +201,7 @@ println(entity.varchar) // prints "my secret value"
 ./gradlew :01-exposed-r2dbc-crypt:test
 
 # Run a specific test class
-./gradlew :01-exposed-r2dbc-crypt:test --tests "exposed.examples.crypt.Ex01_EncryptedColumn"
+./gradlew :01-exposed-r2dbc-crypt:test --tests "exposed.r2dbc.examples.crypt.Ex01_EncryptedColumn"
 ```
 
 ## References

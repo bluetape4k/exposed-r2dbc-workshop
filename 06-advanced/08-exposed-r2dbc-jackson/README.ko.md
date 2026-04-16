@@ -110,21 +110,21 @@ sequenceDiagram
     participant DB as Database
 
     Note over App,DB: INSERT — Kotlin 객체 → JSON 문자열
-    App ->> Col: insert { it[data] = UserData(info=User("test","A"), logins=5) }
-    Col ->> OM: writeValueAsString(userData)
-    OM -->> Col: '{"info":{"name":"test","team":"A"},"logins":5,"active":true}'
+    App ->> Col: insert { it[jacksonColumn] = DataHolder(user=User("Admin",null), logins=10) }
+    Col ->> OM: writeValueAsString(dataHolder)
+    OM -->> Col: '{"user":{"name":"Admin","team":null},"logins":10,"active":true}'
     Col ->> DB: INSERT json_text
 
     Note over App,DB: SELECT — JSON 문자열 → Kotlin 객체
-    DB -->> Col: '{"info":{"name":"test","team":"A"},"logins":5,"active":true}'
-    Col ->> OM: readValue(json, UserData::class)
-    OM -->> Col: UserData(info=User("test","A"), logins=5, active=true)
-    Col -->> App: UserData 객체
+    DB -->> Col: '{"user":{"name":"Admin","team":null},"logins":10,"active":true}'
+    Col ->> OM: readValue(json, DataHolder::class)
+    OM -->> Col: DataHolder(user=User("Admin",null), logins=10, active=true)
+    Col -->> App: DataHolder 객체
 
     Note over App,DB: JSON 경로 추출 (DB 측)
-    App ->> Col: data.extract(".info.name")
-    Col ->> DB: JSON_EXTRACT(data, '$.info.name')
-    DB -->> App: "test"
+    App ->> Col: jacksonColumn.extract(".user.name")
+    Col ->> DB: JSON_EXTRACT(jackson_column, '$.user.name')
+    DB -->> App: "Admin"
 ```
 
 ## 테이블 구조 (ER 다이어그램)
@@ -134,20 +134,20 @@ sequenceDiagram
 erDiagram
     JACKSON_TABLE {
         INT id PK
-        JSON data "UserData JSON 컬럼"
+        JSON jackson_column "DataHolder JSON 컬럼"
     }
     JACKSON_B_TABLE {
         INT id PK
-        JSONB data "UserData JSONB 컬럼 (PostgreSQL)"
+        JSONB jackson_b_column "DataHolder JSONB 컬럼 (PostgreSQL)"
     }
-    USER_DATA {
+    DATA_HOLDER {
         String name
         String team_nullable
         INT logins
         BOOLEAN active
     }
-    JACKSON_TABLE ||--|| USER_DATA : "data 필드로 저장"
-    JACKSON_B_TABLE ||--|| USER_DATA : "data 필드로 저장"
+    JACKSON_TABLE ||--|| DATA_HOLDER : "jackson_column 필드로 저장"
+    JACKSON_B_TABLE ||--|| DATA_HOLDER : "jackson_b_column 필드로 저장"
 ```
 
 ## 예제 개요
@@ -175,55 +175,62 @@ erDiagram
 ### 1. `jacksonb` 컬럼이 있는 테이블 정의
 
 ```kotlin
+import io.bluetape4k.exposed.core.jackson.jackson
 import io.bluetape4k.exposed.core.jackson.jacksonb
 
 // 표준 데이터 클래스 - @Serializable 불필요
 data class User(val name: String, val team: String?)
-data class UserData(val info: User, val logins: Int, val active: Boolean)
+data class DataHolder(val user: User, val logins: Int, val active: Boolean, val team: String?)
 
-object UsersTable: IntIdTable("users") {
-  // 컬럼이 UserData 객체를 Jackson을 사용하여 JSONB로 저장
-  val data = jacksonb<UserData>("data")
+object JacksonTable: IntIdTable("jackson_table") {
+    // DataHolder 객체를 Jackson을 사용하여 JSON으로 저장
+    val jacksonColumn = jackson<DataHolder>("jackson_column")
+}
+
+object JacksonBTable: IntIdTable("jackson_b_table") {
+    // DataHolder 객체를 Jackson을 사용하여 JSONB로 저장 (PostgreSQL)
+    val jacksonBColumn = jacksonb<DataHolder>("jackson_b_column")
 }
 ```
 
 ### 2. Jackson으로 삽입 및 쿼리 (DSL)
 
 ```kotlin
-val userData = UserData(info = User("test", "A"), logins = 5, active = true)
+val user = User("Admin", null)
+val data = DataHolder(user, logins = 10, active = true, team = null)
 
 // 데이터 삽입
-UsersTable.insert {
-  it[data] = userData
+JacksonTable.insert {
+    it[jacksonColumn] = data
 }
 
 // 중첩된 값 추출 후 WHERE 절에서 사용
 // 참고: 경로 문법은 데이터베이스마다 다를 수 있음
-val username = UsersTable.data.extract<String>(".info.name")
-val userRecord = UsersTable.selectAll().where { username eq "test" }.single()
+val username = JacksonTable.jacksonColumn.extract<String>(".user.name")
+val row = JacksonTable.selectAll().where { username eq "Admin" }.single()
 
 // 읽을 때 전체 객체가 자동으로 역직렬화됨
-val retrievedData = userRecord[UsersTable.data]
-retrievedData.logins shouldBeEqualTo 5
+val retrieved = row[JacksonTable.jacksonColumn]
+retrieved.logins shouldBeEqualTo 10
 ```
 
 ### 3. 엔티티에서 Jackson 컬럼 사용 (DAO)
 
 ```kotlin
-class UserEntity(id: EntityID<Int>): IntEntity(id) {
-  companion object: IntEntityClass<UserEntity>(UsersTable)
+class JacksonEntity(id: EntityID<Int>): IntEntity(id) {
+    companion object: IntEntityClass<JacksonEntity>(JacksonTable)
 
-  // 속성이 JSON으로/에서 자동 매핑됨
-  var data by UsersTable.data
+    // 속성이 JSON으로/에서 자동 매핑됨
+    var jacksonColumn by JacksonTable.jacksonColumn
 }
 
 // 새 엔티티 생성
-val entity = UserEntity.new {
-  data = UserData(info = User("dao_user", "B"), logins = 1, active = true)
+val entity = JacksonEntity.new {
+    jacksonColumn = DataHolder(User("dao_user", "B"), logins = 1, active = true, team = "B")
 }
 
 // 속성 접근
-println(entity.data.info.name) // "dao_user" 출력
+println(entity.jacksonColumn.user.name) // "dao_user" 출력
 ```
 
 ## 테스트 실행
@@ -235,7 +242,7 @@ println(entity.data.info.name) // "dao_user" 출력
 ./gradlew :08-exposed-r2dbc-jackson:test
 
 # JSONB 컬럼 타입 테스트
-./gradlew :08-exposed-r2dbc-jackson:test --tests "exposed.examples.jackson.JacksonBColumnTest"
+./gradlew :08-exposed-r2dbc-jackson:test --tests "exposed.r2dbc.examples.jackson.JacksonBColumnTest"
 ```
 
 ## 참고 자료

@@ -245,7 +245,7 @@ val result = TableWithDate.selectAll()
 ./gradlew :02-exposed-r2dbc-javatime:test
 
 # Run a specific test class
-./gradlew :02-exposed-r2dbc-javatime:test --tests "exposed.examples.java.time.Ex01_JavaTime"
+./gradlew :02-exposed-r2dbc-javatime:test --tests "exposed.r2dbc.examples.java.time.Ex01_JavaTime"
 ```
 
 ## References

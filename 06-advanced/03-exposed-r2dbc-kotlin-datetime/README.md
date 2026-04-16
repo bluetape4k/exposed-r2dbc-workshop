@@ -272,7 +272,7 @@ val result = TableWithDate.selectAll()
 ./gradlew :03-exposed-r2dbc-kotlin-datetime:test
 
 # Run a specific test class
-./gradlew :03-exposed-r2dbc-kotlin-datetime:test --tests "exposed.examples.kotlin.datetime.Ex01_KotlinDateTime"
+./gradlew :03-exposed-r2dbc-kotlin-datetime:test --tests "exposed.r2dbc.examples.kotlin.datetime.Ex01_KotlinDateTime"
 ```
 
 ## References

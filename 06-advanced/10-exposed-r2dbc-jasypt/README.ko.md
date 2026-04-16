@@ -118,7 +118,14 @@ classDiagram
 
 ### Encryptors
 
-`Encryptors` enum(예: `Encryptors.AES`, `Encryptors.RC4`)은 암호화 알고리즘을 지정하고 Jasypt용 키 관리 설정을 암시적으로 처리합니다.
+`Encryptors` enum은 암호화 알고리즘을 지정하고 Jasypt용 키 관리 설정을 암시적으로 처리합니다:
+
+| Encryptor                    | 유형       | WHERE 검색 가능 |
+|------------------------------|----------|--------------|
+| `Encryptors.DeterministicAES` | 결정적     | 예           |
+| `Encryptors.DeterministicRC4` | 결정적     | 예           |
+| `Encryptors.TripleDES`        | 비결정적   | 불가          |
+| `Encryptors.RC2`              | 비결정적   | 불가          |
 
 ## 예제 개요
 
@@ -148,13 +155,14 @@ import io.bluetape4k.crypto.encrypt.Encryptors
 object UserSecrets: IntIdTable("user_secrets") {
   val username = varchar("username", 255)
 
-  // AES를 사용하는 API 키용 암호화 문자열 컬럼
-  // 이 컬럼은 검색 가능합니다
-  val apiKey = jasyptVarChar("api_key", 512, Encryptors.AES)
+  // 결정적 AES 암호화 — WHERE 절 검색 가능
+  val name = jasyptVarChar("name", 255, Encryptors.DeterministicAES).nullable().index()
 
-  // RC4를 사용하는 비밀 토큰용 암호화 바이너리 컬럼
-  // 이 컬럼도 검색 가능합니다
-  val secretToken = jasyptBinary("secret_token", 256, Encryptors.RC4)
+  // 결정적 RC4 암호화 — WHERE 절 검색 가능
+  val city = jasyptVarChar("city", 255, Encryptors.DeterministicRC4).nullable().index()
+
+  // TripleDES 암호화 (비결정적) — WHERE 절 검색 불가
+  val address = jasyptBinary("address", 255, Encryptors.TripleDES).nullable()
 }
 ```
 
@@ -162,21 +170,30 @@ object UserSecrets: IntIdTable("user_secrets") {
 
 ```kotlin
 // 암호화된 레코드 삽입
+val insertedName = "홍길동"
+val insertedCity = "서울"
+val insertedAddress = "서울시 강남구 테헤란로 123"
+
 val id = UserSecrets.insertAndGetId {
-  it[username] = "john.doe"
-  it[apiKey] = "my_super_secret_api_key_123"
-  it[secretToken] = "binary_token_data".toByteArray()
+    it[name] = insertedName
+    it[city] = insertedCity
+    it[address] = insertedAddress.toByteArray()
 }
 
-// 조회 및 검증
-val retrievedUser = UserSecrets.selectAll().where { UserSecrets.id eq id }.single()
-retrievedUser[UserSecrets.username] shouldBeEqualTo "john.doe"
-retrievedUser[UserSecrets.apiKey] shouldBeEqualTo "my_super_secret_api_key_123"
-retrievedUser[UserSecrets.secretToken].toUtf8String() shouldBeEqualTo "binary_token_data"
+// 조회 및 검증 (값은 투명하게 복호화됨)
+val row = UserSecrets.selectAll().where { UserSecrets.id eq id }.single()
+row[UserSecrets.name] shouldBeEqualTo insertedName
+row[UserSecrets.city] shouldBeEqualTo insertedCity
+row[UserSecrets.address]?.toUtf8String() shouldBeEqualTo insertedAddress
 
-// 암호화된 컬럼으로 쿼리 (암호화가 결정적이므로 작동)
-val userByApiKey = UserSecrets.selectAll().where { UserSecrets.apiKey eq "my_super_secret_api_key_123" }.single()
-userByApiKey[UserSecrets.username] shouldBeEqualTo "john.doe"
+// 결정적 암호화 컬럼으로 WHERE 절 검색 (DeterministicAES / DeterministicRC4만 가능)
+UserSecrets.selectAll()
+    .where { UserSecrets.name eq insertedName }
+    .count() shouldBeEqualTo 1L
+
+UserSecrets.selectAll()
+    .where { UserSecrets.city eq insertedCity }
+    .count() shouldBeEqualTo 1L
 ```
 
 ## 테스트 실행
@@ -186,7 +203,7 @@ userByApiKey[UserSecrets.username] shouldBeEqualTo "john.doe"
 ./gradlew :10-exposed-r2dbc-jasypt:test
 
 # 특정 테스트 클래스 실행
-./gradlew :10-exposed-r2dbc-jasypt:test --tests "exposed.examples.jasypt.JasyptColumnTypeTest"
+./gradlew :10-exposed-r2dbc-jasypt:test --tests "exposed.r2dbc.examples.jasypt.JasyptColumnTypeTest"
 ```
 
 ## 참고 자료
