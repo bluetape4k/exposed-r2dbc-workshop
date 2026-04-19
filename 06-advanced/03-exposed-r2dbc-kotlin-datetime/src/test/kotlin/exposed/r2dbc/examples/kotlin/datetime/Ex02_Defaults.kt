@@ -724,7 +724,7 @@ class Ex02_Defaults: AbstractR2dbcExposedTest() {
          * );
          * ```
          */
-        val time = Clock.System.now().toLocalDateTime(TimeZone.of("Asia/Seoul")).time
+        val time = LocalTime(0, 30, 49)
         val tester = object: Table("tester") {
             val timeWithDefault = time("timeWithDefault").default(time)
         }

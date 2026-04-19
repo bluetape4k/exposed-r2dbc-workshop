@@ -219,7 +219,7 @@ class Ex01_JavaTime: AbstractR2dbcExposedTest() {
             val tsn = timestamp("tsn").nullable()
         }
 
-        val now = Instant.now()
+        val now = Instant.now().truncatedTo(ChronoUnit.MICROS)
 
         withTables(testDB, testTable) {
             testTable.insert {
