@@ -726,7 +726,7 @@ class Ex02_Defaults: AbstractR2dbcExposedTest() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun testTimeDefaultDoesNotTriggerAlterStatement(testDB: TestDB) = runTest {
-        val time = LocalDateTime.now(ZoneId.of("Asia/Seoul")).toLocalTime()
+        val time = LocalTime.of(0, 30, 49)
 
         val tester = object: Table("tester") {
             val timeWithDefault = time("timeWithDefault").default(time)
