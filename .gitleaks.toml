@@ -1,0 +1,24 @@
+title = "exposed-r2dbc-workshop gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Allowlisted paths and patterns"
+
+paths = [
+    '''.idea/''',
+    '''build/''',
+    '''.gradle/''',
+    '''gradle/wrapper/''',
+    '''.omc/''',
+    '''docs/''',
+    '''README\.md''',
+    '''README\.ko\.md''',
+]
+
+regexes = [
+    '''YOUR_.*_HERE''',
+    '''example[-_]key''',
+    '''test[-_]api[-_]key''',
+]

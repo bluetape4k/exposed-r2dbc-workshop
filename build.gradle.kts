@@ -124,7 +124,9 @@ subprojects {
                 "-XX:+UseZGC",
                 "-Xms2G",
                 "-Xmx4G",
-                "-XX:+EnableDynamicAgentLoading"
+                "-XX:+EnableDynamicAgentLoading",
+                "-Duser.language=en",
+                "-Duser.country=US"
             )
 
             if (project.name.contains("quarkus")) {
