@@ -16,6 +16,7 @@ import org.jetbrains.exposed.v1.migration.r2dbc.MigrationUtils
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.exists
 import org.jetbrains.exposed.v1.r2dbc.insert
+import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.*
@@ -114,6 +115,8 @@ class Ex03_CreateMissingTableAndColumns: AbstractR2dbcExposedTest() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `누락된 테이블과 컬럼을 생성 - 02`(testDB: TestDB) = runTest {
+        // MariaDB R2DBC 드라이버 버그: 빈 batch 실행 시 MariadbBatch.execute 에서 NoSuchElementException 발생 → 스킵
+        Assumptions.assumeFalse { testDB == TestDB.MARIADB }
         val tester = object: IdTable<String>("Users2") {
             override val id: Column<EntityID<String>> = varchar("id", 22)
                 .clientDefault { UUID.randomUUID().toString() }
