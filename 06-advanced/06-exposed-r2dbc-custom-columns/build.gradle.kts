@@ -24,10 +24,6 @@ dependencies {
     testImplementation(Libs.fory_kotlin)
     testImplementation(Libs.kryo5)
 
-    // Encryption
-    testImplementation(Libs.bluetape4k_crypto)
-    testImplementation(Libs.jasypt)
-
     // Identifier 자동 생성
     testImplementation(Libs.bluetape4k_idgenerators)
     testImplementation(Libs.java_uuid_generator)
