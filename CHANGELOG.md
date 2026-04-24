@@ -8,10 +8,29 @@
 
 ## [Unreleased]
 
+### Added
+
+- `Libs.bluetape4k_lingua`, `Libs.bluetape4k_mock_web_server`, `Libs.bluetape4k_mock_webflux_server` 모듈 참조 추가 (BOM 1.7.0 신규 모듈)
+- GitHub Actions CI 워크플로 추가: DB 매트릭스 (`H2/PostgreSQL/MySQL 8/MariaDB`) 병렬 실행, Kover 커버리지 집계, detekt/테스트 아티팩트 업로드
+
 ### Changed
 
-- Bluetape4k `1.4.0` → `1.5.0-Beta1` 업그레이드
+- **Bluetape4k**: `1.6.2` → `1.7.0`
+- **Kotlin**: `2.3.20` → `2.3.21`
+- **MariaDB JDBC 드라이버**: `mariadb-java-client` `3.5.7` → `3.5.8`
+- CI 테스트 잡에서 Testcontainers 기반 DB는 `--max-workers=1` 적용 (Docker 리소스 경합 방지)
 - `.claude/worktrees/` 경로 gitignore에 추가
+
+### Removed
+
+- `Libs.bluetape4k_crypto`, `Libs.bluetape4k_exposed_jasypt` 참조 제거 (BOM 1.7.0에서 제외됨)
+- `06-advanced/10-exposed-r2dbc-jasypt` 예제 모듈 전체 삭제 (대체 모듈은 `12-exposed-r2dbc-tink`)
+- `06-advanced/06-exposed-r2dbc-custom-columns`의 encrypt 테스트 디렉터리 삭제 (`bluetape4k-crypto` 의존)
+
+### Fixed
+
+- MariaDB R2DBC 드라이버 빈 batch 실행 시 `NoSuchElementException` 발생 → `04-exposed-r2dbc-ddl/02-ddl/Ex03_CreateMissingTableAndColumns > 누락된 테이블과 컬럼을 생성 - 02` 테스트 MariaDB 스킵 처리
+- `06-advanced/07-exposed-r2dbc-custom-entities`: MariaDB 단독 실행 시 `@MethodSource`가 빈 리스트 반환하여 `TemplateInvocationValidationException` 발생하던 문제 해소 (더미 fallback + `skipIfMariaDB` helper)
 
 ---
 
