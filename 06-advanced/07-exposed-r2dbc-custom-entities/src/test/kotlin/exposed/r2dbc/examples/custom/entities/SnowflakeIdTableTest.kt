@@ -60,6 +60,7 @@ class SnowflakeIdTableTest: AbstractCustomIdTableTest() {
     @ParameterizedTest(name = "{0} - {1}개 레코드")
     @MethodSource(GET_TESTDB_AND_ENTITY_COUNT)
     fun `Snowflake id를 가진 레코드를 낱개로 생성한다`(testDB: TestDB, recordCount: Int) = runTest {
+        skipIfMariaDB(testDB)
         withTables(testDB, T1) {
             List(recordCount) {
                 T1.insert {
@@ -76,6 +77,7 @@ class SnowflakeIdTableTest: AbstractCustomIdTableTest() {
     @ParameterizedTest(name = "{0} - {1}개 레코드")
     @MethodSource(GET_TESTDB_AND_ENTITY_COUNT)
     fun `Snowflake id를 가진 레코드를 배치로 생성한다`(testDB: TestDB, recordCount: Int) = runTest {
+        skipIfMariaDB(testDB)
         withTables(testDB, T1) {
             val records = List(recordCount) {
                 Record(
@@ -98,6 +100,7 @@ class SnowflakeIdTableTest: AbstractCustomIdTableTest() {
     @ParameterizedTest(name = "{0} - {1}개 레코드")
     @MethodSource(GET_TESTDB_AND_ENTITY_COUNT)
     fun `코루틴 환경에서 레코드를 배치로 생성한다`(testDB: TestDB, recordCount: Int) = runTest {
+        skipIfMariaDB(testDB)
         withTables(testDB, T1) {
             val records = List(recordCount) {
                 Record(

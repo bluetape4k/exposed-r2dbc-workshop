@@ -60,6 +60,7 @@ class TimebasedUUIDTableTest: AbstractCustomIdTableTest() {
     @ParameterizedTest(name = "{0} - {1}개 레코드")
     @MethodSource(GET_TESTDB_AND_ENTITY_COUNT)
     fun `TimebasedUUID id를 가진 레코드를 생성한다`(testDB: TestDB, recordCount: Int) = runTest {
+        skipIfMariaDB(testDB)
         withTables(testDB, T1) {
             repeat(recordCount) {
                 T1.insert {
@@ -75,6 +76,7 @@ class TimebasedUUIDTableTest: AbstractCustomIdTableTest() {
     @ParameterizedTest(name = "{0} - {1}개 레코드")
     @MethodSource(GET_TESTDB_AND_ENTITY_COUNT)
     fun `TimebasedUUID id를 가진 레코드를 배치로 생성한다`(testDB: TestDB, recordCount: Int) = runTest {
+        skipIfMariaDB(testDB)
         withTables(testDB, T1) {
             val records = List(recordCount) {
                 Record(
@@ -96,6 +98,7 @@ class TimebasedUUIDTableTest: AbstractCustomIdTableTest() {
     @ParameterizedTest(name = "{0} - {1}개 레코드")
     @MethodSource(GET_TESTDB_AND_ENTITY_COUNT)
     fun `코루틴 환경에서 레코드를 배치로 생성한다`(testDB: TestDB, recordCount: Int) = runTest {
+        skipIfMariaDB(testDB)
         withTables(testDB, T1) {
             val records = List(recordCount) {
                 Record(

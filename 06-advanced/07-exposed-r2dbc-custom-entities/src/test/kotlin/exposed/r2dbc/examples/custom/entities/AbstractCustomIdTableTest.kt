@@ -4,6 +4,7 @@ import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
 import exposed.r2dbc.shared.tests.TestDB
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.provider.Arguments
 
 /**
@@ -21,7 +22,11 @@ abstract class AbstractCustomIdTableTest: AbstractR2dbcExposedTest() {
         fun getTestDBAndEntityCount(): List<Arguments> {
             val recordCounts = listOf(50, 500)
 
-            val testDBs = TestDB.enabledDialects() - TestDB.ALL_MARIADB_LIKE
+            // enabled dialect가 전부 MariaDB 계열일 경우 JUnit 5가 빈 arguments를
+            // `TemplateInvocationValidationException`로 처리하므로, 더미 인자 1개를 남겨
+            // 테스트 본문의 Assumptions.assumeFalse 에서 스킵 처리하도록 한다.
+            val filtered = TestDB.enabledDialects() - TestDB.ALL_MARIADB_LIKE
+            val testDBs = filtered.ifEmpty { TestDB.enabledDialects() }
 
             return testDBs.map { testDB ->
                 recordCounts.map { entityCount ->
@@ -29,6 +34,14 @@ abstract class AbstractCustomIdTableTest: AbstractR2dbcExposedTest() {
                 }
             }.flatten()
         }
+    }
+
+    /**
+     * MariaDB 계열 dialect 에서는 분산 ID 충돌 우려로 테스트를 스킵한다.
+     * 모든 파라미터 테스트의 첫 줄에서 호출할 것.
+     */
+    protected fun skipIfMariaDB(testDB: TestDB) {
+        Assumptions.assumeFalse { testDB in TestDB.ALL_MARIADB_LIKE }
     }
 
     @AfterEach
