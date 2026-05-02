@@ -1,0 +1,290 @@
+# @formatter:off
+# Gradle Version Catalog — migrated from buildSrc/src/main/kotlin/Libs.kt
+
+[versions]
+bluetape4k = "1.7.0"
+
+kotlin = "2.3.21"
+kotlinx-coroutines = "1.10.2"
+kotlinx-atomicfu = "0.32.1"
+kotlinx-serialization = "1.11.0"
+kotlinx-benchmark = "0.4.14"
+
+spring-boot = "3.5.13"
+
+exposed = "1.2.0"
+
+slf4j = "2.0.17"
+logback = "1.5.32"
+
+jackson = "2.21.2"
+jackson3 = "3.1.2"
+fastjson2 = "2.0.61"
+
+hibernate = "6.6.33.Final"
+hibernate-validator = "8.0.3.Final"
+
+junit-jupiter = "6.0.3"
+kluent = "1.73"
+mockk = "1.14.9"
+awaitility = "4.3.0"
+testcontainers = "2.0.3"
+
+caffeine = "3.2.3"
+lettuce = "6.8.2.RELEASE"
+redisson = "4.3.1"
+
+# Plugin versions
+detekt = "1.23.8"
+dependency-management = "1.1.7"
+test-logger = "4.0.0"
+graalvm-native = "0.11.4"
+gatling = "3.14.9"
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+kotlin-allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
+kotlin-noarg = { id = "org.jetbrains.kotlin.plugin.noarg", version.ref = "kotlin" }
+kotlin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlinx-atomicfu = { id = "org.jetbrains.kotlinx.atomicfu", version.ref = "kotlinx-atomicfu" }
+kotlinx-benchmark = { id = "org.jetbrains.kotlinx.benchmark", version.ref = "kotlinx-benchmark" }
+
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+dependency-management = { id = "io.spring.dependency-management", version.ref = "dependency-management" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+test-logger = { id = "com.adarshr.test-logger", version.ref = "test-logger" }
+graalvm-native = { id = "org.graalvm.buildtools.native", version.ref = "graalvm-native" }
+gatling = { id = "io.gatling.gradle", version.ref = "gatling" }
+
+[libraries]
+jetbrains-annotations = { module = "org.jetbrains:annotations", version = "26.1.0" }
+
+# Bluetape4k
+bluetape4k-bom = { module = "io.github.bluetape4k:bluetape4k-bom", version.ref = "bluetape4k" }
+bluetape4k-coroutines = { module = "io.github.bluetape4k:bluetape4k-coroutines" }
+bluetape4k-exposed = { module = "io.github.bluetape4k:bluetape4k-exposed" }
+bluetape4k-exposed-fastjson2 = { module = "io.github.bluetape4k:bluetape4k-exposed-fastjson2" }
+bluetape4k-exposed-jackson2 = { module = "io.github.bluetape4k:bluetape4k-exposed-jackson2" }
+bluetape4k-exposed-jackson3 = { module = "io.github.bluetape4k:bluetape4k-exposed-jackson3" }
+bluetape4k-exposed-r2dbc = { module = "io.github.bluetape4k:bluetape4k-exposed-r2dbc" }
+bluetape4k-exposed-r2dbc-redisson = { module = "io.github.bluetape4k:bluetape4k-exposed-r2dbc-redisson" }
+bluetape4k-exposed-tink = { module = "io.github.bluetape4k:bluetape4k-exposed-tink" }
+bluetape4k-fastjson2 = { module = "io.github.bluetape4k:bluetape4k-fastjson2" }
+bluetape4k-grpc = { module = "io.github.bluetape4k:bluetape4k-grpc" }
+bluetape4k-idgenerators = { module = "io.github.bluetape4k:bluetape4k-idgenerators" }
+bluetape4k-io = { module = "io.github.bluetape4k:bluetape4k-io" }
+bluetape4k-jackson2 = { module = "io.github.bluetape4k:bluetape4k-jackson2" }
+bluetape4k-jackson3 = { module = "io.github.bluetape4k:bluetape4k-jackson3" }
+bluetape4k-jdbc = { module = "io.github.bluetape4k:bluetape4k-jdbc" }
+bluetape4k-junit5 = { module = "io.github.bluetape4k:bluetape4k-junit5" }
+bluetape4k-logging = { module = "io.github.bluetape4k:bluetape4k-logging" }
+bluetape4k-money = { module = "io.github.bluetape4k:bluetape4k-money" }
+bluetape4k-r2dbc = { module = "io.github.bluetape4k:bluetape4k-r2dbc" }
+bluetape4k-redis = { module = "io.github.bluetape4k:bluetape4k-redis" }
+bluetape4k-spring-boot3-core = { module = "io.github.bluetape4k:bluetape4k-spring-boot3-core" }
+bluetape4k-testcontainers = { module = "io.github.bluetape4k:bluetape4k-testcontainers" }
+bluetape4k-tink = { module = "io.github.bluetape4k:bluetape4k-tink" }
+bluetape4k-virtualthread-jdk21 = { module = "io.github.bluetape4k:bluetape4k-virtualthread-jdk21" }
+
+# Kotlin
+kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test" }
+kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
+
+# Kotlinx Coroutines
+kotlinx-coroutines-bom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core" }
+kotlinx-coroutines-core-common = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-common" }
+kotlinx-coroutines-core-jvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm" }
+kotlinx-coroutines-debug = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-debug" }
+kotlinx-coroutines-reactive = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactive" }
+kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor" }
+kotlinx-coroutines-rx2 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-rx2" }
+kotlinx-coroutines-rx3 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-rx3" }
+kotlinx-coroutines-slf4j = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test" }
+kotlinx-coroutines-test-jvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm" }
+kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "kotlinx-atomicfu" }
+
+# Kotlinx Serialization
+kotlinx-serialization-bom = { module = "org.jetbrains.kotlinx:kotlinx-serialization-bom", version.ref = "kotlinx-serialization" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json" }
+
+# Kotlinx Benchmark
+kotlinx-benchmark-runtime = { module = "org.jetbrains.kotlinx:kotlinx-benchmark-runtime", version.ref = "kotlinx-benchmark" }
+kotlinx-benchmark-runtime-jvm = { module = "org.jetbrains.kotlinx:kotlinx-benchmark-runtime-jvm", version.ref = "kotlinx-benchmark" }
+
+# Logging
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+jcl-over-slf4j = { module = "org.slf4j:jcl-over-slf4j", version.ref = "slf4j" }
+jul-to-slf4j = { module = "org.slf4j:jul-to-slf4j", version.ref = "slf4j" }
+log4j-over-slf4j = { module = "org.slf4j:log4j-over-slf4j", version.ref = "slf4j" }
+logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+logback-core = { module = "ch.qos.logback:logback-core", version.ref = "logback" }
+logcaptor = { module = "io.github.hakky54:logcaptor", version = "2.12.1" }
+
+# Spring Boot
+spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
+spring-boot-autoconfigure = { module = "org.springframework.boot:spring-boot-autoconfigure" }
+spring-boot-autoconfigure-processor = { module = "org.springframework.boot:spring-boot-autoconfigure-processor" }
+spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
+spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools" }
+spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+spring-boot-starter-aop = { module = "org.springframework.boot:spring-boot-starter-aop" }
+spring-boot-starter-data-r2dbc = { module = "org.springframework.boot:spring-boot-starter-data-r2dbc" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
+spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux" }
+springdoc-openapi-starter-webflux-ui = { module = "org.springdoc:springdoc-openapi-starter-webflux-ui", version = "2.8.14" }
+
+# Exposed
+exposed-bom = { module = "org.jetbrains.exposed:exposed-bom", version.ref = "exposed" }
+exposed-core = { module = "org.jetbrains.exposed:exposed-core" }
+exposed-crypt = { module = "org.jetbrains.exposed:exposed-crypt" }
+exposed-dao = { module = "org.jetbrains.exposed:exposed-dao" }
+exposed-java-time = { module = "org.jetbrains.exposed:exposed-java-time" }
+exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc" }
+exposed-json = { module = "org.jetbrains.exposed:exposed-json" }
+exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime" }
+exposed-migration-r2dbc = { module = "org.jetbrains.exposed:exposed-migration-r2dbc" }
+exposed-money = { module = "org.jetbrains.exposed:exposed-money" }
+exposed-r2dbc = { module = "org.jetbrains.exposed:exposed-r2dbc" }
+
+# R2DBC
+r2dbc-spi = { module = "io.r2dbc:r2dbc-spi", version = "1.0.0.RELEASE" }
+r2dbc-h2 = { module = "io.r2dbc:r2dbc-h2", version = "1.1.0.RELEASE" }
+r2dbc-pool = { module = "io.r2dbc:r2dbc-pool", version = "1.0.2.RELEASE" }
+r2dbc-mysql = { module = "io.asyncer:r2dbc-mysql", version = "1.4.1" }
+r2dbc-mariadb = { module = "org.mariadb:r2dbc-mariadb", version = "1.4.0" }
+r2dbc-postgresql = { module = "org.postgresql:r2dbc-postgresql", version = "1.1.1.RELEASE" }
+
+# Reactor
+reactor-kotlin-extensions = { module = "io.projectreactor.kotlin:reactor-kotlin-extensions" }
+reactor-netty = { module = "io.projectreactor.netty:reactor-netty" }
+reactor-test = { module = "io.projectreactor:reactor-test" }
+
+# Jackson
+jackson-bom = { module = "com.fasterxml.jackson:jackson-bom", version.ref = "jackson" }
+jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version = "2.21" }
+jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+jackson-datatype-jdk8 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jdk8", version.ref = "jackson" }
+jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
+jackson-datatype-jsr353 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr353", version.ref = "jackson" }
+jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+jackson-module-paranamer = { module = "com.fasterxml.jackson.module:jackson-module-parameter", version.ref = "jackson" }
+jackson-module-parameter-names = { module = "com.fasterxml.jackson.module:jackson-module-parameter-names", version.ref = "jackson" }
+jackson-module-blackbird = { module = "com.fasterxml.jackson.module:jackson-module-blackbird", version.ref = "jackson" }
+jackson-module-jsonSchema = { module = "com.fasterxml.jackson.module:jackson-module-jsonSchema", version.ref = "jackson" }
+
+# Jackson 3
+jackson3-bom = { module = "tools.jackson:jackson-bom", version.ref = "jackson3" }
+jackson3-module-kotlin = { module = "tools.jackson.module:jackson-module-kotlin", version.ref = "jackson3" }
+jackson3-module-blackbird = { module = "tools.jackson.module:jackson-module-blackbird", version.ref = "jackson3" }
+
+# FastJson2
+fastjson2-kotlin = { module = "com.alibaba.fastjson2:fastjson2-kotlin", version.ref = "fastjson2" }
+
+# Hibernate
+hibernate-core = { module = "org.hibernate.orm:hibernate-core", version.ref = "hibernate" }
+hibernate-jcache = { module = "org.hibernate.orm:hibernate-jcache", version.ref = "hibernate" }
+hibernate-validator = { module = "org.hibernate.validator:hibernate-validator", version.ref = "hibernate-validator" }
+hibernate-validator-annotation-processor = { module = "org.hibernate:hibernate-validator-annotation-processor", version.ref = "hibernate-validator" }
+javassist = { module = "org.javassist:javassist", version = "3.30.2-GA" }
+
+# Cache
+caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine" }
+
+# Redis
+lettuce-core = { module = "io.lettuce:lettuce-core", version.ref = "lettuce" }
+redisson = { module = "org.redisson:redisson", version.ref = "redisson" }
+
+# Database Drivers
+h2-v2 = { module = "com.h2database:h2", version = "2.4.240" }
+mysql-connector-j = { module = "com.mysql:mysql-connector-j", version = "9.6.0" }
+mariadb-java-client = { module = "org.mariadb.jdbc:mariadb-java-client", version = "3.5.8" }
+postgresql-driver = { module = "org.postgresql:postgresql", version = "42.7.10" }
+
+# Misc
+findbugs = { module = "com.google.code.findbugs:jsr305", version = "3.0.2" }
+guava = { module = "com.google.guava:guava", version = "33.2.0-jre" }
+fory-kotlin = { module = "org.apache.fory:fory-kotlin", version = "0.15.0" }
+kryo = { module = "com.esotericsoftware:kryo", version = "5.6.2" }
+java-uuid-generator = { module = "com.fasterxml.uuid:java-uuid-generator", version = "5.2.0" }
+javax-money-api = { module = "javax.money:money-api", version = "1.1" }
+javamoney-moneta = { module = "org.javamoney:moneta", version = "1.4.4" }
+
+# Compression
+snappy-java = { module = "org.xerial.snappy:snappy-java", version = "1.1.10.8" }
+lz4-java = { module = "org.lz4:lz4-java", version = "1.8.0" }
+zstd-jni = { module = "com.github.luben:zstd-jni", version = "1.5.7-1" }
+
+# Jakarta APIs
+jakarta-activation-api = { module = "jakarta.activation:jakarta.activation-api", version = "2.1.3" }
+jakarta-annotation-api = { module = "jakarta.annotation:jakarta.annotation-api", version = "3.0.0" }
+jakarta-el-api = { module = "jakarta.el:jakarta.el-api", version = "6.0.1" }
+jakarta-inject-api = { module = "jakarta.inject:jakarta.inject-api", version = "2.0.1" }
+jakarta-interceptor-api = { module = "jakarta.interceptor:jakarta.interceptor-api", version = "2.2.0" }
+jakarta-jms-api = { module = "jakarta.jms:jakarta.jms-api", version = "3.1.0" }
+jakarta-json-api = { module = "jakarta.json:jakarta.json-api", version = "2.1.3" }
+jakarta-json = { module = "org.glassfish:jakarta.json", version = "2.0.1" }
+jakarta-persistence-api = { module = "jakarta.persistence:jakarta.persistence-api", version = "3.1.0" }
+jakarta-servlet-api = { module = "jakarta.servlet:jakarta.servlet-api", version = "6.1.0" }
+jakarta-transaction-api = { module = "jakarta.transaction:jakarta.transaction-api", version = "2.0.1" }
+jakarta-validation-api = { module = "jakarta.validation:jakarta.validation-api", version = "3.1.1" }
+jakarta-ws-rs-api = { module = "jakarta.ws.rs:jakarta.ws.rs-api", version = "4.0.0" }
+jakarta-xml-bind = { module = "jakarta.xml.bind:jakarta.xml.bind-api", version = "4.0.2" }
+
+# Apache Commons
+commons-beanutils = { module = "commons-beanutils:commons-beanutils", version = "1.11.0" }
+commons-codec = { module = "commons-codec:commons-codec", version = "1.18.0" }
+commons-collections4 = { module = "org.apache.commons:commons-collections4", version = "4.5.0" }
+commons-compress = { module = "org.apache.commons:commons-compress", version = "1.27.1" }
+commons-csv = { module = "org.apache.commons:commons-csv", version = "1.14.0" }
+commons-exec = { module = "org.apache.commons:commons-exec", version = "1.5.0" }
+commons-io = { module = "commons-io:commons-io", version = "2.19.0" }
+commons-lang3 = { module = "org.apache.commons:commons-lang3", version = "3.17.0" }
+commons-logging = { module = "commons-logging:commons-logging", version = "1.3.5" }
+commons-math3 = { module = "org.apache.commons:commons-math3", version = "3.6.1" }
+commons-pool2 = { module = "org.apache.commons:commons-pool2", version = "2.12.1" }
+commons-text = { module = "org.apache.commons:commons-text", version = "1.13.1" }
+
+# JUnit
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit-jupiter" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine" }
+junit-jupiter-migrationsupport = { module = "org.junit.jupiter:junit-jupiter-migrationsupport" }
+junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params" }
+junit-platform-commons = { module = "org.junit.platform:junit-platform-commons" }
+junit-platform-engine = { module = "org.junit.platform:junit-platform-engine" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+junit-platform-runner = { module = "org.junit.platform:junit-platform-runner" }
+
+# Test Libraries
+kluent = { module = "org.amshove.kluent:kluent", version.ref = "kluent" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+awaitility-kotlin = { module = "org.awaitility:awaitility-kotlin", version.ref = "awaitility" }
+datafaker = { module = "net.datafaker:datafaker", version = "2.5.4" }
+random-beans = { module = "io.github.benas:random-beans", version = "3.9.0" }
+
+# Testcontainers
+testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainers" }
+testcontainers = { module = "org.testcontainers:testcontainers" }
+testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter" }
+testcontainers-mariadb = { module = "org.testcontainers:mariadb" }
+testcontainers-mysql = { module = "org.testcontainers:mysql" }
+testcontainers-postgresql = { module = "org.testcontainers:postgresql" }
+
+# Gatling
+gatling-app = { module = "io.gatling:gatling-app", version.ref = "gatling" }
+gatling-core-java = { module = "io.gatling:gatling-core-java", version.ref = "gatling" }
+gatling-http-java = { module = "io.gatling:gatling-http-java", version.ref = "gatling" }
+gatling-recorder = { module = "io.gatling:gatling-recorder", version.ref = "gatling" }
+gatling-test-framework = { module = "io.gatling:gatling-test-framework", version.ref = "gatling" }
+gatling-charts-highcharts = { module = "io.gatling.highcharts:gatling-charts-highcharts", version.ref = "gatling" }

@@ -1,5 +1,5 @@
 plugins {
-    kotlin("plugin.serialization")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 configurations {
@@ -7,67 +7,66 @@ configurations {
 }
 
 dependencies {
-    implementation(platform(Libs.exposed_bom))
+    implementation(platform(libs.exposed.bom))
 
     // Exposed
-    implementation(Libs.exposed_core)
-    implementation(Libs.exposed_dao)
-    implementation(Libs.exposed_jdbc)
-    implementation(Libs.exposed_r2dbc)
-    implementation(Libs.exposed_java_time)
-    implementation(Libs.exposed_crypt)
-    implementation(Libs.exposed_json)
-    implementation(Libs.exposed_money)
-    implementation(Libs.exposed_migration_r2dbc)
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.dao)
+    implementation(libs.exposed.jdbc)
+    implementation(libs.exposed.r2dbc)
+    implementation(libs.exposed.java.time)
+    implementation(libs.exposed.crypt)
+    implementation(libs.exposed.json)
+    implementation(libs.exposed.money)
+    implementation(libs.exposed.migration.r2dbc)
 
     // bluetape4k
-    implementation(Libs.bluetape4k_exposed_r2dbc)
-    implementation(Libs.bluetape4k_jdbc)
-    implementation(Libs.bluetape4k_r2dbc)
-    implementation(Libs.bluetape4k_junit5)
+    implementation(libs.bluetape4k.exposed.r2dbc)
+    implementation(libs.bluetape4k.jdbc)
+    implementation(libs.bluetape4k.r2dbc)
+    implementation(libs.bluetape4k.junit5)
 
-    implementation(Libs.h2_v2)
+    implementation(libs.h2.v2)
 
-    testImplementation(Libs.r2dbc_spi)
-    testImplementation(Libs.r2dbc_pool)
-    testImplementation(Libs.r2dbc_h2)
-    testImplementation(Libs.r2dbc_mariadb)
-    testImplementation(Libs.r2dbc_mysql)
-    testImplementation(Libs.r2dbc_postgresql)
+    testImplementation(libs.r2dbc.spi)
+    testImplementation(libs.r2dbc.pool)
+    testImplementation(libs.r2dbc.h2)
+    testImplementation(libs.r2dbc.mariadb)
+    testImplementation(libs.r2dbc.mysql)
+    testImplementation(libs.r2dbc.postgresql)
 
-    implementation(Libs.bluetape4k_testcontainers)
-    implementation(Libs.testcontainers)
-    implementation(Libs.testcontainers_junit_jupiter)
-    implementation(Libs.testcontainers_mariadb)
-    implementation(Libs.testcontainers_mysql)
-    implementation(Libs.testcontainers_postgresql)
+    implementation(libs.bluetape4k.testcontainers)
+    implementation(libs.testcontainers)
+    implementation(libs.testcontainers.junit.jupiter)
+    implementation(libs.testcontainers.mariadb)
+    implementation(libs.testcontainers.mysql)
+    implementation(libs.testcontainers.postgresql)
 
     // Testcontainers 를 위한 DB 드라이버
-    implementation(Libs.mariadb_java_client)
-    implementation(Libs.mysql_connector_j)
-    implementation(Libs.postgresql_driver)
+    implementation(libs.mariadb.java.client)
+    implementation(libs.mysql.connector.j)
+    implementation(libs.postgresql.driver)
 
     // Identifier 자동 생성
-    implementation(Libs.bluetape4k_idgenerators)
-    implementation(Libs.java_uuid_generator)
+    implementation(libs.bluetape4k.idgenerators)
+    implementation(libs.java.uuid.generator)
 
     // Coroutines
-    implementation(Libs.bluetape4k_coroutines)
-    implementation(Libs.kotlinx_coroutines_core)
-    implementation(Libs.kotlinx_coroutines_reactor)
-    testImplementation(Libs.kotlinx_coroutines_debug)
-    testImplementation(Libs.kotlinx_coroutines_test)
+    implementation(libs.bluetape4k.coroutines)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.reactor)
+    testImplementation(libs.kotlinx.coroutines.debug)
+    testImplementation(libs.kotlinx.coroutines.test)
 
     // Kotlin Serialization Json
-    implementation(platform(Libs.kotlinx_serialization_bom))
-    implementation(Libs.kotlinx_serialization_json)
+    implementation(platform(libs.kotlinx.serialization.bom))
+    implementation(libs.kotlinx.serialization.json)
 
     // Java Money
-    implementation(Libs.bluetape4k_money)
-    implementation(Libs.javax_money_api)
-    implementation(Libs.javamoney_moneta)
+    implementation(libs.bluetape4k.money)
+    implementation(libs.javax.money.api)
+    implementation(libs.javamoney.moneta)
 
     // Logcaptor
-    api(Libs.logcaptor)
-
+    api(libs.logcaptor)
 }

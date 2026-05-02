@@ -1,8 +1,8 @@
 plugins {
     kotlin("plugin.spring")
-    id(Plugins.spring_boot)
-    id(Plugins.graalvm_native)
-    id(Plugins.gatling) version Plugins.Versions.gatling
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.graalvm.native)
+    alias(libs.plugins.gatling)
 }
 
 
@@ -25,79 +25,79 @@ configurations {
 }
 
 dependencies {
-    implementation(platform(Libs.exposed_bom))
+    implementation(platform(libs.exposed.bom))
 
     implementation(project(":exposed-r2dbc-shared"))
 
     // bluetape4k
-    implementation(Libs.bluetape4k_exposed_r2dbc)
-    testImplementation(Libs.bluetape4k_junit5)
-    implementation(Libs.bluetape4k_testcontainers)
-    testImplementation(Libs.bluetape4k_spring_boot3_core)
+    implementation(libs.bluetape4k.exposed.r2dbc)
+    testImplementation(libs.bluetape4k.junit5)
+    implementation(libs.bluetape4k.testcontainers)
+    testImplementation(libs.bluetape4k.spring.boot3.core)
 
     // Jackson
-    implementation(Libs.bluetape4k_jackson2)
-    implementation(Libs.jackson_module_kotlin)
-    implementation(Libs.jackson_module_blackbird)
+    implementation(libs.bluetape4k.jackson2)
+    implementation(libs.jackson.module.kotlin)
+    implementation(libs.jackson.module.blackbird)
 
     // Exposed
-    implementation(Libs.exposed_r2dbc)
-    implementation(Libs.exposed_core)
-    implementation(Libs.exposed_java_time)
+    implementation(libs.exposed.r2dbc)
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.java.time)
 
-    runtimeOnly(Libs.h2_v2)
+    runtimeOnly(libs.h2.v2)
 
-    runtimeOnly(Libs.r2dbc_spi)
-    runtimeOnly(Libs.r2dbc_pool)
-    runtimeOnly(Libs.r2dbc_h2)
-    runtimeOnly(Libs.r2dbc_mariadb)
-    runtimeOnly(Libs.r2dbc_mysql)
-    implementation(Libs.r2dbc_postgresql)
+    runtimeOnly(libs.r2dbc.spi)
+    runtimeOnly(libs.r2dbc.pool)
+    runtimeOnly(libs.r2dbc.h2)
+    runtimeOnly(libs.r2dbc.mariadb)
+    runtimeOnly(libs.r2dbc.mysql)
+    implementation(libs.r2dbc.postgresql)
 
     // MySQL
-    implementation(Libs.testcontainers_mysql)
-    runtimeOnly(Libs.mysql_connector_j)
+    implementation(libs.testcontainers.mysql)
+    runtimeOnly(libs.mysql.connector.j)
 
     // PostgreSQL
-    implementation(Libs.testcontainers_postgresql)
-    runtimeOnly(Libs.postgresql_driver)
+    implementation(libs.testcontainers.postgresql)
+    runtimeOnly(libs.postgresql.driver)
 
     // Spring Boot
-    implementation(Libs.springBoot("autoconfigure"))
-    annotationProcessor(Libs.springBoot("autoconfigure-processor"))
-    annotationProcessor(Libs.springBoot("configuration-processor"))
-    runtimeOnly(Libs.springBoot("devtools"))
+    implementation("org.springframework.boot:spring-boot-autoconfigure")
+    annotationProcessor("org.springframework.boot:spring-boot-autoconfigure-processor")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    runtimeOnly("org.springframework.boot:spring-boot-devtools")
 
-    implementation(Libs.springBootStarter("actuator"))
-    implementation(Libs.springBootStarter("aop"))
-    implementation(Libs.springBootStarter("validation"))
-    implementation(Libs.springBootStarter("webflux"))
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
 
-    testImplementation(Libs.springBootStarter("test")) {
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "junit", module = "junit")
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
         exclude(module = "mockito-core")
     }
 
     // Coroutines
-    implementation(Libs.bluetape4k_coroutines)
-    implementation(Libs.kotlinx_coroutines_core)
-    implementation(Libs.kotlinx_coroutines_reactor)
-    testImplementation(Libs.kotlinx_coroutines_test)
+    implementation(libs.bluetape4k.coroutines)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.reactor)
+    testImplementation(libs.kotlinx.coroutines.test)
 
     // Reactor
-    implementation(Libs.reactor_netty)
-    implementation(Libs.reactor_kotlin_extensions)
-    testImplementation(Libs.reactor_test)
+    implementation(libs.reactor.netty)
+    implementation(libs.reactor.kotlin.extensions)
+    testImplementation(libs.reactor.test)
 
     // SpringDoc - OpenAPI 3.0
-    implementation(Libs.springdoc_openapi_starter_webflux_ui)
+    implementation(libs.springdoc.openapi.starter.webflux.ui)
 
     // Gatling
-    implementation(Libs.gatling_app)
-    implementation(Libs.gatling_core_java)
-    implementation(Libs.gatling_http_java)
-    implementation(Libs.gatling_recorder)
-    implementation(Libs.gatling_charts_highcharts)
-    testImplementation(Libs.gatling_test_framework)
+    implementation(libs.gatling.app)
+    implementation(libs.gatling.core.java)
+    implementation(libs.gatling.http.java)
+    implementation(libs.gatling.recorder)
+    implementation(libs.gatling.charts.highcharts)
+    testImplementation(libs.gatling.test.framework)
 }
