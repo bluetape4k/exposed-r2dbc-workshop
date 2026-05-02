@@ -3,9 +3,9 @@ import java.time.Instant
 
 plugins {
     kotlin("plugin.spring")
-    id(Plugins.spring_boot)
-    id(Plugins.graalvm_native)
-    id(Plugins.kotlinx_benchmark) version Plugins.Versions.kotlinx_benchmark
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.graalvm.native)
+    alias(libs.plugins.kotlinx.benchmark)
 }
 
 springBoot {
@@ -46,96 +46,96 @@ kotlin {
 }
 
 dependencies {
-    implementation(platform(Libs.exposed_bom))
+    implementation(platform(libs.exposed.bom))
     implementation(project(":exposed-r2dbc-shared"))
 
     // Exposed
-    implementation(Libs.exposed_core)
-    implementation(Libs.exposed_r2dbc)
-    implementation(Libs.exposed_java_time)
-    implementation(Libs.exposed_kotlin_datetime)
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.r2dbc)
+    implementation(libs.exposed.java.time)
+    implementation(libs.exposed.kotlin.datetime)
 
     // bluetape4k
-    implementation(Libs.bluetape4k_exposed)
-    implementation(Libs.bluetape4k_exposed_r2dbc)
-    implementation(Libs.bluetape4k_exposed_r2dbc_redisson)
-    implementation(Libs.bluetape4k_idgenerators)
-    implementation(Libs.bluetape4k_redis)
-    implementation(Libs.bluetape4k_testcontainers)
-    testImplementation(Libs.bluetape4k_junit5)
+    implementation(libs.bluetape4k.exposed)
+    implementation(libs.bluetape4k.exposed.r2dbc)
+    implementation(libs.bluetape4k.exposed.r2dbc.redisson)
+    implementation(libs.bluetape4k.idgenerators)
+    implementation(libs.bluetape4k.redis)
+    implementation(libs.bluetape4k.testcontainers)
+    testImplementation(libs.bluetape4k.junit5)
 
     // R2DBC Drivers
-    runtimeOnly(Libs.h2_v2)
+    runtimeOnly(libs.h2.v2)
 
-    runtimeOnly(Libs.r2dbc_spi)
-    runtimeOnly(Libs.r2dbc_pool)
-    runtimeOnly(Libs.r2dbc_h2)
-    runtimeOnly(Libs.r2dbc_mysql)
-    implementation(Libs.r2dbc_postgresql)
+    runtimeOnly(libs.r2dbc.spi)
+    runtimeOnly(libs.r2dbc.pool)
+    runtimeOnly(libs.r2dbc.h2)
+    runtimeOnly(libs.r2dbc.mysql)
+    implementation(libs.r2dbc.postgresql)
 
     // MySQL
-    implementation(Libs.testcontainers_mysql)
-    runtimeOnly(Libs.mysql_connector_j)
+    implementation(libs.testcontainers.mysql)
+    runtimeOnly(libs.mysql.connector.j)
 
     // PostgreSQL
-    implementation(Libs.testcontainers_postgresql)
-    runtimeOnly(Libs.postgresql_driver)
+    implementation(libs.testcontainers.postgresql)
+    runtimeOnly(libs.postgresql.driver)
 
     // Spring Boot
-    implementation(Libs.springBoot("autoconfigure"))
-    annotationProcessor(Libs.springBoot("autoconfigure-processor"))
-    annotationProcessor(Libs.springBoot("configuration-processor"))
-    runtimeOnly(Libs.springBoot("devtools"))
+    implementation("org.springframework.boot:spring-boot-autoconfigure")
+    annotationProcessor("org.springframework.boot:spring-boot-autoconfigure-processor")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    runtimeOnly("org.springframework.boot:spring-boot-devtools")
 
-    implementation(Libs.springBootStarter("actuator"))
-    implementation(Libs.springBootStarter("aop"))
-    implementation(Libs.springBootStarter("validation"))
-    implementation(Libs.springBootStarter("webflux"))
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
 
-    testImplementation(Libs.bluetape4k_spring_boot3_core)
-    testImplementation(Libs.springBootStarter("test")) {
+    testImplementation(libs.bluetape4k.spring.boot3.core)
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "junit", module = "junit")
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
         exclude(module = "mockito-core")
     }
 
     // Jackson
-    implementation(Libs.bluetape4k_jackson2)
-    implementation(Libs.jackson_core)
-    implementation(Libs.jackson_module_kotlin)
-    implementation(Libs.jackson_module_blackbird)
+    implementation(libs.bluetape4k.jackson2)
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.module.kotlin)
+    implementation(libs.jackson.module.blackbird)
 
     // Redisson Cache
-    implementation(Libs.redisson)
+    implementation(libs.redisson)
 
     // Codecs
-    runtimeOnly(Libs.fory_kotlin)
-    runtimeOnly(Libs.kryo5)
+    runtimeOnly(libs.fory.kotlin)
+    runtimeOnly(libs.kryo)
 
     // Compressor
-    runtimeOnly(Libs.lz4_java)
-    runtimeOnly(Libs.snappy_java)
-    runtimeOnly(Libs.zstd_jni)
+    runtimeOnly(libs.lz4.java)
+    runtimeOnly(libs.snappy.java)
+    runtimeOnly(libs.zstd.jni)
 
     // Near Cache
-    implementation(Libs.caffeine)
+    implementation(libs.caffeine)
 
-    implementation(Libs.datafaker)
+    implementation(libs.datafaker)
 
     // Coroutines
-    implementation(Libs.bluetape4k_coroutines)
-    implementation(Libs.kotlinx_coroutines_reactor)
-    testImplementation(Libs.kotlinx_coroutines_test)
-    add("benchmarkImplementation", Libs.kotlinx_benchmark_runtime)
-    add("benchmarkImplementation", Libs.kotlinx_benchmark_runtime_jvm)
+    implementation(libs.bluetape4k.coroutines)
+    implementation(libs.kotlinx.coroutines.reactor)
+    testImplementation(libs.kotlinx.coroutines.test)
+    add("benchmarkImplementation", libs.kotlinx.benchmark.runtime)
+    add("benchmarkImplementation", libs.kotlinx.benchmark.runtime.jvm)
 
     // Reactor
-    implementation(Libs.reactor_netty)
-    implementation(Libs.reactor_kotlin_extensions)
-    testImplementation(Libs.reactor_test)
+    implementation(libs.reactor.netty)
+    implementation(libs.reactor.kotlin.extensions)
+    testImplementation(libs.reactor.test)
 
     // SpringDoc - OpenAPI 3.0
-    implementation(Libs.springdoc_openapi_starter_webflux_ui)
+    implementation(libs.springdoc.openapi.starter.webflux.ui)
 }
 
 benchmark {

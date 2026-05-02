@@ -1,7 +1,7 @@
 plugins {
     kotlin("plugin.spring")
-    id(Plugins.spring_boot)
-    id(Plugins.graalvm_native)
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.graalvm.native)
 }
 
 springBoot {
@@ -22,36 +22,36 @@ configurations {
 }
 
 dependencies {
-    implementation(platform(Libs.exposed_bom))
+    implementation(platform(libs.exposed.bom))
 
     // Exposed
-    implementation(Libs.exposed_core)
-    implementation(Libs.exposed_r2dbc)
-    implementation(Libs.bluetape4k_exposed_r2dbc)
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.r2dbc)
+    implementation(libs.bluetape4k.exposed.r2dbc)
 
     // R2DBC
-    runtimeOnly(Libs.h2_v2)
-    implementation(Libs.r2dbc_spi)
-    implementation(Libs.r2dbc_pool)
-    implementation(Libs.r2dbc_h2)
+    runtimeOnly(libs.h2.v2)
+    implementation(libs.r2dbc.spi)
+    implementation(libs.r2dbc.pool)
+    implementation(libs.r2dbc.h2)
 
     // Spring Boot
-    implementation(Libs.springBoot("autoconfigure"))
-    annotationProcessor(Libs.springBoot("autoconfigure-processor"))
-    annotationProcessor(Libs.springBoot("configuration-processor"))
+    implementation("org.springframework.boot:spring-boot-autoconfigure")
+    annotationProcessor("org.springframework.boot:spring-boot-autoconfigure-processor")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-    implementation(Libs.springBootStarter("actuator"))
-    implementation(Libs.springBootStarter("data-r2dbc"))
-    implementation(Libs.springBootStarter("webflux"))
-    implementation(Libs.springBootStarter("validation"))
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
 
     // Coroutines / Reactor
-    implementation(Libs.kotlinx_coroutines_reactor)
-    implementation(Libs.reactor_kotlin_extensions)
+    implementation(libs.kotlinx.coroutines.reactor)
+    implementation(libs.reactor.kotlin.extensions)
 
-    testImplementation(Libs.bluetape4k_junit5)
-    testImplementation(Libs.bluetape4k_spring_boot3_core)
-    testImplementation(Libs.springBootStarter("test")) {
+    testImplementation(libs.bluetape4k.junit5)
+    testImplementation(libs.bluetape4k.spring.boot3.core)
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "junit", module = "junit")
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
         exclude(module = "mockito-core")
