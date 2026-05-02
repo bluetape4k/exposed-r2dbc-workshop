@@ -276,10 +276,10 @@ random-beans = { module = "io.github.benas:random-beans", version = "3.9.0" }
 # Testcontainers
 testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainers" }
 testcontainers = { module = "org.testcontainers:testcontainers" }
-testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter" }
-testcontainers-mariadb = { module = "org.testcontainers:mariadb" }
-testcontainers-mysql = { module = "org.testcontainers:mysql" }
-testcontainers-postgresql = { module = "org.testcontainers:postgresql" }
+testcontainers-junit-jupiter = { module = "org.testcontainers:testcontainers-junit-jupiter", version.ref = "testcontainers" }
+testcontainers-mariadb = { module = "org.testcontainers:testcontainers-mariadb", version.ref = "testcontainers" }
+testcontainers-mysql = { module = "org.testcontainers:testcontainers-mysql", version.ref = "testcontainers" }
+testcontainers-postgresql = { module = "org.testcontainers:testcontainers-postgresql", version.ref = "testcontainers" }
 
 # Gatling
 gatling-app = { module = "io.gatling:gatling-app", version.ref = "gatling" }
