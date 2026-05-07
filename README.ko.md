@@ -2,6 +2,11 @@
 
 # Exposed R2DBC Workshop
 
+[![CI](https://github.com/bluetape4k/exposed-r2dbc-workshop/actions/workflows/ci.yml/badge.svg)](https://github.com/bluetape4k/exposed-r2dbc-workshop/actions/workflows/ci.yml)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.3-7F52FF?logo=kotlin)](https://kotlinlang.org)
+[![JVM](https://img.shields.io/badge/JVM-21-ED8B00?logo=openjdk)](https://openjdk.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 Kotlin Exposed의 R2DBC 기반 예제를 단계별로 정리한 멀티 모듈 워크숍입니다.
 Reactive SQL DSL, Coroutines, Spring WebFlux, 멀티테넌시, 캐시, 라우팅 같은 실전 패턴을 예제와 테스트 중심으로 학습할 수 있습니다.
 
