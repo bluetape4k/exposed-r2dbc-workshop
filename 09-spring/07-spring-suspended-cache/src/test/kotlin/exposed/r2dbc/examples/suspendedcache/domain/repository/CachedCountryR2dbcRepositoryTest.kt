@@ -6,7 +6,7 @@ import exposed.r2dbc.examples.suspendedcache.utils.DataPopulator
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.support.uninitialized
 import kotlinx.coroutines.test.runTest
-import org.amshove.kluent.shouldBeTrue
+import io.bluetape4k.assertions.shouldBeTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier

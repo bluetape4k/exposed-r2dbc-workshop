@@ -2,7 +2,7 @@ package exposed.r2dbc.examples.routing.web
 
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.spring.tests.httpGet
-import org.amshove.kluent.shouldBeEqualTo
+import io.bluetape4k.assertions.shouldBeEqualTo
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

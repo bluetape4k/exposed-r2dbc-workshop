@@ -227,7 +227,7 @@ subprojects {
         testRuntimeOnly(rootLibs.junit.platform.engine)
         testImplementation(rootLibs.junit.jupiter.migrationsupport)
 
-        testImplementation(rootLibs.kluent)
+        testImplementation(rootLibs.bluetape4k.assertions)
         testImplementation(rootLibs.mockk)
         testImplementation(rootLibs.awaitility.kotlin)
 

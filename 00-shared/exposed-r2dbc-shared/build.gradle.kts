@@ -25,6 +25,7 @@ dependencies {
     implementation(libs.bluetape4k.jdbc)
     implementation(libs.bluetape4k.r2dbc)
     implementation(libs.bluetape4k.junit5)
+    implementation(libs.bluetape4k.assertions)
 
     implementation(libs.h2.v2)
 
