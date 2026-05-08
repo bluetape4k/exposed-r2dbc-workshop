@@ -13,10 +13,10 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import nl.altindag.log.LogCaptor
 import kotlin.test.assertFailsWith
-import org.amshove.kluent.shouldBeEqualTo
-import org.amshove.kluent.shouldContainNone
-import org.amshove.kluent.shouldNotBeEmpty
-import org.amshove.kluent.shouldStartWith
+import io.bluetape4k.assertions.shouldBeEqualTo
+import io.bluetape4k.assertions.shouldContainNone
+import io.bluetape4k.assertions.shouldNotBeEmpty
+import io.bluetape4k.assertions.shouldStartWith
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 import org.jetbrains.exposed.v1.core.eq
@@ -150,7 +150,7 @@ class Ex01_EncryptedColumn: AbstractR2dbcExposedTest() {
 
             val insertLog = logCaptor.debugLogs.single()
             insertLog.shouldStartWith("INSERT ")
-            insertLog.shouldContainNone(insertedStrings)
+            insertLog.shouldContainNone(*insertedStrings.toTypedArray())
 
             logCaptor.clearLogs()
             logCaptor.resetLogLevel()
@@ -227,7 +227,7 @@ class Ex01_EncryptedColumn: AbstractR2dbcExposedTest() {
 
             val insertLog = logCaptor.debugLogs.single()
             insertLog.shouldStartWith("INSERT ")
-            insertLog.shouldContainNone(insertedStrings)
+            insertLog.shouldContainNone(*insertedStrings.toTypedArray())
 
             logCaptor.clearLogs()
 
@@ -251,7 +251,7 @@ class Ex01_EncryptedColumn: AbstractR2dbcExposedTest() {
 
             val updateLog = logCaptor.debugLogs.single()
             updateLog.shouldStartWith("UPDATE ")
-            updateLog.shouldContainNone(updatedStrings)
+            updateLog.shouldContainNone(*updatedStrings.toTypedArray())
 
             logCaptor.clearLogs()
             logCaptor.resetLogLevel()

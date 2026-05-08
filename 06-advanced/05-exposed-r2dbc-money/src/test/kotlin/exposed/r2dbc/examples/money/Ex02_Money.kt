@@ -9,7 +9,7 @@ import io.bluetape4k.money.currencyUnitOf
 import io.bluetape4k.money.moneyOf
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.runTest
-import org.amshove.kluent.shouldBeEqualTo
+import io.bluetape4k.assertions.shouldBeEqualTo
 import org.javamoney.moneta.Money
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.core.eq

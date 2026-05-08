@@ -1,7 +1,7 @@
 package exposed.r2dbc.multitenant.webflux.config
 
 import io.bluetape4k.utils.Runtimex
-import org.amshove.kluent.shouldBeEqualTo
+import io.bluetape4k.assertions.shouldBeEqualTo
 import org.junit.jupiter.api.Test
 
 class ConnectionPoolSizingTest {

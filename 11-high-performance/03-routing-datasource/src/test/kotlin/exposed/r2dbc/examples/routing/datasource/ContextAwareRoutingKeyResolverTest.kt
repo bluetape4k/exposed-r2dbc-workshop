@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.routing.datasource
 
 import exposed.r2dbc.examples.routing.context.RoutingContextKeys
-import org.amshove.kluent.shouldBeEqualTo
+import io.bluetape4k.assertions.shouldBeEqualTo
 import org.junit.jupiter.api.Test
 import reactor.util.context.Context
 

@@ -10,7 +10,7 @@ import io.bluetape4k.logging.debug
 import io.bluetape4k.support.uninitialized
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
-import org.amshove.kluent.shouldNotBeEmpty
+import io.bluetape4k.assertions.shouldNotBeEmpty
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction

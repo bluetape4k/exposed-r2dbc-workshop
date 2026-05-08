@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.routing.web
 
 import exposed.r2dbc.examples.routing.context.RoutingContextKeys
-import org.amshove.kluent.shouldBeEqualTo
+import io.bluetape4k.assertions.shouldBeEqualTo
 import org.junit.jupiter.api.Test
 import org.springframework.mock.http.server.reactive.MockServerHttpRequest
 import org.springframework.mock.web.server.MockServerWebExchange

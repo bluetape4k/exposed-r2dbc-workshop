@@ -14,8 +14,8 @@ import io.bluetape4k.logging.debug
 import io.bluetape4k.support.uninitialized
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
-import org.amshove.kluent.shouldNotBeEmpty
-import org.amshove.kluent.shouldNotBeNull
+import io.bluetape4k.assertions.shouldNotBeEmpty
+import io.bluetape4k.assertions.shouldNotBeNull
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest

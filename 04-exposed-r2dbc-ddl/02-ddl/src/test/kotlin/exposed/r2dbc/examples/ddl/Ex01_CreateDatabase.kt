@@ -7,8 +7,8 @@ import exposed.r2dbc.shared.tests.withDb
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.test.runTest
-import org.amshove.kluent.shouldContain
-import org.amshove.kluent.shouldNotContain
+import io.bluetape4k.assertions.shouldContain
+import io.bluetape4k.assertions.shouldNotContain
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.junit.jupiter.api.Assumptions
 import org.junit.jupiter.params.ParameterizedTest
