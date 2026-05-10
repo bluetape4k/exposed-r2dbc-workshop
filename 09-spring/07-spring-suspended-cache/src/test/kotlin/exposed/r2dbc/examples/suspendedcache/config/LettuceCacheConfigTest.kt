@@ -40,7 +40,7 @@ class LettuceCacheConfigTest(
     }
 
     @Test
-    fun `clear는 scan 기반으로 100개 초과 키도 모두 제거한다`() = runSuspendIO {
+    fun `clear는 100개 초과 키도 모두 제거한다`() = runSuspendIO {
         val cache = lettuceSuspendedCacheManager.getOrCreate<String, String>("bulk-clear")
 
         repeat(150) { index ->

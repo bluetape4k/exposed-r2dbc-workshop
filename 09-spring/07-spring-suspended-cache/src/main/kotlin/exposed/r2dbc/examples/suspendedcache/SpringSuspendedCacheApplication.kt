@@ -12,6 +12,6 @@ class SpringSuspendedCacheApplication {
 
 fun main(vararg args: String) {
     runApplication<SpringSuspendedCacheApplication>(*args) {
-        webApplicationType = WebApplicationType.REACTIVE
+        setWebApplicationType(WebApplicationType.REACTIVE)
     }
 }

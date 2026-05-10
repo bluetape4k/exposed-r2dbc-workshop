@@ -7,9 +7,11 @@ import org.junit.jupiter.api.BeforeAll
 import org.redisson.api.RedissonClient
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient
 import org.springframework.test.context.ActiveProfiles
 
 @ActiveProfiles("h2")  // h2 | postgres | mysql
+@AutoConfigureWebTestClient
 @SpringBootTest(
     classes = [CacheStrategyApplication::class],
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,

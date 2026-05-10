@@ -30,6 +30,7 @@ class LettuceSuspendedCacheManager(
     private data class ManagedCache(
         val cache: LettuceSuspendedCache<out Any, out Any>,
         val connection: StatefulRedisConnection<*, *>,
+        val keyConnection: StatefulRedisConnection<String, String>?,
     )
 
     private val caches = ConcurrentHashMap<String, ManagedCache>()
@@ -53,14 +54,22 @@ class LettuceSuspendedCacheManager(
         return caches.computeIfAbsent(name) {
             val conn = openConnection(redisCodec)
             val commands = conn.coroutines() as RedisCoroutinesCommands<String, V>
+            val keyConn = if (redisCodec == null) {
+                null
+            } else {
+                redisClient.connect()
+            }
+            val keyCommands = (keyConn ?: conn as StatefulRedisConnection<String, String>).coroutines()
 
             ManagedCache(
                 cache = LettuceSuspendedCache<K, V>(
                     name = name,
                     commands = commands,
+                    keyCommands = keyCommands,
                     ttlSeconds = ttl,
                 ),
                 connection = conn,
+                keyConnection = keyConn,
             )
         }.cache as LettuceSuspendedCache<K, V>
     }
@@ -90,6 +99,7 @@ class LettuceSuspendedCacheManager(
     override fun close() {
         caches.values.forEach { managed ->
             managed.connection.close()
+            managed.keyConnection?.close()
         }
         caches.clear()
     }

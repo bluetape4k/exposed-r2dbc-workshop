@@ -294,7 +294,7 @@ class Ex07_UnsignedColumnType: AbstractR2dbcExposedTest() {
             UIntTable.ddl.single().endsWith(ddlEnding, ignoreCase = true).shouldBeTrue()
 
             val number = 3_221_225_471u
-            number shouldBeInRange Int.MAX_VALUE.toUInt()..UInt.MAX_VALUE
+            (number >= Int.MAX_VALUE.toUInt() && number <= UInt.MAX_VALUE).shouldBeTrue()
 
             UIntTable.insert { it[unsignedInt] = number }
 
