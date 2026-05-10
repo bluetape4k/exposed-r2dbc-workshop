@@ -9,7 +9,7 @@ dependencies {
 
     // Exposed
     testImplementation(libs.exposed.r2dbc)
-    testImplementation(libs.bluetape4k.exposed)
+    testImplementation(libs.bluetape4k.exposed.core)
     testImplementation(libs.bluetape4k.exposed.r2dbc)
 
     testImplementation(libs.bluetape4k.junit5)

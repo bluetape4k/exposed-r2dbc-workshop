@@ -56,7 +56,7 @@ dependencies {
     implementation(libs.exposed.kotlin.datetime)
 
     // bluetape4k
-    implementation(libs.bluetape4k.exposed)
+    implementation(libs.bluetape4k.exposed.core)
     implementation(libs.bluetape4k.exposed.r2dbc)
     implementation(libs.bluetape4k.exposed.r2dbc.redisson)
     implementation(libs.bluetape4k.idgenerators)
