@@ -20,7 +20,7 @@ Exposed R2DBC의 **트랜잭션(Transaction)** 관리 기능을 다루는 예제
 | 비동기  | Kotlin Coroutines                               |
 | DB   | H2 (기본), MariaDB, MySQL 8, PostgreSQL           |
 | 컨테이너 | Testcontainers                                  |
-| 테스트  | JUnit 5 + Kluent + ParameterizedTest (멀티 DB 지원) |
+| 테스트  | JUnit 5 + bluetape4k-assertions + ParameterizedTest (멀티 DB 지원) |
 
 ## 실행 흐름
 

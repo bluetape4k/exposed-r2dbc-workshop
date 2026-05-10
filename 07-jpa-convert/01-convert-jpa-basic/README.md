@@ -12,7 +12,7 @@ An example module demonstrating how to convert common JPA patterns (Entity, rela
 | Async     | Kotlin Coroutines                                       |
 | DB        | H2 (default), MariaDB, MySQL 8, PostgreSQL              |
 | Container | Testcontainers                                          |
-| Test      | JUnit 5 + Kluent + ParameterizedTest (multi-DB support) |
+| Test      | JUnit 5 + bluetape4k-assertions + ParameterizedTest (multi-DB support) |
 
 ## JPA → Exposed R2DBC Migration Path
 

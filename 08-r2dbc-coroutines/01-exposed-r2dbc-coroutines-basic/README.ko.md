@@ -20,7 +20,7 @@ Exposed R2DBC + Kotlin Coroutines 환경에서 비동기 데이터베이스 작�
 | 비동기  | Kotlin Coroutines + Flow                        |
 | DB   | H2 (기본), MariaDB, MySQL 8, PostgreSQL           |
 | 컨테이너 | Testcontainers                                  |
-| 테스트  | JUnit 5 + Kluent + ParameterizedTest (멀티 DB 지원) |
+| 테스트  | JUnit 5 + bluetape4k-assertions + ParameterizedTest (멀티 DB 지원) |
 
 ## 실행 흐름
 

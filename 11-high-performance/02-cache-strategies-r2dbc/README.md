@@ -29,7 +29,7 @@ but operates with **Non-Blocking I/O** in a Spring WebFlux + Netty + Coroutines 
 | Compressor | LZ4 / Snappy / Zstd                           |
 | Near Cache | Caffeine                                      |
 | DB         | H2 (default) / MySQL / PostgreSQL (Testcontainers) |
-| Test       | JUnit 5, Kluent, Awaitility, Reactor Test     |
+| Test       | JUnit 5, bluetape4k-assertions, Awaitility, Reactor Test     |
 
 ## Structure Diagram
 
