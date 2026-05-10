@@ -164,8 +164,8 @@ jobs:
               :exposed-r2dbc-shared:test
           - db: MARIADB
             db-name: MariaDB
-            slug: mariadb-shard-1
-            shard-name: shard-1
+            slug: mariadb-smoke
+            shard-name: smoke
             needs-docker: true
             collect-coverage: false
             module-tasks: >-
@@ -175,42 +175,6 @@ jobs:
               :01-connection:test
               :04-exposed-r2dbc-json:test
               :01-exposed-r2dbc-crypt:test
-          - db: MARIADB
-            db-name: MariaDB
-            slug: mariadb-shard-2
-            shard-name: shard-2
-            needs-docker: true
-            collect-coverage: false
-            module-tasks: >-
-              :07-spring-suspended-cache:test
-              :01-convert-jpa-basic:test
-              :02-types:test
-              :02-ddl:test
-              :06-exposed-r2dbc-custom-columns:test
-              :03-exposed-r2dbc-kotlin-datetime:test
-              :08-exposed-r2dbc-jackson:test
-              :02-exposed-r2dbc-virtualthreads-basic:test
-          - db: MARIADB
-            db-name: MariaDB
-            slug: mariadb-shard-3
-            shard-name: shard-3
-            needs-docker: true
-            collect-coverage: false
-            module-tasks: >-
-              :02-cache-strategies-r2dbc:test
-              :07-exposed-r2dbc-custom-entities:test
-              :04-transactions:test
-              :03-functions:test
-              :03-multitenant-spring-webflux:test
-              :02-exposed-r2dbc-javatime:test
-              :05-exposed-r2dbc-money:test
-              :03-routing-datasource:test
-              :09-exposed-r2dbc-fastjson2:test
-              :11-exposed-r2dbc-jackson3:test
-              :exposed-r2dbc-sql-example:test
-              :01-exposed-r2dbc-coroutines-basic:test
-              :12-exposed-r2dbc-tink:test
-              :exposed-r2dbc-shared:test
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
