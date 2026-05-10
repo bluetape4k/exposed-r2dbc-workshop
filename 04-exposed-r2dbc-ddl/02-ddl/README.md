@@ -24,7 +24,7 @@ Learn how to define and manage database schemas with Exposed R2DBC. Perform DDL 
 | Async     | Kotlin Coroutines                                       |
 | DB        | H2 (default), MariaDB, MySQL 8, PostgreSQL              |
 | Container | Testcontainers                                          |
-| Testing   | JUnit 5 + Kluent + ParameterizedTest (multi-DB support) |
+| Testing   | JUnit 5 + bluetape4k-assertions + ParameterizedTest (multi-DB support) |
 
 ---
 

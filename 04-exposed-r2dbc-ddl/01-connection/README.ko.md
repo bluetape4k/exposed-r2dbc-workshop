@@ -23,7 +23,7 @@ Exposed R2DBC에서 데이터베이스 연결을 구성하고, 연결 메타데�
 | 비동기  | Kotlin Coroutines                               |
 | DB   | H2 (기본), MariaDB, MySQL 8, PostgreSQL           |
 | 컨테이너 | Testcontainers                                  |
-| 테스트  | JUnit 5 + Kluent + ParameterizedTest (멀티 DB 지원) |
+| 테스트  | JUnit 5 + bluetape4k-assertions + ParameterizedTest (멀티 DB 지원) |
 
 ---
 

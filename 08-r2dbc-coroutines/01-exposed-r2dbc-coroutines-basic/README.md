@@ -20,7 +20,7 @@ Learn how to perform asynchronous database operations in an Exposed R2DBC + Kotl
 | Async     | Kotlin Coroutines + Flow                                |
 | DB        | H2 (default), MariaDB, MySQL 8, PostgreSQL              |
 | Container | Testcontainers                                          |
-| Test      | JUnit 5 + Kluent + ParameterizedTest (multi-DB support) |
+| Test      | JUnit 5 + bluetape4k-assertions + ParameterizedTest (multi-DB support) |
 
 ## Execution Flow
 

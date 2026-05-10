@@ -29,7 +29,7 @@ Redisson + Exposed 를 활용한 캐시 전략의 **Kotlin Coroutines 기반 비
 | Compressor | LZ4 / Snappy / Zstd                           |
 | Near Cache | Caffeine                                      |
 | DB         | H2 (기본) / MySQL / PostgreSQL (Testcontainers) |
-| Test       | JUnit 5, Kluent, Awaitility, Reactor Test     |
+| Test       | JUnit 5, bluetape4k-assertions, Awaitility, Reactor Test     |
 
 ## 구조 다이어그램
 

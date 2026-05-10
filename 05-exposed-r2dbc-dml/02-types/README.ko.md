@@ -20,7 +20,7 @@ Exposed R2DBC DSL에서 지원하는 **다양한 컬럼 타입(Column Types)
 | 비동기  | Kotlin Coroutines                               |
 | DB   | H2 (기본), MariaDB, MySQL 8, PostgreSQL           |
 | 컨테이너 | Testcontainers                                  |
-| 테스트  | JUnit 5 + Kluent + ParameterizedTest (멀티 DB 지원) |
+| 테스트  | JUnit 5 + bluetape4k-assertions + ParameterizedTest (멀티 DB 지원) |
 
 ## 구조 다이어그램
 
