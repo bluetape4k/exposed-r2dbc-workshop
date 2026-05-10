@@ -20,6 +20,7 @@ plugins {
     alias(libs.plugins.kotlinx.atomicfu)
 
     alias(libs.plugins.detekt)
+    alias(libs.plugins.kover)
 
     alias(libs.plugins.spring.boot) apply false
 
@@ -54,6 +55,7 @@ subprojects {
         // Atomicfu
         plugin("org.jetbrains.kotlinx.atomicfu")
         plugin("com.adarshr.test-logger")
+        plugin("org.jetbrains.kotlinx.kover")
     }
 
     java {
@@ -184,6 +186,14 @@ subprojects {
         }
     }
 
+    kover {
+        currentProject {
+            sources {
+                includedSourceSets.add("main")
+            }
+        }
+    }
+
     dependencies {
         val api by configurations
         val testApi by configurations
@@ -253,6 +263,25 @@ subprojects {
         }
         tasks.withType<CollectReachabilityMetadata>().configureEach {
             enabled = false
+        }
+    }
+}
+
+dependencies {
+    subprojects
+        .filter { it.name != "exposed-r2dbc-shared" }
+        .forEach { kover(it) }
+}
+
+kover {
+    reports {
+        total {
+            xml {
+                onCheck = false
+            }
+            html {
+                onCheck = false
+            }
         }
     }
 }
