@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import io.bluetape4k.assertions.shouldBeEqualTo
-import io.bluetape4k.assertions.shouldBeInRange
 import io.bluetape4k.assertions.shouldBeTrue
 import io.bluetape4k.assertions.shouldContainSame
 import io.bluetape4k.assertions.shouldHaveSize
@@ -295,7 +294,7 @@ class Ex07_UnsignedColumnType: AbstractR2dbcExposedTest() {
             UIntTable.ddl.single().endsWith(ddlEnding, ignoreCase = true).shouldBeTrue()
 
             val number = 3_221_225_471u
-            number shouldBeInRange Int.MAX_VALUE.toUInt()..UInt.MAX_VALUE
+            (number >= Int.MAX_VALUE.toUInt() && number <= UInt.MAX_VALUE).shouldBeTrue()
 
             UIntTable.insert { it[unsignedInt] = number }
 

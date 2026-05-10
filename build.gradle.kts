@@ -42,7 +42,7 @@ allprojects {
     }
     // Bluetape4k Snapshot 버전을 사용할 때만 사용하세요.
     configurations.all {
-        resolutionStrategy.cacheChangingModulesFor(1, TimeUnit.DAYS)
+        resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
     }
 }
 
@@ -244,7 +244,6 @@ subprojects {
         testRuntimeOnly(rootLibs.junit.platform.engine)
         testImplementation(rootLibs.junit.jupiter.migrationsupport)
 
-        testImplementation(rootLibs.bluetape4k.assertions)
         testImplementation(rootLibs.mockk)
         testImplementation(rootLibs.awaitility.kotlin)
 

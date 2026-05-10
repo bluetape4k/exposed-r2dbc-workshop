@@ -21,10 +21,13 @@ class LettuceSuspendedCacheManagerTest {
         val redisClient = mockk<RedisClient>()
         val codec = mockk<LettuceBinaryCodec<String>>()
         val connection = mockk<StatefulRedisConnection<String, String>>()
+        val keyConnection = mockk<StatefulRedisConnection<String, String>>()
         val commands = mockk<RedisReactiveCommands<String, String>>()
 
         every { redisClient.connect(codec) } returns connection
+        every { redisClient.connect() } returns keyConnection
         every { connection.reactive() } returns commands
+        every { keyConnection.reactive() } returns commands
 
         val manager = LettuceSuspendedCacheManager(redisClient = redisClient)
 
@@ -33,6 +36,7 @@ class LettuceSuspendedCacheManagerTest {
 
         assertSame(first, second)
         verify(exactly = 1) { redisClient.connect(codec) }
+        verify(exactly = 1) { redisClient.connect() }
     }
 
     @Test

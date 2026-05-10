@@ -19,7 +19,7 @@ An example module covering the usage of **various column types** supported by th
 | Async     | Kotlin Coroutines                                           |
 | DB        | H2 (default), MariaDB, MySQL 8, PostgreSQL                  |
 | Container | Testcontainers                                              |
-| Testing   | JUnit 5 + Kluent + ParameterizedTest (multi-DB support)     |
+| Testing   | JUnit 5 + bluetape4k-assertions + ParameterizedTest (multi-DB support)     |
 
 ## Structure Diagram
 
