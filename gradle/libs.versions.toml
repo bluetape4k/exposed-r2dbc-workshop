@@ -2,24 +2,25 @@
 # Gradle Version Catalog — migrated from buildSrc/src/main/kotlin/Libs.kt
 
 [versions]
-bluetape4k = "1.7.0"
+bluetape4k = "1.8.0-SNAPSHOT"
+bluetape4k-dependencies = "1.0.0-SNAPSHOT"
 bluetape4k-assertions-version = "1.8.0-SNAPSHOT"
 
 kotlin = "2.3.21"
-kotlinx-coroutines = "1.10.2"
+kotlinx-coroutines = "1.11.0"
 kotlinx-atomicfu = "0.32.1"
 kotlinx-serialization = "1.11.0"
-kotlinx-benchmark = "0.4.14"
+kotlinx-benchmark = "0.4.15"
 
-spring-boot = "3.5.13"
+spring-boot = "4.0.6"
 
 exposed = "1.2.0"
 
 slf4j = "2.0.17"
 logback = "1.5.32"
 
-jackson = "2.21.2"
-jackson3 = "3.1.2"
+jackson = "2.21.3"
+jackson3 = "3.1.3"
 fastjson2 = "2.0.61"
 
 hibernate = "6.6.33.Final"
@@ -63,17 +64,17 @@ gatling = { id = "io.gatling.gradle", version.ref = "gatling" }
 jetbrains-annotations = { module = "org.jetbrains:annotations", version = "26.1.0" }
 
 # Bluetape4k
-bluetape4k-bom = { module = "io.github.bluetape4k:bluetape4k-bom", version.ref = "bluetape4k" }
+bluetape4k-dependencies = { module = "io.github.bluetape4k:bluetape4k-dependencies", version.ref = "bluetape4k-dependencies" }
 bluetape4k-coroutines = { module = "io.github.bluetape4k:bluetape4k-coroutines" }
-bluetape4k-exposed = { module = "io.github.bluetape4k:bluetape4k-exposed" }
-bluetape4k-exposed-fastjson2 = { module = "io.github.bluetape4k:bluetape4k-exposed-fastjson2" }
-bluetape4k-exposed-jackson2 = { module = "io.github.bluetape4k:bluetape4k-exposed-jackson2" }
-bluetape4k-exposed-jackson3 = { module = "io.github.bluetape4k:bluetape4k-exposed-jackson3" }
-bluetape4k-exposed-r2dbc = { module = "io.github.bluetape4k:bluetape4k-exposed-r2dbc" }
-bluetape4k-exposed-r2dbc-redisson = { module = "io.github.bluetape4k:bluetape4k-exposed-r2dbc-redisson" }
-bluetape4k-exposed-tink = { module = "io.github.bluetape4k:bluetape4k-exposed-tink" }
-bluetape4k-fastjson2 = { module = "io.github.bluetape4k:bluetape4k-fastjson2" }
-bluetape4k-grpc = { module = "io.github.bluetape4k:bluetape4k-grpc" }
+bluetape4k-exposed = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-jdbc" }
+bluetape4k-exposed-fastjson2 = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-fastjson2" }
+bluetape4k-exposed-jackson2 = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-jackson2" }
+bluetape4k-exposed-jackson3 = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-jackson3" }
+bluetape4k-exposed-r2dbc = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-r2dbc" }
+bluetape4k-exposed-r2dbc-redisson = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-r2dbc-redisson" }
+bluetape4k-exposed-tink = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-tink" }
+bluetape4k-fastjson2 = { module = "io.github.bluetape4k:bluetape4k-fastjson2", version.ref = "bluetape4k" }
+bluetape4k-grpc = { module = "io.github.bluetape4k:bluetape4k-grpc", version.ref = "bluetape4k" }
 bluetape4k-idgenerators = { module = "io.github.bluetape4k:bluetape4k-idgenerators" }
 bluetape4k-io = { module = "io.github.bluetape4k:bluetape4k-io" }
 bluetape4k-jackson2 = { module = "io.github.bluetape4k:bluetape4k-jackson2" }
@@ -83,12 +84,12 @@ bluetape4k-assertions = { module = "io.github.bluetape4k:bluetape4k-assertions",
 bluetape4k-junit5 = { module = "io.github.bluetape4k:bluetape4k-junit5" }
 bluetape4k-logging = { module = "io.github.bluetape4k:bluetape4k-logging" }
 bluetape4k-money = { module = "io.github.bluetape4k:bluetape4k-money" }
-bluetape4k-r2dbc = { module = "io.github.bluetape4k:bluetape4k-r2dbc" }
+bluetape4k-r2dbc = { module = "io.github.bluetape4k:bluetape4k-r2dbc", version.ref = "bluetape4k" }
 bluetape4k-redis = { module = "io.github.bluetape4k:bluetape4k-redis" }
-bluetape4k-spring-boot3-core = { module = "io.github.bluetape4k:bluetape4k-spring-boot3-core" }
+bluetape4k-spring-boot-core = { module = "io.github.bluetape4k:bluetape4k-spring-boot-core" }
 bluetape4k-testcontainers = { module = "io.github.bluetape4k:bluetape4k-testcontainers" }
-bluetape4k-tink = { module = "io.github.bluetape4k:bluetape4k-tink" }
-bluetape4k-virtualthread-jdk21 = { module = "io.github.bluetape4k:bluetape4k-virtualthread-jdk21" }
+bluetape4k-tink = { module = "io.github.bluetape4k:bluetape4k-tink", version.ref = "bluetape4k" }
+bluetape4k-virtualthread-jdk21 = { module = "io.github.bluetape4k:bluetape4k-virtualthread-jdk21", version.ref = "bluetape4k" }
 
 # Kotlin
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
@@ -136,7 +137,7 @@ spring-boot-autoconfigure-processor = { module = "org.springframework.boot:sprin
 spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
 spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools" }
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
-spring-boot-starter-aop = { module = "org.springframework.boot:spring-boot-starter-aop" }
+spring-boot-starter-aspectj = { module = "org.springframework.boot:spring-boot-starter-aspectj" }
 spring-boot-starter-data-r2dbc = { module = "org.springframework.boot:spring-boot-starter-data-r2dbc" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
@@ -222,7 +223,7 @@ javamoney-moneta = { module = "org.javamoney:moneta", version = "1.4.4" }
 
 # Compression
 snappy-java = { module = "org.xerial.snappy:snappy-java", version = "1.1.10.8" }
-lz4-java = { module = "org.lz4:lz4-java", version = "1.8.0" }
+lz4-java = { module = "at.yawk.lz4:lz4-java", version = "1.11.0" }
 zstd-jni = { module = "com.github.luben:zstd-jni", version = "1.5.7-1" }
 
 # Jakarta APIs

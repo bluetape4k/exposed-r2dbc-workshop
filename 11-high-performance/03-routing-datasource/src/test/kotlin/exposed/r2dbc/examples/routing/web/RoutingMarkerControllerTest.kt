@@ -6,6 +6,7 @@ import io.bluetape4k.assertions.shouldBeEqualTo
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.expectBody
@@ -13,6 +14,7 @@ import org.springframework.test.web.reactive.server.expectBody
 /**
  * 라우팅 마커 API의 테넌트/읽기전용 분기 동작을 검증한다.
  */
+@AutoConfigureWebTestClient
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class RoutingMarkerControllerTest(
     @param:Autowired private val client: WebTestClient,

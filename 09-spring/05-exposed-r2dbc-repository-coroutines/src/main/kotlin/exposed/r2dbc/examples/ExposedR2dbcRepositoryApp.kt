@@ -12,6 +12,6 @@ class ExposedR2dbcRepositoryApp {
 
 fun main(vararg args: String) {
     runApplication<ExposedR2dbcRepositoryApp>(*args) {
-        webApplicationType = WebApplicationType.REACTIVE
+        setWebApplicationType(WebApplicationType.REACTIVE)
     }
 }

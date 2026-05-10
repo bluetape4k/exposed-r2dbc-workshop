@@ -16,6 +16,6 @@ class ExposedMultitenantWebfluxApp {
 
 fun main(vararg args: String) {
     runApplication<ExposedMultitenantWebfluxApp>(*args) {
-        webApplicationType = WebApplicationType.REACTIVE
+        setWebApplicationType(WebApplicationType.REACTIVE)
     }
 }
