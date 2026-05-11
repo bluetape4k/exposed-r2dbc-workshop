@@ -41,7 +41,7 @@ dependency-management = "1.1.7"
 test-logger = "4.0.0"
 kover = "0.9.8"
 graalvm-native = "0.11.4"
-gatling = "3.14.9"
+gatling = "3.15.0"
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
