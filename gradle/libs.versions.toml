@@ -242,7 +242,7 @@ jakarta-servlet-api = { module = "jakarta.servlet:jakarta.servlet-api", version 
 jakarta-transaction-api = { module = "jakarta.transaction:jakarta.transaction-api", version = "2.0.1" }
 jakarta-validation-api = { module = "jakarta.validation:jakarta.validation-api", version = "3.1.1" }
 jakarta-ws-rs-api = { module = "jakarta.ws.rs:jakarta.ws.rs-api", version = "4.0.0" }
-jakarta-xml-bind = { module = "jakarta.xml.bind:jakarta.xml.bind-api", version = "4.0.2" }
+jakarta-xml-bind = { module = "jakarta.xml.bind:jakarta.xml.bind-api", version = "4.0.5" }
 
 # Apache Commons
 commons-beanutils = { module = "commons-beanutils:commons-beanutils", version = "1.11.0" }
