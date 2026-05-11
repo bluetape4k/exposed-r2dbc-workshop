@@ -246,7 +246,7 @@ jakarta-xml-bind = { module = "jakarta.xml.bind:jakarta.xml.bind-api", version =
 
 # Apache Commons
 commons-beanutils = { module = "commons-beanutils:commons-beanutils", version = "1.11.0" }
-commons-codec = { module = "commons-codec:commons-codec", version = "1.18.0" }
+commons-codec = { module = "commons-codec:commons-codec", version = "1.22.0" }
 commons-collections4 = { module = "org.apache.commons:commons-collections4", version = "4.5.0" }
 commons-compress = { module = "org.apache.commons:commons-compress", version = "1.27.1" }
 commons-csv = { module = "org.apache.commons:commons-csv", version = "1.14.0" }
