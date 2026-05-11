@@ -29,7 +29,7 @@ hibernate-validator = "8.0.3.Final"
 junit-jupiter = "6.0.3"
 mockk = "1.14.9"
 awaitility = "4.3.0"
-testcontainers = "2.0.3"
+testcontainers = "2.0.5"
 
 caffeine = "3.2.3"
 lettuce = "6.8.2.RELEASE"
