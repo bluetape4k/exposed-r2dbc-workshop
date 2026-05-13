@@ -42,6 +42,9 @@ Gradle module names are leaf directory names.
 11-high-performance/
 ```
 
+Root README visual assets live under `docs/assets/` and should be shared by
+`README.md` and `README.ko.md` through the same relative path.
+
 ## Shared Test Infrastructure
 
 - Tests extend `AbstractR2dbcExposedTest`.
