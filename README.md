@@ -5,8 +5,23 @@
 [![JVM](https://img.shields.io/badge/JVM-21-ED8B00?logo=openjdk)](https://openjdk.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+![Exposed R2DBC workshop workbench](./docs/assets/exposed-r2dbc-workshop-workbench.png)
+
 Kotlin Exposed의 R2DBC 기반 예제를 단계별로 정리한 멀티 모듈 워크숍입니다.
 Reactive SQL DSL, Coroutines, Spring WebFlux, 멀티테넌시, 캐시, 라우팅 같은 실전 패턴을 예제와 테스트 중심으로 학습할 수 있습니다.
+
+## Project Purpose
+
+`exposed-r2dbc-workshop` teaches Kotlin Exposed R2DBC with coroutine-first,
+test-backed examples for reactive database access, WebFlux integration,
+schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
+
+## What It Provides
+
+- **Reactive SQL learning path** from shared test infrastructure to high-performance routing.
+- **Coroutine/R2DBC examples** with `suspendTransaction`, Flow collection, and WebFlux.
+- **Multi-database verification** for H2, PostgreSQL, MySQL, and MariaDB.
+- **Production patterns** for repository, cache, multi-tenant schema, and routing datasource examples.
 
 상세 설명은 [Kotlin Exposed Book](https://debop.notion.site/Kotlin-Exposed-Book-1ad2744526b080428173e9c907abdae2)에서 확인할 수 있습니다.
 
