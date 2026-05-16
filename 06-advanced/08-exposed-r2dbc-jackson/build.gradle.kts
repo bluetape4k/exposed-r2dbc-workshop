@@ -3,16 +3,16 @@ configurations {
 }
 
 dependencies {
-    implementation(platform(libs.exposed.bom))
+    implementation(platform(libs.jetbrains.exposed.bom))
 
     implementation(project(":exposed-r2dbc-shared"))
 
     // Exposed
+    implementation(libs.jetbrains.exposed.r2dbc)
     implementation(libs.exposed.r2dbc)
-    implementation(libs.bluetape4k.exposed.r2dbc)
 
     // Jackson (테스트에서만 사용)
-    testImplementation(libs.bluetape4k.exposed.jackson2)
+    testImplementation(libs.exposed.jackson2)
     testImplementation(libs.bluetape4k.jackson2)
     testImplementation(libs.jackson.module.kotlin)
     testImplementation(libs.jackson.module.blackbird)

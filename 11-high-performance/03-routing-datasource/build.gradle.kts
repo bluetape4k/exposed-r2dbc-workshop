@@ -22,12 +22,12 @@ configurations {
 }
 
 dependencies {
-    implementation(platform(libs.exposed.bom))
+    implementation(platform(libs.jetbrains.exposed.bom))
 
     // Exposed
-    implementation(libs.exposed.core)
+    implementation(libs.jetbrains.exposed.core)
+    implementation(libs.jetbrains.exposed.r2dbc)
     implementation(libs.exposed.r2dbc)
-    implementation(libs.bluetape4k.exposed.r2dbc)
 
     // R2DBC
     runtimeOnly(libs.h2.v2)

@@ -25,12 +25,12 @@ configurations {
 }
 
 dependencies {
-    implementation(platform(libs.exposed.bom))
+    implementation(platform(libs.jetbrains.exposed.bom))
 
     implementation(project(":exposed-r2dbc-shared"))
 
     // bluetape4k
-    implementation(libs.bluetape4k.exposed.r2dbc)
+    implementation(libs.exposed.r2dbc)
     testImplementation(libs.bluetape4k.junit5)
     implementation(libs.bluetape4k.testcontainers)
     testImplementation(libs.bluetape4k.spring.boot.core)
@@ -41,9 +41,9 @@ dependencies {
     implementation(libs.jackson.module.blackbird)
 
     // Exposed
-    implementation(libs.exposed.r2dbc)
-    implementation(libs.exposed.core)
-    implementation(libs.exposed.java.time)
+    implementation(libs.jetbrains.exposed.r2dbc)
+    implementation(libs.jetbrains.exposed.core)
+    implementation(libs.jetbrains.exposed.java.time)
 
     runtimeOnly(libs.h2.v2)
 

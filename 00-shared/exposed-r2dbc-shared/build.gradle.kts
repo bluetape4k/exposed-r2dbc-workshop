@@ -7,21 +7,21 @@ configurations {
 }
 
 dependencies {
-    implementation(platform(libs.exposed.bom))
+    implementation(platform(libs.jetbrains.exposed.bom))
 
     // Exposed
-    implementation(libs.exposed.core)
-    implementation(libs.exposed.dao)
-    implementation(libs.exposed.jdbc)
-    implementation(libs.exposed.r2dbc)
-    implementation(libs.exposed.java.time)
-    implementation(libs.exposed.crypt)
-    implementation(libs.exposed.json)
-    implementation(libs.exposed.money)
-    implementation(libs.exposed.migration.r2dbc)
+    implementation(libs.jetbrains.exposed.core)
+    implementation(libs.jetbrains.exposed.dao)
+    implementation(libs.jetbrains.exposed.jdbc)
+    implementation(libs.jetbrains.exposed.r2dbc)
+    implementation(libs.jetbrains.exposed.java.time)
+    implementation(libs.jetbrains.exposed.crypt)
+    implementation(libs.jetbrains.exposed.json)
+    implementation(libs.jetbrains.exposed.money)
+    implementation(libs.jetbrains.exposed.migration.r2dbc)
 
     // bluetape4k
-    implementation(libs.bluetape4k.exposed.r2dbc)
+    implementation(libs.exposed.r2dbc)
     implementation(libs.bluetape4k.jdbc)
     implementation(libs.bluetape4k.r2dbc)
     implementation(libs.bluetape4k.junit5)

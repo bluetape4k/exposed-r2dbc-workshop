@@ -22,16 +22,16 @@ configurations {
 }
 
 dependencies {
-    implementation(platform(libs.exposed.bom))
+    implementation(platform(libs.jetbrains.exposed.bom))
 
     implementation(project(":exposed-r2dbc-shared"))
 
     // Exposed
-    implementation(libs.exposed.r2dbc)
-    implementation(libs.exposed.java.time)
+    implementation(libs.jetbrains.exposed.r2dbc)
+    implementation(libs.jetbrains.exposed.java.time)
 
     // bluetape4k
-    implementation(libs.bluetape4k.exposed.r2dbc)
+    implementation(libs.exposed.r2dbc)
     implementation(libs.bluetape4k.redis)
     implementation(libs.bluetape4k.grpc)
     implementation(libs.bluetape4k.testcontainers)

@@ -3,14 +3,14 @@ configurations {
 }
 
 dependencies {
-    implementation(platform(libs.exposed.bom))
+    implementation(platform(libs.jetbrains.exposed.bom))
 
     testImplementation(project(":exposed-r2dbc-shared"))
 
     // Exposed
+    testImplementation(libs.jetbrains.exposed.r2dbc)
+    testImplementation(libs.exposed.core)
     testImplementation(libs.exposed.r2dbc)
-    testImplementation(libs.bluetape4k.exposed.core)
-    testImplementation(libs.bluetape4k.exposed.r2dbc)
     testImplementation(libs.bluetape4k.junit5)
 
     testImplementation(libs.bluetape4k.io)
