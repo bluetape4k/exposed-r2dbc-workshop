@@ -3,20 +3,20 @@ configurations {
 }
 
 dependencies {
-    implementation(platform(libs.exposed.bom))
+    implementation(platform(libs.jetbrains.exposed.bom))
 
     testImplementation(project(":exposed-r2dbc-shared"))
 
     // Exposed
-    testImplementation(libs.exposed.r2dbc)
+    testImplementation(libs.jetbrains.exposed.r2dbc)
 
     // Money
-    testImplementation(libs.exposed.money)
+    testImplementation(libs.jetbrains.exposed.money)
     testImplementation(libs.javax.money.api)
     testImplementation(libs.javamoney.moneta)
     testImplementation(libs.bluetape4k.money)
 
-    testImplementation(libs.bluetape4k.exposed.r2dbc)
+    testImplementation(libs.exposed.r2dbc)
     testImplementation(libs.bluetape4k.junit5)
 
     testRuntimeOnly(libs.h2.v2)

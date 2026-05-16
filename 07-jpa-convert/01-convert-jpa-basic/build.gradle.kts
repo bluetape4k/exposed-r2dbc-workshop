@@ -3,7 +3,7 @@ configurations {
 }
 
 dependencies {
-    implementation(platform(libs.exposed.bom))
+    implementation(platform(libs.jetbrains.exposed.bom))
 
     testImplementation(project(":exposed-r2dbc-shared"))
 
@@ -12,12 +12,12 @@ dependencies {
     testImplementation(libs.hibernate.validator)
 
     // Exposed
-    testImplementation(libs.exposed.dao)
-    testImplementation(libs.exposed.jdbc)
-    testImplementation(libs.exposed.r2dbc)
-    testImplementation(libs.exposed.java.time)
+    testImplementation(libs.jetbrains.exposed.dao)
+    testImplementation(libs.jetbrains.exposed.jdbc)
+    testImplementation(libs.jetbrains.exposed.r2dbc)
+    testImplementation(libs.jetbrains.exposed.java.time)
 
-    testImplementation(libs.bluetape4k.exposed.r2dbc)
+    testImplementation(libs.exposed.r2dbc)
     testImplementation(libs.bluetape4k.idgenerators)
 
     testImplementation(libs.bluetape4k.junit5)
