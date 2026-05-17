@@ -69,13 +69,13 @@ jetbrains-annotations = { module = "org.jetbrains:annotations", version = "26.1.
 bluetape4k-dependencies = { module = "io.github.bluetape4k:bluetape4k-dependencies", version.ref = "bluetape4k-dependencies" }
 bluetape4k-assertions = { module = "io.github.bluetape4k:bluetape4k-assertions", version.ref = "bluetape4k-assertions-version" }
 bluetape4k-coroutines = { module = "io.github.bluetape4k:bluetape4k-coroutines" }
-exposed-core = { module = "io.github.bluetape4k.exposed:exposed-core" }
-exposed-fastjson2 = { module = "io.github.bluetape4k.exposed:exposed-fastjson2" }
-exposed-jackson2 = { module = "io.github.bluetape4k.exposed:exposed-jackson2" }
-exposed-jackson3 = { module = "io.github.bluetape4k.exposed:exposed-jackson3" }
-exposed-r2dbc = { module = "io.github.bluetape4k.exposed:exposed-r2dbc" }
-exposed-r2dbc-redisson = { module = "io.github.bluetape4k.exposed:exposed-r2dbc-redisson" }
-exposed-tink = { module = "io.github.bluetape4k.exposed:exposed-tink" }
+exposed-core = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-core" }
+exposed-fastjson2 = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-fastjson2" }
+exposed-jackson2 = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-jackson2" }
+exposed-jackson3 = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-jackson3" }
+exposed-r2dbc = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-r2dbc" }
+exposed-r2dbc-redisson = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-r2dbc-redisson" }
+exposed-tink = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-tink" }
 bluetape4k-fastjson2 = { module = "io.github.bluetape4k:bluetape4k-fastjson2", version.ref = "bluetape4k" }
 bluetape4k-grpc = { module = "io.github.bluetape4k:bluetape4k-grpc", version.ref = "bluetape4k" }
 bluetape4k-idgenerators = { module = "io.github.bluetape4k:bluetape4k-idgenerators" }
