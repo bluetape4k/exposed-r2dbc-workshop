@@ -3,7 +3,7 @@
 # 01-dml
 
 Exposed R2DBC DSL을 사용한 **DML(Data Manipulation Language)
-** 작업의 종합 예제 모듈입니다. SELECT, INSERT, UPDATE, DELETE, UPSERT, MERGE, JOIN, UNION, CTE 등 거의 모든 SQL DML 패턴을 27개의 테스트 파일로 다루고 있습니다.
+** 작업의 종합 예제 모듈입니다. SELECT, INSERT, UPDATE, DELETE, UPSERT, MERGE, JOIN, UNION, CTE 등 거의 모든 SQL DML 패턴을 28개의 테스트 파일로 다루고 있습니다.
 
 ## 기술 스택
 
@@ -45,6 +45,7 @@ src/test/kotlin/exposed/r2dbc/examples/dml/
 ├── Ex30_Explain.kt             # EXPLAIN / EXPLAIN ANALYZE 실행 계획 조회
 ├── Ex40_LateralJoin.kt         # LATERAL JOIN (PostgreSQL)
 ├── Ex50_RecursiveCTE.kt        # 재귀 CTE (WITH RECURSIVE)
+├── Ex51_CteQueryBuilder.kt     # CteTable/withCte 기반 Query Builder CTE
 └── Ex99_Dual.kt                # DUAL 테이블 (테이블 없는 SELECT)
 ```
 
@@ -109,6 +110,7 @@ src/test/kotlin/exposed/r2dbc/examples/dml/
 |----------------------------|-------------------------------------------|
 | `Ex30_Explain`             | `EXPLAIN` / `EXPLAIN ANALYZE`로 실행 계획 확인   |
 | `Ex50_RecursiveCTE`        | `WITH RECURSIVE`를 이용한 재귀 CTE (계층 구조 조회)   |
+| `Ex51_CteQueryBuilder`     | `CteTable`과 `withCte`를 이용한 Query Builder CTE |
 | `Ex16_FetchBatchedResults` | 대용량 결과를 배치 단위로 조회 (`fetchBatchedResults`) |
 | `Ex99_Dual`                | 테이블 없이 SELECT 실행 (DUAL 테이블 패턴)            |
 

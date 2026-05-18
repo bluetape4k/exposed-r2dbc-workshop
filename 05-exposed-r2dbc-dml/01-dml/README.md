@@ -2,7 +2,7 @@
 
 # 01-dml
 
-A comprehensive example module for **DML (Data Manipulation Language)** operations using the Exposed R2DBC DSL. Covers nearly all SQL DML patterns — SELECT, INSERT, UPDATE, DELETE, UPSERT, MERGE, JOIN, UNION, CTE, and more — across 27 test files.
+A comprehensive example module for **DML (Data Manipulation Language)** operations using the Exposed R2DBC DSL. Covers nearly all SQL DML patterns — SELECT, INSERT, UPDATE, DELETE, UPSERT, MERGE, JOIN, UNION, CTE, and more — across 28 test files.
 
 ## Tech Stack
 
@@ -44,6 +44,7 @@ src/test/kotlin/exposed/r2dbc/examples/dml/
 ├── Ex30_Explain.kt             # EXPLAIN / EXPLAIN ANALYZE query plan inspection
 ├── Ex40_LateralJoin.kt         # LATERAL JOIN (PostgreSQL)
 ├── Ex50_RecursiveCTE.kt        # Recursive CTE (WITH RECURSIVE)
+├── Ex51_CteQueryBuilder.kt     # Query Builder CTE with CteTable/withCte
 └── Ex99_Dual.kt                # DUAL table (SELECT without a table)
 ```
 
@@ -108,6 +109,7 @@ src/test/kotlin/exposed/r2dbc/examples/dml/
 |------------------------------|------------------------------------------------------------------|
 | `Ex30_Explain`               | Inspect query execution plan with `EXPLAIN` / `EXPLAIN ANALYZE`  |
 | `Ex50_RecursiveCTE`          | Recursive CTE using `WITH RECURSIVE` (hierarchical queries)       |
+| `Ex51_CteQueryBuilder`       | Query Builder CTE using `CteTable` and `withCte`                  |
 | `Ex16_FetchBatchedResults`   | Batch retrieval of large results (`fetchBatchedResults`)          |
 | `Ex99_Dual`                  | Execute SELECT without a table (DUAL table pattern)               |
 
