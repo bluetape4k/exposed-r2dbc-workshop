@@ -3,7 +3,7 @@
 
 [versions]
 bluetape4k = "1.8.0-SNAPSHOT"
-bluetape4k-dependencies = "1.0.0-SNAPSHOT"
+bluetape4k-dependencies = "1.0.1-SNAPSHOT"
 bluetape4k-assertions-version = "1.8.0-SNAPSHOT"
 
 kotlin = "2.3.21"
@@ -14,9 +14,9 @@ kotlinx-benchmark = "0.4.15"
 
 spring-boot = "4.0.6"
 
-exposed = "1.2.0"
+exposed = "1.3.0"
 
-slf4j = "2.0.17"
+slf4j = "2.0.18"
 logback = "1.5.32"
 
 jackson = "2.21.3"
@@ -33,7 +33,7 @@ testcontainers = "2.0.5"
 
 caffeine = "3.2.3"
 lettuce = "6.8.2.RELEASE"
-redisson = "4.3.1"
+redisson = "4.4.0"
 
 # Plugin versions
 detekt = "1.23.8"
@@ -41,7 +41,7 @@ dependency-management = "1.1.7"
 test-logger = "4.0.0"
 kover = "0.9.8"
 graalvm-native = "0.11.4"
-gatling = "3.14.9"
+gatling = "3.15.0"
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -69,13 +69,13 @@ jetbrains-annotations = { module = "org.jetbrains:annotations", version = "26.1.
 bluetape4k-dependencies = { module = "io.github.bluetape4k:bluetape4k-dependencies", version.ref = "bluetape4k-dependencies" }
 bluetape4k-assertions = { module = "io.github.bluetape4k:bluetape4k-assertions", version.ref = "bluetape4k-assertions-version" }
 bluetape4k-coroutines = { module = "io.github.bluetape4k:bluetape4k-coroutines" }
-exposed-core = { module = "io.github.bluetape4k.exposed:exposed-core" }
-exposed-fastjson2 = { module = "io.github.bluetape4k.exposed:exposed-fastjson2" }
-exposed-jackson2 = { module = "io.github.bluetape4k.exposed:exposed-jackson2" }
-exposed-jackson3 = { module = "io.github.bluetape4k.exposed:exposed-jackson3" }
-exposed-r2dbc = { module = "io.github.bluetape4k.exposed:exposed-r2dbc" }
-exposed-r2dbc-redisson = { module = "io.github.bluetape4k.exposed:exposed-r2dbc-redisson" }
-exposed-tink = { module = "io.github.bluetape4k.exposed:exposed-tink" }
+exposed-core = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-core" }
+exposed-fastjson2 = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-fastjson2" }
+exposed-jackson2 = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-jackson2" }
+exposed-jackson3 = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-jackson3" }
+exposed-r2dbc = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-r2dbc" }
+exposed-r2dbc-redisson = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-r2dbc-redisson" }
+exposed-tink = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-tink" }
 bluetape4k-fastjson2 = { module = "io.github.bluetape4k:bluetape4k-fastjson2", version.ref = "bluetape4k" }
 bluetape4k-grpc = { module = "io.github.bluetape4k:bluetape4k-grpc", version.ref = "bluetape4k" }
 bluetape4k-idgenerators = { module = "io.github.bluetape4k:bluetape4k-idgenerators" }
@@ -130,7 +130,7 @@ jul-to-slf4j = { module = "org.slf4j:jul-to-slf4j", version.ref = "slf4j" }
 log4j-over-slf4j = { module = "org.slf4j:log4j-over-slf4j", version.ref = "slf4j" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 logback-core = { module = "ch.qos.logback:logback-core", version.ref = "logback" }
-logcaptor = { module = "io.github.hakky54:logcaptor", version = "2.12.1" }
+logcaptor = { module = "io.github.hakky54:logcaptor", version = "2.12.6" }
 
 # Spring Boot
 spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
@@ -210,23 +210,23 @@ redisson = { module = "org.redisson:redisson", version.ref = "redisson" }
 
 # Database Drivers
 h2-v2 = { module = "com.h2database:h2", version = "2.4.240" }
-mysql-connector-j = { module = "com.mysql:mysql-connector-j", version = "9.6.0" }
+mysql-connector-j = { module = "com.mysql:mysql-connector-j", version = "9.7.0" }
 mariadb-java-client = { module = "org.mariadb.jdbc:mariadb-java-client", version = "3.5.8" }
-postgresql-driver = { module = "org.postgresql:postgresql", version = "42.7.10" }
+postgresql-driver = { module = "org.postgresql:postgresql", version = "42.7.11" }
 
 # Misc
 findbugs = { module = "com.google.code.findbugs:jsr305", version = "3.0.2" }
-guava = { module = "com.google.guava:guava", version = "33.2.0-jre" }
+guava = { module = "com.google.guava:guava", version = "33.6.0-jre" }
 fory-kotlin = { module = "org.apache.fory:fory-kotlin", version = "0.15.0" }
 kryo = { module = "com.esotericsoftware:kryo", version = "5.6.2" }
 java-uuid-generator = { module = "com.fasterxml.uuid:java-uuid-generator", version = "5.2.0" }
 javax-money-api = { module = "javax.money:money-api", version = "1.1" }
-javamoney-moneta = { module = "org.javamoney:moneta", version = "1.4.4" }
+javamoney-moneta = { module = "org.javamoney:moneta", version = "1.4.5" }
 
 # Compression
 snappy-java = { module = "org.xerial.snappy:snappy-java", version = "1.1.10.8" }
 lz4-java = { module = "at.yawk.lz4:lz4-java", version = "1.11.0" }
-zstd-jni = { module = "com.github.luben:zstd-jni", version = "1.5.7-1" }
+zstd-jni = { module = "com.github.luben:zstd-jni", version = "1.5.7-8" }
 
 # Jakarta APIs
 jakarta-activation-api = { module = "jakarta.activation:jakarta.activation-api", version = "2.1.3" }
@@ -242,20 +242,20 @@ jakarta-servlet-api = { module = "jakarta.servlet:jakarta.servlet-api", version 
 jakarta-transaction-api = { module = "jakarta.transaction:jakarta.transaction-api", version = "2.0.1" }
 jakarta-validation-api = { module = "jakarta.validation:jakarta.validation-api", version = "3.1.1" }
 jakarta-ws-rs-api = { module = "jakarta.ws.rs:jakarta.ws.rs-api", version = "4.0.0" }
-jakarta-xml-bind = { module = "jakarta.xml.bind:jakarta.xml.bind-api", version = "4.0.2" }
+jakarta-xml-bind = { module = "jakarta.xml.bind:jakarta.xml.bind-api", version = "4.0.5" }
 
 # Apache Commons
 commons-beanutils = { module = "commons-beanutils:commons-beanutils", version = "1.11.0" }
-commons-codec = { module = "commons-codec:commons-codec", version = "1.18.0" }
+commons-codec = { module = "commons-codec:commons-codec", version = "1.22.0" }
 commons-collections4 = { module = "org.apache.commons:commons-collections4", version = "4.5.0" }
 commons-compress = { module = "org.apache.commons:commons-compress", version = "1.27.1" }
-commons-csv = { module = "org.apache.commons:commons-csv", version = "1.14.0" }
-commons-exec = { module = "org.apache.commons:commons-exec", version = "1.5.0" }
-commons-io = { module = "commons-io:commons-io", version = "2.19.0" }
+commons-csv = { module = "org.apache.commons:commons-csv", version = "1.14.1" }
+commons-exec = { module = "org.apache.commons:commons-exec", version = "1.6.0" }
+commons-io = { module = "commons-io:commons-io", version = "2.22.0" }
 commons-lang3 = { module = "org.apache.commons:commons-lang3", version = "3.17.0" }
-commons-logging = { module = "commons-logging:commons-logging", version = "1.3.5" }
+commons-logging = { module = "commons-logging:commons-logging", version = "1.3.6" }
 commons-math3 = { module = "org.apache.commons:commons-math3", version = "3.6.1" }
-commons-pool2 = { module = "org.apache.commons:commons-pool2", version = "2.12.1" }
+commons-pool2 = { module = "org.apache.commons:commons-pool2", version = "2.13.1" }
 commons-text = { module = "org.apache.commons:commons-text", version = "1.13.1" }
 
 # JUnit
