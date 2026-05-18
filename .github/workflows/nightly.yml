@@ -19,20 +19,20 @@ jobs:
     name: Validate Gradle Wrapper
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: gradle/actions/wrapper-validation@v4
+      - uses: actions/checkout@v6
+      - uses: gradle/actions/wrapper-validation@v6
 
   build:
     name: Build & Detekt
     runs-on: ubuntu-latest
     needs: validate-wrapper
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.JAVA_DISTRIBUTION }}
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v6
         with:
           gradle-version: wrapper
       - name: Build (compile only)
@@ -43,7 +43,7 @@ jobs:
         run: ./gradlew detekt --parallel
       - name: Upload detekt report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: detekt-report
           path: '**/build/reports/detekt/*.xml'
@@ -176,12 +176,12 @@ jobs:
               :04-exposed-r2dbc-json:test
               :01-exposed-r2dbc-crypt:test
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.JAVA_DISTRIBUTION }}
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v6
         with:
           gradle-version: wrapper
           cache-read-only: true
@@ -208,14 +208,14 @@ jobs:
         continue-on-error: true
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: test-results-${{ matrix.slug }}
           path: '**/build/test-results/test/*.xml'
           retention-days: 14
       - name: Upload coverage report
         if: matrix.collect-coverage && always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-${{ matrix.slug }}
           path: '**/build/reports/kover/'
@@ -227,12 +227,12 @@ jobs:
     needs: [ test ]
     if: always()
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
       - name: Download coverage artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: coverage-*
           path: coverage-artifacts
@@ -243,7 +243,7 @@ jobs:
         run: python3 .github/scripts/aggregate-kover-coverage.py coverage-artifacts
       - name: Upload aggregated coverage
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-all
           path: coverage-artifacts/
