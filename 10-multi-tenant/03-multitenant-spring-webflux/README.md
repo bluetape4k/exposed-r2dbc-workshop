@@ -56,15 +56,15 @@ src/main/kotlin/exposed/r2dbc/multitenant/webflux/
 
 ### Multi-tenancy Request Flow
 
-![Multi-tenancy Request Flow 1](../../docs/images/readme-diagrams/10-multi-tenant-03-multitenant-spring-webflux-diagram-01.svg)
+![Multi-tenancy Request Flow 1](../../docs/images/readme-diagrams/10-multi-tenant-03-multitenant-spring-webflux-diagram-01.png)
 
 ## Tenant Context Propagation Flow
 
-![Tenant Context Propagation Flow 2](../../docs/images/readme-diagrams/10-multi-tenant-03-multitenant-spring-webflux-diagram-02.svg)
+![Tenant Context Propagation Flow 2](../../docs/images/readme-diagrams/10-multi-tenant-03-multitenant-spring-webflux-diagram-02.png)
 
 ## TenantAwareRepository Class Structure
 
-![TenantAwareRepository Class Structure 3](../../docs/images/readme-diagrams/10-multi-tenant-03-multitenant-spring-webflux-diagram-03.svg)
+![TenantAwareRepository Class Structure 3](../../docs/images/readme-diagrams/10-multi-tenant-03-multitenant-spring-webflux-diagram-03.png)
 
 ### Tenant Definitions
 

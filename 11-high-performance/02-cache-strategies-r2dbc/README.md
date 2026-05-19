@@ -33,7 +33,7 @@ but operates with **Non-Blocking I/O** in a Spring WebFlux + Netty + Coroutines 
 
 ## Structure Diagram
 
-![Structure Diagram 1](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-diagram-01.svg)
+![Structure Diagram 1](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-diagram-01.png)
 
 > `UserCacheRepository`: Near Cache (Caffeine) + Redis (MapCache)
 > `UserCredentialsCacheRepository`: Read-only cache (credentials, code tables)
@@ -41,7 +41,7 @@ but operates with **Non-Blocking I/O** in a Spring WebFlux + Netty + Coroutines 
 
 ## Cache Lookup Flow
 
-![Cache Lookup Flow 2](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-diagram-02.svg)
+![Cache Lookup Flow 2](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-diagram-02.png)
 
 ## Project Structure
 
@@ -246,7 +246,7 @@ The Markdown report stores benchmark name, mode, score, error, unit, and paramet
 
 ### Strategy Flow by Type
 
-![Strategy Flow by Type 3](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-diagram-03.svg)
+![Strategy Flow by Type 3](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-diagram-03.png)
 
 ### Strategy Selection Criteria
 
@@ -261,7 +261,7 @@ The Markdown report stores benchmark name, mode, score, error, unit, and paramet
 
 Using the `READ_WRITE_THROUGH_WITH_NEAR_CACHE` setting activates a Caffeine local cache inside the application.
 
-![Near Cache Effect 4](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-diagram-04.svg)
+![Near Cache Effect 4](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-diagram-04.png)
 
 Repeated lookups within the same process respond without a Redis round-trip, **significantly reducing P99 latency**.
 

@@ -42,7 +42,7 @@ compositeMoney(precision: Int, scale: Int, columnName: String)
 
 ## 구조 다이어그램
 
-![Component Diagram 1](../../docs/images/readme-diagrams/06-advanced-05-exposed-r2dbc-money-ko-diagram-01.svg)
+![Component Diagram 1](../../docs/images/readme-diagrams/06-advanced-05-exposed-r2dbc-money-ko-diagram-01.png)
 
 > `CurrencyUnit`: ISO 4217 코드 (USD, KRW 등)
 
@@ -51,11 +51,11 @@ compositeMoney(precision: Int, scale: Int, columnName: String)
 
 ## MonetaryAmount 저장/복원 흐름
 
-![MonetaryAmount Save/Component Component 2](../../docs/images/readme-diagrams/06-advanced-05-exposed-r2dbc-money-ko-diagram-02.svg)
+![MonetaryAmount Save/Component Component 2](../../docs/images/readme-diagrams/06-advanced-05-exposed-r2dbc-money-ko-diagram-02.png)
 
 ## Money 포함 테이블 구조 (ER 다이어그램)
 
-![Money Component Table Component (ER Diagram) 3](../../docs/images/readme-diagrams/06-advanced-05-exposed-r2dbc-money-ko-diagram-03.svg)
+![Money Component Table Component (ER Diagram) 3](../../docs/images/readme-diagrams/06-advanced-05-exposed-r2dbc-money-ko-diagram-03.png)
 
 > `compositeMoney`는 항상 `_C` 접미사 통화 컬럼을 함께 생성 — 수동 정의 시 이름 자유롭게 지정 가능
 

@@ -32,18 +32,18 @@ The same query functions as the Jackson 2.x module are available:
 
 ## Structure Diagram
 
-![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-11-exposed-r2dbc-jackson3-diagram-01.svg)
+![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-11-exposed-r2dbc-jackson3-diagram-01.png)
 
 > Jackson 2.x (`com.fasterxml.jackson`) → Jackson 3.x (`tools.jackson`) package change
 > `JsonMapper` is the main entry point in Jackson 3.x — replaces `ObjectMapper` from Jackson 2.x
 
 ## JSON Serialization Flow
 
-![JSON Serialization Flow 2](../../docs/images/readme-diagrams/06-advanced-11-exposed-r2dbc-jackson3-diagram-02.svg)
+![JSON Serialization Flow 2](../../docs/images/readme-diagrams/06-advanced-11-exposed-r2dbc-jackson3-diagram-02.png)
 
 ## Jackson 2.x vs 3.x Differences
 
-![Jackson 2.x vs 3.x Differences 3](../../docs/images/readme-diagrams/06-advanced-11-exposed-r2dbc-jackson3-diagram-03.svg)
+![Jackson 2.x vs 3.x Differences 3](../../docs/images/readme-diagrams/06-advanced-11-exposed-r2dbc-jackson3-diagram-03.png)
 
 ## Example Overview
 

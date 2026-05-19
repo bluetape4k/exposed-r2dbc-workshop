@@ -7,15 +7,15 @@ The examples in this directory cover topics closer to production environments â€
 
 ## High-Performance Strategy Overview
 
-![High-Performance Strategy Overview 1](../docs/images/readme-diagrams/11-high-performance-diagram-01.svg)
+![High-Performance Strategy Overview 1](../docs/images/readme-diagrams/11-high-performance-diagram-01.png)
 
 ## Cache Layer Structure (Class Diagram)
 
-![Cache Layer Structure (Class Diagram) 2](../docs/images/readme-diagrams/11-high-performance-diagram-02.svg)
+![Cache Layer Structure (Class Diagram) 2](../docs/images/readme-diagrams/11-high-performance-diagram-02.png)
 
 ## Cache Hit/Miss Processing Flow
 
-![Cache Hit/Miss Processing Flow 3](../docs/images/readme-diagrams/11-high-performance-diagram-03.svg)
+![Cache Hit/Miss Processing Flow 3](../docs/images/readme-diagrams/11-high-performance-diagram-03.png)
 
 ## Learning Objectives
 

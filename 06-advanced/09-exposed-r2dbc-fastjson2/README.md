@@ -36,18 +36,18 @@ The same powerful set of JSON query functions provided by Exposed is available:
 
 ## Structure Diagram
 
-![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-09-exposed-r2dbc-fastjson2-diagram-01.svg)
+![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-09-exposed-r2dbc-fastjson2-diagram-01.png)
 
 > No annotations required — Fastjson2 handles standard Kotlin data classes and POJOs via reflection
 > Faster serialization/deserialization than Jackson; suitable for services where JSON processing performance is critical
 
 ## JSON Serialization Flow
 
-![JSON Serialization Flow 2](../../docs/images/readme-diagrams/06-advanced-09-exposed-r2dbc-fastjson2-diagram-02.svg)
+![JSON Serialization Flow 2](../../docs/images/readme-diagrams/06-advanced-09-exposed-r2dbc-fastjson2-diagram-02.png)
 
 ## JSON Library Comparison
 
-![JSON Library Comparison 3](../../docs/images/readme-diagrams/06-advanced-09-exposed-r2dbc-fastjson2-diagram-03.svg)
+![JSON Library Comparison 3](../../docs/images/readme-diagrams/06-advanced-09-exposed-r2dbc-fastjson2-diagram-03.png)
 
 ## Example Overview
 

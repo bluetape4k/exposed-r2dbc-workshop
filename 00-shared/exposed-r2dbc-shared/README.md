@@ -76,17 +76,17 @@ By centralizing these components, `exposed-r2dbc-shared` ensures that all exampl
 
 ## DML Test Data Schema (ERD)
 
-![DML Test Data Schema (ERD) 1](../../docs/images/readme-diagrams/00-shared-exposed-r2dbc-shared-diagram-01.svg)
+![DML Test Data Schema (ERD) 1](../../docs/images/readme-diagrams/00-shared-exposed-r2dbc-shared-diagram-01.png)
 
 ---
 
 ## Core Component Structure
 
-![Core Component Structure 2](../../docs/images/readme-diagrams/00-shared-exposed-r2dbc-shared-diagram-02.svg)
+![Core Component Structure 2](../../docs/images/readme-diagrams/00-shared-exposed-r2dbc-shared-diagram-02.png)
 
 ## withTables() Execution Flow
 
-![withTables() Execution Flow 3](../../docs/images/readme-diagrams/00-shared-exposed-r2dbc-shared-diagram-03.svg)
+![withTables() Execution Flow 3](../../docs/images/readme-diagrams/00-shared-exposed-r2dbc-shared-diagram-03.png)
 
 ---
 

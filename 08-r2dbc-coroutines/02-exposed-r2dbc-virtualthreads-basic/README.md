@@ -12,7 +12,7 @@ to achieve high-performance async processing with blocking-style code.
 
 ## Execution Flow
 
-![Execution Flow 1](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-diagram-01.svg)
+![Execution Flow 1](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-diagram-01.png)
 
 ---
 
@@ -235,11 +235,11 @@ Core API roles:
 
 ## Platform Thread vs Virtual Thread Comparison
 
-![Platform Thread vs Virtual Thread Comparison 2](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-diagram-02.svg)
+![Platform Thread vs Virtual Thread Comparison 2](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-diagram-02.png)
 
 ## Virtual Thread API Class Structure
 
-![Virtual Thread API Class Structure 3](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-diagram-03.svg)
+![Virtual Thread API Class Structure 3](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-diagram-03.png)
 
 ### When Should You Choose Virtual Threads?
 

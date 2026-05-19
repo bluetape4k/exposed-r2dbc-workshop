@@ -22,7 +22,7 @@ Using a Movie and Actor domain, this module teaches you how to build an **asynch
 
 ![Movie Schema](MovieSchema_Dark.png)
 
-![Movie Schema 1](../../docs/images/readme-diagrams/01-spring-boot-spring-webflux-exposed-diagram-01.svg)
+![Movie Schema 1](../../docs/images/readme-diagrams/01-spring-boot-spring-webflux-exposed-diagram-01.png)
 
 ```kotlin
 object MovieSchema {
@@ -85,11 +85,11 @@ src/gatling/kotlin/
 
 ## Layer Structure
 
-![Layer Structure 2](../../docs/images/readme-diagrams/01-spring-boot-spring-webflux-exposed-diagram-02.svg)
+![Layer Structure 2](../../docs/images/readme-diagrams/01-spring-boot-spring-webflux-exposed-diagram-02.png)
 
 ## Spring WebFlux + Exposed R2DBC Integration Flow
 
-![Spring WebFlux + Exposed R2DBC Integration Flow 3](../../docs/images/readme-diagrams/01-spring-boot-spring-webflux-exposed-diagram-03.svg)
+![Spring WebFlux + Exposed R2DBC Integration Flow 3](../../docs/images/readme-diagrams/01-spring-boot-spring-webflux-exposed-diagram-03.png)
 
 1. WebFlux executes `suspend` handlers as coroutines.
 2. The Controller wraps repository calls inside `suspendTransaction { }`.

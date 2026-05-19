@@ -38,15 +38,15 @@ ConnectionFactoryRegistry       ← 키 → ConnectionFactory 매핑
 
 ## 클래스 다이어그램
 
-![Component Diagram 1](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-ko-diagram-01.svg)
+![Component Diagram 1](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-ko-diagram-01.png)
 
 ## 요청→라우팅→DB 선택 흐름 (sequenceDiagram)
 
-![Request→Routing→DB Component Component (sequenceDiagram) 2](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-ko-diagram-02.svg)
+![Request→Routing→DB Component Component (sequenceDiagram) 2](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-ko-diagram-02.png)
 
 ## 라우팅 키 결정 흐름 (flowchart)
 
-![Routing Component Component Component (flowchart) 3](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-ko-diagram-03.svg)
+![Routing Component Component Component (flowchart) 3](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-ko-diagram-03.png)
 
 ## 핵심 구성 요소
 

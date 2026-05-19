@@ -9,17 +9,17 @@
 
 ## 구조 다이어그램
 
-![Component Diagram 1](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-ko-diagram-01.svg)
+![Component Diagram 1](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-ko-diagram-01.png)
 
-![Component Diagram 2](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-ko-diagram-02.svg)
+![Component Diagram 2](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-ko-diagram-02.png)
 
 ## ID 생성 흐름
 
-![ID Component Component 3](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-ko-diagram-03.svg)
+![ID Component Component 3](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-ko-diagram-03.png)
 
 ## ID 선택 플로우차트
 
-![ID Component Component 4](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-ko-diagram-04.svg)
+![ID Component Component 4](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-ko-diagram-04.png)
 
 ## ID 생성 전략 비교
 

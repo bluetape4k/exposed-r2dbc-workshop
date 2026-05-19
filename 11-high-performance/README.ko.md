@@ -7,15 +7,15 @@ Exposed R2DBC 환경에서 성능과 확장성을 높이기 위한 예제를 모
 
 ## 고성능 전략 개요
 
-![High Performance Component Component 1](../docs/images/readme-diagrams/11-high-performance-ko-diagram-01.svg)
+![High Performance Component Component 1](../docs/images/readme-diagrams/11-high-performance-ko-diagram-01.png)
 
 ## 캐시 계층 구조 (클래스 다이어그램)
 
-![Cache Component Component (Component Diagram) 2](../docs/images/readme-diagrams/11-high-performance-ko-diagram-02.svg)
+![Cache Component Component (Component Diagram) 2](../docs/images/readme-diagrams/11-high-performance-ko-diagram-02.png)
 
 ## 캐시 히트/미스 처리 흐름
 
-![Cache Hit/Miss Component Component 3](../docs/images/readme-diagrams/11-high-performance-ko-diagram-03.svg)
+![Cache Hit/Miss Component Component 3](../docs/images/readme-diagrams/11-high-performance-ko-diagram-03.png)
 
 ## 학습 목표
 

@@ -8,17 +8,17 @@ This approach builds on the concepts from the `06-custom-columns` module, packag
 
 ## Structure Diagram
 
-![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-diagram-01.svg)
+![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-diagram-01.png)
 
-![Structure Diagram 2](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-diagram-02.svg)
+![Structure Diagram 2](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-diagram-02.png)
 
 ## ID Generation Flow
 
-![ID Generation Flow 3](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-diagram-03.svg)
+![ID Generation Flow 3](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-diagram-03.png)
 
 ## ID Strategy Selection Flowchart
 
-![ID Strategy Selection Flowchart 4](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-diagram-04.svg)
+![ID Strategy Selection Flowchart 4](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-diagram-04.png)
 
 ## ID Generation Strategy Comparison
 

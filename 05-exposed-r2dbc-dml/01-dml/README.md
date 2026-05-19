@@ -183,15 +183,15 @@ cities.crossJoin(users)
 
 The tables used across this module:
 
-![Example Table Structure (ER Diagram) 1](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-diagram-01.svg)
+![Example Table Structure (ER Diagram) 1](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-diagram-01.png)
 
 ## DSL API Structure (Class Diagram)
 
-![DSL API Structure (Class Diagram) 2](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-diagram-02.svg)
+![DSL API Structure (Class Diagram) 2](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-diagram-02.png)
 
 ## CTE / UPSERT Execution Flow (Sequence Diagram)
 
-![CTE / UPSERT Execution Flow (Sequence Diagram) 3](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-diagram-03.svg)
+![CTE / UPSERT Execution Flow (Sequence Diagram) 3](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-diagram-03.png)
 
 ## Flow Collection Patterns
 

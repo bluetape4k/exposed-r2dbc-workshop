@@ -22,7 +22,7 @@
 
 ![Movie Schema](MovieSchema_Dark.png)
 
-![Movie Component 1](../../docs/images/readme-diagrams/01-spring-boot-spring-webflux-exposed-ko-diagram-01.svg)
+![Movie Component 1](../../docs/images/readme-diagrams/01-spring-boot-spring-webflux-exposed-ko-diagram-01.png)
 
 ```kotlin
 object MovieSchema {
@@ -85,11 +85,11 @@ src/gatling/kotlin/
 
 ## 레이어 구조
 
-![Layer Component 2](../../docs/images/readme-diagrams/01-spring-boot-spring-webflux-exposed-ko-diagram-02.svg)
+![Layer Component 2](../../docs/images/readme-diagrams/01-spring-boot-spring-webflux-exposed-ko-diagram-02.png)
 
 ## Spring WebFlux + Exposed R2DBC 통합 흐름
 
-![Spring WebFlux + Exposed R2DBC Integration Component 3](../../docs/images/readme-diagrams/01-spring-boot-spring-webflux-exposed-ko-diagram-03.svg)
+![Spring WebFlux + Exposed R2DBC Integration Component 3](../../docs/images/readme-diagrams/01-spring-boot-spring-webflux-exposed-ko-diagram-03.png)
 
 1. WebFlux가 `suspend` 핸들러를 코루틴으로 실행합니다.
 2. Controller에서 `suspendTransaction { }` 블록 안에 Repository 호출을 감쌉니다.

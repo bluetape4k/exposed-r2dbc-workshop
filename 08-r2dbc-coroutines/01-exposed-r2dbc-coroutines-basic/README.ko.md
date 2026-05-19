@@ -26,15 +26,15 @@ Exposed R2DBC + Kotlin Coroutines 환경에서 비동기 데이터베이스 작�
 
 ### Coroutine + R2DBC 트랜잭션
 
-![Coroutine + R2DBC Transaction 1](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-ko-diagram-01.svg)
+![Coroutine + R2DBC Transaction 1](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-ko-diagram-01.png)
 
 ### Flow 수집 패턴
 
-![Flow Component Component 2](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-ko-diagram-02.svg)
+![Flow Component Component 2](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-ko-diagram-02.png)
 
 ## Coroutine 상태 다이어그램
 
-![Coroutine Component Diagram 3](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-ko-diagram-03.svg)
+![Coroutine Component Diagram 3](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-ko-diagram-03.png)
 
 ## 핵심 개념
 

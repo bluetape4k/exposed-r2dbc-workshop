@@ -51,11 +51,11 @@ When comparing date/time values in a `WHERE` clause, it is recommended to use li
 
 ## Structure Diagram
 
-![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-02-exposed-r2dbc-javatime-diagram-01.svg)
+![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-02-exposed-r2dbc-javatime-diagram-01.png)
 
 ## Java Time Type to DB Mapping Decision Flow
 
-![Java Time Type to DB Mapping Decision Flow 2](../../docs/images/readme-diagrams/06-advanced-02-exposed-r2dbc-javatime-diagram-02.svg)
+![Java Time Type to DB Mapping Decision Flow 2](../../docs/images/readme-diagrams/06-advanced-02-exposed-r2dbc-javatime-diagram-02.png)
 
 ## Timezone Notes
 

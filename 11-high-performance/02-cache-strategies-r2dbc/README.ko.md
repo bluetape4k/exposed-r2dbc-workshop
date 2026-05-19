@@ -33,7 +33,7 @@ Redisson + Exposed 를 활용한 캐시 전략의 **Kotlin Coroutines 기반 비
 
 ## 구조 다이어그램
 
-![Component Diagram 1](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-ko-diagram-01.svg)
+![Component Diagram 1](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-ko-diagram-01.png)
 
 > `UserCacheRepository`: Near Cache(Caffeine) + Redis(MapCache)
 > `UserCredentialsCacheRepository`: 읽기 전용 캐시 (인증정보, 코드표)
@@ -41,7 +41,7 @@ Redisson + Exposed 를 활용한 캐시 전략의 **Kotlin Coroutines 기반 비
 
 ## 캐시 조회 흐름
 
-![Cache Query Component 2](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-ko-diagram-02.svg)
+![Cache Query Component 2](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-ko-diagram-02.png)
 
 ## 프로젝트 구조
 
@@ -247,7 +247,7 @@ Markdown 리포트는 benchmark 이름, mode, score, error, unit, parameter 정�
 
 ### 전략별 동작 흐름
 
-![Component Component Component 3](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-ko-diagram-03.svg)
+![Component Component Component 3](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-ko-diagram-03.png)
 
 ### 전략 선택 기준
 
@@ -262,7 +262,7 @@ Markdown 리포트는 benchmark 이름, mode, score, error, unit, parameter 정�
 
 `READ_WRITE_THROUGH_WITH_NEAR_CACHE` 설정을 사용하면 애플리케이션 내부에 Caffeine 로컬 캐시가 활성화됩니다.
 
-![Near Cache Component 4](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-ko-diagram-04.svg)
+![Near Cache Component 4](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-ko-diagram-04.png)
 
 동일 프로세스 내에서 반복 조회 시 Redis 라운드트립 없이 응답하여 **P99 레이턴시를 크게 낮출 수 있습니다**.
 

@@ -26,15 +26,15 @@ Exposed R2DBC의 **트랜잭션(Transaction)** 관리 기능을 다루는 예제
 
 ### R2DBC suspendTransaction 흐름
 
-![R2DBC suspendTransaction Component 1](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-04-transactions-ko-diagram-01.svg)
+![R2DBC suspendTransaction Component 1](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-04-transactions-ko-diagram-01.png)
 
 ### 중첩 트랜잭션 / Savepoint 흐름
 
-![Component Transaction / Savepoint Component 2](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-04-transactions-ko-diagram-02.svg)
+![Component Transaction / Savepoint Component 2](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-04-transactions-ko-diagram-02.png)
 
 ## 트랜잭션 상태 다이어그램
 
-![Transaction Component Diagram 3](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-04-transactions-ko-diagram-03.svg)
+![Transaction Component Diagram 3](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-04-transactions-ko-diagram-03.png)
 
 ## 프로젝트 구조
 

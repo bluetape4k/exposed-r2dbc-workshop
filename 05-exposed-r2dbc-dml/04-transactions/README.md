@@ -26,15 +26,15 @@ An example module covering **Transaction** management in Exposed R2DBC. Learn th
 
 ### R2DBC suspendTransaction Flow
 
-![R2DBC suspendTransaction Flow 1](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-04-transactions-diagram-01.svg)
+![R2DBC suspendTransaction Flow 1](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-04-transactions-diagram-01.png)
 
 ### Nested Transaction / Savepoint Flow
 
-![Nested Transaction / Savepoint Flow 2](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-04-transactions-diagram-02.svg)
+![Nested Transaction / Savepoint Flow 2](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-04-transactions-diagram-02.png)
 
 ## Transaction State Diagram
 
-![Transaction State Diagram 3](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-04-transactions-diagram-03.svg)
+![Transaction State Diagram 3](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-04-transactions-diagram-03.png)
 
 ## Project Structure
 

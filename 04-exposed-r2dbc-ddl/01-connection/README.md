@@ -29,7 +29,7 @@ Learn how to configure database connections, query connection metadata, and use 
 
 ## Execution Flow
 
-![Execution Flow 1](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-01-connection-diagram-01.svg)
+![Execution Flow 1](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-01-connection-diagram-01.png)
 
 > Using the `r2dbc:pool:h2:mem:///poolDB?maxSize=10` URL scheme automatically activates `ConnectionPool`.
 > Concurrent `suspendTransaction` requests that exceed the pool size wait until a connection is returned and then reuse it.
@@ -50,7 +50,7 @@ src/test/kotlin/exposed/r2dbc/examples/connection/
 
 ## Connection Class Hierarchy
 
-![Connection Class Hierarchy 2](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-01-connection-diagram-02.svg)
+![Connection Class Hierarchy 2](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-01-connection-diagram-02.png)
 
 ---
 

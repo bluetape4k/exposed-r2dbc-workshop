@@ -29,7 +29,7 @@ Exposed R2DBC에서 데이터베이스 연결을 구성하고, 연결 메타데�
 
 ## 실행 흐름
 
-![Component Component 1](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-01-connection-ko-diagram-01.svg)
+![Component Component 1](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-01-connection-ko-diagram-01.png)
 
 > `r2dbc:pool:h2:mem:///poolDB?maxSize=10` URL 스킴을 사용하면 `ConnectionPool`이 자동 활성화됩니다.
 > 풀 크기를 초과하는 동시 `suspendTransaction` 요청은 커넥션이 반환될 때까지 대기한 후 재활용됩니다.
@@ -50,7 +50,7 @@ src/test/kotlin/exposed/r2dbc/examples/connection/
 
 ## 커넥션 클래스 계층 구조
 
-![Component Component Component Component 2](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-01-connection-ko-diagram-02.svg)
+![Component Component Component Component 2](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-01-connection-ko-diagram-02.png)
 
 ---
 

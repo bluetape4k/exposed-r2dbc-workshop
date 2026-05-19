@@ -127,7 +127,7 @@ Integrate the **Google Tink** encryption library with Exposed R2DBC. Choose betw
 
 ## Module Selection Guide
 
-![Module Selection Guide 1](../docs/images/readme-diagrams/06-advanced-diagram-01.svg)
+![Module Selection Guide 1](../docs/images/readme-diagrams/06-advanced-diagram-01.png)
 
 ## JSON Module Comparison
 

@@ -127,7 +127,7 @@ Jackson 3.x 버전을 사용하여 R2DBC 환경에서 JSON/JSONB 컬럼을 처�
 
 ## 모듈 선택 가이드
 
-![Component Component Component 1](../docs/images/readme-diagrams/06-advanced-ko-diagram-01.svg)
+![Component Component Component 1](../docs/images/readme-diagrams/06-advanced-ko-diagram-01.png)
 
 ## JSON 모듈 비교
 

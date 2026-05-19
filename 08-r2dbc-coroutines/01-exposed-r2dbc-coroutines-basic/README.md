@@ -26,15 +26,15 @@ Learn how to perform asynchronous database operations in an Exposed R2DBC + Kotl
 
 ### Coroutine + R2DBC Transaction
 
-![Coroutine + R2DBC Transaction 1](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-diagram-01.svg)
+![Coroutine + R2DBC Transaction 1](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-diagram-01.png)
 
 ### Flow Collection Patterns
 
-![Flow Collection Patterns 2](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-diagram-02.svg)
+![Flow Collection Patterns 2](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-diagram-02.png)
 
 ## Coroutine State Diagram
 
-![Coroutine State Diagram 3](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-diagram-03.svg)
+![Coroutine State Diagram 3](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-diagram-03.png)
 
 ## Key Concepts
 

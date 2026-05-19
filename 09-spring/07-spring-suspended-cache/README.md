@@ -24,15 +24,15 @@ An example implementing a Lettuce-based Suspended Cache with Coroutines in a Spr
 
 ## Execution Flow
 
-![Execution Flow 1](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-diagram-01.svg)
+![Execution Flow 1](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-diagram-01.png)
 
 ## Cache Class Structure
 
-![Cache Class Structure 2](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-diagram-02.svg)
+![Cache Class Structure 2](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-diagram-02.png)
 
 ## Cache-Aside Pattern Flow
 
-![Cache-Aside Pattern Flow 3](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-diagram-03.svg)
+![Cache-Aside Pattern Flow 3](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-diagram-03.png)
 
 ## Project Structure
 

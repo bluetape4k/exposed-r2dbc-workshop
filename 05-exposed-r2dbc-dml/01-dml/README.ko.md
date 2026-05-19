@@ -184,15 +184,15 @@ cities.crossJoin(users)
 
 아래는 이 모듈에서 공통으로 사용되는 테이블 구조입니다.
 
-![YesComponent Table Component (ER Diagram) 1](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-ko-diagram-01.svg)
+![YesComponent Table Component (ER Diagram) 1](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-ko-diagram-01.png)
 
 ## DSL API 구조 (클래스 다이어그램)
 
-![DSL API Component (Component Diagram) 2](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-ko-diagram-02.svg)
+![DSL API Component (Component Diagram) 2](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-ko-diagram-02.png)
 
 ## CTE / UPSERT 실행 흐름 (시퀀스 다이어그램)
 
-![CTE / UPSERT Component Component (Component Diagram) 3](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-ko-diagram-03.svg)
+![CTE / UPSERT Component Component (Component Diagram) 3](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-ko-diagram-03.png)
 
 ## Flow 수집 패턴
 

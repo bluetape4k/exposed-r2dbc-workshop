@@ -17,7 +17,7 @@ JPA의 기본 패턴(Entity, 관계 매핑,
 
 ## JPA → Exposed R2DBC 마이그레이션 경로
 
-![JPA → Exposed R2DBC Component Component 1](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-ko-diagram-01.svg)
+![JPA → Exposed R2DBC Component Component 1](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-ko-diagram-01.png)
 
 ## 프로젝트 구조
 
@@ -196,11 +196,11 @@ object CustomIdTable: IdTable<Email>("emails") {
 
 ## JPA 엔티티 vs Exposed 테이블 비교
 
-![JPA Component vs Exposed Table Component 2](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-ko-diagram-02.svg)
+![JPA Component vs Exposed Table Component 2](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-ko-diagram-02.png)
 
 ## Blog 도메인 ERD
 
-![Blog Domain ERD 3](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-ko-diagram-03.svg)
+![Blog Domain ERD 3](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-ko-diagram-03.png)
 
 ## JPA vs Exposed 주요 개념 매핑 요약
 

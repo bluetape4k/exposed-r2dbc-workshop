@@ -68,7 +68,7 @@ Similar to `Ex01_JsonColumn.kt` but uses the higher-performance `jsonb` column t
 
 ## Structure Diagram
 
-![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-diagram-01.svg)
+![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-diagram-01.png)
 
 > `JsonBColumn`: PostgreSQL only (supports indexing and operators)
 
@@ -77,11 +77,11 @@ Similar to `Ex01_JsonColumn.kt` but uses the higher-performance `jsonb` column t
 
 ## JSON Serialization/Deserialization Flow
 
-![JSON Serialization/Deserialization Flow 2](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-diagram-02.svg)
+![JSON Serialization/Deserialization Flow 2](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-diagram-02.png)
 
 ## JSON Query Function Usage Flow
 
-![JSON Query Function Usage Flow 3](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-diagram-03.svg)
+![JSON Query Function Usage Flow 3](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-diagram-03.png)
 
 ## Code Examples
 

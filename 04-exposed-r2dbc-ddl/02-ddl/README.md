@@ -30,21 +30,21 @@ Learn how to define and manage database schemas with Exposed R2DBC. Perform DDL 
 
 ## Structure Diagram
 
-![Structure Diagram 1](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-diagram-01.svg)
+![Structure Diagram 1](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-diagram-01.png)
 
-![Structure Diagram 2](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-diagram-02.svg)
+![Structure Diagram 2](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-diagram-02.png)
 
 ---
 
 ## Sample Table ERD (Users / Orders / Products)
 
-![Sample Table ERD (Users / Orders / Products) 3](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-diagram-03.svg)
+![Sample Table ERD (Users / Orders / Products) 3](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-diagram-03.png)
 
 ---
 
 ## Schema Migration Flow
 
-![Schema Migration Flow 4](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-diagram-04.svg)
+![Schema Migration Flow 4](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-diagram-04.png)
 
 ---
 

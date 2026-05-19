@@ -51,11 +51,11 @@
 
 ## 구조 다이어그램
 
-![Component Diagram 1](../../docs/images/readme-diagrams/06-advanced-02-exposed-r2dbc-javatime-ko-diagram-01.svg)
+![Component Diagram 1](../../docs/images/readme-diagrams/06-advanced-02-exposed-r2dbc-javatime-ko-diagram-01.png)
 
 ## Java Time 타입 → DB 매핑 결정 흐름
 
-![Java Time Component → DB Component Component Component 2](../../docs/images/readme-diagrams/06-advanced-02-exposed-r2dbc-javatime-ko-diagram-02.svg)
+![Java Time Component → DB Component Component Component 2](../../docs/images/readme-diagrams/06-advanced-02-exposed-r2dbc-javatime-ko-diagram-02.png)
 
 ## 타임존(TimeZone) 주의사항
 

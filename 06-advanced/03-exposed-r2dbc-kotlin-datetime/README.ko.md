@@ -53,15 +53,15 @@
 
 ## 구조 다이어그램
 
-![Component Diagram 1](../../docs/images/readme-diagrams/06-advanced-03-exposed-r2dbc-kotlin-datetime-ko-diagram-01.svg)
+![Component Diagram 1](../../docs/images/readme-diagrams/06-advanced-03-exposed-r2dbc-kotlin-datetime-ko-diagram-01.png)
 
 ## 날짜/시간 처리 흐름
 
-![Date/Time Component Component 2](../../docs/images/readme-diagrams/06-advanced-03-exposed-r2dbc-kotlin-datetime-ko-diagram-02.svg)
+![Date/Time Component Component 2](../../docs/images/readme-diagrams/06-advanced-03-exposed-r2dbc-kotlin-datetime-ko-diagram-02.png)
 
 ## 컬럼 타입 선택 흐름
 
-![Component Component Component Component 3](../../docs/images/readme-diagrams/06-advanced-03-exposed-r2dbc-kotlin-datetime-ko-diagram-03.svg)
+![Component Component Component Component 3](../../docs/images/readme-diagrams/06-advanced-03-exposed-r2dbc-kotlin-datetime-ko-diagram-03.png)
 
 ## `java.time` 모듈과의 차이점
 

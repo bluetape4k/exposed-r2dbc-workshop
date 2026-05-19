@@ -38,15 +38,15 @@ Actual DB (H2 / PostgreSQL, etc.)
 
 ## Class Diagram
 
-![Class Diagram 1](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-diagram-01.svg)
+![Class Diagram 1](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-diagram-01.png)
 
 ## Request → Routing → DB Selection Flow (sequenceDiagram)
 
-![Request → Routing → DB Selection Flow (sequenceDiagram) 2](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-diagram-02.svg)
+![Request → Routing → DB Selection Flow (sequenceDiagram) 2](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-diagram-02.png)
 
 ## Routing Key Determination Flow (flowchart)
 
-![Routing Key Determination Flow (flowchart) 3](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-diagram-03.svg)
+![Routing Key Determination Flow (flowchart) 3](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-diagram-03.png)
 
 ## Key Components
 

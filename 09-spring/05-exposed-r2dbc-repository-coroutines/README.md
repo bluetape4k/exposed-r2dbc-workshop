@@ -49,15 +49,15 @@ src/main/kotlin/exposed/r2dbc/examples/
 
 ## Repository Class Structure
 
-![Repository Class Structure 1](../../docs/images/readme-diagrams/09-spring-05-exposed-r2dbc-repository-coroutines-diagram-01.svg)
+![Repository Class Structure 1](../../docs/images/readme-diagrams/09-spring-05-exposed-r2dbc-repository-coroutines-diagram-01.png)
 
 ## HTTP Request Flow
 
-![HTTP Request Flow 2](../../docs/images/readme-diagrams/09-spring-05-exposed-r2dbc-repository-coroutines-diagram-02.svg)
+![HTTP Request Flow 2](../../docs/images/readme-diagrams/09-spring-05-exposed-r2dbc-repository-coroutines-diagram-02.png)
 
 ## Movie/Actor ERD
 
-![Movie/Actor ERD 3](../../docs/images/readme-diagrams/09-spring-05-exposed-r2dbc-repository-coroutines-diagram-03.svg)
+![Movie/Actor ERD 3](../../docs/images/readme-diagrams/09-spring-05-exposed-r2dbc-repository-coroutines-diagram-03.png)
 
 ## Spring + Coroutine Bridge Pattern (`DataInitializer`)
 

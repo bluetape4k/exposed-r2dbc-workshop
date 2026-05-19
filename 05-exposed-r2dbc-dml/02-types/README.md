@@ -23,11 +23,11 @@ An example module covering the usage of **various column types** supported by th
 
 ## Structure Diagram
 
-![Structure Diagram 1](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-02-types-diagram-01.svg)
+![Structure Diagram 1](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-02-types-diagram-01.png)
 
 ## Kotlin Type → DB Type Mapping Flow
 
-![Kotlin Type → DB Type Mapping Flow 2](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-02-types-diagram-02.svg)
+![Kotlin Type → DB Type Mapping Flow 2](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-02-types-diagram-02.png)
 
 ## Project Structure
 

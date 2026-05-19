@@ -16,7 +16,7 @@ An example module demonstrating how to convert common JPA patterns (Entity, rela
 
 ## JPA → Exposed R2DBC Migration Path
 
-![JPA → Exposed R2DBC Migration Path 1](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-diagram-01.svg)
+![JPA → Exposed R2DBC Migration Path 1](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-diagram-01.png)
 
 ## Project Structure
 
@@ -194,11 +194,11 @@ object CustomIdTable: IdTable<Email>("emails") {
 
 ## JPA Entity vs Exposed Table Comparison
 
-![JPA Entity vs Exposed Table Comparison 2](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-diagram-02.svg)
+![JPA Entity vs Exposed Table Comparison 2](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-diagram-02.png)
 
 ## Blog Domain ERD
 
-![Blog Domain ERD 3](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-diagram-03.svg)
+![Blog Domain ERD 3](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-diagram-03.png)
 
 ## JPA vs Exposed Key Concept Mapping Summary
 

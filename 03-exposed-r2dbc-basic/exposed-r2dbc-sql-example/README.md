@@ -9,9 +9,9 @@ Perform SELECT, INSERT, UPDATE, and DELETE asynchronously in an R2DBC environmen
 
 ## Structure Diagram
 
-![Structure Diagram 1](../../docs/images/readme-diagrams/03-exposed-r2dbc-basic-exposed-r2dbc-sql-example-diagram-01.svg)
+![Structure Diagram 1](../../docs/images/readme-diagrams/03-exposed-r2dbc-basic-exposed-r2dbc-sql-example-diagram-01.png)
 
-![Structure Diagram 2](../../docs/images/readme-diagrams/03-exposed-r2dbc-basic-exposed-r2dbc-sql-example-diagram-02.svg)
+![Structure Diagram 2](../../docs/images/readme-diagrams/03-exposed-r2dbc-basic-exposed-r2dbc-sql-example-diagram-02.png)
 
 ---
 
@@ -220,7 +220,7 @@ names shouldBeEqualTo listOf("Jane.Doe", "John.Doe")
 
 ## Query Execution Flow
 
-![Query Execution Flow 3](../../docs/images/readme-diagrams/03-exposed-r2dbc-basic-exposed-r2dbc-sql-example-diagram-03.svg)
+![Query Execution Flow 3](../../docs/images/readme-diagrams/03-exposed-r2dbc-basic-exposed-r2dbc-sql-example-diagram-03.png)
 
 ---
 

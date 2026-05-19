@@ -40,7 +40,7 @@ This enables flexible queries filtering by the full `MonetaryAmount`, the amount
 
 ## Structure Diagram
 
-![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-05-exposed-r2dbc-money-diagram-01.svg)
+![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-05-exposed-r2dbc-money-diagram-01.png)
 
 > `CurrencyUnit`: ISO 4217 code (USD, KRW, etc.)
 
@@ -49,11 +49,11 @@ This enables flexible queries filtering by the full `MonetaryAmount`, the amount
 
 ## MonetaryAmount Storage/Restoration Flow
 
-![MonetaryAmount Storage/Restoration Flow 2](../../docs/images/readme-diagrams/06-advanced-05-exposed-r2dbc-money-diagram-02.svg)
+![MonetaryAmount Storage/Restoration Flow 2](../../docs/images/readme-diagrams/06-advanced-05-exposed-r2dbc-money-diagram-02.png)
 
 ## Table Structure with Money (ER Diagram)
 
-![Table Structure with Money (ER Diagram) 3](../../docs/images/readme-diagrams/06-advanced-05-exposed-r2dbc-money-diagram-03.svg)
+![Table Structure with Money (ER Diagram) 3](../../docs/images/readme-diagrams/06-advanced-05-exposed-r2dbc-money-diagram-03.png)
 
 > `compositeMoney` always creates a paired currency column with `_C` suffix — column names can be freely specified when defined manually
 

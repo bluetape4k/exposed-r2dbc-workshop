@@ -49,15 +49,15 @@ src/main/kotlin/exposed/r2dbc/examples/
 
 ## Repository 클래스 구조
 
-![Repository Component Component 1](../../docs/images/readme-diagrams/09-spring-05-exposed-r2dbc-repository-coroutines-ko-diagram-01.svg)
+![Repository Component Component 1](../../docs/images/readme-diagrams/09-spring-05-exposed-r2dbc-repository-coroutines-ko-diagram-01.png)
 
 ## HTTP 요청 흐름 (sequenceDiagram)
 
-![HTTP Request Component (sequenceDiagram) 2](../../docs/images/readme-diagrams/09-spring-05-exposed-r2dbc-repository-coroutines-ko-diagram-02.svg)
+![HTTP Request Component (sequenceDiagram) 2](../../docs/images/readme-diagrams/09-spring-05-exposed-r2dbc-repository-coroutines-ko-diagram-02.png)
 
 ## Movie/Actor ERD
 
-![Movie/Actor ERD 3](../../docs/images/readme-diagrams/09-spring-05-exposed-r2dbc-repository-coroutines-ko-diagram-03.svg)
+![Movie/Actor ERD 3](../../docs/images/readme-diagrams/09-spring-05-exposed-r2dbc-repository-coroutines-ko-diagram-03.png)
 
 ## Spring + Coroutine 브릿지 패턴 (`DataInitializer`)
 

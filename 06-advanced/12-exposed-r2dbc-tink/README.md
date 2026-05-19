@@ -11,11 +11,11 @@ Tink is a high-level cryptographic library developed by Google, designed to make
 
 ## Execution Flow
 
-![Execution Flow 1](../../docs/images/readme-diagrams/06-advanced-12-exposed-r2dbc-tink-diagram-01.svg)
+![Execution Flow 1](../../docs/images/readme-diagrams/06-advanced-12-exposed-r2dbc-tink-diagram-01.png)
 
 ## Structure Diagram
 
-![Structure Diagram 2](../../docs/images/readme-diagrams/06-advanced-12-exposed-r2dbc-tink-diagram-02.svg)
+![Structure Diagram 2](../../docs/images/readme-diagrams/06-advanced-12-exposed-r2dbc-tink-diagram-02.png)
 
 ## Learning Objectives
 

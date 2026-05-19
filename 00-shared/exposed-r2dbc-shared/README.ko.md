@@ -82,17 +82,17 @@
 
 ## DML 테스트 데이터 스키마 (ERD)
 
-![DML Test Data Component (ERD) 1](../../docs/images/readme-diagrams/00-shared-exposed-r2dbc-shared-ko-diagram-01.svg)
+![DML Test Data Component (ERD) 1](../../docs/images/readme-diagrams/00-shared-exposed-r2dbc-shared-ko-diagram-01.png)
 
 ---
 
 ## 핵심 컴포넌트 구조
 
-![Component Component Component 2](../../docs/images/readme-diagrams/00-shared-exposed-r2dbc-shared-ko-diagram-02.svg)
+![Component Component Component 2](../../docs/images/readme-diagrams/00-shared-exposed-r2dbc-shared-ko-diagram-02.png)
 
 ## withTables() 동작 흐름
 
-![withTables() Component Component 3](../../docs/images/readme-diagrams/00-shared-exposed-r2dbc-shared-ko-diagram-03.svg)
+![withTables() Component Component 3](../../docs/images/readme-diagrams/00-shared-exposed-r2dbc-shared-ko-diagram-03.png)
 
 ---
 

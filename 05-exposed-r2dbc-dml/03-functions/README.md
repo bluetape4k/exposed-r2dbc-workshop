@@ -23,11 +23,11 @@ An example module for **SQL Functions** available in the Exposed R2DBC DSL. Cove
 
 ## Function Categories
 
-![Function Categories 1](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-03-functions-diagram-01.svg)
+![Function Categories 1](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-03-functions-diagram-01.png)
 
 ## Function Class Hierarchy (Class Diagram)
 
-![Function Class Hierarchy (Class Diagram) 2](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-03-functions-diagram-02.svg)
+![Function Class Hierarchy (Class Diagram) 2](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-03-functions-diagram-02.png)
 
 ## Project Structure
 

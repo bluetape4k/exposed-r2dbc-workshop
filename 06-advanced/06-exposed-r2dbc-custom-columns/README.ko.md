@@ -14,7 +14,7 @@
 
 ## 구조 다이어그램
 
-![Component Diagram 1](../../docs/images/readme-diagrams/06-advanced-06-exposed-r2dbc-custom-columns-ko-diagram-01.svg)
+![Component Diagram 1](../../docs/images/readme-diagrams/06-advanced-06-exposed-r2dbc-custom-columns-ko-diagram-01.png)
 
 > `IColumnType`의 `valueFromDB`/`notNullValueToDB`를 오버라이드하여 투명한 변환(압축·암호화·직렬화) 구현
 > `clientDefault { }` 확장으로 INSERT 전 애플리케이션 측 ID 자동 생성(Snowflake, KSUID 등)
@@ -23,11 +23,11 @@
 
 ## 처리 흐름
 
-![Component Component 2](../../docs/images/readme-diagrams/06-advanced-06-exposed-r2dbc-custom-columns-ko-diagram-02.svg)
+![Component Component 2](../../docs/images/readme-diagrams/06-advanced-06-exposed-r2dbc-custom-columns-ko-diagram-02.png)
 
 ## 변환 타입별 비교
 
-![Component Component Component 3](../../docs/images/readme-diagrams/06-advanced-06-exposed-r2dbc-custom-columns-ko-diagram-03.svg)
+![Component Component Component 3](../../docs/images/readme-diagrams/06-advanced-06-exposed-r2dbc-custom-columns-ko-diagram-03.png)
 
 ## 1. 커스텀 클라이언트 측 기본값 생성기
 

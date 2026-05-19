@@ -24,11 +24,11 @@ Exposed R2DBC DSL에서 지원하는 **다양한 컬럼 타입(Column Types)
 
 ## 구조 다이어그램
 
-![Component Diagram 1](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-02-types-ko-diagram-01.svg)
+![Component Diagram 1](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-02-types-ko-diagram-01.png)
 
 ## Kotlin 타입 → DB 타입 매핑 흐름
 
-![Kotlin Component → DB Component Component Component 2](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-02-types-ko-diagram-02.svg)
+![Kotlin Component → DB Component Component Component 2](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-02-types-ko-diagram-02.png)
 
 ## 프로젝트 구조
 

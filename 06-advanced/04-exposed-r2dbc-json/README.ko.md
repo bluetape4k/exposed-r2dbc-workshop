@@ -70,7 +70,7 @@
 
 ## 구조 다이어그램
 
-![Component Diagram 1](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-ko-diagram-01.svg)
+![Component Diagram 1](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-ko-diagram-01.png)
 
 > `JsonBColumn`: PostgreSQL 전용 (인덱싱/연산 지원)
 
@@ -79,11 +79,11 @@
 
 ## JSON 직렬화/역직렬화 흐름
 
-![JSON Component/Component Component 2](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-ko-diagram-02.svg)
+![JSON Component/Component Component 2](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-ko-diagram-02.png)
 
 ## JSON 쿼리 함수 사용 흐름
 
-![JSON Query Function Component Component 3](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-ko-diagram-03.svg)
+![JSON Query Function Component Component 3](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-ko-diagram-03.png)
 
 ## 코드 예제
 

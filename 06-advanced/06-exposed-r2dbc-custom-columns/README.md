@@ -14,7 +14,7 @@ This module is a collection of advanced examples for extending Exposed's capabil
 
 ## Structure Diagram
 
-![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-06-exposed-r2dbc-custom-columns-diagram-01.svg)
+![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-06-exposed-r2dbc-custom-columns-diagram-01.png)
 
 > Override `valueFromDB`/`notNullValueToDB` of `IColumnType` to implement transparent transformations (compression, encryption, serialization)
 > Use the `clientDefault { }` extension to auto-generate application-side IDs (Snowflake, KSUID, etc.) before INSERT
@@ -23,11 +23,11 @@ This module is a collection of advanced examples for extending Exposed's capabil
 
 ## Processing Flow
 
-![Processing Flow 2](../../docs/images/readme-diagrams/06-advanced-06-exposed-r2dbc-custom-columns-diagram-02.svg)
+![Processing Flow 2](../../docs/images/readme-diagrams/06-advanced-06-exposed-r2dbc-custom-columns-diagram-02.png)
 
 ## Comparison by Transformation Type
 
-![Comparison by Transformation Type 3](../../docs/images/readme-diagrams/06-advanced-06-exposed-r2dbc-custom-columns-diagram-03.svg)
+![Comparison by Transformation Type 3](../../docs/images/readme-diagrams/06-advanced-06-exposed-r2dbc-custom-columns-diagram-03.png)
 
 ## 1. Custom Client-Side Default Value Generators
 

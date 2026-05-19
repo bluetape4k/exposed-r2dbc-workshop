@@ -53,15 +53,15 @@ Used when comparing values in `WHERE` clauses to ensure correct SQL generation a
 
 ## Structure Diagram
 
-![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-03-exposed-r2dbc-kotlin-datetime-diagram-01.svg)
+![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-03-exposed-r2dbc-kotlin-datetime-diagram-01.png)
 
 ## Date/Time Processing Flow
 
-![Date/Time Processing Flow 2](../../docs/images/readme-diagrams/06-advanced-03-exposed-r2dbc-kotlin-datetime-diagram-02.svg)
+![Date/Time Processing Flow 2](../../docs/images/readme-diagrams/06-advanced-03-exposed-r2dbc-kotlin-datetime-diagram-02.png)
 
 ## Column Type Selection Flow
 
-![Column Type Selection Flow 3](../../docs/images/readme-diagrams/06-advanced-03-exposed-r2dbc-kotlin-datetime-diagram-03.svg)
+![Column Type Selection Flow 3](../../docs/images/readme-diagrams/06-advanced-03-exposed-r2dbc-kotlin-datetime-diagram-03.png)
 
 ## Differences from the `java.time` Module
 

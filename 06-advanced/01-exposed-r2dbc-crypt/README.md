@@ -76,7 +76,7 @@ Shows how to integrate the DAO API with encrypted columns to use them like entit
 
 ## Class Structure Diagram
 
-![Class Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-01-exposed-r2dbc-crypt-diagram-01.svg)
+![Class Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-01-exposed-r2dbc-crypt-diagram-01.png)
 
 > Non-deterministic encryption: same plaintext generates a different ciphertext each time — AES_256_PBE_GCM recommended (includes AEAD authentication)
 
@@ -84,7 +84,7 @@ Shows how to integrate the DAO API with encrypted columns to use them like entit
 
 ## Execution Flow
 
-![Execution Flow 2](../../docs/images/readme-diagrams/06-advanced-01-exposed-r2dbc-crypt-diagram-02.svg)
+![Execution Flow 2](../../docs/images/readme-diagrams/06-advanced-01-exposed-r2dbc-crypt-diagram-02.png)
 
 ## Code Examples
 

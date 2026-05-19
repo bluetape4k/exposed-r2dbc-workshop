@@ -12,7 +12,7 @@ Exposed R2DBC + Java 21 Virtual Threads 환경에서 비동기 데이터베이�
 
 ## 실행 흐름
 
-![Component Component 1](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-ko-diagram-01.svg)
+![Component Component 1](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-ko-diagram-01.png)
 
 ---
 
@@ -235,11 +235,11 @@ runSuspendVT { }                         ← Virtual Thread 기반 코루틴 테
 
 ## Platform Thread vs Virtual Thread 비교
 
-![Platform Thread vs Virtual Thread Component 2](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-ko-diagram-02.svg)
+![Platform Thread vs Virtual Thread Component 2](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-ko-diagram-02.png)
 
 ## Virtual Thread API 클래스 구조
 
-![Virtual Thread API Component Component 3](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-ko-diagram-03.svg)
+![Virtual Thread API Component Component 3](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-ko-diagram-03.png)
 
 ### 언제 Virtual Threads를 선택해야 하나?
 

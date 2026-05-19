@@ -63,18 +63,18 @@ The same powerful query functions are available:
 
 ## Structure Diagram
 
-![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-diagram-01.svg)
+![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-diagram-01.png)
 
 > No `@Serializable` needed — Jackson `ObjectMapper` handles standard Kotlin data classes directly
 > `KotlinModule` is auto-registered to support data class, nullable, and default parameter handling
 
 ## JSON Serialization Flow
 
-![JSON Serialization Flow 2](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-diagram-02.svg)
+![JSON Serialization Flow 2](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-diagram-02.png)
 
 ## Table Structure (ER Diagram)
 
-![Table Structure (ER Diagram) 3](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-diagram-03.svg)
+![Table Structure (ER Diagram) 3](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-diagram-03.png)
 
 ## Example Overview
 
