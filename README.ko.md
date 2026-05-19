@@ -67,7 +67,7 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 
 ## 추천 학습 경로
 
-![Component Component Component 1](docs/images/readme-diagrams/root-readme-ko-diagram-01.svg)
+![Component Component Component 1](docs/images/readme-diagrams/root-readme-ko-diagram-01.png)
 
 1. Spring 진입: [01-spring-boot/spring-webflux-exposed](01-spring-boot/spring-webflux-exposed/README.md)
 2. SQL DSL 기초: [03-exposed-r2dbc-basic/exposed-r2dbc-sql-example](03-exposed-r2dbc-basic/exposed-r2dbc-sql-example/README.md)
