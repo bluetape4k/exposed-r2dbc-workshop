@@ -47,45 +47,11 @@ sequenceDiagram
 
 ### Flow 수집 패턴
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    Q["Table.selectAll()"] --> F["Flow~ResultRow~"]
-    F --> L[".toList() — 전체 수집"]
-    F --> S[".single() — 단일 (없으면 예외)"]
-    F --> SN[".singleOrNull() — 단일 (없으면 null)"]
-    F --> FI[".first() — 첫 번째 (없으면 예외)"]
-    F --> FN[".firstOrNull() — 첫 번째 (없으면 null)"]
-    F --> C[".count() — 개수 (Long)"]
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    class Q blue
-    class F teal
-    class L,S,SN,FI,FN,C green
-```
+![Flow 수집 패턴 1](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-ko-diagram-01.svg)
 
 ## Coroutine 상태 다이어그램
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-stateDiagram-v2
-    [*] --> Created : launch / async
-    Created --> Running : Dispatcher 스케줄링
-    Running --> Suspended : suspend fun 호출\n(DB 대기, IO 대기)
-    Suspended --> Running : resume (결과 수신)
-    Running --> Completed : 블록 정상 종료
-    Running --> Cancelled : cancel() / 예외
-    Completed --> [*]
-    Cancelled --> [*]
-
-    state Running {
-        [*] --> Executing
-        Executing --> SuspendTransaction : suspendTransaction 진입
-        SuspendTransaction --> Executing : 트랜잭션 완료
-    }
-```
+![Coroutine 상태 다이어그램 2](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-ko-diagram-02.svg)
 
 ## 핵심 개념
 

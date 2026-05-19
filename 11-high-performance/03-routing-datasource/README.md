@@ -38,52 +38,7 @@ Actual DB (H2 / PostgreSQL, etc.)
 
 ## Class Diagram
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class DynamicRoutingConnectionFactory {
-        +create() Publisher~Connection~
-        -keyResolver RoutingKeyResolver
-        -registry ConnectionFactoryRegistry
-    }
-    class ContextAwareRoutingKeyResolver {
-        +currentLookupKey(context) String
-        -defaultTenant String
-    }
-    class ConnectionFactoryRegistry {
-        <<interface>>
-        +get(key) ConnectionFactory
-        +keys() Set~String~
-    }
-    class InMemoryConnectionFactoryRegistry {
-        -factories Map~String, ConnectionFactory~
-        +register(key, factory)
-        +get(key) ConnectionFactory
-    }
-    class TenantRoutingWebFilter {
-        +filter(exchange, chain) Mono~Void~
-        -defaultTenant String
-    }
-    class RoutingTransactionalExecutor {
-        +readWrite(block) T
-        +readOnly(block) T
-        -readWriteOperator TransactionalOperator
-        -readOnlyOperator TransactionalOperator
-    }
-
-    DynamicRoutingConnectionFactory --> ContextAwareRoutingKeyResolver: uses
-    DynamicRoutingConnectionFactory --> ConnectionFactoryRegistry: uses
-    InMemoryConnectionFactoryRegistry ..|> ConnectionFactoryRegistry
-    TenantRoutingWebFilter --> DynamicRoutingConnectionFactory: contextWrite
-    RoutingTransactionalExecutor --> DynamicRoutingConnectionFactory: routing hint
-
-    style DynamicRoutingConnectionFactory fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style ContextAwareRoutingKeyResolver fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style ConnectionFactoryRegistry fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style InMemoryConnectionFactoryRegistry fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style TenantRoutingWebFilter fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    style RoutingTransactionalExecutor fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
-```
+![Class Diagram 1](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-diagram-01.svg)
 
 ## Request → Routing → DB Selection Flow (sequenceDiagram)
 
@@ -113,46 +68,7 @@ sequenceDiagram
 
 ## Routing Key Determination Flow (flowchart)
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    Req["HTTP Request"] --> H1{"X-Tenant-Id\nheader present?"}
-
-    H1 -->|yes| TenantVal["tenant = header value"]
-    H1 -->|no| TenantDef["tenant = defaultTenant\n(application.yml)"]
-
-    TenantVal --> H2{"Read-only\ndetermination"}
-    TenantDef --> H2
-
-    H2 --> RO1{"X-Read-Only: true\nheader?"}
-    RO1 -->|yes| ReadOnly["READ_ONLY = true"]
-    RO1 -->|no| RO2{"Path contains\n/readonly?"}
-    RO2 -->|yes| ReadOnly
-    RO2 -->|no| ReadWrite["READ_ONLY = false"]
-
-    ReadOnly --> KeyRO["Routing key\ntenant:ro\nexample: acme:ro"]
-    ReadWrite --> KeyRW["Routing key\ntenant:rw\nexample: acme:rw"]
-
-    KeyRO --> Registry{"ConnectionFactoryRegistry"}
-    KeyRW --> Registry
-
-    Registry -->|key found| CF["Return ConnectionFactory"]
-    Registry -->|key not found| Err["IllegalStateException\nNo ConnectionFactory for key=..."]
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    classDef red    fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
-
-    class TenantVal,TenantDef teal
-    class ReadOnly orange
-    class ReadWrite green
-    class KeyRO,KeyRW blue
-    class CF purple
-    class Err red
-```
+![Routing Key Determination Flow (flowchart) 2](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-diagram-02.svg)
 
 ## Key Components
 

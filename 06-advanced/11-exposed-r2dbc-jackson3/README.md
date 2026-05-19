@@ -32,32 +32,7 @@ The same query functions as the Jackson 2.x module are available:
 
 ## Structure Diagram
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class Jackson3Column~T~ {
-        <<bluetape4k-exposed>>
-        +jackson(name) Column~T~
-        -mapper: JsonMapper
-    }
-    note for Jackson3Column "tools.jackson package (Jackson 3.x)"
-    class Jackson3BColumn~T~ {
-        +jacksonb(name) Column~T~
-    }
-    note for Jackson3BColumn "PostgreSQL JSONB only"
-    class JsonMapper {
-        <<Jackson 3 (tools.jackson.databind)>>
-        +writeValueAsString(value): String
-        +readValue(json, klass): T
-    }
-
-    Jackson3Column <|-- Jackson3BColumn : json to jsonb extension
-    Jackson3Column --> JsonMapper : serialization/deserialization
-
-    style Jackson3Column fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style Jackson3BColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style JsonMapper fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-```
+![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-11-exposed-r2dbc-jackson3-diagram-01.svg)
 
 > Jackson 2.x (`com.fasterxml.jackson`) → Jackson 3.x (`tools.jackson`) package change
 > `JsonMapper` is the main entry point in Jackson 3.x — replaces `ObjectMapper` from Jackson 2.x
@@ -91,31 +66,7 @@ sequenceDiagram
 
 ## Jackson 2.x vs 3.x Differences
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart LR
-    subgraph Jackson2
-        A1["Package: com.fasterxml.jackson"]
-        A2["Core class: ObjectMapper"]
-        A3["Module: 08-exposed-r2dbc-jackson"]
-    end
-    subgraph Jackson3
-        B1["Package: tools.jackson"]
-        B2["Core class: JsonMapper"]
-        B3["Module: 11-exposed-r2dbc-jackson3 (this module)"]
-    end
-    A1 -.->|package change| B1
-    A2 -.->|class change| B2
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-
-    class A1,A2,A3 blue
-    class B1,B2,B3 teal
-```
+![Jackson 2.x vs 3.x Differences 2](../../docs/images/readme-diagrams/06-advanced-11-exposed-r2dbc-jackson3-diagram-02.svg)
 
 ## Example Overview
 

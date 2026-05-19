@@ -7,88 +7,11 @@ Exposed R2DBC 환경에서 성능과 확장성을 높이기 위한 예제를 모
 
 ## 고성능 전략 개요
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    App["애플리케이션"] --> CF["DynamicRoutingConnectionFactory"]
-    CF --> Strat{"라우팅 전략"}
-    Strat -->|쓰기 요청| PDB["Primary DB (쓰기)"]
-    Strat -->|읽기 요청| RDB["Replica DB (읽기)"]
-    Strat -->|테넌트 기반| TDB["Tenant-specific DB"]
-
-    App --> Cache["캐시 계층"]
-    Cache --> L1["L1: 인메모리 (Caffeine)"]
-    Cache --> L2["L2: Redis (Lettuce Coroutines)"]
-    L1 -->|MISS| L2
-    L2 -->|MISS| PDB
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    classDef red    fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
-
-    class App blue
-    class CF,Strat teal
-    class PDB,RDB,TDB orange
-    class Cache,L1,L2 green
-```
+![고성능 전략 개요 1](../docs/images/readme-diagrams/11-high-performance-ko-diagram-01.svg)
 
 ## 캐시 계층 구조 (클래스 다이어그램)
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class CacheStrategy {
-        <<interface>>
-        +get(key: K) V
-        +put(key: K, value: V)
-        +evict(key: K)
-    }
-    class L1Cache {
-        <<Caffeine 인메모리>>
-        -caffeineCache Cache~K, V~
-        +get(key: K) V
-        +put(key: K, value: V)
-        +evict(key: K)
-        +maximumSize: Long
-        +expireAfterWrite: Duration
-    }
-    class L2Cache {
-        <<Redis Lettuce Coroutines>>
-        -redisClient RedisClient
-        +get(key: K) V
-        +put(key: K, value: V)
-        +evict(key: K)
-        +ttl: Duration
-    }
-    class TwoLevelCacheStrategy {
-        -l1: L1Cache
-        -l2: L2Cache
-        +get(key: K) V
-        +put(key: K, value: V)
-        +evict(key: K)
-    }
-    class DatabaseSource {
-        <<R2DBC Exposed>>
-        +findById(id: K) V
-        +save(value: V)
-    }
-
-    CacheStrategy <|.. L1Cache
-    CacheStrategy <|.. L2Cache
-    CacheStrategy <|.. TwoLevelCacheStrategy
-    TwoLevelCacheStrategy --> L1Cache : L1 우선 조회
-    TwoLevelCacheStrategy --> L2Cache : L1 MISS 시 L2 조회
-    TwoLevelCacheStrategy --> DatabaseSource : L2 MISS 시 DB 조회
-
-    style CacheStrategy fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style L1Cache fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style L2Cache fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style TwoLevelCacheStrategy fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style DatabaseSource fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-```
+![캐시 계층 구조 (클래스 다이어그램) 2](../docs/images/readme-diagrams/11-high-performance-ko-diagram-02.svg)
 
 ## 캐시 히트/미스 처리 흐름
 

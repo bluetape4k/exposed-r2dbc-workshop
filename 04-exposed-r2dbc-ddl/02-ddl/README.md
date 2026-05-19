@@ -30,124 +30,15 @@ Learn how to define and manage database schemas with Exposed R2DBC. Perform DDL 
 
 ## Structure Diagram
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class Table {
-        <<abstract>>
-        +tableName: String
-        +columns: List~Column~
-        +primaryKey: PrimaryKey?
-        +indices: List~Index~
-        +foreignKey(vararg columns)
-        +index(customIndexName, isUnique, vararg columns)
-        +uniqueIndex(customIndexName, vararg columns)
-    }
-    class IntIdTable {
-        +id: Column~EntityID~Int~~
-    }
-    class LongIdTable {
-        +id: Column~EntityID~Long~~
-    }
-    class UUIDTable {
-        +id: Column~EntityID~UUID~~
-    }
-    class IdTable~T~ {
-        <<abstract>>
-        +id: Column~EntityID~T~~
-    }
-    class SchemaUtils {
-        +create(vararg tables)
-        +drop(vararg tables)
-        +createMissing(vararg tables)
-        +addMissingColumnsStatements(vararg tables)
-        +addMissingColumns(vararg tables)
-        +createSequence(vararg seq)
-        +dropSequence(vararg seq)
-    }
+![Structure Diagram 1](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-diagram-01.svg)
 
-    IdTable~T~ <|-- IntIdTable
-    IdTable~T~ <|-- LongIdTable
-    IdTable~T~ <|-- UUIDTable
-    Table <|-- IdTable~T~
-    SchemaUtils ..> Table : manages
-
-    style Table fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style IdTable fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style IntIdTable fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    style LongIdTable fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    style UUIDTable fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    style SchemaUtils fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-```
-
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    A["Table definition\nobject MyTable : IntIdTable()"] --> B["suspendTransaction { }"]
-    B --> C["SchemaUtils.create(MyTable)"]
-    C --> D{Table exists?}
-    D -->|No| E["Execute CREATE TABLE IF NOT EXISTS"]
-    D -->|Yes| F["Skip (IF NOT EXISTS)"]
-    E --> G["Create columns / indices / FKs"]
-    G --> H["Done"]
-    F --> H
-
-    B2["suspendTransaction { }"] --> C2["SchemaUtils.createMissing(MyTable)"]
-    C2 --> D2{Missing tables/columns?}
-    D2 -->|Yes| E2["ALTER / CREATE missing items only"]
-    D2 -->|No| F2["Skip"]
-    E2 --> H2["Done"]
-    F2 --> H2
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-
-    class A blue
-    class B,B2 teal
-    class C,C2 green
-    class D,D2 orange
-    class E,E2 purple
-    class F,F2,G,H,H2 teal
-```
+![Structure Diagram 2](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-diagram-02.svg)
 
 ---
 
 ## Sample Table ERD (Users / Orders / Products)
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-erDiagram
-    users {
-        int id PK "auto increment"
-        varchar name "NOT NULL"
-        varchar email "UNIQUE NOT NULL"
-        timestamp created_at "DEFAULT now"
-        boolean is_active "DEFAULT true"
-    }
-    orders {
-        int id PK "auto increment"
-        int user_id FK "NOT NULL"
-        decimal amount "CHECK amount > 0"
-        varchar status "NOT NULL"
-    }
-    products {
-        int id PK "auto increment"
-        varchar name "NOT NULL, indexed"
-        varchar sku "UNIQUE NOT NULL"
-    }
-    order_items {
-        int id PK "auto increment"
-        int order_id FK "NOT NULL"
-        int product_id FK "NOT NULL"
-        int quantity "NOT NULL"
-    }
-    users ||--o{ orders : "places"
-    orders ||--o{ order_items : "contains"
-    products ||--o{ order_items : "included in"
-```
+![Sample Table ERD (Users / Orders / Products) 3](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-diagram-03.svg)
 
 ---
 

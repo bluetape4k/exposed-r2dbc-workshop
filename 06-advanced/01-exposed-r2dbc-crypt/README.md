@@ -76,53 +76,7 @@ Shows how to integrate the DAO API with encrypted columns to use them like entit
 
 ## Class Structure Diagram
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class Encryptor {
-        <<interface>>
-        +encrypt(str: String) String
-        +decrypt(str: String) String
-        +maxColLength(inputByteSize: Int) Int
-    }
-    class Algorithms {
-        <<object>>
-        +AES_256_PBE_GCM(password, salt) Encryptor
-        +AES_256_PBE_CBC(password, salt) Encryptor
-        +BLOW_FISH(key) Encryptor
-        +TRIPLE_DES(key) Encryptor
-    }
-    class EncryptedVarcharColumnType {
-        <<ColumnType>>
-        +encryptor: Encryptor
-        +colLength: Int
-        +valueFromDB(value: Any) String
-        +notNullValueToDB(value: String) Any
-    }
-    class EncryptedBinaryColumnType {
-        <<ColumnType>>
-        +encryptor: Encryptor
-        +colLength: Int
-        +valueFromDB(value: Any) ByteArray
-        +notNullValueToDB(value: ByteArray) Any
-    }
-    class Table {
-        +encryptedVarchar(name, colLength, encryptor) Column~String~
-        +encryptedBinary(name, colLength, encryptor) Column~ByteArray~
-    }
-
-    Encryptor <|.. Algorithms : creates
-    EncryptedVarcharColumnType --> Encryptor : uses
-    EncryptedBinaryColumnType --> Encryptor : uses
-    Table --> EncryptedVarcharColumnType : column type
-    Table --> EncryptedBinaryColumnType : column type
-
-    style Encryptor fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style Algorithms fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style EncryptedVarcharColumnType fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style EncryptedBinaryColumnType fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style Table fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-```
+![Class Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-01-exposed-r2dbc-crypt-diagram-01.svg)
 
 > Non-deterministic encryption: same plaintext generates a different ciphertext each time — AES_256_PBE_GCM recommended (includes AEAD authentication)
 

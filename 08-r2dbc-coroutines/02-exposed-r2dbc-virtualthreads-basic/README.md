@@ -252,82 +252,11 @@ Core API roles:
 
 ## Platform Thread vs Virtual Thread Comparison
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TB
-    subgraph PT ["Platform Thread Model"]
-        direction TB
-        PT_Pool["OS Thread Pool\n(limited to hundreds)"]
-        PT1["Thread-1\n[SQL wait -> blocked]"]
-        PT2["Thread-2\n[SQL wait -> blocked]"]
-        PT3["Thread-N\n[idle waste]"]
-        PT_Pool --> PT1
-        PT_Pool --> PT2
-        PT_Pool --> PT3
-    end
-
-    subgraph VT ["Virtual Thread Model (JDK 21+)"]
-        direction TB
-        Carrier["Carrier Thread Pool\n(number of CPU cores)"]
-        VT1["VThread-1\n[running SQL]"]
-        VT2["VThread-2\n[other work]"]
-        VTN["VThread-N\n[millions possible]"]
-        Carrier -->|mount| VT1
-        Carrier -->|mount when VT1 suspends| VT2
-        Carrier -.->|async remount| VTN
-    end
-
-    PT -->|"upgrade to JDK 21"| VT
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    class PT_Pool,PT1,PT2,PT3 blue
-    class Carrier,VT1,VT2,VTN green
-```
+![Platform Thread vs Virtual Thread Comparison 1](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-diagram-01.svg)
 
 ## Virtual Thread API Class Structure
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class CoroutineDispatcher {
-        <<abstract>>
-        +dispatch(context, block)
-    }
-    class VirtualThreadDispatcher {
-        <<bluetape4k>>
-        +newVT() CoroutineDispatcher
-        +dispatch(context, block)
-    }
-    class R2dbcTransaction {
-        +virtualThreadTransaction(block)
-        +maxAttempts Int
-    }
-    class InTopLevelSuspendTransaction {
-        <<suspend fun>>
-        +db R2dbcDatabase
-        +transactionIsolation IsolationLevel
-        +statement suspend block
-    }
-    class RunSuspendVT {
-        <<JUnit5 extension>>
-        +invoke(testBody) Unit
-    }
-
-    CoroutineDispatcher <|-- VirtualThreadDispatcher
-    R2dbcTransaction --> VirtualThreadDispatcher : uses
-    InTopLevelSuspendTransaction --> VirtualThreadDispatcher : dispatches on
-    RunSuspendVT --> VirtualThreadDispatcher : wraps test
-
-    note for VirtualThreadDispatcher "Created via Dispatchers.newVT()\nBased on JDK 21 Virtual Threads"
-    note for RunSuspendVT "Used together with @EnabledOnJre(JRE.JAVA_21)"
-
-    style CoroutineDispatcher fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style VirtualThreadDispatcher fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style R2dbcTransaction fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style InTopLevelSuspendTransaction fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style RunSuspendVT fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-```
+![Virtual Thread API Class Structure 2](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-diagram-02.svg)
 
 ### When Should You Choose Virtual Threads?
 

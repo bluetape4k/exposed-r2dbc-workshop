@@ -66,32 +66,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 
 ## 추천 학습 경로
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart LR
-    A["00-shared\n테스트 인프라"] --> B["01-spring-boot\nWebFlux 진입점"]
-    B --> C["03-basic\nSQL DSL 기초"]
-    C --> D["04-ddl\n연결/스키마"]
-    D --> E["05-dml\nCRUD/함수/트랜잭션"]
-    E --> F["06-advanced\n암호화/JSON/Money"]
-    F --> G["07-jpa-convert\nJPA 마이그레이션"]
-    G --> H["08-coroutines\nFlow/Virtual Threads"]
-    H --> I["09-spring\nRepository/Cache"]
-    I --> J["10-multi-tenant\n스키마 멀티테넌시"]
-    J --> K["11-high-performance\n캐시/라우팅"]
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-
-    class A blue
-    class B green
-    class C,D,E teal
-    class F,G orange
-    class H,I,J,K purple
-```
+![추천 학습 경로 1](docs/images/readme-diagrams/root-readme-en-diagram-01.svg)
 
 1. Spring 진입: [01-spring-boot/spring-webflux-exposed](01-spring-boot/spring-webflux-exposed/README.md)
 2. SQL DSL 기초: [03-exposed-r2dbc-basic/exposed-r2dbc-sql-example](03-exposed-r2dbc-basic/exposed-r2dbc-sql-example/README.md)

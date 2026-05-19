@@ -53,46 +53,7 @@
 
 ## 구조 다이어그램
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class KotlinDateTimeColumn {
-        <<exposed-kotlin-datetime 확장>>
-    }
-    class KotlinLocalDateColumn {
-        +date(name) Column~kotlinx.datetime.LocalDate~
-    }
-    class KotlinLocalTimeColumn {
-        +time(name) Column~kotlinx.datetime.LocalTime~
-    }
-    class KotlinLocalDateTimeColumn {
-        +datetime(name) Column~kotlinx.datetime.LocalDateTime~
-    }
-    class KotlinInstantColumn {
-        +timestamp(name) Column~kotlin.time.Instant~
-    }
-    class KotlinTimestampWithTimeZoneColumn {
-        +timestampWithTimeZone(name) Column~OffsetDateTime~
-    }
-    class KotlinDurationColumn {
-        +duration(name) Column~kotlin.time.Duration~
-    }
-
-    KotlinDateTimeColumn <|-- KotlinLocalDateColumn
-    KotlinDateTimeColumn <|-- KotlinLocalTimeColumn
-    KotlinDateTimeColumn <|-- KotlinLocalDateTimeColumn
-    KotlinDateTimeColumn <|-- KotlinInstantColumn
-    KotlinDateTimeColumn <|-- KotlinTimestampWithTimeZoneColumn
-    KotlinDateTimeColumn <|-- KotlinDurationColumn
-
-    style KotlinDateTimeColumn fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style KotlinLocalDateColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style KotlinLocalTimeColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style KotlinLocalDateTimeColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style KotlinInstantColumn fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style KotlinTimestampWithTimeZoneColumn fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style KotlinDurationColumn fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-```
+![구조 다이어그램 1](../../docs/images/readme-diagrams/06-advanced-03-exposed-r2dbc-kotlin-datetime-ko-diagram-01.svg)
 
 ## 날짜/시간 처리 흐름
 
@@ -119,38 +80,7 @@ sequenceDiagram
 
 ## 컬럼 타입 선택 흐름
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    A[날짜/시간 데이터 저장 필요] --> B{어떤 정보가 필요?}
-    B --> C[날짜만] --> D[date → LocalDate]
-    B --> E[시간만] --> F[time → LocalTime]
-    B --> G[날짜+시간] --> H{타임존 필요?}
-    H --> I[아니오] --> J[datetime → LocalDateTime]
-    H --> K[예, UTC 기준] --> L[timestamp → Instant]
-    H --> M[예, 오프셋 보존] --> N[timestampWithTimeZone → OffsetDateTime]
-    B --> O[경과 시간] --> P[duration → Duration]
-    N --> Q{DB 선택}
-    Q --> R[H2: 오프셋 보존됨]
-    Q --> S[PostgreSQL/MySQL: UTC 정규화]
-    Q --> T[MariaDB/MySQL V5: 미지원 예외]
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    classDef red    fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
-
-    class A blue
-    class B,H,Q purple
-    class D,F,J green
-    class L teal
-    class N orange
-    class P teal
-    class R green
-    class S,T orange
-```
+![컬럼 타입 선택 흐름 2](../../docs/images/readme-diagrams/06-advanced-03-exposed-r2dbc-kotlin-datetime-ko-diagram-02.svg)
 
 ## `java.time` 모듈과의 차이점
 

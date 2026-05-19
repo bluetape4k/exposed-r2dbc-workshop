@@ -9,58 +9,9 @@ R2DBC 환경에서 비동기로 SELECT, INSERT, UPDATE, DELETE를 수행합니�
 
 ## 구조 다이어그램
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-erDiagram
-    cities {
-        int id PK "SERIAL, auto increment"
-        varchar(50) name "NOT NULL"
-    }
-    users {
-        varchar(10) id PK
-        varchar(50) name "NOT NULL"
-        int city_id FK "NULL, references cities(id)"
-    }
-    cities ||--o{ users : "city_id"
-```
+![구조 다이어그램 1](../../docs/images/readme-diagrams/03-exposed-r2dbc-basic-exposed-r2dbc-sql-example-ko-diagram-01.svg)
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class Query {
-        +where(op: Op~Boolean~)
-        +andWhere(op: Op~Boolean~)
-        +orWhere(op: Op~Boolean~)
-        +orderBy(column, order)
-        +groupBy(vararg columns)
-        +limit(n: Int)
-        +toList()
-        +single()
-        +firstOrNull()
-        +count()
-        +collect(action)
-        +map(transform)
-    }
-    class Table {
-        +selectAll()
-        +select(vararg columns)
-        +insert(body: InsertStatement)
-        +update(where, body: UpdateStatement)
-        +deleteWhere(op: Op~Boolean~)
-        +innerJoin(other: Table)
-    }
-    class Join {
-        +select(vararg columns)
-        +selectAll()
-    }
-    Table --> Query : "selectAll() / select()"
-    Table --> Join : "innerJoin() / leftJoin()"
-    Join --> Query : "select() / selectAll()"
-
-    style Query fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style Table fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style Join fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-```
+![구조 다이어그램 2](../../docs/images/readme-diagrams/03-exposed-r2dbc-basic-exposed-r2dbc-sql-example-ko-diagram-02.svg)
 
 ---
 

@@ -49,57 +49,7 @@ src/main/kotlin/exposed/r2dbc/examples/
 
 ## Repository 클래스 구조
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class R2dbcRepository~ID, T~ {
-        <<interface>>
-        +table IdTable~ID~
-        +extractId(entity) ID
-        +toEntity(row) T
-        +findAll() Flow~T~
-        +findById(id) T?
-        +deleteById(id) Int
-    }
-    class MovieR2dbcRepository {
-        +table MovieTable
-        +extractId(entity) Long
-        +toEntity(row) MovieRecord
-        +save(movie) MovieRecord
-        +searchMovies(params) Flow~MovieRecord~
-        +getAllMoviesWithActors() Flow~MovieWithActorRecord~
-        +getMovieWithActors(id) MovieWithActorRecord?
-    }
-    class ActorR2dbcRepository {
-        +table ActorTable
-        +extractId(entity) Long
-        +toEntity(row) ActorRecord
-        +save(actor) ActorRecord
-        +searchActors(params) Flow~ActorRecord~
-    }
-    class MovieController {
-        +getMovieWithActors(id) MovieWithActorRecord?
-        +searchMovies(params) List~MovieRecord~
-        +createMovie(movie) MovieRecord
-        +deleteMovie(id) Int
-    }
-    class ActorController {
-        +getAllActors() List~ActorRecord~
-        +getActorById(id) ActorRecord?
-        +createActor(actor) ActorRecord
-    }
-
-    MovieR2dbcRepository ..|> R2dbcRepository
-    ActorR2dbcRepository ..|> R2dbcRepository
-    MovieController --> MovieR2dbcRepository: uses
-    ActorController --> ActorR2dbcRepository: uses
-
-    style R2dbcRepository fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style MovieR2dbcRepository fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style ActorR2dbcRepository fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style MovieController fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style ActorController fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-```
+![Repository 클래스 구조 1](../../docs/images/readme-diagrams/09-spring-05-exposed-r2dbc-repository-coroutines-ko-diagram-01.svg)
 
 ## HTTP 요청 흐름 (sequenceDiagram)
 
@@ -135,31 +85,7 @@ sequenceDiagram
 
 ## Movie/Actor ERD
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-erDiagram
-    movies {
-        bigint id PK
-        varchar name
-        varchar producer_name
-        date release_date
-    }
-    actors {
-        bigint id PK
-        varchar first_name
-        varchar last_name
-        date birthday
-    }
-    actors_in_movies {
-        bigint movie_id FK
-        bigint actor_id FK
-    }
-
-    movies ||--o{ actors_in_movies : "1:N"
-    actors ||--o{ actors_in_movies : "1:N"
-    actors_in_movies }o--|| movies : ""
-    actors_in_movies }o--|| actors : ""
-```
+![Movie/Actor ERD 2](../../docs/images/readme-diagrams/09-spring-05-exposed-r2dbc-repository-coroutines-ko-diagram-02.svg)
 
 ## Spring + Coroutine 브릿지 패턴 (`DataInitializer`)
 

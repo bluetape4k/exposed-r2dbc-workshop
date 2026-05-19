@@ -36,41 +36,7 @@ The same powerful set of JSON query functions provided by Exposed is available:
 
 ## Structure Diagram
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class FastjsonColumn~T~ {
-        <<bluetape4k-exposed>>
-        +fastjson(name) Column~T~
-    }
-    class FastjsonBColumn~T~ {
-        +fastjsonb(name) Column~T~
-    }
-    note for FastjsonBColumn "PostgreSQL JSONB only"
-    class FastJson2Serializer~T~ {
-        +serialize(value: T): String
-        +deserialize(value: String): T
-    }
-    class JSONWriter {
-        <<Fastjson2 (com.alibaba.fastjson2)>>
-        +toJSONString(value): String
-    }
-    class JSONReader {
-        <<Fastjson2 (com.alibaba.fastjson2)>>
-        +read(json, klass): T
-    }
-
-    FastjsonColumn <|-- FastjsonBColumn : json to jsonb extension
-    FastjsonColumn --> FastJson2Serializer : delegates to
-    FastJson2Serializer --> JSONWriter : serialization
-    FastJson2Serializer --> JSONReader : deserialization
-
-    style FastjsonColumn fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style FastjsonBColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style FastJson2Serializer fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style JSONWriter fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style JSONReader fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-```
+![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-09-exposed-r2dbc-fastjson2-diagram-01.svg)
 
 > No annotations required — Fastjson2 handles standard Kotlin data classes and POJOs via reflection
 > Faster serialization/deserialization than Jackson; suitable for services where JSON processing performance is critical
@@ -104,30 +70,7 @@ sequenceDiagram
 
 ## JSON Library Comparison
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart LR
-    subgraph Selection Criteria
-        A[Choose JSON Library] --> B{Project Context}
-        B --> C[Already using Jackson 2.x] --> D[08-jackson module]
-        B --> E[Need Jackson 3.x latest features] --> F[11-jackson3 module]
-        B --> G[Need maximum performance] --> H[09-fastjson2 module\nthis module]
-        B --> I[Prefer kotlinx.serialization] --> J[exposed-json module]
-    end
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-
-    class A blue
-    class B purple
-    class D green
-    class F teal
-    class H orange
-    class J green
-```
+![JSON Library Comparison 2](../../docs/images/readme-diagrams/06-advanced-09-exposed-r2dbc-fastjson2-diagram-02.svg)
 
 ## Example Overview
 

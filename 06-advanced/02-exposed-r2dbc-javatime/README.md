@@ -51,87 +51,11 @@ When comparing date/time values in a `WHERE` clause, it is recommended to use li
 
 ## Structure Diagram
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class JavaTimeColumn {
-        <<exposed-java-time extension>>
-    }
-    class DateColumn {
-        +date(name) Column~LocalDate~
-    }
-    class TimeColumn {
-        +time(name) Column~LocalTime~
-    }
-    class DateTimeColumn {
-        +datetime(name) Column~LocalDateTime~
-    }
-    class TimestampColumn {
-        +timestamp(name) Column~Instant~
-    }
-    class TimestampWithTimeZoneColumn {
-        +timestampWithTimeZone(name) Column~OffsetDateTime~
-    }
-    class DurationColumn {
-        +duration(name) Column~Duration~
-    }
-
-    JavaTimeColumn <|-- DateColumn
-    JavaTimeColumn <|-- TimeColumn
-    JavaTimeColumn <|-- DateTimeColumn
-    JavaTimeColumn <|-- TimestampColumn
-    JavaTimeColumn <|-- TimestampWithTimeZoneColumn
-    JavaTimeColumn <|-- DurationColumn
-
-    style JavaTimeColumn fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style DateColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style TimeColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style DateTimeColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style TimestampColumn fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style TimestampWithTimeZoneColumn fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style DurationColumn fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-```
+![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-02-exposed-r2dbc-javatime-diagram-01.svg)
 
 ## Java Time Type to DB Mapping Decision Flow
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    Start["Decide data representation"] --> Q1{"Is timezone\ninformation needed?"}
-    Q1 -->|Yes| Q2{"Does DB support\ntimestampWithTimeZone?"}
-    Q1 -->|No| Q3{"What kind of date?"}
-
-    Q2 -->|PostgreSQL / MySQL8 / H2| TZ["timestampWithTimeZone\nOffsetDateTime"]
-    Q2 -->|MariaDB / MySQL V5| Fallback["Store ZoneId separately in VARCHAR\ntimestamp - Instant"]
-
-    Q3 -->|Date only| DateCol["date\nLocalDate"]
-    Q3 -->|Time only| TimeCol["time\nLocalTime"]
-    Q3 -->|Local date+time| DT{"Nanosecond\nprecision needed?"}
-    Q3 -->|UTC-based timestamp| TS["timestamp\nInstant"]
-
-    DT -->|H2 9-digit nanoseconds| DTH2["datetime\nLocalDateTime\nH2-only high precision"]
-    DT -->|PostgreSQL/MySQL 6-digit microseconds| DTPG["datetime\nLocalDateTime\nWatch for microsecond truncation"]
-
-    TZ --> Done["DB column definition complete"]
-    Fallback --> Done
-    DateCol --> Done
-    TimeCol --> Done
-    TS --> Done
-    DTH2 --> Done
-    DTPG --> Done
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-
-    class TZ,Fallback orange
-    class DateCol,TimeCol green
-    class TS blue
-    class DTH2,DTPG teal
-    class Done purple
-```
+![Java Time Type to DB Mapping Decision Flow 2](../../docs/images/readme-diagrams/06-advanced-02-exposed-r2dbc-javatime-diagram-02.svg)
 
 ## Timezone Notes
 

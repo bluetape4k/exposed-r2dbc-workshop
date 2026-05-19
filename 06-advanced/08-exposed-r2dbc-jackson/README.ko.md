@@ -64,38 +64,7 @@ Jackson의 `SerializationFeature`와 `DeserializationFeature`는 직렬화/역�
 
 ## 구조 다이어그램
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class JacksonColumn~T~ {
-        <<bluetape4k-exposed>>
-        +jackson(name) Column~T~
-        -objectMapper: ObjectMapper
-    }
-    class JacksonBColumn~T~ {
-        +jacksonb(name) Column~T~
-    }
-    note for JacksonBColumn "PostgreSQL JSONB 전용"
-    class ObjectMapper {
-        <<Jackson (com.fasterxml.jackson)>>
-        +writeValueAsString(value): String
-        +readValue(json, klass): T
-    }
-    class KotlinModule {
-        <<Jackson 확장>>
-        +Kotlin 데이터 클래스 지원
-    }
-    note for KotlinModule "자동 등록됨"
-
-    JacksonColumn <|-- JacksonBColumn : json → jsonb 확장
-    JacksonColumn --> ObjectMapper : 직렬화/역직렬화
-    ObjectMapper --> KotlinModule : 등록
-
-    style JacksonColumn fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style JacksonBColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style ObjectMapper fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style KotlinModule fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-```
+![구조 다이어그램 1](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-ko-diagram-01.svg)
 
 > `@Serializable` 불필요 — Jackson `ObjectMapper`가 표준 Kotlin 데이터 클래스를 직접 처리
 > `KotlinModule`이 자동 등록되어 data class·nullable·default 파라미터 지원
@@ -129,26 +98,7 @@ sequenceDiagram
 
 ## 테이블 구조 (ER 다이어그램)
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-erDiagram
-    JACKSON_TABLE {
-        INT id PK
-        JSON jackson_column "DataHolder JSON 컬럼"
-    }
-    JACKSON_B_TABLE {
-        INT id PK
-        JSONB jackson_b_column "DataHolder JSONB 컬럼 (PostgreSQL)"
-    }
-    DATA_HOLDER {
-        String name
-        String team_nullable
-        INT logins
-        BOOLEAN active
-    }
-    JACKSON_TABLE ||--|| DATA_HOLDER : "jackson_column 필드로 저장"
-    JACKSON_B_TABLE ||--|| DATA_HOLDER : "jackson_b_column 필드로 저장"
-```
+![테이블 구조 (ER 다이어그램) 2](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-ko-diagram-02.svg)
 
 ## 예제 개요
 

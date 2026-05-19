@@ -63,38 +63,7 @@ The same powerful query functions are available:
 
 ## Structure Diagram
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class JacksonColumn~T~ {
-        <<bluetape4k-exposed>>
-        +jackson(name) Column~T~
-        -objectMapper: ObjectMapper
-    }
-    class JacksonBColumn~T~ {
-        +jacksonb(name) Column~T~
-    }
-    note for JacksonBColumn "PostgreSQL JSONB only"
-    class ObjectMapper {
-        <<Jackson (com.fasterxml.jackson)>>
-        +writeValueAsString(value): String
-        +readValue(json, klass): T
-    }
-    class KotlinModule {
-        <<Jackson Extension>>
-        +Kotlin data class support
-    }
-    note for KotlinModule "Auto-registered"
-
-    JacksonColumn <|-- JacksonBColumn : json to jsonb extension
-    JacksonColumn --> ObjectMapper : serialization/deserialization
-    ObjectMapper --> KotlinModule : registered
-
-    style JacksonColumn fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style JacksonBColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style ObjectMapper fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style KotlinModule fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-```
+![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-diagram-01.svg)
 
 > No `@Serializable` needed — Jackson `ObjectMapper` handles standard Kotlin data classes directly
 > `KotlinModule` is auto-registered to support data class, nullable, and default parameter handling
@@ -128,26 +97,7 @@ sequenceDiagram
 
 ## Table Structure (ER Diagram)
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-erDiagram
-    JACKSON_TABLE {
-        INT id PK
-        JSON jackson_column "DataHolder JSON column"
-    }
-    JACKSON_B_TABLE {
-        INT id PK
-        JSONB jackson_b_column "DataHolder JSONB column (PostgreSQL)"
-    }
-    DATA_HOLDER {
-        String name
-        String team_nullable
-        INT logins
-        BOOLEAN active
-    }
-    JACKSON_TABLE ||--|| DATA_HOLDER : "stored in jackson_column"
-    JACKSON_B_TABLE ||--|| DATA_HOLDER : "stored in jackson_b_column"
-```
+![Table Structure (ER Diagram) 2](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-diagram-02.svg)
 
 ## Example Overview
 

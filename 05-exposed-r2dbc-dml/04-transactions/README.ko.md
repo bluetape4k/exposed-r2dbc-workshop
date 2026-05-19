@@ -46,72 +46,11 @@ sequenceDiagram
 
 ### 중첩 트랜잭션 / Savepoint 흐름
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    classDef red    fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
-
-    A["suspendTransaction (외부)"] --> B["SQL 실행 1"]
-    B --> C{"중첩 트랜잭션?"}
-    C -->|yes| D["SAVEPOINT sp1"]
-    D --> E["SQL 실행 2"]
-    E --> G{예외 발생?}
-    G -->|rollback| H["ROLLBACK TO sp1\n(SQL 2만 취소)"]
-    G -->|정상| I["RELEASE sp1"]
-    H --> J["외부 COMMIT\n(SQL 1만 저장)"]
-    I --> J
-    C -->|no| K["동일 트랜잭션 공유\n(외부와 같은 범위)"]
-
-    class A blue
-    class B green
-    class C orange
-    class D purple
-    class E green
-    class G orange
-    class H red
-    class I teal
-    class J teal
-    class K blue
-```
+![중첩 트랜잭션 / Savepoint 흐름 1](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-04-transactions-ko-diagram-01.svg)
 
 ## 트랜잭션 상태 다이어그램
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-stateDiagram-v2
-    [*] --> IDLE : DB 연결 획득
-
-    IDLE --> ACTIVE : suspendTransaction 호출\nBEGIN 실행
-
-    ACTIVE --> ACTIVE : SQL 실행\n(SELECT/INSERT/UPDATE/DELETE)
-
-    ACTIVE --> SAVEPOINT : useNestedTransactions=true\n내부 suspendTransaction 호출
-
-    SAVEPOINT --> SAVEPOINT : 내부 SQL 실행
-
-    SAVEPOINT --> ACTIVE : RELEASE SAVEPOINT\n(내부 정상 완료)
-
-    SAVEPOINT --> ACTIVE : ROLLBACK TO SAVEPOINT\n(내부 예외 발생)
-
-    ACTIVE --> COMMITTED : COMMIT\n(정상 완료)
-
-    ACTIVE --> ROLLEDBACK : ROLLBACK\n(예외 발생)
-
-    COMMITTED --> IDLE : 연결 반환
-    ROLLEDBACK --> IDLE : 연결 반환
-
-    ACTIVE --> TIMEOUT : queryTimeout 초과
-
-    TIMEOUT --> ROLLEDBACK : 자동 ROLLBACK
-
-    COMMITTED --> [*]
-    ROLLEDBACK --> [*]
-```
+![트랜잭션 상태 다이어그램 2](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-04-transactions-ko-diagram-02.svg)
 
 ## 프로젝트 구조
 

@@ -51,87 +51,11 @@
 
 ## 구조 다이어그램
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class JavaTimeColumn {
-        <<exposed-java-time 확장>>
-    }
-    class DateColumn {
-        +date(name) Column~LocalDate~
-    }
-    class TimeColumn {
-        +time(name) Column~LocalTime~
-    }
-    class DateTimeColumn {
-        +datetime(name) Column~LocalDateTime~
-    }
-    class TimestampColumn {
-        +timestamp(name) Column~Instant~
-    }
-    class TimestampWithTimeZoneColumn {
-        +timestampWithTimeZone(name) Column~OffsetDateTime~
-    }
-    class DurationColumn {
-        +duration(name) Column~Duration~
-    }
-
-    JavaTimeColumn <|-- DateColumn
-    JavaTimeColumn <|-- TimeColumn
-    JavaTimeColumn <|-- DateTimeColumn
-    JavaTimeColumn <|-- TimestampColumn
-    JavaTimeColumn <|-- TimestampWithTimeZoneColumn
-    JavaTimeColumn <|-- DurationColumn
-
-    style JavaTimeColumn fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style DateColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style TimeColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style DateTimeColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style TimestampColumn fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style TimestampWithTimeZoneColumn fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style DurationColumn fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-```
+![구조 다이어그램 1](../../docs/images/readme-diagrams/06-advanced-02-exposed-r2dbc-javatime-ko-diagram-01.svg)
 
 ## Java Time 타입 → DB 매핑 결정 흐름
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    Start["데이터 표현 결정"] --> Q1{"시간대 정보가\n필요한가?"}
-    Q1 -->|예| Q2{"DB가\ntimestampWithTimeZone\n지원하는가?"}
-    Q1 -->|아니오| Q3{"날짜 유형은?"}
-
-    Q2 -->|PostgreSQL / MySQL8 / H2| TZ["timestampWithTimeZone\nOffsetDateTime"]
-    Q2 -->|MariaDB / MySQL V5| Fallback["VARCHAR에 ZoneId 별도 저장\ntimestamp - Instant"]
-
-    Q3 -->|날짜만| DateCol["date\nLocalDate"]
-    Q3 -->|시간만| TimeCol["time\nLocalTime"]
-    Q3 -->|날짜+시간 로컬| DT{"나노초 정밀도\n필요?"}
-    Q3 -->|UTC 기준 타임스탬프| TS["timestamp\nInstant"]
-
-    DT -->|H2 나노초 9자리| DTH2["datetime\nLocalDateTime\nH2 전용 고정밀"]
-    DT -->|PostgreSQL·MySQL 마이크로초 6자리| DTPG["datetime\nLocalDateTime\n마이크로초 잘림 주의"]
-
-    TZ --> Done["DB 컬럼 정의 완료"]
-    Fallback --> Done
-    DateCol --> Done
-    TimeCol --> Done
-    TS --> Done
-    DTH2 --> Done
-    DTPG --> Done
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-
-    class TZ,Fallback orange
-    class DateCol,TimeCol green
-    class TS blue
-    class DTH2,DTPG teal
-    class Done purple
-```
+![Java Time 타입 → DB 매핑 결정 흐름 2](../../docs/images/readme-diagrams/06-advanced-02-exposed-r2dbc-javatime-ko-diagram-02.svg)
 
 ## 타임존(TimeZone) 주의사항
 
