@@ -76,89 +76,17 @@ By centralizing these components, `exposed-r2dbc-shared` ensures that all exampl
 
 ## DML Test Data Schema (ERD)
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-erDiagram
-    cities {
-        int id PK "SERIAL, auto increment"
-        varchar name "NOT NULL"
-    }
-    users {
-        varchar id PK "varchar(10)"
-        varchar name "NOT NULL"
-        int city_id FK "NULL, references cities"
-    }
-    sales {
-        int id PK
-        varchar product "NOT NULL"
-        decimal amount "NOT NULL"
-        int city_id FK
-    }
-    cities ||--o{ users : "has"
-    cities ||--o{ sales : "has"
-```
+![DML Test Data Schema (ERD) 1](../../docs/images/readme-diagrams/00-shared-exposed-r2dbc-shared-diagram-01.svg)
 
 ---
 
 ## Core Component Structure
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class AbstractR2dbcExposedTest {
-        +enableDialects() List~TestDB~
-        +withDb(testDB, block)
-        +withTables(testDB, tables, block)
-    }
-
-    class TestDB {
-        <<enumeration>>
-        H2
-        H2_MYSQL
-        H2_PSQL
-        H2_MARIADB
-        H2_ORACLE
-        H2_SQLSERVER
-        MARIADB
-        MYSQL_V5
-        MYSQL_V8
-        POSTGRESQL
-        +db() R2dbcDatabase
-    }
-
-    class Containers {
-        <<singleton>>
-        +mariadb MariaDBContainer
-        +mysql MySQLContainer
-        +postgresql PostgreSQLContainer
-    }
-
-    AbstractR2dbcExposedTest --> TestDB: uses
-    TestDB --> Containers: uses (for container DBs)
-
-    style AbstractR2dbcExposedTest fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style TestDB fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style Containers fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-```
+![Core Component Structure 2](../../docs/images/readme-diagrams/00-shared-exposed-r2dbc-shared-diagram-02.svg)
 
 ## withTables() Execution Flow
 
-```mermaid
-sequenceDiagram
-    participant Test as Test Code
-    participant WTF as withTables()
-    participant DB as DB Container
-    participant Schema as SchemaUtils
-    Test ->> WTF: withTables(testDB, MyTable) { ... }
-    WTF ->> DB: Acquire DB connection (Semaphore serialization)
-    WTF ->> Schema: SchemaUtils.create(*tables)
-    Schema -->> WTF: Tables created
-    WTF ->> Test: Execute block
-    Test -->> WTF: Block complete
-    WTF ->> Schema: SchemaUtils.drop(*tables) [finally]
-    Schema -->> WTF: Tables dropped
-    WTF ->> DB: Release connection (Semaphore released)
-```
+![withTables() Execution Flow 3](../../docs/images/readme-diagrams/00-shared-exposed-r2dbc-shared-diagram-03.svg)
 
 ---
 

@@ -14,49 +14,7 @@
 
 ## 구조 다이어그램
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class Column~T~ {
-        <<Exposed 기반>>
-        +columnType: IColumnType~T~
-        +name: String
-        +clientDefault(expr: () -~> T): Column~T~
-    }
-    class IColumnType~T~ {
-        <<interface>>
-        +valueFromDB(value: Any): T
-        +notNullValueToDB(value: T): Any
-        +sqlType(): String
-    }
-    class CompressedColumnType~T~ {
-        +sqlType(): String
-        +valueFromDB(): ByteArray
-        +notNullValueToDB(): ByteArray
-    }
-    class EncryptedColumnType~T~ {
-        +sqlType(): String
-        +valueFromDB(): String
-        +notNullValueToDB(): String
-    }
-    note for EncryptedColumnType "결정적 암호화 (검색 가능)"
-    class BinarySerializedColumnType~T~ {
-        +sqlType(): String
-        +valueFromDB(): ByteArray
-        +notNullValueToDB(): ByteArray
-    }
-
-    Column --> IColumnType : 사용
-    IColumnType <|.. CompressedColumnType : 구현
-    IColumnType <|.. EncryptedColumnType : 구현
-    IColumnType <|.. BinarySerializedColumnType : 구현
-
-    style Column fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style IColumnType fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style CompressedColumnType fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style EncryptedColumnType fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style BinarySerializedColumnType fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-```
+![Component Diagram 1](../../docs/images/readme-diagrams/06-advanced-06-exposed-r2dbc-custom-columns-ko-diagram-01.svg)
 
 > `IColumnType`의 `valueFromDB`/`notNullValueToDB`를 오버라이드하여 투명한 변환(압축·암호화·직렬화) 구현
 > `clientDefault { }` 확장으로 INSERT 전 애플리케이션 측 ID 자동 생성(Snowflake, KSUID 등)
@@ -65,58 +23,11 @@ classDiagram
 
 ## 처리 흐름
 
-```mermaid
-sequenceDiagram
-    participant App as 애플리케이션
-    participant Col as CustomColumnType
-    participant Transform as 변환기
-    participant DB as Database
-
-    Note over App,DB: INSERT — 투명한 변환 (압축/암호화/직렬화)
-    App ->> Col: insert { it[data] = rawValue }
-    Col ->> Transform: notNullValueToDB(rawValue)
-    Transform -->> Col: transformedBytes
-    Col ->> DB: INSERT transformedBytes
-
-    Note over App,DB: SELECT — 역변환 자동 수행
-    DB -->> Col: transformedBytes
-    Col ->> Transform: valueFromDB(transformedBytes)
-    Transform -->> Col: rawValue
-    Col -->> App: rawValue
-
-    Note over App,DB: clientDefault — INSERT 전 ID 자동 생성
-    App ->> Col: insert { } (id 미지정)
-    Col ->> Transform: clientDefault lambda
-    Transform -->> Col: generatedId (Snowflake/KSUID)
-    Col ->> DB: INSERT generatedId
-```
+![Component Component 2](../../docs/images/readme-diagrams/06-advanced-06-exposed-r2dbc-custom-columns-ko-diagram-02.svg)
 
 ## 변환 타입별 비교
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart LR
-    subgraph 압축 Compress
-        A1[ByteArray 원본] --> A2[LZ4/Snappy/Zstd 압축] --> A3[BLOB/VARBINARY 저장]
-    end
-    subgraph 암호화 Encrypt
-        B1[String 원본] --> B2[AES/RC4 결정적 암호화] --> B3[VARCHAR 저장]
-        B3 --> B4[WHERE 검색 가능]
-    end
-    subgraph 직렬화 Serialize
-        C1[Kotlin 객체] --> C2[Kryo/Fory 직렬화] --> C3[LZ4/Zstd 압축] --> C4[BLOB 저장]
-    end
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-
-    class A1,A2,A3 blue
-    class B1,B2,B3,B4 orange
-    class C1,C2,C3,C4 teal
-```
+![Component Component Component 3](../../docs/images/readme-diagrams/06-advanced-06-exposed-r2dbc-custom-columns-ko-diagram-03.svg)
 
 ## 1. 커스텀 클라이언트 측 기본값 생성기
 

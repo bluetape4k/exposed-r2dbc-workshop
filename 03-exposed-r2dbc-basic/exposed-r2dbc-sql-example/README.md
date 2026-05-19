@@ -9,58 +9,9 @@ Perform SELECT, INSERT, UPDATE, and DELETE asynchronously in an R2DBC environmen
 
 ## Structure Diagram
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-erDiagram
-    cities {
-        int id PK "SERIAL, auto increment"
-        varchar(50) name "NOT NULL"
-    }
-    users {
-        varchar(10) id PK
-        varchar(50) name "NOT NULL"
-        int city_id FK "NULL, references cities(id)"
-    }
-    cities ||--o{ users : "city_id"
-```
+![Structure Diagram 1](../../docs/images/readme-diagrams/03-exposed-r2dbc-basic-exposed-r2dbc-sql-example-diagram-01.svg)
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class Query {
-        +where(op: Op~Boolean~)
-        +andWhere(op: Op~Boolean~)
-        +orWhere(op: Op~Boolean~)
-        +orderBy(column, order)
-        +groupBy(vararg columns)
-        +limit(n: Int)
-        +toList()
-        +single()
-        +firstOrNull()
-        +count()
-        +collect(action)
-        +map(transform)
-    }
-    class Table {
-        +selectAll()
-        +select(vararg columns)
-        +insert(body: InsertStatement)
-        +update(where, body: UpdateStatement)
-        +deleteWhere(op: Op~Boolean~)
-        +innerJoin(other: Table)
-    }
-    class Join {
-        +select(vararg columns)
-        +selectAll()
-    }
-    Table --> Query : "selectAll() / select()"
-    Table --> Join : "innerJoin() / leftJoin()"
-    Join --> Query : "select() / selectAll()"
-
-    style Query fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style Table fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style Join fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-```
+![Structure Diagram 2](../../docs/images/readme-diagrams/03-exposed-r2dbc-basic-exposed-r2dbc-sql-example-diagram-02.svg)
 
 ---
 
@@ -269,36 +220,7 @@ names shouldBeEqualTo listOf("Jane.Doe", "John.Doe")
 
 ## Query Execution Flow
 
-```mermaid
-sequenceDiagram
-    participant Test as Test Code
-    participant WT as withTables
-    participant TX as suspendTransaction
-    participant DSL as Exposed DSL
-    participant DB as R2DBC Database
-
-    Test ->> WT: withTables(testDB, CityTable, UserTable)
-    WT ->> TX: suspendTransaction { SchemaUtils.create() }
-    TX ->> DB: CREATE TABLE cities, users
-    DB -->> TX: done
-    TX -->> WT: Tables created
-    WT ->> Test: Execute block
-
-    Test ->> DSL: CityTable.insert { it[name] = "Seoul" }
-    DSL ->> DB: INSERT INTO cities VALUES (...)
-    DB -->> DSL: ResultRow (id=1)
-    DSL -->> Test: id
-
-    Test ->> DSL: UserTable.innerJoin(CityTable).select(...).where { ... }
-    DSL ->> DB: SELECT ... FROM users INNER JOIN cities ON ...
-    DB -->> DSL: Flow<ResultRow>
-    DSL -->> Test: List<ResultRow>
-
-    Test ->> WT: Block complete
-    WT ->> TX: suspendTransaction { SchemaUtils.drop() }
-    TX ->> DB: DROP TABLE users, cities
-    DB -->> TX: done
-```
+![Query Execution Flow 3](../../docs/images/readme-diagrams/03-exposed-r2dbc-basic-exposed-r2dbc-sql-example-diagram-03.svg)
 
 ---
 

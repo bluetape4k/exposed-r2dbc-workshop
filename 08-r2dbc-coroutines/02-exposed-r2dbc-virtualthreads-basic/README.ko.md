@@ -12,24 +12,7 @@ Exposed R2DBC + Java 21 Virtual Threads 환경에서 비동기 데이터베이�
 
 ## 실행 흐름
 
-```mermaid
-sequenceDiagram
-    participant C as 호출자 (Coroutine)
-    participant VT as Virtual Thread Dispatcher
-    participant ST as suspendTransaction
-    participant DB as R2DBC Database
-
-    C ->> VT: runSuspendVT { }
-    VT ->> VT: VirtualThread 할당
-    VT ->> ST: virtualThreadTransaction { }
-    ST ->> DB: BEGIN (on Virtual Thread)
-    ST ->> DB: SQL 실행
-    DB -->> ST: 결과
-    ST ->> DB: COMMIT
-    ST -->> VT: 결과 반환
-    VT -->> C: 결과 반환
-    Note right of VT: 블로킹 허용<br/>(Virtual Thread 특성)
-```
+![Component Component 1](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-ko-diagram-01.svg)
 
 ---
 
@@ -252,82 +235,11 @@ runSuspendVT { }                         ← Virtual Thread 기반 코루틴 테
 
 ## Platform Thread vs Virtual Thread 비교
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TB
-    subgraph PT ["Platform Thread 모델"]
-        direction TB
-        PT_Pool["OS Thread Pool\n(수백 개 한계)"]
-        PT1["Thread-1\n[SQL 대기 → 블로킹]"]
-        PT2["Thread-2\n[SQL 대기 → 블로킹]"]
-        PT3["Thread-N\n[유휴 낭비]"]
-        PT_Pool --> PT1
-        PT_Pool --> PT2
-        PT_Pool --> PT3
-    end
-
-    subgraph VT ["Virtual Thread 모델 (JDK 21+)"]
-        direction TB
-        Carrier["Carrier Thread Pool\n(CPU 코어 수)"]
-        VT1["VThread-1\n[SQL 실행]"]
-        VT2["VThread-2\n[다른 작업]"]
-        VTN["VThread-N\n[수백만 개 가능]"]
-        Carrier -->|마운트| VT1
-        Carrier -->|VT1 suspend 시 마운트| VT2
-        Carrier -.->|비동기 재마운트| VTN
-    end
-
-    PT -->|"JDK 21 업그레이드"| VT
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    class PT_Pool,PT1,PT2,PT3 blue
-    class Carrier,VT1,VT2,VTN green
-```
+![Platform Thread vs Virtual Thread Component 2](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-ko-diagram-02.svg)
 
 ## Virtual Thread API 클래스 구조
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class CoroutineDispatcher {
-        <<abstract>>
-        +dispatch(context, block)
-    }
-    class VirtualThreadDispatcher {
-        <<bluetape4k>>
-        +newVT() CoroutineDispatcher
-        +dispatch(context, block)
-    }
-    class R2dbcTransaction {
-        +virtualThreadTransaction(block)
-        +maxAttempts Int
-    }
-    class InTopLevelSuspendTransaction {
-        <<suspend fun>>
-        +db R2dbcDatabase
-        +transactionIsolation IsolationLevel
-        +statement suspend block
-    }
-    class RunSuspendVT {
-        <<JUnit5 extension>>
-        +invoke(testBody) Unit
-    }
-
-    CoroutineDispatcher <|-- VirtualThreadDispatcher
-    R2dbcTransaction --> VirtualThreadDispatcher : uses
-    InTopLevelSuspendTransaction --> VirtualThreadDispatcher : dispatches on
-    RunSuspendVT --> VirtualThreadDispatcher : wraps test
-
-    note for VirtualThreadDispatcher "Dispatchers.newVT() 로 생성\nJDK 21 Virtual Threads 기반"
-    note for RunSuspendVT "@EnabledOnJre(JRE.JAVA_21) 와 함께 사용"
-
-    style CoroutineDispatcher fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style VirtualThreadDispatcher fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style R2dbcTransaction fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style InTopLevelSuspendTransaction fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style RunSuspendVT fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-```
+![Virtual Thread API Component Component 3](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-ko-diagram-03.svg)
 
 ### 언제 Virtual Threads를 선택해야 하나?
 

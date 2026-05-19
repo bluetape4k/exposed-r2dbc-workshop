@@ -33,46 +33,7 @@ but operates with **Non-Blocking I/O** in a Spring WebFlux + Netty + Coroutines 
 
 ## Structure Diagram
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class AbstractR2dbcRedissonRepository~K, V~ {
-        <<abstract>>
-        +get(key: K) V?
-        +put(key: K, value: V) void
-        +evict(key: K) void
-        +evictAll(keys: Collection~K~) void
-        +clear() void
-    }
-
-    class UserCacheRepository {
-        +strategy: READ_WRITE_THROUGH_WITH_NEAR_CACHE
-        +get(id: Long) UserRecord?
-        +put(id: Long, user: UserRecord) void
-        +evict(id: Long) void
-    }
-
-    class UserCredentialsCacheRepository {
-        +strategy: READ_ONLY
-        +get(id: Long) UserCredentialsRecord?
-        +evict(id: Long) void
-    }
-
-    class UserEventCacheRepository {
-        +strategy: WRITE_BEHIND
-        +put(id: Long, event: UserEventRecord) void
-        +flush() void
-    }
-
-    AbstractR2dbcRedissonRepository <|-- UserCacheRepository
-    AbstractR2dbcRedissonRepository <|-- UserCredentialsCacheRepository
-    AbstractR2dbcRedissonRepository <|-- UserEventCacheRepository
-
-    style AbstractR2dbcRedissonRepository fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style UserCacheRepository fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style UserCredentialsCacheRepository fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style UserEventCacheRepository fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-```
+![Structure Diagram 1](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-diagram-01.svg)
 
 > `UserCacheRepository`: Near Cache (Caffeine) + Redis (MapCache)
 > `UserCredentialsCacheRepository`: Read-only cache (credentials, code tables)
@@ -80,27 +41,7 @@ classDiagram
 
 ## Cache Lookup Flow
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    REQ["cache.get(key)"] --> L1{L1 Caffeine<br/>Near Cache<br/>HIT?}
-    L1 -->|HIT| RET1["Return immediately<br/>nanoseconds ⚡"]
-    L1 -->|MISS| L2{L2 Redisson<br/>MapCache<br/>HIT?}
-    L2 -->|HIT| FILL1["Sync L1<br/>+ Return<br/>microseconds ⚡"]
-    L2 -->|MISS| DB["DB query<br/>suspendTransaction<br/>Exposed R2DBC"]
-    DB --> FILL2["Store in L2<br/>with TTL"]
-    FILL2 --> FILL1
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-
-    class RET1 green
-    class FILL1 blue
-    class FILL2 teal
-    class DB orange
-```
+![Cache Lookup Flow 2](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-diagram-02.svg)
 
 ## Project Structure
 
@@ -305,47 +246,7 @@ The Markdown report stores benchmark name, mode, score, error, unit, and paramet
 
 ### Strategy Flow by Type
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    subgraph RT["Read Through"]
-        RT1["get(id)"] --> RT2{Cache<br/>HIT?}
-        RT2 -->|YES| RT3["Return from<br/>Redis"]
-        RT2 -->|NO| RT4["Query DB"]
-        RT4 --> RT5["Store in Redis"]
-        RT5 --> RT6["Return"]
-    end
-
-    subgraph WT["Write Through"]
-        WT1["put(entity)"] --> WT2["Store in<br/>Redis"]
-        WT2 --> WT3["Store in DB<br/>synchronous"]
-        WT3 --> WT4["Done"]
-    end
-
-    subgraph WB["Write Behind"]
-        WB1["put(entity)"] --> WB2["Store in<br/>Redis"]
-        WB2 --> WB3["Return<br/>immediately"]
-        WB2 -.->|async| WB4["Store in DB<br/>batch"]
-    end
-
-    subgraph RO["Read-Only Cache"]
-        RO1["get(id)"] --> RO2{Cache<br/>HIT?}
-        RO2 -->|YES| RO3["Return from<br/>Redis"]
-        RO2 -->|NO| RO4["Query DB"]
-        RO4 --> RO5["Store in Redis"]
-        RO5 --> RO6["Return"]
-    end
-
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef yellow fill:#FFFDE7,stroke:#FFF176,color:#F57F17
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-
-    class RT3,RT6,RO3,RO6 green
-    class WT4 blue
-    class WB3 yellow
-    class WB4 orange
-```
+![Strategy Flow by Type 3](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-diagram-03.svg)
 
 ### Strategy Selection Criteria
 
@@ -360,24 +261,7 @@ flowchart TD
 
 Using the `READ_WRITE_THROUGH_WITH_NEAR_CACHE` setting activates a Caffeine local cache inside the application.
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart LR
-    REQ["cache.get(key)"] -->|L1| L1["Caffeine<br/>Near Cache"]
-    L1 -->|HIT| RET1["Return<br/>⚡ nanoseconds"]
-    L1 -->|MISS| L2["Redis<br/>MapCache"]
-    L2 -->|HIT| RET2["Return<br/>⚡ microseconds"]
-    L2 -->|MISS| L3["DB<br/>Exposed R2DBC"]
-    L3 --> RET3["Return<br/>⏱ milliseconds"]
-
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-
-    class RET1 green
-    class RET2 blue
-    class RET3 orange
-```
+![Near Cache Effect 4](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-diagram-04.svg)
 
 Repeated lookups within the same process respond without a Redis round-trip, **significantly reducing P99 latency**.
 

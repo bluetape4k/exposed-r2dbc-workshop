@@ -70,29 +70,7 @@
 
 ## 구조 다이어그램
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class JsonColumn~T~ {
-        <<Exposed 확장>>
-        +json(name, jsonMapper) Column~T~
-    }
-    class JsonBColumn~T~ {
-        +jsonb(name, jsonMapper) Column~T~
-    }
-    class KotlinxJsonMapper~T~ {
-        <<kotlinx.serialization>>
-        +serialize(value: T) String
-        +deserialize(value: String) T
-    }
-
-    JsonColumn <|-- JsonBColumn : json → jsonb 확장
-    JsonColumn --> KotlinxJsonMapper : 직렬화/역직렬화
-
-    style JsonColumn fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style JsonBColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style KotlinxJsonMapper fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-```
+![Component Diagram 1](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-ko-diagram-01.svg)
 
 > `JsonBColumn`: PostgreSQL 전용 (인덱싱/연산 지원)
 
@@ -101,69 +79,11 @@ classDiagram
 
 ## JSON 직렬화/역직렬화 흐름
 
-```mermaid
-sequenceDiagram
-    participant App as 애플리케이션
-    participant Col as JsonColumn~T~
-    participant Mapper as KotlinxJsonMapper
-    participant DB as Database
-
-    Note over App,DB: 저장 (INSERT / UPDATE)
-    App ->> Col: insert { it[data] = DataHolder(...) }
-    Col ->> Mapper: serialize(value: T)
-    Mapper -->> Col: JSON 문자열 (예: {"user":{"name":"Alice"},...})
-    Col ->> DB: INSERT '{"user":{...}}'
-
-    Note over App,DB: 조회 (SELECT)
-    DB -->> Col: '{"user":{"name":"Alice"},...}'
-    Col ->> Mapper: deserialize(jsonString)
-    Mapper -->> Col: DataHolder(user=User("Alice",...),...)
-    Col -->> App: DataHolder 객체
-
-    Note over App,DB: JSON 경로 쿼리 (extract / contains / exists)
-    App ->> Col: data.extract(".active", toScalar=true)
-    Col ->> DB: JSON_EXTRACT(data, '$.active') [MySQL] 또는\ndata->'active' [PostgreSQL]
-    DB -->> App: 추출된 스칼라 값
-```
+![JSON Component/Component Component 2](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-ko-diagram-02.svg)
 
 ## JSON 쿼리 함수 사용 흐름
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    Start["JSON 쿼리 작성"] --> Q1{"어떤 DB인가?"}
-
-    Q1 -->|PostgreSQL| PG{"쿼리 유형?"}
-    Q1 -->|MySQL 8| MY{"쿼리 유형?"}
-    Q1 -->|H2 / SQLServer / Oracle| Unsupported["UnsupportedByDialectException\n대부분 미지원"]
-
-    PG -->|특정 필드 값 추출| PG_EXT["extract(path, toScalar)\n경로: field, nested"]
-    PG -->|JSON 포함 여부| PG_CONT["contains(jsonString)\n@> 연산자 (GIN 인덱스 활용)"]
-    PG -->|JSONPath 존재 여부| PG_EX["exists(path)\njsonb_path_exists()"]
-
-    MY -->|특정 필드 값 추출| MY_EXT["extract(path, toScalar)\n경로: .field.nested"]
-    MY -->|JSON 포함 여부| MY_CONT["contains(jsonString)\nJSON_CONTAINS()"]
-    MY -->|JSONPath 존재 여부| MY_EX["exists(path)\nJSON_CONTAINS_PATH()"]
-
-    PG_EXT --> Result["selectAll().where{...}.toList()"]
-    PG_CONT --> Result
-    PG_EX --> Result
-    MY_EXT --> Result
-    MY_CONT --> Result
-    MY_EX --> Result
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    classDef red    fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
-
-    class PG_EXT,PG_CONT,PG_EX blue
-    class MY_EXT,MY_CONT,MY_EX green
-    class Unsupported red
-    class Result teal
-```
+![JSON Query Function Component Component 3](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-ko-diagram-03.svg)
 
 ## 코드 예제
 

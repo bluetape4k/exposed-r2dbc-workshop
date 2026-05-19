@@ -26,66 +26,15 @@ Learn how to perform asynchronous database operations in an Exposed R2DBC + Kotl
 
 ### Coroutine + R2DBC Transaction
 
-```mermaid
-sequenceDiagram
-    participant T as runTest / TestScope
-    participant W as withTables / withDb
-    participant ST as suspendTransaction
-    participant DB as R2DBC DB
-
-    T ->> W: withTables(testDB, *tables)
-    W ->> DB: SchemaUtils.create(*tables)
-    W ->> ST: suspendTransaction { ... }
-    ST ->> DB: BEGIN
-    ST ->> DB: Execute DML
-    DB -->> ST: Flow / Result
-    ST ->> DB: COMMIT
-    ST -->> W: result
-    W ->> DB: SchemaUtils.drop(*tables)
-    W -->> T: done
-```
+![Coroutine + R2DBC Transaction 1](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-diagram-01.svg)
 
 ### Flow Collection Patterns
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    Q["Table.selectAll()"] --> F["Flow~ResultRow~"]
-    F --> L[".toList() — collect all"]
-    F --> S[".single() — single (exception if none)"]
-    F --> SN[".singleOrNull() — single (null if none)"]
-    F --> FI[".first() — first (exception if none)"]
-    F --> FN[".firstOrNull() — first (null if none)"]
-    F --> C[".count() — count (Long)"]
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    class Q blue
-    class F teal
-    class L,S,SN,FI,FN,C green
-```
+![Flow Collection Patterns 2](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-diagram-02.svg)
 
 ## Coroutine State Diagram
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-stateDiagram-v2
-    [*] --> Created : launch / async
-    Created --> Running : Dispatcher scheduling
-    Running --> Suspended : suspend fun called\n(waiting for DB, IO)
-    Suspended --> Running : resume (result received)
-    Running --> Completed : block finishes normally
-    Running --> Cancelled : cancel() / exception
-    Completed --> [*]
-    Cancelled --> [*]
-
-    state Running {
-        [*] --> Executing
-        Executing --> SuspendTransaction : enter suspendTransaction
-        SuspendTransaction --> Executing : transaction completed
-    }
-```
+![Coroutine State Diagram 3](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-diagram-03.svg)
 
 ## Key Concepts
 

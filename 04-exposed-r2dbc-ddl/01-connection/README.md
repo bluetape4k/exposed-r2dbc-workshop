@@ -29,25 +29,7 @@ Learn how to configure database connections, query connection metadata, and use 
 
 ## Execution Flow
 
-```mermaid
-sequenceDiagram
-    participant App as Application
-    participant CF as ConnectionFactory
-    participant DB as Database (Exposed)
-    participant Pool as ConnectionPool
-
-    App ->> CF: ConnectionFactories.get(url)
-    CF -->> Pool: Create ConnectionPool
-    App ->> DB: R2dbcDatabase.connect(connectionFactory)
-    DB -->> App: R2dbcDatabase instance
-
-    App ->> DB: suspendTransaction { }
-    DB ->> Pool: acquire connection
-    Pool -->> DB: R2DBC Connection
-    DB ->> DB: Execute SQL (SELECT / INSERT / UPDATE / DELETE)
-    DB ->> Pool: release connection
-    DB -->> App: Return result
-```
+![Execution Flow 1](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-01-connection-diagram-01.svg)
 
 > Using the `r2dbc:pool:h2:mem:///poolDB?maxSize=10` URL scheme automatically activates `ConnectionPool`.
 > Concurrent `suspendTransaction` requests that exceed the pool size wait until a connection is returned and then reuse it.
@@ -68,47 +50,7 @@ src/test/kotlin/exposed/r2dbc/examples/connection/
 
 ## Connection Class Hierarchy
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class R2dbcDatabase {
-        +connect(url: String)
-        +connect(connectionFactory)
-        +connect(pool, config)
-    }
-    class ConnectionFactory {
-        <<interface>>
-        +create()
-        +getMetadata()
-    }
-    class ConnectionPool {
-        +acquire()
-        +disposeLater()
-        +getMetrics()
-    }
-    class ConnectionFactoryOptions {
-        +builder()
-        +option(option, value)
-        +build()
-    }
-    class DatabaseMetadataImpl {
-        +columns(tables)
-        +tableConstraints(tables)
-        +version String
-        +databaseProductName String
-    }
-
-    R2dbcDatabase --> ConnectionFactory : uses
-    ConnectionPool ..|> ConnectionFactory : implements
-    ConnectionFactoryOptions --> ConnectionFactory : configures
-    R2dbcDatabase --> DatabaseMetadataImpl : exposes via connection().metadata
-
-    style R2dbcDatabase fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style ConnectionFactory fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style ConnectionPool fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    style ConnectionFactoryOptions fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style DatabaseMetadataImpl fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-```
+![Connection Class Hierarchy 2](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-01-connection-diagram-02.svg)
 
 ---
 

@@ -9,140 +9,17 @@
 
 ## 구조 다이어그램
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class IdTable~ID~ {
-        <<abstract>>
-        +id: Column~EntityID~ID~~
-    }
-    class SnowflakeIdTable {
-        <<abstract>>
-        +id: Column~EntityID~Long~~
-        clientDefault: SnowflakeId
-    }
-    class KsuidTable {
-        <<abstract>>
-        +id: Column~EntityID~String~~
-        clientDefault: KSUID-Base62 27자
-    }
-    class KsuidMillisTable {
-        <<abstract>>
-        +id: Column~EntityID~String~~
-        clientDefault: KSUID-Millis 27자
-    }
-    class TimebasedUUIDTable {
-        <<abstract>>
-        +id: Column~EntityID~UUID~~
-        clientDefault: UUIDv1 RFC4122
-    }
-    class TimebasedUUIDBase62Table {
-        <<abstract>>
-        +id: Column~EntityID~String~~
-        clientDefault: UUIDv1+Base62 22자
-    }
-    class T1["T1 : SnowflakeIdTable"] {
-        +name: Column~String~
-        +age: Column~Int~
-    }
+![Component Diagram 1](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-ko-diagram-01.svg)
 
-    IdTable <|-- SnowflakeIdTable
-    IdTable <|-- KsuidTable
-    IdTable <|-- KsuidMillisTable
-    IdTable <|-- TimebasedUUIDTable
-    IdTable <|-- TimebasedUUIDBase62Table
-    SnowflakeIdTable <|-- T1
-
-    style IdTable fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style SnowflakeIdTable fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style KsuidTable fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style KsuidMillisTable fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style TimebasedUUIDTable fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style TimebasedUUIDBase62Table fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    style T1 fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-```
-
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-erDiagram
-    T_SNOWFLAKE {
-        BIGINT id PK "Snowflake ID (자동 생성)"
-        VARCHAR name "255"
-        INT age
-    }
-    T_KSUID {
-        VARCHAR id PK "KSUID Base62 (27자)"
-        VARCHAR name "255"
-        INT age
-    }
-    T_KSUID_MILLIS {
-        VARCHAR id PK "KSUID Millis (27자)"
-        VARCHAR name "255"
-        INT age
-    }
-    T_TIMEBASED_UUID {
-        UUID id PK "UUIDv1 (RFC 4122)"
-        VARCHAR name "255"
-        INT age
-    }
-    T_TIMEBASED_UUID_BASE62 {
-        VARCHAR id PK "UUIDv1+Base62 (22자)"
-        VARCHAR name "255"
-        INT age
-    }
-```
+![Component Diagram 2](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-ko-diagram-02.svg)
 
 ## ID 생성 흐름
 
-```mermaid
-sequenceDiagram
-    participant App as 애플리케이션
-    participant Table as CustomIdTable
-    participant Gen as ID 생성기
-    participant DB as Database
-
-    Note over App,DB: DAO — Product.new { ... }
-    App ->> Table: Product.new { name = "Laptop" }
-    Table ->> Gen: clientDefault lambda 호출
-    Gen -->> Table: generatedId (예: 1234567890L)
-    Table ->> DB: INSERT INTO products (id, name) VALUES (1234567890, 'Laptop')
-
-    Note over App,DB: DSL — Products.insert { ... }
-    App ->> Table: Products.insert { it[name] = "Mouse" }
-    Table ->> Gen: clientDefault lambda 호출
-    Gen -->> Table: generatedId
-    Table ->> DB: INSERT INTO products (id, name) VALUES (generatedId, 'Mouse')
-```
+![ID Component Component 3](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-ko-diagram-03.svg)
 
 ## ID 선택 플로우차트
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    A[ID 전략 선택] --> B{ID 타입}
-    B --> C[숫자 Long] --> D[SnowflakeIdTable\n밀리초 정렬, 64bit]
-    B --> E{문자열 String}
-    E --> F{UUID 표준 필요?}
-    F --> G[예] --> H{컴팩트 표현?}
-    H --> I[아니오] --> J[TimebasedUUIDTable\nUUID 36자, RFC 4122]
-    H --> K[예] --> L[TimebasedUUIDBase62Table\nString 22자]
-    F --> M[아니오] --> N{밀리초 정밀도?}
-    N --> O[아니오] --> P[KsuidTable\n초 단위, 27자]
-    N --> Q[예] --> R[KsuidMillisTable\n밀리초, 27자]
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-
-    class A blue
-    class B,E,F,H,N purple
-    class D,G,I green
-    class J,L purple
-    class P,R orange
-    class C,K,M,O,Q teal
-```
+![ID Component Component 4](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-ko-diagram-04.svg)
 
 ## ID 생성 전략 비교
 

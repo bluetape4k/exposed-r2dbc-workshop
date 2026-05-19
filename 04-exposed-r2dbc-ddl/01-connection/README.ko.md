@@ -29,25 +29,7 @@ Exposed R2DBC에서 데이터베이스 연결을 구성하고, 연결 메타데�
 
 ## 실행 흐름
 
-```mermaid
-sequenceDiagram
-    participant App as 애플리케이션
-    participant CF as ConnectionFactory
-    participant DB as Database (Exposed)
-    participant Pool as ConnectionPool
-
-    App ->> CF: ConnectionFactories.get(url)
-    CF -->> Pool: ConnectionPool 생성
-    App ->> DB: R2dbcDatabase.connect(connectionFactory)
-    DB -->> App: R2dbcDatabase 인스턴스
-
-    App ->> DB: suspendTransaction { }
-    DB ->> Pool: acquire connection
-    Pool -->> DB: R2DBC Connection
-    DB ->> DB: SQL 실행 (SELECT / INSERT / UPDATE / DELETE)
-    DB ->> Pool: release connection
-    DB -->> App: 결과 반환
-```
+![Component Component 1](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-01-connection-ko-diagram-01.svg)
 
 > `r2dbc:pool:h2:mem:///poolDB?maxSize=10` URL 스킴을 사용하면 `ConnectionPool`이 자동 활성화됩니다.
 > 풀 크기를 초과하는 동시 `suspendTransaction` 요청은 커넥션이 반환될 때까지 대기한 후 재활용됩니다.
@@ -68,47 +50,7 @@ src/test/kotlin/exposed/r2dbc/examples/connection/
 
 ## 커넥션 클래스 계층 구조
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class R2dbcDatabase {
-        +connect(url: String)
-        +connect(connectionFactory)
-        +connect(pool, config)
-    }
-    class ConnectionFactory {
-        <<interface>>
-        +create()
-        +getMetadata()
-    }
-    class ConnectionPool {
-        +acquire()
-        +disposeLater()
-        +getMetrics()
-    }
-    class ConnectionFactoryOptions {
-        +builder()
-        +option(option, value)
-        +build()
-    }
-    class DatabaseMetadataImpl {
-        +columns(tables)
-        +tableConstraints(tables)
-        +version String
-        +databaseProductName String
-    }
-
-    R2dbcDatabase --> ConnectionFactory : uses
-    ConnectionPool ..|> ConnectionFactory : implements
-    ConnectionFactoryOptions --> ConnectionFactory : configures
-    R2dbcDatabase --> DatabaseMetadataImpl : exposes via connection().metadata
-
-    style R2dbcDatabase fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style ConnectionFactory fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style ConnectionPool fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    style ConnectionFactoryOptions fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style DatabaseMetadataImpl fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-```
+![Component Component Component Component 2](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-01-connection-ko-diagram-02.svg)
 
 ---
 

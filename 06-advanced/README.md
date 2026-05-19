@@ -127,45 +127,7 @@ Integrate the **Google Tink** encryption library with Exposed R2DBC. Choose betw
 
 ## Module Selection Guide
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    Start([Select Advanced Feature]) --> Q1{Data type?}
-    Q1 -->|Date/Time| Q2{Runtime?}
-    Q2 -->|JVM only| M02[02-javatime\njava.time API]
-    Q2 -->|Multiplatform| M03[03-kotlin-datetime\nkotlinx.datetime]
-    Q1 -->|JSON| Q3{Serialization?}
-    Q3 -->|kotlinx . serialization| M04[04-json\nRequires @Serializable]
-    Q3 -->|Jackson 2 .x| M08[08-jackson\nFlexible ObjectMapper]
-    Q3 -->|High performance| M09[09-fastjson2\n2-3x faster]
-    Q3 -->|Jakarta EE 9+| M11[11-jackson3\nVirtual Thread stable]
-
-    Q1 -->|Encryption| Q4{WHERE search needed?}
-    Q4 -->|No search| Q5{Library?}
-    Q5 -->|Bouncy Castle| M01[01-crypt\nNon-deterministic]
-    Q5 -->|Google Tink AEAD| M12A[12-tink AEAD\nHigh security]
-    Q4 -->|Search needed| Q6{Library?}
-    Q6 -->|Jasypt| M10[10-jasypt\nDeterministic]
-    Q6 -->|Google Tink DAEAD| M12B[12-tink DAEAD\nDeterministic+searchable]
-
-    Q1 -->|Currency/Amount| M05[05-money\nJavaMoney JSR-354]
-    Q1 -->|Custom ID/Compression| M06[06-custom-columns\nSnowflake/LZ4/Kryo]
-    Q1 -->|Custom Entity| M07[07-custom-entities\nSnowflake/KSUID/UUID]
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    classDef red    fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
-
-    class M02,M03 blue
-    class M04,M08,M09,M11 green
-    class M01,M12A,M12B red
-    class M10 orange
-    class M05 teal
-    class M06,M07 purple
-```
+![Module Selection Guide 1](../docs/images/readme-diagrams/06-advanced-diagram-01.svg)
 
 ## JSON Module Comparison
 

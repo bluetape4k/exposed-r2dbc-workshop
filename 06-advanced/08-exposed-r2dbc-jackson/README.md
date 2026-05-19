@@ -63,91 +63,18 @@ The same powerful query functions are available:
 
 ## Structure Diagram
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class JacksonColumn~T~ {
-        <<bluetape4k-exposed>>
-        +jackson(name) Column~T~
-        -objectMapper: ObjectMapper
-    }
-    class JacksonBColumn~T~ {
-        +jacksonb(name) Column~T~
-    }
-    note for JacksonBColumn "PostgreSQL JSONB only"
-    class ObjectMapper {
-        <<Jackson (com.fasterxml.jackson)>>
-        +writeValueAsString(value): String
-        +readValue(json, klass): T
-    }
-    class KotlinModule {
-        <<Jackson Extension>>
-        +Kotlin data class support
-    }
-    note for KotlinModule "Auto-registered"
-
-    JacksonColumn <|-- JacksonBColumn : json to jsonb extension
-    JacksonColumn --> ObjectMapper : serialization/deserialization
-    ObjectMapper --> KotlinModule : registered
-
-    style JacksonColumn fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style JacksonBColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style ObjectMapper fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style KotlinModule fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-```
+![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-diagram-01.svg)
 
 > No `@Serializable` needed — Jackson `ObjectMapper` handles standard Kotlin data classes directly
 > `KotlinModule` is auto-registered to support data class, nullable, and default parameter handling
 
 ## JSON Serialization Flow
 
-```mermaid
-sequenceDiagram
-    participant App as Application
-    participant Col as JacksonColumn
-    participant OM as ObjectMapper
-    participant DB as Database
-
-    Note over App,DB: INSERT — Kotlin object to JSON string
-    App ->> Col: insert { it[jacksonColumn] = DataHolder(user=User("Admin",null), logins=10) }
-    Col ->> OM: writeValueAsString(dataHolder)
-    OM -->> Col: '{"user":{"name":"Admin","team":null},"logins":10,"active":true}'
-    Col ->> DB: INSERT json_text
-
-    Note over App,DB: SELECT — JSON string to Kotlin object
-    DB -->> Col: '{"user":{"name":"Admin","team":null},"logins":10,"active":true}'
-    Col ->> OM: readValue(json, DataHolder::class)
-    OM -->> Col: DataHolder(user=User("Admin",null), logins=10, active=true)
-    Col -->> App: DataHolder object
-
-    Note over App,DB: JSON path extraction (DB side)
-    App ->> Col: jacksonColumn.extract(".user.name")
-    Col ->> DB: JSON_EXTRACT(jackson_column, '$.user.name')
-    DB -->> App: "Admin"
-```
+![JSON Serialization Flow 2](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-diagram-02.svg)
 
 ## Table Structure (ER Diagram)
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-erDiagram
-    JACKSON_TABLE {
-        INT id PK
-        JSON jackson_column "DataHolder JSON column"
-    }
-    JACKSON_B_TABLE {
-        INT id PK
-        JSONB jackson_b_column "DataHolder JSONB column (PostgreSQL)"
-    }
-    DATA_HOLDER {
-        String name
-        String team_nullable
-        INT logins
-        BOOLEAN active
-    }
-    JACKSON_TABLE ||--|| DATA_HOLDER : "stored in jackson_column"
-    JACKSON_B_TABLE ||--|| DATA_HOLDER : "stored in jackson_b_column"
-```
+![Table Structure (ER Diagram) 3](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-diagram-03.svg)
 
 ## Example Overview
 

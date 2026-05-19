@@ -14,49 +14,7 @@ This module is a collection of advanced examples for extending Exposed's capabil
 
 ## Structure Diagram
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class Column~T~ {
-        <<Exposed base>>
-        +columnType: IColumnType~T~
-        +name: String
-        +clientDefault(expr: () -~> T): Column~T~
-    }
-    class IColumnType~T~ {
-        <<interface>>
-        +valueFromDB(value: Any): T
-        +notNullValueToDB(value: T): Any
-        +sqlType(): String
-    }
-    class CompressedColumnType~T~ {
-        +sqlType(): String
-        +valueFromDB(): ByteArray
-        +notNullValueToDB(): ByteArray
-    }
-    class EncryptedColumnType~T~ {
-        +sqlType(): String
-        +valueFromDB(): String
-        +notNullValueToDB(): String
-    }
-    note for EncryptedColumnType "Deterministic encryption (searchable)"
-    class BinarySerializedColumnType~T~ {
-        +sqlType(): String
-        +valueFromDB(): ByteArray
-        +notNullValueToDB(): ByteArray
-    }
-
-    Column --> IColumnType : uses
-    IColumnType <|.. CompressedColumnType : implements
-    IColumnType <|.. EncryptedColumnType : implements
-    IColumnType <|.. BinarySerializedColumnType : implements
-
-    style Column fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style IColumnType fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style CompressedColumnType fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style EncryptedColumnType fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style BinarySerializedColumnType fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-```
+![Structure Diagram 1](../../docs/images/readme-diagrams/06-advanced-06-exposed-r2dbc-custom-columns-diagram-01.svg)
 
 > Override `valueFromDB`/`notNullValueToDB` of `IColumnType` to implement transparent transformations (compression, encryption, serialization)
 > Use the `clientDefault { }` extension to auto-generate application-side IDs (Snowflake, KSUID, etc.) before INSERT
@@ -65,58 +23,11 @@ classDiagram
 
 ## Processing Flow
 
-```mermaid
-sequenceDiagram
-    participant App as Application
-    participant Col as CustomColumnType
-    participant Transform as Transformer
-    participant DB as Database
-
-    Note over App,DB: INSERT — transparent transformation (compress/encrypt/serialize)
-    App ->> Col: insert { it[data] = rawValue }
-    Col ->> Transform: notNullValueToDB(rawValue)
-    Transform -->> Col: transformedBytes
-    Col ->> DB: INSERT transformedBytes
-
-    Note over App,DB: SELECT — reverse transformation performed automatically
-    DB -->> Col: transformedBytes
-    Col ->> Transform: valueFromDB(transformedBytes)
-    Transform -->> Col: rawValue
-    Col -->> App: rawValue
-
-    Note over App,DB: clientDefault — auto-generate ID before INSERT
-    App ->> Col: insert { } (id not specified)
-    Col ->> Transform: clientDefault lambda
-    Transform -->> Col: generatedId (Snowflake/KSUID)
-    Col ->> DB: INSERT generatedId
-```
+![Processing Flow 2](../../docs/images/readme-diagrams/06-advanced-06-exposed-r2dbc-custom-columns-diagram-02.svg)
 
 ## Comparison by Transformation Type
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart LR
-    subgraph Compress
-        A1[ByteArray original] --> A2[LZ4/Snappy/Zstd compression] --> A3[BLOB/VARBINARY storage]
-    end
-    subgraph Encrypt
-        B1[String original] --> B2[AES/RC4 deterministic encryption] --> B3[VARCHAR storage]
-        B3 --> B4[WHERE search possible]
-    end
-    subgraph Serialize
-        C1[Kotlin object] --> C2[Kryo/Fory serialization] --> C3[LZ4/Zstd compression] --> C4[BLOB storage]
-    end
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-
-    class A1,A2,A3 blue
-    class B1,B2,B3,B4 orange
-    class C1,C2,C3,C4 teal
-```
+![Comparison by Transformation Type 3](../../docs/images/readme-diagrams/06-advanced-06-exposed-r2dbc-custom-columns-diagram-03.svg)
 
 ## 1. Custom Client-Side Default Value Generators
 

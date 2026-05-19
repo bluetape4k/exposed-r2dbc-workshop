@@ -26,92 +26,15 @@ An example module covering **Transaction** management in Exposed R2DBC. Learn th
 
 ### R2DBC suspendTransaction Flow
 
-```mermaid
-sequenceDiagram
-    participant C as Coroutine (Caller)
-    participant T as suspendTransaction
-    participant DB as R2DBC Database
-
-    C ->> T: suspendTransaction(db)
-    T ->> DB: BEGIN
-    T ->> DB: Execute SQL (INSERT/SELECT...)
-    alt Normal completion
-        T ->> DB: COMMIT
-        T -->> C: Return result
-    else Exception raised
-        T ->> DB: ROLLBACK
-        T -->> C: Propagate exception
-    end
-```
+![R2DBC suspendTransaction Flow 1](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-04-transactions-diagram-01.svg)
 
 ### Nested Transaction / Savepoint Flow
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    classDef red    fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
-
-    A["suspendTransaction (outer)"] --> B["Execute SQL 1"]
-    B --> C{"Nested transaction?"}
-    C -->|yes| D["SAVEPOINT sp1"]
-    D --> E["Execute SQL 2"]
-    E --> G{Exception raised?}
-    G -->|rollback| H["ROLLBACK TO sp1\n(Cancel SQL 2 only)"]
-    G -->|normal| I["RELEASE sp1"]
-    H --> J["Outer COMMIT\n(Persist SQL 1 only)"]
-    I --> J
-    C -->|no| K["Share outer transaction\n(same scope)"]
-
-    class A blue
-    class B green
-    class C orange
-    class D purple
-    class E green
-    class G orange
-    class H red
-    class I teal
-    class J teal
-    class K blue
-```
+![Nested Transaction / Savepoint Flow 2](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-04-transactions-diagram-02.svg)
 
 ## Transaction State Diagram
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-stateDiagram-v2
-    [*] --> IDLE : Acquire DB connection
-
-    IDLE --> ACTIVE : Call suspendTransaction\nExecute BEGIN
-
-    ACTIVE --> ACTIVE : Execute SQL\n(SELECT/INSERT/UPDATE/DELETE)
-
-    ACTIVE --> SAVEPOINT : useNestedTransactions=true\nInner suspendTransaction called
-
-    SAVEPOINT --> SAVEPOINT : Execute inner SQL
-
-    SAVEPOINT --> ACTIVE : RELEASE SAVEPOINT\n(Inner completed normally)
-
-    SAVEPOINT --> ACTIVE : ROLLBACK TO SAVEPOINT\n(Inner exception raised)
-
-    ACTIVE --> COMMITTED : COMMIT\n(Normal completion)
-
-    ACTIVE --> ROLLEDBACK : ROLLBACK\n(Exception raised)
-
-    COMMITTED --> IDLE : Return connection
-    ROLLEDBACK --> IDLE : Return connection
-
-    ACTIVE --> TIMEOUT : queryTimeout exceeded
-
-    TIMEOUT --> ROLLEDBACK : Auto ROLLBACK
-
-    COMMITTED --> [*]
-    ROLLEDBACK --> [*]
-```
+![Transaction State Diagram 3](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-04-transactions-diagram-03.svg)
 
 ## Project Structure
 

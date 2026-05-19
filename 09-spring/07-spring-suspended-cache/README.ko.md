@@ -25,120 +25,15 @@ Spring WebFlux + Exposed R2DBC 환경에서 Lettuce 기반의 Suspended Cache를
 
 ## 실행 흐름
 
-```mermaid
-sequenceDiagram
-    participant C as Controller/Service
-    participant Cache as LettuceSuspendedCache (Redis)
-    participant Repo as DefaultCountryR2dbcRepository
-    participant DB as R2DBC Database
-
-    C ->> Cache: cache.get(code)
-    alt 캐시 HIT
-        Cache -->> C: 캐시된 결과 반환
-    else 캐시 MISS
-        Cache -->> C: null
-        C ->> Repo: delegate.findByCode(code) (suspend)
-        Repo ->> DB: suspendTransaction { SELECT }
-        DB -->> Repo: ResultRow
-        Repo -->> C: CountryRecord
-        C ->> Cache: cache.put(code, result) (TTL 60s)
-        Cache -->> C: 새로 조회한 결과 반환
-    end
-```
+![Component Component 1](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-ko-diagram-01.svg)
 
 ## Cache 클래스 구조 (classDiagram)
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class CountryR2dbcRepository {
-        <<interface>>
-        +findByCode(code) CountryRecord?
-        +update(record) Int
-        +evictCacheAll()
-    }
-    class DefaultCountryR2dbcRepository {
-        +findByCode(code) CountryRecord?
-        +update(record) Int
-        +evictCacheAll()
-    }
-    class CachedCountryR2dbcRepository {
-        -delegate CountryR2dbcRepository
-        -cacheManager LettuceSuspendedCacheManager
-        -cache LettuceSuspendedCache
-        +findByCode(code) CountryRecord?
-        +update(record) Int
-        +evictCacheAll()
-    }
-    class LettuceSuspendedCache~K,V~ {
-        +name String
-        +commands RedisCoroutinesCommands
-        +ttlSeconds Long
-        +get(key) V?
-        +put(key, value)
-        +evict(key)
-        +clear()
-    }
-    class LettuceSuspendedCacheManager {
-        -redisClient RedisClient
-        -ttlSeconds Long
-        -codec LettuceBinaryCodec
-        +getOrCreate(name, ttlSeconds) LettuceSuspendedCache
-    }
-
-    CountryR2dbcRepository <|.. DefaultCountryR2dbcRepository
-    CountryR2dbcRepository <|.. CachedCountryR2dbcRepository
-    CachedCountryR2dbcRepository --> DefaultCountryR2dbcRepository : delegates
-    CachedCountryR2dbcRepository --> LettuceSuspendedCacheManager : uses
-    LettuceSuspendedCacheManager --> LettuceSuspendedCache : creates
-
-    note for CachedCountryR2dbcRepository "Decorator 패턴\nCache-Aside 전략"
-    note for LettuceSuspendedCache "Lettuce Coroutines API\nsuspend fun 기반"
-
-    style CountryR2dbcRepository fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style DefaultCountryR2dbcRepository fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style CachedCountryR2dbcRepository fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style LettuceSuspendedCache fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style LettuceSuspendedCacheManager fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-```
+![Cache Component Component (classDiagram) 2](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-ko-diagram-02.svg)
 
 ## Cache-Aside 패턴 흐름
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    Request["요청: findByCode(code)"]
-    CacheGet["Redis GET\ncaches:country:code:{code}"]
-    CacheHit{"캐시 HIT?"}
-    ReturnCached["캐시 결과 반환\n즉시 응답"]
-    DBQuery["DB 조회\nsuspendTransaction SELECT"]
-    CachePut["Redis SET\n(TTL 60s)"]
-    ReturnDB["DB 결과 반환"]
-
-    UpdateReq["요청: update(record)"]
-    CacheEvict["Redis DEL\n캐시 무효화"]
-    DBUpdate["DB 업데이트\nsuspendTransaction UPDATE"]
-
-    Request --> CacheGet
-    CacheGet --> CacheHit
-    CacheHit -- HIT --> ReturnCached
-    CacheHit -- MISS --> DBQuery
-    DBQuery --> CachePut
-    CachePut --> ReturnDB
-
-    UpdateReq --> CacheEvict
-    CacheEvict --> DBUpdate
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef red    fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
-    class Request,UpdateReq blue
-    class CacheGet,CachePut,CacheEvict orange
-    class DBQuery,DBUpdate green
-    class ReturnCached,ReturnDB green
-    class CacheHit orange
-```
+![Cache-Aside Component Component 3](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-ko-diagram-03.svg)
 
 ## 프로젝트 구조
 

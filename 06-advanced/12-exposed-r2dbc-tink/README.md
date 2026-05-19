@@ -11,98 +11,11 @@ Tink is a high-level cryptographic library developed by Google, designed to make
 
 ## Execution Flow
 
-```mermaid
-sequenceDiagram
-    participant App as Application
-    participant Col as TinkColumn
-    participant Tink as Google Tink
-    participant DB as Database
-
-    Note over App,DB: INSERT — AEAD non-deterministic encryption (AES256_GCM / CHACHA20_POLY1305)
-    App ->> Col: insert { it[secret] = "sensitive data" }
-    Col ->> Tink: aead.encrypt("sensitive data".toByteArray())
-    Tink -->> Col: ciphertext (different bytes each time)
-    Col ->> DB: INSERT Base64(ciphertext)
-
-    Note over App,DB: INSERT — DAEAD deterministic encryption (AES256_SIV)
-    App ->> Col: insert { it[email] = "user@example.com" }
-    Col ->> Tink: daead.encryptDeterministically("user@example.com".toByteArray())
-    Tink -->> Col: deterministicCiphertext (always the same)
-    Col ->> DB: INSERT Base64(deterministicCiphertext)
-
-    Note over App,DB: SELECT
-    DB -->> Col: Base64(ciphertext)
-    Col ->> Tink: aead.decrypt(ciphertext)
-    Tink -->> Col: "sensitive data".toByteArray()
-    Col -->> App: "sensitive data"
-
-    Note over App,DB: WHERE search — DAEAD only
-    App ->> Col: where { email eq "user@example.com" }
-    Col ->> Tink: daead.encryptDeterministically("user@example.com".toByteArray())
-    Tink -->> Col: deterministicCiphertext
-    Col ->> DB: WHERE email = Base64(deterministicCiphertext)
-    DB -->> App: matching rows returned
-```
+![Execution Flow 1](../../docs/images/readme-diagrams/06-advanced-12-exposed-r2dbc-tink-diagram-01.svg)
 
 ## Structure Diagram
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class IColumnType~T~ {
-        <<interface>>
-        +valueFromDB(value: Any): T
-        +notNullValueToDB(value: T): Any
-        +sqlType(): String
-    }
-    class TinkDaeadVarCharColumn {
-        <<bluetape4k-exposed>>
-        +sqlType(): String
-        +valueFromDB(enc): String
-        +notNullValueToDB(plain): String
-        -daead: DeterministicAead
-    }
-    class TinkAeadVarCharColumn {
-        <<bluetape4k-exposed>>
-        +sqlType(): String
-        +valueFromDB(enc): String
-        +notNullValueToDB(plain): String
-        -aead: Aead
-    }
-    class TinkAeadBinaryColumn {
-        <<bluetape4k-exposed>>
-        +sqlType(): String
-        +valueFromDB(enc): ByteArray
-        +notNullValueToDB(bin): ByteArray
-        -aead: Aead
-    }
-    class DeterministicAead {
-        <<Google Tink Interface>>
-        +encryptDeterministically(plaintext, aad): ByteArray
-        +decryptDeterministically(ciphertext, aad): ByteArray
-    }
-    class Aead {
-        <<Google Tink Interface>>
-        +encrypt(plaintext, aad): ByteArray
-        +decrypt(ciphertext, aad): ByteArray
-    }
-    note for TinkDaeadVarCharColumn "Deterministic encryption — searchable in WHERE clause"
-    note for TinkAeadVarCharColumn "Non-deterministic — stronger security, not searchable"
-
-    IColumnType <|.. TinkDaeadVarCharColumn
-    IColumnType <|.. TinkAeadVarCharColumn
-    IColumnType <|.. TinkAeadBinaryColumn
-    TinkDaeadVarCharColumn --> DeterministicAead : delegates to
-    TinkAeadVarCharColumn --> Aead : delegates to
-    TinkAeadBinaryColumn --> Aead : delegates to
-
-    style IColumnType fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style TinkDaeadVarCharColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style TinkAeadVarCharColumn fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style TinkAeadBinaryColumn fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style DeterministicAead fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    style Aead fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
-```
+![Structure Diagram 2](../../docs/images/readme-diagrams/06-advanced-12-exposed-r2dbc-tink-diagram-02.svg)
 
 ## Learning Objectives
 

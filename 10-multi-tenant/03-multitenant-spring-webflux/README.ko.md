@@ -57,121 +57,15 @@ src/main/kotlin/exposed/r2dbc/multitenant/webflux/
 
 ### 멀티테넌시 요청 흐름
 
-```mermaid
-sequenceDiagram
-    participant Client as HTTP 클라이언트
-    participant Filter as TenantWebFilter
-    participant Ctx as ReactorContext
-    participant Controller as ActorController
-    participant Repo as ActorRepository
-    participant DB as R2dbcDatabase
-    Client ->> Filter: HTTP 요청 (X-TENANT-ID: korean)
-    Filter ->> Ctx: contextWrite(TenantId("korean"))
-    Filter ->> Controller: 요청 전달
-    Controller ->> Controller: suspendTransactionWithCurrentTenant { }
-    Controller ->> Ctx: currentReactorTenant() 조회
-    Ctx -->> Controller: Tenant("korean")
-    Controller ->> DB: SchemaUtils.setSchema("korean")
-    Controller ->> Repo: actorRepository.findAll()
-    Repo ->> DB: SELECT * FROM korean.actors
-    DB -->> Repo: 한국어 배우 데이터
-    Repo -->> Controller: List~ActorRecord~
-    Controller -->> Client: JSON 응답 (한국어 데이터)
-```
+![Component Request Component 1](../../docs/images/readme-diagrams/10-multi-tenant-03-multitenant-spring-webflux-ko-diagram-01.svg)
 
 ## 테넌트 컨텍스트 전파 흐름
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    HTTP["HTTP 요청\n헤더: X-TENANT-ID: korean"]
-    TenantFilter["TenantFilter (WebFilter)\nX-TENANT-ID 헤더 추출"]
-    ReactorCtx["ReactorContext\nTenantId('korean') 저장"]
-    Controller["ActorController\nsuspend fun getAllActors()"]
-    TxFun["suspendTransactionWithCurrentTenant\ncurrentReactorTenant() 조회"]
-    SchemaSwitch["SchemaUtils.setSchema('korean')\n스키마 전환"]
-    Repository["ActorR2dbcRepository\nfindAll()"]
-    DB["R2DBC Database\nSELECT * FROM korean.actors"]
-    Response["JSON 응답\n한국어 배우 데이터"]
-
-    HTTP --> TenantFilter
-    TenantFilter --> ReactorCtx
-    ReactorCtx --> Controller
-    Controller --> TxFun
-    TxFun --> SchemaSwitch
-    SchemaSwitch --> Repository
-    Repository --> DB
-    DB --> Response
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    class HTTP blue
-    class TenantFilter,ReactorCtx purple
-    class Controller,TxFun orange
-    class SchemaSwitch,Repository teal
-    class DB,Response green
-```
+![Component Component Component Component 2](../../docs/images/readme-diagrams/10-multi-tenant-03-multitenant-spring-webflux-ko-diagram-02.svg)
 
 ## TenantAwareRepository 클래스 구조
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class TenantId {
-        <<CoroutineContext.Element>>
-        +value Tenant
-        +TENANT_ID_KEY String
-        +DEFAULT TenantId
-    }
-    class TenantFilter {
-        <<WebFilter>>
-        +filter(exchange, chain) Mono~Void~
-    }
-    class ActorR2dbcRepository {
-        +findAll() Flow~ActorRecord~
-        +findById(id) ActorRecord?
-    }
-    class MovieR2dbcRepository {
-        +findAll() Flow~MovieRecord~
-        +findById(id) MovieRecord?
-        +getAllMoviesWithActors() Flow~MovieWithActorRecord~
-    }
-    class ActorController {
-        +getAllActors() List~ActorRecord~
-        +getActorById(id) ActorRecord?
-    }
-    class SuspendTransactionWithCurrentTenant {
-        <<suspend fun>>
-        +db R2dbcDatabase
-        +statement suspend block
-        +currentReactorTenant() Tenant
-    }
-    class SchemaSupport {
-        <<object>>
-        +getSchemaDefinition(tenant) Schema
-        +setSchema(schema)
-    }
-
-    TenantFilter --> TenantId : creates
-    ActorController --> SuspendTransactionWithCurrentTenant : calls
-    ActorController --> ActorR2dbcRepository : uses
-    SuspendTransactionWithCurrentTenant --> SchemaSupport : setSchema
-    SuspendTransactionWithCurrentTenant --> TenantId : reads from ReactorContext
-
-    note for TenantId "CoroutineContext.Key 구현\nReactorContext에서 읽기 가능"
-    note for TenantFilter "WebFilter 체인 앞단\ncontextWrite로 ReactorContext 저장"
-
-    style TenantId fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style TenantFilter fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style ActorR2dbcRepository fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style MovieR2dbcRepository fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style ActorController fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style SuspendTransactionWithCurrentTenant fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    style SchemaSupport fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
-```
+![TenantAwareRepository Component Component 3](../../docs/images/readme-diagrams/10-multi-tenant-03-multitenant-spring-webflux-ko-diagram-03.svg)
 
 ### 테넌트 정의
 

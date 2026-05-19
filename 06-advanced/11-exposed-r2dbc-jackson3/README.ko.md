@@ -33,90 +33,18 @@ Jackson 2.x 모듈과 동일한 쿼리 함수를 사용할 수 있습니다:
 
 ## 구조 다이어그램
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class Jackson3Column~T~ {
-        <<bluetape4k-exposed>>
-        +jackson(name) Column~T~
-        -mapper: JsonMapper
-    }
-    note for Jackson3Column "tools.jackson 패키지 (Jackson 3.x)"
-    class Jackson3BColumn~T~ {
-        +jacksonb(name) Column~T~
-    }
-    note for Jackson3BColumn "PostgreSQL JSONB 전용"
-    class JsonMapper {
-        <<Jackson 3 (tools.jackson.databind)>>
-        +writeValueAsString(value): String
-        +readValue(json, klass): T
-    }
-
-    Jackson3Column <|-- Jackson3BColumn : json → jsonb 확장
-    Jackson3Column --> JsonMapper : 직렬화/역직렬화
-
-    style Jackson3Column fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style Jackson3BColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style JsonMapper fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-```
+![Component Diagram 1](../../docs/images/readme-diagrams/06-advanced-11-exposed-r2dbc-jackson3-ko-diagram-01.svg)
 
 > Jackson 2.x(`com.fasterxml.jackson`) → Jackson 3.x(`tools.jackson`) 패키지 변경
 > `JsonMapper`가 Jackson 3.x의 핵심 진입점 — Jackson 2.x의 `ObjectMapper`를 대체
 
 ## JSON 직렬화 흐름
 
-```mermaid
-sequenceDiagram
-    participant App as 애플리케이션
-    participant Col as Jackson3Column
-    participant JM as JsonMapper
-    participant DB as Database
-
-    Note over App,DB: INSERT — Kotlin 객체 → JSON 문자열
-    App ->> Col: insert { it[data] = UserData(info=User("test","A"), logins=5) }
-    Col ->> JM: writeValueAsString(userData)
-    JM -->> Col: '{"info":{"name":"test","team":"A"},"logins":5,"active":true}'
-    Col ->> DB: INSERT json_text
-
-    Note over App,DB: SELECT — JSON 문자열 → Kotlin 객체
-    DB -->> Col: json_text
-    Col ->> JM: readValue(json, UserData::class)
-    JM -->> Col: UserData 객체
-    Col -->> App: UserData 객체
-
-    Note over App,DB: JSON 경로 추출 (DB 측)
-    App ->> Col: data.extract(".info.name")
-    Col ->> DB: JSON_EXTRACT(data, '$.info.name')
-    DB -->> App: "test"
-```
+![JSON Component Component 2](../../docs/images/readme-diagrams/06-advanced-11-exposed-r2dbc-jackson3-ko-diagram-02.svg)
 
 ## Jackson 2.x vs 3.x 차이점
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart LR
-    subgraph Jackson2
-        A1["패키지: com.fasterxml.jackson"]
-        A2["핵심 클래스: ObjectMapper"]
-        A3["모듈: 08-exposed-r2dbc-jackson"]
-    end
-    subgraph Jackson3
-        B1["패키지: tools.jackson"]
-        B2["핵심 클래스: JsonMapper"]
-        B3["모듈: 11-exposed-r2dbc-jackson3 (이 모듈)"]
-    end
-    A1 -.->|패키지 변경| B1
-    A2 -.->|클래스 변경| B2
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-
-    class A1,A2,A3 blue
-    class B1,B2,B3 teal
-```
+![Jackson 2.x vs 3.x Component 3](../../docs/images/readme-diagrams/06-advanced-11-exposed-r2dbc-jackson3-ko-diagram-03.svg)
 
 ## 예제 개요
 

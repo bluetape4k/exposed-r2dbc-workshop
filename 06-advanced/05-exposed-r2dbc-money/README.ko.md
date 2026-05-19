@@ -42,41 +42,7 @@ compositeMoney(precision: Int, scale: Int, columnName: String)
 
 ## 구조 다이어그램
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class CompositeMoney {
-        <<Exposed 확장>>
-        +compositeMoney(precision, scale, name) CompositeColumn~MonetaryAmount?~
-        +amount: Column~BigDecimal?~
-        +currency: Column~CurrencyUnit?~
-    }
-    class MonetaryAmount {
-        <<interface — JSR-354>>
-        +getNumber() NumberValue
-        +getCurrency() CurrencyUnit
-    }
-    class Money {
-        <<Moneta 구현체>>
-        +of(amount, currency) Money
-        +getNumber() NumberValue
-        +getCurrency() CurrencyUnit
-    }
-    class CurrencyUnit {
-        <<JSR-354>>
-        +currencyCode: String
-    }
-
-    CompositeMoney --> MonetaryAmount : Column 값 타입
-    Money ..|> MonetaryAmount : 구현
-    Money --> CurrencyUnit : 포함
-    CompositeMoney --> CurrencyUnit : currency 컬럼
-
-    style CompositeMoney fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style MonetaryAmount fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style Money fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style CurrencyUnit fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-```
+![Component Diagram 1](../../docs/images/readme-diagrams/06-advanced-05-exposed-r2dbc-money-ko-diagram-01.svg)
 
 > `CurrencyUnit`: ISO 4217 코드 (USD, KRW 등)
 
@@ -85,63 +51,11 @@ classDiagram
 
 ## MonetaryAmount 저장/복원 흐름
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    App["애플리케이션\nMonetaryAmount\n(amount=10.00, currency=USD)"]
-
-    App -->|insert / update| Split["CompositeMoney 분리"]
-    Split --> AmtCol["DECIMAL 컬럼\ncomposite_money\n값: 10.00000"]
-    Split --> CurCol["VARCHAR(3) 컬럼\ncomposite_money_C\n값: USD"]
-
-    AmtCol --> DB[(Database)]
-    CurCol --> DB
-
-    DB -->|select| Merge["CompositeMoney 복원"]
-    Merge --> AmtRead["BigDecimal: 10.00000"]
-    Merge --> CurRead["CurrencyUnit: USD"]
-    AmtRead --> Restore["MonetaryAmount\nMoney.of(10.00000, USD)"]
-    CurRead --> Restore
-    Restore --> AppOut["애플리케이션\nMonetaryAmount 객체 반환"]
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-
-    class App,AppOut blue
-    class Split,Merge teal
-    class AmtCol,CurCol orange
-    class AmtRead,CurRead green
-    class Restore purple
-```
+![MonetaryAmount Save/Component Component 2](../../docs/images/readme-diagrams/06-advanced-05-exposed-r2dbc-money-ko-diagram-02.svg)
 
 ## Money 포함 테이블 구조 (ER 다이어그램)
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-erDiagram
-    ACCOUNTS {
-        int id PK "자동 증가 기본키"
-        decimal composite_money "금액 (DECIMAL precision=8, scale=5)"
-        varchar composite_money_C "통화 코드 (VARCHAR(3), ISO 4217)"
-    }
-
-    ACCOUNTS_WITH_DEFAULT {
-        int id PK "자동 증가 기본키"
-        decimal default_money "기본값 있는 금액 컬럼"
-        varchar default_money_C "기본값 있는 통화 컬럼"
-        decimal client_money "clientDefault 금액 컬럼"
-        varchar client_money_C "clientDefault 통화 컬럼"
-    }
-
-    MANUAL_ACCOUNTS {
-        int id PK "자동 증가 기본키"
-        decimal amount "수동 정의 금액 컬럼"
-        varchar currency "수동 정의 통화 컬럼"
-    }
-```
+![Money Component Table Component (ER Diagram) 3](../../docs/images/readme-diagrams/06-advanced-05-exposed-r2dbc-money-ko-diagram-03.svg)
 
 > `compositeMoney`는 항상 `_C` 접미사 통화 컬럼을 함께 생성 — 수동 정의 시 이름 자유롭게 지정 가능
 

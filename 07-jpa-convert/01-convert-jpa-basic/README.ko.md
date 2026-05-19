@@ -17,32 +17,7 @@ JPA의 기본 패턴(Entity, 관계 매핑,
 
 ## JPA → Exposed R2DBC 마이그레이션 경로
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart LR
-    subgraph JPA ["JPA (기존)"]
-        JE["@Entity\n@Table(name='...')"]
-        JR["JpaRepository~T,ID~"]
-        JQ["JPQL / @Query"]
-        JT["@Transactional"]
-    end
-    subgraph Exposed ["Exposed R2DBC (전환 후)"]
-        ET["object MyTable\n: IntIdTable('...')"]
-        EQ["Table.selectAll()\n.where { ... }"]
-        EC["Table.insert { }\nTable.update { }"]
-        EST["suspendTransaction { }"]
-    end
-
-    JE -->|"컬럼 정의 이전"| ET
-    JR -->|"CRUD 메서드 이전"| EQ
-    JQ -->|"쿼리 이전"| EC
-    JT -->|"트랜잭션 이전"| EST
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    class JE,JR,JQ,JT blue
-    class ET,EQ,EC,EST green
-```
+![JPA → Exposed R2DBC Component Component 1](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-ko-diagram-01.svg)
 
 ## 프로젝트 구조
 
@@ -221,97 +196,11 @@ object CustomIdTable: IdTable<Email>("emails") {
 
 ## JPA 엔티티 vs Exposed 테이블 비교
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class JpaEntity {
-        <<JPA Entity>>
-        +Long id
-        +String name
-        +String description
-        +persist()
-        +find()
-        +merge()
-        +remove()
-    }
-    class ExposedTable {
-        <<Exposed DSL>>
-        +Column~Long~ id
-        +Column~String~ name
-        +Column~String~ description
-        +insert()
-        +selectAll()
-        +update()
-        +deleteWhere()
-    }
-    class ExposedEntity {
-        <<Exposed DAO>>
-        +EntityID~Long~ id
-        +String name
-        +String description
-    }
-
-    note for JpaEntity "어노테이션 기반\n@Entity @Table @Id @Column"
-    note for ExposedTable "DSL 기반\nobject MyTable : LongIdTable"
-    note for ExposedEntity "DAO 기반\nclass MyEntity : LongEntity"
-
-    style JpaEntity fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style ExposedTable fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style ExposedEntity fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-```
+![JPA Component vs Exposed Table Component 2](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-ko-diagram-02.svg)
 
 ## Blog 도메인 ERD
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-erDiagram
-    posts {
-        bigint id PK
-        varchar title
-    }
-    post_details {
-        bigint id PK,FK
-        date created_on
-        varchar created_by
-    }
-    post_comments {
-        bigint id PK
-        bigint post_id FK
-        varchar review
-    }
-    tags {
-        bigint id PK
-        varchar name
-    }
-    post_tags {
-        bigint id PK
-        bigint post_id FK
-        bigint tag_id FK
-    }
-    persons {
-        bigint id PK
-        varchar first_name
-        varchar last_name
-        date birth_date
-        boolean employed
-        varchar occupation
-        bigint address_id FK
-    }
-    addresses {
-        bigint id PK
-        varchar street
-        varchar city
-        varchar state
-        varchar zip
-    }
-
-    posts ||--|| post_details : "1:1 공유PK"
-    posts ||--o{ post_comments : "1:N"
-    posts }o--o{ tags : "N:M via post_tags"
-    post_tags }o--|| posts : ""
-    post_tags }o--|| tags : ""
-    persons }o--|| addresses : "ManyToOne"
-```
+![Blog Domain ERD 3](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-ko-diagram-03.svg)
 
 ## JPA vs Exposed 주요 개념 매핑 요약
 
