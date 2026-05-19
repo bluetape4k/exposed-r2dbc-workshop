@@ -30,158 +30,21 @@ Exposed R2DBC로 데이터베이스 스키마를 정의하고 관리하는 방�
 
 ## 구조 다이어그램
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class Table {
-        <<abstract>>
-        +tableName: String
-        +columns: List~Column~
-        +primaryKey: PrimaryKey?
-        +indices: List~Index~
-        +foreignKey(vararg columns)
-        +index(customIndexName, isUnique, vararg columns)
-        +uniqueIndex(customIndexName, vararg columns)
-    }
-    class IntIdTable {
-        +id: Column~EntityID~Int~~
-    }
-    class LongIdTable {
-        +id: Column~EntityID~Long~~
-    }
-    class UUIDTable {
-        +id: Column~EntityID~UUID~~
-    }
-    class IdTable~T~ {
-        <<abstract>>
-        +id: Column~EntityID~T~~
-    }
-    class SchemaUtils {
-        +create(vararg tables)
-        +drop(vararg tables)
-        +createMissing(vararg tables)
-        +addMissingColumnsStatements(vararg tables)
-        +addMissingColumns(vararg tables)
-        +createSequence(vararg seq)
-        +dropSequence(vararg seq)
-    }
+![Structure diagram](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-class-01.png)
 
-    IdTable~T~ <|-- IntIdTable
-    IdTable~T~ <|-- LongIdTable
-    IdTable~T~ <|-- UUIDTable
-    Table <|-- IdTable~T~
-    SchemaUtils ..> Table : 관리
-
-    style Table fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style IdTable fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style IntIdTable fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    style LongIdTable fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    style UUIDTable fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    style SchemaUtils fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-```
-
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    A["테이블 정의\nobject MyTable : IntIdTable()"] --> B["suspendTransaction { }"]
-    B --> C["SchemaUtils.create(MyTable)"]
-    C --> D{테이블 존재?}
-    D -->|없음| E["CREATE TABLE IF NOT EXISTS 실행"]
-    D -->|있음| F["스킵 (IF NOT EXISTS)"]
-    E --> G["컬럼 / 인덱스 / FK 생성"]
-    G --> H["완료"]
-    F --> H
-
-    B2["suspendTransaction { }"] --> C2["SchemaUtils.createMissing(MyTable)"]
-    C2 --> D2{누락 테이블/컬럼 존재?}
-    D2 -->|있음| E2["누락 항목만 ALTER / CREATE"]
-    D2 -->|없음| F2["스킵"]
-    E2 --> H2["완료"]
-    F2 --> H2
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-
-    class A blue
-    class B,B2 teal
-    class C,C2 green
-    class D,D2 orange
-    class E,E2 purple
-    class F,F2,G,H,H2 teal
-```
+![Structure diagram](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-architecture-02.png)
 
 ---
 
 ## 샘플 테이블 ERD (Users / Orders / Products)
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-erDiagram
-    users {
-        int id PK "auto increment"
-        varchar name "NOT NULL"
-        varchar email "UNIQUE NOT NULL"
-        timestamp created_at "DEFAULT now"
-        boolean is_active "DEFAULT true"
-    }
-    orders {
-        int id PK "auto increment"
-        int user_id FK "NOT NULL"
-        decimal amount "CHECK amount > 0"
-        varchar status "NOT NULL"
-    }
-    products {
-        int id PK "auto increment"
-        varchar name "NOT NULL, indexed"
-        varchar sku "UNIQUE NOT NULL"
-    }
-    order_items {
-        int id PK "auto increment"
-        int order_id FK "NOT NULL"
-        int product_id FK "NOT NULL"
-        int quantity "NOT NULL"
-    }
-    users ||--o{ orders : "places"
-    orders ||--o{ order_items : "contains"
-    products ||--o{ order_items : "included in"
-```
+![Table ERD (Users / Orders / Products) diagram](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-erd-03.png)
 
 ---
 
 ## 스키마 마이그레이션 흐름
 
-```mermaid
-sequenceDiagram
-    participant App as 애플리케이션
-    participant TX as suspendTransaction
-    participant SU as SchemaUtils
-    participant DB as Database
-
-    App ->> TX: suspendTransaction { }
-    TX ->> SU: SchemaUtils.create(Users, Orders)
-    SU ->> DB: CREATE TABLE IF NOT EXISTS users (...)
-    SU ->> DB: CREATE TABLE IF NOT EXISTS orders (...)
-    DB -->> SU: 완료
-    SU -->> TX: 테이블 생성 완료
-
-    App ->> TX: suspendTransaction { }
-    TX ->> SU: SchemaUtils.createMissing(Users)
-    SU ->> DB: SHOW TABLES / information_schema 조회
-    DB -->> SU: 현재 스키마 정보
-    SU ->> SU: 누락 테이블/컬럼 감지
-    SU ->> DB: ALTER TABLE ... ADD COLUMN ...
-    DB -->> SU: 마이그레이션 완료
-    SU -->> TX: 누락 항목 추가 완료
-
-    App ->> TX: suspendTransaction { }
-    TX ->> SU: SchemaUtils.drop(Orders, Users)
-    SU ->> DB: DROP TABLE orders
-    SU ->> DB: DROP TABLE users
-    DB -->> SU: 완료
-```
+![02-ddl diagram diagram](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-sequence-04.png)
 
 ---
 

@@ -11,98 +11,11 @@ Tink는 Google이 개발한 고수준 암호화 라이브러리로, 안전한 �
 
 ## 실행 흐름
 
-```mermaid
-sequenceDiagram
-    participant App as 애플리케이션
-    participant Col as TinkColumn
-    participant Tink as Google Tink
-    participant DB as Database
-
-    Note over App,DB: 저장 (INSERT) — AEAD 비결정적 암호화 (AES256_GCM / CHACHA20_POLY1305)
-    App ->> Col: insert { it[secret] = "민감한 데이터" }
-    Col ->> Tink: aead.encrypt("민감한 데이터".toByteArray())
-    Tink -->> Col: ciphertext (매번 다른 바이트)
-    Col ->> DB: INSERT Base64(ciphertext)
-
-    Note over App,DB: 저장 (INSERT) — DAEAD 결정적 암호화 (AES256_SIV)
-    App ->> Col: insert { it[email] = "user@example.com" }
-    Col ->> Tink: daead.encryptDeterministically("user@example.com".toByteArray())
-    Tink -->> Col: deterministicCiphertext (항상 동일)
-    Col ->> DB: INSERT Base64(deterministicCiphertext)
-
-    Note over App,DB: 조회 (SELECT)
-    DB -->> Col: Base64(ciphertext)
-    Col ->> Tink: aead.decrypt(ciphertext)
-    Tink -->> Col: "민감한 데이터".toByteArray()
-    Col -->> App: "민감한 데이터"
-
-    Note over App,DB: WHERE 검색 — DAEAD만 가능
-    App ->> Col: where { email eq "user@example.com" }
-    Col ->> Tink: daead.encryptDeterministically("user@example.com".toByteArray())
-    Tink -->> Col: deterministicCiphertext
-    Col ->> DB: WHERE email = Base64(deterministicCiphertext)
-    DB -->> App: 결과 행 반환
-```
+![Execution diagram](../../docs/images/readme-diagrams/06-advanced-12-exposed-r2dbc-tink-sequence-01.png)
 
 ## 구조 다이어그램
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class IColumnType~T~ {
-        <<interface>>
-        +valueFromDB(value: Any): T
-        +notNullValueToDB(value: T): Any
-        +sqlType(): String
-    }
-    class TinkDaeadVarCharColumn {
-        <<bluetape4k-exposed>>
-        +sqlType(): String
-        +valueFromDB(enc): String
-        +notNullValueToDB(plain): String
-        -daead: DeterministicAead
-    }
-    class TinkAeadVarCharColumn {
-        <<bluetape4k-exposed>>
-        +sqlType(): String
-        +valueFromDB(enc): String
-        +notNullValueToDB(plain): String
-        -aead: Aead
-    }
-    class TinkAeadBinaryColumn {
-        <<bluetape4k-exposed>>
-        +sqlType(): String
-        +valueFromDB(enc): ByteArray
-        +notNullValueToDB(bin): ByteArray
-        -aead: Aead
-    }
-    class DeterministicAead {
-        <<Google Tink Interface>>
-        +encryptDeterministically(plaintext, aad): ByteArray
-        +decryptDeterministically(ciphertext, aad): ByteArray
-    }
-    class Aead {
-        <<Google Tink Interface>>
-        +encrypt(plaintext, aad): ByteArray
-        +decrypt(ciphertext, aad): ByteArray
-    }
-    note for TinkDaeadVarCharColumn "결정적 암호화 → WHERE 절 검색 가능"
-    note for TinkAeadVarCharColumn "비결정적 → 보안 강도 높음, 검색 불가"
-
-    IColumnType <|.. TinkDaeadVarCharColumn
-    IColumnType <|.. TinkAeadVarCharColumn
-    IColumnType <|.. TinkAeadBinaryColumn
-    TinkDaeadVarCharColumn --> DeterministicAead : 위임
-    TinkAeadVarCharColumn --> Aead : 위임
-    TinkAeadBinaryColumn --> Aead : 위임
-
-    style IColumnType fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style TinkDaeadVarCharColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style TinkAeadVarCharColumn fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style TinkAeadBinaryColumn fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style DeterministicAead fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    style Aead fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
-```
+![Structure diagram](../../docs/images/readme-diagrams/06-advanced-12-exposed-r2dbc-tink-class-02.png)
 
 ## 학습 목표
 

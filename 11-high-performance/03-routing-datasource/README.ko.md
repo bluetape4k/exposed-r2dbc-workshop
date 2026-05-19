@@ -38,121 +38,15 @@ ConnectionFactoryRegistry       ← 키 → ConnectionFactory 매핑
 
 ## 클래스 다이어그램
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class DynamicRoutingConnectionFactory {
-        +create() Publisher~Connection~
-        -keyResolver RoutingKeyResolver
-        -registry ConnectionFactoryRegistry
-    }
-    class ContextAwareRoutingKeyResolver {
-        +currentLookupKey(context) String
-        -defaultTenant String
-    }
-    class ConnectionFactoryRegistry {
-        <<interface>>
-        +get(key) ConnectionFactory
-        +keys() Set~String~
-    }
-    class InMemoryConnectionFactoryRegistry {
-        -factories Map~String, ConnectionFactory~
-        +register(key, factory)
-        +get(key) ConnectionFactory
-    }
-    class TenantRoutingWebFilter {
-        +filter(exchange, chain) Mono~Void~
-        -defaultTenant String
-    }
-    class RoutingTransactionalExecutor {
-        +readWrite(block) T
-        +readOnly(block) T
-        -readWriteOperator TransactionalOperator
-        -readOnlyOperator TransactionalOperator
-    }
-
-    DynamicRoutingConnectionFactory --> ContextAwareRoutingKeyResolver: uses
-    DynamicRoutingConnectionFactory --> ConnectionFactoryRegistry: uses
-    InMemoryConnectionFactoryRegistry ..|> ConnectionFactoryRegistry
-    TenantRoutingWebFilter --> DynamicRoutingConnectionFactory: contextWrite
-    RoutingTransactionalExecutor --> DynamicRoutingConnectionFactory: routing hint
-
-    style DynamicRoutingConnectionFactory fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style ContextAwareRoutingKeyResolver fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style ConnectionFactoryRegistry fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style InMemoryConnectionFactoryRegistry fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style TenantRoutingWebFilter fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    style RoutingTransactionalExecutor fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
-```
+![03-routing-datasource diagram diagram](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-class-01.png)
 
 ## 요청→라우팅→DB 선택 흐름 (sequenceDiagram)
 
-```mermaid
-sequenceDiagram
-    participant Client as HTTP Client
-    participant Filter as TenantRoutingWebFilter
-    participant Controller as RoutingMarkerController
-    participant Executor as RoutingTransactionalExecutor
-    participant Factory as DynamicRoutingConnectionFactory
-    participant Registry as ConnectionFactoryRegistry
-    participant DB as 실제 DB
-
-    Client ->> Filter: GET /routing/marker/readonly\nX-Tenant-Id: acme
-    Filter ->> Filter: TENANT="acme", READ_ONLY=true
-    Filter ->> Controller: contextWrite(TENANT, READ_ONLY)
-    Controller ->> Executor: txExecutor.readOnly { ... }
-    Executor ->> Factory: readOnlyOperator.execute(Mono)\ncontextWrite(READ_ONLY, true)
-    Factory ->> Factory: Mono.deferContextual\nkeyResolver.currentLookupKey(ctx)
-    Note right of Factory: key = "acme:ro"
-    Factory ->> Registry: get("acme:ro")
-    Registry -->> Factory: ConnectionFactory (acme RO)
-    Factory ->> DB: create() → Connection
-    DB -->> Controller: 쿼리 결과
-    Controller -->> Client: JSON 응답\n{tenant:"acme", readOnly:true}
-```
+![Request→→DB (sequenceDiagram) diagram](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-sequence-02.png)
 
 ## 라우팅 키 결정 흐름 (flowchart)
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    Req["HTTP 요청"] --> H1{"X-Tenant-Id\n헤더 존재?"}
-
-    H1 -->|예| TenantVal["tenant = 헤더 값"]
-    H1 -->|아니오| TenantDef["tenant = defaultTenant\n(application.yml)"]
-
-    TenantVal --> H2{"읽기 전용\n판별"}
-    TenantDef --> H2
-
-    H2 --> RO1{"X-Read-Only: true\n헤더?"}
-    RO1 -->|예| ReadOnly["READ_ONLY = true"]
-    RO1 -->|아니오| RO2{"경로가\n/readonly 포함?"}
-    RO2 -->|예| ReadOnly
-    RO2 -->|아니오| ReadWrite["READ_ONLY = false"]
-
-    ReadOnly --> KeyRO["라우팅 키\ntenant:ro\n예: acme:ro"]
-    ReadWrite --> KeyRW["라우팅 키\ntenant:rw\n예: acme:rw"]
-
-    KeyRO --> Registry{"ConnectionFactoryRegistry"}
-    KeyRW --> Registry
-
-    Registry -->|키 존재| CF["ConnectionFactory 반환"]
-    Registry -->|키 없음| Err["IllegalStateException\nNo ConnectionFactory for key=..."]
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    classDef red    fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
-
-    class TenantVal,TenantDef teal
-    class ReadOnly orange
-    class ReadWrite green
-    class KeyRO,KeyRW blue
-    class CF purple
-    class Err red
-```
+![(flowchart) diagram](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-architecture-03.png)
 
 ## 핵심 구성 요소
 

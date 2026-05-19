@@ -33,46 +33,7 @@ Redisson + Exposed 를 활용한 캐시 전략의 **Kotlin Coroutines 기반 비
 
 ## 구조 다이어그램
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class AbstractR2dbcRedissonRepository~K, V~ {
-        <<abstract>>
-        +get(key: K) V?
-        +put(key: K, value: V) void
-        +evict(key: K) void
-        +evictAll(keys: Collection~K~) void
-        +clear() void
-    }
-
-    class UserCacheRepository {
-        +strategy: READ_WRITE_THROUGH_WITH_NEAR_CACHE
-        +get(id: Long) UserRecord?
-        +put(id: Long, user: UserRecord) void
-        +evict(id: Long) void
-    }
-
-    class UserCredentialsCacheRepository {
-        +strategy: READ_ONLY
-        +get(id: Long) UserCredentialsRecord?
-        +evict(id: Long) void
-    }
-
-    class UserEventCacheRepository {
-        +strategy: WRITE_BEHIND
-        +put(id: Long, event: UserEventRecord) void
-        +flush() void
-    }
-
-    AbstractR2dbcRedissonRepository <|-- UserCacheRepository
-    AbstractR2dbcRedissonRepository <|-- UserCredentialsCacheRepository
-    AbstractR2dbcRedissonRepository <|-- UserEventCacheRepository
-
-    style AbstractR2dbcRedissonRepository fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style UserCacheRepository fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style UserCredentialsCacheRepository fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style UserEventCacheRepository fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-```
+![Structure diagram](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-class-01.png)
 
 > `UserCacheRepository`: Near Cache(Caffeine) + Redis(MapCache)
 > `UserCredentialsCacheRepository`: 읽기 전용 캐시 (인증정보, 코드표)
@@ -80,27 +41,7 @@ classDiagram
 
 ## 캐시 조회 흐름
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    REQ["cache.get(key)"] --> L1{L1 Caffeine<br/>Near Cache<br/>HIT?}
-    L1 -->|HIT| RET1["즉시 반환<br/>나노초 ⚡"]
-    L1 -->|MISS| L2{L2 Redisson<br/>MapCache<br/>HIT?}
-    L2 -->|HIT| FILL1["L1 동기화<br/>+ 반환<br/>마이크로초 ⚡"]
-    L2 -->|MISS| DB["DB 조회<br/>suspendTransaction<br/>Exposed R2DBC"]
-    DB --> FILL2["L2 저장<br/>TTL 적용"]
-    FILL2 --> FILL1
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-
-    class RET1 green
-    class FILL1 blue
-    class FILL2 teal
-    class DB orange
-```
+![Cache Query diagram](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-architecture-02.png)
 
 ## 프로젝트 구조
 
@@ -306,47 +247,7 @@ Markdown 리포트는 benchmark 이름, mode, score, error, unit, parameter 정�
 
 ### 전략별 동작 흐름
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    subgraph RT["Read Through"]
-        RT1["get(id)"] --> RT2{Cache<br/>HIT?}
-        RT2 -->|YES| RT3["Redis<br/>반환"]
-        RT2 -->|NO| RT4["DB 조회"]
-        RT4 --> RT5["Redis 저장"]
-        RT5 --> RT6["반환"]
-    end
-
-    subgraph WT["Write Through"]
-        WT1["put(entity)"] --> WT2["Redis<br/>저장"]
-        WT2 --> WT3["DB 저장<br/>동기"]
-        WT3 --> WT4["완료"]
-    end
-
-    subgraph WB["Write Behind"]
-        WB1["put(entity)"] --> WB2["Redis<br/>저장"]
-        WB2 --> WB3["즉시<br/>반환"]
-        WB2 -.->|비동기| WB4["DB 저장<br/>배치처리"]
-    end
-
-    subgraph RO["Read-Only Cache"]
-        RO1["get(id)"] --> RO2{Cache<br/>HIT?}
-        RO2 -->|YES| RO3["Redis<br/>반환"]
-        RO2 -->|NO| RO4["DB 조회"]
-        RO4 --> RO5["Redis 저장"]
-        RO5 --> RO6["반환"]
-    end
-
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef yellow fill:#FFFDE7,stroke:#FFF176,color:#F57F17
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-
-    class RT3,RT6,RO3,RO6 green
-    class WT4 blue
-    class WB3 yellow
-    class WB4 orange
-```
+![02-cache-strategies-r2dbc diagram diagram](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-architecture-03.png)
 
 ### 전략 선택 기준
 
@@ -361,24 +262,7 @@ flowchart TD
 
 `READ_WRITE_THROUGH_WITH_NEAR_CACHE` 설정을 사용하면 애플리케이션 내부에 Caffeine 로컬 캐시가 활성화됩니다.
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart LR
-    REQ["cache.get(key)"] -->|L1| L1["Caffeine<br/>Near Cache"]
-    L1 -->|HIT| RET1["반환<br/>⚡ 나노초"]
-    L1 -->|MISS| L2["Redis<br/>MapCache"]
-    L2 -->|HIT| RET2["반환<br/>⚡ 마이크로초"]
-    L2 -->|MISS| L3["DB<br/>Exposed R2DBC"]
-    L3 --> RET3["반환<br/>⏱ 밀리초"]
-
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-
-    class RET1 green
-    class RET2 blue
-    class RET3 orange
-```
+![Near Cache diagram](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-architecture-04.png)
 
 동일 프로세스 내에서 반복 조회 시 Redis 라운드트립 없이 응답하여 **P99 레이턴시를 크게 낮출 수 있습니다**.
 

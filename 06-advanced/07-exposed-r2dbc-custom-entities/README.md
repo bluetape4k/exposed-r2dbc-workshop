@@ -8,140 +8,17 @@ This approach builds on the concepts from the `06-custom-columns` module, packag
 
 ## Structure Diagram
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class IdTable~ID~ {
-        <<abstract>>
-        +id: Column~EntityID~ID~~
-    }
-    class SnowflakeIdTable {
-        <<abstract>>
-        +id: Column~EntityID~Long~~
-        clientDefault: SnowflakeId
-    }
-    class KsuidTable {
-        <<abstract>>
-        +id: Column~EntityID~String~~
-        clientDefault: KSUID-Base62 27chars
-    }
-    class KsuidMillisTable {
-        <<abstract>>
-        +id: Column~EntityID~String~~
-        clientDefault: KSUID-Millis 27chars
-    }
-    class TimebasedUUIDTable {
-        <<abstract>>
-        +id: Column~EntityID~UUID~~
-        clientDefault: UUIDv1 RFC4122
-    }
-    class TimebasedUUIDBase62Table {
-        <<abstract>>
-        +id: Column~EntityID~String~~
-        clientDefault: UUIDv1+Base62 22chars
-    }
-    class T1["T1 : SnowflakeIdTable"] {
-        +name: Column~String~
-        +age: Column~Int~
-    }
+![Structure Diagram diagram](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-class-01.png)
 
-    IdTable <|-- SnowflakeIdTable
-    IdTable <|-- KsuidTable
-    IdTable <|-- KsuidMillisTable
-    IdTable <|-- TimebasedUUIDTable
-    IdTable <|-- TimebasedUUIDBase62Table
-    SnowflakeIdTable <|-- T1
-
-    style IdTable fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style SnowflakeIdTable fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style KsuidTable fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style KsuidMillisTable fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style TimebasedUUIDTable fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style TimebasedUUIDBase62Table fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    style T1 fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-```
-
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-erDiagram
-    T_SNOWFLAKE {
-        BIGINT id PK "Snowflake ID (auto-generated)"
-        VARCHAR name "255"
-        INT age
-    }
-    T_KSUID {
-        VARCHAR id PK "KSUID Base62 (27 chars)"
-        VARCHAR name "255"
-        INT age
-    }
-    T_KSUID_MILLIS {
-        VARCHAR id PK "KSUID Millis (27 chars)"
-        VARCHAR name "255"
-        INT age
-    }
-    T_TIMEBASED_UUID {
-        UUID id PK "UUIDv1 (RFC 4122)"
-        VARCHAR name "255"
-        INT age
-    }
-    T_TIMEBASED_UUID_BASE62 {
-        VARCHAR id PK "UUIDv1+Base62 (22 chars)"
-        VARCHAR name "255"
-        INT age
-    }
-```
+![Structure Diagram diagram](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-erd-02.png)
 
 ## ID Generation Flow
 
-```mermaid
-sequenceDiagram
-    participant App as Application
-    participant Table as CustomIdTable
-    participant Gen as ID Generator
-    participant DB as Database
-
-    Note over App,DB: DAO — Product.new { ... }
-    App ->> Table: Product.new { name = "Laptop" }
-    Table ->> Gen: invoke clientDefault lambda
-    Gen -->> Table: generatedId (e.g. 1234567890L)
-    Table ->> DB: INSERT INTO products (id, name) VALUES (1234567890, 'Laptop')
-
-    Note over App,DB: DSL — Products.insert { ... }
-    App ->> Table: Products.insert { it[name] = "Mouse" }
-    Table ->> Gen: invoke clientDefault lambda
-    Gen -->> Table: generatedId
-    Table ->> DB: INSERT INTO products (id, name) VALUES (generatedId, 'Mouse')
-```
+![ID Generation Flow diagram](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-sequence-03.png)
 
 ## ID Strategy Selection Flowchart
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    A[Choose ID Strategy] --> B{ID Type}
-    B --> C[Numeric Long] --> D[SnowflakeIdTable\nmilli-sorted, 64bit]
-    B --> E{String}
-    E --> F{Need UUID standard?}
-    F --> G[Yes] --> H{Compact representation?}
-    H --> I[No] --> J[TimebasedUUIDTable\nUUID 36 chars, RFC 4122]
-    H --> K[Yes] --> L[TimebasedUUIDBase62Table\nString 22 chars]
-    F --> M[No] --> N{Millisecond precision?}
-    N --> O[No] --> P[KsuidTable\nsecond precision, 27 chars]
-    N --> Q[Yes] --> R[KsuidMillisTable\nmillis, 27 chars]
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-
-    class A blue
-    class B,E,F,H,N purple
-    class D,G,I green
-    class J,L purple
-    class P,R orange
-    class C,K,M,O,Q teal
-```
+![ID Strategy Selection Flowchart diagram](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-architecture-04.png)
 
 ## ID Generation Strategy Comparison
 

@@ -26,66 +26,15 @@ Exposed R2DBC + Kotlin Coroutines 환경에서 비동기 데이터베이스 작�
 
 ### Coroutine + R2DBC 트랜잭션
 
-```mermaid
-sequenceDiagram
-    participant T as runTest / TestScope
-    participant W as withTables / withDb
-    participant ST as suspendTransaction
-    participant DB as R2DBC DB
-
-    T ->> W: withTables(testDB, *tables)
-    W ->> DB: SchemaUtils.create(*tables)
-    W ->> ST: suspendTransaction { ... }
-    ST ->> DB: BEGIN
-    ST ->> DB: DML 실행
-    DB -->> ST: Flow / Result
-    ST ->> DB: COMMIT
-    ST -->> W: 결과
-    W ->> DB: SchemaUtils.drop(*tables)
-    W -->> T: 완료
-```
+![Coroutine + R2DBC Transaction diagram](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-sequence-01.png)
 
 ### Flow 수집 패턴
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    Q["Table.selectAll()"] --> F["Flow~ResultRow~"]
-    F --> L[".toList() — 전체 수집"]
-    F --> S[".single() — 단일 (없으면 예외)"]
-    F --> SN[".singleOrNull() — 단일 (없으면 null)"]
-    F --> FI[".first() — 첫 번째 (없으면 예외)"]
-    F --> FN[".firstOrNull() — 첫 번째 (없으면 null)"]
-    F --> C[".count() — 개수 (Long)"]
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    class Q blue
-    class F teal
-    class L,S,SN,FI,FN,C green
-```
+![Flow diagram](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-architecture-02.png)
 
 ## Coroutine 상태 다이어그램
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-stateDiagram-v2
-    [*] --> Created : launch / async
-    Created --> Running : Dispatcher 스케줄링
-    Running --> Suspended : suspend fun 호출\n(DB 대기, IO 대기)
-    Suspended --> Running : resume (결과 수신)
-    Running --> Completed : 블록 정상 종료
-    Running --> Cancelled : cancel() / 예외
-    Completed --> [*]
-    Cancelled --> [*]
-
-    state Running {
-        [*] --> Executing
-        Executing --> SuspendTransaction : suspendTransaction 진입
-        SuspendTransaction --> Executing : 트랜잭션 완료
-    }
-```
+![Coroutine diagram](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-architecture-03.png)
 
 ## 핵심 개념
 

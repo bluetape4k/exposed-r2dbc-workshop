@@ -16,32 +16,7 @@ An example module demonstrating how to convert common JPA patterns (Entity, rela
 
 ## JPA → Exposed R2DBC Migration Path
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart LR
-    subgraph JPA ["JPA (Before)"]
-        JE["@Entity\n@Table(name='...')"]
-        JR["JpaRepository~T,ID~"]
-        JQ["JPQL / @Query"]
-        JT["@Transactional"]
-    end
-    subgraph Exposed ["Exposed R2DBC (After)"]
-        ET["object MyTable\n: IntIdTable('...')"]
-        EQ["Table.selectAll()\n.where { ... }"]
-        EC["Table.insert { }\nTable.update { }"]
-        EST["suspendTransaction { }"]
-    end
-
-    JE -->|"migrate column definitions"| ET
-    JR -->|"migrate CRUD methods"| EQ
-    JQ -->|"migrate queries"| EC
-    JT -->|"migrate transactions"| EST
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    class JE,JR,JQ,JT blue
-    class ET,EQ,EC,EST green
-```
+![JPA → Exposed R2DBC Migration Path diagram](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-architecture-01.png)
 
 ## Project Structure
 
@@ -219,97 +194,11 @@ object CustomIdTable: IdTable<Email>("emails") {
 
 ## JPA Entity vs Exposed Table Comparison
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class JpaEntity {
-        <<JPA Entity>>
-        +Long id
-        +String name
-        +String description
-        +persist()
-        +find()
-        +merge()
-        +remove()
-    }
-    class ExposedTable {
-        <<Exposed DSL>>
-        +Column~Long~ id
-        +Column~String~ name
-        +Column~String~ description
-        +insert()
-        +selectAll()
-        +update()
-        +deleteWhere()
-    }
-    class ExposedEntity {
-        <<Exposed DAO>>
-        +EntityID~Long~ id
-        +String name
-        +String description
-    }
-
-    note for JpaEntity "Annotation-based\n@Entity @Table @Id @Column"
-    note for ExposedTable "DSL-based\nobject MyTable : LongIdTable"
-    note for ExposedEntity "DAO-based\nclass MyEntity : LongEntity"
-
-    style JpaEntity fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style ExposedTable fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style ExposedEntity fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-```
+![JPA Entity vs Exposed Table Comparison diagram](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-class-02.png)
 
 ## Blog Domain ERD
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-erDiagram
-    posts {
-        bigint id PK
-        varchar title
-    }
-    post_details {
-        bigint id PK,FK
-        date created_on
-        varchar created_by
-    }
-    post_comments {
-        bigint id PK
-        bigint post_id FK
-        varchar review
-    }
-    tags {
-        bigint id PK
-        varchar name
-    }
-    post_tags {
-        bigint id PK
-        bigint post_id FK
-        bigint tag_id FK
-    }
-    persons {
-        bigint id PK
-        varchar first_name
-        varchar last_name
-        date birth_date
-        boolean employed
-        varchar occupation
-        bigint address_id FK
-    }
-    addresses {
-        bigint id PK
-        varchar street
-        varchar city
-        varchar state
-        varchar zip
-    }
-
-    posts ||--|| post_details : "1:1 shared PK"
-    posts ||--o{ post_comments : "1:N"
-    posts }o--o{ tags : "N:M via post_tags"
-    post_tags }o--|| posts : ""
-    post_tags }o--|| tags : ""
-    persons }o--|| addresses : "ManyToOne"
-```
+![Blog Domain ERD diagram](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-erd-03.png)
 
 ## JPA vs Exposed Key Concept Mapping Summary
 
