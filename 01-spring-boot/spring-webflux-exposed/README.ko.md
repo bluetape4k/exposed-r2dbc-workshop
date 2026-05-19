@@ -22,28 +22,7 @@
 
 ![Movie Schema](MovieSchema_Dark.png)
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-erDiagram
-    movies {
-        bigint id PK "auto increment"
-        varchar name "NOT NULL, indexed"
-        varchar producer_name "NOT NULL, indexed"
-        timestamp release_date "NOT NULL"
-    }
-    actors {
-        bigint id PK "auto increment"
-        varchar first_name "NOT NULL, indexed"
-        varchar last_name "NOT NULL, indexed"
-        date birthday "NULL"
-    }
-    actors_in_movies {
-        bigint movie_id FK "NOT NULL, CASCADE DELETE"
-        bigint actor_id FK "NOT NULL, CASCADE DELETE"
-    }
-    movies ||--o{ actors_in_movies : "has"
-    actors ||--o{ actors_in_movies : "appears in"
-```
+![Movie diagram](../../docs/images/readme-diagrams/01-spring-boot-spring-webflux-exposed-erd-01.png)
 
 ```kotlin
 object MovieSchema {
@@ -106,75 +85,11 @@ src/gatling/kotlin/
 
 ## 레이어 구조
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class MovieController {
-        +getMovieById(id)
-        +searchMovies(request)
-        +createMovie(movie)
-        +deleteMovie(id)
-    }
-    class ActorController {
-        +getAllActors()
-        +getActorById(id)
-        +createActor(actor)
-    }
-    class MovieRepository {
-        +findById(id)
-        +findAll()
-        +create(movie)
-        +deleteById(id)
-    }
-    class ActorRepository {
-        +findById(id)
-        +findAll()
-        +create(actor)
-    }
-    class MovieTable {
-        <<object>>
-        +id LongIdTable
-        +name varchar
-        +producerName varchar
-        +releaseDate datetime
-    }
-    class ActorTable {
-        <<object>>
-        +id LongIdTable
-        +firstName varchar
-        +lastName varchar
-        +birthday date
-    }
-
-    MovieController --> MovieRepository: uses
-    ActorController --> ActorRepository: uses
-    MovieRepository --> MovieTable: DSL
-    ActorRepository --> ActorTable: DSL
-
-    style MovieController fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style ActorController fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style MovieRepository fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style ActorRepository fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style MovieTable fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style ActorTable fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-```
+![Structure diagram](../../docs/images/readme-diagrams/01-spring-boot-spring-webflux-exposed-class-02.png)
 
 ## Spring WebFlux + Exposed R2DBC 통합 흐름
 
-```mermaid
-sequenceDiagram
-    participant Client as HTTP 클라이언트
-    participant Controller as RestController
-    participant Repo as Repository
-    participant DB as R2dbcDatabase
-    Client ->> Controller: HTTP 요청 (suspend fun)
-    Controller ->> Controller: suspendTransaction { }
-    Controller ->> Repo: repository.findById(id)
-    Repo ->> DB: Exposed DSL (selectAll/insert/...)
-    DB -->> Repo: ResultRow / Flow
-    Repo -->> Controller: DTO (MovieRecord)
-    Controller -->> Client: JSON 응답
-```
+![Spring WebFlux + Exposed R2DBC diagram](../../docs/images/readme-diagrams/01-spring-boot-spring-webflux-exposed-sequence-03.png)
 
 1. WebFlux가 `suspend` 핸들러를 코루틴으로 실행합니다.
 2. Controller에서 `suspendTransaction { }` 블록 안에 Repository 호출을 감쌉니다.

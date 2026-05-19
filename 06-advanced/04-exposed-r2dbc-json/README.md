@@ -68,29 +68,7 @@ Similar to `Ex01_JsonColumn.kt` but uses the higher-performance `jsonb` column t
 
 ## Structure Diagram
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class JsonColumn~T~ {
-        <<Exposed extension>>
-        +json(name, jsonMapper) Column~T~
-    }
-    class JsonBColumn~T~ {
-        +jsonb(name, jsonMapper) Column~T~
-    }
-    class KotlinxJsonMapper~T~ {
-        <<kotlinx.serialization>>
-        +serialize(value: T) String
-        +deserialize(value: String) T
-    }
-
-    JsonColumn <|-- JsonBColumn : json to jsonb extension
-    JsonColumn --> KotlinxJsonMapper : serialization/deserialization
-
-    style JsonColumn fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style JsonBColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style KotlinxJsonMapper fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-```
+![Structure Diagram diagram](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-class-01.png)
 
 > `JsonBColumn`: PostgreSQL only (supports indexing and operators)
 
@@ -99,69 +77,11 @@ classDiagram
 
 ## JSON Serialization/Deserialization Flow
 
-```mermaid
-sequenceDiagram
-    participant App as Application
-    participant Col as JsonColumn~T~
-    participant Mapper as KotlinxJsonMapper
-    participant DB as Database
-
-    Note over App,DB: Write (INSERT / UPDATE)
-    App ->> Col: insert { it[data] = DataHolder(...) }
-    Col ->> Mapper: serialize(value: T)
-    Mapper -->> Col: JSON string (e.g. {"user":{"name":"Alice"},...})
-    Col ->> DB: INSERT '{"user":{...}}'
-
-    Note over App,DB: Read (SELECT)
-    DB -->> Col: '{"user":{"name":"Alice"},...}'
-    Col ->> Mapper: deserialize(jsonString)
-    Mapper -->> Col: DataHolder(user=User("Alice",...),...)
-    Col -->> App: DataHolder object
-
-    Note over App,DB: JSON path query (extract / contains / exists)
-    App ->> Col: data.extract(".active", toScalar=true)
-    Col ->> DB: JSON_EXTRACT(data, '$.active') [MySQL] or\ndata->'active' [PostgreSQL]
-    DB -->> App: extracted scalar value
-```
+![JSON Serialization / Deserialization Flow diagram](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-sequence-02.png)
 
 ## JSON Query Function Usage Flow
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    Start["Write JSON query"] --> Q1{"Which DB?"}
-
-    Q1 -->|PostgreSQL| PG{"Query type?"}
-    Q1 -->|MySQL 8| MY{"Query type?"}
-    Q1 -->|H2 / SQLServer / Oracle| Unsupported["UnsupportedByDialectException\nMostly unsupported"]
-
-    PG -->|Extract specific field value| PG_EXT["extract(path, toScalar)\npath: field, nested"]
-    PG -->|Check JSON containment| PG_CONT["contains(jsonString)\n@> operator (GIN index)"]
-    PG -->|Check JSONPath existence| PG_EX["exists(path)\njsonb_path_exists()"]
-
-    MY -->|Extract specific field value| MY_EXT["extract(path, toScalar)\npath: .field.nested"]
-    MY -->|Check JSON containment| MY_CONT["contains(jsonString)\nJSON_CONTAINS()"]
-    MY -->|Check JSONPath existence| MY_EX["exists(path)\nJSON_CONTAINS_PATH()"]
-
-    PG_EXT --> Result["selectAll().where{...}.toList()"]
-    PG_CONT --> Result
-    PG_EX --> Result
-    MY_EXT --> Result
-    MY_CONT --> Result
-    MY_EX --> Result
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    classDef red    fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
-
-    class PG_EXT,PG_CONT,PG_EX blue
-    class MY_EXT,MY_CONT,MY_EX green
-    class Unsupported red
-    class Result teal
-```
+![JSON Query Function Usage Flow diagram](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-architecture-03.png)
 
 ## Code Examples
 

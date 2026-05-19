@@ -64,91 +64,18 @@ Jackson의 `SerializationFeature`와 `DeserializationFeature`는 직렬화/역�
 
 ## 구조 다이어그램
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class JacksonColumn~T~ {
-        <<bluetape4k-exposed>>
-        +jackson(name) Column~T~
-        -objectMapper: ObjectMapper
-    }
-    class JacksonBColumn~T~ {
-        +jacksonb(name) Column~T~
-    }
-    note for JacksonBColumn "PostgreSQL JSONB 전용"
-    class ObjectMapper {
-        <<Jackson (com.fasterxml.jackson)>>
-        +writeValueAsString(value): String
-        +readValue(json, klass): T
-    }
-    class KotlinModule {
-        <<Jackson 확장>>
-        +Kotlin 데이터 클래스 지원
-    }
-    note for KotlinModule "자동 등록됨"
-
-    JacksonColumn <|-- JacksonBColumn : json → jsonb 확장
-    JacksonColumn --> ObjectMapper : 직렬화/역직렬화
-    ObjectMapper --> KotlinModule : 등록
-
-    style JacksonColumn fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style JacksonBColumn fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style ObjectMapper fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style KotlinModule fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-```
+![Structure diagram](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-class-01.png)
 
 > `@Serializable` 불필요 — Jackson `ObjectMapper`가 표준 Kotlin 데이터 클래스를 직접 처리
 > `KotlinModule`이 자동 등록되어 data class·nullable·default 파라미터 지원
 
 ## JSON 직렬화 흐름
 
-```mermaid
-sequenceDiagram
-    participant App as 애플리케이션
-    participant Col as JacksonColumn
-    participant OM as ObjectMapper
-    participant DB as Database
-
-    Note over App,DB: INSERT — Kotlin 객체 → JSON 문자열
-    App ->> Col: insert { it[jacksonColumn] = DataHolder(user=User("Admin",null), logins=10) }
-    Col ->> OM: writeValueAsString(dataHolder)
-    OM -->> Col: '{"user":{"name":"Admin","team":null},"logins":10,"active":true}'
-    Col ->> DB: INSERT json_text
-
-    Note over App,DB: SELECT — JSON 문자열 → Kotlin 객체
-    DB -->> Col: '{"user":{"name":"Admin","team":null},"logins":10,"active":true}'
-    Col ->> OM: readValue(json, DataHolder::class)
-    OM -->> Col: DataHolder(user=User("Admin",null), logins=10, active=true)
-    Col -->> App: DataHolder 객체
-
-    Note over App,DB: JSON 경로 추출 (DB 측)
-    App ->> Col: jacksonColumn.extract(".user.name")
-    Col ->> DB: JSON_EXTRACT(jackson_column, '$.user.name')
-    DB -->> App: "Admin"
-```
+![JSON Serialization diagram](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-sequence-02.png)
 
 ## 테이블 구조 (ER 다이어그램)
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-erDiagram
-    JACKSON_TABLE {
-        INT id PK
-        JSON jackson_column "DataHolder JSON 컬럼"
-    }
-    JACKSON_B_TABLE {
-        INT id PK
-        JSONB jackson_b_column "DataHolder JSONB 컬럼 (PostgreSQL)"
-    }
-    DATA_HOLDER {
-        String name
-        String team_nullable
-        INT logins
-        BOOLEAN active
-    }
-    JACKSON_TABLE ||--|| DATA_HOLDER : "jackson_column 필드로 저장"
-    JACKSON_B_TABLE ||--|| DATA_HOLDER : "jackson_b_column 필드로 저장"
-```
+![Table Structure (ER ) diagram](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-erd-03.png)
 
 ## 예제 개요
 

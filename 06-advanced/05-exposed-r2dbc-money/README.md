@@ -40,41 +40,7 @@ This enables flexible queries filtering by the full `MonetaryAmount`, the amount
 
 ## Structure Diagram
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class CompositeMoney {
-        <<Exposed extension>>
-        +compositeMoney(precision, scale, name) CompositeColumn~MonetaryAmount?~
-        +amount: Column~BigDecimal?~
-        +currency: Column~CurrencyUnit?~
-    }
-    class MonetaryAmount {
-        <<interface — JSR-354>>
-        +getNumber() NumberValue
-        +getCurrency() CurrencyUnit
-    }
-    class Money {
-        <<Moneta implementation>>
-        +of(amount, currency) Money
-        +getNumber() NumberValue
-        +getCurrency() CurrencyUnit
-    }
-    class CurrencyUnit {
-        <<JSR-354>>
-        +currencyCode: String
-    }
-
-    CompositeMoney --> MonetaryAmount : Column value type
-    Money ..|> MonetaryAmount : implements
-    Money --> CurrencyUnit : contains
-    CompositeMoney --> CurrencyUnit : currency column
-
-    style CompositeMoney fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style MonetaryAmount fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style Money fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style CurrencyUnit fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-```
+![Structure Diagram diagram](../../docs/images/readme-diagrams/06-advanced-05-exposed-r2dbc-money-class-01.png)
 
 > `CurrencyUnit`: ISO 4217 code (USD, KRW, etc.)
 
@@ -83,63 +49,11 @@ classDiagram
 
 ## MonetaryAmount Storage/Restoration Flow
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    App["Application\nMonetaryAmount\n(amount=10.00, currency=USD)"]
-
-    App -->|insert / update| Split["CompositeMoney split"]
-    Split --> AmtCol["DECIMAL column\ncomposite_money\nvalue: 10.00000"]
-    Split --> CurCol["VARCHAR(3) column\ncomposite_money_C\nvalue: USD"]
-
-    AmtCol --> DB[(Database)]
-    CurCol --> DB
-
-    DB -->|select| Merge["CompositeMoney restore"]
-    Merge --> AmtRead["BigDecimal: 10.00000"]
-    Merge --> CurRead["CurrencyUnit: USD"]
-    AmtRead --> Restore["MonetaryAmount\nMoney.of(10.00000, USD)"]
-    CurRead --> Restore
-    Restore --> AppOut["Application\nMonetaryAmount object returned"]
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-
-    class App,AppOut blue
-    class Split,Merge teal
-    class AmtCol,CurCol orange
-    class AmtRead,CurRead green
-    class Restore purple
-```
+![MonetaryAmount Storage / Restoration Flow diagram](../../docs/images/readme-diagrams/06-advanced-05-exposed-r2dbc-money-architecture-02.png)
 
 ## Table Structure with Money (ER Diagram)
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-erDiagram
-    ACCOUNTS {
-        int id PK "Auto-increment primary key"
-        decimal composite_money "Amount (DECIMAL precision=8, scale=5)"
-        varchar composite_money_C "Currency code (VARCHAR(3), ISO 4217)"
-    }
-
-    ACCOUNTS_WITH_DEFAULT {
-        int id PK "Auto-increment primary key"
-        decimal default_money "Amount column with default value"
-        varchar default_money_C "Currency column with default value"
-        decimal client_money "clientDefault amount column"
-        varchar client_money_C "clientDefault currency column"
-    }
-
-    MANUAL_ACCOUNTS {
-        int id PK "Auto-increment primary key"
-        decimal amount "Manually defined amount column"
-        varchar currency "Manually defined currency column"
-    }
-```
+![Table Structure with Money (ER Diagram) diagram](../../docs/images/readme-diagrams/06-advanced-05-exposed-r2dbc-money-erd-03.png)
 
 > `compositeMoney` always creates a paired currency column with `_C` suffix — column names can be freely specified when defined manually
 

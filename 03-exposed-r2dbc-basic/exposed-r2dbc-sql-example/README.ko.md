@@ -9,58 +9,9 @@ R2DBC 환경에서 비동기로 SELECT, INSERT, UPDATE, DELETE를 수행합니�
 
 ## 구조 다이어그램
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-erDiagram
-    cities {
-        int id PK "SERIAL, auto increment"
-        varchar(50) name "NOT NULL"
-    }
-    users {
-        varchar(10) id PK
-        varchar(50) name "NOT NULL"
-        int city_id FK "NULL, references cities(id)"
-    }
-    cities ||--o{ users : "city_id"
-```
+![Structure diagram](../../docs/images/readme-diagrams/03-exposed-r2dbc-basic-exposed-r2dbc-sql-example-erd-01.png)
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class Query {
-        +where(op: Op~Boolean~)
-        +andWhere(op: Op~Boolean~)
-        +orWhere(op: Op~Boolean~)
-        +orderBy(column, order)
-        +groupBy(vararg columns)
-        +limit(n: Int)
-        +toList()
-        +single()
-        +firstOrNull()
-        +count()
-        +collect(action)
-        +map(transform)
-    }
-    class Table {
-        +selectAll()
-        +select(vararg columns)
-        +insert(body: InsertStatement)
-        +update(where, body: UpdateStatement)
-        +deleteWhere(op: Op~Boolean~)
-        +innerJoin(other: Table)
-    }
-    class Join {
-        +select(vararg columns)
-        +selectAll()
-    }
-    Table --> Query : "selectAll() / select()"
-    Table --> Join : "innerJoin() / leftJoin()"
-    Join --> Query : "select() / selectAll()"
-
-    style Query fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style Table fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style Join fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-```
+![Structure diagram](../../docs/images/readme-diagrams/03-exposed-r2dbc-basic-exposed-r2dbc-sql-example-class-02.png)
 
 ---
 
@@ -272,36 +223,7 @@ names shouldBeEqualTo listOf("Jane.Doe", "John.Doe")
 
 ## 쿼리 실행 흐름
 
-```mermaid
-sequenceDiagram
-    participant Test as 테스트 코드
-    participant WT as withTables
-    participant TX as suspendTransaction
-    participant DSL as Exposed DSL
-    participant DB as R2DBC Database
-
-    Test ->> WT: withTables(testDB, CityTable, UserTable)
-    WT ->> TX: suspendTransaction { SchemaUtils.create() }
-    TX ->> DB: CREATE TABLE cities, users
-    DB -->> TX: 완료
-    TX -->> WT: 테이블 생성 완료
-    WT ->> Test: 블록 실행
-
-    Test ->> DSL: CityTable.insert { it[name] = "Seoul" }
-    DSL ->> DB: INSERT INTO cities VALUES (...)
-    DB -->> DSL: ResultRow (id=1)
-    DSL -->> Test: id
-
-    Test ->> DSL: UserTable.innerJoin(CityTable).select(...).where { ... }
-    DSL ->> DB: SELECT ... FROM users INNER JOIN cities ON ...
-    DB -->> DSL: Flow<ResultRow>
-    DSL -->> Test: List<ResultRow>
-
-    Test ->> WT: 블록 완료
-    WT ->> TX: suspendTransaction { SchemaUtils.drop() }
-    TX ->> DB: DROP TABLE users, cities
-    DB -->> TX: 완료
-```
+![Execution diagram](../../docs/images/readme-diagrams/03-exposed-r2dbc-basic-exposed-r2dbc-sql-example-sequence-03.png)
 
 ---
 

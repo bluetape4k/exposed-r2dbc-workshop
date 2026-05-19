@@ -81,53 +81,7 @@ DAO API와 암호화 컬럼을 통합하여 엔티티처럼 사용하는 방법�
 
 ## 클래스 구조 다이어그램
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-classDiagram
-    class Encryptor {
-        <<interface>>
-        +encrypt(str: String) String
-        +decrypt(str: String) String
-        +maxColLength(inputByteSize: Int) Int
-    }
-    class Algorithms {
-        <<object>>
-        +AES_256_PBE_GCM(password, salt) Encryptor
-        +AES_256_PBE_CBC(password, salt) Encryptor
-        +BLOW_FISH(key) Encryptor
-        +TRIPLE_DES(key) Encryptor
-    }
-    class EncryptedVarcharColumnType {
-        <<ColumnType>>
-        +encryptor: Encryptor
-        +colLength: Int
-        +valueFromDB(value: Any) String
-        +notNullValueToDB(value: String) Any
-    }
-    class EncryptedBinaryColumnType {
-        <<ColumnType>>
-        +encryptor: Encryptor
-        +colLength: Int
-        +valueFromDB(value: Any) ByteArray
-        +notNullValueToDB(value: ByteArray) Any
-    }
-    class Table {
-        +encryptedVarchar(name, colLength, encryptor) Column~String~
-        +encryptedBinary(name, colLength, encryptor) Column~ByteArray~
-    }
-
-    Encryptor <|.. Algorithms : 생성
-    EncryptedVarcharColumnType --> Encryptor : uses
-    EncryptedBinaryColumnType --> Encryptor : uses
-    Table --> EncryptedVarcharColumnType : 컬럼 타입
-    Table --> EncryptedBinaryColumnType : 컬럼 타입
-
-    style Encryptor fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    style Algorithms fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    style EncryptedVarcharColumnType fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    style EncryptedBinaryColumnType fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    style Table fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-```
+![Structure diagram](../../docs/images/readme-diagrams/06-advanced-01-exposed-r2dbc-crypt-class-01.png)
 
 > 비결정적 암호화: 동일 평문도 매번 다른 암호문 생성 — AES_256_PBE_GCM 권장 (AEAD 인증 포함)
 
@@ -135,29 +89,7 @@ classDiagram
 
 ## 실행 흐름
 
-```mermaid
-sequenceDiagram
-    participant App as 애플리케이션
-    participant Col as EncryptedColumn
-    participant Enc as Encryptor (AES/Blowfish/TripleDES)
-    participant DB as Database
-
-    Note over App,DB: 저장 (INSERT)
-    App ->> Col: insert { it[name] = "plain text" }
-    Col ->> Enc: encrypt("plain text")
-    Enc -->> Col: Base64(ciphertext)
-    Col ->> DB: INSERT 'Base64(ciphertext)'
-
-    Note over App,DB: 조회 (SELECT)
-    DB -->> Col: 'Base64(ciphertext)'
-    Col ->> Enc: decrypt("Base64(ciphertext)")
-    Enc -->> Col: "plain text"
-    Col -->> App: "plain text"
-
-    Note over App,DB: 검색 제한 (비결정적 암호화)
-    App -x Col: where { name eq encrypt("plain text") }
-    Note right of Col: 매번 다른 암호문 생성 → WHERE 검색 불가
-```
+![Execution diagram](../../docs/images/readme-diagrams/06-advanced-01-exposed-r2dbc-crypt-sequence-02.png)
 
 ## 코드 예제
 

@@ -127,45 +127,7 @@ Jackson 3.x 버전을 사용하여 R2DBC 환경에서 JSON/JSONB 컬럼을 처�
 
 ## 모듈 선택 가이드
 
-```mermaid
-%%{init: {"theme": "neutral"}}%%
-flowchart TD
-    Start([고급 기능 선택]) --> Q1{데이터 타입?}
-    Q1 -->|날짜/시간| Q2{런타임?}
-    Q2 -->|JVM 전용| M02[02-javatime\njava.time API]
-    Q2 -->|Multiplatform| M03[03-kotlin-datetime\nkotlinx.datetime]
-    Q1 -->|JSON| Q3{직렬화 방식?}
-    Q3 -->|kotlinx . serialization| M04[04-json\n@Serializable 필요]
-    Q3 -->|Jackson 2 .x| M08[08-jackson\n유연한 ObjectMapper]
-    Q3 -->|고성능| M09[09-fastjson2\n2~3배 빠름]
-    Q3 -->|Jakarta EE 9+| M11[11-jackson3\nVirtual Thread 안정]
-
-    Q1 -->|암호화| Q4{WHERE 검색 필요?}
-    Q4 -->|검색 불필요| Q5{라이브러리?}
-    Q5 -->|Bouncy Castle| M01[01-crypt\n비결정적 암호화]
-    Q5 -->|Google Tink AEAD| M12A[12-tink AEAD\n고보안]
-    Q4 -->|검색 필요| Q6{라이브러리?}
-    Q6 -->|Jasypt| M10[10-jasypt\n결정적 암호화]
-    Q6 -->|Google Tink DAEAD| M12B[12-tink DAEAD\n결정적+검색]
-
-    Q1 -->|통화/금액| M05[05-money\nJavaMoney JSR-354]
-    Q1 -->|커스텀 ID/압축| M06[06-custom-columns\nSnowflake/LZ4/Kryo]
-    Q1 -->|커스텀 Entity| M07[07-custom-entities\nSnowflake/KSUID/UUID]
-
-    classDef blue   fill:#E3F2FD,stroke:#90CAF9,color:#1565C0
-    classDef green  fill:#E8F5E9,stroke:#A5D6A7,color:#2E7D32
-    classDef purple fill:#F3E5F5,stroke:#CE93D8,color:#6A1B9A
-    classDef orange fill:#FFF3E0,stroke:#FFCC80,color:#E65100
-    classDef teal   fill:#E0F2F1,stroke:#80CBC4,color:#00695C
-    classDef red    fill:#FFEBEE,stroke:#EF9A9A,color:#C62828
-
-    class M02,M03 blue
-    class M04,M08,M09,M11 green
-    class M01,M12A,M12B red
-    class M10 orange
-    class M05 teal
-    class M06,M07 purple
-```
+![Module diagram](../docs/images/readme-diagrams/06-advanced-architecture-01.png)
 
 ## JSON 모듈 비교
 
