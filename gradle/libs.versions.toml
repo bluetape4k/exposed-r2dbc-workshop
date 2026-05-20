@@ -217,7 +217,7 @@ postgresql-driver = { module = "org.postgresql:postgresql", version = "42.7.11" 
 # Misc
 findbugs = { module = "com.google.code.findbugs:jsr305", version = "3.0.2" }
 guava = { module = "com.google.guava:guava", version = "33.6.0-jre" }
-fory-kotlin = { module = "org.apache.fory:fory-kotlin", version = "0.15.0" }
+fory-kotlin = { module = "org.apache.fory:fory-kotlin", version = "0.17.0" }
 kryo = { module = "com.esotericsoftware:kryo", version = "5.6.2" }
 java-uuid-generator = { module = "com.fasterxml.uuid:java-uuid-generator", version = "5.2.0" }
 javax-money-api = { module = "javax.money:money-api", version = "1.1" }
