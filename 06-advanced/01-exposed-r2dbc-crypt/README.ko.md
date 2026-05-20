@@ -60,6 +60,14 @@
 5. **키 교체(Rotation)**: 키를 교체해야 할 경우 기존 데이터를 일괄 재암호화해야 합니다.
    운영 환경에서는 키 교체 절차를 사전에 계획하세요.
 
+## 클래스 구조 다이어그램
+
+![01 exposed r2dbc crypt Class Structure diagram](../../docs/images/readme-diagrams/06-advanced-01-exposed-r2dbc-crypt-class-01.png)
+
+> 비결정적 암호화: 동일 평문도 매번 다른 암호문 생성 — AES_256_PBE_GCM 권장 (AEAD 인증 포함)
+
+> 암호화 컬럼은 `WHERE` 절 동등성 검색 불가 — 결정적 암호화가 필요하면 `jasypt` 모듈 참고
+
 ## 예제 개요
 
 ### `Ex01_EncryptedColumn.kt` (DSL 스타일)
@@ -78,14 +86,6 @@ DAO API와 암호화 컬럼을 통합하여 엔티티처럼 사용하는 방법�
 - **엔티티 정의**: `encryptedVarchar`와 `encryptedBinary` 컬럼에 매핑되는 속성을 가진 `IntEntity` 정의
 - **CRUD 작업**: 엔티티 생성(`ETest.new { ... }`), 읽기(`ETest.all()`), 업데이트가 원활하게 작동합니다. 암호화와 복호화는 개발자에게 완전히 투명합니다.
 - **검색 제한**: 암호화된 속성으로 엔티티 찾기(`ETest.find { TestTable.varchar eq "value" }`)가 실패함을 강조합니다.
-
-## 클래스 구조 다이어그램
-
-![01 exposed r2dbc crypt Class Structure diagram](../../docs/images/readme-diagrams/06-advanced-01-exposed-r2dbc-crypt-class-01.png)
-
-> 비결정적 암호화: 동일 평문도 매번 다른 암호문 생성 — AES_256_PBE_GCM 권장 (AEAD 인증 포함)
-
-> 암호화 컬럼은 `WHERE` 절 동등성 검색 불가 — 결정적 암호화가 필요하면 `jasypt` 모듈 참고
 
 ## 실행 흐름
 

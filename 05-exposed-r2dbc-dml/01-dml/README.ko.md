@@ -51,6 +51,20 @@ src/test/kotlin/exposed/r2dbc/examples/dml/
 
 > **참고**: 이 모듈은 `src/main`이 없고, 모든 코드가 `src/test`에 위치합니다. 학습/실습 목적의 테스트 전용 모듈입니다.
 
+## 예제 테이블 구조 (ER 다이어그램)
+
+아래는 이 모듈에서 공통으로 사용되는 테이블 구조입니다.
+
+![(ER ) diagram](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-erd-01.png)
+
+## DSL API 구조 (클래스 다이어그램)
+
+![DSL API ( ) diagram](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-class-02.png)
+
+## CTE / UPSERT 실행 흐름 (시퀀스 다이어그램)
+
+![CTE / UPSERT ( ) diagram](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-sequence-03.png)
+
 ## 예제 카테고리
 
 ### 기본 CRUD
@@ -181,20 +195,6 @@ cities.crossJoin(users)
     .where { cities.name eq "St. Petersburg" }
     .toList()
 ```
-
-## 예제 테이블 구조 (ER 다이어그램)
-
-아래는 이 모듈에서 공통으로 사용되는 테이블 구조입니다.
-
-![(ER ) diagram](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-erd-01.png)
-
-## DSL API 구조 (클래스 다이어그램)
-
-![DSL API ( ) diagram](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-class-02.png)
-
-## CTE / UPSERT 실행 흐름 (시퀀스 다이어그램)
-
-![CTE / UPSERT ( ) diagram](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-sequence-03.png)
 
 ## Flow 수집 패턴
 

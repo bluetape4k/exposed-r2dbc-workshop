@@ -200,7 +200,7 @@ object CustomIdTable: IdTable<Email>("emails") {
 
 ## Blog 도메인 ERD
 
-![Blog ERD diagram](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-erd-03.png)
+![Blog ERD diagram](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-class-02.png)
 
 ## JPA vs Exposed 주요 개념 매핑 요약
 
