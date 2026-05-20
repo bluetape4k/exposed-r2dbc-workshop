@@ -24,14 +24,14 @@
 <rect class="frame" x="32" y="28" width="980" height="636" rx="28"/>
 <text class="title" x="66" y="82">Tenant Context Propagation Flow</text>
 <text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M522 552 C522 552 856 552 856 552"/>
-<path class="line" d="M188 552 C188 552 522 552 522 552"/>
-<path class="line" d="M856 386 C856 469 188 469 188 552"/>
-<path class="line" d="M522 386 C522 386 856 386 856 386"/>
-<path class="line" d="M188 386 C188 386 522 386 522 386"/>
-<path class="line" d="M856 220 C856 303 188 303 188 386"/>
-<path class="line" d="M522 220 C522 220 856 220 856 220"/>
-<path class="line" d="M188 220 C188 220 522 220 522 220"/>
+<path class="line" d="M672 552 C672 552 706 552 706 552"/>
+<path class="line" d="M338 552 C338 552 372 552 372 552"/>
+<path class="line" d="M706 386 C706 469 338 469 338 552"/>
+<path class="line" d="M672 386 C672 386 706 386 706 386"/>
+<path class="line" d="M338 386 C338 386 372 386 372 386"/>
+<path class="line" d="M706 220 C706 303 338 303 338 386"/>
+<path class="line" d="M672 220 C672 220 706 220 706 220"/>
+<path class="line" d="M338 220 C338 220 372 220 372 220"/>
 <g transform="translate(48,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
   <text class="smallLabel" x="140" y="33" text-anchor="middle">HTTP Request Header:</text>
@@ -39,9 +39,9 @@
 </g>
 <g transform="translate(382,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">TenantFilter (WebFilter)</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">Extract X-TENANT-ID</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">header</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">TenantFilter</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">(WebFilter) Extract</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">X-TENANT-ID header</text>
 </g>
 <g transform="translate(716,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
@@ -50,20 +50,21 @@
 </g>
 <g transform="translate(48,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">ActorController suspend</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">fun getAllActors()</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">ActorController</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">suspend fun</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">getAllActors()</text>
 </g>
 <g transform="translate(382,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">suspend Transaction With</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">Current Tenant</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">currentReactorTenant()</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">suspend Transaction</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">With Current Tenant</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">current Reactor</text>
 </g>
 <g transform="translate(716,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
   <text class="smallLabel" x="140" y="21" text-anchor="middle">Schema Utils.set</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">Schema(korean) Switch</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">schema</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">Schema(korean)</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">Switch schema</text>
 </g>
 <g transform="translate(48,502)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
@@ -72,8 +73,9 @@
 </g>
 <g transform="translate(382,502)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">R2DBC Database SELECT *</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">FROM korean.actors</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">R2DBC Database</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">SELECT * FROM</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">korean.actors</text>
 </g>
 <g transform="translate(716,502)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>

@@ -24,11 +24,11 @@ Exposed R2DBC DSL에서 사용 가능한 **SQL 함수(Functions)
 
 ## 함수 카테고리
 
-![03-functions diagram diagram](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-03-functions-architecture-01.png)
+![03 functions Architecture diagram](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-03-functions-architecture-01.png)
 
 ## 함수 클래스 계층 (클래스 다이어그램)
 
-![03-functions diagram diagram](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-03-functions-class-02.png)
+![( ) diagram](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-03-functions-class-02.png)
 
 ## 프로젝트 구조
 

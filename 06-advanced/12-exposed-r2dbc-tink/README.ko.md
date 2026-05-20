@@ -11,11 +11,11 @@ Tink는 Google이 개발한 고수준 암호화 라이브러리로, 안전한 �
 
 ## 실행 흐름
 
-![Execution diagram](../../docs/images/readme-diagrams/06-advanced-12-exposed-r2dbc-tink-sequence-01.png)
+![12 exposed r2dbc tink Sequence Flow diagram](../../docs/images/readme-diagrams/06-advanced-12-exposed-r2dbc-tink-sequence-01.png)
 
 ## 구조 다이어그램
 
-![Structure diagram](../../docs/images/readme-diagrams/06-advanced-12-exposed-r2dbc-tink-class-02.png)
+![12 exposed r2dbc tink Class Structure 2 diagram](../../docs/images/readme-diagrams/06-advanced-12-exposed-r2dbc-tink-class-02.png)
 
 ## 학습 목표
 

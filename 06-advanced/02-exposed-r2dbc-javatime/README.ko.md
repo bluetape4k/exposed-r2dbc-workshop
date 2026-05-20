@@ -51,7 +51,7 @@
 
 ## 구조 다이어그램
 
-![Structure diagram](../../docs/images/readme-diagrams/06-advanced-02-exposed-r2dbc-javatime-class-01.png)
+![02 exposed r2dbc javatime Class Structure diagram](../../docs/images/readme-diagrams/06-advanced-02-exposed-r2dbc-javatime-class-01.png)
 
 ## Java Time 타입 → DB 매핑 결정 흐름
 

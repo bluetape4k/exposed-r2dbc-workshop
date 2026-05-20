@@ -57,7 +57,7 @@ Used when comparing values in `WHERE` clauses to ensure correct SQL generation a
 
 ## Date/Time Processing Flow
 
-![Date / Time Processing Flow diagram](../../docs/images/readme-diagrams/06-advanced-03-exposed-r2dbc-kotlin-datetime-sequence-02.png)
+![Date/Time Processing Flow diagram](../../docs/images/readme-diagrams/06-advanced-03-exposed-r2dbc-kotlin-datetime-sequence-02.png)
 
 ## Column Type Selection Flow
 

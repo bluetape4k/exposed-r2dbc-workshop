@@ -33,7 +33,7 @@ Redisson + Exposed 를 활용한 캐시 전략의 **Kotlin Coroutines 기반 비
 
 ## 구조 다이어그램
 
-![Structure diagram](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-class-01.png)
+![02 cache strategies r2dbc Class Structure diagram](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-class-01.png)
 
 > `UserCacheRepository`: Near Cache(Caffeine) + Redis(MapCache)
 > `UserCredentialsCacheRepository`: 읽기 전용 캐시 (인증정보, 코드표)
@@ -41,7 +41,7 @@ Redisson + Exposed 를 활용한 캐시 전략의 **Kotlin Coroutines 기반 비
 
 ## 캐시 조회 흐름
 
-![Cache Query diagram](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-architecture-02.png)
+![02 cache strategies r2dbc Architecture 2 diagram](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-architecture-02.png)
 
 ## 프로젝트 구조
 
@@ -247,7 +247,7 @@ Markdown 리포트는 benchmark 이름, mode, score, error, unit, parameter 정�
 
 ### 전략별 동작 흐름
 
-![02-cache-strategies-r2dbc diagram diagram](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-architecture-03.png)
+![02 cache strategies r2dbc Architecture 3 diagram](../../docs/images/readme-diagrams/11-high-performance-02-cache-strategies-r2dbc-architecture-03.png)
 
 ### 전략 선택 기준
 

@@ -24,27 +24,27 @@
 <rect class="frame" x="32" y="28" width="1314" height="968" rx="28"/>
 <text class="title" x="66" y="82">Function Categories</text>
 <text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M522 386 C522 635 856 635 856 884"/>
-<path class="line" d="M188 386 C188 635 522 635 522 884"/>
-<path class="line" d="M188 386 C188 552 1190 552 1190 718"/>
-<path class="line" d="M188 386 C188 552 856 552 856 718"/>
-<path class="line" d="M1190 220 C1190 469 522 469 522 718"/>
-<path class="line" d="M1190 220 C1190 469 188 469 188 718"/>
-<path class="line" d="M856 220 C856 386 1190 386 1190 552"/>
-<path class="line" d="M856 220 C856 386 856 386 856 552"/>
-<path class="line" d="M522 220 C522 386 522 386 522 552"/>
-<path class="line" d="M522 220 C522 386 188 386 188 552"/>
-<path class="line" d="M522 220 C522 303 1190 303 1190 386"/>
-<path class="line" d="M522 220 C522 303 856 303 856 386"/>
-<path class="line" d="M188 220 C188 303 522 303 522 386"/>
-<path class="line" d="M188 220 C188 303 188 303 188 386"/>
-<path class="line" d="M188 220 C188 220 1190 220 1190 220"/>
-<path class="line" d="M188 220 C188 220 856 220 856 220"/>
-<path class="line" d="M188 220 C188 220 522 220 522 220"/>
+<path class="line" d="M522 446 C522 635 856 635 856 824"/>
+<path class="line" d="M188 446 C188 635 522 635 522 824"/>
+<path class="line" d="M338 386 C338 552 1040 552 1040 718"/>
+<path class="line" d="M338 386 C338 552 706 552 706 718"/>
+<path class="line" d="M1040 220 C1040 469 672 469 672 718"/>
+<path class="line" d="M1040 220 C1040 469 338 469 338 718"/>
+<path class="line" d="M1006 220 C1006 386 1040 386 1040 552"/>
+<path class="line" d="M856 280 C856 386 856 386 856 492"/>
+<path class="line" d="M522 280 C522 386 522 386 522 492"/>
+<path class="line" d="M372 220 C372 386 338 386 338 552"/>
+<path class="line" d="M672 220 C672 303 1040 303 1040 386"/>
+<path class="line" d="M672 220 C672 303 706 303 706 386"/>
+<path class="line" d="M338 220 C338 303 372 303 372 386"/>
+<path class="line" d="M188 280 C188 303 188 303 188 326"/>
+<path class="line" d="M338 220 C338 220 1040 220 1040 220"/>
+<path class="line" d="M338 220 C338 220 706 220 706 220"/>
+<path class="line" d="M338 220 C338 220 372 220 372 220"/>
 <g transform="translate(48,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Exposed R2DBC Function</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">Library</text>
+  <text class="smallLabel" x="140" y="33" text-anchor="middle">Exposed R2DBC</text>
+<text class="smallLabel" x="140" y="59" text-anchor="middle">Function Library</text>
 </g>
 <g transform="translate(382,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
@@ -65,25 +65,27 @@
 </g>
 <g transform="translate(48,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">Trigonometric Functions</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">(Ex04_Trigonometrical</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">Function)</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">Trigonometric</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">Functions</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">(Ex04_Trigonometrica</text>
 </g>
 <g transform="translate(382,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Window Functions</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">(Ex05_WindowFunction)</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">Window Functions</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">(Ex05_Window</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">Function)</text>
 </g>
 <g transform="translate(716,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">upper / lower / concat</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">charLength / substring /</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">trim</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">upper / lower /</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">concat charLength /</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">substring / trim</text>
 </g>
 <g transform="translate(1050,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">bitwiseAnd / bitwiseOr /</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">bitwiseXor</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">bitwiseAnd /</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">bitwiseOr /</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">bitwiseXor</text>
 </g>
 <g transform="translate(48,502)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
@@ -106,7 +108,8 @@
 </g>
 <g transform="translate(48,668)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">stdDevPop / stdDevSamp</text>
+  <text class="smallLabel" x="140" y="33" text-anchor="middle">stdDevPop /</text>
+<text class="smallLabel" x="140" y="59" text-anchor="middle">stdDevSamp</text>
 </g>
 <g transform="translate(382,668)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
@@ -114,7 +117,8 @@
 </g>
 <g transform="translate(716,668)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">sin / cos / tan / cot</text>
+  <text class="smallLabel" x="140" y="33" text-anchor="middle">sin / cos / tan /</text>
+<text class="smallLabel" x="140" y="59" text-anchor="middle">cot</text>
 </g>
 <g transform="translate(1050,668)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
@@ -122,11 +126,13 @@
 </g>
 <g transform="translate(382,834)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">degrees / radians / pi</text>
+  <text class="smallLabel" x="140" y="33" text-anchor="middle">degrees / radians /</text>
+<text class="smallLabel" x="140" y="59" text-anchor="middle">pi</text>
 </g>
 <g transform="translate(716,834)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Ranking: rowNumber /</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">rank denseRank / ntile</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">Ranking: rowNumber /</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">rank denseRank /</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">ntile</text>
 </g>
 </svg>

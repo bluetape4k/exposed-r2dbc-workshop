@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1918" viewBox="0 0 1200 1918" role="img" aria-label="Schema Migration Flow">
+<svg xmlns="http://www.w3.org/2000/svg" width="1532" height="2466" viewBox="0 0 1532 2466" role="img" aria-label="Schema Migration Flow">
 <defs>
   <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
   <marker id="openArrow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M 1 1 L 10 5 L 1 9" fill="none" stroke="#758297" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
@@ -20,78 +20,77 @@
     .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inherit)}
   </style>
 </defs>
-<rect class="canvas" width="1200" height="1918"/>
-<rect class="frame" x="32" y="28" width="1136" height="1862" rx="28"/>
+<rect class="canvas" width="1532" height="2466"/>
+<rect class="frame" x="32" y="28" width="1468" height="2410" rx="28"/>
 <text class="title" x="66" y="82">Schema Migration Flow</text>
 <text class="subtitle" x="70" y="118">Sequence messages from the original Mermaid source</text>
-<rect class="card" x="35" y="166" width="210" height="72" rx="20" fill="#E8F3FF" stroke="#5B8DEF"/>
+<rect class="card" x="1.5" y="166" width="277" height="72" rx="20" fill="#E8F3FF" stroke="#5B8DEF"/>
 <text class="smallLabel" x="140" y="209" text-anchor="middle">Application</text>
-<line x1="140" y1="252" x2="140" y2="1858" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="341.6666666666667" y="166" width="210" height="72" rx="20" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel" x="446.6666666666667" y="209" text-anchor="middle">suspendTransaction</text>
-<line x1="446.6666666666667" y1="252" x2="446.6666666666667" y2="1858" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="648.3333333333334" y="166" width="210" height="72" rx="20" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel" x="753.3333333333334" y="209" text-anchor="middle">SchemaUtils</text>
-<line x1="753.3333333333334" y1="252" x2="753.3333333333334" y2="1858" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="955" y="166" width="210" height="72" rx="20" fill="#FDECEF" stroke="#DC6B82"/>
-<text class="smallLabel" x="1060" y="209" text-anchor="middle">Database</text>
-<line x1="1060" y1="252" x2="1060" y2="1858" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect x="158" y="270" width="270.6666666666667" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="174" y="297" text-anchor="start">1. suspendTransaction { }</text>
-<path class="line" d="M140 310 L446.6666666666667 310"/>
-<rect x="464.6666666666667" y="352" width="270.6666666666667" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="480.6666666666667" y="379" text-anchor="start">2. SchemaUtils.create(Users, Orders)</text>
-<path class="line" d="M446.6666666666667 392 L753.3333333333334 392"/>
-<rect x="771.3333333333334" y="434" width="270.66666666666663" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="787.3333333333334" y="461" text-anchor="start">3. CREATE TABLE IF NOT EXISTS users (...)</text>
-<path class="line" d="M753.3333333333334 474 L1060 474"/>
-<rect x="771.3333333333334" y="516" width="270.66666666666663" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="787.3333333333334" y="543" text-anchor="start">4. CREATE TABLE IF NOT EXISTS orders (...)</text>
-<path class="line" d="M753.3333333333334 556 L1060 556"/>
-<rect x="771.3333333333334" y="598" width="270.66666666666663" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="787.3333333333334" y="625" text-anchor="start">5. done</text>
-<path class="dashed" d="M1060 638 L753.3333333333334 638"/>
-<rect x="464.6666666666667" y="680" width="270.6666666666667" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="480.6666666666667" y="707" text-anchor="start">6. Tables created</text>
-<path class="dashed" d="M753.3333333333334 720 L446.6666666666667 720"/>
-<rect x="158" y="762" width="270.6666666666667" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="174" y="789" text-anchor="start">7. suspendTransaction { }</text>
-<path class="line" d="M140 802 L446.6666666666667 802"/>
-<rect x="464.6666666666667" y="844" width="270.6666666666667" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="480.6666666666667" y="871" text-anchor="start">8. SchemaUtils.createMissing(Users)</text>
-<path class="line" d="M446.6666666666667 884 L753.3333333333334 884"/>
-<rect x="771.3333333333334" y="926" width="270.66666666666663" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="787.3333333333334" y="953" text-anchor="start">9. SHOW TABLES / query information_schema</text>
-<path class="line" d="M753.3333333333334 966 L1060 966"/>
-<rect x="771.3333333333334" y="1008" width="270.66666666666663" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="787.3333333333334" y="1035" text-anchor="start">10. Current schema info</text>
-<path class="dashed" d="M1060 1048 L753.3333333333334 1048"/>
-<rect x="771.3333333333334" y="1090" width="190" height="62" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="787.3333333333334" y="1117" text-anchor="start">11. Detect missing</text>
-<text class="strong" x="787.3333333333334" y="1140" text-anchor="start">tables/columns</text>
-<path class="line" d="M753.3333333333334 1130 C809.3333333333334 1130 809.3333333333334 1160 753.3333333333334 1160"/>
-<rect x="771.3333333333334" y="1172" width="270.66666666666663" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="787.3333333333334" y="1199" text-anchor="start">12. ALTER TABLE ... ADD COLUMN ...</text>
-<path class="line" d="M753.3333333333334 1212 L1060 1212"/>
-<rect x="771.3333333333334" y="1254" width="270.66666666666663" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="787.3333333333334" y="1281" text-anchor="start">13. Migration complete</text>
-<path class="dashed" d="M1060 1294 L753.3333333333334 1294"/>
-<rect x="464.6666666666667" y="1336" width="270.6666666666667" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="480.6666666666667" y="1363" text-anchor="start">14. Missing items added</text>
-<path class="dashed" d="M753.3333333333334 1376 L446.6666666666667 1376"/>
-<rect x="158" y="1418" width="270.6666666666667" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="174" y="1445" text-anchor="start">15. suspendTransaction { }</text>
-<path class="line" d="M140 1458 L446.6666666666667 1458"/>
-<rect x="464.6666666666667" y="1500" width="270.6666666666667" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="480.6666666666667" y="1527" text-anchor="start">16. SchemaUtils.drop(Orders, Users)</text>
-<path class="line" d="M446.6666666666667 1540 L753.3333333333334 1540"/>
-<rect x="771.3333333333334" y="1582" width="270.66666666666663" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="787.3333333333334" y="1609" text-anchor="start">17. DROP TABLE orders</text>
-<path class="line" d="M753.3333333333334 1622 L1060 1622"/>
-<rect x="771.3333333333334" y="1664" width="270.66666666666663" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="787.3333333333334" y="1691" text-anchor="start">18. DROP TABLE users</text>
-<path class="line" d="M753.3333333333334 1704 L1060 1704"/>
-<rect x="771.3333333333334" y="1746" width="270.66666666666663" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="787.3333333333334" y="1773" text-anchor="start">19. done</text>
-<path class="dashed" d="M1060 1786 L753.3333333333334 1786"/>
+<line class="lifeline" x1="140" y1="252" x2="140" y2="2406" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
+<rect class="card" x="418.83333333333326" y="166" width="277" height="72" rx="20" fill="#EAF7EF" stroke="#58A978"/>
+<text class="smallLabel" x="557.3333333333333" y="209" text-anchor="middle">suspendTransaction</text>
+<line class="lifeline" x1="557.3333333333333" y1="252" x2="557.3333333333333" y2="2406" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
+<rect class="card" x="836.1666666666666" y="166" width="277" height="72" rx="20" fill="#FFF3D9" stroke="#D6A441"/>
+<text class="smallLabel" x="974.6666666666666" y="209" text-anchor="middle">SchemaUtils</text>
+<line class="lifeline" x1="974.6666666666666" y1="252" x2="974.6666666666666" y2="2406" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
+<rect class="card" x="1253.5" y="166" width="277" height="72" rx="20" fill="#FDECEF" stroke="#DC6B82"/>
+<text class="smallLabel" x="1392" y="209" text-anchor="middle">Database</text>
+<line class="lifeline" x1="1392" y1="252" x2="1392" y2="2406" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
+<rect x="229.66666666666663" y="286" width="238" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="247.66666666666663" y="313" text-anchor="start">1. suspendTransaction { }</text>
+<path class="line" d="M140 344 L557.3333333333333 344"/>
+<rect x="602.5" y="396" width="327" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="620.5" y="423" text-anchor="start">2. SchemaUtils.create(Users, Orders)</text>
+<path class="line" d="M557.3333333333333 454 L974.6666666666666 454"/>
+<rect x="999.8333333333333" y="506" width="367" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="1017.8333333333333" y="533" text-anchor="start">3. CREATE TABLE IF NOT EXISTS users (...)</text>
+<path class="line" d="M974.6666666666666 564 L1392 564"/>
+<rect x="995.8333333333333" y="616" width="375" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="1013.8333333333333" y="643" text-anchor="start">4. CREATE TABLE IF NOT EXISTS orders (...)</text>
+<path class="line" d="M974.6666666666666 674 L1392 674"/>
+<rect x="1078.3333333333333" y="726" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="1096.3333333333333" y="753" text-anchor="start">5. done</text>
+<path class="dashed" d="M1392 784 L974.6666666666666 784"/>
+<rect x="661" y="836" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="679" y="863" text-anchor="start">6. Tables created</text>
+<path class="dashed" d="M974.6666666666666 894 L557.3333333333333 894"/>
+<rect x="229.66666666666663" y="946" width="238" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="247.66666666666663" y="973" text-anchor="start">7. suspendTransaction { }</text>
+<path class="line" d="M140 1004 L557.3333333333333 1004"/>
+<rect x="606.5" y="1056" width="319" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="624.5" y="1083" text-anchor="start">8. SchemaUtils.createMissing(Users)</text>
+<path class="line" d="M557.3333333333333 1114 L974.6666666666666 1114"/>
+<rect x="999.8333333333333" y="1166" width="367" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="1017.8333333333333" y="1193" text-anchor="start">9. SHOW TABLES / query information_schema</text>
+<path class="line" d="M974.6666666666666 1224 L1392 1224"/>
+<rect x="1072.3333333333333" y="1276" width="222" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="1090.3333333333333" y="1303" text-anchor="start">10. Current schema info</text>
+<path class="dashed" d="M1392 1334 L974.6666666666666 1334"/>
+<rect x="871.6666666666666" y="1386" width="302" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="889.6666666666666" y="1413" text-anchor="start">11. Detect missing tables/columns</text>
+<path class="line" d="M974.6666666666666 1444 C1038.6666666666665 1444 1038.6666666666665 1478 974.6666666666666 1478"/>
+<rect x="1027.8333333333333" y="1516" width="311" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="1045.8333333333333" y="1543" text-anchor="start">12. ALTER TABLE ... ADD COLUMN ...</text>
+<path class="line" d="M974.6666666666666 1574 L1392 1574"/>
+<rect x="1076.3333333333333" y="1626" width="214" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="1094.3333333333333" y="1653" text-anchor="start">13. Migration complete</text>
+<path class="dashed" d="M1392 1684 L974.6666666666666 1684"/>
+<rect x="655" y="1736" width="222" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="673" y="1763" text-anchor="start">14. Missing items added</text>
+<path class="dashed" d="M974.6666666666666 1794 L557.3333333333333 1794"/>
+<rect x="225.66666666666663" y="1846" width="246" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="243.66666666666663" y="1873" text-anchor="start">15. suspendTransaction { }</text>
+<path class="line" d="M140 1904 L557.3333333333333 1904"/>
+<rect x="606.5" y="1956" width="319" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="624.5" y="1983" text-anchor="start">16. SchemaUtils.drop(Orders, Users)</text>
+<path class="line" d="M557.3333333333333 2014 L974.6666666666666 2014"/>
+<rect x="1078.3333333333333" y="2066" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="1096.3333333333333" y="2093" text-anchor="start">17. DROP TABLE orders</text>
+<path class="line" d="M974.6666666666666 2124 L1392 2124"/>
+<rect x="1078.3333333333333" y="2176" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="1096.3333333333333" y="2203" text-anchor="start">18. DROP TABLE users</text>
+<path class="line" d="M974.6666666666666 2234 L1392 2234"/>
+<rect x="1078.3333333333333" y="2286" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="1096.3333333333333" y="2313" text-anchor="start">19. done</text>
+<path class="dashed" d="M1392 2344 L974.6666666666666 2344"/>
 </svg>

@@ -77,7 +77,7 @@ Similar to `Ex01_JsonColumn.kt` but uses the higher-performance `jsonb` column t
 
 ## JSON Serialization/Deserialization Flow
 
-![JSON Serialization / Deserialization Flow diagram](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-sequence-02.png)
+![JSON Serialization/Deserialization Flow diagram](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-sequence-02.png)
 
 ## JSON Query Function Usage Flow
 

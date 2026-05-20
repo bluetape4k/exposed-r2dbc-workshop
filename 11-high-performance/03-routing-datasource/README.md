@@ -38,7 +38,7 @@ Actual DB (H2 / PostgreSQL, etc.)
 
 ## Class Diagram
 
-![Class Diagram diagram](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-class-01.png)
+![03 routing datasource Class Structure diagram](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-class-01.png)
 
 ## Request → Routing → DB Selection Flow (sequenceDiagram)
 

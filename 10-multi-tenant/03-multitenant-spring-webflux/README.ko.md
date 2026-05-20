@@ -57,15 +57,15 @@ src/main/kotlin/exposed/r2dbc/multitenant/webflux/
 
 ### 멀티테넌시 요청 흐름
 
-![Request diagram](../../docs/images/readme-diagrams/10-multi-tenant-03-multitenant-spring-webflux-sequence-01.png)
+![03 multitenant spring webflux Sequence Flow diagram](../../docs/images/readme-diagrams/10-multi-tenant-03-multitenant-spring-webflux-sequence-01.png)
 
 ## 테넌트 컨텍스트 전파 흐름
 
-![03-multitenant-spring-webflux diagram diagram](../../docs/images/readme-diagrams/10-multi-tenant-03-multitenant-spring-webflux-architecture-02.png)
+![03 multitenant spring webflux Architecture 2 diagram](../../docs/images/readme-diagrams/10-multi-tenant-03-multitenant-spring-webflux-architecture-02.png)
 
 ## TenantAwareRepository 클래스 구조
 
-![TenantAwareRepository Structure diagram](../../docs/images/readme-diagrams/10-multi-tenant-03-multitenant-spring-webflux-class-03.png)
+![TenantAwareRepository diagram](../../docs/images/readme-diagrams/10-multi-tenant-03-multitenant-spring-webflux-class-03.png)
 
 ### 테넌트 정의
 

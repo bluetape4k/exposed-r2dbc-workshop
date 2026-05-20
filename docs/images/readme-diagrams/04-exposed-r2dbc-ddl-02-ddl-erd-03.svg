@@ -22,7 +22,7 @@
 </defs>
 <rect class="canvas" width="842" height="803"/>
 <rect class="frame" x="32" y="28" width="778" height="747" rx="28"/>
-<text class="title" x="66" y="82">Sample Table ERD (Users / Orders / Products)</text>
+<text class="title" x="66" y="82">Sample Table ERD</text>
 <text class="subtitle" x="70" y="118">ERD tables and relationships from the original Mermaid source</text>
 <path class="line" d="M220 589.5 C220 596.25 622 596.25 622 603"/>
 <path class="line" d="M622 280 C622 441.5 622 441.5 622 603"/>
@@ -30,7 +30,7 @@
 <g transform="translate(60,170)">
   <rect class="card" x="0" y="0" width="320" height="247" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
   <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#5B8DEF"/>
-  <text class="label" x="160" y="52" text-anchor="middle">users</text>
+  <text class="label" x="160" y="44" text-anchor="middle">users</text>
   <text class="mono" x="18" y="104">int id PK auto increment</text>
 <text class="mono" x="18" y="131">varchar name NOT NULL</text>
 <text class="mono" x="18" y="158">varchar email UNIQUE NOT NULL</text>
@@ -40,7 +40,7 @@
 <g transform="translate(462,170)">
   <rect class="card" x="0" y="0" width="320" height="220" rx="5" fill="#EAF7EF" stroke="#58A978"/>
   <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#58A978"/>
-  <text class="label" x="160" y="52" text-anchor="middle">orders</text>
+  <text class="label" x="160" y="44" text-anchor="middle">orders</text>
   <text class="mono" x="18" y="104">int id PK auto increment</text>
 <text class="mono" x="18" y="131">int user_id FK NOT NULL</text>
 <text class="mono" x="18" y="158">decimal amount CHECK amount &gt; 0</text>
@@ -49,7 +49,7 @@
 <g transform="translate(60,493)">
   <rect class="card" x="0" y="0" width="320" height="193" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
   <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#D6A441"/>
-  <text class="label" x="160" y="52" text-anchor="middle">products</text>
+  <text class="label" x="160" y="44" text-anchor="middle">products</text>
   <text class="mono" x="18" y="104">int id PK auto increment</text>
 <text class="mono" x="18" y="131">varchar name NOT NULL, indexed</text>
 <text class="mono" x="18" y="158">varchar sku UNIQUE NOT NULL</text>
@@ -57,7 +57,7 @@
 <g transform="translate(462,493)">
   <rect class="card" x="0" y="0" width="320" height="220" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
   <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#DC6B82"/>
-  <text class="label" x="160" y="52" text-anchor="middle">order_items</text>
+  <text class="label" x="160" y="44" text-anchor="middle">order_items</text>
   <text class="mono" x="18" y="104">int id PK auto increment</text>
 <text class="mono" x="18" y="131">int order_id FK NOT NULL</text>
 <text class="mono" x="18" y="158">int product_id FK NOT NULL</text>

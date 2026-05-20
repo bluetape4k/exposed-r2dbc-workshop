@@ -186,15 +186,15 @@ cities.crossJoin(users)
 
 아래는 이 모듈에서 공통으로 사용되는 테이블 구조입니다.
 
-![Example Table Structure (ER ) diagram](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-erd-01.png)
+![(ER ) diagram](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-erd-01.png)
 
 ## DSL API 구조 (클래스 다이어그램)
 
-![DSL API Structure diagram](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-class-02.png)
+![DSL API ( ) diagram](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-class-02.png)
 
 ## CTE / UPSERT 실행 흐름 (시퀀스 다이어그램)
 
-![CTE / UPSERT Execution diagram](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-sequence-03.png)
+![CTE / UPSERT ( ) diagram](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-01-dml-sequence-03.png)
 
 ## Flow 수집 패턴
 

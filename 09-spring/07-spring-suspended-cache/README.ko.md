@@ -25,11 +25,11 @@ Spring WebFlux + Exposed R2DBC 환경에서 Lettuce 기반의 Suspended Cache를
 
 ## 실행 흐름
 
-![Execution diagram](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-sequence-01.png)
+![07 spring suspended cache Sequence Flow diagram](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-sequence-01.png)
 
 ## Cache 클래스 구조 (classDiagram)
 
-![Cache Structure (classDiagram) diagram](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-class-02.png)
+![Cache (classDiagram) diagram](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-class-02.png)
 
 ## Cache-Aside 패턴 흐름
 

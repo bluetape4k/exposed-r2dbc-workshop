@@ -24,22 +24,22 @@
 <rect class="frame" x="32" y="28" width="1314" height="636" rx="28"/>
 <text class="title" x="66" y="82">JSON Query Function Usage Flow</text>
 <text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M856 552 C856 552 1190 552 1190 552"/>
-<path class="line" d="M522 552 C522 552 1190 552 1190 552"/>
-<path class="line" d="M188 552 C188 552 1190 552 1190 552"/>
-<path class="line" d="M1190 386 C1190 469 1190 469 1190 552"/>
-<path class="line" d="M856 386 C856 469 1190 469 1190 552"/>
-<path class="line" d="M522 386 C522 469 1190 469 1190 552"/>
-<path class="line" d="M1190 220 C1190 386 856 386 856 552"/>
-<path class="line" d="M1190 220 C1190 386 522 386 522 552"/>
-<path class="line" d="M1190 220 C1190 386 188 386 188 552"/>
-<path class="line" d="M856 220 C856 303 1190 303 1190 386"/>
-<path class="line" d="M856 220 C856 303 856 303 856 386"/>
-<path class="line" d="M856 220 C856 303 522 303 522 386"/>
-<path class="line" d="M522 220 C522 303 188 303 188 386"/>
-<path class="line" d="M522 220 C522 220 1190 220 1190 220"/>
-<path class="line" d="M522 220 C522 220 856 220 856 220"/>
-<path class="line" d="M188 220 C188 220 522 220 522 220"/>
+<path class="line" d="M1006 552 C1006 552 1040 552 1040 552"/>
+<path class="line" d="M672 552 C672 552 1040 552 1040 552"/>
+<path class="line" d="M338 552 C338 552 1040 552 1040 552"/>
+<path class="line" d="M1190 446 C1190 469 1190 469 1190 492"/>
+<path class="line" d="M1006 386 C1006 469 1040 469 1040 552"/>
+<path class="line" d="M672 386 C672 469 1040 469 1040 552"/>
+<path class="line" d="M1040 220 C1040 386 1006 386 1006 552"/>
+<path class="line" d="M1040 220 C1040 386 672 386 672 552"/>
+<path class="line" d="M1040 220 C1040 386 338 386 338 552"/>
+<path class="line" d="M1006 220 C1006 303 1040 303 1040 386"/>
+<path class="line" d="M856 280 C856 303 856 303 856 326"/>
+<path class="line" d="M706 220 C706 303 672 303 672 386"/>
+<path class="line" d="M372 220 C372 303 338 303 338 386"/>
+<path class="line" d="M672 220 C672 220 1040 220 1040 220"/>
+<path class="line" d="M672 220 C672 220 706 220 706 220"/>
+<path class="line" d="M338 220 C338 220 372 220 372 220"/>
 <g transform="translate(48,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
   <text class="smallLabel" x="140" y="45" text-anchor="middle">Write JSON query</text>
@@ -58,19 +58,21 @@
 </g>
 <g transform="translate(48,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">Unsupported By Dialect</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">Exception Mostly</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">unsupported</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">Unsupported By</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">Dialect Exception</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">Mostly unsupported</text>
 </g>
 <g transform="translate(382,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">extract(path, toScalar)</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">path: field, nested</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">extract(path,</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">toScalar) path:</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">field, nested</text>
 </g>
 <g transform="translate(716,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">contains(jsonString) @&gt;</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">operator (GIN index)</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">contains(jsonString)</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">@&gt; operator (GIN</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">index)</text>
 </g>
 <g transform="translate(1050,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
@@ -79,8 +81,9 @@
 </g>
 <g transform="translate(48,502)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">extract(path, toScalar)</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">path: .field.nested</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">extract(path,</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">toScalar) path:</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">.field.nested</text>
 </g>
 <g transform="translate(382,502)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
@@ -98,13 +101,4 @@
 <text class="smallLabel" x="140" y="47" text-anchor="middle">All().where{...}.to</text>
 <text class="smallLabel" x="140" y="73" text-anchor="middle">List()</text>
 </g>
-<text class="small" x="689" y="212" text-anchor="middle">PostgreSQL</text>
-<text class="small" x="856" y="212" text-anchor="middle">MySQL 8</text>
-<text class="small" x="355" y="295" text-anchor="middle">H2 / SQLServer /.</text>
-<text class="small" x="689" y="295" text-anchor="middle">Extract specific.</text>
-<text class="small" x="856" y="295" text-anchor="middle">Check JSON contai.</text>
-<text class="small" x="1023" y="295" text-anchor="middle">Check JSONPath ex.</text>
-<text class="small" x="689" y="378" text-anchor="middle">Extract specific.</text>
-<text class="small" x="856" y="378" text-anchor="middle">Check JSON contai.</text>
-<text class="small" x="1023" y="378" text-anchor="middle">Check JSONPath ex.</text>
 </svg>

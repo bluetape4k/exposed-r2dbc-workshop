@@ -24,24 +24,24 @@
 <rect class="frame" x="32" y="28" width="1314" height="802" rx="28"/>
 <text class="title" x="66" y="82">Java Time Type to DB Mapping Decision Flow</text>
 <text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M1190 552 C1190 635 689 635 689 718"/>
-<path class="line" d="M856 552 C856 635 689 635 689 718"/>
-<path class="line" d="M522 552 C522 635 689 635 689 718"/>
-<path class="line" d="M1190 386 C1190 552 689 552 689 718"/>
-<path class="line" d="M856 386 C856 552 689 552 689 718"/>
-<path class="line" d="M522 386 C522 552 689 552 689 718"/>
-<path class="line" d="M188 386 C188 552 689 552 689 718"/>
-<path class="line" d="M188 552 C188 552 1190 552 1190 552"/>
-<path class="line" d="M188 552 C188 552 856 552 856 552"/>
-<path class="line" d="M1190 220 C1190 386 522 386 522 552"/>
-<path class="line" d="M1190 220 C1190 386 188 386 188 552"/>
-<path class="line" d="M1190 220 C1190 303 1190 303 1190 386"/>
-<path class="line" d="M1190 220 C1190 303 856 303 856 386"/>
-<path class="line" d="M856 220 C856 303 522 303 522 386"/>
-<path class="line" d="M856 220 C856 303 188 303 188 386"/>
-<path class="line" d="M522 220 C522 220 1190 220 1190 220"/>
-<path class="line" d="M522 220 C522 220 856 220 856 220"/>
-<path class="line" d="M188 220 C188 220 522 220 522 220"/>
+<path class="line" d="M1040 552 C1040 635 839 635 839 718"/>
+<path class="line" d="M706 552 C706 635 839 635 839 718"/>
+<path class="line" d="M672 552 C672 635 539 635 539 718"/>
+<path class="line" d="M1040 386 C1040 552 839 552 839 718"/>
+<path class="line" d="M856 446 C856 552 689 552 689 658"/>
+<path class="line" d="M522 446 C522 552 689 552 689 658"/>
+<path class="line" d="M338 386 C338 552 539 552 539 718"/>
+<path class="line" d="M338 552 C338 552 1040 552 1040 552"/>
+<path class="line" d="M338 552 C338 552 706 552 706 552"/>
+<path class="line" d="M1040 220 C1040 386 672 386 672 552"/>
+<path class="line" d="M1040 220 C1040 386 338 386 338 552"/>
+<path class="line" d="M1190 280 C1190 303 1190 303 1190 326"/>
+<path class="line" d="M1040 220 C1040 303 1006 303 1006 386"/>
+<path class="line" d="M706 220 C706 303 672 303 672 386"/>
+<path class="line" d="M706 220 C706 303 338 303 338 386"/>
+<path class="line" d="M672 220 C672 220 1040 220 1040 220"/>
+<path class="line" d="M672 220 C672 220 706 220 706 220"/>
+<path class="line" d="M338 220 C338 220 372 220 372 220"/>
 <g transform="translate(48,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
   <text class="smallLabel" x="140" y="33" text-anchor="middle">Decide data</text>
@@ -49,13 +49,14 @@
 </g>
 <g transform="translate(382,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Is timezone information</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">needed?</text>
+  <text class="smallLabel" x="140" y="33" text-anchor="middle">Is timezone</text>
+<text class="smallLabel" x="140" y="59" text-anchor="middle">information needed?</text>
 </g>
 <g transform="translate(716,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Does DB support</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">timestampWithTimeZone?</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">Does DB support</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">timestamp With Time</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">Zone?</text>
 </g>
 <g transform="translate(1050,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
@@ -63,14 +64,14 @@
 </g>
 <g transform="translate(48,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">timestampWithTimeZone</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">OffsetDateTime</text>
+  <text class="smallLabel" x="140" y="33" text-anchor="middle">timestamp With Time</text>
+<text class="smallLabel" x="140" y="59" text-anchor="middle">Zone OffsetDateTime</text>
 </g>
 <g transform="translate(382,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">Store ZoneId separately</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">in VARCHAR timestamp -</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">Instant</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">Store ZoneId</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">separately in</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">VARCHAR timestamp -</text>
 </g>
 <g transform="translate(716,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
@@ -91,28 +92,19 @@
 </g>
 <g transform="translate(716,502)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">datetime LocalDateTime</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">H2-only high precision</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">datetime</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">LocalDateTime</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">H2-only high</text>
 </g>
 <g transform="translate(1050,502)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">datetime LocalDateTime</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">Watch for microsecond</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">truncation</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">datetime</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">LocalDateTime Watch</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">for microsecond</text>
 </g>
 <g transform="translate(549,668)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
   <text class="smallLabel" x="140" y="33" text-anchor="middle">DB column definition</text>
 <text class="smallLabel" x="140" y="59" text-anchor="middle">complete</text>
 </g>
-<text class="small" x="689" y="212" text-anchor="middle">Yes</text>
-<text class="small" x="856" y="212" text-anchor="middle">No</text>
-<text class="small" x="522" y="295" text-anchor="middle">PostgreSQL / MySQ.</text>
-<text class="small" x="689" y="295" text-anchor="middle">MariaDB / MySQL V5</text>
-<text class="small" x="1023" y="295" text-anchor="middle">Date only</text>
-<text class="small" x="1190" y="295" text-anchor="middle">Time only</text>
-<text class="small" x="689" y="378" text-anchor="middle">Local date+time</text>
-<text class="small" x="856" y="378" text-anchor="middle">UTC-based timesta.</text>
-<text class="small" x="522" y="544" text-anchor="middle">H2 9-digit nanose.</text>
-<text class="small" x="689" y="544" text-anchor="middle">PostgreSQL/MySQL.</text>
 </svg>

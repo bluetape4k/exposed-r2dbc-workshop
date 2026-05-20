@@ -24,13 +24,13 @@
 <rect class="frame" x="32" y="28" width="980" height="636" rx="28"/>
 <text class="title" x="66" y="82">Coroutine State Diagram</text>
 <text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M856 552 C856 552 522 552 522 552"/>
-<path class="line" d="M522 552 C522 552 856 552 856 552"/>
-<path class="line" d="M522 220 C522 386 188 386 188 552"/>
-<path class="line" d="M522 220 C522 303 856 303 856 386"/>
-<path class="line" d="M188 386 C188 303 522 303 522 220"/>
-<path class="line" d="M522 220 C522 303 188 303 188 386"/>
-<path class="line" d="M188 220 C188 220 522 220 522 220"/>
+<path class="line" d="M706 552 C706 552 672 552 672 552"/>
+<path class="line" d="M672 552 C672 552 706 552 706 552"/>
+<path class="line" d="M372 220 C372 386 338 386 338 552"/>
+<path class="line" d="M672 220 C672 303 706 303 706 386"/>
+<path class="line" d="M338 386 C338 303 372 303 372 220"/>
+<path class="line" d="M372 220 C372 303 338 303 338 386"/>
+<path class="line" d="M338 220 C338 220 372 220 372 220"/>
 <g transform="translate(48,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
   <text class="smallLabel" x="140" y="45" text-anchor="middle">Created</text>

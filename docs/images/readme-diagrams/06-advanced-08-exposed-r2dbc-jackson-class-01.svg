@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1754" height="1060" viewBox="0 0 1754 1060" role="img" aria-label="Structure Diagram">
+<svg xmlns="http://www.w3.org/2000/svg" width="1754" height="1096" viewBox="0 0 1754 1096" role="img" aria-label="Structure Diagram">
 <defs>
   <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
   <marker id="openArrow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M 1 1 L 10 5 L 1 9" fill="none" stroke="#758297" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
@@ -20,61 +20,55 @@
     .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inherit)}
   </style>
 </defs>
-<rect class="canvas" width="1754" height="1060"/>
-<rect class="frame" x="32" y="28" width="1690" height="1004" rx="28"/>
+<rect class="canvas" width="1754" height="1096"/>
+<rect class="frame" x="32" y="28" width="1690" height="1040" rx="28"/>
 <text class="title" x="66" y="82">Structure Diagram</text>
 <text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="line" d="M877 442 C877 375 1492 375 1492 308"/>
-<path class="line" d="M672 284 C672 363 877 363 877 442"/>
-<path class="inheritLine" d="M877 736 C877 510 672 510 672 284"/>
+<path class="line" d="M877 452 C877 386.5 1492 386.5 1492 321"/>
+<path class="line" d="M672 300 C672 376 877 376 877 452"/>
+<path class="inheritLine" d="M877 756 C877 528 672 528 672 300"/>
 <g transform="translate(92,180)">
-  <rect class="card" x="0" y="0" width="340" height="120" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
+  <rect class="card" x="0" y="0" width="340" height="133" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#5B8DEF"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">JacksonBColumnT</text>
+  <text class="label" x="170" y="61" text-anchor="middle">JacksonBColumnT</text>
   <text class="mono" x="18" y="108">+jacksonb(name) Column~T~</text>
 </g>
 <g transform="translate(502,180)">
-  <rect class="card" x="0" y="0" width="340" height="96" rx="5" fill="#EAF7EF" stroke="#58A978"/>
+  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#EAF7EF" stroke="#58A978"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#58A978"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">JacksonColumn</text>
+  <text class="label" x="170" y="61" text-anchor="middle">JacksonColumn</text>
 
 </g>
 <g transform="translate(912,180)">
-  <rect class="card" x="0" y="0" width="340" height="144" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
+  <rect class="card" x="0" y="0" width="340" height="154" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#D6A441"/>
   <text class="small" x="170" y="26" text-anchor="middle">«bluetape4k-exposed»</text>
-  <text class="label" x="170" y="57" text-anchor="middle">JacksonColumnT</text>
+  <text class="label" x="170" y="61" text-anchor="middle">JacksonColumnT</text>
   <text class="mono" x="18" y="108">+jackson(name) Column~T~</text>
-<text class="mono" x="18" y="132">-objectMapper: ObjectMapper</text>
+<text class="mono" x="18" y="129">-objectMapper: ObjectMapper</text>
 </g>
 <g transform="translate(1322,180)">
-  <rect class="card" x="0" y="0" width="340" height="120" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
+  <rect class="card" x="0" y="0" width="340" height="133" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#DC6B82"/>
   <text class="small" x="170" y="26" text-anchor="middle">«Jackson Extension»</text>
-  <text class="label" x="170" y="57" text-anchor="middle">KotlinModule</text>
+  <text class="label" x="170" y="61" text-anchor="middle">KotlinModule</text>
   <text class="mono" x="18" y="108">+Kotlin data class support</text>
 </g>
-<g transform="translate(707,450)">
-  <rect class="card" x="0" y="0" width="340" height="144" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
+<g transform="translate(707,460)">
+  <rect class="card" x="0" y="0" width="340" height="154" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#45A7A1"/>
   <text class="small" x="170" y="26" text-anchor="middle">«Jackson (com.fasterxm.»</text>
-  <text class="label" x="170" y="57" text-anchor="middle">ObjectMapper</text>
+  <text class="label" x="170" y="61" text-anchor="middle">ObjectMapper</text>
   <text class="mono" x="18" y="108">+writeValueAsString(value): String</text>
-<text class="mono" x="18" y="132">+readValue(json, klass): T</text>
+<text class="mono" x="18" y="129">+readValue(json, klass): T</text>
 </g>
-<g transform="translate(707,744)">
-  <rect class="card" x="0" y="0" width="340" height="96" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
+<g transform="translate(707,764)">
+  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#8A72D6"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">JacksonBColumn</text>
+  <text class="label" x="170" y="61" text-anchor="middle">JacksonBColumn</text>
 
 </g>
-<rect x="716.5" y="495" width="116" height="26" rx="13" fill="#ffffff" opacity="0.94"/>
-<text class="small" x="774.5" y="513" text-anchor="middle">json to jsonb ext.</text>
-<rect x="716.5" y="348" width="116" height="26" rx="13" fill="#ffffff" opacity="0.94"/>
-<text class="small" x="774.5" y="366" text-anchor="middle">serialization/des.</text>
-<rect x="1126.5" y="360" width="116" height="26" rx="13" fill="#ffffff" opacity="0.94"/>
-<text class="small" x="1184.5" y="378" text-anchor="middle">registered</text>
 </svg>

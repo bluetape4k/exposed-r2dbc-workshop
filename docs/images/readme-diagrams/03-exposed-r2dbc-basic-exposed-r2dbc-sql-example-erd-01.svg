@@ -28,14 +28,14 @@
 <g transform="translate(60,170)">
   <rect class="card" x="0" y="0" width="320" height="166" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
   <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#5B8DEF"/>
-  <text class="label" x="160" y="52" text-anchor="middle">cities</text>
+  <text class="label" x="160" y="44" text-anchor="middle">cities</text>
   <text class="mono" x="18" y="104">int id PK SERIAL, auto increment</text>
 <text class="mono" x="18" y="131">varchar(50) name NOT NULL</text>
 </g>
 <g transform="translate(462,170)">
   <rect class="card" x="0" y="0" width="320" height="193" rx="5" fill="#EAF7EF" stroke="#58A978"/>
   <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#58A978"/>
-  <text class="label" x="160" y="52" text-anchor="middle">users</text>
+  <text class="label" x="160" y="44" text-anchor="middle">users</text>
   <text class="mono" x="18" y="104">varchar(10) id PK</text>
 <text class="mono" x="18" y="131">varchar(50) name NOT NULL</text>
 <text class="mono" x="18" y="158">int city_id FK NULL, references c.</text>

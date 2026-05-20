@@ -24,20 +24,20 @@
 <rect class="frame" x="32" y="28" width="1314" height="968" rx="28"/>
 <text class="title" x="66" y="82">Column Type Selection Flow</text>
 <text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M522 884 C522 884 856 884 856 884"/>
-<path class="line" d="M522 718 C522 801 522 801 522 884"/>
-<path class="line" d="M522 220 C522 469 856 469 856 718"/>
-<path class="line" d="M1190 386 C1190 552 188 552 188 718"/>
-<path class="line" d="M1190 386 C1190 469 856 469 856 552"/>
-<path class="line" d="M1190 386 C1190 469 188 469 188 552"/>
-<path class="line" d="M522 220 C522 303 856 303 856 386"/>
-<path class="line" d="M522 220 C522 303 188 303 188 386"/>
-<path class="line" d="M522 220 C522 220 856 220 856 220"/>
-<path class="line" d="M188 220 C188 220 522 220 522 220"/>
+<path class="line" d="M672 884 C672 884 706 884 706 884"/>
+<path class="line" d="M522 778 C522 801 522 801 522 824"/>
+<path class="line" d="M522 280 C522 469 856 469 856 658"/>
+<path class="line" d="M1040 386 C1040 552 338 552 338 718"/>
+<path class="line" d="M1040 386 C1040 469 1006 469 1006 552"/>
+<path class="line" d="M1040 386 C1040 469 338 469 338 552"/>
+<path class="line" d="M672 220 C672 303 706 303 706 386"/>
+<path class="line" d="M372 220 C372 303 338 303 338 386"/>
+<path class="line" d="M672 220 C672 220 706 220 706 220"/>
+<path class="line" d="M338 220 C338 220 372 220 372 220"/>
 <g transform="translate(48,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Need to store date/time</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">data</text>
+  <text class="smallLabel" x="140" y="33" text-anchor="middle">Need to store</text>
+<text class="smallLabel" x="140" y="59" text-anchor="middle">date/time data</text>
 </g>
 <g transform="translate(382,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
@@ -74,7 +74,8 @@
 </g>
 <g transform="translate(382,502)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">datetime → LocalDateTime</text>
+  <text class="smallLabel" x="140" y="33" text-anchor="middle">datetime →</text>
+<text class="smallLabel" x="140" y="59" text-anchor="middle">LocalDateTime</text>
 </g>
 <g transform="translate(716,502)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
@@ -90,8 +91,9 @@
 </g>
 <g transform="translate(382,668)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">timestampWithTimeZone →</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">OffsetDateTime</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">timestamp With Time</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">Zone →</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">OffsetDateTime</text>
 </g>
 <g transform="translate(716,668)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>

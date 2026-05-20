@@ -85,7 +85,7 @@ src/gatling/kotlin/
 
 ## 레이어 구조
 
-![Structure diagram](../../docs/images/readme-diagrams/01-spring-boot-spring-webflux-exposed-class-02.png)
+![spring webflux exposed Class Structure 2 diagram](../../docs/images/readme-diagrams/01-spring-boot-spring-webflux-exposed-class-02.png)
 
 ## Spring WebFlux + Exposed R2DBC 통합 흐름
 
