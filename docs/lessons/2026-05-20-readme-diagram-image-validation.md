@@ -32,3 +32,13 @@ sequence diagrams.
 
 For R2DBC workshop diagrams, keep sequence diagrams tall enough for labels and
 validate class diagrams for visible arrow stems before opening PRs.
+
+## 2026-05-20 ERD Routing Follow-up
+
+`09-spring-05-exposed-r2dbc-repository-coroutines-erd-03` had a Mermaid parser
+residue box and ambiguous relationship lines. The image was rebuilt from the
+current `MovieSchema` source so `actors_in_movies` is shown as the bridge table
+with explicit `movieId` and `actorId` FK arrows.
+
+Future ERDs should remove parser residue and route bridge-table FKs as short
+orthogonal lanes from bridge to parent tables.

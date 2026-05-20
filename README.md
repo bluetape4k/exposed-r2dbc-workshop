@@ -25,6 +25,16 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 
 상세 설명은 [Kotlin Exposed Book](https://debop.notion.site/Kotlin-Exposed-Book-1ad2744526b080428173e9c907abdae2)에서 확인할 수 있습니다.
 
+<!-- README_VISUAL_OVERVIEW:START -->
+## Overview Diagram
+
+![Exposed R2DBC Workshop overview diagram](docs/assets/readme-diagrams/root-readme-overview-01.png)
+
+## Module Composition Chart
+
+![Exposed R2DBC Workshop module composition chart](docs/assets/readme-charts/root-readme-module-chart-01.png)
+<!-- README_VISUAL_OVERVIEW:END -->
+
 ## 핵심 포인트
 
 - Kotlin `2.3.20`, JDK `21+`, Exposed `1.1.1`, Spring Boot `3.5.11`, Bluetape4k `1.5.0-Beta1`

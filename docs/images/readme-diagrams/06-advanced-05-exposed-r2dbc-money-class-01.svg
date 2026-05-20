@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1366" height="921" viewBox="0 0 1366 921" role="img" aria-label="Structure Diagram">
+<svg xmlns="http://www.w3.org/2000/svg" width="924" height="1029" viewBox="0 0 924 1029" role="img" aria-label="Structure Diagram">
 <defs>
   <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M 1 1 L 10 5 L 1 9" fill="none" stroke="#758297" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
-  <marker id="inherit" markerWidth="14" markerHeight="12" refX="12" refY="6" orient="auto" markerUnits="strokeWidth"><path d="M 0 1 L 12 6 L 0 11 Z" fill="#ffffff" stroke="#758297" stroke-width="1.8"/></marker>
+  <marker id="openArrow" markerWidth="10" markerHeight="8" refX="8.5" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M 1 1 L 8.5 4 L 1 7" fill="none" stroke="#758297" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  <marker id="inherit" markerWidth="11" markerHeight="10" refX="9.5" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M 0.5 1 L 9.5 5 L 0.5 9 Z" fill="#ffffff" stroke="#758297" stroke-width="1.7"/></marker>
   <style>
     .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
     .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
@@ -20,46 +20,46 @@
     .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inherit)}
   </style>
 </defs>
-<rect class="canvas" width="1366" height="921"/>
-<rect class="frame" x="32" y="28" width="1302" height="865" rx="28"/>
+<rect class="canvas" width="924" height="1029"/>
+<rect class="frame" x="32" y="28" width="860" height="973" rx="28"/>
 <text class="title" x="66" y="82">Structure Diagram</text>
 <text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="line" d="M263 172 C263 246.5 683 246.5 683 321"/>
-<path class="line" d="M683 518 C683 419.5 683 419.5 683 321"/>
-<path class="implLine" d="M683 518 C683 430 1103 430 1103 342"/>
-<path class="line" d="M263 172 C263 257 1103 257 1103 342"/>
-<g transform="translate(88,180)">
-  <rect class="card" x="0" y="0" width="350" height="196" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#5B8DEF"/>
-  <text class="small" x="175" y="26" text-anchor="middle">«Exposed extension»</text>
-  <text class="label" x="175" y="61" text-anchor="middle">CompositeMoney</text>
+<path class="line" d="M314 366 L314 411 L240 411 L240 456"/>
+<path class="line" d="M314 784 L314 689 L240 689 L240 589"/>
+<path class="implLine" d="M314 784 L314 681 L684 681 L684 610"/>
+<path class="line" d="M314 366 L314 142 L684 142 L684 456"/>
+<g transform="translate(144,784)">
+  <rect class="card" x="0" y="0" width="340" height="175" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
+  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#5B8DEF"/>
+  <text class="small" x="170" y="26" text-anchor="middle">«Moneta implementation»</text>
+  <text class="label" x="170" y="61" text-anchor="middle">Money</text>
+  <text class="mono" x="18" y="108">+of(amount, currency) Money</text>
+<text class="mono" x="18" y="129">+getNumber() NumberValue</text>
+<text class="mono" x="18" y="150">+getCurrency() CurrencyUnit</text>
+</g>
+<g transform="translate(70,456)">
+  <rect class="card" x="0" y="0" width="340" height="133" rx="5" fill="#EAF7EF" stroke="#58A978"/>
+  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#58A978"/>
+  <text class="small" x="170" y="26" text-anchor="middle">«JSR-354»</text>
+  <text class="label" x="170" y="61" text-anchor="middle">CurrencyUnit</text>
+  <text class="mono" x="18" y="108">+currencyCode: String</text>
+</g>
+<g transform="translate(144,170)">
+  <rect class="card" x="0" y="0" width="340" height="196" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
+  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#D6A441"/>
+  <text class="small" x="170" y="26" text-anchor="middle">«Exposed extension»</text>
+  <text class="label" x="170" y="61" text-anchor="middle">CompositeMoney</text>
   <text class="mono" x="18" y="108">+compositeMoney(precision, scale, name)</text>
 <text class="mono" x="18" y="129">CompositeColumn~MonetaryAmount?~</text>
 <text class="mono" x="18" y="150">+amount: Column~BigDecimal?~</text>
 <text class="mono" x="18" y="171">+currency: Column~CurrencyUnit?~</text>
 </g>
-<g transform="translate(508,180)">
-  <rect class="card" x="0" y="0" width="350" height="133" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#58A978"/>
-  <text class="small" x="175" y="26" text-anchor="middle">«JSR-354»</text>
-  <text class="label" x="175" y="61" text-anchor="middle">CurrencyUnit</text>
-  <text class="mono" x="18" y="108">+currencyCode: String</text>
-</g>
-<g transform="translate(928,180)">
-  <rect class="card" x="0" y="0" width="350" height="154" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#D6A441"/>
-  <text class="small" x="175" y="26" text-anchor="middle">«interface — JSR-354»</text>
-  <text class="label" x="175" y="61" text-anchor="middle">MonetaryAmount</text>
+<g transform="translate(514,456)">
+  <rect class="card" x="0" y="0" width="340" height="154" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
+  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#DC6B82"/>
+  <text class="small" x="170" y="26" text-anchor="middle">«interface — JSR-354»</text>
+  <text class="label" x="170" y="61" text-anchor="middle">MonetaryAmount</text>
   <text class="mono" x="18" y="108">+getNumber() NumberValue</text>
 <text class="mono" x="18" y="129">+getCurrency() CurrencyUnit</text>
-</g>
-<g transform="translate(508,526)">
-  <rect class="card" x="0" y="0" width="350" height="175" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
-  <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#DC6B82"/>
-  <text class="small" x="175" y="26" text-anchor="middle">«Moneta implementation»</text>
-  <text class="label" x="175" y="61" text-anchor="middle">Money</text>
-  <text class="mono" x="18" y="108">+of(amount, currency) Money</text>
-<text class="mono" x="18" y="129">+getNumber() NumberValue</text>
-<text class="mono" x="18" y="150">+getCurrency() CurrencyUnit</text>
 </g>
 </svg>

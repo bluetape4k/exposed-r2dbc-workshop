@@ -49,6 +49,15 @@
 | `.contains(value, path)`      | JSON 문서에 주어진 JSON 형식 문자열이 값으로 포함되어 있는지 확인. PostgreSQL에서는 효율적인 `@>` 연산자 사용                     |
 | `.exists(path, optional)`     | 주어진 JSONPath 표현식에 값이 존재하는지 확인                                                                 |
 
+## 구조 다이어그램
+
+![04 exposed r2dbc json Class Structure diagram](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-class-01.png)
+
+> `JsonBColumn`: PostgreSQL 전용 (인덱싱/연산 지원)
+
+> `json`: 모든 DB(H2, MySQL, MariaDB, PostgreSQL) 지원 — 텍스트 저장, 쿼리 느림
+> `jsonb`: PostgreSQL 전용 — 바이너리 저장, 인덱싱·`@>` 연산 지원, 쿼리 빠름
+
 ## 예제 개요
 
 ### `JsonTestData.kt`
@@ -67,15 +76,6 @@
 ### `Ex02_JsonBColumn.kt` (DSL & DAO with `jsonb`)
 
 `Ex01_JsonColumn.kt`와 유사하지만 더 성능이 좋은 `jsonb` 컬럼 타입을 사용합니다. 코드는 거의 동일하며, 주요 차이점은 테이블 정의와 기본 데이터베이스 성능 및 기능에 있음을 보여줍니다.
-
-## 구조 다이어그램
-
-![04 exposed r2dbc json Class Structure diagram](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-class-01.png)
-
-> `JsonBColumn`: PostgreSQL 전용 (인덱싱/연산 지원)
-
-> `json`: 모든 DB(H2, MySQL, MariaDB, PostgreSQL) 지원 — 텍스트 저장, 쿼리 느림
-> `jsonb`: PostgreSQL 전용 — 바이너리 저장, 인덱싱·`@>` 연산 지원, 쿼리 빠름
 
 ## JSON 직렬화/역직렬화 흐름
 
