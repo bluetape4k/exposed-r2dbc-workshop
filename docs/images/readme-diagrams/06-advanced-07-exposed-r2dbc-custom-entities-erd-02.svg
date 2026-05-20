@@ -27,7 +27,7 @@
 <g transform="translate(60,170)">
   <rect class="card" x="0" y="0" width="320" height="193" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
   <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#5B8DEF"/>
-  <text class="label" x="160" y="52" text-anchor="middle">t_snowflake</text>
+  <text class="label" x="160" y="44" text-anchor="middle">t_snowflake</text>
   <text class="mono" x="18" y="104">BIGINT id PK Snowflake ID (auto-g.</text>
 <text class="mono" x="18" y="131">VARCHAR name 255</text>
 <text class="mono" x="18" y="158">INT age</text>
@@ -35,7 +35,7 @@
 <g transform="translate(462,170)">
   <rect class="card" x="0" y="0" width="320" height="193" rx="5" fill="#EAF7EF" stroke="#58A978"/>
   <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#58A978"/>
-  <text class="label" x="160" y="52" text-anchor="middle">t_ksuid</text>
+  <text class="label" x="160" y="44" text-anchor="middle">t_ksuid</text>
   <text class="mono" x="18" y="104">VARCHAR id PK KSUID Base62 (27 ch.</text>
 <text class="mono" x="18" y="131">VARCHAR name 255</text>
 <text class="mono" x="18" y="158">INT age</text>
@@ -43,7 +43,7 @@
 <g transform="translate(864,170)">
   <rect class="card" x="0" y="0" width="320" height="193" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
   <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#D6A441"/>
-  <text class="label" x="160" y="52" text-anchor="middle">t_ksuid_millis</text>
+  <text class="label" x="160" y="44" text-anchor="middle">t_ksuid_millis</text>
   <text class="mono" x="18" y="104">VARCHAR id PK KSUID Millis (27 ch.</text>
 <text class="mono" x="18" y="131">VARCHAR name 255</text>
 <text class="mono" x="18" y="158">INT age</text>
@@ -51,7 +51,7 @@
 <g transform="translate(261,439)">
   <rect class="card" x="0" y="0" width="320" height="193" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
   <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#DC6B82"/>
-  <text class="label" x="160" y="52" text-anchor="middle">t_timebased_uuid</text>
+  <text class="label" x="160" y="44" text-anchor="middle">t_timebased_uuid</text>
   <text class="mono" x="18" y="104">UUID id PK UUIDv1 (RFC 4122)</text>
 <text class="mono" x="18" y="131">VARCHAR name 255</text>
 <text class="mono" x="18" y="158">INT age</text>
@@ -59,7 +59,8 @@
 <g transform="translate(663,439)">
   <rect class="card" x="0" y="0" width="320" height="193" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
   <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#45A7A1"/>
-  <text class="label" x="160" y="52" text-anchor="middle">t_timebased_uuid_base62</text>
+  <text class="label" x="160" y="32" text-anchor="middle">t_timebased_uuid_b</text>
+<text class="label" x="160" y="56" text-anchor="middle">ase62</text>
   <text class="mono" x="18" y="104">VARCHAR id PK UUIDv1+Base62 (22 c.</text>
 <text class="mono" x="18" y="131">VARCHAR name 255</text>
 <text class="mono" x="18" y="158">INT age</text>

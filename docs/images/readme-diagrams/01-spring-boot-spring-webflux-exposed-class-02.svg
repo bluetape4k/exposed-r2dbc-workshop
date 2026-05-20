@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1754" height="910" viewBox="0 0 1754 910" role="img" aria-label="Layer Structure">
+<svg xmlns="http://www.w3.org/2000/svg" width="1754" height="918" viewBox="0 0 1754 918" role="img" aria-label="Layer Structure">
 <defs>
   <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
   <marker id="openArrow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M 1 1 L 10 5 L 1 9" fill="none" stroke="#758297" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
@@ -20,70 +20,70 @@
     .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inherit)}
   </style>
 </defs>
-<rect class="canvas" width="1754" height="910"/>
-<rect class="frame" x="32" y="28" width="1690" height="854" rx="28"/>
+<rect class="canvas" width="1754" height="918"/>
+<rect class="frame" x="32" y="28" width="1690" height="862" rx="28"/>
 <text class="title" x="66" y="82">Layer Structure</text>
 <text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="line" d="M672 172 C672 276 1082 276 1082 380"/>
-<path class="line" d="M672 490 C672 594 1082 594 1082 698"/>
-<path class="line" d="M262 172 C262 264 672 264 672 356"/>
-<path class="line" d="M1492 380 C1492 435 672 435 672 490"/>
+<path class="line" d="M672 172 C672 278 1082 278 1082 384"/>
+<path class="line" d="M672 494 C672 600 1082 600 1082 706"/>
+<path class="line" d="M262 172 C262 267.5 672 267.5 672 363"/>
+<path class="line" d="M1492 384 C1492 439 672 439 672 494"/>
 <g transform="translate(92,180)">
-  <rect class="card" x="0" y="0" width="340" height="168" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
+  <rect class="card" x="0" y="0" width="340" height="175" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#5B8DEF"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">ActorController</text>
+  <text class="label" x="170" y="61" text-anchor="middle">ActorController</text>
   <text class="mono" x="18" y="108">+getAllActors()</text>
-<text class="mono" x="18" y="132">+getActorById(id)</text>
-<text class="mono" x="18" y="156">+createActor(actor)</text>
+<text class="mono" x="18" y="129">+getActorById(id)</text>
+<text class="mono" x="18" y="150">+createActor(actor)</text>
 </g>
 <g transform="translate(502,180)">
-  <rect class="card" x="0" y="0" width="340" height="168" rx="5" fill="#EAF7EF" stroke="#58A978"/>
+  <rect class="card" x="0" y="0" width="340" height="175" rx="5" fill="#EAF7EF" stroke="#58A978"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#58A978"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">ActorRepository</text>
+  <text class="label" x="170" y="61" text-anchor="middle">ActorRepository</text>
   <text class="mono" x="18" y="108">+findById(id)</text>
-<text class="mono" x="18" y="132">+findAll()</text>
-<text class="mono" x="18" y="156">+create(actor)</text>
+<text class="mono" x="18" y="129">+findAll()</text>
+<text class="mono" x="18" y="150">+create(actor)</text>
 </g>
 <g transform="translate(912,180)">
-  <rect class="card" x="0" y="0" width="340" height="192" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
+  <rect class="card" x="0" y="0" width="340" height="196" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#D6A441"/>
   <text class="small" x="170" y="26" text-anchor="middle">«object»</text>
-  <text class="label" x="170" y="57" text-anchor="middle">ActorTable</text>
+  <text class="label" x="170" y="61" text-anchor="middle">ActorTable</text>
   <text class="mono" x="18" y="108">+id LongIdTable</text>
-<text class="mono" x="18" y="132">+firstName varchar</text>
-<text class="mono" x="18" y="156">+lastName varchar</text>
-<text class="mono" x="18" y="180">+birthday date</text>
+<text class="mono" x="18" y="129">+firstName varchar</text>
+<text class="mono" x="18" y="150">+lastName varchar</text>
+<text class="mono" x="18" y="171">+birthday date</text>
 </g>
 <g transform="translate(1322,180)">
-  <rect class="card" x="0" y="0" width="340" height="192" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
+  <rect class="card" x="0" y="0" width="340" height="196" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#DC6B82"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">MovieController</text>
+  <text class="label" x="170" y="61" text-anchor="middle">MovieController</text>
   <text class="mono" x="18" y="108">+getMovieById(id)</text>
-<text class="mono" x="18" y="132">+searchMovies(request)</text>
-<text class="mono" x="18" y="156">+createMovie(movie)</text>
-<text class="mono" x="18" y="180">+deleteMovie(id)</text>
+<text class="mono" x="18" y="129">+searchMovies(request)</text>
+<text class="mono" x="18" y="150">+createMovie(movie)</text>
+<text class="mono" x="18" y="171">+deleteMovie(id)</text>
 </g>
-<g transform="translate(502,498)">
-  <rect class="card" x="0" y="0" width="340" height="192" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
+<g transform="translate(502,502)">
+  <rect class="card" x="0" y="0" width="340" height="196" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#45A7A1"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">MovieRepository</text>
+  <text class="label" x="170" y="61" text-anchor="middle">MovieRepository</text>
   <text class="mono" x="18" y="108">+findById(id)</text>
-<text class="mono" x="18" y="132">+findAll()</text>
-<text class="mono" x="18" y="156">+create(movie)</text>
-<text class="mono" x="18" y="180">+deleteById(id)</text>
+<text class="mono" x="18" y="129">+findAll()</text>
+<text class="mono" x="18" y="150">+create(movie)</text>
+<text class="mono" x="18" y="171">+deleteById(id)</text>
 </g>
-<g transform="translate(912,498)">
-  <rect class="card" x="0" y="0" width="340" height="192" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
+<g transform="translate(912,502)">
+  <rect class="card" x="0" y="0" width="340" height="196" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#8A72D6"/>
   <text class="small" x="170" y="26" text-anchor="middle">«object»</text>
-  <text class="label" x="170" y="57" text-anchor="middle">MovieTable</text>
+  <text class="label" x="170" y="61" text-anchor="middle">MovieTable</text>
   <text class="mono" x="18" y="108">+id LongIdTable</text>
-<text class="mono" x="18" y="132">+name varchar</text>
-<text class="mono" x="18" y="156">+producerName varchar</text>
-<text class="mono" x="18" y="180">+releaseDate datetime</text>
+<text class="mono" x="18" y="129">+name varchar</text>
+<text class="mono" x="18" y="150">+producerName varchar</text>
+<text class="mono" x="18" y="171">+releaseDate datetime</text>
 </g>
 </svg>

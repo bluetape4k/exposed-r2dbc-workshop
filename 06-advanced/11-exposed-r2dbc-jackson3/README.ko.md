@@ -33,14 +33,14 @@ Jackson 2.x 모듈과 동일한 쿼리 함수를 사용할 수 있습니다:
 
 ## 구조 다이어그램
 
-![Structure diagram](../../docs/images/readme-diagrams/06-advanced-11-exposed-r2dbc-jackson3-class-01.png)
+![11 exposed r2dbc jackson3 Class Structure diagram](../../docs/images/readme-diagrams/06-advanced-11-exposed-r2dbc-jackson3-class-01.png)
 
 > Jackson 2.x(`com.fasterxml.jackson`) → Jackson 3.x(`tools.jackson`) 패키지 변경
 > `JsonMapper`가 Jackson 3.x의 핵심 진입점 — Jackson 2.x의 `ObjectMapper`를 대체
 
 ## JSON 직렬화 흐름
 
-![JSON Serialization diagram](../../docs/images/readme-diagrams/06-advanced-11-exposed-r2dbc-jackson3-sequence-02.png)
+![JSON diagram](../../docs/images/readme-diagrams/06-advanced-11-exposed-r2dbc-jackson3-sequence-02.png)
 
 ## Jackson 2.x vs 3.x 차이점
 

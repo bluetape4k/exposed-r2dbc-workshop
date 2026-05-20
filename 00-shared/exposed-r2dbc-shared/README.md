@@ -86,7 +86,7 @@ By centralizing these components, `exposed-r2dbc-shared` ensures that all exampl
 
 ## withTables() Execution Flow
 
-![withTables Execution Flow diagram](../../docs/images/readme-diagrams/00-shared-exposed-r2dbc-shared-sequence-03.png)
+![withTables() Execution Flow diagram](../../docs/images/readme-diagrams/00-shared-exposed-r2dbc-shared-sequence-03.png)
 
 ---
 

@@ -81,7 +81,7 @@ DAO API와 암호화 컬럼을 통합하여 엔티티처럼 사용하는 방법�
 
 ## 클래스 구조 다이어그램
 
-![Structure diagram](../../docs/images/readme-diagrams/06-advanced-01-exposed-r2dbc-crypt-class-01.png)
+![01 exposed r2dbc crypt Class Structure diagram](../../docs/images/readme-diagrams/06-advanced-01-exposed-r2dbc-crypt-class-01.png)
 
 > 비결정적 암호화: 동일 평문도 매번 다른 암호문 생성 — AES_256_PBE_GCM 권장 (AEAD 인증 포함)
 
@@ -89,7 +89,7 @@ DAO API와 암호화 컬럼을 통합하여 엔티티처럼 사용하는 방법�
 
 ## 실행 흐름
 
-![Execution diagram](../../docs/images/readme-diagrams/06-advanced-01-exposed-r2dbc-crypt-sequence-02.png)
+![01 exposed r2dbc crypt Sequence Flow 2 diagram](../../docs/images/readme-diagrams/06-advanced-01-exposed-r2dbc-crypt-sequence-02.png)
 
 ## 코드 예제
 

@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1754" height="2656" viewBox="0 0 1754 2656" role="img" aria-label="Function Class Hierarchy (Class Diagram)">
+<svg xmlns="http://www.w3.org/2000/svg" width="1754" height="2764" viewBox="0 0 1754 2764" role="img" aria-label="Function Class Hierarchy (Class Diagram)">
 <defs>
   <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
   <marker id="openArrow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M 1 1 L 10 5 L 1 9" fill="none" stroke="#758297" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
@@ -20,211 +20,209 @@
     .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inherit)}
   </style>
 </defs>
-<rect class="canvas" width="1754" height="2656"/>
-<rect class="frame" x="32" y="28" width="1690" height="2600" rx="28"/>
+<rect class="canvas" width="1754" height="2764"/>
+<rect class="frame" x="32" y="28" width="1690" height="2708" rx="28"/>
 <text class="title" x="66" y="82">Function Class Hierarchy (Class Diagram)</text>
 <text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="inheritLine" d="M1082 2332 C1082 2019 1492 2019 1492 1706"/>
-<path class="inheritLine" d="M672 2332 C672 2019 1492 2019 1492 1706"/>
-<path class="inheritLine" d="M1492 1594 C1492 1527 877 1527 877 1460"/>
-<path class="inheritLine" d="M1492 2062 C1492 1884 1082 1884 1082 1706"/>
-<path class="inheritLine" d="M262 2062 C262 1884 1082 1884 1082 1706"/>
-<path class="inheritLine" d="M1082 1594 C1082 1527 877 1527 877 1460"/>
-<path class="line" d="M877 1816 C877 1320 1082 1320 1082 824"/>
-<path class="inheritLine" d="M877 1816 C877 1638 877 1638 877 1460"/>
-<path class="inheritLine" d="M672 1594 C672 1527 877 1527 877 1460"/>
-<path class="inheritLine" d="M672 2062 C672 1884 262 1884 262 1706"/>
-<path class="inheritLine" d="M1082 2062 C1082 1884 262 1884 262 1706"/>
-<path class="inheritLine" d="M262 1594 C262 1527 877 1527 877 1460"/>
-<path class="inheritLine" d="M877 1348 C877 1281 877 1281 877 1214"/>
-<path class="inheritLine" d="M877 1102 C877 693 1492 693 1492 284"/>
+<path class="inheritLine" d="M1082 2424 C1082 2098 1492 2098 1492 1772"/>
+<path class="inheritLine" d="M672 2424 C672 2098 1492 2098 1492 1772"/>
+<path class="inheritLine" d="M1492 1644 C1492 1577 877 1577 877 1510"/>
+<path class="inheritLine" d="M1492 2144 C1492 1958 1082 1958 1082 1772"/>
+<path class="inheritLine" d="M262 2144 C262 1958 1082 1958 1082 1772"/>
+<path class="inheritLine" d="M1082 1644 C1082 1577 877 1577 877 1510"/>
+<path class="line" d="M877 1882 C877 1371 1082 1371 1082 860"/>
+<path class="inheritLine" d="M877 1882 C877 1696 877 1696 877 1510"/>
+<path class="inheritLine" d="M672 1644 C672 1577 877 1577 877 1510"/>
+<path class="inheritLine" d="M672 2144 C672 1958 262 1958 262 1772"/>
+<path class="inheritLine" d="M1082 2144 C1082 1958 262 1958 262 1772"/>
+<path class="inheritLine" d="M262 1644 C262 1577 877 1577 877 1510"/>
+<path class="inheritLine" d="M877 1382 C877 1315 877 1315 877 1248"/>
+<path class="inheritLine" d="M877 1120 C877 710 1492 710 1492 300"/>
 <g transform="translate(92,180)">
-  <rect class="card" x="0" y="0" width="340" height="120" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
+  <rect class="card" x="0" y="0" width="340" height="133" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#5B8DEF"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">AbsFunctionT</text>
+  <text class="label" x="170" y="61" text-anchor="middle">AbsFunctionT</text>
   <text class="mono" x="18" y="108">+expr: Expression</text>
 </g>
 <g transform="translate(502,180)">
-  <rect class="card" x="0" y="0" width="340" height="168" rx="5" fill="#EAF7EF" stroke="#58A978"/>
+  <rect class="card" x="0" y="0" width="340" height="175" rx="5" fill="#EAF7EF" stroke="#58A978"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#58A978"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">CustomFunctionT</text>
+  <text class="label" x="170" y="61" text-anchor="middle">CustomFunctionT</text>
   <text class="mono" x="18" y="108">+functionName: String</text>
-<text class="mono" x="18" y="132">+columnType: IColumnType</text>
-<text class="mono" x="18" y="156">+params: Array~Expression~</text>
+<text class="mono" x="18" y="129">+columnType: IColumnType</text>
+<text class="mono" x="18" y="150">+params: Array~Expression~</text>
 </g>
 <g transform="translate(912,180)">
-  <rect class="card" x="0" y="0" width="340" height="168" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
+  <rect class="card" x="0" y="0" width="340" height="175" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#D6A441"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">CustomOperatorT</text>
+  <text class="label" x="170" y="61" text-anchor="middle">CustomOperatorT</text>
   <text class="mono" x="18" y="108">+operator: String</text>
-<text class="mono" x="18" y="132">+left: Expression</text>
-<text class="mono" x="18" y="156">+right: Expression</text>
+<text class="mono" x="18" y="129">+left: Expression</text>
+<text class="mono" x="18" y="150">+right: Expression</text>
 </g>
 <g transform="translate(1322,180)">
-  <rect class="card" x="0" y="0" width="340" height="96" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
+  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#DC6B82"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">Expression</text>
+  <text class="label" x="170" y="61" text-anchor="middle">Expression</text>
 
 </g>
-<g transform="translate(92,474)">
-  <rect class="card" x="0" y="0" width="340" height="120" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
+<g transform="translate(92,481)">
+  <rect class="card" x="0" y="0" width="340" height="133" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#45A7A1"/>
   <text class="small" x="170" y="26" text-anchor="middle">«abstract»</text>
-  <text class="label" x="170" y="57" text-anchor="middle">ExpressionT</text>
+  <text class="label" x="170" y="61" text-anchor="middle">ExpressionT</text>
   <text class="mono" x="18" y="108">+toQueryBuilder(builder)</text>
 </g>
-<g transform="translate(502,474)">
-  <rect class="card" x="0" y="0" width="340" height="120" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
+<g transform="translate(502,481)">
+  <rect class="card" x="0" y="0" width="340" height="133" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#8A72D6"/>
   <text class="small" x="170" y="26" text-anchor="middle">«abstract»</text>
-  <text class="label" x="170" y="57" text-anchor="middle">FunctionT</text>
+  <text class="label" x="170" y="61" text-anchor="middle">FunctionT</text>
   <text class="mono" x="18" y="108">+columnType: IColumnType</text>
 </g>
-<g transform="translate(912,474)">
-  <rect class="card" x="0" y="0" width="340" height="96" rx="5" fill="#F7F1E7" stroke="#B88A44"/>
+<g transform="translate(912,481)">
+  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#F7F1E7" stroke="#B88A44"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#B88A44"/>
   <text class="small" x="170" y="26" text-anchor="middle">«abstract»</text>
-  <text class="label" x="170" y="57" text-anchor="middle">MathFunctionT</text>
+  <text class="label" x="170" y="61" text-anchor="middle">MathFunctionT</text>
 
 </g>
-<g transform="translate(1322,474)">
-  <rect class="card" x="0" y="0" width="340" height="96" rx="5" fill="#EEF6D9" stroke="#8BA84D"/>
+<g transform="translate(1322,481)">
+  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#EEF6D9" stroke="#8BA84D"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#8BA84D"/>
   <text class="small" x="170" y="26" text-anchor="middle">«abstract»</text>
-  <text class="label" x="170" y="57" text-anchor="middle">SqlFunctionT</text>
+  <text class="label" x="170" y="61" text-anchor="middle">SqlFunctionT</text>
 
 </g>
-<g transform="translate(92,720)">
-  <rect class="card" x="0" y="0" width="340" height="96" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
+<g transform="translate(92,740)">
+  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#5B8DEF"/>
   <text class="small" x="170" y="26" text-anchor="middle">«abstract»</text>
-  <text class="label" x="170" y="57" text-anchor="middle">StatisticsFunctionT</text>
+  <text class="label" x="170" y="61" text-anchor="middle">StatisticsFunctionT</text>
 
 </g>
-<g transform="translate(502,720)">
-  <rect class="card" x="0" y="0" width="340" height="240" rx="5" fill="#EAF7EF" stroke="#58A978"/>
+<g transform="translate(502,740)">
+  <rect class="card" x="0" y="0" width="340" height="238" rx="5" fill="#EAF7EF" stroke="#58A978"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#58A978"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">WindowFunctionT</text>
+  <text class="label" x="170" y="61" text-anchor="middle">WindowFunctionT</text>
   <text class="mono" x="18" y="108">+function: Function</text>
-<text class="mono" x="18" y="132">+partitionByColumns: List</text>
-<text class="mono" x="18" y="156">+orderByColumns: List</text>
-<text class="mono" x="18" y="180">+over()</text>
-<text class="mono" x="18" y="204">+partitionBy(cols)</text>
-<text class="mono" x="18" y="228">+orderBy(col, order)</text>
+<text class="mono" x="18" y="129">+partitionByColumns: List</text>
+<text class="mono" x="18" y="150">+orderByColumns: List</text>
+<text class="mono" x="18" y="171">+over()</text>
+<text class="mono" x="18" y="192">+partitionBy(cols)</text>
+<text class="mono" x="18" y="213">+orderBy(col, order)</text>
 </g>
-<g transform="translate(912,720)">
-  <rect class="card" x="0" y="0" width="340" height="96" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
+<g transform="translate(912,740)">
+  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#D6A441"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">WindowFunctionWithFrame</text>
+  <text class="label" x="170" y="61" text-anchor="middle">WindowFunctionWithFrame</text>
 
 </g>
-<g transform="translate(1322,720)">
-  <rect class="card" x="0" y="0" width="340" height="168" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
+<g transform="translate(1322,740)">
+  <rect class="card" x="0" y="0" width="340" height="175" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#DC6B82"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">WindowFunctionWithFrameT</text>
+  <text class="label" x="170" y="61" text-anchor="middle">WindowFunctionWithFrameT</text>
   <text class="mono" x="18" y="108">+frameType: WindowFrameUnit</text>
-<text class="mono" x="18" y="132">+start: WindowFrameBound</text>
-<text class="mono" x="18" y="156">+end: WindowFrameBound</text>
+<text class="mono" x="18" y="129">+start: WindowFrameBound</text>
+<text class="mono" x="18" y="150">+end: WindowFrameBound</text>
 </g>
-<g transform="translate(707,1110)">
-  <rect class="card" x="0" y="0" width="340" height="96" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
+<g transform="translate(707,1128)">
+  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#45A7A1"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">Function</text>
+  <text class="label" x="170" y="61" text-anchor="middle">Function</text>
 
 </g>
-<g transform="translate(707,1356)">
-  <rect class="card" x="0" y="0" width="340" height="96" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
+<g transform="translate(707,1390)">
+  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#8A72D6"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">SqlFunction</text>
+  <text class="label" x="170" y="61" text-anchor="middle">SqlFunction</text>
 
 </g>
-<g transform="translate(92,1602)">
-  <rect class="card" x="0" y="0" width="340" height="96" rx="5" fill="#F7F1E7" stroke="#B88A44"/>
+<g transform="translate(92,1652)">
+  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#F7F1E7" stroke="#B88A44"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#B88A44"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">CustomFunction</text>
+  <text class="label" x="170" y="61" text-anchor="middle">CustomFunction</text>
 
 </g>
-<g transform="translate(502,1602)">
-  <rect class="card" x="0" y="0" width="340" height="96" rx="5" fill="#EEF6D9" stroke="#8BA84D"/>
+<g transform="translate(502,1652)">
+  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#EEF6D9" stroke="#8BA84D"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#8BA84D"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">CustomOperator</text>
+  <text class="label" x="170" y="61" text-anchor="middle">CustomOperator</text>
 
 </g>
-<g transform="translate(912,1602)">
-  <rect class="card" x="0" y="0" width="340" height="96" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
+<g transform="translate(912,1652)">
+  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#5B8DEF"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">MathFunction</text>
+  <text class="label" x="170" y="61" text-anchor="middle">MathFunction</text>
 
 </g>
-<g transform="translate(1322,1602)">
-  <rect class="card" x="0" y="0" width="340" height="96" rx="5" fill="#EAF7EF" stroke="#58A978"/>
+<g transform="translate(1322,1652)">
+  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#EAF7EF" stroke="#58A978"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#58A978"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">StatisticsFunction</text>
+  <text class="label" x="170" y="61" text-anchor="middle">StatisticsFunction</text>
 
 </g>
-<g transform="translate(707,1824)">
-  <rect class="card" x="0" y="0" width="340" height="96" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
+<g transform="translate(707,1890)">
+  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#D6A441"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">WindowFunction</text>
+  <text class="label" x="170" y="61" text-anchor="middle">WindowFunction</text>
 
 </g>
-<g transform="translate(92,2070)">
-  <rect class="card" x="0" y="0" width="340" height="96" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
+<g transform="translate(92,2152)">
+  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#DC6B82"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">AbsFunction</text>
+  <text class="label" x="170" y="61" text-anchor="middle">AbsFunction</text>
 
 </g>
-<g transform="translate(502,2070)">
-  <rect class="card" x="0" y="0" width="340" height="120" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
+<g transform="translate(502,2152)">
+  <rect class="card" x="0" y="0" width="340" height="133" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#45A7A1"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">CustomLongFunction</text>
+  <text class="label" x="170" y="61" text-anchor="middle">CustomLongFunction</text>
   <text class="mono" x="18" y="108">+functionName: String</text>
 </g>
-<g transform="translate(912,2070)">
-  <rect class="card" x="0" y="0" width="340" height="120" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
+<g transform="translate(912,2152)">
+  <rect class="card" x="0" y="0" width="340" height="133" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#8A72D6"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">CustomStringFunction</text>
+  <text class="label" x="170" y="61" text-anchor="middle">CustomStringFunction</text>
   <text class="mono" x="18" y="108">+functionName: String</text>
 </g>
-<g transform="translate(1322,2070)">
-  <rect class="card" x="0" y="0" width="340" height="144" rx="5" fill="#F7F1E7" stroke="#B88A44"/>
+<g transform="translate(1322,2152)">
+  <rect class="card" x="0" y="0" width="340" height="154" rx="5" fill="#F7F1E7" stroke="#B88A44"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#B88A44"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">RoundFunction</text>
+  <text class="label" x="170" y="61" text-anchor="middle">RoundFunction</text>
   <text class="mono" x="18" y="108">+expr: Expression</text>
-<text class="mono" x="18" y="132">+scale: Int</text>
+<text class="mono" x="18" y="129">+scale: Int</text>
 </g>
-<g transform="translate(502,2340)">
-  <rect class="card" x="0" y="0" width="340" height="96" rx="5" fill="#EEF6D9" stroke="#8BA84D"/>
+<g transform="translate(502,2432)">
+  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#EEF6D9" stroke="#8BA84D"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#8BA84D"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">StdDevPopFunction</text>
+  <text class="label" x="170" y="61" text-anchor="middle">StdDevPopFunction</text>
 
 </g>
-<g transform="translate(912,2340)">
-  <rect class="card" x="0" y="0" width="340" height="96" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
+<g transform="translate(912,2432)">
+  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
   <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#5B8DEF"/>
   <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="57" text-anchor="middle">VarPopFunction</text>
+  <text class="label" x="170" y="61" text-anchor="middle">VarPopFunction</text>
 
 </g>
-<rect x="921.5" y="1305" width="116" height="26" rx="13" fill="#ffffff" opacity="0.94"/>
-<text class="small" x="979.5" y="1323" text-anchor="middle">over</text>
 </svg>

@@ -196,11 +196,11 @@ object CustomIdTable: IdTable<Email>("emails") {
 
 ## JPA 엔티티 vs Exposed 테이블 비교
 
-![JPA Entity vs Exposed Table diagram](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-class-02.png)
+![JPA vs Exposed diagram](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-class-02.png)
 
 ## Blog 도메인 ERD
 
-![Blog Domain ERD diagram](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-erd-03.png)
+![Blog ERD diagram](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-erd-03.png)
 
 ## JPA vs Exposed 주요 개념 매핑 요약
 

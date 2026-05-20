@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1262" viewBox="0 0 1200 1262" role="img" aria-label="JSON Serialization Flow">
+<svg xmlns="http://www.w3.org/2000/svg" width="1344" height="1566" viewBox="0 0 1344 1566" role="img" aria-label="JSON Serialization Flow">
 <defs>
   <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
   <marker id="openArrow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M 1 1 L 10 5 L 1 9" fill="none" stroke="#758297" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
@@ -20,56 +20,53 @@
     .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inherit)}
   </style>
 </defs>
-<rect class="canvas" width="1200" height="1262"/>
-<rect class="frame" x="32" y="28" width="1136" height="1206" rx="28"/>
+<rect class="canvas" width="1344" height="1566"/>
+<rect class="frame" x="32" y="28" width="1280" height="1510" rx="28"/>
 <text class="title" x="66" y="82">JSON Serialization Flow</text>
 <text class="subtitle" x="70" y="118">Sequence messages from the original Mermaid source</text>
-<rect class="card" x="35" y="166" width="210" height="72" rx="20" fill="#E8F3FF" stroke="#5B8DEF"/>
+<rect class="card" x="25" y="166" width="230" height="72" rx="20" fill="#E8F3FF" stroke="#5B8DEF"/>
 <text class="smallLabel" x="140" y="209" text-anchor="middle">Application</text>
-<line x1="140" y1="252" x2="140" y2="1202" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="341.6666666666667" y="166" width="210" height="72" rx="20" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel" x="446.6666666666667" y="209" text-anchor="middle">JacksonColumn</text>
-<line x1="446.6666666666667" y1="252" x2="446.6666666666667" y2="1202" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="648.3333333333334" y="166" width="210" height="72" rx="20" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel" x="753.3333333333334" y="209" text-anchor="middle">ObjectMapper</text>
-<line x1="753.3333333333334" y1="252" x2="753.3333333333334" y2="1202" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="955" y="166" width="210" height="72" rx="20" fill="#FDECEF" stroke="#DC6B82"/>
-<text class="smallLabel" x="1060" y="209" text-anchor="middle">Database</text>
-<line x1="1060" y1="252" x2="1060" y2="1202" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect x="158" y="270" width="270.6666666666667" height="62" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="174" y="297" text-anchor="start">1. insert { it[jacksonColumn] =</text>
-<text class="strong" x="174" y="320" text-anchor="start">DataHolder(user=User(Admin,null),</text>
-<path class="line" d="M140 310 L446.6666666666667 310"/>
-<rect x="464.6666666666667" y="352" width="270.6666666666667" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="480.6666666666667" y="379" text-anchor="start">2. writeValueAsString(dataHolder)</text>
-<path class="line" d="M446.6666666666667 392 L753.3333333333334 392"/>
-<rect x="464.6666666666667" y="434" width="270.6666666666667" height="62" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="480.6666666666667" y="461" text-anchor="start">3.</text>
-<text class="strong" x="480.6666666666667" y="484" text-anchor="start">{user:{name:Admin,team:null},logins:10,active:true}</text>
-<path class="dashed" d="M753.3333333333334 474 L446.6666666666667 474"/>
-<rect x="464.6666666666667" y="516" width="577.3333333333333" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="480.6666666666667" y="543" text-anchor="start">4. INSERT json_text</text>
-<path class="line" d="M446.6666666666667 556 L1060 556"/>
-<rect x="464.6666666666667" y="598" width="577.3333333333333" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="480.6666666666667" y="625" text-anchor="start">5. {user:{name:Admin,team:null},logins:10,active:true}</text>
-<path class="dashed" d="M1060 638 L446.6666666666667 638"/>
-<rect x="464.6666666666667" y="680" width="270.6666666666667" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="480.6666666666667" y="707" text-anchor="start">6. readValue(json, DataHolder::class)</text>
-<path class="line" d="M446.6666666666667 720 L753.3333333333334 720"/>
-<rect x="464.6666666666667" y="762" width="270.6666666666667" height="62" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="480.6666666666667" y="789" text-anchor="start">7. DataHolder(user=User(Admin,null),</text>
-<text class="strong" x="480.6666666666667" y="812" text-anchor="start">logins=10, active=true)</text>
-<path class="dashed" d="M753.3333333333334 802 L446.6666666666667 802"/>
-<rect x="158" y="844" width="270.6666666666667" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="174" y="871" text-anchor="start">8. DataHolder object</text>
-<path class="dashed" d="M446.6666666666667 884 L140 884"/>
-<rect x="158" y="926" width="270.6666666666667" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="174" y="953" text-anchor="start">9. jacksonColumn.extract(.user.name)</text>
-<path class="line" d="M140 966 L446.6666666666667 966"/>
-<rect x="464.6666666666667" y="1008" width="577.3333333333333" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="480.6666666666667" y="1035" text-anchor="start">10. JSON_EXTRACT(jackson_column, $.user.name)</text>
-<path class="line" d="M446.6666666666667 1048 L1060 1048"/>
-<rect x="158" y="1090" width="884" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="174" y="1117" text-anchor="start">11. Admin</text>
-<path class="dashed" d="M1060 1130 L140 1130"/>
+<line class="lifeline" x1="140" y1="252" x2="140" y2="1506" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
+<rect class="card" x="379.6666666666667" y="166" width="230" height="72" rx="20" fill="#EAF7EF" stroke="#58A978"/>
+<text class="smallLabel" x="494.6666666666667" y="209" text-anchor="middle">JacksonColumn</text>
+<line class="lifeline" x1="494.6666666666667" y1="252" x2="494.6666666666667" y2="1506" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
+<rect class="card" x="734.3333333333334" y="166" width="230" height="72" rx="20" fill="#FFF3D9" stroke="#D6A441"/>
+<text class="smallLabel" x="849.3333333333334" y="209" text-anchor="middle">ObjectMapper</text>
+<line class="lifeline" x1="849.3333333333334" y1="252" x2="849.3333333333334" y2="1506" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
+<rect class="card" x="1089" y="166" width="230" height="72" rx="20" fill="#FDECEF" stroke="#DC6B82"/>
+<text class="smallLabel" x="1204" y="209" text-anchor="middle">Database</text>
+<line class="lifeline" x1="1204" y1="252" x2="1204" y2="1506" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
+<rect x="60" y="286" width="665" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="78" y="313" text-anchor="start">1. insert { it[jacksonColumn] = DataHolder(user=User(Admin,null), logins=10) }</text>
+<path class="line" d="M140 344 L494.6666666666667 344"/>
+<rect x="521" y="396" width="302" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="539" y="423" text-anchor="start">2. writeValueAsString(dataHolder)</text>
+<path class="line" d="M494.6666666666667 454 L849.3333333333334 454"/>
+<rect x="436" y="506" width="472" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="454" y="533" text-anchor="start">3. {user:{name:Admin,team:null},logins:10,active:true}</text>
+<path class="dashed" d="M849.3333333333334 564 L494.6666666666667 564"/>
+<rect x="744.3333333333334" y="616" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="762.3333333333334" y="643" text-anchor="start">4. INSERT json_text</text>
+<path class="line" d="M494.6666666666667 674 L1204 674"/>
+<rect x="613.3333333333334" y="726" width="472" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="631.3333333333334" y="753" text-anchor="start">5. {user:{name:Admin,team:null},logins:10,active:true}</text>
+<path class="dashed" d="M1204 784 L494.6666666666667 784"/>
+<rect x="504.5" y="836" width="335" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="522.5" y="863" text-anchor="start">6. readValue(json, DataHolder::class)</text>
+<path class="line" d="M494.6666666666667 894 L849.3333333333334 894"/>
+<rect x="412" y="946" width="520" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="430" y="973" text-anchor="start">7. DataHolder(user=User(Admin,null), logins=10, active=true)</text>
+<path class="dashed" d="M849.3333333333334 1004 L494.6666666666667 1004"/>
+<rect x="212.33333333333337" y="1056" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="230.33333333333337" y="1083" text-anchor="start">8. DataHolder object</text>
+<path class="dashed" d="M494.6666666666667 1114 L140 1114"/>
+<rect x="153.83333333333337" y="1166" width="327" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="171.83333333333337" y="1193" text-anchor="start">9. jacksonColumn.extract(.user.name)</text>
+<path class="line" d="M140 1224 L494.6666666666667 1224"/>
+<rect x="649.8333333333334" y="1276" width="399" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="667.8333333333334" y="1303" text-anchor="start">10. JSON_EXTRACT(jackson_column, $.user.name)</text>
+<path class="line" d="M494.6666666666667 1334 L1204 1334"/>
+<rect x="567" y="1386" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="585" y="1413" text-anchor="start">11. Admin</text>
+<path class="dashed" d="M1204 1444 L140 1444"/>
 </svg>

@@ -64,18 +64,18 @@ Jackson의 `SerializationFeature`와 `DeserializationFeature`는 직렬화/역�
 
 ## 구조 다이어그램
 
-![Structure diagram](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-class-01.png)
+![08 exposed r2dbc jackson Class Structure diagram](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-class-01.png)
 
 > `@Serializable` 불필요 — Jackson `ObjectMapper`가 표준 Kotlin 데이터 클래스를 직접 처리
 > `KotlinModule`이 자동 등록되어 data class·nullable·default 파라미터 지원
 
 ## JSON 직렬화 흐름
 
-![JSON Serialization diagram](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-sequence-02.png)
+![JSON diagram](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-sequence-02.png)
 
 ## 테이블 구조 (ER 다이어그램)
 
-![Table Structure (ER ) diagram](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-erd-03.png)
+![(ER ) diagram](../../docs/images/readme-diagrams/06-advanced-08-exposed-r2dbc-jackson-erd-03.png)
 
 ## 예제 개요
 

@@ -9,13 +9,13 @@
 
 ## 구조 다이어그램
 
-![Structure diagram](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-class-01.png)
+![07 exposed r2dbc custom entities Class Structure diagram](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-class-01.png)
 
-![Structure diagram](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-erd-02.png)
+![07 exposed r2dbc custom entities Entity Relationship 2 diagram](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-erd-02.png)
 
 ## ID 생성 흐름
 
-![ID Create diagram](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-sequence-03.png)
+![ID diagram](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-sequence-03.png)
 
 ## ID 선택 플로우차트
 

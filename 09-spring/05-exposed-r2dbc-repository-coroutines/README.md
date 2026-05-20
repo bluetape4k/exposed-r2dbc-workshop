@@ -57,7 +57,7 @@ src/main/kotlin/exposed/r2dbc/examples/
 
 ## Movie/Actor ERD
 
-![Movie / Actor ERD diagram](../../docs/images/readme-diagrams/09-spring-05-exposed-r2dbc-repository-coroutines-erd-03.png)
+![Movie/Actor ERD diagram](../../docs/images/readme-diagrams/09-spring-05-exposed-r2dbc-repository-coroutines-erd-03.png)
 
 ## Spring + Coroutine Bridge Pattern (`DataInitializer`)
 

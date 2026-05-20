@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1098" viewBox="0 0 1200 1098" role="img" aria-label="Execution Flow">
+<svg xmlns="http://www.w3.org/2000/svg" width="1624" height="1482" viewBox="0 0 1624 1482" role="img" aria-label="Execution Flow">
 <defs>
   <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
   <marker id="openArrow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M 1 1 L 10 5 L 1 9" fill="none" stroke="#758297" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
@@ -20,49 +20,53 @@
     .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inherit)}
   </style>
 </defs>
-<rect class="canvas" width="1200" height="1098"/>
-<rect class="frame" x="32" y="28" width="1136" height="1042" rx="28"/>
+<rect class="canvas" width="1624" height="1482"/>
+<rect class="frame" x="32" y="28" width="1560" height="1426" rx="28"/>
 <text class="title" x="66" y="82">Execution Flow</text>
 <text class="subtitle" x="70" y="118">Sequence messages from the original Mermaid source</text>
-<rect class="card" x="35" y="166" width="210" height="72" rx="20" fill="#E8F3FF" stroke="#5B8DEF"/>
+<rect class="card" x="-10" y="166" width="300" height="72" rx="20" fill="#E8F3FF" stroke="#5B8DEF"/>
 <text class="smallLabel" x="140" y="209" text-anchor="middle">Controller/Service</text>
-<line x1="140" y1="252" x2="140" y2="1038" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="341.6666666666667" y="166" width="210" height="72" rx="20" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel" x="446.6666666666667" y="198.5" text-anchor="middle">Lettuce Suspended</text>
-<text class="smallLabel" x="446.6666666666667" y="219.5" text-anchor="middle">Cache (Redis)</text>
-<line x1="446.6666666666667" y1="252" x2="446.6666666666667" y2="1038" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="648.3333333333334" y="166" width="210" height="72" rx="20" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel" x="753.3333333333334" y="198.5" text-anchor="middle">Default Country</text>
-<text class="smallLabel" x="753.3333333333334" y="219.5" text-anchor="middle">R2dbc Repository</text>
-<line x1="753.3333333333334" y1="252" x2="753.3333333333334" y2="1038" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="955" y="166" width="210" height="72" rx="20" fill="#FDECEF" stroke="#DC6B82"/>
-<text class="smallLabel" x="1060" y="209" text-anchor="middle">R2DBC Database</text>
-<line x1="1060" y1="252" x2="1060" y2="1038" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect x="158" y="270" width="270.6666666666667" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="174" y="297" text-anchor="start">1. cache.get(code)</text>
-<path class="line" d="M140 310 L446.6666666666667 310"/>
-<rect x="158" y="352" width="270.6666666666667" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="174" y="379" text-anchor="start">2. return cached result</text>
-<path class="dashed" d="M446.6666666666667 392 L140 392"/>
-<rect x="158" y="434" width="270.6666666666667" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="174" y="461" text-anchor="start">3. null</text>
-<path class="dashed" d="M446.6666666666667 474 L140 474"/>
-<rect x="158" y="516" width="577.3333333333334" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="174" y="543" text-anchor="start">4. delegate.findByCode(code) (suspend)</text>
-<path class="line" d="M140 556 L753.3333333333334 556"/>
-<rect x="771.3333333333334" y="598" width="270.66666666666663" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="787.3333333333334" y="625" text-anchor="start">5. suspendTransaction { SELECT }</text>
-<path class="line" d="M753.3333333333334 638 L1060 638"/>
-<rect x="771.3333333333334" y="680" width="270.66666666666663" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="787.3333333333334" y="707" text-anchor="start">6. ResultRow</text>
-<path class="dashed" d="M1060 720 L753.3333333333334 720"/>
-<rect x="158" y="762" width="577.3333333333334" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="174" y="789" text-anchor="start">7. CountryRecord</text>
-<path class="dashed" d="M753.3333333333334 802 L140 802"/>
-<rect x="158" y="844" width="270.6666666666667" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="174" y="871" text-anchor="start">8. cache.put(code, result) (TTL 60s)</text>
-<path class="line" d="M140 884 L446.6666666666667 884"/>
-<rect x="158" y="926" width="270.6666666666667" height="39" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="174" y="953" text-anchor="start">9. return freshly fetched result</text>
-<path class="dashed" d="M446.6666666666667 966 L140 966"/>
+<line class="lifeline" x1="140" y1="252" x2="140" y2="1422" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
+<rect class="card" x="438" y="166" width="300" height="72" rx="20" fill="#EAF7EF" stroke="#58A978"/>
+<text class="smallLabel" x="588" y="198.5" text-anchor="middle">Lettuce Suspended</text>
+<text class="smallLabel" x="588" y="219.5" text-anchor="middle">Cache (Redis)</text>
+<line class="lifeline" x1="588" y1="252" x2="588" y2="1422" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
+<rect class="card" x="886" y="166" width="300" height="72" rx="20" fill="#FFF3D9" stroke="#D6A441"/>
+<text class="smallLabel" x="1036" y="198.5" text-anchor="middle">Default Country</text>
+<text class="smallLabel" x="1036" y="219.5" text-anchor="middle">R2dbc Repository</text>
+<line class="lifeline" x1="1036" y1="252" x2="1036" y2="1422" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
+<rect class="card" x="1334" y="166" width="300" height="72" rx="20" fill="#FDECEF" stroke="#DC6B82"/>
+<text class="smallLabel" x="1484" y="209" text-anchor="middle">R2DBC Database</text>
+<line class="lifeline" x1="1484" y1="252" x2="1484" y2="1422" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
+<rect x="259" y="286" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="277" y="313" text-anchor="start">1. cache.get(code)</text>
+<path class="line" d="M140 344 L588 344"/>
+<rect x="70" y="396" width="1484" height="40" rx="16" fill="#F7F1E7" stroke="#B88A44" stroke-width="1.6" opacity="0.96"/>
+<text class="strong" x="92" y="423" text-anchor="start">ALT: Cache HIT</text>
+<rect x="253" y="464" width="222" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="271" y="491" text-anchor="start">3. return cached result</text>
+<path class="dashed" d="M588 522 L140 522"/>
+<rect x="70" y="574" width="1484" height="40" rx="16" fill="#F7F1E7" stroke="#B88A44" stroke-width="1.6" opacity="0.96"/>
+<text class="strong" x="92" y="601" text-anchor="start">ELSE: Cache MISS</text>
+<rect x="259" y="642" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="277" y="669" text-anchor="start">5. null</text>
+<path class="dashed" d="M588 700 L140 700"/>
+<rect x="416.5" y="752" width="343" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="434.5" y="779" text-anchor="start">6. delegate.findByCode(code) (suspend)</text>
+<path class="line" d="M140 810 L1036 810"/>
+<rect x="1113" y="862" width="294" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="1131" y="889" text-anchor="start">7. suspendTransaction { SELECT }</text>
+<path class="line" d="M1036 920 L1484 920"/>
+<rect x="1155" y="972" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="1173" y="999" text-anchor="start">8. ResultRow</text>
+<path class="dashed" d="M1484 1030 L1036 1030"/>
+<rect x="483" y="1082" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="501" y="1109" text-anchor="start">9. CountryRecord</text>
+<path class="dashed" d="M1036 1140 L140 1140"/>
+<rect x="196.5" y="1192" width="335" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="214.5" y="1219" text-anchor="start">10. cache.put(code, result) (TTL 60s)</text>
+<path class="line" d="M140 1250 L588 1250"/>
+<rect x="213" y="1302" width="302" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
+<text class="strong" x="231" y="1329" text-anchor="start">11. return freshly fetched result</text>
+<path class="dashed" d="M588 1360 L140 1360"/>
 </svg>

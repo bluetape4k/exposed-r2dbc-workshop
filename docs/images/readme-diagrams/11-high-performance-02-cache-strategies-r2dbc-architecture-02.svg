@@ -24,21 +24,21 @@
 <rect class="frame" x="32" y="28" width="980" height="636" rx="28"/>
 <text class="title" x="66" y="82">Cache Lookup Flow</text>
 <text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M689 552 C689 469 856 469 856 386"/>
-<path class="line" d="M355 552 C355 552 689 552 689 552"/>
-<path class="line" d="M522 386 C522 469 355 469 355 552"/>
-<path class="line" d="M522 386 C522 386 856 386 856 386"/>
-<path class="line" d="M522 220 C522 303 522 303 522 386"/>
-<path class="line" d="M522 220 C522 303 188 303 188 386"/>
-<path class="line" d="M188 220 C188 220 856 220 856 220"/>
+<path class="line" d="M839 552 C839 469 706 469 706 386"/>
+<path class="line" d="M505 552 C505 552 539 552 539 552"/>
+<path class="line" d="M372 386 C372 469 505 469 505 552"/>
+<path class="line" d="M672 386 C672 386 706 386 706 386"/>
+<path class="line" d="M522 280 C522 303 522 303 522 326"/>
+<path class="line" d="M372 220 C372 303 338 303 338 386"/>
+<path class="line" d="M338 220 C338 220 706 220 706 220"/>
 <g transform="translate(48,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
   <text class="smallLabel" x="140" y="45" text-anchor="middle">cache.get(key)</text>
 </g>
 <g transform="translate(382,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">L1 Caffeine Near Cache</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">HIT?</text>
+  <text class="smallLabel" x="140" y="33" text-anchor="middle">L1 Caffeine Near</text>
+<text class="smallLabel" x="140" y="59" text-anchor="middle">Cache HIT?</text>
 </g>
 <g transform="translate(716,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
@@ -69,8 +69,4 @@
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
   <text class="smallLabel" x="140" y="45" text-anchor="middle">Store in L2 with TTL</text>
 </g>
-<text class="small" x="355" y="295" text-anchor="middle">HIT</text>
-<text class="small" x="522" y="295" text-anchor="middle">MISS</text>
-<text class="small" x="689" y="378" text-anchor="middle">HIT</text>
-<text class="small" x="438.5" y="461" text-anchor="middle">MISS</text>
 </svg>

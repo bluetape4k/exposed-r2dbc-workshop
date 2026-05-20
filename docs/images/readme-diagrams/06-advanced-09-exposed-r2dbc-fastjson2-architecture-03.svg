@@ -24,11 +24,11 @@
 <rect class="frame" x="32" y="28" width="1314" height="636" rx="28"/>
 <text class="title" x="66" y="82">JSON Library Comparison</text>
 <text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M522 220 C522 386 522 386 522 552"/>
-<path class="line" d="M522 220 C522 303 856 303 856 386"/>
-<path class="line" d="M522 220 C522 303 188 303 188 386"/>
-<path class="line" d="M522 220 C522 220 856 220 856 220"/>
-<path class="line" d="M188 220 C188 220 522 220 522 220"/>
+<path class="line" d="M522 280 C522 386 522 386 522 492"/>
+<path class="line" d="M672 220 C672 303 706 303 706 386"/>
+<path class="line" d="M372 220 C372 303 338 303 338 386"/>
+<path class="line" d="M672 220 C672 220 706 220 706 220"/>
+<path class="line" d="M338 220 C338 220 372 220 372 220"/>
 <g transform="translate(48,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
   <text class="smallLabel" x="140" y="45" text-anchor="middle">Choose JSON Library</text>
@@ -39,8 +39,8 @@
 </g>
 <g transform="translate(716,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Already using Jackson</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">2.x</text>
+  <text class="smallLabel" x="140" y="33" text-anchor="middle">Already using</text>
+<text class="smallLabel" x="140" y="59" text-anchor="middle">Jackson 2.x</text>
 </g>
 <g transform="translate(1050,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
@@ -48,8 +48,8 @@
 </g>
 <g transform="translate(48,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Need Jackson 3.x latest</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">features</text>
+  <text class="smallLabel" x="140" y="33" text-anchor="middle">Need Jackson 3.x</text>
+<text class="smallLabel" x="140" y="59" text-anchor="middle">latest features</text>
 </g>
 <g transform="translate(382,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
@@ -57,17 +57,19 @@
 </g>
 <g transform="translate(716,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Need maximum performance</text>
+  <text class="smallLabel" x="140" y="33" text-anchor="middle">Need maximum</text>
+<text class="smallLabel" x="140" y="59" text-anchor="middle">performance</text>
 </g>
 <g transform="translate(1050,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">09-fastjson2 module this</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">module</text>
+  <text class="smallLabel" x="140" y="33" text-anchor="middle">09-fastjson2 module</text>
+<text class="smallLabel" x="140" y="59" text-anchor="middle">this module</text>
 </g>
 <g transform="translate(382,502)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Prefer</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">kotlinx.serialization</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">Prefer</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">kotlinx.serializatio</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">n</text>
 </g>
 <g transform="translate(716,502)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>

@@ -38,11 +38,11 @@ ConnectionFactoryRegistry       ← 키 → ConnectionFactory 매핑
 
 ## 클래스 다이어그램
 
-![03-routing-datasource diagram diagram](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-class-01.png)
+![03 routing datasource Class Structure diagram](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-class-01.png)
 
 ## 요청→라우팅→DB 선택 흐름 (sequenceDiagram)
 
-![Request→→DB (sequenceDiagram) diagram](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-sequence-02.png)
+![→→DB (sequenceDiagram) diagram](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-sequence-02.png)
 
 ## 라우팅 키 결정 흐름 (flowchart)
 

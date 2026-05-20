@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1366" height="958" viewBox="0 0 1366 958" role="img" aria-label="Cache Layer Structure (Class Diagram)">
+<svg xmlns="http://www.w3.org/2000/svg" width="1366" height="963" viewBox="0 0 1366 963" role="img" aria-label="Cache Layer Structure (Class Diagram)">
 <defs>
   <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
   <marker id="openArrow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M 1 1 L 10 5 L 1 9" fill="none" stroke="#758297" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
@@ -20,71 +20,65 @@
     .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inherit)}
   </style>
 </defs>
-<rect class="canvas" width="1366" height="958"/>
-<rect class="frame" x="32" y="28" width="1302" height="902" rx="28"/>
+<rect class="canvas" width="1366" height="963"/>
+<rect class="frame" x="32" y="28" width="1302" height="907" rx="28"/>
 <text class="title" x="66" y="82">Cache Layer Structure (Class Diagram)</text>
 <text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="line" d="M1103 490 C1103 411 893 411 893 332"/>
-<path class="line" d="M1103 490 C1103 606 683 606 683 722"/>
-<path class="line" d="M1103 490 C1103 618 263 618 263 746"/>
-<path class="implLine" d="M1103 490 C1103 423 473 423 473 356"/>
-<path class="implLine" d="M683 490 C683 423 473 423 473 356"/>
-<path class="implLine" d="M263 490 C263 423 473 423 473 356"/>
+<path class="line" d="M1103 497 C1103 419.5 893 419.5 893 342"/>
+<path class="line" d="M1103 497 C1103 613.5 683 613.5 683 730"/>
+<path class="line" d="M1103 497 C1103 624 263 624 263 751"/>
+<path class="implLine" d="M1103 497 C1103 430 473 430 473 363"/>
+<path class="implLine" d="M683 497 C683 430 473 430 473 363"/>
+<path class="implLine" d="M263 497 C263 430 473 430 473 363"/>
 <g transform="translate(298,180)">
-  <rect class="card" x="0" y="0" width="350" height="168" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
+  <rect class="card" x="0" y="0" width="350" height="175" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
   <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#5B8DEF"/>
   <text class="small" x="175" y="26" text-anchor="middle">«interface»</text>
-  <text class="label" x="175" y="57" text-anchor="middle">CacheStrategy</text>
+  <text class="label" x="175" y="61" text-anchor="middle">CacheStrategy</text>
   <text class="mono" x="18" y="108">+get(key: K) V</text>
-<text class="mono" x="18" y="132">+put(key: K, value: V)</text>
-<text class="mono" x="18" y="156">+evict(key: K)</text>
+<text class="mono" x="18" y="129">+put(key: K, value: V)</text>
+<text class="mono" x="18" y="150">+evict(key: K)</text>
 </g>
 <g transform="translate(718,180)">
-  <rect class="card" x="0" y="0" width="350" height="144" rx="5" fill="#EAF7EF" stroke="#58A978"/>
+  <rect class="card" x="0" y="0" width="350" height="154" rx="5" fill="#EAF7EF" stroke="#58A978"/>
   <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#58A978"/>
   <text class="small" x="175" y="26" text-anchor="middle">«R2DBC Exposed»</text>
-  <text class="label" x="175" y="57" text-anchor="middle">DatabaseSource</text>
+  <text class="label" x="175" y="61" text-anchor="middle">DatabaseSource</text>
   <text class="mono" x="18" y="108">+findById(id: K) V</text>
-<text class="mono" x="18" y="132">+save(value: V)</text>
+<text class="mono" x="18" y="129">+save(value: V)</text>
 </g>
-<g transform="translate(88,498)">
-  <rect class="card" x="0" y="0" width="350" height="240" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
+<g transform="translate(88,505)">
+  <rect class="card" x="0" y="0" width="350" height="238" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
   <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#D6A441"/>
   <text class="small" x="175" y="26" text-anchor="middle">«Caffeine In-Memory»</text>
-  <text class="label" x="175" y="57" text-anchor="middle">L1Cache</text>
+  <text class="label" x="175" y="61" text-anchor="middle">L1Cache</text>
   <text class="mono" x="18" y="108">-caffeineCache Cache~K, V~</text>
-<text class="mono" x="18" y="132">+get(key: K) V</text>
-<text class="mono" x="18" y="156">+put(key: K, value: V)</text>
-<text class="mono" x="18" y="180">+evict(key: K)</text>
-<text class="mono" x="18" y="204">+maximumSize: Long</text>
-<text class="mono" x="18" y="228">+expireAfterWrite: Duration</text>
+<text class="mono" x="18" y="129">+get(key: K) V</text>
+<text class="mono" x="18" y="150">+put(key: K, value: V)</text>
+<text class="mono" x="18" y="171">+evict(key: K)</text>
+<text class="mono" x="18" y="192">+maximumSize: Long</text>
+<text class="mono" x="18" y="213">+expireAfterWrite: Duration</text>
 </g>
-<g transform="translate(508,498)">
-  <rect class="card" x="0" y="0" width="350" height="216" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
+<g transform="translate(508,505)">
+  <rect class="card" x="0" y="0" width="350" height="217" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
   <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#DC6B82"/>
   <text class="small" x="175" y="26" text-anchor="middle">«Redis Lettuce Corouti.»</text>
-  <text class="label" x="175" y="57" text-anchor="middle">L2Cache</text>
+  <text class="label" x="175" y="61" text-anchor="middle">L2Cache</text>
   <text class="mono" x="18" y="108">-redisClient RedisClient</text>
-<text class="mono" x="18" y="132">+get(key: K) V</text>
-<text class="mono" x="18" y="156">+put(key: K, value: V)</text>
-<text class="mono" x="18" y="180">+evict(key: K)</text>
-<text class="mono" x="18" y="204">+ttl: Duration</text>
+<text class="mono" x="18" y="129">+get(key: K) V</text>
+<text class="mono" x="18" y="150">+put(key: K, value: V)</text>
+<text class="mono" x="18" y="171">+evict(key: K)</text>
+<text class="mono" x="18" y="192">+ttl: Duration</text>
 </g>
-<g transform="translate(928,498)">
-  <rect class="card" x="0" y="0" width="350" height="216" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
+<g transform="translate(928,505)">
+  <rect class="card" x="0" y="0" width="350" height="217" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
   <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#45A7A1"/>
   <text class="small" x="175" y="26" text-anchor="middle"></text>
-  <text class="label" x="175" y="57" text-anchor="middle">TwoLevelCacheStrategy</text>
+  <text class="label" x="175" y="61" text-anchor="middle">TwoLevelCacheStrategy</text>
   <text class="mono" x="18" y="108">-l1: L1Cache</text>
-<text class="mono" x="18" y="132">-l2: L2Cache</text>
-<text class="mono" x="18" y="156">+get(key: K) V</text>
-<text class="mono" x="18" y="180">+put(key: K, value: V)</text>
-<text class="mono" x="18" y="204">+evict(key: K)</text>
+<text class="mono" x="18" y="129">-l2: L2Cache</text>
+<text class="mono" x="18" y="150">+get(key: K) V</text>
+<text class="mono" x="18" y="171">+put(key: K, value: V)</text>
+<text class="mono" x="18" y="192">+evict(key: K)</text>
 </g>
-<rect x="625" y="603" width="116" height="26" rx="13" fill="#ffffff" opacity="0.94"/>
-<text class="small" x="683" y="621" text-anchor="middle">L1 lookup first</text>
-<rect x="835" y="591" width="116" height="26" rx="13" fill="#ffffff" opacity="0.94"/>
-<text class="small" x="893" y="609" text-anchor="middle">L2 lookup on L1 M.</text>
-<rect x="940" y="396" width="116" height="26" rx="13" fill="#ffffff" opacity="0.94"/>
-<text class="small" x="998" y="414" text-anchor="middle">DB lookup on L2 M.</text>
 </svg>

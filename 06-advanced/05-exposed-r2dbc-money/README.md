@@ -49,7 +49,7 @@ This enables flexible queries filtering by the full `MonetaryAmount`, the amount
 
 ## MonetaryAmount Storage/Restoration Flow
 
-![MonetaryAmount Storage / Restoration Flow diagram](../../docs/images/readme-diagrams/06-advanced-05-exposed-r2dbc-money-architecture-02.png)
+![MonetaryAmount Storage/Restoration Flow diagram](../../docs/images/readme-diagrams/06-advanced-05-exposed-r2dbc-money-architecture-02.png)
 
 ## Table Structure with Money (ER Diagram)
 

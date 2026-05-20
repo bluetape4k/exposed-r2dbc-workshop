@@ -70,7 +70,7 @@
 
 ## 구조 다이어그램
 
-![Structure diagram](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-class-01.png)
+![04 exposed r2dbc json Class Structure diagram](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-class-01.png)
 
 > `JsonBColumn`: PostgreSQL 전용 (인덱싱/연산 지원)
 
@@ -79,7 +79,7 @@
 
 ## JSON 직렬화/역직렬화 흐름
 
-![JSON Serialization / Serialization diagram](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-sequence-02.png)
+![JSON / diagram](../../docs/images/readme-diagrams/06-advanced-04-exposed-r2dbc-json-sequence-02.png)
 
 ## JSON 쿼리 함수 사용 흐름
 

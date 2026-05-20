@@ -9,9 +9,9 @@ R2DBC 환경에서 비동기로 SELECT, INSERT, UPDATE, DELETE를 수행합니�
 
 ## 구조 다이어그램
 
-![Structure diagram](../../docs/images/readme-diagrams/03-exposed-r2dbc-basic-exposed-r2dbc-sql-example-erd-01.png)
+![exposed r2dbc sql example Entity Relationship diagram](../../docs/images/readme-diagrams/03-exposed-r2dbc-basic-exposed-r2dbc-sql-example-erd-01.png)
 
-![Structure diagram](../../docs/images/readme-diagrams/03-exposed-r2dbc-basic-exposed-r2dbc-sql-example-class-02.png)
+![exposed r2dbc sql example Class Structure 2 diagram](../../docs/images/readme-diagrams/03-exposed-r2dbc-basic-exposed-r2dbc-sql-example-class-02.png)
 
 ---
 
@@ -223,7 +223,7 @@ names shouldBeEqualTo listOf("Jane.Doe", "John.Doe")
 
 ## 쿼리 실행 흐름
 
-![Execution diagram](../../docs/images/readme-diagrams/03-exposed-r2dbc-basic-exposed-r2dbc-sql-example-sequence-03.png)
+![exposed r2dbc sql example Sequence Flow 3 diagram](../../docs/images/readme-diagrams/03-exposed-r2dbc-basic-exposed-r2dbc-sql-example-sequence-03.png)
 
 ---
 

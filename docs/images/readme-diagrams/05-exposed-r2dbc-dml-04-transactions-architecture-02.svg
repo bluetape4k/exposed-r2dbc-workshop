@@ -24,16 +24,16 @@
 <rect class="frame" x="32" y="28" width="1314" height="636" rx="28"/>
 <text class="title" x="66" y="82">Nested Transaction / Savepoint Flow</text>
 <text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M856 220 C856 386 856 386 856 552"/>
-<path class="line" d="M1190 386 C1190 469 522 469 522 552"/>
-<path class="line" d="M856 386 C856 469 522 469 522 552"/>
-<path class="line" d="M522 386 C522 386 1190 386 1190 386"/>
-<path class="line" d="M522 386 C522 386 856 386 856 386"/>
-<path class="line" d="M188 386 C188 386 522 386 522 386"/>
-<path class="line" d="M1190 220 C1190 303 188 303 188 386"/>
-<path class="line" d="M856 220 C856 220 1190 220 1190 220"/>
-<path class="line" d="M522 220 C522 220 856 220 856 220"/>
-<path class="line" d="M188 220 C188 220 522 220 522 220"/>
+<path class="line" d="M856 280 C856 386 856 386 856 492"/>
+<path class="line" d="M1040 386 C1040 469 672 469 672 552"/>
+<path class="line" d="M706 386 C706 469 672 469 672 552"/>
+<path class="line" d="M672 386 C672 386 1040 386 1040 386"/>
+<path class="line" d="M672 386 C672 386 706 386 706 386"/>
+<path class="line" d="M338 386 C338 386 372 386 372 386"/>
+<path class="line" d="M1040 220 C1040 303 338 303 338 386"/>
+<path class="line" d="M1006 220 C1006 220 1040 220 1040 220"/>
+<path class="line" d="M672 220 C672 220 706 220 706 220"/>
+<path class="line" d="M338 220 C338 220 372 220 372 220"/>
 <g transform="translate(48,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
   <text class="smallLabel" x="140" y="33" text-anchor="middle">suspendTransaction</text>
@@ -61,8 +61,8 @@
 </g>
 <g transform="translate(716,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">ROLLBACK TO sp1 (Cancel</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">SQL 2 only)</text>
+  <text class="smallLabel" x="140" y="33" text-anchor="middle">ROLLBACK TO sp1</text>
+<text class="smallLabel" x="140" y="59" text-anchor="middle">(Cancel SQL 2 only)</text>
 </g>
 <g transform="translate(1050,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
@@ -70,16 +70,13 @@
 </g>
 <g transform="translate(382,502)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Outer COMMIT (Persist</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">SQL 1 only)</text>
+  <text class="smallLabel" x="140" y="33" text-anchor="middle">Outer COMMIT</text>
+<text class="smallLabel" x="140" y="59" text-anchor="middle">(Persist SQL 1 only)</text>
 </g>
 <g transform="translate(716,502)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Share outer transaction</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">(same scope)</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">Share outer</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">transaction (same</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">scope)</text>
 </g>
-<text class="small" x="1023" y="212" text-anchor="middle">yes</text>
-<text class="small" x="689" y="378" text-anchor="middle">rollback</text>
-<text class="small" x="856" y="378" text-anchor="middle">normal</text>
-<text class="small" x="856" y="378" text-anchor="middle">no</text>
 </svg>

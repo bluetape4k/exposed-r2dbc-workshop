@@ -30,14 +30,14 @@
 <g transform="translate(60,170)">
   <rect class="card" x="0" y="0" width="320" height="166" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
   <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#5B8DEF"/>
-  <text class="label" x="160" y="52" text-anchor="middle">cities</text>
+  <text class="label" x="160" y="44" text-anchor="middle">cities</text>
   <text class="mono" x="18" y="104">int city_id PK auto_increment</text>
 <text class="mono" x="18" y="131">varchar name</text>
 </g>
 <g transform="translate(462,170)">
   <rect class="card" x="0" y="0" width="320" height="220" rx="5" fill="#EAF7EF" stroke="#58A978"/>
   <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#58A978"/>
-  <text class="label" x="160" y="52" text-anchor="middle">users</text>
+  <text class="label" x="160" y="44" text-anchor="middle">users</text>
   <text class="mono" x="18" y="104">varchar id PK</text>
 <text class="mono" x="18" y="131">varchar name</text>
 <text class="mono" x="18" y="158">int city_id FK nullable</text>
@@ -46,7 +46,7 @@
 <g transform="translate(864,170)">
   <rect class="card" x="0" y="0" width="320" height="193" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
   <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#D6A441"/>
-  <text class="label" x="160" y="52" text-anchor="middle">userdata</text>
+  <text class="label" x="160" y="44" text-anchor="middle">userdata</text>
   <text class="mono" x="18" y="104">varchar user_id FK</text>
 <text class="mono" x="18" y="131">varchar comment</text>
 <text class="mono" x="18" y="158">int value</text>
@@ -54,7 +54,7 @@
 <g transform="translate(60,466)">
   <rect class="card" x="0" y="0" width="320" height="220" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
   <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#DC6B82"/>
-  <text class="label" x="160" y="52" text-anchor="middle">sales</text>
+  <text class="label" x="160" y="44" text-anchor="middle">sales</text>
   <text class="mono" x="18" y="104">int year</text>
 <text class="mono" x="18" y="131">int month</text>
 <text class="mono" x="18" y="158">varchar product nullable</text>
@@ -63,13 +63,13 @@
 <g transform="translate(462,466)">
   <rect class="card" x="0" y="0" width="320" height="139" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
   <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#45A7A1"/>
-  <text class="label" x="160" y="52" text-anchor="middle">someamounts</text>
+  <text class="label" x="160" y="44" text-anchor="middle">someamounts</text>
   <text class="mono" x="18" y="104">decimal amount</text>
 </g>
 <g transform="translate(864,466)">
   <rect class="card" x="0" y="0" width="320" height="193" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
   <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#8A72D6"/>
-  <text class="label" x="160" y="52" text-anchor="middle">orgs</text>
+  <text class="label" x="160" y="44" text-anchor="middle">orgs</text>
   <text class="mono" x="18" y="104">int id PK</text>
 <text class="mono" x="18" y="131">varchar uid UK</text>
 <text class="mono" x="18" y="158">varchar name</text>
@@ -77,7 +77,7 @@
 <g transform="translate(462,762)">
   <rect class="card" x="0" y="0" width="320" height="166" rx="5" fill="#F7F1E7" stroke="#B88A44"/>
   <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#B88A44"/>
-  <text class="label" x="160" y="52" text-anchor="middle">orgmemberships</text>
+  <text class="label" x="160" y="44" text-anchor="middle">orgmemberships</text>
   <text class="mono" x="18" y="104">int id PK</text>
 <text class="mono" x="18" y="131">varchar org FK</text>
 </g>

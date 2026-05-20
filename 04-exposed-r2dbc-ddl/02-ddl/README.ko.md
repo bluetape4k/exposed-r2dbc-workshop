@@ -30,21 +30,21 @@ Exposed R2DBC로 데이터베이스 스키마를 정의하고 관리하는 방�
 
 ## 구조 다이어그램
 
-![Structure diagram](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-class-01.png)
+![02 ddl Class Structure diagram](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-class-01.png)
 
-![Structure diagram](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-architecture-02.png)
+![02 ddl Architecture 2 diagram](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-architecture-02.png)
 
 ---
 
 ## 샘플 테이블 ERD (Users / Orders / Products)
 
-![Table ERD (Users / Orders / Products) diagram](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-erd-03.png)
+![ERD (Users / Orders / Products) diagram](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-erd-03.png)
 
 ---
 
 ## 스키마 마이그레이션 흐름
 
-![02-ddl diagram diagram](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-sequence-04.png)
+![02 ddl Sequence Flow 4 diagram](../../docs/images/readme-diagrams/04-exposed-r2dbc-ddl-02-ddl-sequence-04.png)
 
 ---
 

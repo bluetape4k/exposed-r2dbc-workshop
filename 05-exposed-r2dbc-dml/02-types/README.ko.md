@@ -24,7 +24,7 @@ Exposed R2DBC DSL에서 지원하는 **다양한 컬럼 타입(Column Types)
 
 ## 구조 다이어그램
 
-![Structure diagram](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-02-types-class-01.png)
+![02 types Class Structure diagram](../../docs/images/readme-diagrams/05-exposed-r2dbc-dml-02-types-class-01.png)
 
 ## Kotlin 타입 → DB 타입 매핑 흐름
 

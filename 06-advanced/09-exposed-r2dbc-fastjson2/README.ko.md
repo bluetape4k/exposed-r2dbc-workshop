@@ -38,18 +38,18 @@ Exposed가 제공하는 동일한 강력한 JSON 쿼리 함수 세트를 사용�
 
 ## 구조 다이어그램
 
-![Structure diagram](../../docs/images/readme-diagrams/06-advanced-09-exposed-r2dbc-fastjson2-class-01.png)
+![09 exposed r2dbc fastjson2 Class Structure diagram](../../docs/images/readme-diagrams/06-advanced-09-exposed-r2dbc-fastjson2-class-01.png)
 
 > 어노테이션 불필요 — Fastjson2 리플렉션 기반으로 표준 Kotlin 데이터 클래스·POJO 처리
 > Jackson 대비 직렬화/역직렬화 속도 우위, JSON 처리 성능이 중요한 서비스에 적합
 
 ## JSON 직렬화 흐름
 
-![JSON Serialization diagram](../../docs/images/readme-diagrams/06-advanced-09-exposed-r2dbc-fastjson2-sequence-02.png)
+![JSON diagram](../../docs/images/readme-diagrams/06-advanced-09-exposed-r2dbc-fastjson2-sequence-02.png)
 
 ## JSON 라이브러리 비교
 
-![JSON Library diagram](../../docs/images/readme-diagrams/06-advanced-09-exposed-r2dbc-fastjson2-architecture-03.png)
+![JSON diagram](../../docs/images/readme-diagrams/06-advanced-09-exposed-r2dbc-fastjson2-architecture-03.png)
 
 ## 예제 개요
 

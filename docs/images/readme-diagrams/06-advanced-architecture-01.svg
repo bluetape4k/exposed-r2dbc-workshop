@@ -24,23 +24,23 @@
 <rect class="frame" x="32" y="28" width="1314" height="968" rx="28"/>
 <text class="title" x="66" y="82">Module Selection Guide</text>
 <text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M522 220 C522 552 856 552 856 884"/>
-<path class="line" d="M856 718 C856 801 522 801 522 884"/>
-<path class="line" d="M856 718 C856 718 1190 718 1190 718"/>
-<path class="line" d="M856 552 C856 635 856 635 856 718"/>
-<path class="line" d="M1190 552 C1190 635 522 635 522 718"/>
-<path class="line" d="M1190 552 C1190 635 188 635 188 718"/>
-<path class="line" d="M856 552 C856 552 1190 552 1190 552"/>
-<path class="line" d="M522 220 C522 386 856 386 856 552"/>
-<path class="line" d="M522 386 C522 469 522 469 522 552"/>
-<path class="line" d="M522 386 C522 469 188 469 188 552"/>
-<path class="line" d="M522 386 C522 386 1190 386 1190 386"/>
-<path class="line" d="M522 386 C522 386 856 386 856 386"/>
-<path class="line" d="M522 220 C522 303 522 303 522 386"/>
-<path class="line" d="M856 220 C856 303 188 303 188 386"/>
-<path class="line" d="M856 220 C856 220 1190 220 1190 220"/>
-<path class="line" d="M522 220 C522 220 856 220 856 220"/>
-<path class="line" d="M188 220 C188 220 522 220 522 220"/>
+<path class="line" d="M522 280 C522 552 856 552 856 824"/>
+<path class="line" d="M706 718 C706 801 672 801 672 884"/>
+<path class="line" d="M1006 718 C1006 718 1040 718 1040 718"/>
+<path class="line" d="M856 612 C856 635 856 635 856 658"/>
+<path class="line" d="M1040 552 C1040 635 672 635 672 718"/>
+<path class="line" d="M1040 552 C1040 635 338 635 338 718"/>
+<path class="line" d="M1006 552 C1006 552 1040 552 1040 552"/>
+<path class="line" d="M672 220 C672 386 706 386 706 552"/>
+<path class="line" d="M522 446 C522 469 522 469 522 492"/>
+<path class="line" d="M372 386 C372 469 338 469 338 552"/>
+<path class="line" d="M672 386 C672 386 1040 386 1040 386"/>
+<path class="line" d="M672 386 C672 386 706 386 706 386"/>
+<path class="line" d="M522 280 C522 303 522 303 522 326"/>
+<path class="line" d="M706 220 C706 303 338 303 338 386"/>
+<path class="line" d="M1006 220 C1006 220 1040 220 1040 220"/>
+<path class="line" d="M672 220 C672 220 706 220 706 220"/>
+<path class="line" d="M338 220 C338 220 372 220 372 220"/>
 <g transform="translate(48,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
   <text class="smallLabel" x="140" y="33" text-anchor="middle">[Select Advanced</text>
@@ -56,8 +56,8 @@
 </g>
 <g transform="translate(1050,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">02-javatime java.time</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">API</text>
+  <text class="smallLabel" x="140" y="33" text-anchor="middle">02-javatime</text>
+<text class="smallLabel" x="140" y="59" text-anchor="middle">java.time API</text>
 </g>
 <g transform="translate(48,336)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
@@ -80,7 +80,8 @@
 </g>
 <g transform="translate(48,502)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">09-fastjson2 2-3x faster</text>
+  <text class="smallLabel" x="140" y="33" text-anchor="middle">09-fastjson2 2-3x</text>
+<text class="smallLabel" x="140" y="59" text-anchor="middle">faster</text>
 </g>
 <g transform="translate(382,502)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
@@ -111,32 +112,18 @@
 </g>
 <g transform="translate(1050,668)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">10-jasypt Deterministic</text>
+  <text class="smallLabel" x="140" y="33" text-anchor="middle">10-jasypt</text>
+<text class="smallLabel" x="140" y="59" text-anchor="middle">Deterministic</text>
 </g>
 <g transform="translate(382,834)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">12-tink DAEAD</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">Deterministic+searchable</text>
+  <text class="smallLabel" x="140" y="21" text-anchor="middle">12-tink DAEAD</text>
+<text class="smallLabel" x="140" y="47" text-anchor="middle">Deterministic+search</text>
+<text class="smallLabel" x="140" y="73" text-anchor="middle">able</text>
 </g>
 <g transform="translate(716,834)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
   <text class="smallLabel" x="140" y="33" text-anchor="middle">05-money JavaMoney</text>
 <text class="smallLabel" x="140" y="59" text-anchor="middle">JSR-354</text>
 </g>
-<text class="small" x="689" y="212" text-anchor="middle">Date/Time</text>
-<text class="small" x="1023" y="212" text-anchor="middle">JVM only</text>
-<text class="small" x="522" y="295" text-anchor="middle">Multiplatform</text>
-<text class="small" x="522" y="295" text-anchor="middle">JSON</text>
-<text class="small" x="689" y="378" text-anchor="middle">kotlinx . seriali.</text>
-<text class="small" x="856" y="378" text-anchor="middle">Jackson 2 .x</text>
-<text class="small" x="355" y="461" text-anchor="middle">High performance</text>
-<text class="small" x="522" y="461" text-anchor="middle">Jakarta EE 9+</text>
-<text class="small" x="689" y="378" text-anchor="middle">Encryption</text>
-<text class="small" x="1023" y="544" text-anchor="middle">No search</text>
-<text class="small" x="689" y="627" text-anchor="middle">Bouncy Castle</text>
-<text class="small" x="856" y="627" text-anchor="middle">Google Tink AEAD</text>
-<text class="small" x="856" y="627" text-anchor="middle">Search needed</text>
-<text class="small" x="1023" y="710" text-anchor="middle">Jasypt</text>
-<text class="small" x="689" y="793" text-anchor="middle">Google Tink DAEAD</text>
-<text class="small" x="689" y="544" text-anchor="middle">Currency/Amount</text>
 </svg>

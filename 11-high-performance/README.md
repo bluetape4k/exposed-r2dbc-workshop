@@ -15,7 +15,7 @@ The examples in this directory cover topics closer to production environments â€
 
 ## Cache Hit/Miss Processing Flow
 
-![Cache Hit / Miss Processing Flow diagram](../docs/images/readme-diagrams/11-high-performance-sequence-03.png)
+![Cache Hit/Miss Processing Flow diagram](../docs/images/readme-diagrams/11-high-performance-sequence-03.png)
 
 ## Learning Objectives
 
