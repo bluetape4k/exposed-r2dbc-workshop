@@ -1,0 +1,42 @@
+# Chapter 12: Production Integration
+
+[English](README.md) | [한국어](README.ko.md)
+
+Chapter 12 compares production-oriented Exposed R2DBC service boundaries in
+Spring Boot 4 and Ktor. The chapter keeps the domain vocabulary aligned across
+both stacks while showing the native HTTP, realtime, client, and diagnostics
+surfaces each framework expects.
+
+## Modules
+
+| Module | Stack | Focus |
+|---|---|---|
+| [`01-spring-production-integration`](01-spring-production-integration/) | Spring Boot 4 WebFlux | Controller/service/repository boundaries, SSE replay, structured errors, readiness |
+| [`02-ktor-production-integration`](02-ktor-production-integration/) | Ktor 3 | Routing, sessions/authentication, WebSockets, MockEngine outbound dispatch, readiness |
+
+## Topic Map
+
+| Issue | Topic | Spring slice | Ktor slice |
+|---|---|---|---|
+| #44 | Application architecture | `app` | `app` |
+| #45 | Authentication/session | `auth` | `auth` |
+| #46 | Realtime outbox | `realtime` with SSE replay | `realtime` with WebSockets |
+| #47 | HTTP client outbox/idempotency | `outbound` | `outbound` |
+| #48 | Observability/readiness | `diagnostics` | `diagnostics` |
+| #49 | Documentation and verification | README + Gradle/test evidence | README + Gradle/test evidence |
+
+## Production Contracts
+
+- Database access runs through Exposed R2DBC `suspendTransaction`.
+- App-boundary tests use H2 R2DBC for predictable Spring/Ktor startup.
+- Duplicate idempotency keys return HTTP 409 with a structured conflict error.
+- Realtime examples persist events before delivery and support cursor replay.
+- Readiness reports `UP` when the database is reachable and `DEGRADED` when the
+  diagnostics table records a degraded database state.
+
+## Verification
+
+```bash
+./gradlew projects
+repo-test-summary -- ./gradlew :01-spring-production-integration:test :02-ktor-production-integration:test
+```
