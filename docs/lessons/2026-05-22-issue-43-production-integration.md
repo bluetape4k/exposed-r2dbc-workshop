@@ -22,6 +22,8 @@ Exposed R2DBC.
 
 - `./gradlew projects`
 - `repo-test-summary -- ./gradlew :01-spring-production-integration:test :02-ktor-production-integration:test --console=plain`
+- `actionlint .github/workflows/Examples.yml`
+- `repo-test-summary -- ./gradlew :01-spring-production-integration:test :02-ktor-production-integration:test "-PuseDB=H2" --continue --console=plain`
 - Spring module: 4 tests passing.
 - Ktor module: 5 tests passing.
 
@@ -29,4 +31,6 @@ Exposed R2DBC.
 
 For app-boundary examples, use H2 R2DBC with `DB_CLOSE_DELAY=-1`; otherwise each
 connection can see an empty in-memory database. Keep dialect matrix coverage at
-repository level unless app bootstrap is explicitly part of the lesson.
+repository level unless app bootstrap is explicitly part of the lesson. Register
+new end-to-end examples in `.github/workflows/Examples.yml` so the focused
+workflow guards workshop adoption separately from the full CI matrix.
