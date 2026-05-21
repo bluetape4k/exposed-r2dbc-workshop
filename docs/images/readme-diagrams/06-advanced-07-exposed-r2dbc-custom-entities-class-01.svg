@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="998" height="1370" viewBox="0 0 998 1370" role="img" aria-label="Structure Diagram">
+<svg xmlns="http://www.w3.org/2000/svg" width="2320" height="1161" viewBox="0 0 2320 1161" role="img" aria-label="Structure Diagram">
 <defs>
   <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
   <marker id="openArrow" markerWidth="10" markerHeight="8" refX="8.5" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M 1 1 L 8.5 4 L 1 7" fill="none" stroke="#758297" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></marker>
@@ -20,24 +20,24 @@
     .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inherit)}
   </style>
 </defs>
-<rect class="canvas" width="998" height="1370"/>
-<rect class="frame" x="32" y="28" width="934" height="1314" rx="28"/>
+<rect class="canvas" width="2320" height="1161"/>
+<rect class="frame" x="32" y="28" width="2256" height="1105" rx="28"/>
 <text class="title" x="66" y="82">Structure Diagram</text>
 <text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="inheritLine" d="M274 292 L274 460"/>
-<path class="inheritLine" d="M724 740 L724 685 L274 685 L274 852"/>
-<path class="inheritLine" d="M724 614 L724 677 L274 677 L274 740"/>
-<path class="inheritLine" d="M274 1020 L274 852"/>
-<path class="inheritLine" d="M724 334 L724 381 L52 381 L52 661 L274 661 L274 740"/>
-<path class="inheritLine" d="M274 614 L274 740"/>
-<g transform="translate(84,180)">
+<path class="inheritLine" d="M1160 686 L1160 626 L260 626 L260 566"/>
+<path class="inheritLine" d="M2060 412 L2060 352 L1160 352 L1160 292"/>
+<path class="inheritLine" d="M1610 412 L1610 352 L1160 352 L1160 292"/>
+<path class="inheritLine" d="M710 412 L710 352 L1160 352 L1160 292"/>
+<path class="inheritLine" d="M1160 412 L1160 352 L1160 352 L1160 292"/>
+<path class="inheritLine" d="M260 412 L260 352 L1160 352 L1160 292"/>
+<g transform="translate(970,686)">
   <rect class="card" x="0" y="0" width="380" height="112" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
   <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#5B8DEF"/>
   <text class="small" x="190" y="26" text-anchor="middle"></text>
   <text class="label" x="190" y="61" text-anchor="middle">T1</text>
 
 </g>
-<g transform="translate(534,180)">
+<g transform="translate(970,412)">
   <rect class="card" x="0" y="0" width="380" height="154" rx="5" fill="#EAF7EF" stroke="#58A978"/>
   <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#58A978"/>
   <text class="small" x="190" y="26" text-anchor="middle">«abstract»</text>
@@ -45,7 +45,7 @@
   <text class="mono" x="18" y="108">+id: Column~EntityID~String~~</text>
 <text class="mono" x="18" y="129">clientDefault: KSUID-Base62 27chars</text>
 </g>
-<g transform="translate(84,460)">
+<g transform="translate(70,412)">
   <rect class="card" x="0" y="0" width="380" height="154" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
   <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#D6A441"/>
   <text class="small" x="190" y="26" text-anchor="middle">«abstract»</text>
@@ -53,7 +53,7 @@
   <text class="mono" x="18" y="108">+id: Column~EntityID~Long~~</text>
 <text class="mono" x="18" y="129">clientDefault: SnowflakeId</text>
 </g>
-<g transform="translate(534,460)">
+<g transform="translate(1420,412)">
   <rect class="card" x="0" y="0" width="380" height="154" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
   <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#DC6B82"/>
   <text class="small" x="190" y="26" text-anchor="middle">«abstract»</text>
@@ -61,14 +61,14 @@
   <text class="mono" x="18" y="108">+id: Column~EntityID~UUID~~</text>
 <text class="mono" x="18" y="129">clientDefault: UUIDv1 RFC4122</text>
 </g>
-<g transform="translate(84,740)">
+<g transform="translate(970,180)">
   <rect class="card" x="0" y="0" width="380" height="112" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
   <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#45A7A1"/>
   <text class="small" x="190" y="26" text-anchor="middle"></text>
   <text class="label" x="190" y="61" text-anchor="middle">IdTable</text>
 
 </g>
-<g transform="translate(534,740)">
+<g transform="translate(1870,412)">
   <rect class="card" x="0" y="0" width="380" height="154" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
   <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#8A72D6"/>
   <text class="small" x="190" y="26" text-anchor="middle">«abstract»</text>
@@ -76,7 +76,7 @@
   <text class="mono" x="18" y="108">+id: Column~EntityID~String~~</text>
 <text class="mono" x="18" y="129">clientDefault: UUIDv1+Base62 22chars</text>
 </g>
-<g transform="translate(84,1020)">
+<g transform="translate(520,412)">
   <rect class="card" x="0" y="0" width="380" height="154" rx="5" fill="#F7F1E7" stroke="#B88A44"/>
   <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#B88A44"/>
   <text class="small" x="190" y="26" text-anchor="middle">«abstract»</text>
@@ -84,7 +84,7 @@
   <text class="mono" x="18" y="108">+id: Column~EntityID~String~~</text>
 <text class="mono" x="18" y="129">clientDefault: KSUID-Millis 27chars</text>
 </g>
-<g transform="translate(534,1020)">
+<g transform="translate(970,918)">
   <rect class="card" x="0" y="0" width="380" height="133" rx="5" fill="#EEF6D9" stroke="#8BA84D"/>
   <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#8BA84D"/>
   <text class="small" x="190" y="26" text-anchor="middle">«abstract»</text>
