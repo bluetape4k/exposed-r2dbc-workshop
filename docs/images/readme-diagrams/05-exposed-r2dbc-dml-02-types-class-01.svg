@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1406" height="2350" viewBox="0 0 1406 2350" role="img" aria-label="Structure Diagram">
+<svg xmlns="http://www.w3.org/2000/svg" width="5270" height="1308" viewBox="0 0 5270 1308" role="img" aria-label="Structure Diagram">
 <defs>
   <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
   <marker id="openArrow" markerWidth="10" markerHeight="8" refX="8.5" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M 1 1 L 8.5 4 L 1 7" fill="none" stroke="#758297" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></marker>
@@ -20,24 +20,24 @@
     .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inherit)}
   </style>
 </defs>
-<rect class="canvas" width="1406" height="2350"/>
-<rect class="frame" x="32" y="28" width="1342" height="2294" rx="28"/>
+<rect class="canvas" width="5270" height="1308"/>
+<rect class="frame" x="32" y="28" width="5206" height="1252" rx="28"/>
 <text class="title" x="66" y="82">Structure Diagram</text>
 <text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="inheritLine" d="M261 1230 L261 1162 L703 1162 L703 978"/>
-<path class="inheritLine" d="M1145 334 L1145 447 L1372 447 L1372 790 L703 790 L703 866"/>
-<path class="inheritLine" d="M703 1594 L703 1510 L44 1510 L44 1146 L703 1146 L703 978"/>
-<path class="inheritLine" d="M261 978 L261 774 L703 774 L703 866"/>
-<path class="inheritLine" d="M1145 866 L1145 766 L703 766 L703 978"/>
-<path class="inheritLine" d="M703 698 L703 866"/>
-<path class="inheritLine" d="M1145 1230 L1145 1170 L703 1170 L703 978"/>
-<path class="inheritLine" d="M261 656 L261 798 L703 798 L703 866"/>
-<path class="inheritLine" d="M703 1230 L703 978"/>
-<path class="inheritLine" d="M703 355 L703 439 L44 439 L44 782 L703 782 L703 866"/>
-<path class="inheritLine" d="M261 334 L261 431 L54 431 L54 774 L703 774 L703 866"/>
-<path class="inheritLine" d="M261 1594 L261 1494 L64 1494 L64 1130 L703 1130 L703 978"/>
-<path class="inheritLine" d="M1145 677 L1145 758 L703 758 L703 866"/>
-<g transform="translate(96,180)">
+<path class="inheritLine" d="M1435 412 L1435 352 L2635 352 L2635 292"/>
+<path class="inheritLine" d="M3835 412 L3835 352 L2635 352 L2635 292"/>
+<path class="inheritLine" d="M3435 412 L3435 352 L2635 352 L2635 292"/>
+<path class="inheritLine" d="M1035 412 L1035 352 L2635 352 L2635 292"/>
+<path class="inheritLine" d="M4635 412 L4635 352 L2635 352 L2635 292"/>
+<path class="inheritLine" d="M2635 412 L2635 352 L2635 352 L2635 292"/>
+<path class="inheritLine" d="M5035 412 L5035 352 L2635 352 L2635 292"/>
+<path class="inheritLine" d="M635 412 L635 352 L2635 352 L2635 292"/>
+<path class="inheritLine" d="M3035 412 L3035 352 L2635 352 L2635 292"/>
+<path class="inheritLine" d="M2235 412 L2235 352 L2635 352 L2635 292"/>
+<path class="inheritLine" d="M235 412 L235 352 L2635 352 L2635 292"/>
+<path class="inheritLine" d="M1835 412 L1835 352 L2635 352 L2635 292"/>
+<path class="inheritLine" d="M4235 412 L4235 352 L2635 352 L2635 292"/>
+<g transform="translate(70,412)">
   <rect class="card" x="0" y="0" width="330" height="154" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
   <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#5B8DEF"/>
   <text class="small" x="165" y="26" text-anchor="middle"></text>
@@ -45,7 +45,7 @@
   <text class="mono" x="18" y="108">+varchar(name, length)</text>
 <text class="mono" x="18" y="129">+length: Int</text>
 </g>
-<g transform="translate(538,180)">
+<g transform="translate(2070,412)">
   <rect class="card" x="0" y="0" width="330" height="175" rx="5" fill="#EAF7EF" stroke="#58A978"/>
   <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#58A978"/>
   <text class="small" x="165" y="26" text-anchor="middle"></text>
@@ -54,7 +54,7 @@
 <text class="mono" x="18" y="129">+mediumText(name)</text>
 <text class="mono" x="18" y="150">+largeText(name)</text>
 </g>
-<g transform="translate(980,180)">
+<g transform="translate(3670,412)">
   <rect class="card" x="0" y="0" width="330" height="154" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
   <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#D6A441"/>
   <text class="small" x="165" y="26" text-anchor="middle"></text>
@@ -62,14 +62,14 @@
   <text class="mono" x="18" y="108">+javaUUID(name)</text>
 <text class="mono" x="18" y="129">+autoGenerate()</text>
 </g>
-<g transform="translate(96,523)">
+<g transform="translate(470,412)">
   <rect class="card" x="0" y="0" width="330" height="133" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
   <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#DC6B82"/>
   <text class="small" x="165" y="26" text-anchor="middle"></text>
   <text class="label" x="165" y="61" text-anchor="middle">FloatColumn</text>
   <text class="mono" x="18" y="108">+float(name)</text>
 </g>
-<g transform="translate(538,523)">
+<g transform="translate(2470,412)">
   <rect class="card" x="0" y="0" width="330" height="175" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
   <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#45A7A1"/>
   <text class="small" x="165" y="26" text-anchor="middle"></text>
@@ -78,7 +78,7 @@
 <text class="mono" x="18" y="129">+precision: Int</text>
 <text class="mono" x="18" y="150">+scale: Int</text>
 </g>
-<g transform="translate(980,523)">
+<g transform="translate(4070,412)">
   <rect class="card" x="0" y="0" width="330" height="154" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
   <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#8A72D6"/>
   <text class="small" x="165" y="26" text-anchor="middle"></text>
@@ -86,21 +86,21 @@
   <text class="mono" x="18" y="108">+bool(name)</text>
 <text class="mono" x="18" y="129">+booleanParam(value)</text>
 </g>
-<g transform="translate(96,866)">
+<g transform="translate(870,412)">
   <rect class="card" x="0" y="0" width="330" height="112" rx="5" fill="#F7F1E7" stroke="#B88A44"/>
   <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#B88A44"/>
   <text class="small" x="165" y="26" text-anchor="middle"></text>
   <text class="label" x="165" y="61" text-anchor="middle">ArrayColumn</text>
 
 </g>
-<g transform="translate(538,866)">
+<g transform="translate(2470,180)">
   <rect class="card" x="0" y="0" width="330" height="112" rx="5" fill="#EEF6D9" stroke="#8BA84D"/>
   <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#8BA84D"/>
   <text class="small" x="165" y="26" text-anchor="middle"></text>
   <text class="label" x="165" y="61" text-anchor="middle">Column</text>
 
 </g>
-<g transform="translate(980,866)">
+<g transform="translate(4470,412)">
   <rect class="card" x="0" y="0" width="330" height="196" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
   <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#5B8DEF"/>
   <text class="small" x="165" y="26" text-anchor="middle"></text>
@@ -110,7 +110,7 @@
 <text class="mono" x="18" y="150">+uint(name)</text>
 <text class="mono" x="18" y="171">+ulong(name)</text>
 </g>
-<g transform="translate(96,1230)">
+<g transform="translate(1270,412)">
   <rect class="card" x="0" y="0" width="330" height="154" rx="5" fill="#EAF7EF" stroke="#58A978"/>
   <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#58A978"/>
   <text class="small" x="165" y="26" text-anchor="middle"></text>
@@ -118,7 +118,7 @@
   <text class="mono" x="18" y="108">+kotlinUUID(name)</text>
 <text class="mono" x="18" y="129">+generateV7()</text>
 </g>
-<g transform="translate(538,1230)">
+<g transform="translate(2870,412)">
   <rect class="card" x="0" y="0" width="330" height="196" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
   <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#D6A441"/>
   <text class="small" x="165" y="26" text-anchor="middle"></text>
@@ -128,21 +128,21 @@
 <text class="mono" x="18" y="150">+integer(name)</text>
 <text class="mono" x="18" y="171">+long(name)</text>
 </g>
-<g transform="translate(980,1230)">
+<g transform="translate(4870,412)">
   <rect class="card" x="0" y="0" width="330" height="133" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
   <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#DC6B82"/>
   <text class="small" x="165" y="26" text-anchor="middle"></text>
   <text class="label" x="165" y="61" text-anchor="middle">DoubleColumn</text>
   <text class="mono" x="18" y="108">+double(name)</text>
 </g>
-<g transform="translate(96,1594)">
+<g transform="translate(1670,412)">
   <rect class="card" x="0" y="0" width="330" height="133" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
   <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#45A7A1"/>
   <text class="small" x="165" y="26" text-anchor="middle"></text>
   <text class="label" x="165" y="61" text-anchor="middle">CharColumn</text>
   <text class="mono" x="18" y="108">+char(name, length)</text>
 </g>
-<g transform="translate(538,1594)">
+<g transform="translate(3270,412)">
   <rect class="card" x="0" y="0" width="330" height="154" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
   <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#8A72D6"/>
   <text class="small" x="165" y="26" text-anchor="middle"></text>
@@ -150,7 +150,7 @@
   <text class="mono" x="18" y="108">+blob(name)</text>
 <text class="mono" x="18" y="129">+blobParam(value)</text>
 </g>
-<g transform="translate(980,1594)">
+<g transform="translate(2470,728)">
   <rect class="card" x="0" y="0" width="330" height="196" rx="5" fill="#F7F1E7" stroke="#B88A44"/>
   <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#B88A44"/>
   <text class="small" x="165" y="26" text-anchor="middle"></text>
@@ -160,7 +160,7 @@
 <text class="mono" x="18" y="150">+allFrom(column)</text>
 <text class="mono" x="18" y="171">+slice(column, lower, upper)</text>
 </g>
-<g transform="translate(538,1958)">
+<g transform="translate(2470,1044)">
   <rect class="card" x="0" y="0" width="330" height="154" rx="5" fill="#EEF6D9" stroke="#8BA84D"/>
   <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#8BA84D"/>
   <text class="small" x="165" y="26" text-anchor="middle">«abstract»</text>
