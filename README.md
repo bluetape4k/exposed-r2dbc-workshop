@@ -86,6 +86,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 6. Coroutines / Virtual Threads: [08-r2dbc-coroutines](08-r2dbc-coroutines/01-exposed-r2dbc-coroutines-basic/README.md)
 7. Spring Repository / Cache: [09-spring](09-spring/05-exposed-r2dbc-repository-coroutines/README.md)
 8. 멀티테넌시 / 고성능: [10-multi-tenant](10-multi-tenant/03-multitenant-spring-webflux/README.md), [11-high-performance](11-high-performance/README.md)
+9. Production integration: [12-production-integration](12-production-integration/README.md)
 
 ## 모듈 맵
 
@@ -103,6 +104,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 | `09-spring`              | Repository 패턴, Redis 기반 suspended cache       | [Spring Examples](09-spring/05-exposed-r2dbc-repository-coroutines/README.md) |
 | `10-multi-tenant`        | Schema 기반 멀티테넌시 + WebFlux                     | [Multi-tenant](10-multi-tenant/03-multitenant-spring-webflux/README.md)       |
 | `11-high-performance`    | 캐시 전략, routing datasource, read/write 분리      | [High Performance](11-high-performance/README.md)                             |
+| `12-production-integration` | Spring Boot 4/Ktor production service patterns   | [Production Integration](12-production-integration/README.md)                 |
 
 ## 주목할 예제
 
@@ -113,6 +115,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 - [10-multi-tenant/03-multitenant-spring-webflux](10-multi-tenant/03-multitenant-spring-webflux/README.md)
   Reactor Context + Coroutine Context 기반 tenant 전파
 - [11-high-performance/03-routing-datasource](11-high-performance/03-routing-datasource/README.md)
+- [12-production-integration](12-production-integration/README.md)
   tenant + read/write 분리 라우팅
 
 ## 아키텍처 개요
@@ -221,6 +224,7 @@ class Ex01_MyExample : AbstractR2dbcExposedTest() {
 09-spring/               Repository 패턴, Redis 기반 Suspended Cache
 10-multi-tenant/         Schema 기반 멀티테넌시 + Spring WebFlux
 11-high-performance/     캐시 전략, 읽기/쓰기 분리 라우팅 DataSource
+12-production-integration/ Production-grade Spring Boot 4 and Ktor R2DBC examples
 ```
 
 ## 개발 팁
