@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
+  <title id="title">Chapter 12 Spring Boot and Ktor R2DBC Application Architecture</title>
+  <desc id="desc">Paired Spring Boot WebFlux and Ktor routes delegate to service boundaries, Exposed R2DBC repositories, and H2 R2DBC persistence with structured error handling.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f7f9fc; }
+      .panel { fill: #ffffff; stroke: #bcc7d6; stroke-width: 2; rx: 18; }
+      .spring { fill: #e8f7ee; stroke: #3a8b57; }
+      .ktor { fill: #edf1ff; stroke: #5067c5; }
+      .shared { fill: #fff7e6; stroke: #b7791f; }
+      .db { fill: #f1f5f9; stroke: #475569; }
+      .title { font: 700 34px Arial, sans-serif; fill: #172033; }
+      .subtitle { font: 500 18px Arial, sans-serif; fill: #516070; }
+      .label { font: 700 20px Arial, sans-serif; fill: #172033; }
+      .small { font: 500 15px Arial, sans-serif; fill: #425466; }
+      .mono { font: 600 14px Menlo, Consolas, monospace; fill: #172033; }
+      .arrow { stroke: #5d6b7a; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#5d6b7a"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1400" height="760"/>
+  <text x="70" y="70" class="title">Chapter 12 Production Application Architecture</text>
+  <text x="70" y="105" class="subtitle">Two stack-native HTTP boundaries, one aligned Exposed R2DBC service/repository shape</text>
+
+  <rect x="60" y="145" width="590" height="470" class="panel spring"/>
+  <text x="95" y="190" class="label">Spring Boot 4 WebFlux</text>
+  <text x="95" y="220" class="small">Annotation controller + RestControllerAdvice</text>
+
+  <rect x="100" y="255" width="190" height="80" class="panel"/>
+  <text x="126" y="287" class="mono">web</text>
+  <text x="126" y="312" class="small">Controller / SSE</text>
+
+  <rect x="330" y="255" width="190" height="80" class="panel"/>
+  <text x="356" y="287" class="mono">app</text>
+  <text x="356" y="312" class="small">Service validation</text>
+
+  <rect x="330" y="380" width="190" height="80" class="panel"/>
+  <text x="356" y="412" class="mono">app</text>
+  <text x="356" y="437" class="small">R2DBC repository</text>
+
+  <rect x="100" y="380" width="190" height="80" class="panel"/>
+  <text x="126" y="412" class="mono">web</text>
+  <text x="126" y="437" class="small">Structured errors</text>
+
+  <rect x="215" y="505" width="190" height="70" class="panel db"/>
+  <text x="241" y="535" class="mono">persistence</text>
+  <text x="241" y="558" class="small">Spring tables</text>
+
+  <path class="arrow" d="M290 295 H330"/>
+  <path class="arrow" d="M425 335 V380"/>
+  <path class="arrow" d="M425 460 C425 500 405 520 405 540"/>
+  <path class="arrow" d="M330 420 H290"/>
+
+  <rect x="750" y="145" width="590" height="470" class="panel ktor"/>
+  <text x="785" y="190" class="label">Ktor 3</text>
+  <text x="785" y="220" class="small">Routing DSL + StatusPages + Sessions</text>
+
+  <rect x="790" y="255" width="190" height="80" class="panel"/>
+  <text x="816" y="287" class="mono">routes</text>
+  <text x="816" y="312" class="small">HTTP / WebSocket</text>
+
+  <rect x="1020" y="255" width="190" height="80" class="panel"/>
+  <text x="1046" y="287" class="mono">app</text>
+  <text x="1046" y="312" class="small">Validation + DTOs</text>
+
+  <rect x="1020" y="380" width="190" height="80" class="panel"/>
+  <text x="1046" y="412" class="mono">app</text>
+  <text x="1046" y="437" class="small">R2DBC repository</text>
+
+  <rect x="790" y="380" width="190" height="80" class="panel"/>
+  <text x="816" y="412" class="mono">config</text>
+  <text x="816" y="437" class="small">JSON / errors</text>
+
+  <rect x="905" y="505" width="190" height="70" class="panel db"/>
+  <text x="931" y="535" class="mono">persistence</text>
+  <text x="931" y="558" class="small">Ktor tables</text>
+
+  <path class="arrow" d="M980 295 H1020"/>
+  <path class="arrow" d="M1115 335 V380"/>
+  <path class="arrow" d="M1115 460 C1115 500 1095 520 1095 540"/>
+  <path class="arrow" d="M1020 420 H980"/>
+
+  <rect x="410" y="645" width="580" height="70" class="panel shared"/>
+  <text x="440" y="675" class="label">Aligned contracts</text>
+  <text x="440" y="700" class="small">suspendTransaction, request validation, JSON serialization, structured HTTP errors, focused tests</text>
+</svg>

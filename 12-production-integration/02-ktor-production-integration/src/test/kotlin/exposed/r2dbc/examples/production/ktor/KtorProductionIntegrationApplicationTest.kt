@@ -1,5 +1,15 @@
 package exposed.r2dbc.examples.production.ktor
 
+import exposed.r2dbc.examples.production.ktor.app.AccountView
+import exposed.r2dbc.examples.production.ktor.app.CreateWorkItemRequest
+import exposed.r2dbc.examples.production.ktor.app.EnqueueOutboundRequest
+import exposed.r2dbc.examples.production.ktor.app.KtorProductionRepository
+import exposed.r2dbc.examples.production.ktor.app.OutboundRequestView
+import exposed.r2dbc.examples.production.ktor.app.ReadinessView
+import exposed.r2dbc.examples.production.ktor.app.RegisterAccountRequest
+import exposed.r2dbc.examples.production.ktor.app.StructuredError
+import exposed.r2dbc.examples.production.ktor.app.WorkItemView
+import exposed.r2dbc.examples.production.ktor.outbound.KtorOutboundDispatcher
 import io.bluetape4k.assertions.shouldBeEqualTo
 import io.bluetape4k.assertions.shouldBeGreaterThan
 import io.ktor.client.HttpClient
@@ -87,6 +97,65 @@ class KtorProductionIntegrationApplicationTest {
     }
 
     @Test
+    fun `blank work item request returns structured validation error`() = testApplication {
+        val repository = newRepository("validation")
+        repository.reset()
+        application {
+            productionIntegrationModule(repository)
+        }
+        val client = createJsonClient()
+
+        client.post("/production/accounts") {
+            contentType(ContentType.Application.Json)
+            setBody(RegisterAccountRequest("alice", "ktor-key", "work:create"))
+        }
+
+        val error = client.post("/production/work-items") {
+            contentType(ContentType.Application.Json)
+            setBody(CreateWorkItemRequest(" ", "payload"))
+        }
+
+        error.status shouldBeEqualTo HttpStatusCode.BadRequest
+        error.body<StructuredError>().code shouldBeEqualTo "INVALID_REQUEST"
+    }
+
+    @Test
+    fun `malformed JSON returns structured parse error`() = testApplication {
+        val repository = newRepository("malformed")
+        repository.reset()
+        application {
+            productionIntegrationModule(repository)
+        }
+        val client = createJsonClient()
+
+        val error = client.post("/production/accounts") {
+            contentType(ContentType.Application.Json)
+            setBody("{")
+        }
+
+        error.status shouldBeEqualTo HttpStatusCode.BadRequest
+        error.body<StructuredError>().code shouldBeEqualTo "INVALID_JSON"
+    }
+
+    @Test
+    fun `work item without session returns structured unauthorized error`() = testApplication {
+        val repository = newRepository("unauthorized")
+        repository.reset()
+        application {
+            productionIntegrationModule(repository)
+        }
+        val client = createJsonClient()
+
+        val error = client.post("/production/work-items") {
+            contentType(ContentType.Application.Json)
+            setBody(CreateWorkItemRequest("alice", "ship order"))
+        }
+
+        error.status shouldBeEqualTo HttpStatusCode.Unauthorized
+        error.body<StructuredError>().code shouldBeEqualTo "UNAUTHORIZED"
+    }
+
+    @Test
     fun `duplicate idempotency key returns conflict`() = testApplication {
         val repository = newRepository("outbound")
         repository.reset()
@@ -113,6 +182,29 @@ class KtorProductionIntegrationApplicationTest {
 
         duplicate.status shouldBeEqualTo HttpStatusCode.Conflict
         duplicate.body<StructuredError>().code shouldBeEqualTo "IDEMPOTENCY_CONFLICT"
+    }
+
+    @Test
+    fun `invalid outbound target URL returns structured validation error`() = testApplication {
+        val repository = newRepository("invalid-target")
+        repository.reset()
+        application {
+            productionIntegrationModule(repository)
+        }
+        val client = createJsonClient()
+
+        client.post("/production/accounts") {
+            contentType(ContentType.Application.Json)
+            setBody(RegisterAccountRequest("outbound", "outbound-key", "outbound:create"))
+        }
+
+        val error = client.post("/production/outbound") {
+            contentType(ContentType.Application.Json)
+            setBody(EnqueueOutboundRequest("payment-2", "ht!tp://example.test/payments", "payload"))
+        }
+
+        error.status shouldBeEqualTo HttpStatusCode.BadRequest
+        error.body<StructuredError>().code shouldBeEqualTo "INVALID_REQUEST"
     }
 
     @Test
