@@ -31,6 +31,7 @@ Exposed R2DBC 환경에서 성능과 확장성을 높이기 위한 예제를 모
 | [03-routing-datasource](./03-routing-datasource/README.md) | tenant + read/write 분리 라우팅, Reactor Context 전파 | 읽기/쓰기 분리, 샤딩, 멀티 테넌트 라우팅의 기초를 보고 싶을 때 |
 | [04-cache-strategies-ktor-r2dbc](./04-cache-strategies-ktor-r2dbc/README.ko.md) | Ktor route에서 관찰하는 cache hit/miss, invalidation, write refresh, DB fallback | Spring WebFlux controller 없이 일반 캐시 전략을 보고 싶을 때 |
 | [05-cache-strategies-ktor-r2dbc-coroutines](./05-cache-strategies-ktor-r2dbc-coroutines/README.ko.md) | Ktor coroutine single-flight cache fallback, cancellation, coalesced read | 일반 Ktor cache 예제와 분리해 coroutine 전용 cache 동작을 보고 싶을 때 |
+| [06-routing-datasource-ktor-r2dbc](./06-routing-datasource-ktor-r2dbc/README.ko.md) | Reactor Context 없는 Ktor tenant + read/write R2DBC target routing | Routing datasource 주제를 Ktor request handling으로 보고 싶을 때 |
 
 ## 권장 순서
 
@@ -38,7 +39,8 @@ Exposed R2DBC 환경에서 성능과 확장성을 높이기 위한 예제를 모
 2. `03-routing-datasource`로 요청 컨텍스트 기반 라우팅을 확인합니다.
 3. `04-cache-strategies-ktor-r2dbc`로 같은 캐시 전략 표면을 Ktor route에서 비교합니다.
 4. `05-cache-strategies-ktor-r2dbc-coroutines`에서 single-flight fallback과 cancellation 동작을 확인합니다.
-5. 필요하면 `09-spring`, `10-multi-tenant` 모듈과 함께 비교해 패턴 차이를 봅니다.
+5. `06-routing-datasource-ktor-r2dbc`에서 Ktor call attributes와 Spring Reactor Context routing을 비교합니다.
+6. 필요하면 `09-spring`, `10-multi-tenant` 모듈과 함께 비교해 패턴 차이를 봅니다.
 
 ## 실행 팁
 
@@ -54,6 +56,9 @@ Exposed R2DBC 환경에서 성능과 확장성을 높이기 위한 예제를 모
 
 # Ktor coroutine cache strategy 모듈 테스트
 ./gradlew :05-cache-strategies-ktor-r2dbc-coroutines:test
+
+# Ktor routing datasource 모듈 테스트
+./gradlew :06-routing-datasource-ktor-r2dbc:test
 ```
 
 루트에서 실행할 때는 실제 Gradle 프로젝트명 기준으로 다음과 같이 사용하는 편이 안전합니다.
@@ -63,4 +68,5 @@ Exposed R2DBC 환경에서 성능과 확장성을 높이기 위한 예제를 모
 ./gradlew :exposed-r2dbc-11-high-performance-03-routing-datasource:test
 ./gradlew :exposed-r2dbc-11-high-performance-04-cache-strategies-ktor-r2dbc:test
 ./gradlew :exposed-r2dbc-11-high-performance-05-cache-strategies-ktor-r2dbc-coroutines:test
+./gradlew :exposed-r2dbc-11-high-performance-06-routing-datasource-ktor-r2dbc:test
 ```

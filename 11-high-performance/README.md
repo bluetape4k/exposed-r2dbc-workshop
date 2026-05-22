@@ -31,6 +31,7 @@ The examples in this directory cover topics closer to production environments â€
 | [03-routing-datasource](./03-routing-datasource/README.md) | Tenant + read/write routing, Reactor Context propagation | When you want to learn the basics of read/write separation, sharding, and multi-tenant routing |
 | [04-cache-strategies-ktor-r2dbc](./04-cache-strategies-ktor-r2dbc/README.md) | Ktor route-visible cache hit/miss, invalidation, write refresh, DB fallback | When you want the general cache strategy topic without Spring WebFlux controllers |
 | [05-cache-strategies-ktor-r2dbc-coroutines](./05-cache-strategies-ktor-r2dbc-coroutines/README.md) | Ktor coroutine single-flight cache fallback, cancellation, coalesced reads | When you want coroutine-specific cache behavior separate from the general Ktor cache example |
+| [06-routing-datasource-ktor-r2dbc](./06-routing-datasource-ktor-r2dbc/README.md) | Ktor tenant + read/write R2DBC target routing without Reactor Context | When you want the routing datasource topic through Ktor request handling |
 
 ## Recommended Order
 
@@ -38,7 +39,8 @@ The examples in this directory cover topics closer to production environments â€
 2. Move to `03-routing-datasource` to understand request-context-based routing.
 3. Compare `04-cache-strategies-ktor-r2dbc` when you want to see the same cache strategy surface through Ktor routes.
 4. Read `05-cache-strategies-ktor-r2dbc-coroutines` for single-flight fallback and cancellation behavior.
-5. Optionally compare with the `09-spring` and `10-multi-tenant` modules to see the pattern differences.
+5. Read `06-routing-datasource-ktor-r2dbc` to compare Ktor call attributes with Spring Reactor Context routing.
+6. Optionally compare with the `09-spring` and `10-multi-tenant` modules to see the pattern differences.
 
 ## Running Tips
 
@@ -54,6 +56,9 @@ The examples in this directory cover topics closer to production environments â€
 
 # Test the Ktor coroutine cache strategy module
 ./gradlew :05-cache-strategies-ktor-r2dbc-coroutines:test
+
+# Test the Ktor routing datasource module
+./gradlew :06-routing-datasource-ktor-r2dbc:test
 ```
 
 When running from the root, it is safer to use the actual Gradle project name:
@@ -63,4 +68,5 @@ When running from the root, it is safer to use the actual Gradle project name:
 ./gradlew :exposed-r2dbc-11-high-performance-03-routing-datasource:test
 ./gradlew :exposed-r2dbc-11-high-performance-04-cache-strategies-ktor-r2dbc:test
 ./gradlew :exposed-r2dbc-11-high-performance-05-cache-strategies-ktor-r2dbc-coroutines:test
+./gradlew :exposed-r2dbc-11-high-performance-06-routing-datasource-ktor-r2dbc:test
 ```
