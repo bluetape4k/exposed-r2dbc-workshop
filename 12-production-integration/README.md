@@ -14,6 +14,10 @@ surfaces each framework expects.
 | [`01-spring-production-integration`](01-spring-production-integration/) | Spring Boot 4 WebFlux | Controller/service/repository boundaries, SSE replay, structured errors, readiness |
 | [`02-ktor-production-integration`](02-ktor-production-integration/) | Ktor 3 | Routing, sessions/authentication, WebSockets, MockEngine outbound dispatch, readiness |
 
+## Application Architecture
+
+![Chapter 12 production application architecture](../docs/assets/readme-diagrams/issue-44-production-architecture-r2dbc-01.png)
+
 ## Topic Map
 
 | Issue | Topic | Spring slice | Ktor slice |

@@ -13,6 +13,10 @@ diagnostics 경계는 각 프레임워크의 자연스러운 방식으로 보여
 | [`01-spring-production-integration`](01-spring-production-integration/) | Spring Boot 4 WebFlux | Controller/service/repository 경계, SSE replay, structured errors, readiness |
 | [`02-ktor-production-integration`](02-ktor-production-integration/) | Ktor 3 | Routing, sessions/authentication, WebSockets, MockEngine outbound dispatch, readiness |
 
+## Application Architecture
+
+![Chapter 12 production application architecture](../docs/assets/readme-diagrams/issue-44-production-architecture-r2dbc-01.png)
+
 ## 이슈별 주제 맵
 
 | Issue | 주제 | Spring slice | Ktor slice |

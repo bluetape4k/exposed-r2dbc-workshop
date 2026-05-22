@@ -1,5 +1,14 @@
 package exposed.r2dbc.examples.production.spring
 
+import exposed.r2dbc.examples.production.spring.app.AccountView
+import exposed.r2dbc.examples.production.spring.app.CreateWorkItemRequest
+import exposed.r2dbc.examples.production.spring.app.EnqueueOutboundRequest
+import exposed.r2dbc.examples.production.spring.app.OutboxEventView
+import exposed.r2dbc.examples.production.spring.app.ReadinessView
+import exposed.r2dbc.examples.production.spring.app.RegisterAccountRequest
+import exposed.r2dbc.examples.production.spring.app.SpringProductionRepository
+import exposed.r2dbc.examples.production.spring.app.StructuredError
+import exposed.r2dbc.examples.production.spring.app.WorkItemView
 import io.bluetape4k.assertions.shouldBeEqualTo
 import io.bluetape4k.assertions.shouldBeGreaterThan
 import kotlinx.coroutines.test.runTest
@@ -83,6 +92,44 @@ class SpringProductionIntegrationApplicationTest(
     }
 
     @Test
+    fun `blank work item request returns structured validation error`() {
+        client.post()
+            .uri("/production/accounts")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(RegisterAccountRequest("alice", "spring-key", "work:create"))
+            .exchange()
+            .expectStatus().isOk
+
+        val error = client.post()
+            .uri("/production/work-items")
+            .header("X-Api-Key", "spring-key")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(CreateWorkItemRequest(" ", "payload"))
+            .exchange()
+            .expectStatus().isBadRequest
+            .expectBody(StructuredError::class.java)
+            .returnResult()
+            .responseBody
+
+        requireNotNull(error).code shouldBeEqualTo "INVALID_REQUEST"
+    }
+
+    @Test
+    fun `malformed JSON returns structured parse error`() {
+        val error = client.post()
+            .uri("/production/accounts")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue("{")
+            .exchange()
+            .expectStatus().isBadRequest
+            .expectBody(StructuredError::class.java)
+            .returnResult()
+            .responseBody
+
+        requireNotNull(error).code shouldBeEqualTo "INVALID_JSON"
+    }
+
+    @Test
     fun `duplicate idempotency key returns conflict`() {
         val request = EnqueueOutboundRequest("payment-1", "https://example.test/payments", "payload")
 
@@ -113,6 +160,29 @@ class SpringProductionIntegrationApplicationTest(
             .responseBody
 
         requireNotNull(error).code shouldBeEqualTo "IDEMPOTENCY_CONFLICT"
+    }
+
+    @Test
+    fun `invalid outbound target URL returns structured validation error`() {
+        client.post()
+            .uri("/production/accounts")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(RegisterAccountRequest("outbound", "outbound-key", "outbound:create"))
+            .exchange()
+            .expectStatus().isOk
+
+        val error = client.post()
+            .uri("/production/outbound")
+            .header("X-Api-Key", "outbound-key")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(EnqueueOutboundRequest("payment-2", "ht!tp://example.test/payments", "payload"))
+            .exchange()
+            .expectStatus().isBadRequest
+            .expectBody(StructuredError::class.java)
+            .returnResult()
+            .responseBody
+
+        requireNotNull(error).code shouldBeEqualTo "INVALID_REQUEST"
     }
 
     @Test
