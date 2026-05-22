@@ -100,3 +100,14 @@ clear하면 다시 `UP`으로 회복합니다.
 ./gradlew projects
 repo-test-summary -- ./gradlew :01-spring-production-integration:test :02-ktor-production-integration:test
 ```
+
+검증 범위는 의도적으로 나누어 둡니다.
+
+- `settings.gradle.kts`는 `includeModules("12-production-integration", false, false)`를 통해
+  12장 leaf module 두 개를 자동으로 발견합니다.
+- `.github/workflows/Examples.yml`은 12장 파일, root README 파일, README diagram
+  asset이 바뀔 때 두 12장 module의 H2 focused test를 실행합니다.
+- Main CI workflow는 repository의 다른 non-doc code 변경에 대해
+  repository-wide build, detekt, DB matrix test를 실행합니다. Nightly는 full
+  repository H2 test와 DB shard coverage를 유지하므로 12장도 일반 `test` task
+  경로로 계속 검증됩니다.
