@@ -37,6 +37,9 @@ internal object SpringProductionTables {
         val eventType = varchar("event_type", 80)
         val payload = varchar("payload", 500)
         val delivered = bool("delivered").default(false)
+        val status = varchar("status", 32).default("PENDING")
+        val attempts = integer("attempts").default(0)
+        val lastError = varchar("last_error", 240).nullable()
         override val primaryKey = PrimaryKey(sequence)
     }
 

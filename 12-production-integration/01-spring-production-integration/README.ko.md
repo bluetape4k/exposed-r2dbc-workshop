@@ -3,8 +3,8 @@
 [English](README.md) | [한국어](README.ko.md)
 
 이 모듈은 12장의 Spring Boot 4 WebFlux 예제입니다. Issue #44의 application
-architecture baseline에 더해 issue #45의 authentication/session slice를
-포함합니다.
+architecture baseline, issue #45의 authentication/session slice, issue #46의
+realtime outbox slice를 포함합니다.
 
 ## 아키텍처
 
@@ -25,6 +25,16 @@ Spring에서는 Basic authentication이 authoritative transport입니다. Persis
 session row는 Ktor cookie flow와 비교하기 위한 session metadata이며, 별도의
 authentication filter 대체물이 아닙니다.
 
+## Realtime Outbox
+
+![Chapter 12 realtime outbox delivery](../../docs/assets/readme-diagrams/issue-46-outbox-realtime-r2dbc-01.png)
+
+Spring realtime slice는 기존 API-key permission 경계를 통해 work item을
+받고, work item과 `PENDING` outbox row를 하나의 R2DBC transaction에
+저장합니다. 이후 pending row를 in-process SSE hub로 publish합니다. Replay는
+요청 sequence 이후의 `PUBLISHED` row만 반환하며, delivery 실패는 attempt
+count와 error text를 가진 `FAILED` 상태로 보존합니다.
+
 ## 패키지 구성
 
 ```text
@@ -32,7 +42,7 @@ exposed.r2dbc.examples.production.spring
 ├── auth        # WebFlux Security와 repository-backed user details
 ├── app         # DTO, service boundary, validation, Exposed R2DBC repository
 ├── persistence # repository 경계가 소유하는 table 정의
-└── web         # WebFlux controller, SSE endpoint, structured error mapping
+└── web         # WebFlux controller, SSE hub, structured error mapping
 ```
 
 ## Spring Boot 4 vs Ktor
@@ -42,6 +52,7 @@ exposed.r2dbc.examples.production.spring
 | HTTP 경계 | Annotation 기반 WebFlux controller | 명시적인 Ktor routing DSL |
 | JSON/error mapping | Boot JSON 지원과 `@RestControllerAdvice` | `ContentNegotiation`과 `StatusPages` |
 | Session/auth 형태 | WebFlux Security Basic auth와 DB session metadata | Ktor Basic auth가 signed-cookie session metadata 생성 |
+| Realtime delivery | Persisted publish 상태가 있는 Server-Sent Events | 같은 outbox 상태를 쓰는 WebSocket replay/live stream |
 | R2DBC 경계 | Repository가 `suspendTransaction` 호출을 소유 | Ktor route 아래에서도 같은 repository 형태 |
 | Test 방식 | `@SpringBootTest` + `WebTestClient` | `testApplication` + Ktor client plugin |
 
@@ -53,4 +64,5 @@ repo-test-summary -- ./gradlew :01-spring-production-integration:test -PuseDB=H2
 
 Test suite는 authorized access, missing credentials, invalid credentials,
 non-admin role denial, public registration permission/role clamping, raw token을
-숨기는 session listing을 검증합니다.
+숨기는 session listing, event persistence, publish state transition, replay
+boundary, delivery failure retention을 검증합니다.

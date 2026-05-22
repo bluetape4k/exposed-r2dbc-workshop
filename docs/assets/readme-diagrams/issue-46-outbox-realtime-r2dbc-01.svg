@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
+  <title id="title">Chapter 12 Realtime Outbox Delivery</title>
+  <desc id="desc">Spring Boot 4 SSE and Ktor WebSocket examples persist work-item events to an Exposed R2DBC outbox before publishing PUBLISHED or FAILED delivery state.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; rx: 18; }
+      .spring { fill: #ecfdf5; stroke: #2f855a; }
+      .ktor { fill: #eef2ff; stroke: #4f46e5; }
+      .db { fill: #fff7ed; stroke: #c2410c; }
+      .state { fill: #fefce8; stroke: #a16207; }
+      .title { font: 700 34px Arial, sans-serif; fill: #172033; }
+      .subtitle { font: 500 18px Arial, sans-serif; fill: #516070; }
+      .label { font: 700 20px Arial, sans-serif; fill: #172033; }
+      .small { font: 500 15px Arial, sans-serif; fill: #425466; }
+      .mono { font: 600 14px Menlo, Consolas, monospace; fill: #172033; }
+      .arrow { stroke: #5d6b7a; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#5d6b7a"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1400" height="760"/>
+  <text x="70" y="70" class="title">Realtime Outbox Delivery</text>
+  <text x="70" y="105" class="subtitle">Persist domain events first, publish pending rows, then replay only published events by cursor</text>
+
+  <rect x="60" y="145" width="590" height="450" class="panel spring"/>
+  <text x="95" y="190" class="label">Spring Boot 4 WebFlux SSE</text>
+  <text x="95" y="220" class="small">API-key protected work writes feed an SSE replay and live hub</text>
+
+  <rect x="100" y="260" width="180" height="78" class="panel"/>
+  <text x="125" y="292" class="mono">work-items</text>
+  <text x="125" y="315" class="small">validate + accept</text>
+
+  <rect x="330" y="260" width="190" height="78" class="panel db"/>
+  <text x="355" y="292" class="mono">R2DBC tx</text>
+  <text x="355" y="315" class="small">work row + outbox row</text>
+
+  <rect x="330" y="385" width="190" height="78" class="panel state"/>
+  <text x="355" y="417" class="mono">PENDING</text>
+  <text x="355" y="440" class="small">attempt counter = 0</text>
+
+  <rect x="100" y="385" width="180" height="78" class="panel"/>
+  <text x="125" y="417" class="mono">publish</text>
+  <text x="125" y="440" class="small">delivery boundary</text>
+
+  <rect x="215" y="510" width="210" height="60" class="panel state"/>
+  <text x="240" y="535" class="mono">PUBLISHED / FAILED</text>
+  <text x="240" y="557" class="small">status is stored</text>
+
+  <path class="arrow" d="M280 299 H330"/>
+  <path class="arrow" d="M425 338 V385"/>
+  <path class="arrow" d="M330 424 H280"/>
+  <path class="arrow" d="M190 463 C190 500 215 510 260 520"/>
+
+  <rect x="750" y="145" width="590" height="450" class="panel ktor"/>
+  <text x="785" y="190" class="label">Ktor WebSocket Realtime</text>
+  <text x="785" y="220" class="small">Signed session cookie protects work, publish, outbox, and WebSocket endpoints</text>
+
+  <rect x="790" y="260" width="180" height="78" class="panel"/>
+  <text x="815" y="292" class="mono">auth-session</text>
+  <text x="815" y="315" class="small">cookie token check</text>
+
+  <rect x="1020" y="260" width="190" height="78" class="panel db"/>
+  <text x="1045" y="292" class="mono">R2DBC outbox</text>
+  <text x="1045" y="315" class="small">same table shape</text>
+
+  <rect x="1020" y="385" width="190" height="78" class="panel state"/>
+  <text x="1045" y="417" class="mono">replay after=N</text>
+  <text x="1045" y="440" class="small">published rows only</text>
+
+  <rect x="790" y="385" width="180" height="78" class="panel"/>
+  <text x="815" y="417" class="mono">live hub</text>
+  <text x="815" y="440" class="small">dedupe by sequence</text>
+
+  <rect x="905" y="510" width="210" height="60" class="panel state"/>
+  <text x="930" y="535" class="mono">WebSocket frames</text>
+  <text x="930" y="557" class="small">replay + live stream</text>
+
+  <path class="arrow" d="M970 299 H1020"/>
+  <path class="arrow" d="M1115 338 V385"/>
+  <path class="arrow" d="M1020 424 H970"/>
+  <path class="arrow" d="M880 463 C880 500 905 510 950 520"/>
+
+  <rect x="305" y="630" width="790" height="70" class="panel"/>
+  <text x="335" y="660" class="label">Verified realtime outcomes</text>
+  <text x="335" y="685" class="small">event persistence, publish transition, cursor replay boundary, live stream delivery, and failed delivery retention</text>
+</svg>

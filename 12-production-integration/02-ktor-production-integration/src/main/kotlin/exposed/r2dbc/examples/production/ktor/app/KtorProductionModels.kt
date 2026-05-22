@@ -141,10 +141,56 @@ data class OutboxEventView(
     val aggregateId: String,
     val eventType: String,
     val payload: String,
+    val status: OutboxStatus,
+    val attempts: Int,
+    val lastError: String?,
 ): Serializable {
     companion object {
         private const val serialVersionUID: Long = 1L
     }
+}
+
+/**
+ * Collection wrapper for persisted realtime outbox rows.
+ */
+@kotlinx.serialization.Serializable
+data class OutboxEventsView(
+    val events: List<OutboxEventView>,
+): Serializable {
+    companion object {
+        private const val serialVersionUID: Long = 1L
+    }
+}
+
+/**
+ * Realtime outbox publish attempt summary.
+ */
+@kotlinx.serialization.Serializable
+data class PublishOutboxView(
+    val attempted: Int,
+    val delivered: Int,
+    val failed: Int,
+): Serializable {
+    companion object {
+        private const val serialVersionUID: Long = 1L
+    }
+}
+
+/**
+ * Explicit delivery state persisted with each realtime outbox row.
+ */
+@kotlinx.serialization.Serializable
+enum class OutboxStatus {
+    PENDING,
+    PUBLISHED,
+    FAILED,
+}
+
+/**
+ * Delivery boundary used by the realtime outbox publisher.
+ */
+interface RealtimeDelivery {
+    suspend fun deliver(event: OutboxEventView): Boolean
 }
 
 /**

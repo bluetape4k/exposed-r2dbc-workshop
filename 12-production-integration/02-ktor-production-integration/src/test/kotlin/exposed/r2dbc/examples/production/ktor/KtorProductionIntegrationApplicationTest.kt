@@ -5,8 +5,13 @@ import exposed.r2dbc.examples.production.ktor.app.AuthProfileView
 import exposed.r2dbc.examples.production.ktor.app.CreateWorkItemRequest
 import exposed.r2dbc.examples.production.ktor.app.EnqueueOutboundRequest
 import exposed.r2dbc.examples.production.ktor.app.KtorProductionRepository
+import exposed.r2dbc.examples.production.ktor.app.OutboxEventsView
+import exposed.r2dbc.examples.production.ktor.app.OutboxEventView
+import exposed.r2dbc.examples.production.ktor.app.OutboxStatus
 import exposed.r2dbc.examples.production.ktor.app.OutboundRequestView
+import exposed.r2dbc.examples.production.ktor.app.PublishOutboxView
 import exposed.r2dbc.examples.production.ktor.app.ReadinessView
+import exposed.r2dbc.examples.production.ktor.app.RealtimeDelivery
 import exposed.r2dbc.examples.production.ktor.app.RegisterAccountRequest
 import exposed.r2dbc.examples.production.ktor.app.SessionView
 import exposed.r2dbc.examples.production.ktor.app.SessionsView
@@ -35,6 +40,7 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.testing.testApplication
 import io.ktor.websocket.Frame
 import io.ktor.websocket.readText
+import kotlinx.coroutines.withTimeout
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -203,6 +209,8 @@ class KtorProductionIntegrationApplicationTest {
             contentType(ContentType.Application.Json)
             setBody(CreateWorkItemRequest("alice", "ship order"))
         }
+        repository.outboxEvents().single().status shouldBeEqualTo OutboxStatus.PENDING
+        client.post("/production/outbox/publish").body<PublishOutboxView>().delivered shouldBeEqualTo 1
 
         client.webSocket("/production/realtime?after=0") {
             val text = (incoming.receive() as Frame.Text).readText()
@@ -210,6 +218,64 @@ class KtorProductionIntegrationApplicationTest {
         }
 
         repository.replayEvents(0).size shouldBeGreaterThan 0
+    }
+
+    @Test
+    fun `websocket realtime endpoint streams live event after subscription`() = testApplication {
+        val repository = newRepository("realtime-live")
+        repository.reset()
+        application {
+            productionIntegrationModule(repository)
+        }
+
+        val client = createClient {
+            install(ContentNegotiation) {
+                json()
+            }
+            install(HttpCookies)
+            install(WebSockets)
+        }
+
+        client.post("/production/sessions") {
+            basic("alice", "password")
+        }
+
+        client.webSocket("/production/realtime?after=0") {
+            client.post("/production/work-items") {
+                contentType(ContentType.Application.Json)
+                setBody(CreateWorkItemRequest("alice", "live update"))
+            }
+            client.post("/production/outbox/publish")
+
+            val text = withTimeout(5_000) {
+                (incoming.receive() as Frame.Text).readText()
+            }
+            text.contains("live update") shouldBeEqualTo true
+        }
+    }
+
+    @Test
+    fun `delivery failure is recorded without losing realtime outbox event`() = testApplication {
+        val repository = newRepository("realtime-failure")
+        repository.reset()
+        application {
+            productionIntegrationModule(repository, realtimeDelivery = FailingRealtimeDelivery)
+        }
+        val client = createJsonClient()
+
+        client.post("/production/sessions") {
+            basic("alice", "password")
+        }
+        client.post("/production/work-items") {
+            contentType(ContentType.Application.Json)
+            setBody(CreateWorkItemRequest("alice", "will fail"))
+        }
+
+        client.post("/production/outbox/publish").status shouldBeEqualTo HttpStatusCode.OK
+        val outbox = client.get("/production/outbox").body<OutboxEventsView>()
+        val failed = outbox.events.single()
+        failed.status shouldBeEqualTo OutboxStatus.FAILED
+        failed.lastError shouldBeEqualTo "realtime delivery returned false"
     }
 
     @Test
@@ -396,5 +462,9 @@ class KtorProductionIntegrationApplicationTest {
     private fun io.ktor.client.request.HttpRequestBuilder.basic(username: String, password: String) {
         val encoded = Base64.getEncoder().encodeToString("$username:$password".toByteArray())
         header(HttpHeaders.Authorization, "Basic $encoded")
+    }
+
+    private object FailingRealtimeDelivery: RealtimeDelivery {
+        override suspend fun deliver(event: OutboxEventView): Boolean = false
     }
 }
