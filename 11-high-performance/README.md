@@ -61,12 +61,6 @@ The examples in this directory cover topics closer to production environments â€
 ./gradlew :06-routing-datasource-ktor-r2dbc:test
 ```
 
-When running from the root, it is safer to use the actual Gradle project name:
-
-```bash
-./gradlew :exposed-r2dbc-11-high-performance-02-cache-strategies-r2dbc:test
-./gradlew :exposed-r2dbc-11-high-performance-03-routing-datasource:test
-./gradlew :exposed-r2dbc-11-high-performance-04-cache-strategies-ktor-r2dbc:test
-./gradlew :exposed-r2dbc-11-high-performance-05-cache-strategies-ktor-r2dbc-coroutines:test
-./gradlew :exposed-r2dbc-11-high-performance-06-routing-datasource-ktor-r2dbc:test
-```
+These commands use the unique Gradle project names reported by `./gradlew projects`.
+Prefixed names such as `:exposed-r2dbc-11-high-performance-...` are not
+registered in this repository.

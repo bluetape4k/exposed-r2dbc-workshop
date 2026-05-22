@@ -47,3 +47,13 @@ PostgreSQL/MySQL Nightly shards intentionally keep only
 `03-multitenant-spring-webflux`; the MariaDB smoke shard does not run chapter 10.
 Modules `04`, `05`, `06`, and `07` are H2 workshop strategies with no
 PostgreSQL/MySQL/MariaDB tenant database surface yet.
+
+When running from the repository root, use the unique Gradle project names below:
+
+```bash
+./gradlew :03-multitenant-spring-webflux:test
+./gradlew :04-connection-factory-per-tenant-spring-webflux:test
+./gradlew :05-spring-security-tenant-authorization-spring-webflux:test
+./gradlew :06-tenant-onboarding-spring-webflux:test
+./gradlew :07-multitenant-ktor:test
+```

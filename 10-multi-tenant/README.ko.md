@@ -47,3 +47,13 @@ PostgreSQL/MySQL Nightly shard는 의도적으로 `03-multitenant-spring-webflux
 유지하고, MariaDB smoke shard는 chapter 10을 실행하지 않습니다. `04`, `05`,
 `06`, `07`은 아직 PostgreSQL/MySQL/MariaDB tenant database surface를 추가하지 않은
 H2 workshop 전략이기 때문입니다.
+
+repository root에서 실행할 때는 고유한 Gradle project name을 사용합니다.
+
+```bash
+./gradlew :03-multitenant-spring-webflux:test
+./gradlew :04-connection-factory-per-tenant-spring-webflux:test
+./gradlew :05-spring-security-tenant-authorization-spring-webflux:test
+./gradlew :06-tenant-onboarding-spring-webflux:test
+./gradlew :07-multitenant-ktor:test
+```
