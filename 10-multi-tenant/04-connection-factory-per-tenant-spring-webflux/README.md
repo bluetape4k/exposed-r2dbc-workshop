@@ -1,0 +1,105 @@
+# 04-connection-factory-per-tenant-spring-webflux
+
+[English](README.md) | [한국어](README.ko.md)
+
+Spring WebFlux + Exposed R2DBC example that routes each tenant to a distinct
+R2DBC `ConnectionFactory` and connection pool.
+
+## Strategy
+
+This module demonstrates **connection-factory-per-tenant** isolation:
+
+- HTTP requests must include `X-TENANT-ID`.
+- Supported tenants are `korean` and `english`.
+- Each tenant uses a different H2 in-memory database URL.
+- Spring R2DBC routes connections through `AbstractRoutingConnectionFactory`.
+- Exposed transactions always use an explicit routing `R2dbcDatabase`.
+- Startup initialization uses explicit tenant databases backed by the same
+  registry-owned pools.
+
+```mermaid
+flowchart TD
+    A[HTTP request] --> B[TenantFilter]
+    B -->|valid X-TENANT-ID| C[Reactor Context tenantId]
+    C --> D[TenantTransactionExecutor]
+    D --> E[Exposed suspendTransaction]
+    E --> F[TenantRoutingConnectionFactory]
+    F -->|korean| G[(tenant_cf_korean)]
+    F -->|english| H[(tenant_cf_english)]
+```
+
+## When To Use
+
+Choose this strategy when tenants need stronger operational separation than a
+shared-schema model and the tenant set is bounded or explicitly provisioned.
+Each tenant gets a separate pool, so connection count grows with tenant count.
+
+Compared with
+[`03-multitenant-spring-webflux`](../03-multitenant-spring-webflux/README.md):
+
+| Module | Isolation | Main tradeoff |
+|---|---|---|
+| `03` schema-per-tenant | Shared database, per-transaction schema switch | Fewer pools, but relies on connection schema state |
+| `04` connection-factory-per-tenant | Separate R2DBC URL and pool per tenant | Clearer isolation, but more pools |
+
+This module does not implement tenant authorization. Until issue #40 adds
+Spring Security, any client that knows a valid tenant ID can select that tenant.
+
+## Configuration
+
+```yaml
+app:
+  tenants:
+    default-tenant: korean
+    definitions:
+      korean:
+        url: r2dbc:h2:mem:///tenant_cf_korean;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+      english:
+        url: r2dbc:h2:mem:///tenant_cf_english;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+  r2dbc:
+    pool:
+      max-size: 8
+      initial-size: 1
+      min-idle: 1
+      max-idle-time: 10m
+      max-life-time: 30m
+      max-create-connection-time: 10s
+      max-acquire-time: 3s
+      acquire-retry: 3
+      background-eviction-interval: 1m
+```
+
+HTTP requests fail closed:
+
+| Header | Result |
+|---|---|
+| `X-TENANT-ID: korean` | Korean tenant pool |
+| `X-TENANT-ID: english` | English tenant pool |
+| missing, blank, malformed, unknown | `400 Bad Request` |
+
+Outside the HTTP path, the routing factory can use the configured default tenant
+when no Reactor lookup key is present. If an unknown lookup key is emitted,
+`setLenientFallback(false)` makes routing fail.
+
+## Run
+
+```bash
+./gradlew :04-connection-factory-per-tenant-spring-webflux:bootRun
+```
+
+```bash
+curl -H "X-TENANT-ID: korean" http://localhost:8080/actors/2
+curl -H "X-TENANT-ID: english" http://localhost:8080/actors/2
+```
+
+The same actor ID returns different tenant-specific fixture data.
+
+## Verification
+
+```bash
+./gradlew :04-connection-factory-per-tenant-spring-webflux:compileKotlin --warning-mode all --console=plain
+repo-test-summary -- ./gradlew :04-connection-factory-per-tenant-spring-webflux:test "-PuseDB=H2" --continue --console=plain
+```
+
+Root CI runs `./gradlew test`, so this H2-only module is covered by PR CI. It is
+not added to container-heavy Nightly shards in this PR.

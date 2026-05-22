@@ -1,0 +1,89 @@
+plugins {
+    kotlin("plugin.spring")
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.graalvm.native)
+}
+
+
+springBoot {
+    mainClass.set("exposed.r2dbc.multitenant.connectionfactory.ConnectionFactoryTenantAppKt")
+
+    buildInfo {
+        properties {
+            additional.put("name", "Connection-factory-per-tenant WebFlux Example")
+            additional.put("description", "Spring WebFlux + Exposed R2DBC connection-factory-per-tenant example")
+            version = "1.0.0"
+            additional.put("java.version", JavaVersion.current())
+        }
+    }
+}
+
+configurations {
+    testImplementation.get().extendsFrom(compileOnly.get(), runtimeOnly.get())
+}
+
+dependencies {
+    implementation(platform(libs.jetbrains.exposed.bom))
+
+    implementation(project(":exposed-r2dbc-shared"))
+
+    // Exposed
+    implementation(libs.jetbrains.exposed.r2dbc)
+    implementation(libs.jetbrains.exposed.java.time)
+    implementation(libs.jetbrains.exposed.migration.r2dbc)
+
+    // bluetape4k
+    implementation(libs.exposed.r2dbc)
+    testImplementation(libs.bluetape4k.junit5)
+
+    // R2DBC Drivers
+    runtimeOnly(libs.h2.v2)
+
+    implementation(libs.r2dbc.spi)
+    implementation(libs.r2dbc.pool)
+    implementation(libs.r2dbc.h2)
+
+    // Spring Boot
+    implementation("org.springframework.boot:spring-boot-autoconfigure")
+    annotationProcessor("org.springframework.boot:spring-boot-autoconfigure-processor")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    runtimeOnly("org.springframework.boot:spring-boot-devtools")
+
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-aspectj")
+    implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+
+    testImplementation(libs.bluetape4k.spring.boot.core)
+    testImplementation("org.springframework.boot:spring-boot-webtestclient")
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(group = "junit", module = "junit")
+        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+        exclude(module = "mockito-core")
+    }
+
+    // Redis Cache
+    runtimeOnly(libs.lettuce.core)
+    runtimeOnly(libs.commons.pool2)
+
+    // Codecs
+    runtimeOnly(libs.fory.kotlin)
+    runtimeOnly(libs.kryo)
+
+    // Compressor
+    runtimeOnly(libs.lz4.java)
+    runtimeOnly(libs.snappy.java)
+    runtimeOnly(libs.zstd.jni)
+
+    // Coroutines
+    implementation(libs.bluetape4k.coroutines)
+    implementation(libs.kotlinx.coroutines.reactor)
+    testImplementation(libs.kotlinx.coroutines.test)
+
+    // Reactor
+    implementation(libs.reactor.netty)
+    implementation(libs.reactor.kotlin.extensions)
+    testImplementation(libs.reactor.test)
+
+}
