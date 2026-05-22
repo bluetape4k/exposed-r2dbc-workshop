@@ -4,7 +4,8 @@
 
 이 모듈은 12장의 Ktor 3 예제입니다. Issue #44의 application architecture
 baseline, issue #45의 authentication/session slice, issue #46의 realtime
-outbox slice, issue #47의 HTTP client outbox/idempotency slice를 포함합니다.
+outbox slice, issue #47의 HTTP client outbox/idempotency slice를 포함하고,
+issue #48의 diagnostics/readiness slice를 추가합니다.
 
 ## 아키텍처
 
@@ -48,15 +49,27 @@ idempotency key를 `Idempotency-Key` header로 전달하며, `MockEngine`으로
 transaction 밖에서 수행한 뒤, sanitized error text와 함께 retryable 또는
 permanent failure 상태를 기록합니다.
 
+## Observability And Readiness
+
+![Chapter 12 observability and readiness](../../docs/assets/readme-diagrams/issue-48-observability-readiness-r2dbc-01.png)
+
+Ktor는 `CallId`와 `CallLogging`을 설치해 안전한 `X-Request-ID` 값을 echo하고,
+invalid ID는 structured error rendering 전에 UUID로 교체합니다.
+`GET /production/diagnostics/operations/{name}`은 synthetic coroutine delay를
+R2DBC transaction 밖에서 완료한 뒤 bounded diagnostic operation을 기록합니다.
+`GET /production/diagnostics/operations`는 최신 100건을 반환하고,
+`GET /production/readiness`는 bounded live database ping과 diagnostics의
+sticky degraded database state를 함께 반영합니다.
+
 ## 패키지 구성
 
 ```text
 exposed.r2dbc.examples.production.ktor
 ├── app         # DTO, validation, Exposed R2DBC repository
-├── config      # JSON serialization, structured error mapping, auth failure
+├── config      # JSON serialization, request correlation, structured error mapping, auth failure
 ├── outbound    # Ktor HTTP client dispatcher 경계
 ├── persistence # repository 경계가 소유하는 table 정의
-└── routes      # HTTP route와 WebSocket replay endpoint
+└── routes      # HTTP route, diagnostics endpoint, WebSocket replay endpoint
 ```
 
 ## Ktor vs Spring Boot 4
@@ -68,6 +81,7 @@ exposed.r2dbc.examples.production.ktor
 | Session/auth 형태 | Ktor Basic auth가 signed-cookie session metadata 생성 | WebFlux Security Basic auth와 DB session metadata |
 | Realtime delivery | Persisted publish 상태가 있는 WebSocket replay/live stream | 같은 outbox 상태를 쓰는 Server-Sent Events |
 | Outbound HTTP | MockEngine test가 있는 Ktor HTTP client dispatcher | Persisted idempotency 상태를 쓰는 WebClient dispatcher |
+| Diagnostics/readiness | CallId/CallLogging과 명시적인 route diagnostics | WebFilter request correlation과 annotation 기반 diagnostics endpoint |
 | R2DBC 경계 | Repository가 `suspendTransaction` 호출을 소유 | Spring service 뒤에서도 같은 repository 형태 |
 | Test 방식 | `testApplication` + Ktor client plugin | `@SpringBootTest` + `WebTestClient` |
 
@@ -83,4 +97,6 @@ session cookie, raw token을 숨기는 session listing, event persistence, publi
 state transition, replay/live WebSocket delivery, delivery failure retention,
 outbound success/retry/permanent failure, duplicate idempotency key, permission
 denial, sanitized dispatch error, Ktor `MockEngine` dispatch, concurrent
-single-send protection을 검증합니다.
+single-send protection, request-id echo/replacement, structured error
+correlation, diagnostic operation timing, readiness degraded/recovery 동작을
+검증합니다.

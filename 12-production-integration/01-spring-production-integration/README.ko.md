@@ -5,7 +5,7 @@
 이 모듈은 12장의 Spring Boot 4 WebFlux 예제입니다. Issue #44의 application
 architecture baseline, issue #45의 authentication/session slice, issue #46의
 realtime outbox slice, issue #47의 HTTP client outbox/idempotency slice를
-포함합니다.
+포함하고, issue #48의 diagnostics/readiness slice를 추가합니다.
 
 ## 아키텍처
 
@@ -49,6 +49,19 @@ Repository는 dispatchable row를 `IN_FLIGHT`로 claim한 뒤 HTTP client 호출
 transaction 밖에서 수행하고, retryable failure는 최대 세 번으로 제한하며,
 저장되는 error text는 sanitize합니다.
 
+## Observability And Readiness
+
+![Chapter 12 observability and readiness](../../docs/assets/readme-diagrams/issue-48-observability-readiness-r2dbc-01.png)
+
+`SpringRequestCorrelationFilter`는 `X-Request-ID`를 정규화하고, 수용된 값을 모든
+응답 header에 echo하며, structured error mapping에서 사용할 수 있게 합니다.
+`GET /production/diagnostics/operations/{name}`은 bounded diagnostic operation을
+기록하고 optional coroutine delay는 R2DBC transaction 밖에서 수행합니다.
+`GET /production/diagnostics/operations`는 최신 100건을 반환합니다.
+`GET /production/readiness`는 bounded live database ping을 실행하고,
+diagnostics table이 database degraded marker를 가진 동안 sticky `DEGRADED`를
+보고합니다.
+
 ## 패키지 구성
 
 ```text
@@ -56,7 +69,7 @@ exposed.r2dbc.examples.production.spring
 ├── auth        # WebFlux Security와 repository-backed user details
 ├── app         # DTO, service boundary, validation, Exposed R2DBC repository
 ├── persistence # repository 경계가 소유하는 table 정의
-└── web         # WebFlux controller, SSE hub, WebClient dispatcher, structured error mapping
+└── web         # WebFlux controller, request correlation, SSE hub, WebClient dispatcher, structured error mapping
 ```
 
 ## Spring Boot 4 vs Ktor
@@ -68,6 +81,7 @@ exposed.r2dbc.examples.production.spring
 | Session/auth 형태 | WebFlux Security Basic auth와 DB session metadata | Ktor Basic auth가 signed-cookie session metadata 생성 |
 | Realtime delivery | Persisted publish 상태가 있는 Server-Sent Events | 같은 outbox 상태를 쓰는 WebSocket replay/live stream |
 | Outbound HTTP | Persisted idempotency 상태를 쓰는 WebClient dispatcher | MockEngine test가 있는 Ktor HTTP client dispatcher |
+| Diagnostics/readiness | WebFilter request correlation과 annotation 기반 diagnostics endpoint | CallId/CallLogging과 명시적인 route diagnostics |
 | R2DBC 경계 | Repository가 `suspendTransaction` 호출을 소유 | Ktor route 아래에서도 같은 repository 형태 |
 | Test 방식 | `@SpringBootTest` + `WebTestClient` | `testApplication` + Ktor client plugin |
 
@@ -82,4 +96,6 @@ non-admin role denial, public registration permission/role clamping, raw token�
 숨기는 session listing, event persistence, publish state transition, replay
 boundary, delivery failure retention, outbound success/retry/permanent failure,
 duplicate idempotency key, permission denial, sanitized dispatch error,
-concurrent single-send protection을 검증합니다.
+concurrent single-send protection, request-id echo/replacement, structured error
+correlation, diagnostic operation timing, readiness degraded/recovery 동작을
+검증합니다.

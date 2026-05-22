@@ -3,6 +3,8 @@ package exposed.r2dbc.examples.production.spring
 import exposed.r2dbc.examples.production.spring.app.AccountView
 import exposed.r2dbc.examples.production.spring.app.AuthProfileView
 import exposed.r2dbc.examples.production.spring.app.CreateWorkItemRequest
+import exposed.r2dbc.examples.production.spring.app.DiagnosticOperationView
+import exposed.r2dbc.examples.production.spring.app.DiagnosticOperationsView
 import exposed.r2dbc.examples.production.spring.app.DispatchOutboundView
 import exposed.r2dbc.examples.production.spring.app.DuplicateIdempotencyKeyException
 import exposed.r2dbc.examples.production.spring.app.EnqueueOutboundRequest
@@ -20,8 +22,11 @@ import exposed.r2dbc.examples.production.spring.app.SpringProductionRepository
 import exposed.r2dbc.examples.production.spring.app.SpringProductionWorkflowService
 import exposed.r2dbc.examples.production.spring.app.StructuredError
 import exposed.r2dbc.examples.production.spring.app.WorkItemView
+import exposed.r2dbc.examples.production.spring.web.REQUEST_ID_HEADER
 import io.bluetape4k.assertions.shouldBeEqualTo
 import io.bluetape4k.assertions.shouldBeGreaterThan
+import io.bluetape4k.assertions.shouldNotBeEqualTo
+import io.bluetape4k.assertions.shouldNotBeNull
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.awaitAll
@@ -561,10 +566,37 @@ class SpringProductionIntegrationApplicationTest(
     }
 
     @Test
-    fun `readiness reports degraded database state`() = runTest {
+    fun `readiness reports up degraded and recovered database state with request id`() = runTest {
+        val up = client.get()
+            .uri("/production/readiness")
+            .header(REQUEST_ID_HEADER, "spring-ready-up")
+            .exchange()
+            .expectStatus().isOk
+            .expectHeader().valueEquals(REQUEST_ID_HEADER, "spring-ready-up")
+            .expectBody(ReadinessView::class.java)
+            .returnResult()
+            .responseBody
+
+        requireNotNull(up).status shouldBeEqualTo "UP"
+        up.requestId shouldBeEqualTo "spring-ready-up"
+
         repository.markDatabaseDegraded("slow query threshold exceeded")
 
-        val readiness = client.get()
+        val degraded = client.get()
+            .uri("/production/readiness")
+            .header(REQUEST_ID_HEADER, "spring-ready-degraded")
+            .exchange()
+            .expectStatus().isOk
+            .expectHeader().valueEquals(REQUEST_ID_HEADER, "spring-ready-degraded")
+            .expectBody(ReadinessView::class.java)
+            .returnResult()
+            .responseBody
+
+        requireNotNull(degraded).status shouldBeEqualTo "DEGRADED"
+        degraded.requestId shouldBeEqualTo "spring-ready-degraded"
+
+        repository.clearDatabaseDegraded()
+        val recovered = client.get()
             .uri("/production/readiness")
             .exchange()
             .expectStatus().isOk
@@ -572,7 +604,115 @@ class SpringProductionIntegrationApplicationTest(
             .returnResult()
             .responseBody
 
-        requireNotNull(readiness).status shouldBeEqualTo "DEGRADED"
+        requireNotNull(recovered).status shouldBeEqualTo "UP"
+    }
+
+    @Test
+    fun `diagnostic operation records slow timing and request id`() {
+        val operation = client.get()
+            .uri("/production/diagnostics/operations/import-orders?delayMs=260")
+            .header(REQUEST_ID_HEADER, "spring-diagnostic-1")
+            .exchange()
+            .expectStatus().isOk
+            .expectHeader().valueEquals(REQUEST_ID_HEADER, "spring-diagnostic-1")
+            .expectBody(DiagnosticOperationView::class.java)
+            .returnResult()
+            .responseBody
+
+        val recorded = requireNotNull(operation)
+        recorded.name shouldBeEqualTo "import-orders"
+        recorded.requestId shouldBeEqualTo "spring-diagnostic-1"
+        recorded.slow shouldBeEqualTo true
+
+        val operations = client.get()
+            .uri("/production/diagnostics/operations")
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(DiagnosticOperationsView::class.java)
+            .returnResult()
+            .responseBody
+
+        requireNotNull(operations).operations.any { it.id == recorded.id } shouldBeEqualTo true
+    }
+
+    @Test
+    fun `invalid request id is replaced before diagnostic persistence`() {
+        val result = client.get()
+            .uri("/production/diagnostics/operations/import")
+            .header(REQUEST_ID_HEADER, "spring trace with spaces")
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(DiagnosticOperationView::class.java)
+            .returnResult()
+
+        val sanitized = result.responseHeaders.getFirst(REQUEST_ID_HEADER).shouldNotBeNull()
+        sanitized shouldNotBeEqualTo "spring trace with spaces"
+        requireNotNull(result.responseBody).requestId shouldBeEqualTo sanitized
+    }
+
+    @Test
+    fun `diagnostic validation errors include request id`() {
+        val delayError = client.get()
+            .uri("/production/diagnostics/operations/import?delayMs=2001")
+            .header(REQUEST_ID_HEADER, "spring-diagnostic-2")
+            .exchange()
+            .expectStatus().isBadRequest
+            .expectHeader().valueEquals(REQUEST_ID_HEADER, "spring-diagnostic-2")
+            .expectBody(StructuredError::class.java)
+            .returnResult()
+            .responseBody
+
+        requireNotNull(delayError).code shouldBeEqualTo "INVALID_REQUEST"
+        delayError.requestId shouldBeEqualTo "spring-diagnostic-2"
+
+        val nameError = client.get()
+            .uri("/production/diagnostics/operations/Import")
+            .header(REQUEST_ID_HEADER, "spring-diagnostic-3")
+            .exchange()
+            .expectStatus().isBadRequest
+            .expectBody(StructuredError::class.java)
+            .returnResult()
+            .responseBody
+
+        requireNotNull(nameError).requestId shouldBeEqualTo "spring-diagnostic-3"
+    }
+
+    @Test
+    fun `structured permission and conflict errors include request id`() {
+        val forbidden = client.get()
+            .uri("/production/outbound")
+            .header("X-Api-Key", "alice-api-key")
+            .header(REQUEST_ID_HEADER, "spring-error-1")
+            .exchange()
+            .expectStatus().isForbidden
+            .expectBody(StructuredError::class.java)
+            .returnResult()
+            .responseBody
+
+        requireNotNull(forbidden).requestId shouldBeEqualTo "spring-error-1"
+
+        val request = EnqueueOutboundRequest("payment-request-id", "https://example.test/payments", "payload")
+        client.post()
+            .uri("/production/outbound")
+            .header("X-Api-Key", "admin-api-key")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(request)
+            .exchange()
+            .expectStatus().isOk
+
+        val conflict = client.post()
+            .uri("/production/outbound")
+            .header("X-Api-Key", "admin-api-key")
+            .header(REQUEST_ID_HEADER, "spring-error-2")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(request)
+            .exchange()
+            .expectStatus().isEqualTo(409)
+            .expectBody(StructuredError::class.java)
+            .returnResult()
+            .responseBody
+
+        requireNotNull(conflict).requestId shouldBeEqualTo "spring-error-2"
     }
 
     private fun WebTestClient.RequestHeadersSpec<*>.basic(username: String, password: String) =

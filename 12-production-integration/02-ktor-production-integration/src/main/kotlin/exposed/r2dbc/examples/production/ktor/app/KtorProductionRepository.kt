@@ -25,6 +25,7 @@ import org.jetbrains.exposed.v1.core.or
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.deleteAll
+import org.jetbrains.exposed.v1.r2dbc.deleteWhere
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
@@ -58,6 +59,11 @@ class KtorProductionRepository(
         val idempotencyKeyPattern = Regex("[A-Za-z0-9._-]{1,120}")
         val credentialLikeErrorPattern =
             Regex("(?i)\\b(authorization|cookie|token|secret|api[-_ ]?key)[:=]\\s*(?:Bearer\\s+)?[^\\s,;]+")
+        const val diagnosticOperationLimit = 100
+        const val slowDiagnosticThresholdMs = 250L
+        val diagnosticPingTimeout: Duration = Duration.ofSeconds(1)
+        val diagnosticOperationNamePattern = Regex("[a-z][a-z0-9-]{0,40}")
+        val diagnosticRequestIdPattern = Regex("[A-Za-z0-9._-]{1,64}")
     }
 
     private val initialized = AtomicBoolean(false)
@@ -73,6 +79,7 @@ class KtorProductionRepository(
         KtorProductionTables.OutboxEvents,
         KtorProductionTables.OutboundRequests,
         KtorProductionTables.Diagnostics,
+        KtorProductionTables.DiagnosticOperations,
     )
 
     suspend fun reset() {
@@ -80,6 +87,7 @@ class KtorProductionRepository(
         schemaMutex.withLock {
             suspendTransaction(db = database) {
                 SchemaUtils.create(*tables)
+                KtorProductionTables.DiagnosticOperations.deleteAll()
                 KtorProductionTables.Diagnostics.deleteAll()
                 KtorProductionTables.OutboundRequests.deleteAll()
                 KtorProductionTables.OutboxEvents.deleteAll()
@@ -405,8 +413,48 @@ class KtorProductionRepository(
         }
     }
 
+    suspend fun recordDiagnosticOperation(command: RecordDiagnosticOperationCommand): DiagnosticOperationView {
+        ensureSchema()
+        command.name.requireValidDiagnosticOperationName()
+        command.requestId.requireValidDiagnosticRequestId()
+        require(command.durationMs >= 0) {
+            "durationMs must be greater than or equal to zero"
+        }
+        val id = UUID.randomUUID().toString()
+        val createdAtEpochMs = Instant.now().toEpochMilli()
+        return suspendTransaction(db = database) {
+            KtorProductionTables.DiagnosticOperations.insert {
+                it[KtorProductionTables.DiagnosticOperations.id] = id
+                it[name] = command.name
+                it[requestId] = command.requestId
+                it[durationMs] = command.durationMs
+                it[slow] = command.slow
+                it[KtorProductionTables.DiagnosticOperations.createdAtEpochMs] = createdAtEpochMs
+            }
+            DiagnosticOperationView(
+                id = id,
+                name = command.name,
+                requestId = command.requestId,
+                durationMs = command.durationMs,
+                slow = command.slow,
+                createdAtEpochMs = createdAtEpochMs,
+            )
+        }
+    }
+
+    suspend fun diagnosticOperations(limit: Int = diagnosticOperationLimit): List<DiagnosticOperationView> =
+        ensureSchemaAndRead {
+            KtorProductionTables.DiagnosticOperations
+                .selectAll()
+                .orderBy(KtorProductionTables.DiagnosticOperations.createdAtEpochMs to SortOrder.DESC)
+                .limit(limit)
+                .map { it.toDiagnosticOperation() }
+                .toList()
+        }
+
     suspend fun markDatabaseDegraded(details: String) {
         ensureSchema()
+        details.requireNotBlank("details")
         schemaMutex.withLock {
             suspendTransaction(db = database) {
                 val existing = KtorProductionTables.Diagnostics
@@ -429,18 +477,54 @@ class KtorProductionRepository(
         }
     }
 
-    suspend fun readiness(): ReadinessView =
-        ensureSchemaAndRead {
-            val degraded = KtorProductionTables.Diagnostics
-                .selectAll()
-                .where { KtorProductionTables.Diagnostics.status eq "DEGRADED" }
-                .singleOrNull()
-            if (degraded == null) {
-                ReadinessView("UP", "database reachable")
-            } else {
-                ReadinessView("DEGRADED", degraded[KtorProductionTables.Diagnostics.details])
+    suspend fun clearDatabaseDegraded() {
+        ensureSchema()
+        schemaMutex.withLock {
+            suspendTransaction(db = database) {
+                KtorProductionTables.Diagnostics.deleteWhere {
+                    KtorProductionTables.Diagnostics.name eq "database"
+                }
             }
         }
+    }
+
+    suspend fun pingDatabase(): Boolean =
+        try {
+            withTimeout(diagnosticPingTimeout.toKotlinDuration()) {
+                suspendTransaction(db = database) {
+                    KtorProductionTables.Diagnostics.selectAll().limit(1).toList()
+                    true
+                }
+            }
+        } catch (e: TimeoutCancellationException) {
+            log.warn(e) { "Database readiness ping timed out" }
+            false
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            log.warn(e) { "Database readiness ping failed" }
+            false
+        }
+
+    suspend fun readiness(requestId: String? = null): ReadinessView {
+        try {
+            ensureSchema()
+            val degraded = degradedDatabaseDetails()
+            if (degraded != null) {
+                return ReadinessView("DEGRADED", degraded, requestId)
+            }
+            return if (pingDatabase()) {
+                ReadinessView("UP", "database reachable", requestId)
+            } else {
+                ReadinessView("DEGRADED", "database unreachable", requestId)
+            }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            log.warn(e) { "Database readiness check failed for requestId=${requestId.orEmpty()}" }
+            return ReadinessView("DEGRADED", "database unreachable", requestId)
+        }
+    }
 
     private suspend fun ensureSchema() {
         if (initialized.get()) {
@@ -522,6 +606,30 @@ class KtorProductionRepository(
             "idempotencyKey must be 1-120 characters and contain only letters, digits, dot, underscore, or hyphen"
         }
     }
+
+    private fun String.requireValidDiagnosticOperationName() {
+        require(diagnosticOperationNamePattern.matches(this)) {
+            "operation name must start with a lowercase letter and contain only lowercase letters, digits, or hyphen"
+        }
+    }
+
+    private fun String.requireValidDiagnosticRequestId() {
+        require(diagnosticRequestIdPattern.matches(this)) {
+            "requestId must be 1-64 characters and contain only letters, digits, dot, underscore, or hyphen"
+        }
+    }
+
+    private suspend fun degradedDatabaseDetails(): String? =
+        suspendTransaction(db = database) {
+            KtorProductionTables.Diagnostics
+                .selectAll()
+                .where {
+                    (KtorProductionTables.Diagnostics.name eq "database") and
+                            (KtorProductionTables.Diagnostics.status eq "DEGRADED")
+                }
+                .singleOrNull()
+                ?.get(KtorProductionTables.Diagnostics.details)
+        }
 
     private suspend fun claimDispatchableOutbound(): List<OutboundRequestView> =
         suspendTransaction(db = database) {
@@ -687,6 +795,16 @@ class KtorProductionRepository(
             attempts = this[KtorProductionTables.OutboundRequests.attempts],
             lastStatusCode = this[KtorProductionTables.OutboundRequests.lastStatusCode],
             lastError = this[KtorProductionTables.OutboundRequests.lastError],
+        )
+
+    private fun ResultRow.toDiagnosticOperation(): DiagnosticOperationView =
+        DiagnosticOperationView(
+            id = this[KtorProductionTables.DiagnosticOperations.id],
+            name = this[KtorProductionTables.DiagnosticOperations.name],
+            requestId = this[KtorProductionTables.DiagnosticOperations.requestId],
+            durationMs = this[KtorProductionTables.DiagnosticOperations.durationMs],
+            slow = this[KtorProductionTables.DiagnosticOperations.slow],
+            createdAtEpochMs = this[KtorProductionTables.DiagnosticOperations.createdAtEpochMs],
         )
 
     private fun BCryptPasswordEncoder.encodeRequired(password: String): String =

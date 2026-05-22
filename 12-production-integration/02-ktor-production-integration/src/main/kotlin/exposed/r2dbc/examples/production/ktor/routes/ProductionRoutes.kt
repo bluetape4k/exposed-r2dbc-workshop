@@ -4,6 +4,8 @@ import exposed.r2dbc.examples.production.ktor.UserSession
 import exposed.r2dbc.examples.production.ktor.app.AuthPrincipal
 import exposed.r2dbc.examples.production.ktor.app.AuthProfileView
 import exposed.r2dbc.examples.production.ktor.app.CreateWorkItemRequest
+import exposed.r2dbc.examples.production.ktor.app.DiagnosticOperationView
+import exposed.r2dbc.examples.production.ktor.app.DiagnosticOperationsView
 import exposed.r2dbc.examples.production.ktor.app.EnqueueOutboundRequest
 import exposed.r2dbc.examples.production.ktor.app.KtorProductionRepository
 import exposed.r2dbc.examples.production.ktor.app.KtorRealtimeHub
@@ -12,6 +14,7 @@ import exposed.r2dbc.examples.production.ktor.app.OutboundRequestsView
 import exposed.r2dbc.examples.production.ktor.app.OutboxEventView
 import exposed.r2dbc.examples.production.ktor.app.OutboxEventsView
 import exposed.r2dbc.examples.production.ktor.app.PermissionDeniedException
+import exposed.r2dbc.examples.production.ktor.app.RecordDiagnosticOperationCommand
 import exposed.r2dbc.examples.production.ktor.app.RealtimeDelivery
 import exposed.r2dbc.examples.production.ktor.app.RegisterAccountRequest
 import exposed.r2dbc.examples.production.ktor.app.SessionsView
@@ -21,6 +24,7 @@ import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.call
 import io.ktor.server.auth.authenticate
 import io.ktor.server.auth.principal
+import io.ktor.server.plugins.callid.callId
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.get
@@ -33,8 +37,14 @@ import io.ktor.server.websocket.webSocket
 import io.ktor.websocket.Frame
 import io.ktor.websocket.send
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
+import kotlin.time.TimeSource
+
+private const val SlowDiagnosticThresholdMs = 250L
+private const val MaxDiagnosticDelayMs = 2_000L
+private val OperationNamePattern = Regex("[a-z][a-z0-9-]{0,40}")
 
 internal fun Application.productionRoutes(
     repository: KtorProductionRepository,
@@ -134,7 +144,29 @@ internal fun Application.productionRoutes(
         }
 
         get("/production/readiness") {
-            call.respond(repository.readiness())
+            call.respond(repository.readiness(call.callId.orEmpty()))
+        }
+
+        get("/production/diagnostics/operations") {
+            call.respond(DiagnosticOperationsView(repository.diagnosticOperations()))
+        }
+
+        get("/production/diagnostics/operations/{name}") {
+            val name = call.parameters["name"].orEmpty()
+            val delayText = call.request.queryParameters["delayMs"]
+            val delayMs = delayText?.toLongOrNull()
+                ?: if (delayText == null) {
+                    0L
+                } else {
+                    throw IllegalArgumentException("delayMs must be a whole number")
+                }
+            val operation = runDiagnosticOperation(
+                repository = repository,
+                name = name,
+                delayMs = delayMs,
+                requestId = call.callId.orEmpty(),
+            )
+            call.respond(operation)
         }
     }
 }
@@ -154,4 +186,32 @@ private suspend fun ApplicationCall.requireSessionPermission(
     if (!repository.hasSessionPermission(token, permission)) {
         throw PermissionDeniedException(permission)
     }
+}
+
+private suspend fun runDiagnosticOperation(
+    repository: KtorProductionRepository,
+    name: String,
+    delayMs: Long,
+    requestId: String,
+): DiagnosticOperationView {
+    require(OperationNamePattern.matches(name)) {
+        "operation name must start with a lowercase letter and contain only lowercase letters, digits, or hyphen"
+    }
+    require(delayMs in 0..MaxDiagnosticDelayMs) {
+        "delayMs must be between 0 and $MaxDiagnosticDelayMs"
+    }
+
+    val started = TimeSource.Monotonic.markNow()
+    if (delayMs > 0) {
+        delay(delayMs)
+    }
+    val durationMs = started.elapsedNow().inWholeMilliseconds
+    return repository.recordDiagnosticOperation(
+        RecordDiagnosticOperationCommand(
+            name = name,
+            requestId = requestId,
+            durationMs = durationMs,
+            slow = durationMs >= SlowDiagnosticThresholdMs,
+        )
+    )
 }

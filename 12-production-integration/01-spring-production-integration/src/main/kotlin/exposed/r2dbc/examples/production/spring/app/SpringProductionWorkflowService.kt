@@ -1,6 +1,8 @@
 package exposed.r2dbc.examples.production.spring.app
 
+import kotlinx.coroutines.delay
 import org.springframework.stereotype.Service
+import kotlin.time.TimeSource
 
 /**
  * Application service that keeps coroutine and WebFlux boundaries explicit.
@@ -11,6 +13,12 @@ class SpringProductionWorkflowService(
     private val realtimeDelivery: RealtimeDelivery,
     private val outboundDelivery: OutboundDelivery,
 ) {
+    private companion object {
+        const val slowDiagnosticThresholdMs = 250L
+        const val maxDiagnosticDelayMs = 2_000L
+        val operationNamePattern = Regex("[a-z][a-z0-9-]{0,40}")
+    }
+
     suspend fun registerAccount(request: RegisterAccountRequest): AccountView =
         repository.registerAccount(request)
 
@@ -56,8 +64,38 @@ class SpringProductionWorkflowService(
     suspend fun dispatchPendingOutbound(): DispatchOutboundView =
         repository.dispatchPendingOutbound(outboundDelivery)
 
-    suspend fun readiness(): ReadinessView =
-        repository.readiness()
+    suspend fun runDiagnosticOperation(
+        name: String,
+        delayMs: Long,
+        requestId: String,
+    ): DiagnosticOperationView {
+        require(operationNamePattern.matches(name)) {
+            "operation name must start with a lowercase letter and contain only lowercase letters, digits, or hyphen"
+        }
+        require(delayMs in 0..maxDiagnosticDelayMs) {
+            "delayMs must be between 0 and $maxDiagnosticDelayMs"
+        }
+
+        val started = TimeSource.Monotonic.markNow()
+        if (delayMs > 0) {
+            delay(delayMs)
+        }
+        val durationMs = started.elapsedNow().inWholeMilliseconds
+        return repository.recordDiagnosticOperation(
+            RecordDiagnosticOperationCommand(
+                name = name,
+                requestId = requestId,
+                durationMs = durationMs,
+                slow = durationMs >= slowDiagnosticThresholdMs,
+            )
+        )
+    }
+
+    suspend fun diagnosticOperations(): DiagnosticOperationsView =
+        DiagnosticOperationsView(repository.diagnosticOperations())
+
+    suspend fun readiness(requestId: String? = null): ReadinessView =
+        repository.readiness(requestId)
 
     suspend fun requirePermission(apiKey: String, permission: String) {
         if (!repository.hasPermission(apiKey, permission)) {

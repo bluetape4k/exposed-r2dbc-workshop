@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.server.ServerWebExchange
 import org.springframework.web.server.ServerWebInputException
 
 /**
@@ -15,22 +16,55 @@ import org.springframework.web.server.ServerWebInputException
 @RestControllerAdvice
 class SpringProductionErrorHandler {
     @ExceptionHandler(DuplicateIdempotencyKeyException::class)
-    fun duplicateIdempotencyKey(exception: DuplicateIdempotencyKeyException): ResponseEntity<StructuredError> =
+    fun duplicateIdempotencyKey(
+        exception: DuplicateIdempotencyKeyException,
+        exchange: ServerWebExchange,
+    ): ResponseEntity<StructuredError> =
         ResponseEntity.status(HttpStatus.CONFLICT)
-            .body(StructuredError("IDEMPOTENCY_CONFLICT", exception.message ?: "Duplicate idempotency key"))
+            .body(
+                StructuredError(
+                    code = "IDEMPOTENCY_CONFLICT",
+                    message = exception.message ?: "Duplicate idempotency key",
+                    requestId = exchange.requestId(),
+                )
+            )
 
     @ExceptionHandler(PermissionDeniedException::class)
-    fun permissionDenied(exception: PermissionDeniedException): ResponseEntity<StructuredError> =
+    fun permissionDenied(
+        exception: PermissionDeniedException,
+        exchange: ServerWebExchange,
+    ): ResponseEntity<StructuredError> =
         ResponseEntity.status(HttpStatus.FORBIDDEN)
-            .body(StructuredError("FORBIDDEN", exception.message ?: "Permission denied"))
+            .body(
+                StructuredError(
+                    code = "FORBIDDEN",
+                    message = exception.message ?: "Permission denied",
+                    requestId = exchange.requestId(),
+                )
+            )
 
     @ExceptionHandler(IllegalArgumentException::class)
-    fun invalidRequest(exception: IllegalArgumentException): ResponseEntity<StructuredError> =
+    fun invalidRequest(
+        exception: IllegalArgumentException,
+        exchange: ServerWebExchange,
+    ): ResponseEntity<StructuredError> =
         ResponseEntity.badRequest()
-            .body(StructuredError("INVALID_REQUEST", exception.message ?: "Invalid request"))
+            .body(
+                StructuredError(
+                    code = "INVALID_REQUEST",
+                    message = exception.message ?: "Invalid request",
+                    requestId = exchange.requestId(),
+                )
+            )
 
     @ExceptionHandler(ServerWebInputException::class)
-    fun malformedRequest(): ResponseEntity<StructuredError> =
+    fun malformedRequest(exchange: ServerWebExchange): ResponseEntity<StructuredError> =
         ResponseEntity.badRequest()
-            .body(StructuredError("INVALID_JSON", "Request body is not valid JSON"))
+            .body(
+                StructuredError(
+                    code = "INVALID_JSON",
+                    message = "Request body is not valid JSON",
+                    requestId = exchange.requestId(),
+                )
+            )
 }

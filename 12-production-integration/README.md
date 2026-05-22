@@ -45,6 +45,19 @@ status code, and sanitized error text. Tests use replaceable dispatchers and
 Ktor `MockEngine`, so success, retry, duplicate, permanent failure, and
 concurrent single-send behavior are covered without a real external service.
 
+## Observability And Readiness
+
+![Chapter 12 observability and readiness](../docs/assets/readme-diagrams/issue-48-observability-readiness-r2dbc-01.png)
+
+The observability slice normalizes `X-Request-ID` across Spring WebFlux and
+Ktor. Safe caller-provided IDs are echoed in responses, invalid IDs are replaced
+with a generated UUID, and structured errors include the request id. Diagnostic
+operation endpoints record the newest operation rows with duration and slow
+flags after any synthetic delay finishes outside an R2DBC transaction.
+Readiness performs a bounded live database ping, reports sticky `DEGRADED`
+state when diagnostics record a database problem, and returns to `UP` after the
+degraded marker is cleared.
+
 ## Topic Map
 
 | Issue | Topic | Spring slice | Ktor slice |
@@ -71,8 +84,12 @@ concurrent single-send behavior are covered without a real external service.
 - HTTP client outbox examples persist outbound rows before delivery, claim
   retryable rows before dispatch, cap retries at three attempts, and redact
   credential-like text from stored dispatch errors.
-- Readiness reports `UP` when the database is reachable and `DEGRADED` when the
-  diagnostics table records a degraded database state.
+- Request correlation accepts only safe `X-Request-ID` values and generates a
+  UUID when the incoming header is missing or invalid.
+- Diagnostic operation endpoints keep the newest 100 rows and mark operations
+  over 250 ms as slow without holding a database transaction during delay.
+- Readiness reports `UP` only after a bounded live database ping and reports
+  `DEGRADED` for unreachable database state or an explicit degraded marker.
 
 ## Verification
 

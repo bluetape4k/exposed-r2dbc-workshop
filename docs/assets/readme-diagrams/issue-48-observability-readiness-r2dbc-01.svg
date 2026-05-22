@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
+  <title id="title">Chapter 12 observability and readiness flow</title>
+  <desc id="desc">Spring Boot 4 WebFlux and Ktor add request correlation, structured errors, diagnostic operation rows, and readiness checks around Exposed R2DBC.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #1f2937; stroke-width: 2; rx: 8; }
+      .spring { fill: #ecfdf5; stroke: #047857; }
+      .ktor { fill: #eef2ff; stroke: #4338ca; }
+      .db { fill: #fff7ed; stroke: #c2410c; }
+      .ops { fill: #f0f9ff; stroke: #0369a1; }
+      .error { fill: #fef2f2; stroke: #b91c1c; }
+      .text { font-family: Arial, Helvetica, sans-serif; fill: #111827; }
+      .title { font-size: 34px; font-weight: 700; }
+      .subtitle { font-size: 18px; fill: #475569; }
+      .label { font-size: 20px; font-weight: 700; }
+      .small { font-size: 16px; fill: #334155; }
+      .tiny { font-size: 14px; fill: #475569; }
+      .arrow { stroke: #111827; stroke-width: 3; fill: none; marker-end: url(#arrowhead); }
+      .dash { stroke-dasharray: 8 7; }
+    </style>
+    <marker id="arrowhead" markerWidth="12" markerHeight="8" refX="11" refY="4" orient="auto">
+      <path d="M 0 0 L 12 4 L 0 8 z" fill="#111827"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1400" height="760"/>
+  <text class="text title" x="70" y="72">Observability Readiness with Exposed R2DBC</text>
+  <text class="text subtitle" x="70" y="104">Correlate requests, persist diagnostic operations, and report database readiness deterministically.</text>
+
+  <rect class="panel spring" x="70" y="150" width="290" height="140" rx="8"/>
+  <text class="text label" x="96" y="190">Spring Boot 4</text>
+  <text class="text small" x="96" y="224">WebFlux WebFilter</text>
+  <text class="text small" x="96" y="250">Controller + service boundary</text>
+
+  <rect class="panel ktor" x="70" y="470" width="290" height="140" rx="8"/>
+  <text class="text label" x="96" y="510">Ktor 3</text>
+  <text class="text small" x="96" y="544">CallId + routing DSL</text>
+  <text class="text small" x="96" y="570">StatusPages errors</text>
+
+  <rect class="panel ops" x="440" y="155" width="305" height="150" rx="8"/>
+  <text class="text label" x="468" y="198">Request Correlation</text>
+  <text class="text small" x="468" y="232">X-Request-ID</text>
+  <text class="text small" x="468" y="258">safe pattern or UUIDv4</text>
+  <text class="text tiny" x="468" y="282">echoed on every response</text>
+
+  <rect class="panel" x="440" y="455" width="305" height="150" rx="8"/>
+  <text class="text label" x="468" y="498">Diagnostic Operation</text>
+  <text class="text small" x="468" y="532">name + requestId</text>
+  <text class="text small" x="468" y="558">durationMs + slow flag</text>
+  <text class="text tiny" x="468" y="582">delay outside transaction</text>
+
+  <rect class="panel db" x="820" y="150" width="330" height="170" rx="8"/>
+  <text class="text label" x="848" y="194">R2DBC Diagnostics</text>
+  <text class="text small" x="848" y="228">DiagnosticOperations rows</text>
+  <text class="text small" x="848" y="254">Diagnostics(database)</text>
+  <text class="text small" x="848" y="280">sticky DEGRADED state</text>
+
+  <rect class="panel ops" x="820" y="455" width="330" height="150" rx="8"/>
+  <text class="text label" x="848" y="498">Readiness</text>
+  <text class="text small" x="848" y="532">live R2DBC ping</text>
+  <text class="text small" x="848" y="558">one-second timeout</text>
+  <text class="text tiny" x="848" y="582">UP or DEGRADED</text>
+
+  <rect class="panel error" x="1200" y="250" width="150" height="225" rx="8"/>
+  <text class="text label" x="1224" y="290">Errors</text>
+  <text class="text small" x="1224" y="330">400 validation</text>
+  <text class="text small" x="1224" y="370">403 permission</text>
+  <text class="text small" x="1224" y="410">409 conflict</text>
+  <text class="text tiny" x="1224" y="448">requestId included</text>
+
+  <path class="arrow" d="M 360 220 L 440 220"/>
+  <path class="arrow" d="M 360 540 L 440 540"/>
+  <path class="arrow" d="M 745 230 L 820 230"/>
+  <path class="arrow" d="M 745 530 L 820 530"/>
+  <path class="arrow" d="M 985 320 L 985 455"/>
+  <path class="arrow" d="M 1150 235 C 1205 245 1210 275 1200 315"/>
+  <path class="arrow dash" d="M 1150 525 C 1215 505 1220 465 1200 430"/>
+  <path class="arrow dash" d="M 820 575 C 720 660 530 650 490 605"/>
+
+  <text class="text tiny" x="382" y="208">safe id</text>
+  <text class="text tiny" x="382" y="528">operation probe</text>
+  <text class="text tiny" x="762" y="218">persist</text>
+  <text class="text tiny" x="760" y="518">check</text>
+  <text class="text tiny" x="1000" y="390">sticky state</text>
+  <text class="text tiny" x="657" y="662">newest 100 rows</text>
+</svg>
