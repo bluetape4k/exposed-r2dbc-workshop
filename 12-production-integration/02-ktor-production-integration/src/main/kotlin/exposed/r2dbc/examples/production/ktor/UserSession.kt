@@ -7,7 +7,7 @@ import java.io.Serializable
  */
 @kotlinx.serialization.Serializable
 data class UserSession(
-    val accountId: String,
+    val token: String,
 ): Serializable {
     companion object {
         private const val serialVersionUID: Long = 1L

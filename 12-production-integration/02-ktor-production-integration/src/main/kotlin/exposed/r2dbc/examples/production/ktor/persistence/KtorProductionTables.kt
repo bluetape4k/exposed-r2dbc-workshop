@@ -5,10 +5,21 @@ import org.jetbrains.exposed.v1.core.Table
 internal object KtorProductionTables {
     object Accounts: Table("ktor_prod_accounts") {
         val id = varchar("id", 64)
-        val username = varchar("username", 80)
+        val username = varchar("username", 80).uniqueIndex()
         val apiKey = varchar("api_key", 120).uniqueIndex()
+        val passwordHash = varchar("password_hash", 120)
+        val displayName = varchar("display_name", 120)
         val permission = varchar("permission", 80)
-        val sessionToken = varchar("session_token", 120)
+        val roles = varchar("roles", 200)
+        override val primaryKey = PrimaryKey(id)
+    }
+
+    object Sessions: Table("ktor_prod_sessions") {
+        val id = varchar("id", 64)
+        val username = varchar("username", 80)
+        val tokenHash = varchar("token_hash", 64).uniqueIndex()
+        val issuedAtEpochMs = long("issued_at_epoch_ms")
+        val expiresAtEpochMs = long("expires_at_epoch_ms")
         override val primaryKey = PrimaryKey(id)
     }
 

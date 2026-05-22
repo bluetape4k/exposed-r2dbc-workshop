@@ -1,6 +1,7 @@
 package exposed.r2dbc.examples.production.spring.web
 
 import exposed.r2dbc.examples.production.spring.app.DuplicateIdempotencyKeyException
+import exposed.r2dbc.examples.production.spring.app.PermissionDeniedException
 import exposed.r2dbc.examples.production.spring.app.StructuredError
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -17,6 +18,11 @@ class SpringProductionErrorHandler {
     fun duplicateIdempotencyKey(exception: DuplicateIdempotencyKeyException): ResponseEntity<StructuredError> =
         ResponseEntity.status(HttpStatus.CONFLICT)
             .body(StructuredError("IDEMPOTENCY_CONFLICT", exception.message ?: "Duplicate idempotency key"))
+
+    @ExceptionHandler(PermissionDeniedException::class)
+    fun permissionDenied(exception: PermissionDeniedException): ResponseEntity<StructuredError> =
+        ResponseEntity.status(HttpStatus.FORBIDDEN)
+            .body(StructuredError("FORBIDDEN", exception.message ?: "Permission denied"))
 
     @ExceptionHandler(IllegalArgumentException::class)
     fun invalidRequest(exception: IllegalArgumentException): ResponseEntity<StructuredError> =

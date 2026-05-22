@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Flux
+import java.security.Principal
 
 /**
  * WebFlux controller exposing the chapter 12 production slices.
@@ -32,6 +33,22 @@ class SpringProductionController(
     @PostMapping("/accounts")
     suspend fun registerAccount(@RequestBody request: RegisterAccountRequest) =
         service.registerAccount(request)
+
+    @GetMapping("/profile")
+    suspend fun profile(principal: Principal) =
+        service.profile(principal.name)
+
+    @GetMapping("/admin")
+    suspend fun admin(principal: Principal) =
+        service.adminProfile(principal.name)
+
+    @PostMapping("/sessions")
+    suspend fun createSession(principal: Principal) =
+        service.createSession(principal.name)
+
+    @GetMapping("/sessions")
+    suspend fun sessions(principal: Principal) =
+        service.sessions(principal.name)
 
     @PostMapping("/work-items")
     suspend fun createWorkItem(
