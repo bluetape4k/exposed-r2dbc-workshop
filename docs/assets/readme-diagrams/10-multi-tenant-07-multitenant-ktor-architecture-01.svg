@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760">
+  <defs>
+    <style>
+      .bg { fill: #f7fafc; }
+      .title { font: 700 34px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #132238; }
+      .subtitle { font: 500 18px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #53627a; }
+      .box { fill: #ffffff; stroke: #b8c4d6; stroke-width: 2; rx: 8; }
+      .box-blue { fill: #eaf4ff; stroke: #4c83c3; }
+      .box-green { fill: #edf8f1; stroke: #4a9b68; }
+      .box-yellow { fill: #fff7e6; stroke: #c58a2b; }
+      .box-red { fill: #fff0f0; stroke: #c45d5d; }
+      .label { font: 700 20px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #152033; }
+      .text { font: 500 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #334155; }
+      .small { font: 500 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #53627a; }
+      .arrow { stroke: #53627a; stroke-width: 3; marker-end: url(#arrow); fill: none; }
+      .reject { stroke: #b44b4b; }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#53627a"/>
+    </marker>
+  </defs>
+  <rect class="bg" x="0" y="0" width="1400" height="760"/>
+  <text class="title" x="70" y="70">Ktor R2DBC Schema-Per-Tenant Request Flow</text>
+  <text class="subtitle" x="70" y="102">Validated tenant enum crosses the plugin boundary; schema is reset inside each Exposed R2DBC transaction.</text>
+
+  <rect class="box box-blue" x="70" y="165" width="260" height="135"/>
+  <text class="label" x="95" y="205">HTTP Request</text>
+  <text class="text" x="95" y="238">GET /actors/2</text>
+  <text class="text" x="95" y="265">X-TENANT-ID: korean</text>
+
+  <rect class="box box-yellow" x="410" y="145" width="300" height="175"/>
+  <text class="label" x="435" y="185">TenantPlugin</text>
+  <text class="text" x="435" y="220">1. read all X-TENANT-ID values</text>
+  <text class="text" x="435" y="247">2. trim + reject conflicts</text>
+  <text class="text" x="435" y="274">3. resolve Tenants.Tenant enum</text>
+  <text class="small" x="435" y="302">raw header never reaches SET SCHEMA</text>
+
+  <rect class="box box-red" x="455" y="380" width="250" height="110"/>
+  <text class="label" x="480" y="420">Invalid Tenant</text>
+  <text class="text" x="480" y="452">400 INVALID_TENANT</text>
+
+  <rect class="box" x="800" y="165" width="260" height="135"/>
+  <text class="label" x="825" y="205">ActorRoutes</text>
+  <text class="text" x="825" y="238">call.currentTenant()</text>
+  <text class="text" x="825" y="265">no fallback tenant</text>
+
+  <rect class="box box-green" x="1120" y="145" width="230" height="175"/>
+  <text class="label" x="1145" y="185">Transaction</text>
+  <text class="text" x="1145" y="220">suspendTransaction</text>
+  <text class="text" x="1145" y="247">SchemaUtils.setSchema</text>
+  <text class="text" x="1145" y="274">Repository query</text>
+
+  <rect class="box" x="800" y="420" width="235" height="135"/>
+  <text class="label" x="825" y="460">Schema korean</text>
+  <text class="text" x="825" y="493">actors, movies</text>
+  <text class="text" x="825" y="520">Korean seed data</text>
+
+  <rect class="box" x="1115" y="420" width="235" height="135"/>
+  <text class="label" x="1140" y="460">Schema english</text>
+  <text class="text" x="1140" y="493">actors, movies</text>
+  <text class="text" x="1140" y="520">English seed data</text>
+
+  <rect class="box box-blue" x="70" y="585" width="1280" height="95"/>
+  <text class="label" x="95" y="625">Test Evidence</text>
+  <text class="text" x="95" y="655">success reads, structured 400 errors, duplicate headers, write isolation, pool size 1 tenant alternation, overlapping Ktor requests</text>
+
+  <path class="arrow" d="M330 232 L410 232"/>
+  <path class="arrow" d="M710 232 L800 232"/>
+  <path class="arrow" d="M1060 232 L1120 232"/>
+  <path class="arrow" d="M1235 320 L1235 420"/>
+  <path class="arrow reject" d="M560 320 L560 380"/>
+  <path class="arrow" d="M930 300 L900 420"/>
+  <path class="arrow" d="M930 300 L1195 420"/>
+</svg>
