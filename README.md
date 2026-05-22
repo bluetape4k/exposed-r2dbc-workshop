@@ -1,5 +1,7 @@
 # Exposed R2DBC Workshop
 
+> 한국어 버전: [README.ko.md](README.ko.md)
+
 [![CI](https://github.com/bluetape4k/exposed-r2dbc-workshop/actions/workflows/ci.yml/badge.svg)](https://github.com/bluetape4k/exposed-r2dbc-workshop/actions/workflows/ci.yml)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.3-7F52FF?logo=kotlin)](https://kotlinlang.org)
 [![JVM](https://img.shields.io/badge/JVM-21-ED8B00?logo=openjdk)](https://openjdk.org)
@@ -19,7 +21,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 ## What It Provides
 
 - **Reactive SQL learning path** from shared test infrastructure to high-performance routing.
-- **Coroutine/R2DBC examples** with `suspendTransaction`, Flow collection, and WebFlux.
+- **Coroutine/R2DBC examples** with `suspendTransaction`, Flow collection, WebFlux, and Ktor request handling.
 - **Multi-database verification** for H2, PostgreSQL, MySQL, and MariaDB.
 - **Production patterns** for repository, cache, multi-tenant schema, routing datasource,
   realtime outbox, HTTP client outbox/idempotency, and observability/readiness examples.
@@ -41,7 +43,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 - Kotlin `2.3.20`, JDK `21+`, Exposed `1.1.1`, Spring Boot `3.5.11`, Bluetape4k `1.5.0-Beta1`
 - 대부분의 예제가 테스트 중심으로 구성되어 있어, 코드보다 테스트를 따라가며 학습하기 좋습니다.
 - H2, PostgreSQL, MySQL 기반 시나리오를 함께 검증합니다.
-- Spring/WebFlux 모듈은 REST API, 캐시, 멀티테넌시, 라우팅 예제를 포함합니다.
+- Spring/WebFlux와 Ktor 모듈은 REST API, 캐시, 멀티테넌시, 라우팅 예제를 포함합니다.
 
 ## 요구사항
 
@@ -62,10 +64,12 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 ./gradlew test -PuseDB=H2,POSTGRESQL
 
 # 특정 모듈 테스트
-./gradlew :exposed-r2dbc-09-spring-05-exposed-r2dbc-repository-coroutines:test
+./gradlew :05-exposed-r2dbc-repository-coroutines:test
+./gradlew :07-multitenant-ktor:test
+./gradlew :06-routing-datasource-ktor-r2dbc:test
 
 # Spring 예제 실행
-./gradlew :exposed-r2dbc-09-spring-07-spring-suspended-cache:bootRun
+./gradlew :07-spring-suspended-cache:bootRun
 ```
 
 ## 테스트 가이드
@@ -95,7 +99,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 |--------------------------|-----------------------------------------------|-------------------------------------------------------------------------------|
 | `00-shared`              | 공통 테스트 인프라, 스키마, 샘플 repository                | [Shared](00-shared/exposed-r2dbc-shared/README.md)                            |
 | `01-spring-boot`         | Spring WebFlux + Exposed R2DBC 기본 통합          | [Spring WebFlux](01-spring-boot/spring-webflux-exposed/README.md)             |
-| `02-alternatives-to-jpa` | JPA 대안 패턴 비교 (JDBC Template, JOOQ 등)          | [Alternatives](02-alternatives-to-jpa/README.md)                              |
+| `02-alternatives-to-jpa` | JPA 대안 패턴 비교 (JDBC Template, JOOQ 등)          | Not present in this checkout                                                  |
 | `03-exposed-r2dbc-basic` | SQL DSL, 조인, 조건절 등 기본기                        | [SQL Example](03-exposed-r2dbc-basic/exposed-r2dbc-sql-example/README.md)     |
 | `04-exposed-r2dbc-ddl`   | 연결 관리, DDL, 스키마 제어                            | [Connection](04-exposed-r2dbc-ddl/01-connection/README.md)                    |
 | `05-exposed-r2dbc-dml`   | CRUD, 함수, 타입, 트랜잭션                            | [DML](05-exposed-r2dbc-dml/01-dml/README.md)                                  |
@@ -103,8 +107,8 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 | `07-jpa-convert`         | JPA 패턴을 Exposed R2DBC로 전환                     | [JPA Convert](07-jpa-convert/01-convert-jpa-basic/README.md)                  |
 | `08-r2dbc-coroutines`    | Coroutines, Flow, Virtual Threads             | [Coroutines](08-r2dbc-coroutines/01-exposed-r2dbc-coroutines-basic/README.md) |
 | `09-spring`              | Repository 패턴, Redis 기반 suspended cache       | [Spring Examples](09-spring/05-exposed-r2dbc-repository-coroutines/README.md) |
-| `10-multi-tenant`        | Schema, connection-factory, authorization, onboarding 멀티테넌시 + WebFlux | [Multi-Tenant Strategies](10-multi-tenant/README.md) |
-| `11-high-performance`    | 캐시 전략, routing datasource, read/write 분리      | [High Performance](11-high-performance/README.md)                             |
+| `10-multi-tenant`        | Schema, connection-factory, authorization, onboarding 멀티테넌시 + WebFlux/Ktor | [Multi-Tenant Strategies](10-multi-tenant/README.md) |
+| `11-high-performance`    | 캐시 전략, routing datasource, read/write 분리 + Ktor 비교 | [High Performance](11-high-performance/README.md)                             |
 | `12-production-integration` | Spring Boot 4/Ktor production service patterns, realtime replay, HTTP client outbox/idempotency, request correlation/readiness diagnostics | [Production Integration](12-production-integration/README.md)                 |
 
 ## 주목할 예제
@@ -119,7 +123,14 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
   Reactor Context + Coroutine Context 기반 tenant 전파
 - [10-multi-tenant/06-tenant-onboarding-spring-webflux](10-multi-tenant/06-tenant-onboarding-spring-webflux/README.md)
   런타임 tenant metadata 예약, R2DBC pool provisioning, 실패 cleanup
+- [10-multi-tenant/07-multitenant-ktor](10-multi-tenant/07-multitenant-ktor/README.md)
+  Ktor call attributes 기반 schema-per-tenant 요청 흐름
 - [11-high-performance/03-routing-datasource](11-high-performance/03-routing-datasource/README.md)
+  Reactor Context 기반 tenant/read-write routing datasource
+- [11-high-performance/04-cache-strategies-ktor-r2dbc](11-high-performance/04-cache-strategies-ktor-r2dbc/README.md),
+  [11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines](11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines/README.md),
+  [11-high-performance/06-routing-datasource-ktor-r2dbc](11-high-performance/06-routing-datasource-ktor-r2dbc/README.md)
+  Ktor R2DBC cache, coroutine single-flight cache, routing datasource 비교
 - [12-production-integration](12-production-integration/README.md)
   Spring Boot 4/Ktor production service boundary comparison
 - [12-production-integration/01-spring-production-integration](12-production-integration/01-spring-production-integration/README.md),

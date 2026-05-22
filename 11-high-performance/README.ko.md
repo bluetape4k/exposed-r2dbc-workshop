@@ -61,12 +61,6 @@ Exposed R2DBC 환경에서 성능과 확장성을 높이기 위한 예제를 모
 ./gradlew :06-routing-datasource-ktor-r2dbc:test
 ```
 
-루트에서 실행할 때는 실제 Gradle 프로젝트명 기준으로 다음과 같이 사용하는 편이 안전합니다.
-
-```bash
-./gradlew :exposed-r2dbc-11-high-performance-02-cache-strategies-r2dbc:test
-./gradlew :exposed-r2dbc-11-high-performance-03-routing-datasource:test
-./gradlew :exposed-r2dbc-11-high-performance-04-cache-strategies-ktor-r2dbc:test
-./gradlew :exposed-r2dbc-11-high-performance-05-cache-strategies-ktor-r2dbc-coroutines:test
-./gradlew :exposed-r2dbc-11-high-performance-06-routing-datasource-ktor-r2dbc:test
-```
+이 명령들은 `./gradlew projects`가 보여주는 고유한 Gradle project name을
+사용합니다. `:exposed-r2dbc-11-high-performance-...` 같은 prefix 이름은 이
+repository에 등록되어 있지 않습니다.
