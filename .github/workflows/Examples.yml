@@ -8,6 +8,7 @@ on:
       - '10-multi-tenant/04-connection-factory-per-tenant-spring-webflux/**'
       - '10-multi-tenant/05-spring-security-tenant-authorization-spring-webflux/**'
       - '10-multi-tenant/06-tenant-onboarding-spring-webflux/**'
+      - '10-multi-tenant/07-multitenant-ktor/**'
       - '12-production-integration/**'
       - 'README.md'
       - 'README.ko.md'
@@ -26,6 +27,7 @@ on:
       - '10-multi-tenant/04-connection-factory-per-tenant-spring-webflux/**'
       - '10-multi-tenant/05-spring-security-tenant-authorization-spring-webflux/**'
       - '10-multi-tenant/06-tenant-onboarding-spring-webflux/**'
+      - '10-multi-tenant/07-multitenant-ktor/**'
       - '12-production-integration/**'
       - 'README.md'
       - 'README.ko.md'
@@ -74,6 +76,7 @@ jobs:
           :04-connection-factory-per-tenant-spring-webflux:test
           :05-spring-security-tenant-authorization-spring-webflux:test
           :06-tenant-onboarding-spring-webflux:test
+          :07-multitenant-ktor:test
           "-PuseDB=H2"
           --continue
 
@@ -91,6 +94,8 @@ jobs:
             10-multi-tenant/05-spring-security-tenant-authorization-spring-webflux/build/reports/tests/test/
             10-multi-tenant/06-tenant-onboarding-spring-webflux/build/test-results/test/*.xml
             10-multi-tenant/06-tenant-onboarding-spring-webflux/build/reports/tests/test/
+            10-multi-tenant/07-multitenant-ktor/build/test-results/test/*.xml
+            10-multi-tenant/07-multitenant-ktor/build/reports/tests/test/
           retention-days: 7
 
   chapter-12:
