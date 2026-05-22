@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760">
+  <rect width="1400" height="760" fill="#f8fafc"/>
+  <text x="700" y="64" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#111827">Ktor R2DBC Coroutine Cache Flow</text>
+  <text x="700" y="101" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#4b5563">Single-flight DB fallback keeps concurrent suspend callers from stampeding the database</text>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#374151"/>
+    </marker>
+  </defs>
+
+  <g font-family="Arial, sans-serif">
+    <rect x="80" y="185" width="230" height="130" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="195" y="232" text-anchor="middle" font-size="22" font-weight="700" fill="#1e3a8a">Ktor Route</text>
+    <text x="195" y="266" text-anchor="middle" font-size="15" fill="#1e40af">suspend handler</text>
+
+    <rect x="390" y="165" width="260" height="170" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="520" y="214" text-anchor="middle" font-size="22" font-weight="700" fill="#14532d">Repository</text>
+    <text x="520" y="250" text-anchor="middle" font-size="15" fill="#166534">cache read on IO dispatcher</text>
+    <text x="520" y="276" text-anchor="middle" font-size="15" fill="#166534">R2DBC fallback in transaction</text>
+
+    <rect x="735" y="140" width="280" height="220" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+    <text x="875" y="189" text-anchor="middle" font-size="22" font-weight="700" fill="#7c2d12">SingleFlight Loader</text>
+    <text x="875" y="225" text-anchor="middle" font-size="15" fill="#92400e">ConcurrentHashMap key - Deferred</text>
+    <text x="875" y="251" text-anchor="middle" font-size="15" fill="#92400e">SupervisorJob app scope</text>
+    <text x="875" y="277" text-anchor="middle" font-size="15" fill="#92400e">timeout and cleanup</text>
+
+    <rect x="1090" y="150" width="230" height="110" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+    <text x="1205" y="193" text-anchor="middle" font-size="22" font-weight="700" fill="#7f1d1d">Redis RMap</text>
+    <text x="1205" y="224" text-anchor="middle" font-size="15" fill="#991b1b">distributed cache</text>
+
+    <rect x="1090" y="420" width="230" height="110" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+    <text x="1205" y="463" text-anchor="middle" font-size="22" font-weight="700" fill="#4c1d95">Exposed R2DBC</text>
+    <text x="1205" y="494" text-anchor="middle" font-size="15" fill="#5b21b6">DB fallback</text>
+
+    <rect x="390" y="450" width="260" height="120" rx="8" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+    <text x="520" y="494" text-anchor="middle" font-size="22" font-weight="700" fill="#0c4a6e">Responses</text>
+    <text x="520" y="526" text-anchor="middle" font-size="15" fill="#075985">HIT / MISS / COALESCED</text>
+
+    <line x1="310" y1="250" x2="390" y2="250" stroke="#374151" stroke-width="3" marker-end="url(#arrow)"/>
+    <line x1="650" y1="250" x2="735" y2="250" stroke="#374151" stroke-width="3" marker-end="url(#arrow)"/>
+    <line x1="1015" y1="205" x2="1090" y2="205" stroke="#374151" stroke-width="3" marker-end="url(#arrow)"/>
+    <line x1="875" y1="360" x2="1090" y2="475" stroke="#374151" stroke-width="3" marker-end="url(#arrow)"/>
+    <line x1="1090" y1="500" x2="650" y2="520" stroke="#374151" stroke-width="3" marker-end="url(#arrow)"/>
+    <line x1="390" y1="510" x2="195" y2="315" stroke="#374151" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <rect x="735" y="455" width="280" height="110" rx="8" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+    <text x="875" y="496" text-anchor="middle" font-size="20" font-weight="700" fill="#7c2d12">Cancellation Contract</text>
+    <text x="875" y="528" text-anchor="middle" font-size="15" fill="#9a3412">waiter cancellation rethrows</text>
+    <text x="875" y="552" text-anchor="middle" font-size="15" fill="#9a3412">producer cleanup uses compare-remove</text>
+  </g>
+</svg>

@@ -75,7 +75,10 @@ verification, dual-review, lessons, PR, CI, merge, and qmd-sync sequence.
    - `actionlint .github/workflows/Examples.yml`
    - `git diff --check`
    - Scan for forbidden coroutine patterns:
-     `rg -n "runBlocking|runCatching|GlobalScope" 11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines`
+     `rg -n "runCatching|GlobalScope" 11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines`
+   - Scan `runBlocking` separately and verify any hit is a lifecycle
+     startup/shutdown bridge, not a route or repository request path:
+     `rg -n "runBlocking" 11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines`
    - Scan catch ordering:
      `rg -n "catch \\(.*Exception" 11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines/src/main/kotlin`
      and verify every broad catch is preceded by a `CancellationException`

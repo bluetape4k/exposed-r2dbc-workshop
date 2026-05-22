@@ -12,6 +12,7 @@ on:
       - '11-high-performance/02-cache-strategies-r2dbc/**'
       - '11-high-performance/03-routing-datasource/**'
       - '11-high-performance/04-cache-strategies-ktor-r2dbc/**'
+      - '11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines/**'
       - '12-production-integration/**'
       - 'README.md'
       - 'README.ko.md'
@@ -35,6 +36,7 @@ on:
       - '11-high-performance/02-cache-strategies-r2dbc/**'
       - '11-high-performance/03-routing-datasource/**'
       - '11-high-performance/04-cache-strategies-ktor-r2dbc/**'
+      - '11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines/**'
       - '12-production-integration/**'
       - 'README.md'
       - 'README.ko.md'
@@ -130,6 +132,7 @@ jobs:
           :02-cache-strategies-r2dbc:test
           :03-routing-datasource:test
           :04-cache-strategies-ktor-r2dbc:test
+          :05-cache-strategies-ktor-r2dbc-coroutines:test
           "-PuseDB=H2"
           --continue
 
@@ -145,6 +148,8 @@ jobs:
             11-high-performance/03-routing-datasource/build/reports/tests/test/
             11-high-performance/04-cache-strategies-ktor-r2dbc/build/test-results/test/*.xml
             11-high-performance/04-cache-strategies-ktor-r2dbc/build/reports/tests/test/
+            11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines/build/test-results/test/*.xml
+            11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines/build/reports/tests/test/
           retention-days: 7
 
   chapter-12:
