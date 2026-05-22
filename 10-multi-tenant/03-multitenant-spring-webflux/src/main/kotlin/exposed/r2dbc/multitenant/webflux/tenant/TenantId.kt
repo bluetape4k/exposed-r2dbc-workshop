@@ -1,5 +1,7 @@
 package exposed.r2dbc.multitenant.webflux.tenant
 
+import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.warn
 import io.r2dbc.spi.IsolationLevel
 import kotlinx.coroutines.reactor.ReactorContext
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
@@ -37,21 +39,36 @@ data class TenantId(val value: Tenants.Tenant): CoroutineContext.Element {
     }
 }
 
+private object TenantContextLogger: KLogging()
+
 /**
- * [ReactorContext] 에서 `TenantId` 의 정보를 읽어옵니다. 없으면 [TenantId.DEFAULT] 를 사용합니다.
+ * Reads the current tenant from Reactor context.
  *
- * Webflux 에서 사용되는 코루틴의 [CoroutineContext] 에서 [TenantId] 를 읽어옵니다.
+ * HTTP requests should always pass through [TenantFilter], which rejects missing tenant headers before this
+ * fallback is reached. If direct non-WebFlux example code calls this without a Reactor tenant context, the
+ * function logs a warning and uses [Tenants.DEFAULT_TENANT].
  */
-suspend fun currentReactorTenant(): Tenants.Tenant =
-    coroutineContext[ReactorContext]?.context?.getOrDefault(TenantId.TENANT_ID_KEY, TenantId.DEFAULT)?.value
-        ?: Tenants.DEFAULT_TENANT
+suspend fun currentReactorTenant(): Tenants.Tenant {
+    return coroutineContext[ReactorContext]?.context?.getOrDefault(TenantId.TENANT_ID_KEY, TenantId.DEFAULT)?.value
+        ?: defaultTenantWithWarning("ReactorContext")
+}
 
 
 /**
- * 현재 코루틴의 [TenantId] 를 읽어옵니다. 없으면 [Tenants.DEFAULT_TENANT] 를 사용합니다.
+ * Reads the current tenant from coroutine context.
+ *
+ * This fallback exists only for direct example calls outside the WebFlux request path. HTTP requests without a
+ * tenant header are rejected by [TenantFilter].
  */
 suspend fun currentTenant(): Tenants.Tenant =
-    coroutineContext[TenantId]?.value ?: Tenants.DEFAULT_TENANT
+    coroutineContext[TenantId]?.value ?: defaultTenantWithWarning("CoroutineContext")
+
+private fun defaultTenantWithWarning(source: String): Tenants.Tenant {
+    TenantContextLogger.log.warn {
+        "Tenant context missing in $source; using default tenant '${Tenants.DEFAULT_TENANT.id}' for direct example call"
+    }
+    return Tenants.DEFAULT_TENANT
+}
 
 /**
  * 지정한 [tenant]의 DB 스키마로 전환한 후 트랜잭션을 실행합니다.

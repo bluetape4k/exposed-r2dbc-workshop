@@ -75,6 +75,16 @@ Two tenants are used, each with a separate DB schema:
 | KOREAN  | `korean`  | `korean`  | Korean (조니 뎁, 글래디에이터, etc.)        |
 | ENGLISH | `english` | `english` | English (Johnny Depp, Gladiator, etc.)    |
 
+### Request Tenant Contract
+
+Every tenant-aware request must include `X-TENANT-ID`.
+
+| Case | Response |
+|------|----------|
+| Missing or blank `X-TENANT-ID` | `400 Bad Request` |
+| Unknown tenant ID | `400 Bad Request` |
+| `korean` or `english` | Routed to that tenant schema |
+
 ## Multi-tenancy Isolation Level Options
 
 ### 1. Schema-based (This Example)
@@ -138,7 +148,7 @@ Instead, tenant information is stored in `ReactorContext` and read within corout
 
 ### 1. TenantFilter - Extract Tenant from Request
 
-`WebFilter` reads the `X-TENANT-ID` HTTP header and stores `TenantId` in `ReactorContext`. If the header is absent, the default tenant (`KOREAN`) is used.
+`WebFilter` reads the mandatory `X-TENANT-ID` HTTP header and stores `TenantId` in `ReactorContext`. Missing, blank, or unknown tenant IDs are rejected with `400 Bad Request` before any database operation runs.
 
 ```kotlin
 @Component
@@ -149,7 +159,8 @@ class TenantFilter: WebFilter {
 
     override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> = mono {
         val tenantId = exchange.request.headers.getFirst(TENANT_HEADER)
-        val resolvedTenantId = tenantId?.takeIf { it.isNotBlank() } ?: Tenants.DEFAULT_TENANT.id
+        val resolvedTenantId = tenantId?.takeIf { it.isNotBlank() }
+            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing tenant id header: $TENANT_HEADER")
         val tenant = Tenants.findById(resolvedTenantId)
             ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown tenant id: $resolvedTenantId")
 
@@ -165,6 +176,8 @@ class TenantFilter: WebFilter {
 
 `TenantId` implements `CoroutineContext.Element` to pass tenant information within coroutines.
 Provides the `currentReactorTenant()` function to read the tenant from `ReactorContext`.
+The fallback shown below is only for non-WebFlux direct coroutine calls and logs a warning when used.
+HTTP requests without `X-TENANT-ID` are rejected by `TenantFilter`.
 
 ```kotlin
 data class TenantId(val value: Tenants.Tenant): CoroutineContext.Element {
@@ -180,7 +193,7 @@ data class TenantId(val value: Tenants.Tenant): CoroutineContext.Element {
 suspend fun currentReactorTenant(): Tenants.Tenant =
     coroutineContext[ReactorContext]?.context
         ?.getOrDefault(TenantId.TENANT_ID_KEY, TenantId.DEFAULT)?.value
-        ?: Tenants.DEFAULT_TENANT
+        ?: defaultTenantWithWarning("ReactorContext")
 ```
 
 ### 3. suspendTransactionWithCurrentTenant - Tenant-Specific Transaction
@@ -285,7 +298,7 @@ curl -H "X-TENANT-ID: korean" http://localhost:8080/actors/2
 ## Testing
 
 ```bash
-./gradlew :03-multitenant-spring-webflux:test
+./gradlew :03-multitenant-spring-webflux:test "-PuseDB=H2"
 ```
 
 Tests use H2 in-memory DB with `@ActiveProfiles("h2")`.
@@ -295,4 +308,13 @@ Tests use H2 in-memory DB with `@ActiveProfiles("h2")`.
 - **ActorControllerTest** - API tests for all tenants (KOREAN/ENGLISH) using `@ParameterizedTest`
     - Query all actors per tenant and verify data language
     - Query specific actor per tenant and verify name
+    - Verify missing, blank, and unknown tenant headers return `400`
+    - Verify same actor IDs stay isolated across tenant schemas
 - **ExposedR2dbcConfigTest** - R2DBC configuration load verification
+- **ConnectionPoolSizingTest** - Connection pool sizing rule verification
+
+## CI and Nightly Coverage
+
+This module is covered by the root CI `./gradlew test` path and by Nightly
+shards that invoke `:03-multitenant-spring-webflux:test`. If the module name
+changes, update both this command and `.github/workflows/nightly.yml` together.
