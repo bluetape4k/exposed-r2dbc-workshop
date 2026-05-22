@@ -278,6 +278,36 @@ interface OutboundDelivery {
 data class ReadinessView(
     val status: String,
     val details: String,
+    val requestId: String? = null,
+): Serializable {
+    companion object {
+        private const val serialVersionUID: Long = 1L
+    }
+}
+
+/**
+ * Persisted diagnostic operation returned by the diagnostics slice.
+ */
+@kotlinx.serialization.Serializable
+data class DiagnosticOperationView(
+    val id: String,
+    val name: String,
+    val requestId: String,
+    val durationMs: Long,
+    val slow: Boolean,
+    val createdAtEpochMs: Long,
+): Serializable {
+    companion object {
+        private const val serialVersionUID: Long = 1L
+    }
+}
+
+/**
+ * Collection wrapper for diagnostic operation rows.
+ */
+@kotlinx.serialization.Serializable
+data class DiagnosticOperationsView(
+    val operations: List<DiagnosticOperationView>,
 ): Serializable {
     companion object {
         private const val serialVersionUID: Long = 1L
@@ -291,6 +321,21 @@ data class ReadinessView(
 data class StructuredError(
     val code: String,
     val message: String,
+    val requestId: String? = null,
+): Serializable {
+    companion object {
+        private const val serialVersionUID: Long = 1L
+    }
+}
+
+/**
+ * Repository command for storing one measured diagnostic operation.
+ */
+data class RecordDiagnosticOperationCommand(
+    val name: String,
+    val requestId: String,
+    val durationMs: Long,
+    val slow: Boolean,
 ): Serializable {
     companion object {
         private const val serialVersionUID: Long = 1L

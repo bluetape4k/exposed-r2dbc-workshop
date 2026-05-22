@@ -3,6 +3,8 @@ package exposed.r2dbc.examples.production.ktor
 import exposed.r2dbc.examples.production.ktor.app.AccountView
 import exposed.r2dbc.examples.production.ktor.app.AuthProfileView
 import exposed.r2dbc.examples.production.ktor.app.CreateWorkItemRequest
+import exposed.r2dbc.examples.production.ktor.app.DiagnosticOperationView
+import exposed.r2dbc.examples.production.ktor.app.DiagnosticOperationsView
 import exposed.r2dbc.examples.production.ktor.app.DispatchOutboundView
 import exposed.r2dbc.examples.production.ktor.app.DuplicateIdempotencyKeyException
 import exposed.r2dbc.examples.production.ktor.app.EnqueueOutboundRequest
@@ -21,9 +23,12 @@ import exposed.r2dbc.examples.production.ktor.app.SessionView
 import exposed.r2dbc.examples.production.ktor.app.SessionsView
 import exposed.r2dbc.examples.production.ktor.app.StructuredError
 import exposed.r2dbc.examples.production.ktor.app.WorkItemView
+import exposed.r2dbc.examples.production.ktor.config.REQUEST_ID_HEADER
 import exposed.r2dbc.examples.production.ktor.outbound.KtorOutboundDispatcher
 import io.bluetape4k.assertions.shouldBeEqualTo
 import io.bluetape4k.assertions.shouldBeGreaterThan
+import io.bluetape4k.assertions.shouldNotBeEqualTo
+import io.bluetape4k.assertions.shouldNotBeNull
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.mock.MockEngine
@@ -559,22 +564,128 @@ class KtorProductionIntegrationApplicationTest {
     }
 
     @Test
-    fun `readiness reports degraded database state`() = testApplication {
+    fun `readiness reports up degraded and recovered database state with request id`() = testApplication {
         val repository = newRepository("diagnostics")
         repository.reset()
-        repository.markDatabaseDegraded("slow query threshold exceeded")
         application {
             productionIntegrationModule(repository)
         }
         val client = createJsonClient()
 
-        client.post("/production/accounts") {
-            contentType(ContentType.Application.Json)
-            setBody(RegisterAccountRequest("ops", "ops-key", "readiness:read"))
+        val up = client.get("/production/readiness") {
+            header(REQUEST_ID_HEADER, "ktor-ready-up")
+        }.body<ReadinessView>()
+        up.status shouldBeEqualTo "UP"
+        up.requestId shouldBeEqualTo "ktor-ready-up"
+
+        repository.markDatabaseDegraded("slow query threshold exceeded")
+
+        val degraded = client.get("/production/readiness") {
+            header(REQUEST_ID_HEADER, "ktor-ready-degraded")
+        }.body<ReadinessView>()
+        degraded.status shouldBeEqualTo "DEGRADED"
+        degraded.requestId shouldBeEqualTo "ktor-ready-degraded"
+
+        repository.clearDatabaseDegraded()
+
+        client.get("/production/readiness").body<ReadinessView>().status shouldBeEqualTo "UP"
+    }
+
+    @Test
+    fun `diagnostic operation records slow timing and request id`() = testApplication {
+        val repository = newRepository("diagnostic-operation")
+        repository.reset()
+        application {
+            productionIntegrationModule(repository)
+        }
+        val client = createJsonClient()
+
+        val operation = client.get("/production/diagnostics/operations/import-orders?delayMs=260") {
+            header(REQUEST_ID_HEADER, "ktor-diagnostic-1")
+        }.body<DiagnosticOperationView>()
+
+        operation.name shouldBeEqualTo "import-orders"
+        operation.requestId shouldBeEqualTo "ktor-diagnostic-1"
+        operation.slow shouldBeEqualTo true
+
+        val operations = client.get("/production/diagnostics/operations").body<DiagnosticOperationsView>()
+        operations.operations.any { it.id == operation.id } shouldBeEqualTo true
+    }
+
+    @Test
+    fun `invalid request id is replaced before diagnostic persistence`() = testApplication {
+        val repository = newRepository("diagnostic-request-id")
+        repository.reset()
+        application {
+            productionIntegrationModule(repository)
+        }
+        val client = createJsonClient()
+
+        val response = client.get("/production/diagnostics/operations/import") {
+            header(REQUEST_ID_HEADER, "ktor trace with spaces")
         }
 
-        val readiness = client.get("/production/readiness").body<ReadinessView>()
-        readiness.status shouldBeEqualTo "DEGRADED"
+        val sanitized = response.headers[REQUEST_ID_HEADER].shouldNotBeNull()
+        sanitized shouldNotBeEqualTo "ktor trace with spaces"
+        response.body<DiagnosticOperationView>().requestId shouldBeEqualTo sanitized
+    }
+
+    @Test
+    fun `diagnostic validation errors include request id`() = testApplication {
+        val repository = newRepository("diagnostic-validation")
+        repository.reset()
+        application {
+            productionIntegrationModule(repository)
+        }
+        val client = createJsonClient()
+
+        val delayError = client.get("/production/diagnostics/operations/import?delayMs=2001") {
+            header(REQUEST_ID_HEADER, "ktor-diagnostic-2")
+        }
+        delayError.status shouldBeEqualTo HttpStatusCode.BadRequest
+        delayError.body<StructuredError>().requestId shouldBeEqualTo "ktor-diagnostic-2"
+
+        val nameError = client.get("/production/diagnostics/operations/Import") {
+            header(REQUEST_ID_HEADER, "ktor-diagnostic-3")
+        }
+        nameError.status shouldBeEqualTo HttpStatusCode.BadRequest
+        nameError.body<StructuredError>().requestId shouldBeEqualTo "ktor-diagnostic-3"
+    }
+
+    @Test
+    fun `structured permission and conflict errors include request id`() = testApplication {
+        val repository = newRepository("diagnostic-errors")
+        repository.reset()
+        application {
+            productionIntegrationModule(repository)
+        }
+        val client = createJsonClient()
+        client.post("/production/sessions") {
+            basic("alice", "password")
+        }
+
+        val forbidden = client.get("/production/outbound") {
+            header(REQUEST_ID_HEADER, "ktor-error-1")
+        }
+        forbidden.status shouldBeEqualTo HttpStatusCode.Forbidden
+        forbidden.body<StructuredError>().requestId shouldBeEqualTo "ktor-error-1"
+
+        client.post("/production/sessions") {
+            basic("admin", "password")
+        }
+        val request = EnqueueOutboundRequest("payment-request-id", "https://example.test/payments", "payload")
+        client.post("/production/outbound") {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }.status shouldBeEqualTo HttpStatusCode.OK
+
+        val conflict = client.post("/production/outbound") {
+            header(REQUEST_ID_HEADER, "ktor-error-2")
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+        conflict.status shouldBeEqualTo HttpStatusCode.Conflict
+        conflict.body<StructuredError>().requestId shouldBeEqualTo "ktor-error-2"
     }
 
     @Test

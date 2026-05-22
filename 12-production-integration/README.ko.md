@@ -44,6 +44,19 @@ Spring WebClient 또는 Ktor HTTP client 호출은 transaction 밖에서 수행�
 dispatcher와 Ktor `MockEngine`을 사용하므로 실제 외부 서비스 없이 success,
 retry, duplicate, permanent failure, concurrent single-send 동작을 검증합니다.
 
+## Observability And Readiness
+
+![Chapter 12 observability and readiness](../docs/assets/readme-diagrams/issue-48-observability-readiness-r2dbc-01.png)
+
+Observability slice는 Spring WebFlux와 Ktor에서 `X-Request-ID`를 같은
+계약으로 정규화합니다. 안전한 caller-provided ID는 응답에 그대로 echo하고,
+invalid ID는 generated UUID로 교체하며, structured error에는 request id를
+포함합니다. Diagnostic operation endpoint는 synthetic delay를 R2DBC
+transaction 밖에서 끝낸 뒤 duration과 slow flag를 row로 저장하고 최신 100건을
+조회합니다. Readiness는 bounded live database ping을 수행하고, diagnostics가
+database degraded marker를 기록하면 sticky `DEGRADED`를 반환하며, marker를
+clear하면 다시 `UP`으로 회복합니다.
+
 ## 이슈별 주제 맵
 
 | Issue | 주제 | Spring slice | Ktor slice |
@@ -72,8 +85,14 @@ retry, duplicate, permanent failure, concurrent single-send 동작을 검증합�
 - HTTP client outbox 예제는 delivery 전에 outbound row를 저장하고, retryable
   row를 dispatch 전에 claim하며, 최대 세 번까지 retry하고, 저장되는 dispatch
   error에서 credential처럼 보이는 값을 redact합니다.
-- Readiness는 database 접근 가능 시 `UP`, diagnostics table에 degraded 상태가
-  기록되면 `DEGRADED`를 반환합니다.
+- Request correlation은 안전한 `X-Request-ID`만 수용하고 header가 없거나
+  invalid하면 UUID를 생성합니다.
+- Diagnostic operation endpoint는 최신 100건만 조회하고, 250 ms를 넘는
+  operation을 slow로 표시하며, delay 중에는 database transaction을 열지
+  않습니다.
+- Readiness는 bounded live database ping 성공 시에만 `UP`을 반환하고,
+  database unreachable 또는 explicit degraded marker 상태는 `DEGRADED`로
+  보고합니다.
 
 ## 검증
 

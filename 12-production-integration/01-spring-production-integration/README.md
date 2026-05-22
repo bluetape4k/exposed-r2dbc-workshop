@@ -5,7 +5,8 @@
 This module is the Spring Boot 4 WebFlux side of chapter 12. It now includes
 the application architecture baseline from issue #44, the authentication /
 session slice from issue #45, the realtime outbox slice from issue #46, and
-the HTTP client outbox/idempotency slice from issue #47.
+the HTTP client outbox/idempotency slice from issue #47, and the diagnostics /
+readiness slice from issue #48.
 
 ## Architecture
 
@@ -49,6 +50,18 @@ The repository claims dispatchable rows as `IN_FLIGHT` before calling the HTTP
 client, runs the network call outside the transaction, caps retryable failures
 at three attempts, and stores sanitized error text.
 
+## Observability And Readiness
+
+![Chapter 12 observability and readiness](../../docs/assets/readme-diagrams/issue-48-observability-readiness-r2dbc-01.png)
+
+`SpringRequestCorrelationFilter` normalizes `X-Request-ID`, echoes the accepted
+value on every response, and makes it available to structured error mapping.
+`GET /production/diagnostics/operations/{name}` records a bounded diagnostic
+operation with optional coroutine delay outside the R2DBC transaction, while
+`GET /production/diagnostics/operations` returns the newest 100 rows. `GET
+/production/readiness` runs a bounded live database ping and reports sticky
+`DEGRADED` state when the diagnostics table marks the database as degraded.
+
 ## Package Layout
 
 ```text
@@ -56,7 +69,7 @@ exposed.r2dbc.examples.production.spring
 ├── auth        # WebFlux Security and repository-backed user details
 ├── app         # DTOs, service boundary, validation, Exposed R2DBC repository
 ├── persistence # table definitions owned by the repository boundary
-└── web         # WebFlux controller, SSE hub, WebClient dispatcher, structured error mapping
+└── web         # WebFlux controller, request correlation, SSE hub, WebClient dispatcher, structured error mapping
 ```
 
 ## Spring Boot 4 vs Ktor
@@ -68,6 +81,7 @@ exposed.r2dbc.examples.production.spring
 | Session/auth shape | WebFlux Security Basic auth plus DB session metadata | Ktor Basic auth creates signed-cookie session metadata |
 | Realtime delivery | Server-Sent Events with persisted publish state | WebSocket replay/live stream with the same outbox state |
 | Outbound HTTP | WebClient dispatcher with persisted idempotency state | Ktor HTTP client dispatcher with MockEngine tests |
+| Diagnostics/readiness | WebFilter request correlation plus annotated diagnostics endpoints | CallId/CallLogging plus explicit route diagnostics |
 | R2DBC boundary | Repository-owned `suspendTransaction` calls | Same repository shape under Ktor routes |
 | Test style | `@SpringBootTest` + `WebTestClient` | `testApplication` + Ktor client plugins |
 
@@ -82,4 +96,6 @@ credentials, non-admin role denial, public registration permission/role
 clamping, session listings that hide raw tokens, event persistence, publish
 state transitions, replay boundaries, delivery failure retention, outbound
 success/retry/permanent failure, duplicate idempotency keys, permission denial,
-sanitized dispatch errors, and concurrent single-send protection.
+sanitized dispatch errors, concurrent single-send protection, request-id echo
+and replacement, structured error correlation, diagnostic operation timing, and
+readiness degraded/recovery behavior.

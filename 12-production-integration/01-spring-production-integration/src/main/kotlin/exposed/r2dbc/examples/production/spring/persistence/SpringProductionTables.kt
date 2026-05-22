@@ -58,7 +58,17 @@ internal object SpringProductionTables {
     object Diagnostics: Table("spring_prod_diagnostics") {
         val name = varchar("name", 80)
         val status = varchar("status", 40)
-        val details = varchar("details", 500)
+        val details = varchar("details", 1000)
         override val primaryKey = PrimaryKey(name)
+    }
+
+    object DiagnosticOperations: Table("spring_prod_diagnostic_operations") {
+        val id = varchar("id", 64)
+        val name = varchar("name", 64)
+        val requestId = varchar("request_id", 64)
+        val durationMs = long("duration_ms")
+        val slow = bool("slow")
+        val createdAtEpochMs = long("created_at_epoch_ms")
+        override val primaryKey = PrimaryKey(id)
     }
 }

@@ -23,6 +23,7 @@ import org.jetbrains.exposed.v1.core.or
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.deleteAll
+import org.jetbrains.exposed.v1.r2dbc.deleteWhere
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
@@ -58,6 +59,11 @@ class SpringProductionRepository(
         val idempotencyKeyPattern = Regex("[A-Za-z0-9._-]{1,120}")
         val credentialLikeErrorPattern =
             Regex("(?i)\\b(authorization|cookie|token|secret|api[-_ ]?key)[:=]\\s*(?:Bearer\\s+)?[^\\s,;]+")
+        const val diagnosticOperationLimit = 100
+        const val slowDiagnosticThresholdMs = 250L
+        val diagnosticPingTimeout: Duration = Duration.ofSeconds(1)
+        val diagnosticOperationNamePattern = Regex("[a-z][a-z0-9-]{0,40}")
+        val diagnosticRequestIdPattern = Regex("[A-Za-z0-9._-]{1,64}")
     }
 
     private val initialized = AtomicBoolean(false)
@@ -73,6 +79,7 @@ class SpringProductionRepository(
         SpringProductionTables.OutboxEvents,
         SpringProductionTables.OutboundRequests,
         SpringProductionTables.Diagnostics,
+        SpringProductionTables.DiagnosticOperations,
     )
 
     suspend fun reset() {
@@ -80,6 +87,7 @@ class SpringProductionRepository(
         schemaMutex.withLock {
             suspendTransaction(db = database) {
                 SchemaUtils.create(*tables)
+                SpringProductionTables.DiagnosticOperations.deleteAll()
                 SpringProductionTables.Diagnostics.deleteAll()
                 SpringProductionTables.OutboundRequests.deleteAll()
                 SpringProductionTables.OutboxEvents.deleteAll()
@@ -363,8 +371,48 @@ class SpringProductionRepository(
         }
     }
 
+    suspend fun recordDiagnosticOperation(command: RecordDiagnosticOperationCommand): DiagnosticOperationView {
+        ensureSchema()
+        command.name.requireValidDiagnosticOperationName()
+        command.requestId.requireValidDiagnosticRequestId()
+        require(command.durationMs >= 0) {
+            "durationMs must be greater than or equal to zero"
+        }
+        val id = UUID.randomUUID().toString()
+        val createdAtEpochMs = Instant.now().toEpochMilli()
+        return suspendTransaction(db = database) {
+            SpringProductionTables.DiagnosticOperations.insert {
+                it[SpringProductionTables.DiagnosticOperations.id] = id
+                it[name] = command.name
+                it[requestId] = command.requestId
+                it[durationMs] = command.durationMs
+                it[slow] = command.slow
+                it[SpringProductionTables.DiagnosticOperations.createdAtEpochMs] = createdAtEpochMs
+            }
+            DiagnosticOperationView(
+                id = id,
+                name = command.name,
+                requestId = command.requestId,
+                durationMs = command.durationMs,
+                slow = command.slow,
+                createdAtEpochMs = createdAtEpochMs,
+            )
+        }
+    }
+
+    suspend fun diagnosticOperations(limit: Int = diagnosticOperationLimit): List<DiagnosticOperationView> =
+        ensureSchemaAndRead {
+            SpringProductionTables.DiagnosticOperations
+                .selectAll()
+                .orderBy(SpringProductionTables.DiagnosticOperations.createdAtEpochMs to SortOrder.DESC)
+                .limit(limit)
+                .map { it.toDiagnosticOperation() }
+                .toList()
+        }
+
     suspend fun markDatabaseDegraded(details: String) {
         ensureSchema()
+        details.requireNotBlank("details")
         schemaMutex.withLock {
             suspendTransaction(db = database) {
                 val existing = SpringProductionTables.Diagnostics
@@ -387,18 +435,54 @@ class SpringProductionRepository(
         }
     }
 
-    suspend fun readiness(): ReadinessView =
-        ensureSchemaAndRead {
-            val degraded = SpringProductionTables.Diagnostics
-                .selectAll()
-                .where { SpringProductionTables.Diagnostics.status eq "DEGRADED" }
-                .singleOrNull()
-            if (degraded == null) {
-                ReadinessView("UP", "database reachable")
-            } else {
-                ReadinessView("DEGRADED", degraded[SpringProductionTables.Diagnostics.details])
+    suspend fun clearDatabaseDegraded() {
+        ensureSchema()
+        schemaMutex.withLock {
+            suspendTransaction(db = database) {
+                SpringProductionTables.Diagnostics.deleteWhere {
+                    SpringProductionTables.Diagnostics.name eq "database"
+                }
             }
         }
+    }
+
+    suspend fun pingDatabase(): Boolean =
+        try {
+            withTimeout(diagnosticPingTimeout.toKotlinDuration()) {
+                suspendTransaction(db = database) {
+                    SpringProductionTables.Diagnostics.selectAll().limit(1).toList()
+                    true
+                }
+            }
+        } catch (e: TimeoutCancellationException) {
+            log.warn(e) { "Database readiness ping timed out" }
+            false
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            log.warn(e) { "Database readiness ping failed" }
+            false
+        }
+
+    suspend fun readiness(requestId: String? = null): ReadinessView {
+        try {
+            ensureSchema()
+            val degraded = degradedDatabaseDetails()
+            if (degraded != null) {
+                return ReadinessView("DEGRADED", degraded, requestId)
+            }
+            return if (pingDatabase()) {
+                ReadinessView("UP", "database reachable", requestId)
+            } else {
+                ReadinessView("DEGRADED", "database unreachable", requestId)
+            }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            log.warn(e) { "Database readiness check failed for requestId=${requestId.orEmpty()}" }
+            return ReadinessView("DEGRADED", "database unreachable", requestId)
+        }
+    }
 
     private suspend fun ensureSchema() {
         if (initialized.get()) {
@@ -480,6 +564,30 @@ class SpringProductionRepository(
             "idempotencyKey must be 1-120 characters and contain only letters, digits, dot, underscore, or hyphen"
         }
     }
+
+    private fun String.requireValidDiagnosticOperationName() {
+        require(diagnosticOperationNamePattern.matches(this)) {
+            "operation name must start with a lowercase letter and contain only lowercase letters, digits, or hyphen"
+        }
+    }
+
+    private fun String.requireValidDiagnosticRequestId() {
+        require(diagnosticRequestIdPattern.matches(this)) {
+            "requestId must be 1-64 characters and contain only letters, digits, dot, underscore, or hyphen"
+        }
+    }
+
+    private suspend fun degradedDatabaseDetails(): String? =
+        suspendTransaction(db = database) {
+            SpringProductionTables.Diagnostics
+                .selectAll()
+                .where {
+                    (SpringProductionTables.Diagnostics.name eq "database") and
+                            (SpringProductionTables.Diagnostics.status eq "DEGRADED")
+                }
+                .singleOrNull()
+                ?.get(SpringProductionTables.Diagnostics.details)
+        }
 
     private suspend fun claimDispatchableOutbound(): List<OutboundRequestView> =
         suspendTransaction(db = database) {
@@ -645,6 +753,16 @@ class SpringProductionRepository(
             attempts = this[SpringProductionTables.OutboundRequests.attempts],
             lastStatusCode = this[SpringProductionTables.OutboundRequests.lastStatusCode],
             lastError = this[SpringProductionTables.OutboundRequests.lastError],
+        )
+
+    private fun ResultRow.toDiagnosticOperation(): DiagnosticOperationView =
+        DiagnosticOperationView(
+            id = this[SpringProductionTables.DiagnosticOperations.id],
+            name = this[SpringProductionTables.DiagnosticOperations.name],
+            requestId = this[SpringProductionTables.DiagnosticOperations.requestId],
+            durationMs = this[SpringProductionTables.DiagnosticOperations.durationMs],
+            slow = this[SpringProductionTables.DiagnosticOperations.slow],
+            createdAtEpochMs = this[SpringProductionTables.DiagnosticOperations.createdAtEpochMs],
         )
 
     private fun PasswordEncoder.encodeRequired(password: String): String =

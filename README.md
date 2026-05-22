@@ -22,7 +22,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 - **Coroutine/R2DBC examples** with `suspendTransaction`, Flow collection, and WebFlux.
 - **Multi-database verification** for H2, PostgreSQL, MySQL, and MariaDB.
 - **Production patterns** for repository, cache, multi-tenant schema, routing datasource,
-  realtime outbox, and HTTP client outbox/idempotency examples.
+  realtime outbox, HTTP client outbox/idempotency, and observability/readiness examples.
 
 상세 설명은 [Kotlin Exposed Book](https://debop.notion.site/Kotlin-Exposed-Book-1ad2744526b080428173e9c907abdae2)에서 확인할 수 있습니다.
 
@@ -105,7 +105,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 | `09-spring`              | Repository 패턴, Redis 기반 suspended cache       | [Spring Examples](09-spring/05-exposed-r2dbc-repository-coroutines/README.md) |
 | `10-multi-tenant`        | Schema, connection-factory, authorization, onboarding 멀티테넌시 + WebFlux | [Multi-Tenant Strategies](10-multi-tenant/README.md) |
 | `11-high-performance`    | 캐시 전략, routing datasource, read/write 분리      | [High Performance](11-high-performance/README.md)                             |
-| `12-production-integration` | Spring Boot 4/Ktor production service patterns, realtime replay, HTTP client outbox/idempotency | [Production Integration](12-production-integration/README.md)                 |
+| `12-production-integration` | Spring Boot 4/Ktor production service patterns, realtime replay, HTTP client outbox/idempotency, request correlation/readiness diagnostics | [Production Integration](12-production-integration/README.md)                 |
 
 ## 주목할 예제
 
@@ -124,7 +124,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
   Spring Boot 4/Ktor production service boundary comparison
 - [12-production-integration/01-spring-production-integration](12-production-integration/01-spring-production-integration/README.md),
   [12-production-integration/02-ktor-production-integration](12-production-integration/02-ktor-production-integration/README.md)
-  HTTP client outbox/idempotency with persisted retry state and duplicate-key protection
+  HTTP client outbox/idempotency plus request-correlation and readiness diagnostics
 
 ## 아키텍처 개요
 

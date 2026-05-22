@@ -1,6 +1,8 @@
 package exposed.r2dbc.examples.production.spring.web
 
 import exposed.r2dbc.examples.production.spring.app.CreateWorkItemRequest
+import exposed.r2dbc.examples.production.spring.app.DiagnosticOperationView
+import exposed.r2dbc.examples.production.spring.app.DiagnosticOperationsView
 import exposed.r2dbc.examples.production.spring.app.DispatchOutboundView
 import exposed.r2dbc.examples.production.spring.app.EnqueueOutboundRequest
 import exposed.r2dbc.examples.production.spring.app.OutboxEventsView
@@ -15,12 +17,14 @@ import exposed.r2dbc.examples.production.spring.app.WorkItemView
 import org.springframework.http.MediaType
 import org.springframework.http.codec.ServerSentEvent
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Flux
 import java.security.Principal
 
@@ -105,8 +109,24 @@ class SpringProductionController(
     }
 
     @GetMapping("/readiness")
-    suspend fun readiness(): ReadinessView =
-        service.readiness()
+    suspend fun readiness(exchange: ServerWebExchange): ReadinessView =
+        service.readiness(exchange.requestId())
+
+    @GetMapping("/diagnostics/operations")
+    suspend fun diagnosticOperations(): DiagnosticOperationsView =
+        service.diagnosticOperations()
+
+    @GetMapping("/diagnostics/operations/{name}")
+    suspend fun runDiagnosticOperation(
+        @PathVariable name: String,
+        @RequestParam(defaultValue = "0") delayMs: Long,
+        exchange: ServerWebExchange,
+    ): DiagnosticOperationView =
+        service.runDiagnosticOperation(
+            name = name,
+            delayMs = delayMs,
+            requestId = exchange.requestId(),
+        )
 
     private suspend fun realtimeEvents(after: Long): Flux<ServerSentEvent<OutboxEventView>> {
         val replay = Flux.fromIterable(service.replayEvents(after))

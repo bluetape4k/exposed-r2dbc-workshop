@@ -16,6 +16,7 @@ import io.ktor.server.application.install
 import io.ktor.server.auth.Authentication
 import io.ktor.server.auth.basic
 import io.ktor.server.auth.session
+import io.ktor.server.plugins.callid.callId
 import io.ktor.server.response.respond
 import io.ktor.server.sessions.Sessions
 import io.ktor.server.sessions.SessionTransportTransformerMessageAuthentication
@@ -64,7 +65,11 @@ fun Application.productionIntegrationModule(
             challenge {
                 call.respond(
                     HttpStatusCode.Unauthorized,
-                    StructuredError("UNAUTHORIZED", "Session is required")
+                    StructuredError(
+                        code = "UNAUTHORIZED",
+                        message = "Session is required",
+                        requestId = call.callId.orEmpty(),
+                    )
                 )
             }
         }

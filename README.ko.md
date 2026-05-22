@@ -23,7 +23,7 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 - **Coroutine/R2DBC 예제** — `suspendTransaction`, Flow collection, WebFlux 포함
 - **Multi-database 검증** — H2, PostgreSQL, MySQL, MariaDB
 - **운영형 패턴** — repository, cache, multi-tenant schema, routing datasource,
-  realtime outbox, HTTP client outbox/idempotency 예제
+  realtime outbox, HTTP client outbox/idempotency, observability/readiness 예제
 
 상세 설명은 [Kotlin Exposed Book](https://debop.notion.site/Kotlin-Exposed-Book-1ad2744526b080428173e9c907abdae2)에서 확인할 수 있습니다.
 
@@ -106,7 +106,7 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 | `09-spring`              | Repository 패턴, Redis 기반 suspended cache       | [Spring Examples](09-spring/05-exposed-r2dbc-repository-coroutines/README.md) |
 | `10-multi-tenant`        | Schema, connection-factory, authorization, onboarding 멀티테넌시 + WebFlux | [Multi-Tenant Strategies](10-multi-tenant/README.ko.md) |
 | `11-high-performance`    | 캐시 전략, routing datasource, read/write 분리      | [High Performance](11-high-performance/README.md)                             |
-| `12-production-integration` | Spring Boot 4/Ktor production service patterns, realtime replay, HTTP client outbox/idempotency | [Production Integration](12-production-integration/README.ko.md)              |
+| `12-production-integration` | Spring Boot 4/Ktor production service patterns, realtime replay, HTTP client outbox/idempotency, request correlation/readiness diagnostics | [Production Integration](12-production-integration/README.ko.md)              |
 
 ## 주목할 예제
 
@@ -125,7 +125,7 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
   Spring Boot 4/Ktor production service boundary 비교
 - [12-production-integration/01-spring-production-integration](12-production-integration/01-spring-production-integration/README.ko.md),
   [12-production-integration/02-ktor-production-integration](12-production-integration/02-ktor-production-integration/README.ko.md)
-  persisted retry state와 duplicate-key protection을 포함한 HTTP client outbox/idempotency
+  HTTP client outbox/idempotency와 request-correlation/readiness diagnostics
 
 ## 아키텍처 개요
 
