@@ -3,8 +3,8 @@
 [English](README.md) | [한국어](README.ko.md)
 
 This module is the Spring Boot 4 WebFlux side of chapter 12. It now includes
-the application architecture baseline from issue #44 and the authentication /
-session slice from issue #45.
+the application architecture baseline from issue #44, the authentication /
+session slice from issue #45, and the realtime outbox slice from issue #46.
 
 ## Architecture
 
@@ -25,6 +25,16 @@ Spring keeps Basic authentication as the authoritative transport. The persisted
 session rows are session metadata for comparison with the Ktor cookie flow, not
 a replacement authentication filter.
 
+## Realtime Outbox
+
+![Chapter 12 realtime outbox delivery](../../docs/assets/readme-diagrams/issue-46-outbox-realtime-r2dbc-01.png)
+
+The Spring realtime slice accepts work through the existing API-key permission
+boundary, stores the work item and `PENDING` outbox row in one R2DBC
+transaction, then publishes pending rows through an in-process SSE hub. Replay
+returns only `PUBLISHED` rows after the requested sequence, and failed delivery
+is retained as `FAILED` with an attempt count and error text.
+
 ## Package Layout
 
 ```text
@@ -32,7 +42,7 @@ exposed.r2dbc.examples.production.spring
 ├── auth        # WebFlux Security and repository-backed user details
 ├── app         # DTOs, service boundary, validation, Exposed R2DBC repository
 ├── persistence # table definitions owned by the repository boundary
-└── web         # WebFlux controller, SSE endpoint, structured error mapping
+└── web         # WebFlux controller, SSE hub, structured error mapping
 ```
 
 ## Spring Boot 4 vs Ktor
@@ -42,6 +52,7 @@ exposed.r2dbc.examples.production.spring
 | HTTP boundary | Annotation-driven WebFlux controller | Explicit Ktor routing DSL |
 | JSON/error mapping | Boot JSON support plus `@RestControllerAdvice` | `ContentNegotiation` plus `StatusPages` |
 | Session/auth shape | WebFlux Security Basic auth plus DB session metadata | Ktor Basic auth creates signed-cookie session metadata |
+| Realtime delivery | Server-Sent Events with persisted publish state | WebSocket replay/live stream with the same outbox state |
 | R2DBC boundary | Repository-owned `suspendTransaction` calls | Same repository shape under Ktor routes |
 | Test style | `@SpringBootTest` + `WebTestClient` | `testApplication` + Ktor client plugins |
 
@@ -53,4 +64,5 @@ repo-test-summary -- ./gradlew :01-spring-production-integration:test -PuseDB=H2
 
 The test suite covers authorized access, missing credentials, invalid
 credentials, non-admin role denial, public registration permission/role
-clamping, and session listings that hide raw tokens.
+clamping, session listings that hide raw tokens, event persistence, publish
+state transitions, replay boundaries, and delivery failure retention.

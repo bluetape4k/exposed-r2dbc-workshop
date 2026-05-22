@@ -1,6 +1,8 @@
 package exposed.r2dbc.examples.production.ktor
 
 import exposed.r2dbc.examples.production.ktor.app.KtorProductionRepository
+import exposed.r2dbc.examples.production.ktor.app.KtorRealtimeHub
+import exposed.r2dbc.examples.production.ktor.app.RealtimeDelivery
 import exposed.r2dbc.examples.production.ktor.app.StructuredError
 import exposed.r2dbc.examples.production.ktor.app.AuthPrincipal
 import exposed.r2dbc.examples.production.ktor.config.installProductionKtorPlugins
@@ -24,6 +26,8 @@ import java.security.SecureRandom
  */
 fun Application.productionIntegrationModule(
     repository: KtorProductionRepository = KtorProductionRepository(defaultProductionDatabase()),
+    realtimeHub: KtorRealtimeHub = KtorRealtimeHub(),
+    realtimeDelivery: RealtimeDelivery = realtimeHub,
 ) {
     installProductionKtorPlugins()
     install(Sessions) {
@@ -58,7 +62,7 @@ fun Application.productionIntegrationModule(
     }
     install(WebSockets)
 
-    productionRoutes(repository)
+    productionRoutes(repository, realtimeHub, realtimeDelivery)
 }
 
 /**

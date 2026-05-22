@@ -6,8 +6,11 @@ import exposed.r2dbc.examples.production.ktor.app.AuthProfileView
 import exposed.r2dbc.examples.production.ktor.app.CreateWorkItemRequest
 import exposed.r2dbc.examples.production.ktor.app.EnqueueOutboundRequest
 import exposed.r2dbc.examples.production.ktor.app.KtorProductionRepository
+import exposed.r2dbc.examples.production.ktor.app.KtorRealtimeHub
 import exposed.r2dbc.examples.production.ktor.app.OutboxEventView
+import exposed.r2dbc.examples.production.ktor.app.OutboxEventsView
 import exposed.r2dbc.examples.production.ktor.app.PermissionDeniedException
+import exposed.r2dbc.examples.production.ktor.app.RealtimeDelivery
 import exposed.r2dbc.examples.production.ktor.app.RegisterAccountRequest
 import exposed.r2dbc.examples.production.ktor.app.SessionsView
 import exposed.r2dbc.examples.production.ktor.config.ProductionJson
@@ -27,9 +30,15 @@ import io.ktor.server.sessions.set
 import io.ktor.server.websocket.webSocket
 import io.ktor.websocket.Frame
 import io.ktor.websocket.send
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 
-internal fun Application.productionRoutes(repository: KtorProductionRepository) {
+internal fun Application.productionRoutes(
+    repository: KtorProductionRepository,
+    realtimeHub: KtorRealtimeHub,
+    realtimeDelivery: RealtimeDelivery,
+) {
     routing {
         post("/production/accounts") {
             val account = repository.registerAccount(call.receive<RegisterAccountRequest>())
@@ -76,6 +85,33 @@ internal fun Application.productionRoutes(repository: KtorProductionRepository) 
                 repository.replayEvents(after).forEach { event ->
                     send(Frame.Text(ProductionJson.encodeToString<OutboxEventView>(event)))
                 }
+
+                val liveJob = launch {
+                    realtimeHub.live().collect { event ->
+                        if (event.sequence > after) {
+                            send(Frame.Text(ProductionJson.encodeToString<OutboxEventView>(event)))
+                        }
+                    }
+                }
+                try {
+                    for (frame in incoming) {
+                        if (frame is Frame.Close) {
+                            break
+                        }
+                    }
+                } finally {
+                    liveJob.cancel("websocket session closed")
+                }
+            }
+
+            get("/production/outbox") {
+                call.requireSessionPermission(repository, "work:create")
+                call.respond(OutboxEventsView(repository.outboxEvents()))
+            }
+
+            post("/production/outbox/publish") {
+                call.requireSessionPermission(repository, "work:create")
+                call.respond(repository.publishPending(realtimeDelivery))
             }
 
             post("/production/outbound") {

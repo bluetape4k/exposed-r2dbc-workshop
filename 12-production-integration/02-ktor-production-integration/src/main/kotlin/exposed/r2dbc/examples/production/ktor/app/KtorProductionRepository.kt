@@ -3,6 +3,7 @@ package exposed.r2dbc.examples.production.ktor.app
 import exposed.r2dbc.examples.production.ktor.persistence.KtorProductionTables
 import io.bluetape4k.codec.Base58
 import io.bluetape4k.support.requireNotBlank
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.singleOrNull
@@ -10,6 +11,8 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.SortOrder
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.greater
@@ -39,9 +42,11 @@ class KtorProductionRepository(
         const val defaultRegisteredPermission = "work:create"
         val defaultRegisteredRoles = setOf("USER")
         val passwordEncoder = BCryptPasswordEncoder()
+        const val maxOutboxErrorLength = 240
     }
 
     private val initialized = AtomicBoolean(false)
+    private val publishMutex = Mutex()
     private val schemaMutex = Mutex()
 
     private val tables = arrayOf(
@@ -221,6 +226,10 @@ class KtorProductionRepository(
                 it[aggregateId] = id
                 it[eventType] = "work-item.accepted"
                 it[payload] = request.payload
+                it[status] = OutboxStatus.PENDING.name
+                it[attempts] = 0
+                it[lastError] = null
+                it[delivered] = false
             }
             WorkItemView(id, request.owner, request.payload, "ACCEPTED")
         }
@@ -230,17 +239,60 @@ class KtorProductionRepository(
         ensureSchemaAndRead {
             KtorProductionTables.OutboxEvents
                 .selectAll()
-                .where { KtorProductionTables.OutboxEvents.sequence greater afterSequence }
-                .map {
-                    OutboxEventView(
-                        sequence = it[KtorProductionTables.OutboxEvents.sequence],
-                        aggregateId = it[KtorProductionTables.OutboxEvents.aggregateId],
-                        eventType = it[KtorProductionTables.OutboxEvents.eventType],
-                        payload = it[KtorProductionTables.OutboxEvents.payload],
-                    )
+                .where {
+                    (KtorProductionTables.OutboxEvents.sequence greater afterSequence) and
+                            (KtorProductionTables.OutboxEvents.status eq OutboxStatus.PUBLISHED.name)
                 }
+                .orderBy(KtorProductionTables.OutboxEvents.sequence to SortOrder.ASC)
+                .map { it.toOutboxEvent() }
                 .toList()
         }
+
+    suspend fun outboxEvents(): List<OutboxEventView> =
+        ensureSchemaAndRead {
+            KtorProductionTables.OutboxEvents
+                .selectAll()
+                .orderBy(KtorProductionTables.OutboxEvents.sequence to SortOrder.ASC)
+                .map { it.toOutboxEvent() }
+                .toList()
+        }
+
+    suspend fun publishPending(delivery: RealtimeDelivery): PublishOutboxView {
+        ensureSchema()
+        return publishMutex.withLock {
+            val pending = pendingOutboxEvents()
+            var delivered = 0
+            var failed = 0
+            for (event in pending) {
+                val publishedEvent = event.copy(
+                    status = OutboxStatus.PUBLISHED,
+                    attempts = event.attempts + 1,
+                    lastError = null,
+                )
+                val deliveryAccepted = try {
+                    delivery.deliver(publishedEvent)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    markOutboxFailed(event.sequence, e.message ?: "realtime delivery threw an exception")
+                    failed += 1
+                    continue
+                }
+                if (deliveryAccepted) {
+                    markOutboxPublished(event.sequence)
+                    delivered += 1
+                } else {
+                    markOutboxFailed(event.sequence, "realtime delivery returned false")
+                    failed += 1
+                }
+            }
+            PublishOutboxView(
+                attempted = pending.size,
+                delivered = delivered,
+                failed = failed,
+            )
+        }
+    }
 
     suspend fun enqueueOutbound(request: EnqueueOutboundRequest): OutboundRequestView {
         ensureSchema()
@@ -331,6 +383,44 @@ class KtorProductionRepository(
         }
     }
 
+    private suspend fun pendingOutboxEvents(): List<OutboxEventView> =
+        suspendTransaction(db = database) {
+            KtorProductionTables.OutboxEvents
+                .selectAll()
+                .where { KtorProductionTables.OutboxEvents.status eq OutboxStatus.PENDING.name }
+                .orderBy(KtorProductionTables.OutboxEvents.sequence to SortOrder.ASC)
+                .map { it.toOutboxEvent() }
+                .toList()
+        }
+
+    private suspend fun markOutboxPublished(sequence: Long) {
+        updateOutboxStatus(sequence, OutboxStatus.PUBLISHED, lastError = null)
+    }
+
+    private suspend fun markOutboxFailed(sequence: Long, message: String) {
+        updateOutboxStatus(sequence, OutboxStatus.FAILED, lastError = message.take(maxOutboxErrorLength))
+    }
+
+    private suspend fun updateOutboxStatus(
+        sequence: Long,
+        nextStatus: OutboxStatus,
+        lastError: String?,
+    ) {
+        suspendTransaction(db = database) {
+            val current = KtorProductionTables.OutboxEvents
+                .selectAll()
+                .where { KtorProductionTables.OutboxEvents.sequence eq sequence }
+                .singleOrNull()
+                ?: throw NoSuchElementException("Outbox event $sequence was not found")
+            KtorProductionTables.OutboxEvents.update({ KtorProductionTables.OutboxEvents.sequence eq sequence }) {
+                it[status] = nextStatus.name
+                it[delivered] = nextStatus == OutboxStatus.PUBLISHED
+                it[attempts] = current[KtorProductionTables.OutboxEvents.attempts] + 1
+                it[KtorProductionTables.OutboxEvents.lastError] = lastError
+            }
+        }
+    }
+
     private fun String.requireAllowedTargetUrl() {
         val uri = try {
             URI.create(this)
@@ -390,6 +480,17 @@ class KtorProductionRepository(
         MessageDigest.getInstance("SHA-256")
             .digest(toByteArray())
             .joinToString(separator = "") { byte -> "%02x".format(byte) }
+
+    private fun ResultRow.toOutboxEvent(): OutboxEventView =
+        OutboxEventView(
+            sequence = this[KtorProductionTables.OutboxEvents.sequence],
+            aggregateId = this[KtorProductionTables.OutboxEvents.aggregateId],
+            eventType = this[KtorProductionTables.OutboxEvents.eventType],
+            payload = this[KtorProductionTables.OutboxEvents.payload],
+            status = OutboxStatus.valueOf(this[KtorProductionTables.OutboxEvents.status]),
+            attempts = this[KtorProductionTables.OutboxEvents.attempts],
+            lastError = this[KtorProductionTables.OutboxEvents.lastError],
+        )
 
     private fun BCryptPasswordEncoder.encodeRequired(password: String): String =
         checkNotNull(encode(password)) {

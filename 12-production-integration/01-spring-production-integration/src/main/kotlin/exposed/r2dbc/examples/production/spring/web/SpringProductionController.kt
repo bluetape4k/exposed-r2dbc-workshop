@@ -2,14 +2,14 @@ package exposed.r2dbc.examples.production.spring.web
 
 import exposed.r2dbc.examples.production.spring.app.CreateWorkItemRequest
 import exposed.r2dbc.examples.production.spring.app.EnqueueOutboundRequest
+import exposed.r2dbc.examples.production.spring.app.OutboxEventsView
 import exposed.r2dbc.examples.production.spring.app.OutboxEventView
 import exposed.r2dbc.examples.production.spring.app.OutboundRequestView
+import exposed.r2dbc.examples.production.spring.app.PublishOutboxView
 import exposed.r2dbc.examples.production.spring.app.ReadinessView
 import exposed.r2dbc.examples.production.spring.app.RegisterAccountRequest
 import exposed.r2dbc.examples.production.spring.app.SpringProductionWorkflowService
 import exposed.r2dbc.examples.production.spring.app.WorkItemView
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.reactor.asFlux
 import org.springframework.http.MediaType
 import org.springframework.http.codec.ServerSentEvent
 import org.springframework.web.bind.annotation.GetMapping
@@ -29,6 +29,7 @@ import java.security.Principal
 @RequestMapping("/production")
 class SpringProductionController(
     private val service: SpringProductionWorkflowService,
+    private val realtimeHub: SpringRealtimeHub,
 ) {
     @PostMapping("/accounts")
     suspend fun registerAccount(@RequestBody request: RegisterAccountRequest) =
@@ -68,6 +69,18 @@ class SpringProductionController(
         return realtimeEvents(after)
     }
 
+    @GetMapping("/outbox")
+    suspend fun outbox(@RequestHeader("X-Api-Key") apiKey: String): OutboxEventsView {
+        service.requirePermission(apiKey, "work:create")
+        return service.outboxEvents()
+    }
+
+    @PostMapping("/outbox/publish")
+    suspend fun publishOutbox(@RequestHeader("X-Api-Key") apiKey: String): PublishOutboxView {
+        service.requirePermission(apiKey, "work:create")
+        return service.publishPendingOutbox()
+    }
+
     @PostMapping("/outbound")
     suspend fun enqueueOutbound(
         @RequestHeader("X-Api-Key") apiKey: String,
@@ -81,15 +94,15 @@ class SpringProductionController(
     suspend fun readiness(): ReadinessView =
         service.readiness()
 
-    private fun realtimeEvents(after: Long) =
-        flow {
-            service.replayEvents(after).forEach { event ->
-                emit(
-                    ServerSentEvent.builder(event)
-                        .id(event.sequence.toString())
-                        .event(event.eventType)
-                        .build()
-                )
+    private suspend fun realtimeEvents(after: Long): Flux<ServerSentEvent<OutboxEventView>> {
+        val replay = Flux.fromIterable(service.replayEvents(after))
+        return Flux.concat(replay, realtimeHub.live())
+            .filter { event -> event.sequence > after }
+            .map { event ->
+                ServerSentEvent.builder(event)
+                    .id(event.sequence.toString())
+                    .event(event.eventType)
+                    .build()
             }
-        }.asFlux()
+    }
 }

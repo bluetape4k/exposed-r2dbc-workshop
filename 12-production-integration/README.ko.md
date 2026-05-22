@@ -21,6 +21,16 @@ diagnostics 경계는 각 프레임워크의 자연스러운 방식으로 보여
 
 ![Chapter 12 authentication and session metadata](../docs/assets/readme-diagrams/issue-45-auth-session-r2dbc-01.png)
 
+## Realtime Outbox Delivery
+
+![Chapter 12 realtime outbox delivery](../docs/assets/readme-diagrams/issue-46-outbox-realtime-r2dbc-01.png)
+
+Realtime slice는 accepted work item과 outbox event를 같은 Exposed R2DBC
+transaction에 저장합니다. Pending row publish는 Spring SSE 또는 Ktor
+WebSocket delivery 경계가 event를 받아들인 뒤에만 `PUBLISHED`로 전환합니다.
+Delivery 실패는 attempt count와 error note를 포함한 `FAILED` 상태로 저장하므로
+reconnect/replay는 in-memory event에만 의존하지 않습니다.
+
 ## 이슈별 주제 맵
 
 | Issue | 주제 | Spring slice | Ktor slice |
@@ -44,8 +54,8 @@ diagnostics 경계는 각 프레임워크의 자연스러운 방식으로 보여
   R2DBC를 사용합니다.
 - 중복 idempotency key는 두 스택 모두 HTTP 409와 structured conflict error를
   반환합니다.
-- Realtime 예제는 delivery 전에 event를 outbox에 저장하고 cursor replay를
-  지원합니다.
+- Realtime 예제는 delivery 전에 event를 outbox에 저장하고, pending row만
+  publish하며, 실패 상태를 기록하고, cursor 이후 `PUBLISHED` row만 replay합니다.
 - Readiness는 database 접근 가능 시 `UP`, diagnostics table에 degraded 상태가
   기록되면 `DEGRADED`를 반환합니다.
 

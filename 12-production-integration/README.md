@@ -22,6 +22,16 @@ surfaces each framework expects.
 
 ![Chapter 12 authentication and session metadata](../docs/assets/readme-diagrams/issue-45-auth-session-r2dbc-01.png)
 
+## Realtime Outbox Delivery
+
+![Chapter 12 realtime outbox delivery](../docs/assets/readme-diagrams/issue-46-outbox-realtime-r2dbc-01.png)
+
+The realtime slice persists each accepted work item and outbox event in the
+same Exposed R2DBC transaction. Publishing pending rows moves events to
+`PUBLISHED` only after the Spring SSE or Ktor WebSocket delivery boundary
+accepts them. Failed delivery is stored as `FAILED` with an attempt count and
+error note, so reconnect/replay never depends on an in-memory event alone.
+
 ## Topic Map
 
 | Issue | Topic | Spring slice | Ktor slice |
@@ -43,7 +53,8 @@ surfaces each framework expects.
   slice cannot self-register privileged users.
 - App-boundary tests use H2 R2DBC for predictable Spring/Ktor startup.
 - Duplicate idempotency keys return HTTP 409 with a structured conflict error.
-- Realtime examples persist events before delivery and support cursor replay.
+- Realtime examples persist events before delivery, publish only pending rows,
+  record failed delivery state, and replay only `PUBLISHED` rows after a cursor.
 - Readiness reports `UP` when the database is reachable and `DEGRADED` when the
   diagnostics table records a degraded database state.
 

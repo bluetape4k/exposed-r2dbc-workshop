@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service
 @Service
 class SpringProductionWorkflowService(
     private val repository: SpringProductionRepository,
+    private val realtimeDelivery: RealtimeDelivery,
 ) {
     suspend fun registerAccount(request: RegisterAccountRequest): AccountView =
         repository.registerAccount(request)
@@ -38,6 +39,12 @@ class SpringProductionWorkflowService(
 
     suspend fun replayEvents(afterSequence: Long): List<OutboxEventView> =
         repository.replayEvents(afterSequence)
+
+    suspend fun outboxEvents(): OutboxEventsView =
+        OutboxEventsView(repository.outboxEvents())
+
+    suspend fun publishPendingOutbox(): PublishOutboxView =
+        repository.publishPending(realtimeDelivery)
 
     suspend fun enqueueOutbound(request: EnqueueOutboundRequest): OutboundRequestView =
         repository.enqueueOutbound(request)
