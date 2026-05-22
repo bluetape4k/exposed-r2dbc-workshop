@@ -4,6 +4,7 @@ on:
   push:
     branches: [ develop ]
     paths:
+      - '10-multi-tenant/04-connection-factory-per-tenant-spring-webflux/**'
       - '12-production-integration/**'
       - '00-shared/**'
       - 'build.gradle.kts'
@@ -15,6 +16,7 @@ on:
   pull_request:
     branches: [ develop ]
     paths:
+      - '10-multi-tenant/04-connection-factory-per-tenant-spring-webflux/**'
       - '12-production-integration/**'
       - '00-shared/**'
       - 'build.gradle.kts'
@@ -35,6 +37,41 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
+  chapter-10:
+    name: Chapter 10 multi-tenant examples
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-java@v5
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: wrapper
+          cache-read-only: ${{ github.event_name == 'pull_request' }}
+
+      - name: Run multi-tenant examples
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+        run: >-
+          ./gradlew
+          :04-connection-factory-per-tenant-spring-webflux:test
+          "-PuseDB=H2"
+          --continue
+
+      - name: Upload chapter 10 example test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: chapter-10-example-test-results
+          path: |
+            10-multi-tenant/04-connection-factory-per-tenant-spring-webflux/build/test-results/test/*.xml
+            10-multi-tenant/04-connection-factory-per-tenant-spring-webflux/build/reports/tests/test/
+          retention-days: 7
+
   chapter-12:
     name: Chapter 12 production integration
     runs-on: ubuntu-latest
