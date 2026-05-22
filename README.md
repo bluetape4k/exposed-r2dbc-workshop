@@ -21,7 +21,8 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 - **Reactive SQL learning path** from shared test infrastructure to high-performance routing.
 - **Coroutine/R2DBC examples** with `suspendTransaction`, Flow collection, and WebFlux.
 - **Multi-database verification** for H2, PostgreSQL, MySQL, and MariaDB.
-- **Production patterns** for repository, cache, multi-tenant schema, and routing datasource examples.
+- **Production patterns** for repository, cache, multi-tenant schema, routing datasource,
+  realtime outbox, and HTTP client outbox/idempotency examples.
 
 상세 설명은 [Kotlin Exposed Book](https://debop.notion.site/Kotlin-Exposed-Book-1ad2744526b080428173e9c907abdae2)에서 확인할 수 있습니다.
 
@@ -104,7 +105,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 | `09-spring`              | Repository 패턴, Redis 기반 suspended cache       | [Spring Examples](09-spring/05-exposed-r2dbc-repository-coroutines/README.md) |
 | `10-multi-tenant`        | Schema, connection-factory, authorization, onboarding 멀티테넌시 + WebFlux | [Multi-Tenant Strategies](10-multi-tenant/README.md) |
 | `11-high-performance`    | 캐시 전략, routing datasource, read/write 분리      | [High Performance](11-high-performance/README.md)                             |
-| `12-production-integration` | Spring Boot 4/Ktor production service patterns   | [Production Integration](12-production-integration/README.md)                 |
+| `12-production-integration` | Spring Boot 4/Ktor production service patterns, realtime replay, HTTP client outbox/idempotency | [Production Integration](12-production-integration/README.md)                 |
 
 ## 주목할 예제
 
@@ -120,7 +121,10 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
   런타임 tenant metadata 예약, R2DBC pool provisioning, 실패 cleanup
 - [11-high-performance/03-routing-datasource](11-high-performance/03-routing-datasource/README.md)
 - [12-production-integration](12-production-integration/README.md)
-  tenant + read/write 분리 라우팅
+  Spring Boot 4/Ktor production service boundary comparison
+- [12-production-integration/01-spring-production-integration](12-production-integration/01-spring-production-integration/README.md),
+  [12-production-integration/02-ktor-production-integration](12-production-integration/02-ktor-production-integration/README.md)
+  HTTP client outbox/idempotency with persisted retry state and duplicate-key protection
 
 ## 아키텍처 개요
 

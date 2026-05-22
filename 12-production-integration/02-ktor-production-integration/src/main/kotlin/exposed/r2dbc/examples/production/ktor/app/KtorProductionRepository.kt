@@ -2,20 +2,26 @@ package exposed.r2dbc.examples.production.ktor.app
 
 import exposed.r2dbc.examples.production.ktor.persistence.KtorProductionTables
 import io.bluetape4k.codec.Base58
+import io.bluetape4k.logging.KLogging
+import io.bluetape4k.logging.warn
 import io.bluetape4k.support.requireNotBlank
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.SortOrder
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.greater
+import org.jetbrains.exposed.v1.core.less
+import org.jetbrains.exposed.v1.core.or
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.deleteAll
@@ -29,6 +35,7 @@ import java.time.Duration
 import java.time.Instant
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.time.toKotlinDuration
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 /**
@@ -37,16 +44,26 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 class KtorProductionRepository(
     private val database: R2dbcDatabase,
 ) {
-    private companion object {
+    private companion object: KLogging() {
         val sessionTtl: Duration = Duration.ofHours(1)
         const val defaultRegisteredPermission = "work:create"
         val defaultRegisteredRoles = setOf("USER")
         val passwordEncoder = BCryptPasswordEncoder()
         const val maxOutboxErrorLength = 240
+        const val maxOutboundErrorLength = 240
+        const val maxOutboundAttempts = 3
+        // Longest prefix preserved before a sanitized error body, e.g. "HTTP 599 ".
+        private const val maxHttpStatusPrefixLength = 9
+        val outboundDispatchTimeout: Duration = Duration.ofSeconds(5)
+        val idempotencyKeyPattern = Regex("[A-Za-z0-9._-]{1,120}")
+        val credentialLikeErrorPattern =
+            Regex("(?i)\\b(authorization|cookie|token|secret|api[-_ ]?key)[:=]\\s*(?:Bearer\\s+)?[^\\s,;]+")
     }
 
     private val initialized = AtomicBoolean(false)
     private val publishMutex = Mutex()
+    private val dispatchMutex = Mutex()
+    private val outboundMutationMutex = Mutex()
     private val schemaMutex = Mutex()
 
     private val tables = arrayOf(
@@ -296,27 +313,95 @@ class KtorProductionRepository(
 
     suspend fun enqueueOutbound(request: EnqueueOutboundRequest): OutboundRequestView {
         ensureSchema()
-        request.idempotencyKey.requireNotBlank("idempotencyKey")
+        request.idempotencyKey.requireValidOutboundIdempotencyKey()
         request.targetUrl.requireNotBlank("targetUrl")
         request.targetUrl.requireAllowedTargetUrl()
         request.payload.requireNotBlank("payload")
         val id = UUID.randomUUID().toString()
-        return suspendTransaction(db = database) {
-            val duplicate = KtorProductionTables.OutboundRequests
+        return outboundMutationMutex.withLock {
+            suspendTransaction(db = database) {
+                val duplicate = findOutboundByIdempotencyKeyInTransaction(request.idempotencyKey)
+                if (duplicate != null) {
+                    throw DuplicateIdempotencyKeyException(request.idempotencyKey)
+                }
+                try {
+                    KtorProductionTables.OutboundRequests.insert {
+                        it[KtorProductionTables.OutboundRequests.id] = id
+                        it[idempotencyKey] = request.idempotencyKey
+                        it[targetUrl] = request.targetUrl
+                        it[payload] = request.payload
+                        it[status] = OutboundStatus.PENDING.name
+                        it[attempts] = 0
+                        it[lastStatusCode] = null
+                        it[lastError] = null
+                    }
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    if (findOutboundByIdempotencyKeyInTransaction(request.idempotencyKey) != null) {
+                        throw DuplicateIdempotencyKeyException(request.idempotencyKey)
+                    }
+                    throw e
+                }
+                checkNotNull(findOutboundByIdInTransaction(id)) {
+                    "Inserted outbound request $id was not found"
+                }
+            }
+        }
+    }
+
+    suspend fun outboundRequests(): List<OutboundRequestView> =
+        ensureSchemaAndRead {
+            KtorProductionTables.OutboundRequests
                 .selectAll()
-                .where { KtorProductionTables.OutboundRequests.idempotencyKey eq request.idempotencyKey }
-                .singleOrNull()
-            if (duplicate != null) {
-                throw DuplicateIdempotencyKeyException(request.idempotencyKey)
+                .orderBy(KtorProductionTables.OutboundRequests.id to SortOrder.ASC)
+                .map { it.toOutboundRequest() }
+                .toList()
+        }
+
+    suspend fun dispatchPendingOutbound(
+        delivery: OutboundDelivery,
+        timeout: Duration = outboundDispatchTimeout,
+    ): DispatchOutboundView {
+        ensureSchema()
+        return dispatchMutex.withLock {
+            val claimed = claimDispatchableOutbound()
+            var succeeded = 0
+            var retryableFailed = 0
+            var permanentFailed = 0
+            for (request in claimed) {
+                val result = try {
+                    withTimeout(timeout.toKotlinDuration()) {
+                        delivery.dispatch(request)
+                    }
+                } catch (e: TimeoutCancellationException) {
+                    OutboundDispatchResult(
+                        statusCode = 599,
+                        error = "Transport timeout after ${timeout.toMillis()}ms",
+                    )
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    log.warn(e) { "Outbound dispatch failed for requestId=${request.id}" }
+                    OutboundDispatchResult(
+                        statusCode = 599,
+                        error = "Transport failure: ${e::class.simpleName ?: "Exception"}",
+                    )
+                }
+                when (markOutboundDispatchResult(request.id, result).status) {
+                    OutboundStatus.SUCCEEDED -> succeeded += 1
+                    OutboundStatus.RETRYABLE_FAILED -> retryableFailed += 1
+                    OutboundStatus.PERMANENT_FAILED -> permanentFailed += 1
+                    OutboundStatus.PENDING,
+                    OutboundStatus.IN_FLIGHT -> Unit
+                }
             }
-            KtorProductionTables.OutboundRequests.insert {
-                it[KtorProductionTables.OutboundRequests.id] = id
-                it[idempotencyKey] = request.idempotencyKey
-                it[targetUrl] = request.targetUrl
-                it[payload] = request.payload
-                it[status] = "PENDING"
-            }
-            OutboundRequestView(id, request.idempotencyKey, request.targetUrl, request.payload, "PENDING")
+            DispatchOutboundView(
+                attempted = claimed.size,
+                succeeded = succeeded,
+                retryableFailed = retryableFailed,
+                permanentFailed = permanentFailed,
+            )
         }
     }
 
@@ -432,6 +517,92 @@ class KtorProductionRepository(
         }
     }
 
+    private fun String.requireValidOutboundIdempotencyKey() {
+        require(idempotencyKeyPattern.matches(this)) {
+            "idempotencyKey must be 1-120 characters and contain only letters, digits, dot, underscore, or hyphen"
+        }
+    }
+
+    private suspend fun claimDispatchableOutbound(): List<OutboundRequestView> =
+        suspendTransaction(db = database) {
+            val dispatchable = KtorProductionTables.OutboundRequests
+                .selectAll()
+                .where {
+                    ((KtorProductionTables.OutboundRequests.status eq OutboundStatus.PENDING.name) or
+                            (KtorProductionTables.OutboundRequests.status eq OutboundStatus.RETRYABLE_FAILED.name)) and
+                            (KtorProductionTables.OutboundRequests.attempts less maxOutboundAttempts)
+                }
+                .orderBy(KtorProductionTables.OutboundRequests.id to SortOrder.ASC)
+                .map { it.toOutboundRequest() }
+                .toList()
+            dispatchable.mapNotNull { request ->
+                val updated = KtorProductionTables.OutboundRequests.update({
+                    (KtorProductionTables.OutboundRequests.id eq request.id) and
+                        (((KtorProductionTables.OutboundRequests.status eq OutboundStatus.PENDING.name) or
+                            (KtorProductionTables.OutboundRequests.status eq OutboundStatus.RETRYABLE_FAILED.name)) and
+                            (KtorProductionTables.OutboundRequests.attempts less maxOutboundAttempts))
+                }) {
+                    it[status] = OutboundStatus.IN_FLIGHT.name
+                    it[lastError] = null
+                }
+                if (updated == 1) {
+                    request.copy(status = OutboundStatus.IN_FLIGHT)
+                } else {
+                    null
+                }
+            }
+        }
+
+    private suspend fun markOutboundDispatchResult(
+        id: String,
+        result: OutboundDispatchResult,
+    ): OutboundRequestView =
+        suspendTransaction(db = database) {
+            val current = findOutboundByIdInTransaction(id)
+                ?: throw NoSuchElementException("Outbound request $id was not found")
+            val nextAttempts = current.attempts + 1
+            val nextStatus = result.statusCode.toOutboundStatus(nextAttempts)
+            val nextError = if (nextStatus == OutboundStatus.SUCCEEDED) {
+                null
+            } else {
+                sanitizeOutboundError(result.statusCode, result.error)
+            }
+            KtorProductionTables.OutboundRequests.update({ KtorProductionTables.OutboundRequests.id eq id }) {
+                it[status] = nextStatus.name
+                it[attempts] = nextAttempts
+                it[lastStatusCode] = result.statusCode
+                it[lastError] = nextError
+            }
+            checkNotNull(findOutboundByIdInTransaction(id)) {
+                "Updated outbound request $id was not found"
+            }
+        }
+
+    private fun Int.toOutboundStatus(nextAttempts: Int): OutboundStatus =
+        when {
+            this in 200..299 -> OutboundStatus.SUCCEEDED
+            this in setOf(408, 425, 429) || this >= 500 ->
+                if (nextAttempts >= maxOutboundAttempts) {
+                    OutboundStatus.PERMANENT_FAILED
+                } else {
+                    OutboundStatus.RETRYABLE_FAILED
+                }
+            this in 400..499 -> OutboundStatus.PERMANENT_FAILED
+            else -> OutboundStatus.RETRYABLE_FAILED
+        }
+
+    private fun sanitizeOutboundError(statusCode: Int, rawMessage: String?): String {
+        val safeMessage = rawMessage
+            ?.replace(credentialLikeErrorPattern, "\$1:[redacted]")
+            ?.lineSequence()
+            ?.firstOrNull()
+            ?.take(maxOutboundErrorLength - maxHttpStatusPrefixLength)
+            ?.takeIf { it.isNotBlank() }
+        return listOfNotNull("HTTP $statusCode", safeMessage)
+            .joinToString(" ")
+            .take(maxOutboundErrorLength)
+    }
+
     private fun seedAccountsWithHashes(): List<Pair<SeedAccount, String>> =
         listOf(
             SeedAccount("alice", "alice-api-key", "work:create", "password", "Alice Reader", setOf("USER")),
@@ -490,6 +661,32 @@ class KtorProductionRepository(
             status = OutboxStatus.valueOf(this[KtorProductionTables.OutboxEvents.status]),
             attempts = this[KtorProductionTables.OutboxEvents.attempts],
             lastError = this[KtorProductionTables.OutboxEvents.lastError],
+        )
+
+    private suspend fun findOutboundByIdInTransaction(id: String): OutboundRequestView? =
+        KtorProductionTables.OutboundRequests
+            .selectAll()
+            .where { KtorProductionTables.OutboundRequests.id eq id }
+            .singleOrNull()
+            ?.toOutboundRequest()
+
+    private suspend fun findOutboundByIdempotencyKeyInTransaction(idempotencyKey: String): OutboundRequestView? =
+        KtorProductionTables.OutboundRequests
+            .selectAll()
+            .where { KtorProductionTables.OutboundRequests.idempotencyKey eq idempotencyKey }
+            .singleOrNull()
+            ?.toOutboundRequest()
+
+    private fun ResultRow.toOutboundRequest(): OutboundRequestView =
+        OutboundRequestView(
+            id = this[KtorProductionTables.OutboundRequests.id],
+            idempotencyKey = this[KtorProductionTables.OutboundRequests.idempotencyKey],
+            targetUrl = this[KtorProductionTables.OutboundRequests.targetUrl],
+            payload = this[KtorProductionTables.OutboundRequests.payload],
+            status = OutboundStatus.valueOf(this[KtorProductionTables.OutboundRequests.status]),
+            attempts = this[KtorProductionTables.OutboundRequests.attempts],
+            lastStatusCode = this[KtorProductionTables.OutboundRequests.lastStatusCode],
+            lastError = this[KtorProductionTables.OutboundRequests.lastError],
         )
 
     private fun BCryptPasswordEncoder.encodeRequired(password: String): String =

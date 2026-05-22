@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service
 class SpringProductionWorkflowService(
     private val repository: SpringProductionRepository,
     private val realtimeDelivery: RealtimeDelivery,
+    private val outboundDelivery: OutboundDelivery,
 ) {
     suspend fun registerAccount(request: RegisterAccountRequest): AccountView =
         repository.registerAccount(request)
@@ -49,10 +50,18 @@ class SpringProductionWorkflowService(
     suspend fun enqueueOutbound(request: EnqueueOutboundRequest): OutboundRequestView =
         repository.enqueueOutbound(request)
 
+    suspend fun outboundRequests(): OutboundRequestsView =
+        OutboundRequestsView(repository.outboundRequests())
+
+    suspend fun dispatchPendingOutbound(): DispatchOutboundView =
+        repository.dispatchPendingOutbound(outboundDelivery)
+
     suspend fun readiness(): ReadinessView =
         repository.readiness()
 
     suspend fun requirePermission(apiKey: String, permission: String) {
-        require(repository.hasPermission(apiKey, permission)) { "Missing permission: $permission" }
+        if (!repository.hasPermission(apiKey, permission)) {
+            throw PermissionDeniedException(permission)
+        }
     }
 }

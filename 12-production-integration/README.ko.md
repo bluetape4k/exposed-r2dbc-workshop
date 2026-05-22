@@ -10,8 +10,8 @@ diagnostics 경계는 각 프레임워크의 자연스러운 방식으로 보여
 
 | 모듈 | 스택 | 초점 |
 |---|---|---|
-| [`01-spring-production-integration`](01-spring-production-integration/) | Spring Boot 4 WebFlux | WebFlux Security, controller/service/repository 경계, SSE replay, structured errors, readiness |
-| [`02-ktor-production-integration`](02-ktor-production-integration/) | Ktor 3 | Ktor Authentication/Sessions, WebSockets, MockEngine outbound dispatch, readiness |
+| [`01-spring-production-integration`](01-spring-production-integration/) | Spring Boot 4 WebFlux | WebFlux Security, controller/service/repository 경계, SSE replay, WebClient outbox dispatch, structured errors, readiness |
+| [`02-ktor-production-integration`](02-ktor-production-integration/) | Ktor 3 | Ktor Authentication/Sessions, WebSockets, MockEngine/Ktor HTTP client outbox dispatch, readiness |
 
 ## Application Architecture
 
@@ -30,6 +30,19 @@ transaction에 저장합니다. Pending row publish는 Spring SSE 또는 Ktor
 WebSocket delivery 경계가 event를 받아들인 뒤에만 `PUBLISHED`로 전환합니다.
 Delivery 실패는 attempt count와 error note를 포함한 `FAILED` 상태로 저장하므로
 reconnect/replay는 in-memory event에만 의존하지 않습니다.
+
+## HTTP Client Outbox And Idempotency
+
+![Chapter 12 HTTP client outbox and idempotency](../docs/assets/readme-diagrams/issue-47-http-outbox-idempotency-r2dbc-01.png)
+
+Outbound slice는 외부 HTTP 호출을 dispatch하기 전에 row로 먼저 저장하고,
+database-unique idempotency key를 duplicate boundary로 사용합니다. Dispatch는
+짧은 R2DBC transaction에서 eligible row를 `IN_FLIGHT`로 claim한 뒤,
+Spring WebClient 또는 Ktor HTTP client 호출은 transaction 밖에서 수행합니다.
+이후 attempt count, status code, sanitized error text와 함께 `SUCCEEDED`,
+`RETRYABLE_FAILED`, `PERMANENT_FAILED` 상태를 저장합니다. Test는 replaceable
+dispatcher와 Ktor `MockEngine`을 사용하므로 실제 외부 서비스 없이 success,
+retry, duplicate, permanent failure, concurrent single-send 동작을 검증합니다.
 
 ## 이슈별 주제 맵
 
@@ -56,6 +69,9 @@ reconnect/replay는 in-memory event에만 의존하지 않습니다.
   반환합니다.
 - Realtime 예제는 delivery 전에 event를 outbox에 저장하고, pending row만
   publish하며, 실패 상태를 기록하고, cursor 이후 `PUBLISHED` row만 replay합니다.
+- HTTP client outbox 예제는 delivery 전에 outbound row를 저장하고, retryable
+  row를 dispatch 전에 claim하며, 최대 세 번까지 retry하고, 저장되는 dispatch
+  error에서 credential처럼 보이는 값을 redact합니다.
 - Readiness는 database 접근 가능 시 `UP`, diagnostics table에 degraded 상태가
   기록되면 `DEGRADED`를 반환합니다.
 

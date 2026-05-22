@@ -2,13 +2,16 @@ package exposed.r2dbc.examples.production.ktor
 
 import exposed.r2dbc.examples.production.ktor.app.KtorProductionRepository
 import exposed.r2dbc.examples.production.ktor.app.KtorRealtimeHub
+import exposed.r2dbc.examples.production.ktor.app.OutboundDelivery
 import exposed.r2dbc.examples.production.ktor.app.RealtimeDelivery
 import exposed.r2dbc.examples.production.ktor.app.StructuredError
 import exposed.r2dbc.examples.production.ktor.app.AuthPrincipal
 import exposed.r2dbc.examples.production.ktor.config.installProductionKtorPlugins
+import exposed.r2dbc.examples.production.ktor.outbound.KtorOutboundDispatcher
 import exposed.r2dbc.examples.production.ktor.routes.productionRoutes
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
+import io.ktor.server.application.ApplicationStopped
 import io.ktor.server.application.install
 import io.ktor.server.auth.Authentication
 import io.ktor.server.auth.basic
@@ -28,8 +31,14 @@ fun Application.productionIntegrationModule(
     repository: KtorProductionRepository = KtorProductionRepository(defaultProductionDatabase()),
     realtimeHub: KtorRealtimeHub = KtorRealtimeHub(),
     realtimeDelivery: RealtimeDelivery = realtimeHub,
+    outboundDelivery: OutboundDelivery = KtorOutboundDispatcher(),
 ) {
     installProductionKtorPlugins()
+    monitor.subscribe(ApplicationStopped) {
+        if (outboundDelivery is AutoCloseable) {
+            outboundDelivery.close()
+        }
+    }
     install(Sessions) {
         cookie<UserSession>("production_session") {
             cookie.path = "/"
@@ -62,7 +71,7 @@ fun Application.productionIntegrationModule(
     }
     install(WebSockets)
 
-    productionRoutes(repository, realtimeHub, realtimeDelivery)
+    productionRoutes(repository, realtimeHub, realtimeDelivery, outboundDelivery)
 }
 
 /**

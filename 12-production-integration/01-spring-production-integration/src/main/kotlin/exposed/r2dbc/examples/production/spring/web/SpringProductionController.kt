@@ -1,9 +1,11 @@
 package exposed.r2dbc.examples.production.spring.web
 
 import exposed.r2dbc.examples.production.spring.app.CreateWorkItemRequest
+import exposed.r2dbc.examples.production.spring.app.DispatchOutboundView
 import exposed.r2dbc.examples.production.spring.app.EnqueueOutboundRequest
 import exposed.r2dbc.examples.production.spring.app.OutboxEventsView
 import exposed.r2dbc.examples.production.spring.app.OutboxEventView
+import exposed.r2dbc.examples.production.spring.app.OutboundRequestsView
 import exposed.r2dbc.examples.production.spring.app.OutboundRequestView
 import exposed.r2dbc.examples.production.spring.app.PublishOutboxView
 import exposed.r2dbc.examples.production.spring.app.ReadinessView
@@ -88,6 +90,18 @@ class SpringProductionController(
     ): OutboundRequestView {
         service.requirePermission(apiKey, "outbound:create")
         return service.enqueueOutbound(request)
+    }
+
+    @GetMapping("/outbound")
+    suspend fun outbound(@RequestHeader("X-Api-Key") apiKey: String): OutboundRequestsView {
+        service.requirePermission(apiKey, "outbound:create")
+        return service.outboundRequests()
+    }
+
+    @PostMapping("/outbound/dispatch")
+    suspend fun dispatchOutbound(@RequestHeader("X-Api-Key") apiKey: String): DispatchOutboundView {
+        service.requirePermission(apiKey, "outbound:create")
+        return service.dispatchPendingOutbound()
     }
 
     @GetMapping("/readiness")

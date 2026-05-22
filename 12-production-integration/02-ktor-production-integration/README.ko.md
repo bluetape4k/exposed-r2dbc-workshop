@@ -4,7 +4,7 @@
 
 이 모듈은 12장의 Ktor 3 예제입니다. Issue #44의 application architecture
 baseline, issue #45의 authentication/session slice, issue #46의 realtime
-outbox slice를 포함합니다.
+outbox slice, issue #47의 HTTP client outbox/idempotency slice를 포함합니다.
 
 ## 아키텍처
 
@@ -35,6 +35,19 @@ WebSocket endpoint를 보호합니다. Work item 생성은 같은 R2DBC transact
 전달합니다. Replay는 cursor 이후의 `PUBLISHED` row만 반환하며, delivery 실패는
 `FAILED` 상태로 계속 조회됩니다.
 
+## HTTP Client Outbox
+
+![Chapter 12 HTTP client outbox and idempotency](../../docs/assets/readme-diagrams/issue-47-http-outbox-idempotency-r2dbc-01.png)
+
+Ktor outbound slice는 signed admin session으로 `/production/outbound`와
+`/production/outbound/dispatch`를 보호합니다. 외부 호출 전에 target URL,
+payload, unique idempotency key, retry status, attempt count, last dispatch
+result를 저장합니다. `KtorOutboundDispatcher`는 Ktor `HttpClient`를 사용하고
+idempotency key를 `Idempotency-Key` header로 전달하며, `MockEngine`으로
+검증합니다. Dispatch는 row를 `IN_FLIGHT`로 claim하고 HTTP client 호출은
+transaction 밖에서 수행한 뒤, sanitized error text와 함께 retryable 또는
+permanent failure 상태를 기록합니다.
+
 ## 패키지 구성
 
 ```text
@@ -54,6 +67,7 @@ exposed.r2dbc.examples.production.ktor
 | JSON/error mapping | `ContentNegotiation`과 `StatusPages` | Boot JSON 지원과 `@RestControllerAdvice` |
 | Session/auth 형태 | Ktor Basic auth가 signed-cookie session metadata 생성 | WebFlux Security Basic auth와 DB session metadata |
 | Realtime delivery | Persisted publish 상태가 있는 WebSocket replay/live stream | 같은 outbox 상태를 쓰는 Server-Sent Events |
+| Outbound HTTP | MockEngine test가 있는 Ktor HTTP client dispatcher | Persisted idempotency 상태를 쓰는 WebClient dispatcher |
 | R2DBC 경계 | Repository가 `suspendTransaction` 호출을 소유 | Spring service 뒤에서도 같은 repository 형태 |
 | Test 방식 | `testApplication` + Ktor client plugin | `@SpringBootTest` + `WebTestClient` |
 
@@ -66,5 +80,7 @@ repo-test-summary -- ./gradlew :02-ktor-production-integration:test -PuseDB=H2 -
 Test suite는 authorized access, missing credentials, invalid credentials,
 non-admin role denial, public registration permission/role clamping, invalid
 session cookie, raw token을 숨기는 session listing, event persistence, publish
-state transition, replay/live WebSocket delivery, delivery failure retention을
-검증합니다.
+state transition, replay/live WebSocket delivery, delivery failure retention,
+outbound success/retry/permanent failure, duplicate idempotency key, permission
+denial, sanitized dispatch error, Ktor `MockEngine` dispatch, concurrent
+single-send protection을 검증합니다.

@@ -48,7 +48,10 @@ internal object KtorProductionTables {
         val idempotencyKey = varchar("idempotency_key", 120).uniqueIndex()
         val targetUrl = varchar("target_url", 300)
         val payload = varchar("payload", 500)
-        val status = varchar("status", 40)
+        val status = varchar("status", 40).default("PENDING")
+        val attempts = integer("attempts").default(0)
+        val lastStatusCode = integer("last_status_code").nullable()
+        val lastError = varchar("last_error", 240).nullable()
         override val primaryKey = PrimaryKey(id)
     }
 

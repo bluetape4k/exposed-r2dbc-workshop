@@ -202,11 +202,73 @@ data class OutboundRequestView(
     val idempotencyKey: String,
     val targetUrl: String,
     val payload: String,
-    val status: String,
+    val status: OutboundStatus,
+    val attempts: Int,
+    val lastStatusCode: Int?,
+    val lastError: String?,
 ): Serializable {
     companion object {
         private const val serialVersionUID: Long = 1L
     }
+}
+
+/**
+ * Collection wrapper for persisted outbound HTTP rows.
+ */
+@kotlinx.serialization.Serializable
+data class OutboundRequestsView(
+    val requests: List<OutboundRequestView>,
+): Serializable {
+    companion object {
+        private const val serialVersionUID: Long = 1L
+    }
+}
+
+/**
+ * Outbound HTTP dispatch attempt summary.
+ */
+@kotlinx.serialization.Serializable
+data class DispatchOutboundView(
+    val attempted: Int,
+    val succeeded: Int,
+    val retryableFailed: Int,
+    val permanentFailed: Int,
+): Serializable {
+    companion object {
+        private const val serialVersionUID: Long = 1L
+    }
+}
+
+/**
+ * Explicit delivery state persisted with each outbound HTTP row.
+ */
+@kotlinx.serialization.Serializable
+enum class OutboundStatus {
+    PENDING,
+    IN_FLIGHT,
+    SUCCEEDED,
+    RETRYABLE_FAILED,
+    PERMANENT_FAILED,
+}
+
+/**
+ * Result returned by the outbound HTTP client boundary.
+ */
+@kotlinx.serialization.Serializable
+data class OutboundDispatchResult(
+    val statusCode: Int,
+    val error: String? = null,
+): Serializable {
+    companion object {
+        private const val serialVersionUID: Long = 1L
+    }
+}
+
+/**
+ * HTTP delivery boundary used by the outbound outbox dispatcher.
+ */
+interface OutboundDelivery {
+    suspend fun dispatch(request: OutboundRequestView): OutboundDispatchResult
 }
 
 /**

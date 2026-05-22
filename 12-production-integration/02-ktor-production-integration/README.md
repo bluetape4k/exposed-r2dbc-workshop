@@ -4,7 +4,8 @@
 
 This module is the Ktor 3 side of chapter 12. It now includes the application
 architecture baseline from issue #44, the authentication / session slice from
-issue #45, and the realtime outbox slice from issue #46.
+issue #45, the realtime outbox slice from issue #46, and the HTTP client
+outbox/idempotency slice from issue #47.
 
 ## Architecture
 
@@ -35,6 +36,19 @@ in the same R2DBC transaction, publish attempts deliver through a
 `MutableSharedFlow` hub, replay returns only `PUBLISHED` rows after the cursor,
 and failed delivery stays visible as `FAILED` state.
 
+## HTTP Client Outbox
+
+![Chapter 12 HTTP client outbox and idempotency](../../docs/assets/readme-diagrams/issue-47-http-outbox-idempotency-r2dbc-01.png)
+
+The Ktor outbound slice protects `/production/outbound` and
+`/production/outbound/dispatch` with the signed admin session. It persists the
+target URL, payload, unique idempotency key, retry status, attempt count, and
+last dispatch result before any external call. `KtorOutboundDispatcher` uses
+Ktor `HttpClient`, forwards the idempotency key as `Idempotency-Key`, and is
+tested with `MockEngine`. Dispatch claims rows as `IN_FLIGHT`, calls the HTTP
+client outside the transaction, and records retryable or permanent failure
+state with sanitized error text.
+
 ## Package Layout
 
 ```text
@@ -54,6 +68,7 @@ exposed.r2dbc.examples.production.ktor
 | JSON/error mapping | `ContentNegotiation` plus `StatusPages` | Boot JSON support plus `@RestControllerAdvice` |
 | Session/auth shape | Ktor Basic auth creates signed-cookie session metadata | WebFlux Security Basic auth plus DB session metadata |
 | Realtime delivery | WebSocket replay/live stream with persisted publish state | Server-Sent Events with the same outbox state |
+| Outbound HTTP | Ktor HTTP client dispatcher with MockEngine tests | WebClient dispatcher with persisted idempotency state |
 | R2DBC boundary | Repository-owned `suspendTransaction` calls | Same repository shape behind a Spring service |
 | Test style | `testApplication` + Ktor client plugins | `@SpringBootTest` + `WebTestClient` |
 
@@ -67,4 +82,6 @@ The test suite covers authorized access, missing credentials, invalid
 credentials, non-admin role denial, public registration permission/role
 clamping, invalid session cookies, session listings that hide raw tokens, event
 persistence, publish state transitions, replay/live WebSocket delivery, and
-delivery failure retention.
+delivery failure retention, outbound success/retry/permanent failure, duplicate
+idempotency keys, permission denial, sanitized dispatch errors, Ktor
+`MockEngine` dispatch, and concurrent single-send protection.
