@@ -9,8 +9,26 @@ import org.jetbrains.exposed.v1.r2dbc.R2dbcTransaction
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
 import org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.transactionManager
+import kotlin.coroutines.cancellation.CancellationException
 
 private object WithTablesLogger : KLogging()
+
+internal fun suppressCleanupFailures(
+    statementFailure: Throwable,
+    cleanupFailure: Throwable,
+    recoveryFailure: Throwable?,
+) {
+    if (statementFailure is CancellationException) {
+        WithTablesLogger.log.warn(cleanupFailure) { "Failed to drop tables after cancellation" }
+        recoveryFailure?.let {
+            WithTablesLogger.log.warn(it) { "Failed to recover table cleanup after cancellation" }
+        }
+        return
+    }
+
+    statementFailure.addSuppressed(cleanupFailure)
+    recoveryFailure?.let(statementFailure::addSuppressed)
+}
 
 /**
  * 테스트 실행 전/후 테이블을 생성/정리하면서 [statement]를 수행합니다.
@@ -30,7 +48,13 @@ suspend fun withTables(
     statement: suspend R2dbcTransaction.(TestDB) -> Unit,
 ) {
     withDb(testDB, configure = configure) {
-        runCatching { SchemaUtils.drop(*tables) }
+        try {
+            SchemaUtils.drop(*tables)
+        } catch (ex: CancellationException) {
+            throw ex
+        } catch (_: Throwable) {
+            // Ignore stale table cleanup failures before the test schema is created.
+        }
         SchemaUtils.create(*tables)
         commit()
 
@@ -38,6 +62,9 @@ suspend fun withTables(
         try {
             statement(testDB)
             commit()
+        } catch (ex: CancellationException) {
+            statementFailure = ex
+            throw ex
         } catch (ex: Throwable) {
             statementFailure = ex
             throw ex
@@ -45,10 +72,19 @@ suspend fun withTables(
             try {
                 SchemaUtils.drop(*tables)
                 commit()
+            } catch (ex: CancellationException) {
+                if (statementFailure is CancellationException) {
+                    WithTablesLogger.log.warn(ex) { "Table cleanup was cancelled after statement cancellation" }
+                    throw statementFailure
+                }
+                statementFailure?.let(ex::addSuppressed)
+                throw ex
             } catch (ex: Throwable) {
-                WithTablesLogger.log.warn(ex) { "Failed to drop tables" }
+                if (statementFailure !is CancellationException) {
+                    WithTablesLogger.log.warn(ex) { "Failed to drop tables" }
+                }
                 val database = testDB.db.requireNotNull("testDB.db")
-                val recoveryFailure = runCatching {
+                val recoveryFailure = try {
                     inTopLevelSuspendTransaction(
                         transactionIsolation = database.transactionManager.defaultIsolationLevel!!,
                         db = database,
@@ -56,11 +92,24 @@ suspend fun withTables(
                         maxAttempts = 1
                         SchemaUtils.drop(*tables)
                     }
-                }.exceptionOrNull()
+                    null
+                } catch (recoveryCancellation: CancellationException) {
+                    if (statementFailure is CancellationException) {
+                        WithTablesLogger.log.warn(ex) { "Failed to drop tables after cancellation" }
+                        WithTablesLogger.log.warn(recoveryCancellation) {
+                            "Table cleanup recovery was cancelled after statement cancellation"
+                        }
+                        throw statementFailure
+                    }
+                    statementFailure?.let(recoveryCancellation::addSuppressed)
+                    recoveryCancellation.addSuppressed(ex)
+                    throw recoveryCancellation
+                } catch (recoveryException: Throwable) {
+                    recoveryException
+                }
 
                 if (statementFailure != null) {
-                    statementFailure.addSuppressed(ex)
-                    recoveryFailure?.let(statementFailure::addSuppressed)
+                    suppressCleanupFailures(statementFailure, ex, recoveryFailure)
                 } else if (recoveryFailure != null) {
                     throw recoveryFailure
                 }
