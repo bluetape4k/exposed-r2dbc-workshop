@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820" role="img" aria-labelledby="title desc">
+  <title id="title">Tenant onboarding R2DBC flow</title>
+  <desc id="desc">Spring WebFlux tenant onboarding reserves metadata, provisions an R2DBC pool, creates Exposed schema, registers runtime resources, and routes actor requests to the active tenant database.</desc>
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.16"/>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#334155"/>
+    </marker>
+    <style>
+      .bg { fill: #f8fafc; }
+      .title { font-family: Arial, Helvetica, sans-serif; font-size: 36px; font-weight: 700; fill: #0f172a; }
+      .subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 18px; fill: #475569; }
+      .card { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; filter: url(#shadow); }
+      .card-blue { fill: #eff6ff; stroke: #60a5fa; }
+      .card-green { fill: #ecfdf5; stroke: #34d399; }
+      .card-amber { fill: #fffbeb; stroke: #f59e0b; }
+      .card-red { fill: #fff1f2; stroke: #fb7185; }
+      .label { font-family: Arial, Helvetica, sans-serif; font-size: 22px; font-weight: 700; fill: #0f172a; }
+      .body { font-family: Arial, Helvetica, sans-serif; font-size: 16px; fill: #334155; }
+      .small { font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #475569; }
+      .arrow { stroke: #334155; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .dash { stroke-dasharray: 8 8; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1400" height="820"/>
+  <text class="title" x="70" y="72">Tenant Onboarding with Exposed R2DBC</text>
+  <text class="subtitle" x="70" y="106">Runtime tenant creation: reserve metadata, provision isolated resources, seed schema, then route requests by X-TENANT-ID.</text>
+
+  <rect class="card card-blue" x="70" y="160" width="260" height="132" rx="10"/>
+  <text class="label" x="100" y="205">Admin API</text>
+  <text class="body" x="100" y="238">POST /api/tenants</text>
+  <text class="small" x="100" y="264">X-ADMIN-TOKEN guard</text>
+
+  <rect class="card" x="405" y="160" width="260" height="132" rx="10"/>
+  <text class="label" x="435" y="205">Registry</text>
+  <text class="body" x="435" y="238">reserve PROVISIONING</text>
+  <text class="small" x="435" y="264">metadata + duplicate gate</text>
+
+  <rect class="card card-green" x="740" y="160" width="260" height="132" rx="10"/>
+  <text class="label" x="770" y="205">Provisioner</text>
+  <text class="body" x="770" y="238">create pool + database</text>
+  <text class="small" x="770" y="264">timeout + mutex controlled</text>
+
+  <rect class="card card-amber" x="1075" y="160" width="260" height="132" rx="10"/>
+  <text class="label" x="1105" y="205">Tenant DB</text>
+  <text class="body" x="1105" y="238">SchemaUtils.create</text>
+  <text class="small" x="1105" y="264">seed actor/movie rows</text>
+
+  <path class="arrow" d="M330 226 H392"/>
+  <path class="arrow" d="M665 226 H727"/>
+  <path class="arrow" d="M1000 226 H1062"/>
+
+  <rect class="card card-green" x="405" y="390" width="260" height="132" rx="10"/>
+  <text class="label" x="435" y="435">Runtime Registry</text>
+  <text class="body" x="435" y="468">register tenant pool</text>
+  <text class="small" x="435" y="494">dispose on cleanup/shutdown</text>
+
+  <rect class="card" x="740" y="390" width="260" height="132" rx="10"/>
+  <text class="label" x="770" y="435">Active Tenant</text>
+  <text class="body" x="770" y="468">mark ACTIVE</text>
+  <text class="small" x="770" y="494">ready for routed requests</text>
+
+  <rect class="card card-blue" x="70" y="610" width="260" height="132" rx="10"/>
+  <text class="label" x="100" y="655">Actor API</text>
+  <text class="body" x="100" y="688">GET /actors</text>
+  <text class="small" x="100" y="714">X-TENANT-ID required</text>
+
+  <rect class="card" x="405" y="610" width="260" height="132" rx="10"/>
+  <text class="label" x="435" y="655">Routing Factory</text>
+  <text class="body" x="435" y="688">resolve Reactor context</text>
+  <text class="small" x="435" y="714">select tenant pool</text>
+
+  <rect class="card card-red" x="1075" y="390" width="260" height="132" rx="10"/>
+  <text class="label" x="1105" y="435">Failure Cleanup</text>
+  <text class="body" x="1105" y="468">drop schema + close pool</text>
+  <text class="small" x="1105" y="494">remove registry row</text>
+
+  <path class="arrow" d="M1205 292 V338 H535 V376"/>
+  <path class="arrow" d="M665 456 H727"/>
+  <path class="arrow" d="M330 676 H392"/>
+  <path class="arrow" d="M535 610 V536"/>
+  <path class="arrow" d="M665 676 C800 676 820 522 740 486"/>
+  <path class="arrow dash" d="M870 292 V338 C870 374 1000 382 1062 420"/>
+  <path class="arrow dash" d="M1205 292 V376"/>
+
+  <text class="small" x="725" y="576">Routed reads use only ACTIVE runtime resources.</text>
+  <text class="small" x="1088" y="560">Any provisioning exception removes partial state.</text>
+</svg>

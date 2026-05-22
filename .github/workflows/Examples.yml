@@ -6,6 +6,7 @@ on:
     paths:
       - '10-multi-tenant/04-connection-factory-per-tenant-spring-webflux/**'
       - '10-multi-tenant/05-spring-security-tenant-authorization-spring-webflux/**'
+      - '10-multi-tenant/06-tenant-onboarding-spring-webflux/**'
       - '12-production-integration/**'
       - '00-shared/**'
       - 'build.gradle.kts'
@@ -19,6 +20,7 @@ on:
     paths:
       - '10-multi-tenant/04-connection-factory-per-tenant-spring-webflux/**'
       - '10-multi-tenant/05-spring-security-tenant-authorization-spring-webflux/**'
+      - '10-multi-tenant/06-tenant-onboarding-spring-webflux/**'
       - '12-production-integration/**'
       - '00-shared/**'
       - 'build.gradle.kts'
@@ -62,6 +64,7 @@ jobs:
           ./gradlew
           :04-connection-factory-per-tenant-spring-webflux:test
           :05-spring-security-tenant-authorization-spring-webflux:test
+          :06-tenant-onboarding-spring-webflux:test
           "-PuseDB=H2"
           --continue
 
@@ -75,6 +78,8 @@ jobs:
             10-multi-tenant/04-connection-factory-per-tenant-spring-webflux/build/reports/tests/test/
             10-multi-tenant/05-spring-security-tenant-authorization-spring-webflux/build/test-results/test/*.xml
             10-multi-tenant/05-spring-security-tenant-authorization-spring-webflux/build/reports/tests/test/
+            10-multi-tenant/06-tenant-onboarding-spring-webflux/build/test-results/test/*.xml
+            10-multi-tenant/06-tenant-onboarding-spring-webflux/build/reports/tests/test/
           retention-days: 7
 
   chapter-12:

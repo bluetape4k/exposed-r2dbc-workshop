@@ -86,7 +86,7 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 5. JPA 변환: [07-jpa-convert/01-convert-jpa-basic](07-jpa-convert/01-convert-jpa-basic/README.md)
 6. Coroutines / Virtual Threads: [08-r2dbc-coroutines](08-r2dbc-coroutines/01-exposed-r2dbc-coroutines-basic/README.md)
 7. Spring Repository / Cache: [09-spring](09-spring/05-exposed-r2dbc-repository-coroutines/README.md)
-8. 멀티테넌시 / 고성능: [10-multi-tenant](10-multi-tenant/03-multitenant-spring-webflux/README.md), [11-high-performance](11-high-performance/README.md)
+8. 멀티테넌시 / 고성능: [10-multi-tenant](10-multi-tenant/06-tenant-onboarding-spring-webflux/README.ko.md), [11-high-performance](11-high-performance/README.ko.md)
 9. Production integration: [12-production-integration](12-production-integration/README.ko.md)
 
 ## 모듈 맵
@@ -103,7 +103,7 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 | `07-jpa-convert`         | JPA 패턴을 Exposed R2DBC로 전환                     | [JPA Convert](07-jpa-convert/01-convert-jpa-basic/README.md)                  |
 | `08-r2dbc-coroutines`    | Coroutines, Flow, Virtual Threads             | [Coroutines](08-r2dbc-coroutines/01-exposed-r2dbc-coroutines-basic/README.md) |
 | `09-spring`              | Repository 패턴, Redis 기반 suspended cache       | [Spring Examples](09-spring/05-exposed-r2dbc-repository-coroutines/README.md) |
-| `10-multi-tenant`        | Schema 기반 멀티테넌시 + WebFlux                     | [Multi-tenant](10-multi-tenant/03-multitenant-spring-webflux/README.md)       |
+| `10-multi-tenant`        | Schema, connection-factory, authorization, onboarding 멀티테넌시 + WebFlux | [Tenant Onboarding](10-multi-tenant/06-tenant-onboarding-spring-webflux/README.ko.md) |
 | `11-high-performance`    | 캐시 전략, routing datasource, read/write 분리      | [High Performance](11-high-performance/README.md)                             |
 | `12-production-integration` | Spring Boot 4/Ktor production service patterns   | [Production Integration](12-production-integration/README.ko.md)              |
 
@@ -115,6 +115,8 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
   Lettuce coroutine cache와 Exposed repository 조합
 - [10-multi-tenant/03-multitenant-spring-webflux](10-multi-tenant/03-multitenant-spring-webflux/README.md)
   Reactor Context + Coroutine Context 기반 tenant 전파
+- [10-multi-tenant/06-tenant-onboarding-spring-webflux](10-multi-tenant/06-tenant-onboarding-spring-webflux/README.ko.md)
+  런타임 tenant metadata 예약, R2DBC pool provisioning, 실패 cleanup
 - [11-high-performance/03-routing-datasource](11-high-performance/03-routing-datasource/README.md)
 - [12-production-integration](12-production-integration/README.ko.md)
   tenant + read/write 분리 라우팅
