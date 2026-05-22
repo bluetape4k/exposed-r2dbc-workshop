@@ -97,3 +97,15 @@ degraded marker is cleared.
 ./gradlew projects
 repo-test-summary -- ./gradlew :01-spring-production-integration:test :02-ktor-production-integration:test
 ```
+
+Verification coverage is split deliberately:
+
+- `settings.gradle.kts` discovers both chapter 12 leaf modules through
+  `includeModules("12-production-integration", false, false)`.
+- `.github/workflows/Examples.yml` runs focused H2 tests for both chapter 12
+  modules whenever chapter 12 files, root README files, or README diagram
+  assets change.
+- The main CI workflow still runs repository-wide build, detekt, and DB matrix
+  tests for non-doc code changes elsewhere in the repository. Nightly keeps the
+  full repository H2 test and DB shard coverage, so chapter 12 remains covered
+  by the normal `test` task path.
