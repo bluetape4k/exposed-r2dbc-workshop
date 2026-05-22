@@ -21,6 +21,7 @@ dependencies {
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)
     implementation(libs.ktor.client.content.negotiation)
+    implementation("org.springframework.security:spring-security-crypto")
 
     runtimeOnly(libs.h2.v2)
     runtimeOnly(libs.r2dbc.h2)

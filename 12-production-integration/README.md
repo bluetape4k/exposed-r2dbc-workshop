@@ -11,12 +11,16 @@ surfaces each framework expects.
 
 | Module | Stack | Focus |
 |---|---|---|
-| [`01-spring-production-integration`](01-spring-production-integration/) | Spring Boot 4 WebFlux | Controller/service/repository boundaries, SSE replay, structured errors, readiness |
-| [`02-ktor-production-integration`](02-ktor-production-integration/) | Ktor 3 | Routing, sessions/authentication, WebSockets, MockEngine outbound dispatch, readiness |
+| [`01-spring-production-integration`](01-spring-production-integration/) | Spring Boot 4 WebFlux | WebFlux Security, controller/service/repository boundaries, SSE replay, structured errors, readiness |
+| [`02-ktor-production-integration`](02-ktor-production-integration/) | Ktor 3 | Ktor Authentication/Sessions, WebSockets, MockEngine outbound dispatch, readiness |
 
 ## Application Architecture
 
 ![Chapter 12 production application architecture](../docs/assets/readme-diagrams/issue-44-production-architecture-r2dbc-01.png)
+
+## Authentication And Sessions
+
+![Chapter 12 authentication and session metadata](../docs/assets/readme-diagrams/issue-45-auth-session-r2dbc-01.png)
 
 ## Topic Map
 
@@ -32,6 +36,11 @@ surfaces each framework expects.
 ## Production Contracts
 
 - Database access runs through Exposed R2DBC `suspendTransaction`.
+- Passwords are stored as BCrypt hashes, and session tables store only SHA-256
+  token hashes. Raw session tokens are returned only when a session is created.
+- Public registration permission/role clamping grants only `work:create` and
+  `USER`; admin/outbound access comes from the seeded admin account so the auth
+  slice cannot self-register privileged users.
 - App-boundary tests use H2 R2DBC for predictable Spring/Ktor startup.
 - Duplicate idempotency keys return HTTP 409 with a structured conflict error.
 - Realtime examples persist events before delivery and support cursor replay.

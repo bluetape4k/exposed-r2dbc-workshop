@@ -9,6 +9,9 @@ data class RegisterAccountRequest(
     val username: String,
     val apiKey: String,
     val permission: String,
+    val password: String = "password",
+    val displayName: String = username,
+    val roles: Set<String> = setOf("USER"),
 ): Serializable {
     companion object {
         private const val serialVersionUID: Long = 1L
@@ -46,8 +49,47 @@ data class EnqueueOutboundRequest(
 data class AccountView(
     val id: String,
     val username: String,
+    val displayName: String,
     val permission: String,
-    val sessionToken: String,
+    val roles: Set<String>,
+): Serializable {
+    companion object {
+        private const val serialVersionUID: Long = 1L
+    }
+}
+
+/**
+ * Authenticated profile returned by the Spring Security slice.
+ */
+data class AuthProfileView(
+    val username: String,
+    val displayName: String,
+    val roles: Set<String>,
+): Serializable {
+    companion object {
+        private const val serialVersionUID: Long = 1L
+    }
+}
+
+/**
+ * Session metadata persisted by the authentication slice.
+ */
+data class SessionView(
+    val token: String?,
+    val username: String,
+    val issuedAtEpochMs: Long,
+    val expiresAtEpochMs: Long,
+): Serializable {
+    companion object {
+        private const val serialVersionUID: Long = 1L
+    }
+}
+
+/**
+ * Collection wrapper for persisted session metadata.
+ */
+data class SessionsView(
+    val sessions: List<SessionView>,
 ): Serializable {
     companion object {
         private const val serialVersionUID: Long = 1L
@@ -127,3 +169,26 @@ data class StructuredError(
 class DuplicateIdempotencyKeyException(
     key: String,
 ): RuntimeException("Duplicate idempotency key: $key")
+
+/**
+ * Signals a role mismatch after authentication succeeds.
+ */
+class PermissionDeniedException(
+    permission: String,
+): RuntimeException("$permission permission is required")
+
+/**
+ * Repository-owned authentication account.
+ */
+data class AuthAccount(
+    val id: String,
+    val username: String,
+    val passwordHash: String,
+    val displayName: String,
+    val permission: String,
+    val roles: Set<String>,
+): Serializable {
+    companion object {
+        private const val serialVersionUID: Long = 1L
+    }
+}

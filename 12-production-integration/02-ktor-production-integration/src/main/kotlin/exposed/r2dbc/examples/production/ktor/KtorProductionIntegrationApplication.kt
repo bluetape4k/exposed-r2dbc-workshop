@@ -2,12 +2,14 @@ package exposed.r2dbc.examples.production.ktor
 
 import exposed.r2dbc.examples.production.ktor.app.KtorProductionRepository
 import exposed.r2dbc.examples.production.ktor.app.StructuredError
+import exposed.r2dbc.examples.production.ktor.app.AuthPrincipal
 import exposed.r2dbc.examples.production.ktor.config.installProductionKtorPlugins
 import exposed.r2dbc.examples.production.ktor.routes.productionRoutes
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.auth.Authentication
+import io.ktor.server.auth.basic
 import io.ktor.server.auth.session
 import io.ktor.server.response.respond
 import io.ktor.server.sessions.Sessions
@@ -26,12 +28,26 @@ fun Application.productionIntegrationModule(
     installProductionKtorPlugins()
     install(Sessions) {
         cookie<UserSession>("production_session") {
+            cookie.path = "/"
+            cookie.httpOnly = true
+            cookie.maxAgeInSeconds = 60 * 60
+            cookie.extensions["SameSite"] = "Lax"
             transform(SessionTransportTransformerMessageAuthentication(SessionSigningKey))
         }
     }
     install(Authentication) {
+        basic("auth-basic") {
+            realm = "production-integration"
+            validate { credentials ->
+                repository.authenticate(credentials.name, credentials.password)
+                    ?.let { AuthPrincipal(it.username, it.displayName, it.permission, it.roles) }
+            }
+        }
         session<UserSession>("auth-session") {
-            validate { session -> session }
+            validate { session ->
+                repository.findSessionByToken(session.token)
+                    ?.let { session }
+            }
             challenge {
                 call.respond(
                     HttpStatusCode.Unauthorized,

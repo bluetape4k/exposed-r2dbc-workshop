@@ -1,12 +1,15 @@
 package exposed.r2dbc.examples.production.ktor
 
 import exposed.r2dbc.examples.production.ktor.app.AccountView
+import exposed.r2dbc.examples.production.ktor.app.AuthProfileView
 import exposed.r2dbc.examples.production.ktor.app.CreateWorkItemRequest
 import exposed.r2dbc.examples.production.ktor.app.EnqueueOutboundRequest
 import exposed.r2dbc.examples.production.ktor.app.KtorProductionRepository
 import exposed.r2dbc.examples.production.ktor.app.OutboundRequestView
 import exposed.r2dbc.examples.production.ktor.app.ReadinessView
 import exposed.r2dbc.examples.production.ktor.app.RegisterAccountRequest
+import exposed.r2dbc.examples.production.ktor.app.SessionView
+import exposed.r2dbc.examples.production.ktor.app.SessionsView
 import exposed.r2dbc.examples.production.ktor.app.StructuredError
 import exposed.r2dbc.examples.production.ktor.app.WorkItemView
 import exposed.r2dbc.examples.production.ktor.outbound.KtorOutboundDispatcher
@@ -21,9 +24,11 @@ import io.ktor.client.plugins.cookies.HttpCookies
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.plugins.websocket.webSocket
 import io.ktor.client.request.get
+import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
@@ -33,6 +38,7 @@ import io.ktor.websocket.readText
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import java.util.Base64
 import java.util.UUID
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -49,18 +55,129 @@ class KtorProductionIntegrationApplicationTest {
 
         val account = client.post("/production/accounts") {
             contentType(ContentType.Application.Json)
-            setBody(RegisterAccountRequest("alice", "ktor-key", "work:create"))
+            setBody(RegisterAccountRequest("operator", "ktor-key", "work:create"))
         }.body<AccountView>()
 
-        account.username shouldBeEqualTo "alice"
+        account.username shouldBeEqualTo "operator"
+        account.roles shouldBeEqualTo setOf("USER")
         repository.hasPermission("ktor-key", "work:create") shouldBeEqualTo true
+
+        client.post("/production/sessions") {
+            basic("operator", "password")
+        }.status shouldBeEqualTo HttpStatusCode.OK
 
         val workItem = client.post("/production/work-items") {
             contentType(ContentType.Application.Json)
-            setBody(CreateWorkItemRequest("alice", "ship order"))
+            setBody(CreateWorkItemRequest("operator", "ship order"))
         }.body<WorkItemView>()
 
         workItem.status shouldBeEqualTo "ACCEPTED"
+    }
+
+    @Test
+    fun `missing and invalid basic credentials are rejected`() = testApplication {
+        val repository = newRepository("basic-auth")
+        repository.reset()
+        application {
+            productionIntegrationModule(repository)
+        }
+        val client = createJsonClient()
+
+        client.get("/production/profile").status shouldBeEqualTo HttpStatusCode.Unauthorized
+        client.get("/production/profile") {
+            basic("alice", "wrong")
+        }.status shouldBeEqualTo HttpStatusCode.Unauthorized
+    }
+
+    @Test
+    fun `basic credentials expose profile and deny non-admin access`() = testApplication {
+        val repository = newRepository("roles")
+        repository.reset()
+        application {
+            productionIntegrationModule(repository)
+        }
+        val client = createJsonClient()
+
+        val profile = client.get("/production/profile") {
+            basic("alice", "password")
+        }.body<AuthProfileView>()
+
+        profile.roles shouldBeEqualTo setOf("USER")
+
+        client.get("/production/admin") {
+            basic("alice", "password")
+        }.status shouldBeEqualTo HttpStatusCode.Forbidden
+    }
+
+    @Test
+    fun `admin credentials access protected admin endpoint`() = testApplication {
+        val repository = newRepository("admin")
+        repository.reset()
+        application {
+            productionIntegrationModule(repository)
+        }
+        val client = createJsonClient()
+
+        val profile = client.get("/production/admin") {
+            basic("admin", "password")
+        }.body<AuthProfileView>()
+
+        profile.roles shouldBeEqualTo setOf("ADMIN", "USER")
+    }
+
+    @Test
+    fun `public registration cannot grant admin role`() = testApplication {
+        val repository = newRepository("self-admin")
+        repository.reset()
+        application {
+            productionIntegrationModule(repository)
+        }
+        val client = createJsonClient()
+
+        val account = client.post("/production/accounts") {
+            contentType(ContentType.Application.Json)
+            setBody(
+                RegisterAccountRequest(
+                    username = "self-admin",
+                    apiKey = "self-admin-key",
+                    permission = "outbound:create",
+                    password = "password",
+                    displayName = "Self Admin",
+                    roles = setOf("ADMIN", "USER"),
+                )
+            )
+        }.body<AccountView>()
+
+        account.roles shouldBeEqualTo setOf("USER")
+        account.permission shouldBeEqualTo "work:create"
+
+        client.get("/production/admin") {
+            basic("self-admin", "password")
+        }.status shouldBeEqualTo HttpStatusCode.Forbidden
+    }
+
+    @Test
+    fun `authenticated users persist session metadata without listing raw tokens`() = testApplication {
+        val repository = newRepository("sessions")
+        repository.reset()
+        application {
+            productionIntegrationModule(repository)
+        }
+        val client = createJsonClient()
+
+        val created = client.post("/production/sessions") {
+            basic("alice", "password")
+        }.body<SessionView>()
+
+        created.username shouldBeEqualTo "alice"
+        requireNotNull(created.token)
+        (created.expiresAtEpochMs > created.issuedAtEpochMs) shouldBeEqualTo true
+
+        val sessions = client.get("/production/sessions") {
+            basic("alice", "password")
+        }.body<SessionsView>()
+        val listed = sessions.sessions.single { it.username == "alice" }
+        listed.token shouldBeEqualTo null
     }
 
     @Test
@@ -79,9 +196,8 @@ class KtorProductionIntegrationApplicationTest {
             install(WebSockets)
         }
 
-        client.post("/production/accounts") {
-            contentType(ContentType.Application.Json)
-            setBody(RegisterAccountRequest("alice", "ktor-key", "work:create"))
+        client.post("/production/sessions") {
+            basic("alice", "password")
         }
         client.post("/production/work-items") {
             contentType(ContentType.Application.Json)
@@ -105,9 +221,8 @@ class KtorProductionIntegrationApplicationTest {
         }
         val client = createJsonClient()
 
-        client.post("/production/accounts") {
-            contentType(ContentType.Application.Json)
-            setBody(RegisterAccountRequest("alice", "ktor-key", "work:create"))
+        client.post("/production/sessions") {
+            basic("alice", "password")
         }
 
         val error = client.post("/production/work-items") {
@@ -165,9 +280,8 @@ class KtorProductionIntegrationApplicationTest {
         val client = createJsonClient()
         val request = EnqueueOutboundRequest("payment-1", "https://example.test/payments", "payload")
 
-        client.post("/production/accounts") {
-            contentType(ContentType.Application.Json)
-            setBody(RegisterAccountRequest("outbound", "outbound-key", "outbound:create"))
+        client.post("/production/sessions") {
+            basic("admin", "password")
         }
 
         client.post("/production/outbound") {
@@ -185,6 +299,28 @@ class KtorProductionIntegrationApplicationTest {
     }
 
     @Test
+    fun `session without outbound permission is denied`() = testApplication {
+        val repository = newRepository("outbound-denied")
+        repository.reset()
+        application {
+            productionIntegrationModule(repository)
+        }
+        val client = createJsonClient()
+
+        client.post("/production/sessions") {
+            basic("alice", "password")
+        }.status shouldBeEqualTo HttpStatusCode.OK
+
+        val denied = client.post("/production/outbound") {
+            contentType(ContentType.Application.Json)
+            setBody(EnqueueOutboundRequest("payment-denied", "https://example.test/payments", "payload"))
+        }
+
+        denied.status shouldBeEqualTo HttpStatusCode.Forbidden
+        denied.body<StructuredError>().code shouldBeEqualTo "FORBIDDEN"
+    }
+
+    @Test
     fun `invalid outbound target URL returns structured validation error`() = testApplication {
         val repository = newRepository("invalid-target")
         repository.reset()
@@ -193,9 +329,8 @@ class KtorProductionIntegrationApplicationTest {
         }
         val client = createJsonClient()
 
-        client.post("/production/accounts") {
-            contentType(ContentType.Application.Json)
-            setBody(RegisterAccountRequest("outbound", "outbound-key", "outbound:create"))
+        client.post("/production/sessions") {
+            basic("admin", "password")
         }
 
         val error = client.post("/production/outbound") {
@@ -257,4 +392,9 @@ class KtorProductionIntegrationApplicationTest {
             }
             install(HttpCookies)
         }
+
+    private fun io.ktor.client.request.HttpRequestBuilder.basic(username: String, password: String) {
+        val encoded = Base64.getEncoder().encodeToString("$username:$password".toByteArray())
+        header(HttpHeaders.Authorization, "Basic $encoded")
+    }
 }

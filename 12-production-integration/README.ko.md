@@ -10,12 +10,16 @@ diagnostics 경계는 각 프레임워크의 자연스러운 방식으로 보여
 
 | 모듈 | 스택 | 초점 |
 |---|---|---|
-| [`01-spring-production-integration`](01-spring-production-integration/) | Spring Boot 4 WebFlux | Controller/service/repository 경계, SSE replay, structured errors, readiness |
-| [`02-ktor-production-integration`](02-ktor-production-integration/) | Ktor 3 | Routing, sessions/authentication, WebSockets, MockEngine outbound dispatch, readiness |
+| [`01-spring-production-integration`](01-spring-production-integration/) | Spring Boot 4 WebFlux | WebFlux Security, controller/service/repository 경계, SSE replay, structured errors, readiness |
+| [`02-ktor-production-integration`](02-ktor-production-integration/) | Ktor 3 | Ktor Authentication/Sessions, WebSockets, MockEngine outbound dispatch, readiness |
 
 ## Application Architecture
 
 ![Chapter 12 production application architecture](../docs/assets/readme-diagrams/issue-44-production-architecture-r2dbc-01.png)
+
+## Authentication And Sessions
+
+![Chapter 12 authentication and session metadata](../docs/assets/readme-diagrams/issue-45-auth-session-r2dbc-01.png)
 
 ## 이슈별 주제 맵
 
@@ -31,6 +35,11 @@ diagnostics 경계는 각 프레임워크의 자연스러운 방식으로 보여
 ## Production 계약
 
 - Database access는 Exposed R2DBC `suspendTransaction` 안에서 실행합니다.
+- Password는 BCrypt hash로 저장하고, session table은 SHA-256 token hash만
+  저장합니다. Raw session token은 session 생성 시점에만 반환합니다.
+- Public registration은 `work:create` permission과 `USER` role만 부여합니다.
+  Admin/outbound access는 seeded admin account에서만 오므로 auth slice에서
+  privileged user를 self-register할 수 없습니다.
 - App-boundary test는 Spring/Ktor bootstrap을 예측 가능하게 유지하기 위해 H2
   R2DBC를 사용합니다.
 - 중복 idempotency key는 두 스택 모두 HTTP 409와 structured conflict error를
