@@ -9,10 +9,14 @@ on:
       - '10-multi-tenant/05-spring-security-tenant-authorization-spring-webflux/**'
       - '10-multi-tenant/06-tenant-onboarding-spring-webflux/**'
       - '10-multi-tenant/07-multitenant-ktor/**'
+      - '11-high-performance/02-cache-strategies-r2dbc/**'
+      - '11-high-performance/03-routing-datasource/**'
+      - '11-high-performance/04-cache-strategies-ktor-r2dbc/**'
       - '12-production-integration/**'
       - 'README.md'
       - 'README.ko.md'
       - 'docs/assets/readme-diagrams/**'
+      - 'docs/images/readme-diagrams/**'
       - '00-shared/**'
       - 'build.gradle.kts'
       - 'settings.gradle.kts'
@@ -28,10 +32,14 @@ on:
       - '10-multi-tenant/05-spring-security-tenant-authorization-spring-webflux/**'
       - '10-multi-tenant/06-tenant-onboarding-spring-webflux/**'
       - '10-multi-tenant/07-multitenant-ktor/**'
+      - '11-high-performance/02-cache-strategies-r2dbc/**'
+      - '11-high-performance/03-routing-datasource/**'
+      - '11-high-performance/04-cache-strategies-ktor-r2dbc/**'
       - '12-production-integration/**'
       - 'README.md'
       - 'README.ko.md'
       - 'docs/assets/readme-diagrams/**'
+      - 'docs/images/readme-diagrams/**'
       - '00-shared/**'
       - 'build.gradle.kts'
       - 'settings.gradle.kts'
@@ -96,6 +104,47 @@ jobs:
             10-multi-tenant/06-tenant-onboarding-spring-webflux/build/reports/tests/test/
             10-multi-tenant/07-multitenant-ktor/build/test-results/test/*.xml
             10-multi-tenant/07-multitenant-ktor/build/reports/tests/test/
+          retention-days: 7
+
+  chapter-11:
+    name: Chapter 11 high-performance examples
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-java@v5
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: wrapper
+          cache-read-only: ${{ github.event_name == 'pull_request' }}
+
+      - name: Run high-performance examples
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+        run: >-
+          ./gradlew
+          :02-cache-strategies-r2dbc:test
+          :03-routing-datasource:test
+          :04-cache-strategies-ktor-r2dbc:test
+          "-PuseDB=H2"
+          --continue
+
+      - name: Upload chapter 11 example test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: chapter-11-example-test-results
+          path: |
+            11-high-performance/02-cache-strategies-r2dbc/build/test-results/test/*.xml
+            11-high-performance/02-cache-strategies-r2dbc/build/reports/tests/test/
+            11-high-performance/03-routing-datasource/build/test-results/test/*.xml
+            11-high-performance/03-routing-datasource/build/reports/tests/test/
+            11-high-performance/04-cache-strategies-ktor-r2dbc/build/test-results/test/*.xml
+            11-high-performance/04-cache-strategies-ktor-r2dbc/build/reports/tests/test/
           retention-days: 7
 
   chapter-12:

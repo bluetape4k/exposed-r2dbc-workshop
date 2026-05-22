@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
+  <title id="title">Ktor R2DBC cache strategy flow</title>
+  <desc id="desc">A Ktor route reads a Redisson cache, falls back to Exposed R2DBC, refreshes cache on writes, and exposes local counters.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f7f8fb; }
+      .band { fill: #ffffff; stroke: #c8d0dc; stroke-width: 2; }
+      .head { fill: #123047; font: 700 30px Arial, sans-serif; }
+      .sub { fill: #425466; font: 18px Arial, sans-serif; }
+      .label { fill: #12263a; font: 700 21px Arial, sans-serif; }
+      .text { fill: #35495e; font: 16px Arial, sans-serif; }
+      .small { fill: #52677a; font: 14px Arial, sans-serif; }
+      .box1 { fill: #e8f4ff; stroke: #3d8ed6; stroke-width: 2; }
+      .box2 { fill: #eaf8ef; stroke: #3aa76d; stroke-width: 2; }
+      .box3 { fill: #fff4dd; stroke: #d99b24; stroke-width: 2; }
+      .box4 { fill: #f2ecff; stroke: #7d5bd8; stroke-width: 2; }
+      .arrow { stroke: #52677a; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .dash { stroke: #52677a; stroke-width: 3; fill: none; stroke-dasharray: 10 8; marker-end: url(#arrow); }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#52677a"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1400" height="760"/>
+  <text x="70" y="70" class="head">Ktor R2DBC Cache Strategies</text>
+  <text x="70" y="105" class="sub">Read-through, write refresh, explicit invalidation, and DB fallback without Spring request infrastructure</text>
+
+  <rect x="70" y="150" width="1260" height="500" rx="8" class="band"/>
+
+  <rect x="110" y="220" width="230" height="150" rx="8" class="box1"/>
+  <text x="135" y="265" class="label">Ktor Routes</text>
+  <text x="135" y="300" class="text">GET /users/{id}</text>
+  <text x="135" y="325" class="text">POST /users</text>
+  <text x="135" y="350" class="text">DELETE /users/cache</text>
+
+  <rect x="420" y="200" width="250" height="190" rx="8" class="box4"/>
+  <text x="445" y="245" class="label">Cache Repository</text>
+  <text x="445" y="280" class="text">CacheReadResult</text>
+  <text x="445" y="305" class="text">HIT / MISS / NOT_FOUND</text>
+  <text x="445" y="330" class="text">WRITTEN on create/update</text>
+  <text x="445" y="355" class="small">single cache read before DB fallback</text>
+
+  <rect x="760" y="180" width="230" height="150" rx="8" class="box2"/>
+  <text x="785" y="225" class="label">Redisson RMap</text>
+  <text x="785" y="260" class="text">cache name per app/test</text>
+  <text x="785" y="285" class="text">no TTL</text>
+  <text x="785" y="310" class="text">explicit invalidation</text>
+
+  <rect x="760" y="410" width="230" height="150" rx="8" class="box3"/>
+  <text x="785" y="455" class="label">Exposed R2DBC</text>
+  <text x="785" y="490" class="text">H2 R2DBC pool</text>
+  <text x="785" y="515" class="text">users table</text>
+  <text x="785" y="540" class="text">transactional fallback</text>
+
+  <rect x="1080" y="260" width="210" height="170" rx="8" class="box1"/>
+  <text x="1105" y="305" class="label">Local Stats</text>
+  <text x="1105" y="340" class="text">hits / misses</text>
+  <text x="1105" y="365" class="text">writes</text>
+  <text x="1105" y="390" class="text">invalidations</text>
+  <text x="1105" y="415" class="small">not stored in Redis</text>
+
+  <path d="M340 295 H420" class="arrow"/>
+  <path d="M670 255 H760" class="arrow"/>
+  <path d="M875 330 V410" class="dash"/>
+  <path d="M760 490 H670" class="dash"/>
+  <path d="M990 345 H1080" class="arrow"/>
+  <path d="M545 390 V575 H225 V370" class="arrow"/>
+
+  <text x="360" y="280" class="small">route call</text>
+  <text x="690" y="240" class="small">read/write key</text>
+  <text x="895" y="375" class="small">miss fallback</text>
+  <text x="555" y="600" class="small">structured JSON response</text>
+
+  <rect x="70" y="690" width="1260" height="1" fill="#c8d0dc"/>
+  <text x="70" y="720" class="small">#69 owns cancellation-aware population, single-flight loading, and concurrent suspend-call cache behavior.</text>
+</svg>
