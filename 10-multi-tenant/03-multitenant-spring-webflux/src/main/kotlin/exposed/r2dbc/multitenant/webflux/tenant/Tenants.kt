@@ -7,7 +7,7 @@ import org.jetbrains.exposed.v1.core.Schema
  */
 object Tenants {
 
-    /** 헤더가 없거나 비어 있을 때 사용할 기본 테넌트입니다. */
+    /** Default tenant used only by direct example calls outside the WebFlux request path. */
     val DEFAULT_TENANT = Tenant.KOREAN
 
     /**

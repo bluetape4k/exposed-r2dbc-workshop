@@ -4,16 +4,15 @@ import exposed.r2dbc.multitenant.webflux.AbstractMultitenantTest
 import exposed.r2dbc.multitenant.webflux.domain.model.ActorRecord
 import exposed.r2dbc.multitenant.webflux.tenant.TenantFilter
 import exposed.r2dbc.multitenant.webflux.tenant.TenantFilter.Companion.TENANT_HEADER
-import exposed.r2dbc.multitenant.webflux.tenant.Tenants
 import exposed.r2dbc.multitenant.webflux.tenant.Tenants.Tenant
-import io.bluetape4k.junit5.coroutines.runSuspendIO
-import io.bluetape4k.logging.coroutines.KLoggingChannel
-import io.bluetape4k.logging.debug
-import kotlinx.coroutines.reactive.awaitSingle
 import io.bluetape4k.assertions.shouldBeEqualTo
 import io.bluetape4k.assertions.shouldBeTrue
 import io.bluetape4k.assertions.shouldHaveSize
 import io.bluetape4k.assertions.shouldNotBeNull
+import io.bluetape4k.junit5.coroutines.runSuspendIO
+import io.bluetape4k.logging.coroutines.KLoggingChannel
+import io.bluetape4k.logging.debug
+import kotlinx.coroutines.reactive.awaitSingle
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.springframework.beans.factory.annotation.Autowired
@@ -93,25 +92,49 @@ class ActorControllerTest(
     }
 
     @org.junit.jupiter.api.Test
-    fun `tenant 헤더가 없으면 기본 tenant 조회와 동일하다`() = runSuspendIO {
-        val defaultTenant = Tenants.DEFAULT_TENANT
-        val actorWithHeader = client
+    fun `tenant schemas isolate actor data for the same id`() = runSuspendIO {
+        val koreanActor = client
             .get()
             .uri("/actors/2")
-            .header(TENANT_HEADER, defaultTenant.id)
-            .exchange()
-            .expectStatus().is2xxSuccessful
-            .returnResult<ActorRecord>().responseBody
-            .awaitSingle()
-        val actorWithoutHeader = client
-            .get()
-            .uri("/actors/2")
+            .header(TENANT_HEADER, Tenant.KOREAN.id)
             .exchange()
             .expectStatus().is2xxSuccessful
             .returnResult<ActorRecord>().responseBody
             .awaitSingle()
 
-        actorWithoutHeader.firstName shouldBeEqualTo actorWithHeader.firstName
+        val englishActor = client
+            .get()
+            .uri("/actors/2")
+            .header(TENANT_HEADER, Tenant.ENGLISH.id)
+            .exchange()
+            .expectStatus().is2xxSuccessful
+            .returnResult<ActorRecord>().responseBody
+            .awaitSingle()
+
+        koreanActor.id shouldBeEqualTo englishActor.id
+        koreanActor.firstName shouldBeEqualTo "브래드"
+        koreanActor.lastName shouldBeEqualTo "피트"
+        englishActor.firstName shouldBeEqualTo "Brad"
+        englishActor.lastName shouldBeEqualTo "Pitt"
+    }
+
+    @org.junit.jupiter.api.Test
+    fun `tenant 헤더가 없으면 400을 반환한다`() = runSuspendIO {
+        client
+            .get()
+            .uri("/actors")
+            .exchange()
+            .expectStatus().isBadRequest
+    }
+
+    @org.junit.jupiter.api.Test
+    fun `tenant 헤더가 빈 문자열이면 400을 반환한다`() = runSuspendIO {
+        client
+            .get()
+            .uri("/actors")
+            .header(TENANT_HEADER, "")
+            .exchange()
+            .expectStatus().isBadRequest
     }
 
     @org.junit.jupiter.api.Test

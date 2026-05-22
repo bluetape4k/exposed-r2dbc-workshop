@@ -76,6 +76,16 @@ src/main/kotlin/exposed/r2dbc/multitenant/webflux/
 | KOREAN  | `korean`  | `korean`  | 한국어 (조니 뎁, 글래디에이터 등)          |
 | ENGLISH | `english` | `english` | 영어 (Johnny Depp, Gladiator 등) |
 
+### 요청 테넌트 계약
+
+모든 테넌트 인식 요청은 `X-TENANT-ID` 헤더를 포함해야 합니다.
+
+| 상황 | 응답 |
+|------|------|
+| `X-TENANT-ID` 누락 또는 공백 | `400 Bad Request` |
+| 알 수 없는 테넌트 ID | `400 Bad Request` |
+| `korean` 또는 `english` | 해당 테넌트 스키마로 라우팅 |
+
 ## 멀티테넌시 격리 수준 옵션
 
 ### 1. Schema-based (이 예제)
@@ -139,7 +149,7 @@ WebFlux 환경에서는 요청마다 스레드가 고정되지 않으므로 `Thr
 
 ### 1. TenantFilter - 요청에서 테넌트 추출
 
-`WebFilter`가 HTTP 헤더 `X-TENANT-ID`를 읽어 `ReactorContext`에 `TenantId`를 저장합니다. 헤더가 없으면 기본 테넌트(`KOREAN`)를 사용합니다.
+`WebFilter`가 필수 HTTP 헤더 `X-TENANT-ID`를 읽어 `ReactorContext`에 `TenantId`를 저장합니다. 헤더가 없거나 공백이거나 알 수 없는 테넌트 ID이면 DB 작업 전에 `400 Bad Request`로 거부합니다.
 
 ```kotlin
 @Component
@@ -150,7 +160,8 @@ class TenantFilter: WebFilter {
 
     override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> = mono {
         val tenantId = exchange.request.headers.getFirst(TENANT_HEADER)
-        val resolvedTenantId = tenantId?.takeIf { it.isNotBlank() } ?: Tenants.DEFAULT_TENANT.id
+        val resolvedTenantId = tenantId?.takeIf { it.isNotBlank() }
+            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing tenant id header: $TENANT_HEADER")
         val tenant = Tenants.findById(resolvedTenantId)
             ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown tenant id: $resolvedTenantId")
 
@@ -166,6 +177,8 @@ class TenantFilter: WebFilter {
 
 `TenantId`는 `CoroutineContext.Element`를 구현하여 코루틴 내에서 테넌트 정보를 전달합니다.
 `ReactorContext`에서 테넌트를 읽는 `currentReactorTenant()` 함수를 제공합니다.
+아래 fallback은 WebFlux 밖에서 직접 코루틴을 호출하는 예제 경로용이며, 사용 시 warning 로그를 남깁니다.
+HTTP 요청에서 `X-TENANT-ID`가 없으면 `TenantFilter`가 먼저 거부합니다.
 
 ```kotlin
 data class TenantId(val value: Tenants.Tenant): CoroutineContext.Element {
@@ -181,7 +194,7 @@ data class TenantId(val value: Tenants.Tenant): CoroutineContext.Element {
 suspend fun currentReactorTenant(): Tenants.Tenant =
     coroutineContext[ReactorContext]?.context
         ?.getOrDefault(TenantId.TENANT_ID_KEY, TenantId.DEFAULT)?.value
-        ?: Tenants.DEFAULT_TENANT
+        ?: defaultTenantWithWarning("ReactorContext")
 ```
 
 ### 3. suspendTransactionWithCurrentTenant - 테넌트별 트랜잭션
@@ -286,7 +299,7 @@ curl -H "X-TENANT-ID: korean" http://localhost:8080/actors/2
 ## 테스트
 
 ```bash
-./gradlew :03-multitenant-spring-webflux:test
+./gradlew :03-multitenant-spring-webflux:test "-PuseDB=H2"
 ```
 
 테스트는 `@ActiveProfiles("h2")`로 H2 인메모리 DB를 사용합니다.
@@ -296,4 +309,13 @@ curl -H "X-TENANT-ID: korean" http://localhost:8080/actors/2
 - **ActorControllerTest** - `@ParameterizedTest`로 모든 테넌트(KOREAN/ENGLISH)에 대해 API 테스트
     - 테넌트별 전체 배우 조회 및 데이터 언어 검증
     - 테넌트별 특정 배우 조회 및 이름 검증
+    - 누락, 공백, 알 수 없는 테넌트 헤더가 `400`을 반환하는지 검증
+    - 같은 배우 ID가 테넌트 스키마 간에 격리되는지 검증
 - **ExposedR2dbcConfigTest** - R2DBC 설정 로드 검증
+- **ConnectionPoolSizingTest** - 연결 풀 크기 산정 규칙 검증
+
+## CI 및 Nightly 커버리지
+
+이 모듈은 루트 CI의 `./gradlew test` 경로와 Nightly shard의
+`:03-multitenant-spring-webflux:test` 실행으로 검증됩니다. 모듈 이름이
+바뀌면 이 명령과 `.github/workflows/nightly.yml` 항목을 함께 갱신해야 합니다.

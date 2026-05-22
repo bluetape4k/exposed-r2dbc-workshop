@@ -33,9 +33,9 @@ import reactor.core.publisher.Mono
  * suspendTransactionWithCurrentTenant { SchemaUtils.setSchema("korean") }
  * ```
  *
- * ## 기본값 처리
- * - `X-TENANT-ID` 헤더가 없거나 빈 문자열이면 [Tenants.DEFAULT_TENANT] (KOREAN)을 사용합니다.
- * - 알 수 없는 테넌트 ID는 `400 Bad Request`로 응답합니다.
+ * ## Error handling
+ * - Missing or blank `X-TENANT-ID` returns `400 Bad Request`.
+ * - Unknown tenant IDs also return `400 Bad Request`.
  *
  * ```kotlin
  * val tenantId = currentReactorTenant()
@@ -55,7 +55,8 @@ class TenantFilter: WebFilter {
     override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> = mono {
         val tenantId = exchange.request.headers.getFirst(TENANT_HEADER)
         log.debug { "Request tenantId: $tenantId" }
-        val resolvedTenantId = tenantId?.takeIf { it.isNotBlank() } ?: Tenants.DEFAULT_TENANT.id
+        val resolvedTenantId = tenantId?.takeIf { it.isNotBlank() }
+            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing tenant id header: $TENANT_HEADER")
         val tenant = Tenants.findById(resolvedTenantId)
             ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown tenant id: $resolvedTenantId")
 
