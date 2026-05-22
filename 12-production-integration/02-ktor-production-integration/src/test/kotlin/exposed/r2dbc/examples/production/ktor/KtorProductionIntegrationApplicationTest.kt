@@ -3,11 +3,15 @@ package exposed.r2dbc.examples.production.ktor
 import exposed.r2dbc.examples.production.ktor.app.AccountView
 import exposed.r2dbc.examples.production.ktor.app.AuthProfileView
 import exposed.r2dbc.examples.production.ktor.app.CreateWorkItemRequest
+import exposed.r2dbc.examples.production.ktor.app.DispatchOutboundView
+import exposed.r2dbc.examples.production.ktor.app.DuplicateIdempotencyKeyException
 import exposed.r2dbc.examples.production.ktor.app.EnqueueOutboundRequest
 import exposed.r2dbc.examples.production.ktor.app.KtorProductionRepository
 import exposed.r2dbc.examples.production.ktor.app.OutboxEventsView
 import exposed.r2dbc.examples.production.ktor.app.OutboxEventView
 import exposed.r2dbc.examples.production.ktor.app.OutboxStatus
+import exposed.r2dbc.examples.production.ktor.app.OutboundDelivery
+import exposed.r2dbc.examples.production.ktor.app.OutboundDispatchResult
 import exposed.r2dbc.examples.production.ktor.app.OutboundRequestView
 import exposed.r2dbc.examples.production.ktor.app.PublishOutboxView
 import exposed.r2dbc.examples.production.ktor.app.ReadinessView
@@ -40,12 +44,19 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.testing.testApplication
 import io.ktor.websocket.Frame
 import io.ktor.websocket.readText
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withTimeout
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import java.time.Duration
 import java.util.Base64
 import java.util.UUID
+import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.atomic.AtomicInteger
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class KtorProductionIntegrationApplicationTest {
@@ -365,6 +376,120 @@ class KtorProductionIntegrationApplicationTest {
     }
 
     @Test
+    fun `outbound dispatch marks success after persisted enqueue`() = testApplication {
+        val repository = newRepository("outbound-success")
+        val outboundDelivery = RecordingOutboundDelivery().also {
+            it.enqueue(OutboundDispatchResult(202))
+        }
+        repository.reset()
+        application {
+            productionIntegrationModule(repository, outboundDelivery = outboundDelivery)
+        }
+        val client = createJsonClient()
+
+        client.post("/production/sessions") {
+            basic("admin", "password")
+        }
+        client.post("/production/outbound") {
+            contentType(ContentType.Application.Json)
+            setBody(EnqueueOutboundRequest("payment-success", "https://example.test/payments", "payload"))
+        }.status shouldBeEqualTo HttpStatusCode.OK
+
+        val result = client.post("/production/outbound/dispatch").body<DispatchOutboundView>()
+
+        result.succeeded shouldBeEqualTo 1
+        val stored = repository.outboundRequests().single()
+        stored.status.name shouldBeEqualTo "SUCCEEDED"
+        stored.attempts shouldBeEqualTo 1
+        stored.lastStatusCode shouldBeEqualTo 202
+    }
+
+    @Test
+    fun `outbound retryable failure can be retried to success`() = testApplication {
+        val repository = newRepository("outbound-retry")
+        val outboundDelivery = RecordingOutboundDelivery().also {
+            it.enqueue(OutboundDispatchResult(503, "Authorization:=secret-token temporary outage"))
+            it.enqueue(OutboundDispatchResult(200))
+        }
+        repository.reset()
+        application {
+            productionIntegrationModule(repository, outboundDelivery = outboundDelivery)
+        }
+
+        repository.enqueueOutbound(EnqueueOutboundRequest("payment-retry", "https://example.test/payments", "payload"))
+        repository.dispatchPendingOutbound(outboundDelivery).retryableFailed shouldBeEqualTo 1
+        repository.dispatchPendingOutbound(outboundDelivery).succeeded shouldBeEqualTo 1
+
+        val stored = repository.outboundRequests().single()
+        stored.status.name shouldBeEqualTo "SUCCEEDED"
+        stored.attempts shouldBeEqualTo 2
+        (stored.lastError?.contains("secret-token") ?: false) shouldBeEqualTo false
+    }
+
+    @Test
+    fun `outbound retry exhaustion becomes permanent failure with sanitized error`() = testApplication {
+        val repository = newRepository("outbound-exhaust")
+        val outboundDelivery = RecordingOutboundDelivery().also { delivery ->
+            repeat(3) {
+                delivery.enqueue(OutboundDispatchResult(503, "token:=secret-token service unavailable"))
+            }
+        }
+        repository.reset()
+        application {
+            productionIntegrationModule(repository, outboundDelivery = outboundDelivery)
+        }
+
+        repository.enqueueOutbound(EnqueueOutboundRequest("payment-exhaust", "https://example.test/payments", "payload"))
+        repeat(3) {
+            repository.dispatchPendingOutbound(outboundDelivery)
+        }
+
+        val stored = repository.outboundRequests().single()
+        stored.status.name shouldBeEqualTo "PERMANENT_FAILED"
+        stored.attempts shouldBeEqualTo 3
+        stored.lastStatusCode shouldBeEqualTo 503
+        (stored.lastError?.contains("secret-token") ?: false) shouldBeEqualTo false
+    }
+
+    @Test
+    fun `outbound permanent client failure is not retried`() = testApplication {
+        val repository = newRepository("outbound-permanent")
+        val outboundDelivery = RecordingOutboundDelivery().also {
+            it.enqueue(OutboundDispatchResult(422, "validation rejected"))
+        }
+        repository.reset()
+        application {
+            productionIntegrationModule(repository, outboundDelivery = outboundDelivery)
+        }
+
+        repository.enqueueOutbound(EnqueueOutboundRequest("payment-permanent", "https://example.test/payments", "payload"))
+
+        repository.dispatchPendingOutbound(outboundDelivery).permanentFailed shouldBeEqualTo 1
+        repository.dispatchPendingOutbound(outboundDelivery).attempted shouldBeEqualTo 0
+        val stored = repository.outboundRequests().single()
+        stored.status.name shouldBeEqualTo "PERMANENT_FAILED"
+        stored.attempts shouldBeEqualTo 1
+    }
+
+    @Test
+    fun `outbound timeout is recorded as retryable transport failure`() = kotlinx.coroutines.test.runTest {
+        val repository = newRepository("outbound-timeout")
+        val timeoutDelivery = object: OutboundDelivery {
+            override suspend fun dispatch(request: OutboundRequestView): OutboundDispatchResult =
+                awaitCancellation()
+        }
+        repository.reset()
+        repository.enqueueOutbound(EnqueueOutboundRequest("payment-timeout", "https://example.test/payments", "payload"))
+
+        repository.dispatchPendingOutbound(timeoutDelivery, Duration.ofMillis(10)).retryableFailed shouldBeEqualTo 1
+
+        val stored = repository.outboundRequests().single()
+        stored.status.name shouldBeEqualTo "RETRYABLE_FAILED"
+        stored.lastStatusCode shouldBeEqualTo 599
+        stored.lastError?.contains("timeout") shouldBeEqualTo true
+    }
+
+    @Test
     fun `session without outbound permission is denied`() = testApplication {
         val repository = newRepository("outbound-denied")
         repository.reset()
@@ -384,6 +509,9 @@ class KtorProductionIntegrationApplicationTest {
 
         denied.status shouldBeEqualTo HttpStatusCode.Forbidden
         denied.body<StructuredError>().code shouldBeEqualTo "FORBIDDEN"
+
+        client.get("/production/outbound").status shouldBeEqualTo HttpStatusCode.Forbidden
+        client.post("/production/outbound/dispatch").status shouldBeEqualTo HttpStatusCode.Forbidden
     }
 
     @Test
@@ -402,6 +530,28 @@ class KtorProductionIntegrationApplicationTest {
         val error = client.post("/production/outbound") {
             contentType(ContentType.Application.Json)
             setBody(EnqueueOutboundRequest("payment-2", "ht!tp://example.test/payments", "payload"))
+        }
+
+        error.status shouldBeEqualTo HttpStatusCode.BadRequest
+        error.body<StructuredError>().code shouldBeEqualTo "INVALID_REQUEST"
+    }
+
+    @Test
+    fun `invalid outbound idempotency key returns structured validation error`() = testApplication {
+        val repository = newRepository("invalid-idempotency-key")
+        repository.reset()
+        application {
+            productionIntegrationModule(repository)
+        }
+        val client = createJsonClient()
+
+        client.post("/production/sessions") {
+            basic("admin", "password")
+        }
+
+        val error = client.post("/production/outbound") {
+            contentType(ContentType.Application.Json)
+            setBody(EnqueueOutboundRequest("payment\r\nInjected: value", "https://example.test/payments", "payload"))
         }
 
         error.status shouldBeEqualTo HttpStatusCode.BadRequest
@@ -429,25 +579,131 @@ class KtorProductionIntegrationApplicationTest {
 
     @Test
     fun `outbound dispatcher uses Ktor mock engine`() = kotlinx.coroutines.test.runTest {
-        val dispatcherClient = HttpClient(MockEngine { respondOk("accepted") })
+        val dispatcherClient = HttpClient(MockEngine { request ->
+            request.headers["Idempotency-Key"] shouldBeEqualTo "payment-1"
+            respondOk("accepted")
+        })
         val dispatcher = KtorOutboundDispatcher(dispatcherClient)
 
-        val status = dispatcher.dispatch(
+        val result = dispatcher.dispatch(
             OutboundRequestView(
                 id = "out-1",
                 idempotencyKey = "payment-1",
                 targetUrl = "https://example.test/payments",
                 payload = "payload",
-                status = "PENDING",
+                status = exposed.r2dbc.examples.production.ktor.app.OutboundStatus.PENDING,
+                attempts = 0,
+                lastStatusCode = null,
+                lastError = null,
             )
         )
 
-        status shouldBeEqualTo HttpStatusCode.OK
+        result.statusCode shouldBeEqualTo HttpStatusCode.OK.value
         dispatcherClient.close()
+    }
+
+    @Test
+    fun `concurrent duplicate outbound submit keeps one row`() = kotlinx.coroutines.test.runTest {
+        val repository = newRepository("outbound-concurrent")
+        repository.reset()
+        val request = EnqueueOutboundRequest("payment-concurrent", "https://example.test/payments", "payload")
+
+        val results = coroutineScope {
+            List(2) {
+                async {
+                    try {
+                        repository.enqueueOutbound(request)
+                        "created"
+                    } catch (e: DuplicateIdempotencyKeyException) {
+                        "duplicate"
+                    }
+                }
+            }.awaitAll()
+        }
+
+        results.count { it == "created" } shouldBeEqualTo 1
+        results.count { it == "duplicate" } shouldBeEqualTo 1
+        repository.outboundRequests().size shouldBeEqualTo 1
+    }
+
+    @Test
+    fun `concurrent duplicate outbound submit across repositories keeps one row`() = kotlinx.coroutines.test.runTest {
+        val databaseName = "ktor_duplicate_${UUID.randomUUID().toString().replace("-", "")}"
+        val firstRepository = repositoryForDatabase(databaseName)
+        val secondRepository = repositoryForDatabase(databaseName)
+        val request = EnqueueOutboundRequest("payment-cross-duplicate", "https://example.test/payments", "payload")
+        firstRepository.reset()
+        secondRepository.outboundRequests()
+
+        val results = coroutineScope {
+            listOf(firstRepository, secondRepository)
+                .map { repository ->
+                    async {
+                        try {
+                            repository.enqueueOutbound(request)
+                            "created"
+                        } catch (e: DuplicateIdempotencyKeyException) {
+                            "duplicate"
+                        }
+                    }
+                }
+                .awaitAll()
+        }
+
+        results.count { it == "created" } shouldBeEqualTo 1
+        results.count { it == "duplicate" } shouldBeEqualTo 1
+        firstRepository.outboundRequests().size shouldBeEqualTo 1
+    }
+
+    @Test
+    fun `concurrent outbound dispatch sends one HTTP request`() = kotlinx.coroutines.test.runTest {
+        val repository = newRepository("outbound-single-send")
+        val outboundDelivery = RecordingOutboundDelivery().also {
+            it.enqueue(OutboundDispatchResult(200))
+        }
+        repository.reset()
+        repository.enqueueOutbound(EnqueueOutboundRequest("payment-single-send", "https://example.test/payments", "payload"))
+
+        val results = coroutineScope {
+            List(2) {
+                async { repository.dispatchPendingOutbound(outboundDelivery).attempted }
+            }.awaitAll()
+        }
+
+        results.sum() shouldBeEqualTo 1
+        outboundDelivery.calls shouldBeEqualTo 1
+        repository.outboundRequests().single().status.name shouldBeEqualTo "SUCCEEDED"
+    }
+
+    @Test
+    fun `concurrent outbound dispatch across repositories sends one HTTP request`() = kotlinx.coroutines.test.runTest {
+        val databaseName = "ktor_outbound_${UUID.randomUUID().toString().replace("-", "")}"
+        val firstRepository = repositoryForDatabase(databaseName)
+        val secondRepository = repositoryForDatabase(databaseName)
+        val outboundDelivery = RecordingOutboundDelivery().also {
+            it.enqueue(OutboundDispatchResult(200))
+        }
+        firstRepository.reset()
+        secondRepository.outboundRequests()
+        firstRepository.enqueueOutbound(EnqueueOutboundRequest("payment-cross-repo", "https://example.test/payments", "payload"))
+
+        val results = coroutineScope {
+            listOf(firstRepository, secondRepository)
+                .map { repository -> async { repository.dispatchPendingOutbound(outboundDelivery).attempted } }
+                .awaitAll()
+        }
+
+        results.sum() shouldBeEqualTo 1
+        outboundDelivery.calls shouldBeEqualTo 1
+        firstRepository.outboundRequests().single().status.name shouldBeEqualTo "SUCCEEDED"
     }
 
     private fun newRepository(slug: String): KtorProductionRepository {
         val databaseName = "ktor_${slug}_${UUID.randomUUID().toString().replace("-", "")}"
+        return repositoryForDatabase(databaseName)
+    }
+
+    private fun repositoryForDatabase(databaseName: String): KtorProductionRepository {
         return KtorProductionRepository(R2dbcDatabase.connect("r2dbc:h2:mem:///$databaseName;DB_CLOSE_DELAY=-1;USER=sa;"))
     }
 
@@ -466,5 +722,22 @@ class KtorProductionIntegrationApplicationTest {
 
     private object FailingRealtimeDelivery: RealtimeDelivery {
         override suspend fun deliver(event: OutboxEventView): Boolean = false
+    }
+}
+
+private class RecordingOutboundDelivery: OutboundDelivery {
+    private val callCounter = AtomicInteger(0)
+    val calls: Int
+        get() = callCounter.get()
+
+    private val results = ConcurrentLinkedQueue<OutboundDispatchResult>()
+
+    fun enqueue(result: OutboundDispatchResult) {
+        results.add(result)
+    }
+
+    override suspend fun dispatch(request: OutboundRequestView): OutboundDispatchResult {
+        callCounter.incrementAndGet()
+        return results.poll() ?: OutboundDispatchResult(200)
     }
 }

@@ -4,7 +4,8 @@
 
 이 모듈은 12장의 Spring Boot 4 WebFlux 예제입니다. Issue #44의 application
 architecture baseline, issue #45의 authentication/session slice, issue #46의
-realtime outbox slice를 포함합니다.
+realtime outbox slice, issue #47의 HTTP client outbox/idempotency slice를
+포함합니다.
 
 ## 아키텍처
 
@@ -35,6 +36,19 @@ Spring realtime slice는 기존 API-key permission 경계를 통해 work item을
 요청 sequence 이후의 `PUBLISHED` row만 반환하며, delivery 실패는 attempt
 count와 error text를 가진 `FAILED` 상태로 보존합니다.
 
+## HTTP Client Outbox
+
+![Chapter 12 HTTP client outbox and idempotency](../../docs/assets/readme-diagrams/issue-47-http-outbox-idempotency-r2dbc-01.png)
+
+Spring outbound slice는 `outbound:create` 권한이 있는 account에만
+`POST /production/outbound`를 허용하고, target URL, payload, unique
+idempotency key를 먼저 저장합니다. 이후 `POST /production/outbound/dispatch`가
+pending work를 dispatch합니다. `SpringOutboundDispatcher`는 WebFlux
+`WebClient`를 사용하고 idempotency key를 `Idempotency-Key` header로 전달합니다.
+Repository는 dispatchable row를 `IN_FLIGHT`로 claim한 뒤 HTTP client 호출은
+transaction 밖에서 수행하고, retryable failure는 최대 세 번으로 제한하며,
+저장되는 error text는 sanitize합니다.
+
 ## 패키지 구성
 
 ```text
@@ -42,7 +56,7 @@ exposed.r2dbc.examples.production.spring
 ├── auth        # WebFlux Security와 repository-backed user details
 ├── app         # DTO, service boundary, validation, Exposed R2DBC repository
 ├── persistence # repository 경계가 소유하는 table 정의
-└── web         # WebFlux controller, SSE hub, structured error mapping
+└── web         # WebFlux controller, SSE hub, WebClient dispatcher, structured error mapping
 ```
 
 ## Spring Boot 4 vs Ktor
@@ -53,6 +67,7 @@ exposed.r2dbc.examples.production.spring
 | JSON/error mapping | Boot JSON 지원과 `@RestControllerAdvice` | `ContentNegotiation`과 `StatusPages` |
 | Session/auth 형태 | WebFlux Security Basic auth와 DB session metadata | Ktor Basic auth가 signed-cookie session metadata 생성 |
 | Realtime delivery | Persisted publish 상태가 있는 Server-Sent Events | 같은 outbox 상태를 쓰는 WebSocket replay/live stream |
+| Outbound HTTP | Persisted idempotency 상태를 쓰는 WebClient dispatcher | MockEngine test가 있는 Ktor HTTP client dispatcher |
 | R2DBC 경계 | Repository가 `suspendTransaction` 호출을 소유 | Ktor route 아래에서도 같은 repository 형태 |
 | Test 방식 | `@SpringBootTest` + `WebTestClient` | `testApplication` + Ktor client plugin |
 
@@ -65,4 +80,6 @@ repo-test-summary -- ./gradlew :01-spring-production-integration:test -PuseDB=H2
 Test suite는 authorized access, missing credentials, invalid credentials,
 non-admin role denial, public registration permission/role clamping, raw token을
 숨기는 session listing, event persistence, publish state transition, replay
-boundary, delivery failure retention을 검증합니다.
+boundary, delivery failure retention, outbound success/retry/permanent failure,
+duplicate idempotency key, permission denial, sanitized dispatch error,
+concurrent single-send protection을 검증합니다.

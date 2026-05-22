@@ -11,8 +11,8 @@ surfaces each framework expects.
 
 | Module | Stack | Focus |
 |---|---|---|
-| [`01-spring-production-integration`](01-spring-production-integration/) | Spring Boot 4 WebFlux | WebFlux Security, controller/service/repository boundaries, SSE replay, structured errors, readiness |
-| [`02-ktor-production-integration`](02-ktor-production-integration/) | Ktor 3 | Ktor Authentication/Sessions, WebSockets, MockEngine outbound dispatch, readiness |
+| [`01-spring-production-integration`](01-spring-production-integration/) | Spring Boot 4 WebFlux | WebFlux Security, controller/service/repository boundaries, SSE replay, WebClient outbox dispatch, structured errors, readiness |
+| [`02-ktor-production-integration`](02-ktor-production-integration/) | Ktor 3 | Ktor Authentication/Sessions, WebSockets, MockEngine/Ktor HTTP client outbox dispatch, readiness |
 
 ## Application Architecture
 
@@ -31,6 +31,19 @@ same Exposed R2DBC transaction. Publishing pending rows moves events to
 `PUBLISHED` only after the Spring SSE or Ktor WebSocket delivery boundary
 accepts them. Failed delivery is stored as `FAILED` with an attempt count and
 error note, so reconnect/replay never depends on an in-memory event alone.
+
+## HTTP Client Outbox And Idempotency
+
+![Chapter 12 HTTP client outbox and idempotency](../docs/assets/readme-diagrams/issue-47-http-outbox-idempotency-r2dbc-01.png)
+
+The outbound slice persists each external HTTP request before dispatch and
+uses a database-unique idempotency key as the duplicate boundary. Dispatch
+claims eligible rows as `IN_FLIGHT` in a short R2DBC transaction, performs the
+Spring WebClient or Ktor HTTP client call outside the transaction, then records
+`SUCCEEDED`, `RETRYABLE_FAILED`, or `PERMANENT_FAILED` with attempt count,
+status code, and sanitized error text. Tests use replaceable dispatchers and
+Ktor `MockEngine`, so success, retry, duplicate, permanent failure, and
+concurrent single-send behavior are covered without a real external service.
 
 ## Topic Map
 
@@ -55,6 +68,9 @@ error note, so reconnect/replay never depends on an in-memory event alone.
 - Duplicate idempotency keys return HTTP 409 with a structured conflict error.
 - Realtime examples persist events before delivery, publish only pending rows,
   record failed delivery state, and replay only `PUBLISHED` rows after a cursor.
+- HTTP client outbox examples persist outbound rows before delivery, claim
+  retryable rows before dispatch, cap retries at three attempts, and redact
+  credential-like text from stored dispatch errors.
 - Readiness reports `UP` when the database is reachable and `DEGRADED` when the
   diagnostics table records a degraded database state.
 

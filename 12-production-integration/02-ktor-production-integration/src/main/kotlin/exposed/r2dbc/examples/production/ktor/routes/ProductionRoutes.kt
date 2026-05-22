@@ -7,6 +7,8 @@ import exposed.r2dbc.examples.production.ktor.app.CreateWorkItemRequest
 import exposed.r2dbc.examples.production.ktor.app.EnqueueOutboundRequest
 import exposed.r2dbc.examples.production.ktor.app.KtorProductionRepository
 import exposed.r2dbc.examples.production.ktor.app.KtorRealtimeHub
+import exposed.r2dbc.examples.production.ktor.app.OutboundDelivery
+import exposed.r2dbc.examples.production.ktor.app.OutboundRequestsView
 import exposed.r2dbc.examples.production.ktor.app.OutboxEventView
 import exposed.r2dbc.examples.production.ktor.app.OutboxEventsView
 import exposed.r2dbc.examples.production.ktor.app.PermissionDeniedException
@@ -38,6 +40,7 @@ internal fun Application.productionRoutes(
     repository: KtorProductionRepository,
     realtimeHub: KtorRealtimeHub,
     realtimeDelivery: RealtimeDelivery,
+    outboundDelivery: OutboundDelivery,
 ) {
     routing {
         post("/production/accounts") {
@@ -117,6 +120,16 @@ internal fun Application.productionRoutes(
             post("/production/outbound") {
                 call.requireSessionPermission(repository, "outbound:create")
                 call.respond(repository.enqueueOutbound(call.receive<EnqueueOutboundRequest>()))
+            }
+
+            get("/production/outbound") {
+                call.requireSessionPermission(repository, "outbound:create")
+                call.respond(OutboundRequestsView(repository.outboundRequests()))
+            }
+
+            post("/production/outbound/dispatch") {
+                call.requireSessionPermission(repository, "outbound:create")
+                call.respond(repository.dispatchPendingOutbound(outboundDelivery))
             }
         }
 

@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.web.reactive.function.client.WebClient
 
 /**
  * Starts the Spring Boot 4 production integration example.
@@ -24,4 +25,8 @@ class SpringProductionDatabaseConfig {
     @Bean
     fun productionDatabase(): R2dbcDatabase =
         R2dbcDatabase.connect("r2dbc:h2:mem:///spring-production-integration;DB_CLOSE_DELAY=-1;USER=sa;")
+
+    @Bean
+    fun productionWebClient(): WebClient =
+        WebClient.builder().build()
 }
