@@ -4,6 +4,7 @@ on:
   push:
     branches: [ develop ]
     paths:
+      - '10-multi-tenant/03-multitenant-spring-webflux/**'
       - '10-multi-tenant/04-connection-factory-per-tenant-spring-webflux/**'
       - '10-multi-tenant/05-spring-security-tenant-authorization-spring-webflux/**'
       - '10-multi-tenant/06-tenant-onboarding-spring-webflux/**'
@@ -18,6 +19,7 @@ on:
   pull_request:
     branches: [ develop ]
     paths:
+      - '10-multi-tenant/03-multitenant-spring-webflux/**'
       - '10-multi-tenant/04-connection-factory-per-tenant-spring-webflux/**'
       - '10-multi-tenant/05-spring-security-tenant-authorization-spring-webflux/**'
       - '10-multi-tenant/06-tenant-onboarding-spring-webflux/**'
@@ -62,6 +64,7 @@ jobs:
           GRADLE_OPTS: "-Dorg.gradle.daemon=false"
         run: >-
           ./gradlew
+          :03-multitenant-spring-webflux:test
           :04-connection-factory-per-tenant-spring-webflux:test
           :05-spring-security-tenant-authorization-spring-webflux:test
           :06-tenant-onboarding-spring-webflux:test
@@ -74,6 +77,8 @@ jobs:
         with:
           name: chapter-10-example-test-results
           path: |
+            10-multi-tenant/03-multitenant-spring-webflux/build/test-results/test/*.xml
+            10-multi-tenant/03-multitenant-spring-webflux/build/reports/tests/test/
             10-multi-tenant/04-connection-factory-per-tenant-spring-webflux/build/test-results/test/*.xml
             10-multi-tenant/04-connection-factory-per-tenant-spring-webflux/build/reports/tests/test/
             10-multi-tenant/05-spring-security-tenant-authorization-spring-webflux/build/test-results/test/*.xml
