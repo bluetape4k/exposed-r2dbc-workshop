@@ -104,7 +104,7 @@ object MovieSchema: KLogging() {
             )
         )
 
-        ActorTable.batchInsert(actors) {
+        ActorTable.batchInsert(actors, shouldReturnGeneratedValues = false) {
             this[ActorTable.firstName] = it.firstName
             this[ActorTable.lastName] = it.lastName
             it.birthday?.let { birthDay ->
@@ -112,7 +112,7 @@ object MovieSchema: KLogging() {
             }
         }
 
-        MovieTable.batchInsert(movies) {
+        MovieTable.batchInsert(movies, shouldReturnGeneratedValues = false) {
             this[MovieTable.name] = it.name
             this[MovieTable.producerName] = it.producerName
             this[MovieTable.releaseDate] = LocalDate.parse(it.releaseDate)
@@ -132,7 +132,7 @@ object MovieSchema: KLogging() {
 
             val movieActorIds = actorIds.map { movieId to it }
 
-            ActorInMovieTable.batchInsert(movieActorIds) {
+            ActorInMovieTable.batchInsert(movieActorIds, shouldReturnGeneratedValues = false) {
                 this[ActorInMovieTable.movieId] = it.first.value
                 this[ActorInMovieTable.actorId] = it.second.value
             }
