@@ -46,7 +46,6 @@ kotlin {
 }
 
 dependencies {
-    implementation(platform(libs.jetbrains.exposed.bom))
     implementation(project(":exposed-r2dbc-shared"))
 
     // Exposed
