@@ -1,81 +1,65 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1924" height="1696" viewBox="0 0 1924 1696" role="img" aria-label="Multi-tenancy Request Flow">
+<svg xmlns="http://www.w3.org/2000/svg" width="1470" height="1236" viewBox="0 0 1470 1236" role="img" aria-label="Multi-tenancy Request Flow">
 <defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M 1 1 L 10 5 L 1 9" fill="none" stroke="#758297" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
-  <marker id="inherit" markerWidth="14" markerHeight="12" refX="12" refY="6" orient="auto" markerUnits="strokeWidth"><path d="M 0 1 L 12 6 L 0 11 Z" fill="#ffffff" stroke="#758297" stroke-width="1.8"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inherit)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inherit)}
-  </style>
+<filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
+<marker id="openArrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,4.5 L1,8 Z" fill="#5D6B7A"/></marker>
+<style>.canvas{fill:#F7F9FC}.frame{fill:#fff;stroke:#D8E0EA;stroke-width:1.5}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:39px;font-weight:400;fill:#102033}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;font-weight:400;fill:#536273}.smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:22px;font-weight:400;fill:#102033}.strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}.card{stroke-width:2;filter:url(#shadow)}.line{stroke:#5D6B7A;stroke-width:2.2;fill:none;marker-end:url(#openArrow)}.dashed{stroke:#5D6B7A;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}.lifeline{stroke:#B7C2D1;stroke-width:1.8;stroke-dasharray:8 9}.note{fill:#fff;opacity:.97}</style>
 </defs>
-<rect class="canvas" width="1924" height="1696"/>
-<rect class="frame" x="32" y="28" width="1860" height="1640" rx="28"/>
-<text class="title" x="66" y="82">Multi-tenancy Request Flow</text>
-<text class="subtitle" x="70" y="118">Sequence messages from the original Mermaid source</text>
-<rect class="card" x="21" y="166" width="238" height="72" rx="20" fill="#E8F3FF" stroke="#5B8DEF"/>
-<text class="smallLabel" x="140" y="209" text-anchor="middle">HTTP Client</text>
-<line class="lifeline" x1="140" y1="252" x2="140" y2="1636" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="349.8" y="166" width="238" height="72" rx="20" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel" x="468.8" y="209" text-anchor="middle">TenantWebFilter</text>
-<line class="lifeline" x1="468.8" y1="252" x2="468.8" y2="1636" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="678.6" y="166" width="238" height="72" rx="20" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel" x="797.6" y="209" text-anchor="middle">ReactorContext</text>
-<line class="lifeline" x1="797.6" y1="252" x2="797.6" y2="1636" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="1007.4000000000001" y="166" width="238" height="72" rx="20" fill="#FDECEF" stroke="#DC6B82"/>
-<text class="smallLabel" x="1126.4" y="209" text-anchor="middle">ActorController</text>
-<line class="lifeline" x1="1126.4" y1="252" x2="1126.4" y2="1636" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="1336.2" y="166" width="238" height="72" rx="20" fill="#E9F7F6" stroke="#45A7A1"/>
-<text class="smallLabel" x="1455.2" y="209" text-anchor="middle">ActorRepository</text>
-<line class="lifeline" x1="1455.2" y1="252" x2="1455.2" y2="1636" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="1665" y="166" width="238" height="72" rx="20" fill="#F1ECFF" stroke="#8A72D6"/>
-<text class="smallLabel" x="1784" y="209" text-anchor="middle">R2dbcDatabase</text>
-<line class="lifeline" x1="1784" y1="252" x2="1784" y2="1636" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect x="136.89999999999998" y="286" width="335" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="154.89999999999998" y="313" text-anchor="start">1. HTTP request (X-TENANT-ID: korean)</text>
-<path class="line" d="M140 344 L468.8 344"/>
-<rect x="482.20000000000005" y="396" width="302" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="500.20000000000005" y="423" text-anchor="start">2. contextWrite(TenantId(korean))</text>
-<path class="line" d="M468.8 454 L797.6 454"/>
-<rect x="692.6" y="506" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="710.6" y="533" text-anchor="start">3. forward request</text>
-<path class="line" d="M468.8 564 L1126.4 564"/>
-<rect x="986.9000000000001" y="616" width="375" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="1004.9000000000001" y="643" text-anchor="start">4. suspendTransactionWithCurrentTenant { }</text>
-<path class="line" d="M1126.4 674 C1190.4 674 1190.4 708 1126.4 708"/>
-<rect x="815" y="746" width="294" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="833" y="773" text-anchor="start">5. currentReactorTenant() lookup</text>
-<path class="line" d="M1126.4 804 L797.6 804"/>
-<rect x="857" y="856" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="875" y="883" text-anchor="start">6. Tenant(korean)</text>
-<path class="dashed" d="M797.6 914 L1126.4 914"/>
-<rect x="1308.2" y="966" width="294" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="1326.2" y="993" text-anchor="start">7. SchemaUtils.setSchema(korean)</text>
-<path class="line" d="M1126.4 1024 L1784 1024"/>
-<rect x="1159.8000000000002" y="1076" width="262" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="1177.8000000000002" y="1103" text-anchor="start">8. actorRepository.findAll()</text>
-<path class="line" d="M1126.4 1134 L1455.2 1134"/>
-<rect x="1480.6" y="1186" width="278" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="1498.6" y="1213" text-anchor="start">9. SELECT * FROM korean.actors</text>
-<path class="line" d="M1455.2 1244 L1784 1244"/>
-<rect x="1514.6" y="1296" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="1532.6" y="1323" text-anchor="start">10. Korean actor data</text>
-<path class="dashed" d="M1784 1354 L1455.2 1354"/>
-<rect x="1185.8000000000002" y="1406" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="1203.8000000000002" y="1433" text-anchor="start">11. List~ActorRecord~</text>
-<path class="dashed" d="M1455.2 1464 L1126.4 1464"/>
-<rect x="490.20000000000005" y="1516" width="286" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="508.20000000000005" y="1543" text-anchor="start">12. JSON response (Korean data)</text>
-<path class="dashed" d="M1126.4 1574 L140 1574"/>
+<rect class="canvas" width="1470" height="1236"/>
+<rect class="frame" x="24" y="24" width="1422" height="1180" rx="22"/>
+<text class="title" x="58" y="76">Multi-tenancy Request Flow</text>
+<text class="subtitle" x="62" y="106">Compact sequence flow with reduced outer and inner whitespace</text>
+<rect class="card" x="50.0" y="156" width="220" height="66" rx="16" fill="#E8F3FF" stroke="#5B8DEF"/>
+<text class="smallLabel" x="160.0" y="196" text-anchor="middle">HTTP Client</text>
+<line class="lifeline" x1="160.0" y1="250" x2="160.0" y2="1174"/>
+<rect class="card" x="280.0" y="156" width="220" height="66" rx="16" fill="#EAF7EF" stroke="#58A978"/>
+<text class="smallLabel" x="390.0" y="196" text-anchor="middle">TenantWebFilter</text>
+<line class="lifeline" x1="390.0" y1="250" x2="390.0" y2="1174"/>
+<rect class="card" x="510.0" y="156" width="220" height="66" rx="16" fill="#FFF3D9" stroke="#D6A441"/>
+<text class="smallLabel" x="620.0" y="196" text-anchor="middle">ReactorContext</text>
+<line class="lifeline" x1="620.0" y1="250" x2="620.0" y2="1174"/>
+<rect class="card" x="740.0" y="156" width="220" height="66" rx="16" fill="#FDECEF" stroke="#DC6B82"/>
+<text class="smallLabel" x="850.0" y="196" text-anchor="middle">ActorController</text>
+<line class="lifeline" x1="850.0" y1="250" x2="850.0" y2="1174"/>
+<rect class="card" x="970.0" y="156" width="220" height="66" rx="16" fill="#F1ECFF" stroke="#8A72D6"/>
+<text class="smallLabel" x="1080.0" y="196" text-anchor="middle">ActorRepository</text>
+<line class="lifeline" x1="1080.0" y1="250" x2="1080.0" y2="1174"/>
+<rect class="card" x="1200.0" y="156" width="220" height="66" rx="16" fill="#E9F7F6" stroke="#45A7A1"/>
+<text class="smallLabel" x="1310.0" y="196" text-anchor="middle">R2dbcDatabase</text>
+<line class="lifeline" x1="1310.0" y1="250" x2="1310.0" y2="1174"/>
+<path class="line" d="M160.0 292.0 L390.0 292.0"/>
+<rect class="note" x="147.3" y="260.0" width="255.4" height="28" rx="9"/>
+<text class="strong" x="275.0" y="280.0" text-anchor="middle">1. HTTP request (X-TENANT-ID: korean)</text>
+<path class="line" d="M390.0 366.0 L620.0 366.0"/>
+<rect class="note" x="389.7" y="334.0" width="230.6" height="28" rx="9"/>
+<text class="strong" x="505.0" y="354.0" text-anchor="middle">2. contextWrite(TenantId(korean))</text>
+<path class="line" d="M390.0 440.0 L850.0 440.0"/>
+<rect class="note" x="540.0" y="408.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="620.0" y="428.0" text-anchor="middle">3. forward request</text>
+<path class="line" d="M850.0 514.0 C912.0 514.0 912.0 544.0 850.0 544.0"/>
+<rect class="note" x="920.0" y="504.0" width="286.4" height="28" rx="9"/>
+<text class="strong" x="920.0" y="524.0" text-anchor="start">4. suspendTransactionWithCurrentTenant { }</text>
+<path class="line" d="M850.0 588.0 L620.0 588.0"/>
+<rect class="note" x="622.8" y="556.0" width="224.4" height="28" rx="9"/>
+<text class="strong" x="735.0" y="576.0" text-anchor="middle">5. currentReactorTenant() lookup</text>
+<path class="dashed" d="M620.0 662.0 L850.0 662.0"/>
+<rect class="note" x="655.0" y="630.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="735.0" y="650.0" text-anchor="middle">6. Tenant(korean)</text>
+<path class="line" d="M850.0 736.0 L1310.0 736.0"/>
+<rect class="note" x="967.8" y="704.0" width="224.4" height="28" rx="9"/>
+<text class="strong" x="1080.0" y="724.0" text-anchor="middle">7. SchemaUtils.setSchema(korean)</text>
+<path class="line" d="M850.0 810.0 L1080.0 810.0"/>
+<rect class="note" x="865.2" y="778.0" width="199.6" height="28" rx="9"/>
+<text class="strong" x="965.0" y="798.0" text-anchor="middle">8. actorRepository.findAll()</text>
+<path class="line" d="M1080.0 884.0 L1310.0 884.0"/>
+<rect class="note" x="1089.0" y="852.0" width="212.0" height="28" rx="9"/>
+<text class="strong" x="1195.0" y="872.0" text-anchor="middle">9. SELECT * FROM korean.actors</text>
+<path class="dashed" d="M1310.0 958.0 L1080.0 958.0"/>
+<rect class="note" x="1115.0" y="926.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="1195.0" y="946.0" text-anchor="middle">10. Korean actor data</text>
+<path class="dashed" d="M1080.0 1032.0 L850.0 1032.0"/>
+<rect class="note" x="885.0" y="1000.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="965.0" y="1020.0" text-anchor="middle">11. List~ActorRecord~</text>
+<path class="dashed" d="M850.0 1106.0 L160.0 1106.0"/>
+<rect class="note" x="395.9" y="1074.0" width="218.2" height="28" rx="9"/>
+<text class="strong" x="505.0" y="1094.0" text-anchor="middle">12. JSON response (Korean data)</text>
 </svg>

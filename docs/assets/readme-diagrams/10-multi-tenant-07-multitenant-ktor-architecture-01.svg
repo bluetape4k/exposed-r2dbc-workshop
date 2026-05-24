@@ -15,9 +15,7 @@
       .arrow { stroke: #53627a; stroke-width: 3; marker-end: url(#arrow); fill: none; }
       .reject { stroke: #b44b4b; }
     </style>
-    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
-      <path d="M2,2 L10,6 L2,10 Z" fill="#53627a"/>
-    </marker>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,4.5 L1,8 Z" fill="#5D6B7A"/></marker>
   </defs>
   <rect class="bg" x="0" y="0" width="1400" height="760"/>
   <text class="title" x="70" y="70">Ktor R2DBC Schema-Per-Tenant Request Flow</text>

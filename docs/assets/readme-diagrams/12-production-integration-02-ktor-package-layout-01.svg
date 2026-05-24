@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="560" viewBox="0 0 1160 560" role="img" aria-label="Ktor Production Package Layout">
+<defs><filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,4.5 L1,8 Z" fill="#5D6B7A"/></marker><style>.bg{fill:#F7F9FC}.panel{fill:#FFFFFF;stroke:#BCC7D6;stroke-width:2;rx:18;filter:url(#shadow)}.blue{fill:#E8F3FF;stroke:#5B8DEF}.green{fill:#E8F7EE;stroke:#3A8B57}.amber{fill:#FFF7E6;stroke:#B7791F}.pink{fill:#FDECEF;stroke:#DC6B82}.teal{fill:#E9F7F6;stroke:#45A7A1}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:36px;fill:#172033;font-weight:400}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:16px;fill:#516070;font-weight:400}.label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:23px;fill:#172033;font-weight:400}.small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;fill:#425466;font-weight:400}.arrow{stroke:#5D6B7A;stroke-width:2.4;fill:none;marker-end:url(#arrow)}</style></defs>
+<rect class="bg" width="1160" height="560"/>
+<text x="64" y="70" class="title">Ktor Production Package Layout</text>
+<text x="66" y="102" class="subtitle">exposed.r2dbc.examples.production.ktor package boundaries.</text>
+<rect x="105" y="145" width="405" height="92" class="panel green"/>
+<text x="131" y="181" class="label">app</text>
+<text x="131" y="209" class="small">DTOs, validation, repository boundary</text>
+<rect x="605" y="145" width="405" height="92" class="panel blue"/>
+<text x="631" y="181" class="label">config</text>
+<text x="631" y="209" class="small">JSON, request correlation, status pages</text>
+<rect x="105" y="300" width="405" height="92" class="panel amber"/>
+<text x="131" y="336" class="label">outbound</text>
+<text x="131" y="364" class="small">Ktor HTTP client dispatcher</text>
+<rect x="605" y="300" width="405" height="92" class="panel pink"/>
+<text x="631" y="336" class="label">persistence</text>
+<text x="631" y="364" class="small">table definitions owned by repositories</text>
+<rect x="355" y="435" width="405" height="92" class="panel teal"/>
+<text x="381" y="471" class="label">routes</text>
+<text x="381" y="499" class="small">HTTP routes, diagnostics, WebSocket replay</text>
+<path class="arrow" d="M510 190 H605"/>
+<path class="arrow" d="M310 237 V300"/>
+<path class="arrow" d="M810 237 V300"/>
+<path class="arrow" d="M510 345 H605"/>
+<path class="arrow" d="M310 392 C350 420 390 435 430 435"/>
+</svg>

@@ -1,100 +1,86 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1960" height="2446" viewBox="0 0 1960 2446" role="img" aria-label="HTTP Request Flow">
+<svg xmlns="http://www.w3.org/2000/svg" width="1470" height="1754" viewBox="0 0 1470 1754" role="img" aria-label="HTTP Request Flow">
 <defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M 1 1 L 10 5 L 1 9" fill="none" stroke="#758297" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
-  <marker id="inherit" markerWidth="14" markerHeight="12" refX="12" refY="6" orient="auto" markerUnits="strokeWidth"><path d="M 0 1 L 12 6 L 0 11 Z" fill="#ffffff" stroke="#758297" stroke-width="1.8"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inherit)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inherit)}
-  </style>
+<filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
+<marker id="openArrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,4.5 L1,8 Z" fill="#5D6B7A"/></marker>
+<style>.canvas{fill:#F7F9FC}.frame{fill:#fff;stroke:#D8E0EA;stroke-width:1.5}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:39px;font-weight:400;fill:#102033}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;font-weight:400;fill:#536273}.smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:22px;font-weight:400;fill:#102033}.strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}.card{stroke-width:2;filter:url(#shadow)}.line{stroke:#5D6B7A;stroke-width:2.2;fill:none;marker-end:url(#openArrow)}.dashed{stroke:#5D6B7A;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}.lifeline{stroke:#B7C2D1;stroke-width:1.8;stroke-dasharray:8 9}.note{fill:#fff;opacity:.97}</style>
 </defs>
-<rect class="canvas" width="1960" height="2446"/>
-<rect class="frame" x="32" y="28" width="1896" height="2390" rx="28"/>
-<text class="title" x="66" y="82">HTTP Request Flow</text>
-<text class="subtitle" x="70" y="118">Sequence messages from the original Mermaid source</text>
-<rect class="card" x="-10" y="166" width="300" height="72" rx="20" fill="#E8F3FF" stroke="#5B8DEF"/>
-<text class="smallLabel" x="140" y="209" text-anchor="middle">HTTP Client</text>
-<line class="lifeline" x1="140" y1="252" x2="140" y2="2386" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="410" y="166" width="300" height="72" rx="20" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel" x="560" y="209" text-anchor="middle">MovieController</text>
-<line class="lifeline" x1="560" y1="252" x2="560" y2="2386" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="830" y="166" width="300" height="72" rx="20" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel" x="980" y="198.5" text-anchor="middle">Movie R2dbc</text>
-<text class="smallLabel" x="980" y="219.5" text-anchor="middle">Repository</text>
-<line class="lifeline" x1="980" y1="252" x2="980" y2="2386" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="1250" y="166" width="300" height="72" rx="20" fill="#FDECEF" stroke="#DC6B82"/>
-<text class="smallLabel" x="1400" y="209" text-anchor="middle">suspendTransaction</text>
-<line class="lifeline" x1="1400" y1="252" x2="1400" y2="2386" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="1670" y="166" width="300" height="72" rx="20" fill="#E9F7F6" stroke="#45A7A1"/>
-<text class="smallLabel" x="1820" y="209" text-anchor="middle">R2DBC Database</text>
-<line class="lifeline" x1="1820" y1="252" x2="1820" y2="2386" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect x="245" y="286" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="263" y="313" text-anchor="start">1. GET /movies/{id}</text>
-<path class="line" d="M140 344 L560 344"/>
-<rect x="861" y="396" width="238" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="879" y="423" text-anchor="start">2. suspendTransaction { }</text>
-<path class="line" d="M560 454 L1400 454"/>
-<rect x="1505" y="506" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="1523" y="533" text-anchor="start">3. BEGIN</text>
-<path class="line" d="M1400 564 L1820 564"/>
-<rect x="1071" y="616" width="238" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="1089" y="643" text-anchor="start">4. getMovieWithActors(id)</text>
-<path class="line" d="M1400 674 L980 674"/>
-<rect x="1180.5" y="726" width="439" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="1198.5" y="753" text-anchor="start">5. SELECT movies JOIN actors_in_movies JOIN actors</text>
-<path class="line" d="M980 784 L1820 784"/>
-<rect x="1295" y="836" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="1313" y="863" text-anchor="start">6. ResultRow Flow</text>
-<path class="dashed" d="M1820 894 L980 894"/>
-<rect x="1079" y="946" width="222" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="1097" y="973" text-anchor="start">7. MovieWithActorRecord</text>
-<path class="dashed" d="M980 1004 L1400 1004"/>
-<rect x="1505" y="1056" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="1523" y="1083" text-anchor="start">8. COMMIT</text>
-<path class="line" d="M1400 1114 L1820 1114"/>
-<rect x="869" y="1166" width="222" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="887" y="1193" text-anchor="start">9. MovieWithActorRecord</text>
-<path class="dashed" d="M1400 1224 L560 1224"/>
-<rect x="245" y="1276" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="263" y="1303" text-anchor="start">10. 200 JSON response</text>
-<path class="dashed" d="M560 1334 L140 1334"/>
-<rect x="245" y="1386" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="263" y="1413" text-anchor="start">11. POST /movies</text>
-<path class="line" d="M140 1444 L560 1444"/>
-<rect x="857" y="1496" width="246" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="875" y="1523" text-anchor="start">12. suspendTransaction { }</text>
-<path class="line" d="M560 1554 L1400 1554"/>
-<rect x="1085" y="1606" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="1103" y="1633" text-anchor="start">13. save(movie)</text>
-<path class="line" d="M1400 1664 L980 1664"/>
-<rect x="1277" y="1716" width="246" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="1295" y="1743" text-anchor="start">14. INSERT INTO movies ...</text>
-<path class="line" d="M980 1774 L1820 1774"/>
-<rect x="1295" y="1826" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="1313" y="1853" text-anchor="start">15. generated id</text>
-<path class="dashed" d="M1820 1884 L980 1884"/>
-<rect x="1085" y="1936" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="1103" y="1963" text-anchor="start">16. MovieRecord</text>
-<path class="dashed" d="M980 1994 L1400 1994"/>
-<rect x="1505" y="2046" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="1523" y="2073" text-anchor="start">17. COMMIT</text>
-<path class="line" d="M1400 2104 L1820 2104"/>
-<rect x="875" y="2156" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="893" y="2183" text-anchor="start">18. MovieRecord</text>
-<path class="dashed" d="M1400 2214 L560 2214"/>
-<rect x="245" y="2266" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="263" y="2293" text-anchor="start">19. 201 JSON response</text>
-<path class="dashed" d="M560 2324 L140 2324"/>
+<rect class="canvas" width="1470" height="1754"/>
+<rect class="frame" x="24" y="24" width="1422" height="1698" rx="22"/>
+<text class="title" x="58" y="76">HTTP Request Flow</text>
+<text class="subtitle" x="62" y="106">Compact sequence flow with reduced outer and inner whitespace</text>
+<rect class="card" x="50.0" y="156" width="220" height="66" rx="16" fill="#E8F3FF" stroke="#5B8DEF"/>
+<text class="smallLabel" x="160.0" y="196" text-anchor="middle">HTTP Client</text>
+<line class="lifeline" x1="160.0" y1="250" x2="160.0" y2="1692"/>
+<rect class="card" x="280.0" y="156" width="220" height="66" rx="16" fill="#EAF7EF" stroke="#58A978"/>
+<text class="smallLabel" x="390.0" y="196" text-anchor="middle">MovieController</text>
+<line class="lifeline" x1="390.0" y1="250" x2="390.0" y2="1692"/>
+<rect class="card" x="510.0" y="156" width="220" height="66" rx="16" fill="#FFF3D9" stroke="#D6A441"/>
+<text class="smallLabel" x="620.0" y="196" text-anchor="middle">Movie R2dbc</text>
+<line class="lifeline" x1="620.0" y1="250" x2="620.0" y2="1692"/>
+<rect class="card" x="740.0" y="156" width="220" height="66" rx="16" fill="#FDECEF" stroke="#DC6B82"/>
+<text class="smallLabel" x="850.0" y="196" text-anchor="middle">Repository</text>
+<line class="lifeline" x1="850.0" y1="250" x2="850.0" y2="1692"/>
+<rect class="card" x="970.0" y="156" width="220" height="66" rx="16" fill="#F1ECFF" stroke="#8A72D6"/>
+<text class="smallLabel" x="1080.0" y="196" text-anchor="middle">suspendTransaction</text>
+<line class="lifeline" x1="1080.0" y1="250" x2="1080.0" y2="1692"/>
+<rect class="card" x="1200.0" y="156" width="220" height="66" rx="16" fill="#E9F7F6" stroke="#45A7A1"/>
+<text class="smallLabel" x="1310.0" y="196" text-anchor="middle">R2DBC Database</text>
+<line class="lifeline" x1="1310.0" y1="250" x2="1310.0" y2="1692"/>
+<path class="line" d="M160.0 292.0 L390.0 292.0"/>
+<rect class="note" x="195.0" y="260.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="275.0" y="280.0" text-anchor="middle">1. GET /movies/{id}</text>
+<path class="line" d="M390.0 366.0 L1080.0 366.0"/>
+<rect class="note" x="644.5" y="334.0" width="181.0" height="28" rx="9"/>
+<text class="strong" x="735.0" y="354.0" text-anchor="middle">2. suspendTransaction { }</text>
+<path class="line" d="M1080.0 440.0 L1310.0 440.0"/>
+<rect class="note" x="1115.0" y="408.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="1195.0" y="428.0" text-anchor="middle">3. BEGIN</text>
+<path class="line" d="M1080.0 514.0 L620.0 514.0"/>
+<rect class="note" x="759.5" y="482.0" width="181.0" height="28" rx="9"/>
+<text class="strong" x="850.0" y="502.0" text-anchor="middle">4. getMovieWithActors(id)</text>
+<path class="line" d="M620.0 588.0 L1310.0 588.0"/>
+<rect class="note" x="797.0" y="556.0" width="336.0" height="28" rx="9"/>
+<text class="strong" x="965.0" y="576.0" text-anchor="middle">5. SELECT movies JOIN actors_in_movies JOIN actors</text>
+<path class="dashed" d="M1310.0 662.0 L620.0 662.0"/>
+<rect class="note" x="885.0" y="630.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="965.0" y="650.0" text-anchor="middle">6. ResultRow Flow</text>
+<path class="dashed" d="M620.0 736.0 L1080.0 736.0"/>
+<rect class="note" x="765.7" y="704.0" width="168.6" height="28" rx="9"/>
+<text class="strong" x="850.0" y="724.0" text-anchor="middle">7. MovieWithActorRecord</text>
+<path class="line" d="M1080.0 810.0 L1310.0 810.0"/>
+<rect class="note" x="1115.0" y="778.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="1195.0" y="798.0" text-anchor="middle">8. COMMIT</text>
+<path class="dashed" d="M1080.0 884.0 L390.0 884.0"/>
+<rect class="note" x="650.7" y="852.0" width="168.6" height="28" rx="9"/>
+<text class="strong" x="735.0" y="872.0" text-anchor="middle">9. MovieWithActorRecord</text>
+<path class="dashed" d="M390.0 958.0 L160.0 958.0"/>
+<rect class="note" x="195.0" y="926.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="275.0" y="946.0" text-anchor="middle">10. 200 JSON response</text>
+<path class="line" d="M160.0 1032.0 L390.0 1032.0"/>
+<rect class="note" x="195.0" y="1000.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="275.0" y="1020.0" text-anchor="middle">11. POST /movies</text>
+<path class="line" d="M390.0 1106.0 L1080.0 1106.0"/>
+<rect class="note" x="641.4" y="1074.0" width="187.2" height="28" rx="9"/>
+<text class="strong" x="735.0" y="1094.0" text-anchor="middle">12. suspendTransaction { }</text>
+<path class="line" d="M1080.0 1180.0 L620.0 1180.0"/>
+<rect class="note" x="770.0" y="1148.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="850.0" y="1168.0" text-anchor="middle">13. save(movie)</text>
+<path class="line" d="M620.0 1254.0 L1310.0 1254.0"/>
+<rect class="note" x="871.4" y="1222.0" width="187.2" height="28" rx="9"/>
+<text class="strong" x="965.0" y="1242.0" text-anchor="middle">14. INSERT INTO movies ...</text>
+<path class="dashed" d="M1310.0 1328.0 L620.0 1328.0"/>
+<rect class="note" x="885.0" y="1296.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="965.0" y="1316.0" text-anchor="middle">15. generated id</text>
+<path class="dashed" d="M620.0 1402.0 L1080.0 1402.0"/>
+<rect class="note" x="770.0" y="1370.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="850.0" y="1390.0" text-anchor="middle">16. MovieRecord</text>
+<path class="line" d="M1080.0 1476.0 L1310.0 1476.0"/>
+<rect class="note" x="1115.0" y="1444.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="1195.0" y="1464.0" text-anchor="middle">17. COMMIT</text>
+<path class="dashed" d="M1080.0 1550.0 L390.0 1550.0"/>
+<rect class="note" x="655.0" y="1518.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="735.0" y="1538.0" text-anchor="middle">18. MovieRecord</text>
+<path class="dashed" d="M390.0 1624.0 L160.0 1624.0"/>
+<rect class="note" x="195.0" y="1592.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="275.0" y="1612.0" text-anchor="middle">19. 201 JSON response</text>
 </svg>

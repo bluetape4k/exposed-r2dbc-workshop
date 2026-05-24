@@ -64,13 +64,7 @@ diagnostics table이 database degraded marker를 가진 동안 sticky `DEGRADED`
 
 ## 패키지 구성
 
-```text
-exposed.r2dbc.examples.production.spring
-├── auth        # WebFlux Security와 repository-backed user details
-├── app         # DTO, service boundary, validation, Exposed R2DBC repository
-├── persistence # repository 경계가 소유하는 table 정의
-└── web         # WebFlux controller, request correlation, SSE hub, WebClient dispatcher, structured error mapping
-```
+![Spring production package layout](../../docs/assets/readme-diagrams/12-production-integration-01-spring-package-layout-01.png)
 
 ## Spring Boot 4 vs Ktor
 

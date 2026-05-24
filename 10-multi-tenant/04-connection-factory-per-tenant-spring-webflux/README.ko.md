@@ -17,16 +17,7 @@ Spring WebFlux + Exposed R2DBC 예제로, 테넌트마다 별도의 R2DBC
 - 시작 시 초기화는 registry가 소유한 tenant pool을 재사용하는 명시적
   tenant database로 수행합니다.
 
-```mermaid
-flowchart TD
-    A[HTTP request] --> B[TenantFilter]
-    B -->|valid X-TENANT-ID| C[Reactor Context tenantId]
-    C --> D[TenantTransactionExecutor]
-    D --> E[Exposed suspendTransaction]
-    E --> F[TenantRoutingConnectionFactory]
-    F -->|korean| G[(tenant_cf_korean)]
-    F -->|english| H[(tenant_cf_english)]
-```
+![Connection Factory Per Tenant architecture](../../docs/assets/readme-diagrams/10-multi-tenant-04-connection-factory-per-tenant-architecture-01.png)
 
 ## 선택 기준
 

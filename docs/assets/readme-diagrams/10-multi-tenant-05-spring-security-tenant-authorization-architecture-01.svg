@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="660" viewBox="0 0 1260 660" role="img" aria-label="Spring Security Tenant Authorization">
+<defs>
+  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
+  <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,4.5 L1,8 Z" fill="#5D6B7A"/></marker>
+  <style>.bg{fill:#F7F9FC}.panel{fill:#FFFFFF;stroke:#BCC7D6;stroke-width:2;rx:18;filter:url(#shadow)}.blue{fill:#E8F3FF;stroke:#5B8DEF}.green{fill:#E8F7EE;stroke:#3A8B57}.amber{fill:#FFF7E6;stroke:#B7791F}.pink{fill:#FDECEF;stroke:#DC6B82}.teal{fill:#E9F7F6;stroke:#45A7A1}.lav{fill:#EDF1FF;stroke:#5067C5}.gray{fill:#F1F5F9;stroke:#475569}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:36px;fill:#172033;font-weight:400}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:16px;fill:#516070;font-weight:400}.label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:23px;fill:#172033;font-weight:400}.small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;fill:#425466;font-weight:400}.tiny{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;fill:#425466;font-weight:400}.arrow{stroke:#5D6B7A;stroke-width:2.4;fill:none;marker-end:url(#arrow)}.dashed{stroke:#5D6B7A;stroke-width:2.2;stroke-dasharray:7 6;fill:none;marker-end:url(#arrow)}</style>
+</defs>
+<rect class="bg" width="1260" height="660"/>
+<text x="64" y="70" class="title">Spring Security Tenant Authorization</text>
+<text x="66" y="102" class="subtitle">Authentication, tenant authorization, and R2DBC routing fail closed before database access.</text>
+<rect x="70" y="155" width="220" height="90" class="panel blue"/>
+<text x="96" y="191" class="label">HTTP request</text>
+<text x="96" y="219" class="small">X-TENANT-ID</text>
+<text x="96" y="241" class="small">X-API-KEY</text>
+<rect x="355" y="130" width="250" height="120" class="panel green"/>
+<text x="381" y="166" class="label">Spring Security</text>
+<text x="381" y="194" class="small">API key authentication</text>
+<text x="381" y="216" class="small">principal tenant claims</text>
+<rect x="675" y="130" width="270" height="120" class="panel amber"/>
+<text x="701" y="166" class="label">Tenant auth filter</text>
+<text x="701" y="194" class="small">compares authenticated tenant</text>
+<text x="701" y="216" class="small">with X-TENANT-ID</text>
+<rect x="675" y="345" width="270" height="120" class="panel teal"/>
+<text x="701" y="381" class="label">Exposed transaction</text>
+<text x="701" y="409" class="small">authorized tenant context</text>
+<text x="701" y="431" class="small">suspendTransaction</text>
+<rect x="1010" y="250" width="190" height="90" class="panel pink"/>
+<text x="1036" y="286" class="label">korean DB</text>
+<text x="1036" y="314" class="small">authorized route</text>
+<rect x="1010" y="405" width="190" height="90" class="panel lav"/>
+<text x="1036" y="441" class="label">english DB</text>
+<text x="1036" y="469" class="small">authorized route</text>
+<path class="arrow" d="M290 200 H355"/>
+<path class="arrow" d="M605 190 H675"/>
+<path class="arrow" d="M810 250 V345"/>
+<path class="arrow" d="M945 390 C980 345 990 305 1010 295"/>
+<path class="arrow" d="M945 415 C980 430 990 445 1010 450"/>
+<path class="dashed" d="M675 190 C620 300 500 390 355 420"/>
+<rect x="355" y="380" width="250" height="90" class="panel gray"/>
+<text x="381" y="416" class="label">Unauthorized</text>
+<text x="381" y="444" class="small">401 or 403, no DB route</text>
+</svg>

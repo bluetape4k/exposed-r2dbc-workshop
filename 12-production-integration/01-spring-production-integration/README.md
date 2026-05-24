@@ -64,13 +64,7 @@ operation with optional coroutine delay outside the R2DBC transaction, while
 
 ## Package Layout
 
-```text
-exposed.r2dbc.examples.production.spring
-├── auth        # WebFlux Security and repository-backed user details
-├── app         # DTOs, service boundary, validation, Exposed R2DBC repository
-├── persistence # table definitions owned by the repository boundary
-└── web         # WebFlux controller, request correlation, SSE hub, WebClient dispatcher, structured error mapping
-```
+![Spring production package layout](../../docs/assets/readme-diagrams/12-production-integration-01-spring-package-layout-01.png)
 
 ## Spring Boot 4 vs Ktor
 
