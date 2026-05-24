@@ -3,7 +3,6 @@ plugins {
 }
 
 dependencies {
-    implementation(platform(libs.jetbrains.exposed.bom))
     implementation(project(":exposed-r2dbc-shared"))
 
     implementation(libs.jetbrains.exposed.r2dbc)

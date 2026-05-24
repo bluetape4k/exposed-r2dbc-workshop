@@ -7,7 +7,6 @@ configurations {
 }
 
 dependencies {
-    implementation(platform(libs.jetbrains.exposed.bom))
 
     // Exposed
     implementation(libs.jetbrains.exposed.core)
