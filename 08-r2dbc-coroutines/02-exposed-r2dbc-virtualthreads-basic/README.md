@@ -187,55 +187,11 @@ Java 21's Virtual Threads (Project Loom) overcome the limitations of traditional
 
 ### Benefits of R2DBC + Virtual Threads Combination
 
-```
-Traditional Platform Thread Model:
-┌─────────────────────────────────────────────────┐
-│ Thread Pool (limited to hundreds)               │
-│  [Thread-1] → SQL wait → [Thread-1 blocked]    │
-│  [Thread-2] → SQL wait → [Thread-2 blocked]    │
-│  ...         (threads wasted during I/O wait)  │
-└─────────────────────────────────────────────────┘
-
-Virtual Threads Model (JDK 21+):
-┌─────────────────────────────────────────────────┐
-│ Carrier Thread Pool (number of CPU cores)       │
-│  [Carrier-1] ← mount → [VThread-1] run SQL     │
-│               ← SQL wait occurs                 │
-│  [Carrier-1] ← mount → [VThread-2] other work  │
-│               (VThread-1 suspended, thread free)│
-│  ...         (millions of VThreads concurrently)│
-└─────────────────────────────────────────────────┘
-```
+![Platform Thread vs Virtual Thread Comparison diagram](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-architecture-02.png)
 
 ### Coroutine Scope + Virtual Threads Management Diagram
 
-```
-runSuspendVT { }                         ← Virtual Thread-based coroutine test runner
-│
-├── withTables(testDB, VTester)          ← create table, start transaction context
-│   │
-│   ├── virtualThreadTransaction { }     ← create new VT transaction from current transaction
-│   │   └── VTester.selectAll()          ← R2DBC async SQL (runs on VT)
-│   │
-│   ├── CoroutineScope(Dispatchers.newVT())
-│   │   ├── launch { inTopLevelSuspendTransaction { VTester.insert { } } }
-│   │   ├── launch { inTopLevelSuspendTransaction { VTester.insert { } } }
-│   │   └── ... (millions can run simultaneously)
-│   │
-│   └── joinAll(...)                     ← wait for all VT work to complete
-│
-└── auto-cleanup tables (DROP)
-
-Core API roles:
-  Dispatchers.newVT()      → Virtual Thread-based coroutine dispatcher
-  virtualThreadTransaction → branch to VT from current transaction context
-  inTopLevelSuspendTransaction → independent connection and transaction (suited for parallel I/O)
-  runSuspendVT             → run JUnit 5 test as VT coroutine
-```
-
-## Platform Thread vs Virtual Thread Comparison
-
-![Platform Thread vs Virtual Thread Comparison diagram](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-architecture-02.png)
+![Virtual Thread Scope Management diagram](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-architecture-04.png)
 
 ## Virtual Thread API Class Structure
 

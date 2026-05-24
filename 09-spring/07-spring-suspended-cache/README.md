@@ -93,11 +93,7 @@ class DataPopulator: ApplicationListener<ApplicationReadyEvent> {
 Cache logic is separated from the Repository implementation and applied via the Decorator pattern.
 `CachedCountryR2dbcRepository` wraps `DefaultCountryR2dbcRepository` to transparently apply Redis caching.
 
-```
-[Controller] → [CachedCountryR2dbcRepository] → [Redis Cache]
-                         ↓ (cache miss)
-              [DefaultCountryR2dbcRepository] → [R2DBC Database]
-```
+![Cache Decorator Layering diagram](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-architecture-04.png)
 
 ### Bean Registration Structure
 
@@ -272,34 +268,14 @@ Tests use `@RepeatedTest` to verify performance differences between the first (c
 
 ### LettuceSuspendedCache Internal Flow
 
-```
-[Controller suspend fun]
-        │
-        ▼
-[CachedCountryR2dbcRepository]
-        │
-        ├─ cache.get(code)          ← Redis GET "caches:country:code:<code>"
-        │       │
-        │       ├─ HIT  → return immediately (no DB call)
-        │       │
-        │       └─ MISS → delegate.findByCode(code)   ← Exposed R2DBC suspendTransaction
-        │                       │
-        │                       └─ cache.put(code, result)  ← Redis SET/SETEX (TTL 60s)
-        │
-        └─ cache.evict(code)        ← Redis DEL (invalidate on update)
-```
+![Execution Flow diagram](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-sequence-01.png)
 
 ### SCAN-Based Full Cache Eviction
 
 Redis's `KEYS` command scans all keys at once and can temporarily block the Redis server on large datasets.
 `LettuceSuspendedCache.clear()` solves this with a cursor-based `SCAN` + `UNLINK` pattern (using `KeyScanArgs`):
 
-```
-SCAN cursor MATCH "caches:country:code:*" COUNT 100
-    → get 100 keys at a time via KeyScanArgs.Builder.matches(...).limit(100)
-    → UNLINK key1 key2 ... (async deletion, safer than DEL)
-    → repeat until cursor.isFinished
-```
+![SCAN-Based Cache Eviction diagram](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-architecture-05.png)
 
 Unlike `DEL`, `UNLINK` releases memory in the background and does not block the Redis event loop.
 

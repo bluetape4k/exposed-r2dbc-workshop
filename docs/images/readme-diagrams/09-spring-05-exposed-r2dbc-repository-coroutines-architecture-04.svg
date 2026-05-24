@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="650" viewBox="0 0 1120 650" role="img" aria-label="Spring DI + Exposed R2DBC">
+<defs>
+  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L9,5 L1,9 Z" fill="#5D6B7A"/></marker>
+  <style>
+    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
+    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
+    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
+    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:24px;font-weight:400;fill:#102033}
+    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:20px;font-weight:400;fill:#102033}
+    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12.5px;font-weight:400;fill:#102033}
+    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12.5px;font-weight:400;fill:#536273}
+    .card{stroke-width:2.1;filter:url(#shadow)}.soft{stroke-width:1.7}
+    .line{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#arrow)}
+    .plain{stroke:#758297;stroke-width:2.0;fill:none}.dash{stroke:#758297;stroke-width:2.0;stroke-dasharray:7 6;fill:none;marker-end:url(#arrow)}
+  </style>
+</defs>
+<rect class="canvas" width="1120" height="650"/>
+<rect class="frame" x="32" y="28" width="1056" height="594" rx="28"/>
+<text class="title" x="66" y="82">Spring DI + Exposed R2DBC</text>
+<text class="subtitle" x="70" y="118">Bean graph from Spring container to suspend repository transactions</text>
+<g transform="translate(410,160)">
+  <rect class="card" x="0" y="0" width="300" height="86" rx="8" fill="#E8F3FF" stroke="#5B8DEF"/>
+  <text class="smallLabel" x="150" y="50" text-anchor="middle">Spring Container</text>
+</g><g transform="translate(90,300)">
+  <rect class="card" x="0" y="0" width="270" height="104" rx="8" fill="#EAF7EF" stroke="#58A978"/>
+  <text class="smallLabel" x="135" y="34" text-anchor="middle">R2dbcDatabase</text>
+<text class="smallLabel" x="135" y="59" text-anchor="middle">ExposedR2dbcConfig</text>
+<text class="smallLabel" x="135" y="84" text-anchor="middle">pool + dispatcher</text>
+</g><g transform="translate(425,300)">
+  <rect class="card" x="0" y="0" width="270" height="104" rx="8" fill="#FFF3D9" stroke="#D6A441"/>
+  <text class="smallLabel" x="135" y="34" text-anchor="middle">R2dbcRepository</text>
+<text class="smallLabel" x="135" y="59" text-anchor="middle">Movie / Actor beans</text>
+<text class="smallLabel" x="135" y="84" text-anchor="middle">@Repository</text>
+</g><g transform="translate(760,300)">
+  <rect class="card" x="0" y="0" width="270" height="104" rx="8" fill="#FDECEF" stroke="#DC6B82"/>
+  <text class="smallLabel" x="135" y="34" text-anchor="middle">Web Controllers</text>
+<text class="smallLabel" x="135" y="59" text-anchor="middle">Movie / Actor APIs</text>
+<text class="smallLabel" x="135" y="84" text-anchor="middle">suspend handlers</text>
+</g><g transform="translate(425,480)">
+  <rect class="card" x="0" y="0" width="270" height="86" rx="8" fill="#F1ECFF" stroke="#8A72D6"/>
+  <text class="smallLabel" x="135" y="37.5" text-anchor="middle">suspendTransaction</text>
+<text class="smallLabel" x="135" y="62.5" text-anchor="middle">repository.xxx()</text>
+</g><path class="line" d="M560 246 L225 300"/><path class="line" d="M560 246 L560 300"/><path class="line" d="M560 246 L895 300"/><path class="line" d="M895 404 L560 480"/><path class="line" d="M560 404 L560 480"/><path class="line" d="M425 523 L360 352"/>
+<text class="small" x="392.5" y="429.5" text-anchor="middle">uses</text></svg>

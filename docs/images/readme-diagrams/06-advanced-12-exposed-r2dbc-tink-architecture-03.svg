@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="548" viewBox="0 0 980 548" role="img" aria-label="DAEAD vs AEAD Selection Guide">
+<defs>
+  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L9,5 L1,9 Z" fill="#5D6B7A"/></marker>
+  <style>
+    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
+    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
+    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
+    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:24px;font-weight:400;fill:#102033}
+    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:20px;font-weight:400;fill:#102033}
+    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12.5px;font-weight:400;fill:#102033}
+    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12.5px;font-weight:400;fill:#536273}
+    .card{stroke-width:2.1;filter:url(#shadow)}.soft{stroke-width:1.7}
+    .line{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#arrow)}
+    .plain{stroke:#758297;stroke-width:2.0;fill:none}.dash{stroke:#758297;stroke-width:2.0;stroke-dasharray:7 6;fill:none;marker-end:url(#arrow)}
+  </style>
+</defs>
+<rect class="canvas" width="980" height="548"/>
+<rect class="frame" x="32" y="28" width="916" height="492" rx="28"/>
+<text class="title" x="66" y="82">DAEAD vs AEAD Selection Guide</text>
+<text class="subtitle" x="70" y="118">Choose deterministic encryption only when query predicates require it</text>
+<g transform="translate(350,170)">
+  <rect class="card" x="0" y="0" width="280" height="92" rx="8" fill="#EAF7EF" stroke="#58A978"/>
+  <text class="smallLabel" x="140" y="53" text-anchor="middle">Need WHERE search?</text>
+</g><g transform="translate(92,330)">
+  <rect class="card" x="0" y="0" width="300" height="124" rx="8" fill="#FFF3D9" stroke="#D6A441"/>
+  <text class="smallLabel" x="150" y="44" text-anchor="middle">DAEAD columns</text>
+<text class="smallLabel" x="150" y="69" text-anchor="middle">tinkDaeadVarChar</text>
+<text class="smallLabel" x="150" y="94" text-anchor="middle">names, email, partial IDs</text>
+</g><g transform="translate(588,330)">
+  <rect class="card" x="0" y="0" width="300" height="124" rx="8" fill="#E8F3FF" stroke="#5B8DEF"/>
+  <text class="smallLabel" x="150" y="44" text-anchor="middle">AEAD columns</text>
+<text class="smallLabel" x="150" y="69" text-anchor="middle">tinkAeadVarChar / Binary</text>
+<text class="smallLabel" x="150" y="94" text-anchor="middle">addresses, cards, secrets</text>
+</g><path class="line" d="M425 262 L275 330"/>
+<text class="small" x="350" y="288" text-anchor="middle">YES</text><path class="line" d="M555 262 L735 330"/>
+<text class="small" x="645" y="288" text-anchor="middle">NO</text><text class="small" x="490" y="494" text-anchor="middle">DAEAD repeats ciphertext for equal plaintext. Prefer AEAD unless lookup is required.</text></svg>

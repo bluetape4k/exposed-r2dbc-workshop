@@ -96,11 +96,7 @@ Defines relationships among multiple entities: Post, PostDetail, PostComment, Ta
 
 **Schema Structure:**
 
-```
-posts (1) ←──→ (1) post_details        (One-to-One: shared PK)
-posts (1) ←──→ (N) post_comments       (One-to-Many: FK reference)
-posts (N) ←──→ (N) tags                (Many-to-Many: post_tags join table)
-```
+![Blog ERD diagram](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-erd-03.png)
 
 **JPA vs Exposed Relationship Mapping:**
 

@@ -87,21 +87,11 @@ Every tenant-aware request must include `X-TENANT-ID`.
 
 ## Multi-tenancy Isolation Level Options
 
+![Multi-Tenancy Isolation Options diagram](../../docs/images/readme-diagrams/10-multi-tenant-03-multitenant-spring-webflux-architecture-04.png)
+
 ### 1. Schema-based (This Example)
 
 Each tenant uses a **separate schema on the same DB instance**.
-
-```
-PostgreSQL Instance
-├── Schema: korean
-│   ├── movies
-│   ├── actors
-│   └── actors_in_movies
-└── Schema: english
-    ├── movies
-    ├── actors
-    └── actors_in_movies
-```
 
 **Pros**: Single DB instance management, complete data isolation between tenants, operational simplicity
 **Cons**: Maximum schema count limit per DB, complex connection pool management with many tenants
@@ -110,25 +100,12 @@ PostgreSQL Instance
 
 Separates tenants within a single schema by adding a tenant identifier column (`tenant_id`) to all tables.
 
-```
-Schema: public
-└── actors  (tenant_id, id, first_name, last_name, ...)
-    ├── ROW: tenant_id="korean", id=1, first_name="조니"
-    └── ROW: tenant_id="english", id=1, first_name="Johnny"
-```
-
 **Pros**: Simple implementation, unlimited tenant count
 **Cons**: Must add `WHERE tenant_id = ?` to all queries, risk of data isolation errors
 
 ### 3. Database-based (Not Implemented, Reference Only)
 
 Uses a **separate DB instance per tenant**. Requires a routing DataSource (`DynamicRoutingConnectionFactory`).
-
-```
-App → ConnectionFactory Registry
-       ├── "korean" → ConnectionFactory(korean_db)
-       └── "english" → ConnectionFactory(english_db)
-```
 
 **Pros**: Complete resource isolation, DB-level security
 **Cons**: High operational complexity, DB instance costs proportional to tenant count

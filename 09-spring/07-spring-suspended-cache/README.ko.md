@@ -94,11 +94,7 @@ class DataPopulator: ApplicationListener<ApplicationReadyEvent> {
 캐시 로직을 Repository 구현에서 분리하여 Decorator 패턴으로 적용합니다.
 `CachedCountryR2dbcRepository`는 `DefaultCountryR2dbcRepository`를 래핑하여 Redis 캐시를 투명하게 적용합니다.
 
-```
-[Controller] → [CachedCountryR2dbcRepository] → [Redis Cache]
-                         ↓ (cache miss)
-              [DefaultCountryR2dbcRepository] → [R2DBC Database]
-```
+![Cache Decorator Layering diagram](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-architecture-04.png)
 
 ### Bean 등록 구조
 
@@ -273,34 +269,14 @@ Redis는 Testcontainers를 통해 자동으로 실행됩니다.
 
 ### LettuceSuspendedCache 내부 흐름
 
-```
-[Controller suspend fun]
-        │
-        ▼
-[CachedCountryR2dbcRepository]
-        │
-        ├─ cache.get(code)          ← Redis GET "caches:country:code:<code>"
-        │       │
-        │       ├─ HIT  → 즉시 반환 (DB 호출 없음)
-        │       │
-        │       └─ MISS → delegate.findByCode(code)   ← Exposed R2DBC suspendTransaction
-        │                       │
-        │                       └─ cache.put(code, result)  ← Redis SET/SETEX (TTL 60s)
-        │
-        └─ cache.evict(code)        ← Redis DEL (업데이트 시 무효화)
-```
+![Execution Flow diagram](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-sequence-01.png)
 
 ### SCAN 기반 전체 캐시 삭제
 
 Redis의 `KEYS` 명령은 모든 키를 한 번에 스캔하므로 대규모 데이터셋에서 Redis 서버를 일시적으로 블로킹할 수 있습니다.
 `LettuceSuspendedCache.clear()`는 커서 기반 `SCAN` + `UNLINK` 패턴(`KeyScanArgs` 사용)으로 이 문제를 해결합니다:
 
-```
-SCAN cursor MATCH "caches:country:code:*" COUNT 100
-    → KeyScanArgs.Builder.matches(...).limit(100) 으로 키 목록 100개씩 취득
-    → UNLINK key1 key2 ... (비동기 삭제, DEL보다 안전)
-    → cursor.isFinished 될 때까지 반복
-```
+![SCAN-Based Cache Eviction diagram](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-architecture-05.png)
 
 `UNLINK`는 `DEL`과 달리 백그라운드에서 메모리를 해제하므로 Redis 이벤트 루프를 차단하지 않습니다.
 

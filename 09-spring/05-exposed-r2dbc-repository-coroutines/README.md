@@ -269,14 +269,7 @@ Tests use H2 in-memory DB with `@ActiveProfiles("h2")` and load the full applica
 
 ### Dependency Injection Structure
 
-```
-Spring Container
-    ├── R2dbcDatabase  ←── ExposedR2dbcConfig (ConnectionPool + CoroutineDispatcher)
-    ├── MovieR2dbcRepository  ←── @Repository (R2dbcRepository<Long, MovieRecord>)
-    ├── ActorR2dbcRepository  ←── @Repository
-    └── MovieController / ActorController / MovieActorsController
-            └── suspendTransaction { repository.xxx() }
-```
+![Spring DI + Exposed R2DBC diagram](../../docs/images/readme-diagrams/09-spring-05-exposed-r2dbc-repository-coroutines-architecture-04.png)
 
 ### Repository Layer Design
 

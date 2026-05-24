@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1250" height="660" viewBox="0 0 1250 660" role="img" aria-label="Multi-Tenancy Isolation Options">
+<defs>
+  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L9,5 L1,9 Z" fill="#5D6B7A"/></marker>
+  <style>
+    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
+    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
+    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
+    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:24px;font-weight:400;fill:#102033}
+    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:20px;font-weight:400;fill:#102033}
+    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12.5px;font-weight:400;fill:#102033}
+    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12.5px;font-weight:400;fill:#536273}
+    .card{stroke-width:2.1;filter:url(#shadow)}.soft{stroke-width:1.7}
+    .line{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#arrow)}
+    .plain{stroke:#758297;stroke-width:2.0;fill:none}.dash{stroke:#758297;stroke-width:2.0;stroke-dasharray:7 6;fill:none;marker-end:url(#arrow)}
+  </style>
+</defs>
+<rect class="canvas" width="1250" height="660"/>
+<rect class="frame" x="32" y="28" width="1186" height="604" rx="28"/>
+<text class="title" x="66" y="82">Multi-Tenancy Isolation Options</text>
+<text class="subtitle" x="70" y="118">Schema, row, and database isolation trade separate operational boundaries</text>
+<g transform="translate(70,170)">
+  <rect class="card" x="0" y="0" width="330" height="380" rx="8" fill="#E8F3FF" stroke="#5B8DEF"/>
+  <text class="label" x="165" y="38" text-anchor="middle">Schema-based</text>
+  <line class="plain" x1="16" y1="54" x2="314" y2="54" stroke="#5B8DEF"/>
+  <text class="mono" x="22" y="82">PostgreSQL instance</text>
+  <text class="mono" x="22" y="104">  schema: korean</text>
+  <text class="mono" x="22" y="126">    movies</text>
+  <text class="mono" x="22" y="148">    actors</text>
+  <text class="mono" x="22" y="170">    actors_in_movies</text>
+  <text class="mono" x="22" y="192">  schema: english</text>
+  <text class="mono" x="22" y="214">    movies</text>
+  <text class="mono" x="22" y="236">    actors</text>
+  <text class="mono" x="22" y="258">    actors_in_movies</text>
+  <text class="mono" x="22" y="280">Best: strong isolation, one DB</text>
+</g><g transform="translate(460,170)">
+  <rect class="card" x="0" y="0" width="330" height="380" rx="8" fill="#EAF7EF" stroke="#58A978"/>
+  <text class="label" x="165" y="38" text-anchor="middle">Row-based</text>
+  <line class="plain" x1="16" y1="54" x2="314" y2="54" stroke="#58A978"/>
+  <text class="mono" x="22" y="82">schema: public</text>
+  <text class="mono" x="22" y="104">  actors</text>
+  <text class="mono" x="22" y="126">    tenant_id</text>
+  <text class="mono" x="22" y="148">    id</text>
+  <text class="mono" x="22" y="170">    first_name</text>
+  <text class="mono" x="22" y="192">    last_name</text>
+  <text class="mono" x="22" y="214"></text>
+  <text class="mono" x="22" y="236">Every query filters tenant_id</text>
+  <text class="mono" x="22" y="258">Best: many small tenants</text>
+</g><g transform="translate(850,170)">
+  <rect class="card" x="0" y="0" width="330" height="380" rx="8" fill="#FFF3D9" stroke="#D6A441"/>
+  <text class="label" x="165" y="38" text-anchor="middle">Database-based</text>
+  <line class="plain" x1="16" y1="54" x2="314" y2="54" stroke="#D6A441"/>
+  <text class="mono" x="22" y="82">ConnectionFactory registry</text>
+  <text class="mono" x="22" y="104">  korean -&gt; korean_db</text>
+  <text class="mono" x="22" y="126">  english -&gt; english_db</text>
+  <text class="mono" x="22" y="148"></text>
+  <text class="mono" x="22" y="170">One DB per tenant</text>
+  <text class="mono" x="22" y="192">Routing layer required</text>
+  <text class="mono" x="22" y="214"></text>
+  <text class="mono" x="22" y="236">Best: strict resource split</text>
+</g></svg>

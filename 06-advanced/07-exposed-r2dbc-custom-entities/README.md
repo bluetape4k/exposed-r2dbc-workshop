@@ -34,19 +34,7 @@ Different ID generation strategies vary in storage type, sortability, and length
 
 ### Strategy Selection Guide
 
-```
-Need a numeric ID?
-    YES → SnowflakeIdTable (Long, 64-bit, millis-sorted)
-
-Need a string ID?
-    Sortable + UUID standard compliance?
-        YES → TimebasedUUIDTable (UUID, 36 chars, RFC 4122)
-        Need compact representation?
-            YES → TimebasedUUIDBase62Table (String, 22 chars)
-    Lexicographic sort + URL-friendly?
-        Second precision → KsuidTable (String, 27 chars)
-        Millisecond precision → KsuidMillisTable (String, 27 chars)
-```
+![ID Strategy Selection Flowchart diagram](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-architecture-04.png)
 
 ## Learning Objectives
 

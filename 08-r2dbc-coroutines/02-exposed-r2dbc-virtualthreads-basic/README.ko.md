@@ -187,55 +187,11 @@ JDK 21의 Virtual Threads(Project Loom)는 기존 플랫폼 스레드의 한계�
 
 ### R2DBC + Virtual Threads 조합의 이점
 
-```
-기존 플랫폼 스레드 모델:
-┌─────────────────────────────────────────────────┐
-│ Thread Pool (수백 개 한계)                       │
-│  [Thread-1] → SQL wait → [Thread-1 block]       │
-│  [Thread-2] → SQL wait → [Thread-2 block]       │
-│  ...         (I/O 대기 중 스레드 낭비)           │
-└─────────────────────────────────────────────────┘
-
-Virtual Threads 모델 (JDK 21+):
-┌─────────────────────────────────────────────────┐
-│ Carrier Thread Pool (CPU 코어 수)                │
-│  [Carrier-1] ← 마운트 → [VThread-1] SQL 실행    │
-│               ← SQL wait 발생                    │
-│  [Carrier-1] ← 마운트 → [VThread-2] 다른 작업   │
-│               (VThread-1은 suspend, 스레드 해제) │
-│  ...         (수백만 VThread 동시 처리 가능)     │
-└─────────────────────────────────────────────────┘
-```
+![Platform Thread vs Virtual Thread Comparison diagram](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-architecture-02.png)
 
 ### Coroutine Scope + Virtual Threads 관리 다이어그램
 
-```
-runSuspendVT { }                         ← Virtual Thread 기반 코루틴 테스트 실행기
-│
-├── withTables(testDB, VTester)          ← 테이블 생성, 트랜잭션 컨텍스트 시작
-│   │
-│   ├── virtualThreadTransaction { }     ← 현재 트랜잭션에서 새 VT 트랜잭션 생성
-│   │   └── VTester.selectAll()          ← R2DBC 비동기 SQL (VT에서 실행)
-│   │
-│   ├── CoroutineScope(Dispatchers.newVT())
-│   │   ├── launch { inTopLevelSuspendTransaction { VTester.insert { } } }
-│   │   ├── launch { inTopLevelSuspendTransaction { VTester.insert { } } }
-│   │   └── ... (수백만 개 동시 실행 가능)
-│   │
-│   └── joinAll(...)                     ← 모든 VT 작업 완료 대기
-│
-└── 테이블 자동 정리 (DROP)
-
-핵심 API 역할:
-  Dispatchers.newVT()      → Virtual Thread 기반 코루틴 디스패처
-  virtualThreadTransaction → 현재 트랜잭션 컨텍스트에서 VT로 분기
-  inTopLevelSuspendTransaction → 독립 커넥션·독립 트랜잭션 (병렬 I/O에 적합)
-  runSuspendVT             → JUnit 5 테스트를 VT 코루틴으로 실행
-```
-
-## Platform Thread vs Virtual Thread 비교
-
-![Platform Thread vs Virtual Thread diagram](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-architecture-02.png)
+![Virtual Thread Scope Management diagram](../../docs/images/readme-diagrams/08-r2dbc-coroutines-02-exposed-r2dbc-virtualthreads-basic-architecture-04.png)
 
 ## Virtual Thread API 클래스 구조
 

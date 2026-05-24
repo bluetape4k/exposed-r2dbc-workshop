@@ -97,11 +97,7 @@ Post, PostDetail, PostComment, Tag 등 여러 엔티티 간의 관계를 정의�
 
 **스키마 구조:**
 
-```
-posts (1) ←──→ (1) post_details        (One-to-One: 공유 PK)
-posts (1) ←──→ (N) post_comments       (One-to-Many: FK 참조)
-posts (N) ←──→ (N) tags                (Many-to-Many: post_tags 중간 테이블)
-```
+![Blog ERD diagram](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-erd-03.png)
 
 **JPA vs Exposed 관계 매핑:**
 
@@ -200,7 +196,7 @@ object CustomIdTable: IdTable<Email>("emails") {
 
 ## Blog 도메인 ERD
 
-![Blog ERD diagram](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-class-02.png)
+![Blog ERD diagram](../../docs/images/readme-diagrams/07-jpa-convert-01-convert-jpa-basic-erd-03.png)
 
 ## JPA vs Exposed 주요 개념 매핑 요약
 
