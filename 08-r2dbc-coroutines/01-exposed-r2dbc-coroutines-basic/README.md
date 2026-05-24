@@ -63,24 +63,7 @@ suspend fun query() = suspendTransaction {
 
 ### Coroutine Scope Management Diagram
 
-```
-runTest / runSuspendIO
-│
-├── withTables(testDB, MyTable)          ← create table, start transaction context
-│   │
-│   ├── suspendTransaction { }           ← start new transaction (reuse existing context)
-│   │   └── MyTable.insert { }           ← R2DBC async SQL execution
-│   │
-│   ├── CoroutineScope(Dispatchers.IO)
-│   │   └── async {
-│   │       inTopLevelSuspendTransaction { }  ← independent top-level transaction (new connection)
-│   │           └── MyTable.insert { }
-│   │       }
-│   │
-│   └── awaitAll(...)                    ← wait for all async work to complete
-│
-└── auto-cleanup tables (DROP)
-```
+![Coroutine Scope Management diagram](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-architecture-04.png)
 
 **Key Rules:**
 - `suspendTransaction`: reuses the DB connection from the current coroutine context (nestable)

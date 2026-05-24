@@ -12,27 +12,7 @@
 
 ## 아키텍처
 
-```
-HTTP Request
-    │
-    ▼
-TenantRoutingWebFilter          ← X-Tenant-Id 헤더, /readonly 경로 감지
-    │  contextWrite(TENANT, READ_ONLY)
-    ▼
-RoutingMarkerController         ← suspend 핸들러
-    │  txExecutor.readWrite() / txExecutor.readOnly()
-    ▼
-RoutingTransactionalExecutor    ← TransactionalOperator + READ_ONLY 힌트를 Reactor Context에 추가
-    │
-    ▼
-DynamicRoutingConnectionFactory ← Mono.deferContextual { keyResolver.currentLookupKey(ctx) }
-    │  키 예: "acme:ro", "default:rw"
-    ▼
-ConnectionFactoryRegistry       ← 키 → ConnectionFactory 매핑
-    │
-    ▼
-실제 DB (H2 / PostgreSQL 등)
-```
+![Routing DataSource Architecture diagram](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-architecture-04.png)
 
 ---
 
@@ -212,46 +192,11 @@ routing:
 
 HTTP 요청에서 실제 DB 커넥션까지 라우팅 정보가 전달되는 전체 흐름입니다.
 
-```
-HTTP Request
-    │  X-Tenant-Id: acme
-    │  X-Read-Only: true  (또는 /readonly 경로)
-    ▼
-TenantRoutingWebFilter
-    │  contextWrite {
-    │      TENANT    = "acme"
-    │      READ_ONLY = true
-    │  }
-    ▼
-RoutingMarkerController (suspend fun)
-    │  txExecutor.readOnly { ... }
-    ▼
-RoutingTransactionalExecutor
-    │  readOnlyOperator.execute(Mono) {   ← Spring TransactionalOperator
-    │      contextWrite(READ_ONLY, true)  ← Context에 힌트 추가
-    │  }
-    ▼
-DynamicRoutingConnectionFactory.create()
-    │  Mono.deferContextual { ctx ->
-    │      key = keyResolver.currentLookupKey(ctx)  // "acme:ro"
-    │      registry.get("acme:ro")
-    │  }
-    ▼
-ConnectionFactoryRegistry["acme:ro"]
-    │
-    ▼
-acme 테넌트의 읽기 전용 DB 인스턴스
-```
+![Request to DB Routing Flow diagram](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-sequence-02.png)
 
 ### 테넌트 × 읽기/쓰기 커넥션 구성
 
-```
-ConnectionFactoryRegistry
-├── "default:rw"  →  H2 / PostgreSQL RW (default 테넌트 읽기+쓰기)
-├── "default:ro"  →  H2 / PostgreSQL RO (default 테넌트 읽기 전용)
-├── "acme:rw"     →  H2 / PostgreSQL RW (acme 테넌트 읽기+쓰기)
-└── "acme:ro"     →  H2 / PostgreSQL RO (acme 테넌트 읽기 전용)
-```
+![Tenant Read/Write Registry diagram](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-architecture-05.png)
 
 `ro` URL을 생략하면 `rw` URL이 읽기 전용 커넥션으로도 재사용됩니다.
 

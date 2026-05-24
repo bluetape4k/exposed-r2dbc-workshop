@@ -63,24 +63,7 @@ suspend fun query() = suspendTransaction {
 
 ### Coroutine Scope 관리 다이어그램
 
-```
-runTest / runSuspendIO
-│
-├── withTables(testDB, MyTable)          ← 테이블 생성, 트랜잭션 컨텍스트 시작
-│   │
-│   ├── suspendTransaction { }           ← 새 트랜잭션 시작 (기존 컨텍스트 재사용)
-│   │   └── MyTable.insert { }           ← R2DBC 비동기 SQL 실행
-│   │
-│   ├── CoroutineScope(Dispatchers.IO)
-│   │   └── async {
-│   │       inTopLevelSuspendTransaction { }  ← 독립된 최상위 트랜잭션 (새 커넥션)
-│   │           └── MyTable.insert { }
-│   │       }
-│   │
-│   └── awaitAll(...)                    ← 모든 비동기 작업 완료 대기
-│
-└── 테이블 자동 정리 (DROP)
-```
+![Coroutine Scope Management diagram](../../docs/images/readme-diagrams/08-r2dbc-coroutines-01-exposed-r2dbc-coroutines-basic-architecture-04.png)
 
 **핵심 규칙:**
 - `suspendTransaction`: 현재 코루틴 컨텍스트의 DB 커넥션을 재사용 (중첩 가능)

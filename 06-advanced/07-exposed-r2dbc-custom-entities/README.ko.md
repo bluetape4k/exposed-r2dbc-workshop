@@ -35,19 +35,7 @@
 
 ### 전략 선택 가이드
 
-```
-숫자 ID가 필요한가?
-    YES → SnowflakeIdTable (Long, 64비트, 밀리초 정렬)
-
-문자열 ID가 필요한가?
-    정렬 가능 + UUID 표준 준수 필요?
-        YES → TimebasedUUIDTable (UUID, 36자, RFC 4122)
-        컴팩트 표현 필요?
-            YES → TimebasedUUIDBase62Table (String, 22자)
-    알파벳 정렬 + URL 친화적?
-        초 단위 정밀도 → KsuidTable (String, 27자)
-        밀리초 정밀도 → KsuidMillisTable (String, 27자)
-```
+![ID Strategy Selection Flowchart diagram](../../docs/images/readme-diagrams/06-advanced-07-exposed-r2dbc-custom-entities-architecture-04.png)
 
 ## 학습 목표
 

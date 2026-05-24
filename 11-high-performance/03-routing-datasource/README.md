@@ -12,27 +12,7 @@ automatically routing read requests to read-only DBs and write requests to read/
 
 ## Architecture
 
-```
-HTTP Request
-    │
-    ▼
-TenantRoutingWebFilter          ← Detects X-Tenant-Id header, /readonly path
-    │  contextWrite(TENANT, READ_ONLY)
-    ▼
-RoutingMarkerController         ← suspend handler
-    │  txExecutor.readWrite() / txExecutor.readOnly()
-    ▼
-RoutingTransactionalExecutor    ← Adds TransactionalOperator + READ_ONLY hint to Reactor Context
-    │
-    ▼
-DynamicRoutingConnectionFactory ← Mono.deferContextual { keyResolver.currentLookupKey(ctx) }
-    │  Key examples: "acme:ro", "default:rw"
-    ▼
-ConnectionFactoryRegistry       ← key → ConnectionFactory mapping
-    │
-    ▼
-Actual DB (H2 / PostgreSQL, etc.)
-```
+![Routing DataSource Architecture diagram](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-architecture-04.png)
 
 ---
 
@@ -212,46 +192,11 @@ Tests use `@SpringBootTest(webEnvironment = RANDOM_PORT)` + `WebTestClient` to v
 
 The complete flow of routing information from the HTTP request to the actual DB connection.
 
-```
-HTTP Request
-    │  X-Tenant-Id: acme
-    │  X-Read-Only: true  (or /readonly path)
-    ▼
-TenantRoutingWebFilter
-    │  contextWrite {
-    │      TENANT    = "acme"
-    │      READ_ONLY = true
-    │  }
-    ▼
-RoutingMarkerController (suspend fun)
-    │  txExecutor.readOnly { ... }
-    ▼
-RoutingTransactionalExecutor
-    │  readOnlyOperator.execute(Mono) {   ← Spring TransactionalOperator
-    │      contextWrite(READ_ONLY, true)  ← Add hint to Context
-    │  }
-    ▼
-DynamicRoutingConnectionFactory.create()
-    │  Mono.deferContextual { ctx ->
-    │      key = keyResolver.currentLookupKey(ctx)  // "acme:ro"
-    │      registry.get("acme:ro")
-    │  }
-    ▼
-ConnectionFactoryRegistry["acme:ro"]
-    │
-    ▼
-Read-only DB instance for acme tenant
-```
+![Request to DB Routing Flow diagram](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-sequence-02.png)
 
 ### Tenant × Read/Write Connection Configuration
 
-```
-ConnectionFactoryRegistry
-├── "default:rw"  →  H2 / PostgreSQL RW (default tenant read+write)
-├── "default:ro"  →  H2 / PostgreSQL RO (default tenant read-only)
-├── "acme:rw"     →  H2 / PostgreSQL RW (acme tenant read+write)
-└── "acme:ro"     →  H2 / PostgreSQL RO (acme tenant read-only)
-```
+![Tenant Read/Write Registry diagram](../../docs/images/readme-diagrams/11-high-performance-03-routing-datasource-architecture-05.png)
 
 If the `ro` URL is omitted, the `rw` URL is also reused for read-only connections.
 

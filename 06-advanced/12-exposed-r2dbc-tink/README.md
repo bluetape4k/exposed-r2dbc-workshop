@@ -133,13 +133,7 @@ UserSecrets.selectAll()
 
 ## DAEAD vs AEAD Selection Guide
 
-```
-Is searching required?
-    YES → DAEAD (tinkDaeadVarChar)
-           e.g. names, email addresses, phone numbers, partial IDs
-    NO  → AEAD (tinkAeadVarChar / tinkAeadBinary)
-           e.g. password hints, full addresses, card numbers, biometric data
-```
+![DAEAD vs AEAD Selection Guide diagram](../../docs/images/readme-diagrams/06-advanced-12-exposed-r2dbc-tink-architecture-03.png)
 
 > **Note**: DAEAD always produces the same ciphertext for the same plaintext, making it vulnerable to statistical attacks such as frequency analysis. Use it only when searching is strictly required.
 

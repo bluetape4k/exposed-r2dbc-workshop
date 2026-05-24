@@ -133,13 +133,7 @@ UserSecrets.selectAll()
 
 ## DAEAD vs AEAD 선택 기준
 
-```
-검색이 필요한가?
-    YES → DAEAD (tinkDaeadVarChar)
-           예: 이름, 이메일, 전화번호, 주민번호 앞자리
-    NO  → AEAD (tinkAeadVarChar / tinkAeadBinary)
-           예: 비밀번호 힌트, 전체 주소, 카드번호, 생체정보
-```
+![DAEAD vs AEAD Selection Guide diagram](../../docs/images/readme-diagrams/06-advanced-12-exposed-r2dbc-tink-architecture-03.png)
 
 > **참고**: DAEAD는 동일 평문이 항상 동일 암호문을 생성하므로 빈도 분석 등의 통계적 공격에 취약합니다. 검색이 꼭 필요한 경우에만 사용하세요.
 
