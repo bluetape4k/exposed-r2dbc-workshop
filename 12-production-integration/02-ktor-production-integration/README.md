@@ -64,14 +64,7 @@ ping and respects sticky degraded database state from diagnostics.
 
 ## Package Layout
 
-```text
-exposed.r2dbc.examples.production.ktor
-├── app         # DTOs, validation, and Exposed R2DBC repository
-├── config      # JSON serialization, request correlation, structured error mapping, auth failures
-├── outbound    # Ktor HTTP client dispatcher boundary
-├── persistence # table definitions owned by the repository boundary
-└── routes      # HTTP routes, diagnostics endpoints, and WebSocket replay endpoint
-```
+![Ktor production package layout](../../docs/assets/readme-diagrams/12-production-integration-02-ktor-package-layout-01.png)
 
 ## Ktor vs Spring Boot 4
 

@@ -63,14 +63,7 @@ sticky degraded database state를 함께 반영합니다.
 
 ## 패키지 구성
 
-```text
-exposed.r2dbc.examples.production.ktor
-├── app         # DTO, validation, Exposed R2DBC repository
-├── config      # JSON serialization, request correlation, structured error mapping, auth failure
-├── outbound    # Ktor HTTP client dispatcher 경계
-├── persistence # repository 경계가 소유하는 table 정의
-└── routes      # HTTP route, diagnostics endpoint, WebSocket replay endpoint
-```
+![Ktor production package layout](../../docs/assets/readme-diagrams/12-production-integration-02-ktor-package-layout-01.png)
 
 ## Ktor vs Spring Boot 4
 

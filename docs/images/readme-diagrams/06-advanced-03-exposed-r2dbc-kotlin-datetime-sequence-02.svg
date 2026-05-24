@@ -1,61 +1,47 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1288" height="1236" viewBox="0 0 1288 1236" role="img" aria-label="Date/Time Processing Flow">
+<svg xmlns="http://www.w3.org/2000/svg" width="1085" height="940" viewBox="0 0 1085 940" role="img" aria-label="Date/Time Processing Flow">
 <defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M 1 1 L 10 5 L 1 9" fill="none" stroke="#758297" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
-  <marker id="inherit" markerWidth="14" markerHeight="12" refX="12" refY="6" orient="auto" markerUnits="strokeWidth"><path d="M 0 1 L 12 6 L 0 11 Z" fill="#ffffff" stroke="#758297" stroke-width="1.8"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inherit)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inherit)}
-  </style>
+<filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
+<marker id="openArrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,4.5 L1,8 Z" fill="#5D6B7A"/></marker>
+<style>.canvas{fill:#F7F9FC}.frame{fill:#fff;stroke:#D8E0EA;stroke-width:1.5}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:39px;font-weight:400;fill:#102033}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;font-weight:400;fill:#536273}.smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:22px;font-weight:400;fill:#102033}.strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}.card{stroke-width:2;filter:url(#shadow)}.line{stroke:#5D6B7A;stroke-width:2.2;fill:none;marker-end:url(#openArrow)}.dashed{stroke:#5D6B7A;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}.lifeline{stroke:#B7C2D1;stroke-width:1.8;stroke-dasharray:8 9}.note{fill:#fff;opacity:.97}</style>
 </defs>
-<rect class="canvas" width="1288" height="1236"/>
-<rect class="frame" x="32" y="28" width="1224" height="1180" rx="28"/>
-<text class="title" x="66" y="82">Date/Time Processing Flow</text>
-<text class="subtitle" x="70" y="118">Sequence messages from the original Mermaid source</text>
-<rect class="card" x="-10" y="166" width="300" height="72" rx="20" fill="#E8F3FF" stroke="#5B8DEF"/>
-<text class="smallLabel" x="140" y="209" text-anchor="middle">Application</text>
-<line class="lifeline" x1="140" y1="252" x2="140" y2="1176" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="494" y="166" width="300" height="72" rx="20" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel" x="644" y="198.5" text-anchor="middle">Kotlin Date Time</text>
-<text class="smallLabel" x="644" y="219.5" text-anchor="middle">Column</text>
-<line class="lifeline" x1="644" y1="252" x2="644" y2="1176" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="998" y="166" width="300" height="72" rx="20" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel" x="1148" y="209" text-anchor="middle">Database</text>
-<line class="lifeline" x1="1148" y1="252" x2="1148" y2="1176" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect x="91.5" y="286" width="601" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="109.5" y="313" text-anchor="start">1. insert { it[local_time] = Clock.System.now().toLocalDateTime(UTC) }</text>
-<path class="line" d="M140 344 L644 344"/>
-<rect x="761" y="396" width="270" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="779" y="423" text-anchor="start">2. INSERT 2025-04-14T12:00:00</text>
-<path class="line" d="M644 454 L1148 454"/>
-<rect x="180.5" y="506" width="423" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="198.5" y="533" text-anchor="start">3. select(local_time.year(), local_time.month())</text>
-<path class="line" d="M140 564 L644 564"/>
-<rect x="696.5" y="616" width="399" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="714.5" y="643" text-anchor="start">4. SELECT YEAR(local_time), MONTH(local_time)</text>
-<path class="line" d="M644 674 L1148 674"/>
-<rect x="539" y="726" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="557" y="753" text-anchor="start">5. year=2025, month=4</text>
-<path class="dashed" d="M1148 784 L140 784"/>
-<rect x="144" y="836" width="496" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="162" y="863" text-anchor="start">6. where { date less dateLiteral(LocalDate(3000, 1, 1)) }</text>
-<path class="line" d="M140 894 L644 894"/>
-<rect x="753" y="946" width="286" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="771" y="973" text-anchor="start">7. WHERE date &lt; DATE 3000-01-01</text>
-<path class="line" d="M644 1004 L1148 1004"/>
-<rect x="505" y="1056" width="278" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="523" y="1083" text-anchor="start">8. rows matching the condition</text>
-<path class="dashed" d="M1148 1114 L140 1114"/>
+<rect class="canvas" width="1085" height="940"/>
+<rect class="frame" x="24" y="24" width="1037" height="884" rx="22"/>
+<text class="title" x="58" y="76">Date/Time Processing Flow</text>
+<text class="subtitle" x="62" y="106">Compact sequence flow with reduced outer and inner whitespace</text>
+<rect class="card" x="50.0" y="156" width="220" height="66" rx="16" fill="#E8F3FF" stroke="#5B8DEF"/>
+<text class="smallLabel" x="160.0" y="196" text-anchor="middle">Application</text>
+<line class="lifeline" x1="160.0" y1="250" x2="160.0" y2="878"/>
+<rect class="card" x="305.0" y="156" width="220" height="66" rx="16" fill="#EAF7EF" stroke="#58A978"/>
+<text class="smallLabel" x="415.0" y="196" text-anchor="middle">Kotlin Date Time</text>
+<line class="lifeline" x1="415.0" y1="250" x2="415.0" y2="878"/>
+<rect class="card" x="560.0" y="156" width="220" height="66" rx="16" fill="#FFF3D9" stroke="#D6A441"/>
+<text class="smallLabel" x="670.0" y="196" text-anchor="middle">Column</text>
+<line class="lifeline" x1="670.0" y1="250" x2="670.0" y2="878"/>
+<rect class="card" x="815.0" y="156" width="220" height="66" rx="16" fill="#FDECEF" stroke="#DC6B82"/>
+<text class="smallLabel" x="925.0" y="196" text-anchor="middle">Database</text>
+<line class="lifeline" x1="925.0" y1="250" x2="925.0" y2="878"/>
+<path class="line" d="M160.0 292.0 L415.0 292.0"/>
+<rect class="note" x="72.5" y="260.0" width="430.0" height="28" rx="9"/>
+<text class="strong" x="287.5" y="280.0" text-anchor="middle">1. insert { it[local_time] = Clock.System.now().toLocalDateTime(UTC) }</text>
+<path class="line" d="M415.0 366.0 L925.0 366.0"/>
+<rect class="note" x="567.1" y="334.0" width="205.8" height="28" rx="9"/>
+<text class="strong" x="670.0" y="354.0" text-anchor="middle">2. INSERT 2025-04-14T12:00:00</text>
+<path class="line" d="M160.0 440.0 L415.0 440.0"/>
+<rect class="note" x="125.7" y="408.0" width="323.6" height="28" rx="9"/>
+<text class="strong" x="287.5" y="428.0" text-anchor="middle">3. select(local_time.year(), local_time.month())</text>
+<path class="line" d="M415.0 514.0 L925.0 514.0"/>
+<rect class="note" x="517.5" y="482.0" width="305.0" height="28" rx="9"/>
+<text class="strong" x="670.0" y="502.0" text-anchor="middle">4. SELECT YEAR(local_time), MONTH(local_time)</text>
+<path class="dashed" d="M925.0 588.0 L160.0 588.0"/>
+<rect class="note" x="462.5" y="556.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="542.5" y="576.0" text-anchor="middle">5. year=2025, month=4</text>
+<path class="line" d="M160.0 662.0 L415.0 662.0"/>
+<rect class="note" x="97.8" y="630.0" width="379.4" height="28" rx="9"/>
+<text class="strong" x="287.5" y="650.0" text-anchor="middle">6. where { date less dateLiteral(LocalDate(3000, 1, 1)) }</text>
+<path class="line" d="M415.0 736.0 L925.0 736.0"/>
+<rect class="note" x="551.6" y="704.0" width="236.8" height="28" rx="9"/>
+<text class="strong" x="670.0" y="724.0" text-anchor="middle">7. WHERE date &amp;lt; DATE 3000-01-01</text>
+<path class="dashed" d="M925.0 810.0 L160.0 810.0"/>
+<rect class="note" x="436.5" y="778.0" width="212.0" height="28" rx="9"/>
+<text class="strong" x="542.5" y="798.0" text-anchor="middle">8. rows matching the condition</text>
 </svg>

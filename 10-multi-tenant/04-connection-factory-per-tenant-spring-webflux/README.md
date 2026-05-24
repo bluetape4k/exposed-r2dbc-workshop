@@ -17,16 +17,7 @@ This module demonstrates **connection-factory-per-tenant** isolation:
 - Startup initialization uses explicit tenant databases backed by the same
   registry-owned pools.
 
-```mermaid
-flowchart TD
-    A[HTTP request] --> B[TenantFilter]
-    B -->|valid X-TENANT-ID| C[Reactor Context tenantId]
-    C --> D[TenantTransactionExecutor]
-    D --> E[Exposed suspendTransaction]
-    E --> F[TenantRoutingConnectionFactory]
-    F -->|korean| G[(tenant_cf_korean)]
-    F -->|english| H[(tenant_cf_english)]
-```
+![Connection Factory Per Tenant architecture](../../docs/assets/readme-diagrams/10-multi-tenant-04-connection-factory-per-tenant-architecture-01.png)
 
 ## When To Use
 

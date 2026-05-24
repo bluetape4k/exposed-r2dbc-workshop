@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="720" viewBox="0 0 1260 720" role="img" aria-label="Repository Learning Structure">
+<defs>
+  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
+  <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,4.5 L1,8 Z" fill="#5D6B7A"/></marker>
+  <style>.bg{fill:#F7F9FC}.panel{fill:#FFFFFF;stroke:#BCC7D6;stroke-width:2;rx:18;filter:url(#shadow)}.blue{fill:#E8F3FF;stroke:#5B8DEF}.green{fill:#E8F7EE;stroke:#3A8B57}.amber{fill:#FFF7E6;stroke:#B7791F}.pink{fill:#FDECEF;stroke:#DC6B82}.teal{fill:#E9F7F6;stroke:#45A7A1}.lav{fill:#EDF1FF;stroke:#5067C5}.gray{fill:#F1F5F9;stroke:#475569}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:36px;fill:#172033;font-weight:400}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:16px;fill:#516070;font-weight:400}.label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:23px;fill:#172033;font-weight:400}.small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;fill:#425466;font-weight:400}.tiny{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;fill:#425466;font-weight:400}.arrow{stroke:#5D6B7A;stroke-width:2.4;fill:none;marker-end:url(#arrow)}.dashed{stroke:#5D6B7A;stroke-width:2.2;stroke-dasharray:7 6;fill:none;marker-end:url(#arrow)}</style>
+</defs>
+<rect class="bg" width="1260" height="720"/>
+<text x="64" y="70" class="title">Repository Learning Structure</text>
+<text x="66" y="102" class="subtitle">The repository is organized as a progressive Exposed R2DBC learning path.</text>
+<rect x="110" y="145" width="440" height="100" class="panel blue"/>
+<text x="136" y="181" class="label">00 shared</text>
+<text x="136" y="209" class="small">test infrastructure and sample schema</text>
+<rect x="640" y="145" width="440" height="100" class="panel green"/>
+<text x="666" y="181" class="label">01 Spring Boot</text>
+<text x="666" y="209" class="small">WebFlux entrypoint</text>
+<rect x="110" y="295" width="440" height="100" class="panel amber"/>
+<text x="136" y="331" class="label">03-05 R2DBC basics</text>
+<text x="136" y="359" class="small">SQL DSL, DDL, DML, transactions</text>
+<rect x="640" y="295" width="440" height="100" class="panel pink"/>
+<text x="666" y="331" class="label">06 advanced</text>
+<text x="666" y="359" class="small">JSON, crypto, money, custom columns</text>
+<rect x="110" y="445" width="440" height="100" class="panel teal"/>
+<text x="136" y="481" class="label">07-09 migration/runtime</text>
+<text x="136" y="509" class="small">JPA conversion, coroutines, Spring cache</text>
+<rect x="640" y="445" width="440" height="100" class="panel lav"/>
+<text x="666" y="481" class="label">10-12 production patterns</text>
+<text x="666" y="509" class="small">multi-tenant, performance, production integration</text>
+<path class="arrow" d="M550 195 H640"/>
+<path class="arrow" d="M330 245 V295"/>
+<path class="arrow" d="M860 245 V295"/>
+<path class="arrow" d="M550 345 H640"/>
+<path class="arrow" d="M330 395 V445"/>
+<path class="arrow" d="M860 395 V445"/>
+</svg>

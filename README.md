@@ -225,20 +225,7 @@ class Ex01_MyExample : AbstractR2dbcExposedTest() {
 
 ## 저장소 구조
 
-```text
-00-shared/               공통 테스트 인프라, 스키마, 샘플 repository
-01-spring-boot/          Spring WebFlux + Exposed R2DBC 진입점
-03-exposed-r2dbc-basic/  SQL DSL 기초 예제
-04-exposed-r2dbc-ddl/    연결 관리, DDL, 스키마 제어
-05-exposed-r2dbc-dml/    SELECT/INSERT/UPDATE/DELETE, 함수, 타입, 트랜잭션
-06-advanced/             암호화, 날짜/시간, JSON, Money, 커스텀 컬럼, Jackson, Tink
-07-jpa-convert/          JPA -> Exposed R2DBC 마이그레이션 패턴
-08-r2dbc-coroutines/     Coroutines, Flow, Virtual Threads
-09-spring/               Repository 패턴, Redis 기반 Suspended Cache
-10-multi-tenant/         Schema 기반 멀티테넌시 + Spring WebFlux
-11-high-performance/     캐시 전략, 읽기/쓰기 분리 라우팅 DataSource
-12-production-integration/ Production-grade Spring Boot 4 and Ktor R2DBC examples
-```
+![Repository learning structure](docs/assets/readme-diagrams/root-readme-repository-structure-03.png)
 
 ## 개발 팁
 

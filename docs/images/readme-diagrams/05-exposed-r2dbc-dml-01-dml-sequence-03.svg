@@ -1,74 +1,56 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1078" height="1744" viewBox="0 0 1078 1744" role="img" aria-label="CTE / UPSERT Execution Flow (Sequence Diagram)">
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="1236" viewBox="0 0 920 1236" role="img" aria-label="CTE / UPSERT Execution Flow">
 <defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M 1 1 L 10 5 L 1 9" fill="none" stroke="#758297" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
-  <marker id="inherit" markerWidth="14" markerHeight="12" refX="12" refY="6" orient="auto" markerUnits="strokeWidth"><path d="M 0 1 L 12 6 L 0 11 Z" fill="#ffffff" stroke="#758297" stroke-width="1.8"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inherit)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inherit)}
-  </style>
+<filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
+<marker id="openArrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,4.5 L1,8 Z" fill="#5D6B7A"/></marker>
+<style>.canvas{fill:#F7F9FC}.frame{fill:#fff;stroke:#D8E0EA;stroke-width:1.5}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:39px;font-weight:400;fill:#102033}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;font-weight:400;fill:#536273}.smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:22px;font-weight:400;fill:#102033}.strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}.card{stroke-width:2;filter:url(#shadow)}.line{stroke:#5D6B7A;stroke-width:2.2;fill:none;marker-end:url(#openArrow)}.dashed{stroke:#5D6B7A;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}.lifeline{stroke:#B7C2D1;stroke-width:1.8;stroke-dasharray:8 9}.note{fill:#fff;opacity:.97}</style>
 </defs>
-<rect class="canvas" width="1078" height="1744"/>
-<rect class="frame" x="32" y="28" width="1014" height="1688" rx="28"/>
-<text class="title" x="66" y="82">CTE / UPSERT Execution Flow</text>
-<text class="subtitle" x="70" y="118">Sequence messages from the original Mermaid source</text>
-<rect class="card" x="25" y="166" width="230" height="72" rx="20" fill="#E8F3FF" stroke="#5B8DEF"/>
-<text class="smallLabel" x="140" y="209" text-anchor="middle">Application</text>
-<line class="lifeline" x1="140" y1="252" x2="140" y2="1684" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="424" y="166" width="230" height="72" rx="20" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel" x="539" y="209" text-anchor="middle">Exposed DSL</text>
-<line class="lifeline" x1="539" y1="252" x2="539" y2="1684" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect class="card" x="823" y="166" width="230" height="72" rx="20" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel" x="938" y="209" text-anchor="middle">Database</text>
-<line class="lifeline" x1="938" y1="252" x2="938" y2="1684" stroke="#b7c2d1" stroke-width="2" stroke-dasharray="10 10"/>
-<rect x="176" y="286" width="327" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="194" y="313" text-anchor="start">1. Words.upsert { it[word] = hello }</text>
-<path class="line" d="M140 344 L539 344"/>
-<rect x="535" y="396" width="407" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="553" y="423" text-anchor="start">2. INSERT INTO words ... ON CONFLICT DO UPDATE</text>
-<path class="line" d="M539 454 L938 454"/>
-<rect x="633.5" y="506" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="651.5" y="533" text-anchor="start">3. affected rows</text>
-<path class="dashed" d="M938 564 L539 564"/>
-<rect x="220.5" y="616" width="238" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="238.5" y="643" text-anchor="start">4. UpsertStatement result</text>
-<path class="dashed" d="M539 674 L140 674"/>
-<rect x="144" y="726" width="391" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="162" y="753" text-anchor="start">5. Words.batchUpsert(list, onUpdate = {...})</text>
-<path class="line" d="M140 784 L539 784"/>
-<rect x="70" y="836" width="938" height="40" rx="16" fill="#F7F1E7" stroke="#B88A44" stroke-width="1.6" opacity="0.96"/>
-<text class="strong" x="92" y="863" text-anchor="start">LOOP: Each item</text>
-<rect x="579" y="904" width="319" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="597" y="931" text-anchor="start">7. INSERT ... ON CONFLICT DO UPDATE</text>
-<path class="line" d="M539 962 L938 962"/>
-<rect x="633.5" y="1014" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="651.5" y="1041" text-anchor="start">8. batch results</text>
-<path class="dashed" d="M938 1072 L539 1072"/>
-<rect x="234.5" y="1124" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="252.5" y="1151" text-anchor="start">9. List of results</text>
-<path class="dashed" d="M539 1182 L140 1182"/>
-<rect x="124" y="1234" width="431" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="142" y="1261" text-anchor="start">10. withRecursive(cte, baseQuery, recursiveQuery)</text>
-<path class="line" d="M140 1292 L539 1292"/>
-<rect x="510.5" y="1344" width="456" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="528.5" y="1371" text-anchor="start">11. WITH RECURSIVE cte AS (base UNION ALL recursive)</text>
-<path class="line" d="M539 1402 L938 1402"/>
-<rect x="619.5" y="1454" width="238" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="637.5" y="1481" text-anchor="start">12. ResultSet (hierarchy)</text>
-<path class="dashed" d="M938 1512 L539 1512"/>
-<rect x="234.5" y="1564" width="210" height="40" rx="12" fill="#ffffff" opacity="0.97"/>
-<text class="strong" x="252.5" y="1591" text-anchor="start">13. List of rows</text>
-<path class="dashed" d="M539 1622 L140 1622"/>
+<rect class="canvas" width="920" height="1236"/>
+<rect class="frame" x="24" y="24" width="872" height="1180" rx="22"/>
+<text class="title" x="58" y="76">CTE / UPSERT Execution Flow</text>
+<text class="subtitle" x="62" y="106">Compact sequence flow with reduced outer and inner whitespace</text>
+<rect class="card" x="95.0" y="156" width="220" height="66" rx="16" fill="#E8F3FF" stroke="#5B8DEF"/>
+<text class="smallLabel" x="205.0" y="196" text-anchor="middle">Application</text>
+<line class="lifeline" x1="205.0" y1="250" x2="205.0" y2="1174"/>
+<rect class="card" x="350.0" y="156" width="220" height="66" rx="16" fill="#EAF7EF" stroke="#58A978"/>
+<text class="smallLabel" x="460.0" y="196" text-anchor="middle">Exposed DSL</text>
+<line class="lifeline" x1="460.0" y1="250" x2="460.0" y2="1174"/>
+<rect class="card" x="605.0" y="156" width="220" height="66" rx="16" fill="#FFF3D9" stroke="#D6A441"/>
+<text class="smallLabel" x="715.0" y="196" text-anchor="middle">Database</text>
+<line class="lifeline" x1="715.0" y1="250" x2="715.0" y2="1174"/>
+<path class="line" d="M205.0 292.0 L460.0 292.0"/>
+<rect class="note" x="207.9" y="260.0" width="249.2" height="28" rx="9"/>
+<text class="strong" x="332.5" y="280.0" text-anchor="middle">1. Words.upsert { it[word] = hello }</text>
+<path class="line" d="M460.0 366.0 L715.0 366.0"/>
+<rect class="note" x="431.9" y="334.0" width="311.2" height="28" rx="9"/>
+<text class="strong" x="587.5" y="354.0" text-anchor="middle">2. INSERT INTO words ... ON CONFLICT DO UPDATE</text>
+<path class="dashed" d="M715.0 440.0 L460.0 440.0"/>
+<rect class="note" x="507.5" y="408.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="587.5" y="428.0" text-anchor="middle">3. affected rows</text>
+<path class="dashed" d="M460.0 514.0 L205.0 514.0"/>
+<rect class="note" x="242.0" y="482.0" width="181.0" height="28" rx="9"/>
+<text class="strong" x="332.5" y="502.0" text-anchor="middle">4. UpsertStatement result</text>
+<path class="line" d="M205.0 588.0 L460.0 588.0"/>
+<rect class="note" x="183.1" y="556.0" width="298.8" height="28" rx="9"/>
+<text class="strong" x="332.5" y="576.0" text-anchor="middle">5. Words.batchUpsert(list, onUpdate = {...})</text>
+<path class="line" d="M460.0 662.0 L715.0 662.0"/>
+<rect class="note" x="466.0" y="630.0" width="243.0" height="28" rx="9"/>
+<text class="strong" x="587.5" y="650.0" text-anchor="middle">7. INSERT ... ON CONFLICT DO UPDATE</text>
+<path class="dashed" d="M715.0 736.0 L460.0 736.0"/>
+<rect class="note" x="507.5" y="704.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="587.5" y="724.0" text-anchor="middle">8. batch results</text>
+<path class="dashed" d="M460.0 810.0 L205.0 810.0"/>
+<rect class="note" x="252.5" y="778.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="332.5" y="798.0" text-anchor="middle">9. List of results</text>
+<path class="line" d="M205.0 884.0 L460.0 884.0"/>
+<rect class="note" x="167.6" y="852.0" width="329.8" height="28" rx="9"/>
+<text class="strong" x="332.5" y="872.0" text-anchor="middle">10. withRecursive(cte, baseQuery, recursiveQuery)</text>
+<path class="line" d="M460.0 958.0 L715.0 958.0"/>
+<rect class="note" x="413.3" y="926.0" width="348.4" height="28" rx="9"/>
+<text class="strong" x="587.5" y="946.0" text-anchor="middle">11. WITH RECURSIVE cte AS (base UNION ALL recursive)</text>
+<path class="dashed" d="M715.0 1032.0 L460.0 1032.0"/>
+<rect class="note" x="497.0" y="1000.0" width="181.0" height="28" rx="9"/>
+<text class="strong" x="587.5" y="1020.0" text-anchor="middle">12. ResultSet (hierarchy)</text>
+<path class="dashed" d="M460.0 1106.0 L205.0 1106.0"/>
+<rect class="note" x="252.5" y="1074.0" width="160.0" height="28" rx="9"/>
+<text class="strong" x="332.5" y="1094.0" text-anchor="middle">13. List of rows</text>
 </svg>
