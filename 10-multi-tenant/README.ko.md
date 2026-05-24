@@ -6,6 +6,14 @@ Chapter 10은 Spring WebFlux + Exposed R2DBC tenant routing 전략을 비교합�
 tenant 격리를 schema switch, tenant별 R2DBC pool, authorization gate, runtime
 onboarding 중 어디에 둘지 선택할 때 이 문서에서 시작하세요.
 
+## Architecture Diagram
+
+![Chapter 10 multi-tenant strategy map](../docs/assets/readme-diagrams/10-multi-tenant-strategy-map-01.png)
+
+개별 모듈 README를 열기 전에 이 chapter-level 다이어그램을 먼저 보세요. 요청이
+Spring WebFlux filter, Ktor call attributes, shared schema switch, tenant-owned
+pool, authorization, runtime onboarding 중 어느 흐름을 타야 하는지 보여줍니다.
+
 ## Strategy Map
 
 | Module | 선택 기준 | 격리 모델 | 검증 |

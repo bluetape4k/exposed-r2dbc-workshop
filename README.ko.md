@@ -138,38 +138,32 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 
 ## 아키텍처 개요
 
-```text
-+-------------------------------------------------------------+
-|                    Application Layer                         |
-|   Spring WebFlux Controller / Coroutine Service             |
-+-------------------+-----------------------------------------+
-                    | suspendTransaction { }
-+-------------------v-----------------------------------------+
-|                  Exposed R2DBC DSL Layer                     |
-|   Table DSL · Select/Insert/Update/Delete · Joins · CTE     |
-|   Column Types: json, money, crypt, datetime, uuid          |
-+-------------------+-----------------------------------------+
-                    | R2DBC driver
-+-------------------v-----------------------------------------+
-|            DynamicRoutingConnectionFactory                   |
-|        (read/write split, tenant routing)                   |
-+--------+-----------------------+----------------------------+
-         | write                 | read
-    +----+------+          +-----+-----+
-    | Primary   |          | Replica   |
-    | DB        |          | DB        |
-    +-----------+          +-----------+
-```
+![Exposed R2DBC Workshop runtime architecture](docs/assets/readme-diagrams/root-readme-runtime-architecture-02.png)
 
-**멀티테넌시 흐름 (Schema-based):**
+워크숍 README는 예제를 PNG 다이어그램으로 먼저 설명하는 방향을 따릅니다. 루트 아키텍처 다이어그램은 다음 흐름을 한 화면에서 보여줍니다.
 
-```text
-HTTP Request
-  -> TenantFilter (X-TENANT-ID 헤더 추출)
-  -> ReactorContext 에 테넌트 ID 저장
-  -> Coroutine Context 로 전파 (ReactorContext -> CoroutineContext)
-  -> suspendTransactionWithCurrentTenant { SchemaUtils.setSchema(tenantId) }
-```
+- Spring WebFlux와 Ktor adapter가 tenant, auth, correlation ID 같은 request context를 수집합니다.
+- Coroutine service 계층은 repository, cache, multi-tenant, production integration 패턴을 적용합니다.
+- 모든 DB 접근은 `suspendTransaction`, SQL DSL/Flow collection, R2DBC `ConnectionFactory` routing을 통과합니다.
+- 인프라 예제는 primary/replica DB, Redis suspended cache, outbox/idempotency storage를 다룹니다.
+
+## exposed-workshop 예제 parity
+
+![Example parity map with exposed-workshop](docs/assets/readme-diagrams/issue-89-example-parity-map-01.png)
+
+Issue [#89](https://github.com/bluetape4k/exposed-r2dbc-workshop/issues/89)는
+[`exposed-workshop`](https://github.com/bluetape4k/exposed-workshop)과의 개념 수준 parity를 추적합니다.
+목표는 모듈 이름을 1:1로 맞추는 것이 아니라, 같은 학습 주제가 양쪽 워크숍에서 설명되는지 확인하는 것입니다.
+R2DBC 전용 구조와 JDBC 전용 구조는 API 모델이 다르면 별도 예제로 유지합니다.
+
+| `exposed-workshop` 주제 | R2DBC counterpart | 결정 |
+|------------------------|-------------------|------|
+| Ktor examples epic `#45`, multi-tenant `#46` | Closed R2DBC issues `#32`, `#33`; module `10-multi-tenant/07-multitenant-ktor` | counterpart 있음 |
+| Ktor cache/routing issues `#47`, `#48`, `#49`, `#50` | Closed R2DBC issues `#34`, `#35`, `#36`, `#69`; modules `11-high-performance/04-06-*` | counterpart 있음 |
+| Spring Boot tenant strategy issues `#51`, `#55`, `#56` | Closed R2DBC issues `#37`-`#42`; modules `10-multi-tenant/03-06-*` | counterpart 있음 |
+| Chapter 12 production integration epic `#57` | Closed R2DBC issues `#43`-`#49`; modules `12-production-integration/01-*`, `02-*` | counterpart 있음 |
+| R2DBC connection-factory-per-tenant | Closed R2DBC issue `#39`; exact JDBC equivalent 없음 | 플랫폼 전용, 중복 issue 없음 |
+| JDBC DAO/entities, transaction template, benchmark | `exposed-workshop`의 blocking/JDBC 전용 모듈 | 플랫폼 전용, 중복 issue 없음 |
 
 ## Exposed v1 주요 변경사항
 

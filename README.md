@@ -137,40 +137,34 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
   [12-production-integration/02-ktor-production-integration](12-production-integration/02-ktor-production-integration/README.md)
   HTTP client outbox/idempotency plus request-correlation and readiness diagnostics
 
-## 아키텍처 개요
+## Architecture diagram
 
-```text
-+-------------------------------------------------------------+
-|                    Application Layer                         |
-|   Spring WebFlux Controller / Coroutine Service             |
-+-------------------+-----------------------------------------+
-                    | suspendTransaction { }
-+-------------------v-----------------------------------------+
-|                  Exposed R2DBC DSL Layer                     |
-|   Table DSL · Select/Insert/Update/Delete · Joins · CTE     |
-|   Column Types: json, money, crypt, datetime, uuid          |
-+-------------------+-----------------------------------------+
-                    | R2DBC driver
-+-------------------v-----------------------------------------+
-|            DynamicRoutingConnectionFactory                   |
-|        (read/write split, tenant routing)                   |
-+--------+-----------------------+----------------------------+
-         | write                 | read
-    +----+------+          +-----+-----+
-    | Primary   |          | Replica   |
-    | DB        |          | DB        |
-    +-----------+          +-----------+
-```
+![Exposed R2DBC Workshop runtime architecture](docs/assets/readme-diagrams/root-readme-runtime-architecture-02.png)
 
-**멀티테넌시 흐름 (Schema-based):**
+The workshop README set should explain examples with rendered PNG diagrams first.
+The root architecture shows the shared mental model:
 
-```text
-HTTP Request
-  -> TenantFilter (X-TENANT-ID 헤더 추출)
-  -> ReactorContext 에 테넌트 ID 저장
-  -> Coroutine Context 로 전파 (ReactorContext -> CoroutineContext)
-  -> suspendTransactionWithCurrentTenant { SchemaUtils.setSchema(tenantId) }
-```
+- Spring WebFlux and Ktor adapters collect request context such as tenant, auth, and correlation IDs.
+- Coroutine services use repository, cache, multi-tenant, and production integration patterns.
+- All database work enters Exposed through `suspendTransaction`, SQL DSL/Flow collection, and R2DBC `ConnectionFactory` routing.
+- Infrastructure examples cover primary/replica databases, Redis-backed suspended cache, and outbox/idempotency storage.
+
+## Example parity with exposed-workshop
+
+![Example parity map with exposed-workshop](docs/assets/readme-diagrams/issue-89-example-parity-map-01.png)
+
+Issue [#89](https://github.com/bluetape4k/exposed-r2dbc-workshop/issues/89) tracks concept-level parity with
+[`exposed-workshop`](https://github.com/bluetape4k/exposed-workshop), not exact module-name parity. R2DBC-only and
+JDBC-only architecture choices remain distinct when the API model is different.
+
+| Topic in `exposed-workshop` | R2DBC counterpart | Decision |
+|-----------------------------|-------------------|----------|
+| Ktor examples epic `#45` and multi-tenant `#46` | Closed R2DBC issues `#32`, `#33`; module `10-multi-tenant/07-multitenant-ktor` | Covered by counterpart |
+| Ktor cache/routing issues `#47`, `#48`, `#49`, `#50` | Closed R2DBC issues `#34`, `#35`, `#36`, `#69`; modules `11-high-performance/04-06-*` | Covered by counterpart |
+| Spring Boot tenant strategy issues `#51`, `#55`, `#56` | Closed R2DBC issues `#37`-`#42`; modules `10-multi-tenant/03-06-*` | Covered by counterpart |
+| Chapter 12 production integration epic `#57` | Closed R2DBC issues `#43`-`#49`; modules `12-production-integration/01-*`, `02-*` | Covered by counterpart |
+| R2DBC connection-factory-per-tenant | Closed R2DBC issue `#39`; no exact JDBC equivalent | Platform-specific, no duplicate issue |
+| JDBC DAO/entities, transaction template, benchmark | Blocking/JDBC-only modules in `exposed-workshop` | Platform-specific, no duplicate issue |
 
 ## Exposed v1 주요 변경사항
 

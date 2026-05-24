@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820" role="img" aria-labelledby="title desc">
+  <title id="title">Chapter 10 multi-tenant strategy map</title>
+  <desc id="desc">Architecture map for schema routing, tenant-owned pools, authorization, onboarding, and Ktor tenant request handling.</desc>
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#203040" flood-opacity="0.12"/>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M 1 1 L 10 5 L 1 9" fill="none" stroke="#63758A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <style>
+      .canvas{fill:#F6F9FC}
+      .frame{fill:#FFFFFF;stroke:#D7E2EC;stroke-width:2}
+      .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:38px;fill:#203040;font-weight:400}
+      .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:16px;fill:#536476;font-weight:400}
+      .head{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;fill:#203040;font-weight:400}
+      .label{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;fill:#2F4053;font-weight:400}
+      .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;fill:#5F6F82;font-weight:400}
+      .card{filter:url(#shadow);stroke-width:2}
+      .line{stroke:#63758A;stroke-width:2.2;fill:none;marker-end:url(#arrow)}
+      .dashed{stroke:#63758A;stroke-width:2.2;stroke-dasharray:7 6;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+
+  <rect class="canvas" width="1400" height="820"/>
+  <rect class="frame" x="34" y="30" width="1332" height="760" rx="24"/>
+  <text class="title" x="72" y="82">Chapter 10 multi-tenant strategy map</text>
+  <text class="subtitle" x="76" y="114">Choose the request context and isolation model before selecting a module.</text>
+
+  <g transform="translate(75,160)">
+    <rect class="card" x="0" y="0" width="260" height="115" rx="14" fill="#E8F3FF" stroke="#75A9E8"/>
+    <text class="head" x="130" y="38" text-anchor="middle">HTTP request</text>
+    <text class="label" x="130" y="66" text-anchor="middle">X-TENANT-ID</text>
+    <text class="small" x="130" y="90" text-anchor="middle">plus optional auth or admin token</text>
+  </g>
+
+  <g transform="translate(410,140)">
+    <rect class="card" x="0" y="0" width="260" height="150" rx="14" fill="#EAF7EF" stroke="#69B888"/>
+    <text class="head" x="130" y="38" text-anchor="middle">Spring WebFlux</text>
+    <text class="label" x="130" y="68" text-anchor="middle">Filter plus ReactorContext</text>
+    <text class="small" x="130" y="94" text-anchor="middle">03 schema switch</text>
+    <text class="small" x="130" y="116" text-anchor="middle">05 authorization gate</text>
+  </g>
+
+  <g transform="translate(410,356)">
+    <rect class="card" x="0" y="0" width="260" height="150" rx="14" fill="#FFF3D9" stroke="#D9AA4D"/>
+    <text class="head" x="130" y="38" text-anchor="middle">Ktor</text>
+    <text class="label" x="130" y="68" text-anchor="middle">Plugin plus call attributes</text>
+    <text class="small" x="130" y="94" text-anchor="middle">07 schema-per-tenant flow</text>
+    <text class="small" x="130" y="116" text-anchor="middle">no ReactorContext dependency</text>
+  </g>
+
+  <g transform="translate(750,92)">
+    <rect class="card" x="0" y="0" width="270" height="130" rx="14" fill="#FDECEF" stroke="#DB7890"/>
+    <text class="head" x="135" y="36" text-anchor="middle">Shared database</text>
+    <text class="label" x="135" y="66" text-anchor="middle">schema-per-tenant</text>
+    <text class="small" x="135" y="92" text-anchor="middle">SchemaUtils.setSchema inside transaction</text>
+  </g>
+
+  <g transform="translate(750,255)">
+    <rect class="card" x="0" y="0" width="270" height="130" rx="14" fill="#E9F7F6" stroke="#55B5AF"/>
+    <text class="head" x="135" y="36" text-anchor="middle">Tenant-owned pool</text>
+    <text class="label" x="135" y="66" text-anchor="middle">connection factory per tenant</text>
+    <text class="small" x="135" y="92" text-anchor="middle">04 startup registry</text>
+  </g>
+
+  <g transform="translate(750,418)">
+    <rect class="card" x="0" y="0" width="270" height="130" rx="14" fill="#F1ECFF" stroke="#A58BE3"/>
+    <text class="head" x="135" y="36" text-anchor="middle">Runtime onboarding</text>
+    <text class="label" x="135" y="66" text-anchor="middle">metadata, pool, schema seed</text>
+    <text class="small" x="135" y="92" text-anchor="middle">06 cleanup on failed provisioning</text>
+  </g>
+
+  <g transform="translate(1080,166)">
+    <rect class="card" x="0" y="0" width="240" height="130" rx="14" fill="#F7F1E7" stroke="#B68C55"/>
+    <text class="head" x="120" y="36" text-anchor="middle">R2DBC transaction</text>
+    <text class="label" x="120" y="66" text-anchor="middle">suspendTransaction</text>
+    <text class="small" x="120" y="92" text-anchor="middle">tenant context is read once per unit</text>
+  </g>
+
+  <g transform="translate(1080,366)">
+    <rect class="card" x="0" y="0" width="240" height="130" rx="14" fill="#E8F3FF" stroke="#75A9E8"/>
+    <text class="head" x="120" y="36" text-anchor="middle">Tenant database</text>
+    <text class="label" x="120" y="66" text-anchor="middle">tables, seed data, cleanup</text>
+    <text class="small" x="120" y="92" text-anchor="middle">H2-focused workshop verification</text>
+  </g>
+
+  <path class="line" d="M335 217 C365 217 380 215 410 215"/>
+  <path class="line" d="M335 217 C365 217 380 431 410 431"/>
+  <path class="line" d="M670 215 C705 215 715 157 750 157"/>
+  <path class="line" d="M670 215 C705 215 715 320 750 320"/>
+  <path class="line" d="M670 431 C705 431 715 157 750 157"/>
+  <path class="dashed" d="M670 215 C705 215 715 483 750 483"/>
+  <path class="line" d="M1020 157 C1050 157 1050 231 1080 231"/>
+  <path class="line" d="M1020 320 C1050 320 1050 231 1080 231"/>
+  <path class="line" d="M1020 483 C1050 483 1050 431 1080 431"/>
+  <path class="line" d="M1200 296 C1200 330 1200 332 1200 366"/>
+
+  <g transform="translate(185,610)">
+    <rect x="0" y="0" width="1030" height="72" rx="14" fill="#FFFFFF" stroke="#D7E2EC"/>
+    <text class="label" x="515" y="30" text-anchor="middle">Chapter rule: fail closed when tenant context is missing, blank, malformed, unauthorized, or unknown.</text>
+    <text class="small" x="515" y="54" text-anchor="middle">Pick module 03 for shared schema, 04 for startup pools, 05 for auth, 06 for onboarding, and 07 for Ktor request handling.</text>
+  </g>
+</svg>
