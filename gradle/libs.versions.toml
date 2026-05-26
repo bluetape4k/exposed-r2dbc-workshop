@@ -60,6 +60,7 @@ spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 test-logger = { id = "com.adarshr.test-logger", version.ref = "test-logger" }
 graalvm-native = { id = "org.graalvm.buildtools.native", version.ref = "graalvm-native" }
 gatling = { id = "io.gatling.gradle", version.ref = "gatling" }
+exposed = { id = "org.jetbrains.exposed.plugin", version.ref = "exposed" }
 
 [libraries]
 jetbrains-annotations = { module = "org.jetbrains:annotations", version = "26.1.0" }
