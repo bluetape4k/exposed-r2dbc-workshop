@@ -1,5 +1,15 @@
 plugins {
+    alias(libs.plugins.exposed)
     alias(libs.plugins.kotlin.serialization)
+}
+
+exposed {
+    migrations {
+        tablesPackage = "exposed.r2dbc.examples.production"
+        databaseUrl = "jdbc:h2:mem:12-production-integration-02-ktor-production-integration-migrations;DB_CLOSE_DELAY=-1;MODE=PostgreSQL"
+        databaseUser = "sa"
+        databasePassword = ""
+    }
 }
 
 dependencies {

@@ -1,6 +1,16 @@
 plugins {
+    alias(libs.plugins.exposed)
     kotlin("plugin.spring")
     alias(libs.plugins.spring.boot)
+}
+
+exposed {
+    migrations {
+        tablesPackage = "exposed.r2dbc.examples.production"
+        databaseUrl = "jdbc:h2:mem:12-production-integration-01-spring-production-integration-migrations;DB_CLOSE_DELAY=-1;MODE=PostgreSQL"
+        databaseUser = "sa"
+        databasePassword = ""
+    }
 }
 
 springBoot {

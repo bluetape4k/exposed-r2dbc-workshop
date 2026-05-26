@@ -2,10 +2,20 @@ import groovy.json.JsonSlurper
 import java.time.Instant
 
 plugins {
+    alias(libs.plugins.exposed)
     kotlin("plugin.spring")
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.graalvm.native)
     alias(libs.plugins.kotlinx.benchmark)
+}
+
+exposed {
+    migrations {
+        tablesPackage = "exposed.r2dbc.examples.cache"
+        databaseUrl = "jdbc:h2:mem:11-high-performance-02-cache-strategies-r2dbc-migrations;DB_CLOSE_DELAY=-1;MODE=PostgreSQL"
+        databaseUser = "sa"
+        databasePassword = ""
+    }
 }
 
 springBoot {
