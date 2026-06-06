@@ -1,6 +1,8 @@
 name: Examples
 
 on:
+  schedule:
+    - cron: '30 21 * * 0'  # Weekly R2DBC example coverage, Sunday UTC 21:30 (Monday KST 06:30)
   push:
     branches: [ develop ]
     paths:
@@ -82,6 +84,8 @@ jobs:
       - name: Run multi-tenant examples
         env:
           GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+        # Weekly downstream gate: Spring WebFlux and Ktor R2DBC multi-tenant
+        # examples use the H2/default smoke path for PRs and scheduled runs.
         run: >-
           ./gradlew
           :03-multitenant-spring-webflux:test
@@ -129,6 +133,8 @@ jobs:
       - name: Run high-performance examples
         env:
           GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+        # Weekly downstream gate: R2DBC cache and routing examples stay on
+        # H2 to avoid Testcontainers cost in this consumer-facing workflow.
         run: >-
           ./gradlew
           :02-cache-strategies-r2dbc:test
@@ -176,6 +182,8 @@ jobs:
       - name: Run production integration examples
         env:
           GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+        # Weekly downstream gate: production integration smoke tests validate
+        # R2DBC/WebFlux/Ktor consumer paths without external DB credentials.
         run: >-
           ./gradlew
           :01-spring-production-integration:test
