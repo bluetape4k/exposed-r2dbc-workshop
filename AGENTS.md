@@ -1,5 +1,10 @@
 # AGENTS.md - exposed-r2dbc-workshop
 
+This repository inherits the workspace guidance from `../AGENTS.md`.
+Read and follow the workspace root guide first. This file only adds
+repo-specific layout, commands, domain rules, and local exceptions.
+
+
 Kotlin-only Exposed R2DBC learning workshop. Do not add Java code.
 
 - Kotlin 2.3.20
@@ -41,9 +46,6 @@ Gradle module names are leaf directory names.
 10-multi-tenant/
 11-high-performance/
 ```
-
-Root README visual assets live under `docs/assets/` and should be shared by
-`README.md` and `README.ko.md` through the same relative path.
 
 ## Shared Test Infrastructure
 
