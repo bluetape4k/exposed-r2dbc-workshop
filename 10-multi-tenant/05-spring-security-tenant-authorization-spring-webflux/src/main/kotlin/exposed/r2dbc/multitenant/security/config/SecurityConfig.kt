@@ -70,10 +70,10 @@ class SecurityConfig {
                     .issuedAt(Instant.now())
                     .expiresAt(Instant.now().plusSeconds(3600))
                     .apply {
-                        if (TenantIdResolver.resolveAuthenticatedTenant(tenantId) != null || tenantId != null) {
-                            claim("tenant_id", tenantId)
+                        tenantId
+                            ?.takeIf { TenantIdResolver.resolveAuthenticatedTenant(it) != null }
+                            ?.let { claim("tenant_id", it) }
                         }
-                    }
                     .build()
             )
         }
