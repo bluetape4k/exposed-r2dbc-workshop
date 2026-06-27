@@ -22,6 +22,7 @@ class UserEventCacheRepository(
 ): AbstractR2dbcRedissonRepository<Long, UserEventRecord>(
     redissonClient = redissonClient,
     config = RedissonCacheConfig.WRITE_BEHIND_WITH_NEAR_CACHE.copy(name = "exposed:coroutines:user-events"),
+    trustedBinaryCache = true,
 ) {
 
     companion object: KLoggingChannel()
