@@ -39,8 +39,9 @@ class UserCacheRepository(redissonClient: RedissonClient): AbstractR2dbcRedisson
     redissonClient = redissonClient,
     config = RedissonCacheConfig.READ_WRITE_THROUGH_WITH_NEAR_CACHE.copy(
         name = "exposed:coroutines:users",
-        deleteFromDBOnInvalidate = false
-    )
+        deleteFromDBOnInvalidate = false,
+    ),
+    trustedBinaryCache = true,
 ) {
     companion object: KLoggingChannel()
 
