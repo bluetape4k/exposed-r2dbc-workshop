@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="980" height="548" viewBox="0 0 980 548" role="img" aria-label="DAEAD vs AEAD Selection Guide">
 <defs>
   <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L9,5 L1,9 Z" fill="#5D6B7A"/></marker>
+  <marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
   <style>
     .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
     .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
@@ -32,6 +32,6 @@
   <text class="smallLabel" x="150" y="44" text-anchor="middle">AEAD columns</text>
 <text class="smallLabel" x="150" y="69" text-anchor="middle">tinkAeadVarChar / Binary</text>
 <text class="smallLabel" x="150" y="94" text-anchor="middle">addresses, cards, secrets</text>
-</g><path class="line" d="M425 262 L275 330"/>
-<text class="small" x="350" y="288" text-anchor="middle">YES</text><path class="line" d="M555 262 L735 330"/>
+</g><path class="line" d="M425 262 L275 330" data-connector="line"/>
+<text class="small" x="350" y="288" text-anchor="middle">YES</text><path class="line" d="M555 262 L735 330" data-connector="line"/>
 <text class="small" x="645" y="288" text-anchor="middle">NO</text><text class="small" x="490" y="494" text-anchor="middle">DAEAD repeats ciphertext for equal plaintext. Prefer AEAD unless lookup is required.</text></svg>
