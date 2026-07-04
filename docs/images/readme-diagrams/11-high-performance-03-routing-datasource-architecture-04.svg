@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1180" height="820" viewBox="0 0 1180 820" role="img" aria-label="Routing DataSource Architecture">
 <defs>
   <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L9,5 L1,9 Z" fill="#5D6B7A"/></marker>
+  <marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
   <style>
     .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
     .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
@@ -27,24 +27,24 @@
   <rect class="card" x="0" y="0" width="400" height="76" rx="8" fill="#EAF7EF" stroke="#58A978"/>
   <text class="smallLabel" x="200" y="33" text-anchor="middle">TenantRoutingWebFilter</text>
 <text class="smallLabel" x="200" y="57" text-anchor="middle">contextWrite(TENANT, READ_ONLY)</text>
-</g><path class="line" d="M590 226 L590 245"/><g transform="translate(390,340)">
+</g><path class="line" d="M590 226 L590 245" data-connector="line"/><g transform="translate(390,340)">
   <rect class="card" x="0" y="0" width="400" height="76" rx="8" fill="#FFF3D9" stroke="#D6A441"/>
   <text class="smallLabel" x="200" y="33" text-anchor="middle">RoutingMarkerController</text>
 <text class="smallLabel" x="200" y="57" text-anchor="middle">suspend handler</text>
-</g><path class="line" d="M590 321 L590 340"/><g transform="translate(390,435)">
+</g><path class="line" d="M590 321 L590 340" data-connector="line"/><g transform="translate(390,435)">
   <rect class="card" x="0" y="0" width="400" height="76" rx="8" fill="#FDECEF" stroke="#DC6B82"/>
   <text class="smallLabel" x="200" y="33" text-anchor="middle">RoutingTransactionalExecutor</text>
 <text class="smallLabel" x="200" y="57" text-anchor="middle">TransactionalOperator + READ_ONLY</text>
-</g><path class="line" d="M590 416 L590 435"/><g transform="translate(390,530)">
+</g><path class="line" d="M590 416 L590 435" data-connector="line"/><g transform="translate(390,530)">
   <rect class="card" x="0" y="0" width="400" height="76" rx="8" fill="#E9F7F6" stroke="#45A7A1"/>
   <text class="smallLabel" x="200" y="33" text-anchor="middle">DynamicRoutingConnectionFactory</text>
 <text class="smallLabel" x="200" y="57" text-anchor="middle">Mono.deferContextual lookup</text>
-</g><path class="line" d="M590 511 L590 530"/><g transform="translate(390,625)">
+</g><path class="line" d="M590 511 L590 530" data-connector="line"/><g transform="translate(390,625)">
   <rect class="card" x="0" y="0" width="400" height="76" rx="8" fill="#F1ECFF" stroke="#8A72D6"/>
   <text class="smallLabel" x="200" y="33" text-anchor="middle">ConnectionFactoryRegistry</text>
 <text class="smallLabel" x="200" y="57" text-anchor="middle">key -&gt; ConnectionFactory</text>
-</g><path class="line" d="M590 606 L590 625"/><g transform="translate(390,720)">
+</g><path class="line" d="M590 606 L590 625" data-connector="line"/><g transform="translate(390,720)">
   <rect class="card" x="0" y="0" width="400" height="76" rx="8" fill="#F7F1E7" stroke="#B88A44"/>
   <text class="smallLabel" x="200" y="33" text-anchor="middle">Actual DB</text>
 <text class="smallLabel" x="200" y="57" text-anchor="middle">H2 / PostgreSQL</text>
-</g><path class="line" d="M590 701 L590 720"/><text class="small" x="830" y="566">key examples: acme:ro, default:rw</text></svg>
+</g><path class="line" d="M590 701 L590 720" data-connector="line"/><text class="small" x="830" y="566">key examples: acme:ro, default:rw</text></svg>

@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1250" height="660" viewBox="0 0 1250 660" role="img" aria-label="Multi-Tenancy Isolation Options">
 <defs>
   <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L9,5 L1,9 Z" fill="#5D6B7A"/></marker>
+
   <style>
     .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
     .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
@@ -11,8 +11,8 @@
     .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12.5px;font-weight:400;fill:#102033}
     .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12.5px;font-weight:400;fill:#536273}
     .card{stroke-width:2.1;filter:url(#shadow)}.soft{stroke-width:1.7}
-    .line{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#arrow)}
-    .plain{stroke:#758297;stroke-width:2.0;fill:none}.dash{stroke:#758297;stroke-width:2.0;stroke-dasharray:7 6;fill:none;marker-end:url(#arrow)}
+    .line{stroke:#758297;stroke-width:2.2;fill:none}
+    .plain{stroke:#758297;stroke-width:2.0;fill:none}.dash{stroke:#758297;stroke-width:2.0;stroke-dasharray:7 6;fill:none}
   </style>
 </defs>
 <rect class="canvas" width="1250" height="660"/>

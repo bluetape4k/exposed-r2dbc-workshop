@@ -39,13 +39,13 @@
     <text x="1000" y="594" font-weight="700">acme:ro</text>
     <text x="1000" y="620" fill="#475569">marker acme-ro</text>
   </g>
-  <path d="M950 446 L950 510 L275 510 L275 560" stroke="#4b5563" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
-  <path d="M950 510 L545 510 L545 560" stroke="#4b5563" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
-  <path d="M950 510 L815 510 L815 560" stroke="#4b5563" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M950 446 Q950 510 815 510 Q545 510 275 560" stroke="#4b5563" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M950 510 Q748 510 545 560" stroke="#4b5563" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M950 510 Q882 510 815 560" stroke="#4b5563" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
   <path d="M950 510 L1085 560" stroke="#4b5563" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
   <defs>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L9,3 z" fill="#4b5563"/>
-    </marker>
+<marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
+
+
   </defs>
 </svg>

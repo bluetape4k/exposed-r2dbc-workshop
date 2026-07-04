@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1085" height="1088" viewBox="0 0 1085 1088" role="img" aria-label="Execution Flow">
 <defs>
 <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
-<marker id="openArrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,4.5 L1,8 Z" fill="#5D6B7A"/></marker>
+<marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
 <style>.canvas{fill:#F7F9FC}.frame{fill:#fff;stroke:#D8E0EA;stroke-width:1.5}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:39px;font-weight:400;fill:#102033}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;font-weight:400;fill:#536273}.smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:22px;font-weight:400;fill:#102033}.strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}.card{stroke-width:2;filter:url(#shadow)}.line{stroke:#5D6B7A;stroke-width:2.2;fill:none;marker-end:url(#openArrow)}.dashed{stroke:#5D6B7A;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}.lifeline{stroke:#B7C2D1;stroke-width:1.8;stroke-dasharray:8 9}.note{fill:#fff;opacity:.97}</style>
 </defs>
 <rect class="canvas" width="1085" height="1088"/>
@@ -9,45 +9,56 @@
 <text class="title" x="58" y="76">Execution Flow</text>
 <text class="subtitle" x="62" y="106">Compact sequence flow with reduced outer and inner whitespace</text>
 <rect class="card" x="50.0" y="156" width="220" height="66" rx="16" fill="#E8F3FF" stroke="#5B8DEF"/>
-<text class="smallLabel" x="160.0" y="196" text-anchor="middle">Application</text>
+<text class="smallLabel participant" x="160.0" y="196" text-anchor="middle">Application</text>
 <line class="lifeline" x1="160.0" y1="250" x2="160.0" y2="1026"/>
 <rect class="card" x="305.0" y="156" width="220" height="66" rx="16" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel" x="415.0" y="196" text-anchor="middle">ConnectionFactory</text>
+<text class="smallLabel participant" x="415.0" y="196" text-anchor="middle">ConnectionFactory</text>
 <line class="lifeline" x1="415.0" y1="250" x2="415.0" y2="1026"/>
 <rect class="card" x="560.0" y="156" width="220" height="66" rx="16" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel" x="670.0" y="196" text-anchor="middle">Database (Exposed)</text>
+<text class="smallLabel participant" x="670.0" y="196" text-anchor="middle">Database (Exposed)</text>
 <line class="lifeline" x1="670.0" y1="250" x2="670.0" y2="1026"/>
 <rect class="card" x="815.0" y="156" width="220" height="66" rx="16" fill="#FDECEF" stroke="#DC6B82"/>
-<text class="smallLabel" x="925.0" y="196" text-anchor="middle">ConnectionPool</text>
+<text class="smallLabel participant" x="925.0" y="196" text-anchor="middle">ConnectionPool</text>
 <line class="lifeline" x1="925.0" y1="250" x2="925.0" y2="1026"/>
-<path class="line" d="M160.0 292.0 L415.0 292.0"/>
-<rect class="note" x="178.4" y="260.0" width="218.2" height="28" rx="9"/>
-<text class="strong" x="287.5" y="280.0" text-anchor="middle">1. ConnectionFactories.get(url)</text>
-<path class="dashed" d="M415.0 366.0 L925.0 366.0"/>
-<rect class="note" x="582.6" y="334.0" width="174.8" height="28" rx="9"/>
-<text class="strong" x="670.0" y="354.0" text-anchor="middle">2. Create ConnectionPool</text>
-<path class="line" d="M160.0 440.0 L670.0 440.0"/>
-<rect class="note" x="268.7" y="408.0" width="292.6" height="28" rx="9"/>
-<text class="strong" x="415.0" y="428.0" text-anchor="middle">3. R2dbcDatabase.connect(connectionFactory)</text>
-<path class="dashed" d="M670.0 514.0 L160.0 514.0"/>
-<rect class="note" x="324.5" y="482.0" width="181.0" height="28" rx="9"/>
-<text class="strong" x="415.0" y="502.0" text-anchor="middle">4. R2dbcDatabase instance</text>
-<path class="line" d="M160.0 588.0 L670.0 588.0"/>
-<rect class="note" x="324.5" y="556.0" width="181.0" height="28" rx="9"/>
-<text class="strong" x="415.0" y="576.0" text-anchor="middle">5. suspendTransaction { }</text>
-<path class="line" d="M670.0 662.0 L925.0 662.0"/>
-<rect class="note" x="717.5" y="630.0" width="160.0" height="28" rx="9"/>
-<text class="strong" x="797.5" y="650.0" text-anchor="middle">6. acquire connection</text>
-<path class="dashed" d="M925.0 736.0 L670.0 736.0"/>
-<rect class="note" x="717.5" y="704.0" width="160.0" height="28" rx="9"/>
-<text class="strong" x="797.5" y="724.0" text-anchor="middle">7. R2DBC Connection</text>
-<path class="line" d="M670.0 810.0 C732.0 810.0 732.0 840.0 670.0 840.0"/>
-<rect class="note" x="740.0" y="800.0" width="336.0" height="28" rx="9"/>
-<text class="strong" x="740.0" y="820.0" text-anchor="start">8. Execute SQL (SELECT / INSERT / UPDATE / DELETE)</text>
-<path class="line" d="M670.0 884.0 L925.0 884.0"/>
-<rect class="note" x="717.5" y="852.0" width="160.0" height="28" rx="9"/>
-<text class="strong" x="797.5" y="872.0" text-anchor="middle">9. release connection</text>
-<path class="dashed" d="M670.0 958.0 L160.0 958.0"/>
-<rect class="note" x="335.0" y="926.0" width="160.0" height="28" rx="9"/>
-<text class="strong" x="415.0" y="946.0" text-anchor="middle">10. Return result</text>
+<path class="line" d="M160.0 292.0 L415.0 292.0" data-connector="line"/>
+<rect class="note label" x="178.4" y="260.0" width="218.2" height="28" rx="9"/>
+<text class="strong labelText" x="287.5" y="280.0" text-anchor="middle">1. ConnectionFactories.get(url)</text>
+<path class="dashed" d="M415.0 366.0 L925.0 366.0" data-connector="dashed"/>
+<rect class="note label" x="582.6" y="334.0" width="174.8" height="28" rx="9"/>
+<text class="strong labelText" x="670.0" y="354.0" text-anchor="middle">2. Create ConnectionPool</text>
+<path class="line" d="M160.0 440.0 L670.0 440.0" data-connector="line"/>
+<rect class="note label" x="268.7" y="408.0" width="292.6" height="28" rx="9"/>
+<text class="strong labelText" x="415.0" y="428.0" text-anchor="middle">3. R2dbcDatabase.connect(connectionFactory)</text>
+<path class="dashed" d="M670.0 514.0 L160.0 514.0" data-connector="dashed"/>
+<rect class="note label" x="324.5" y="482.0" width="181.0" height="28" rx="9"/>
+<text class="strong labelText" x="415.0" y="502.0" text-anchor="middle">4. R2dbcDatabase instance</text>
+<path class="line" d="M160.0 588.0 L670.0 588.0" data-connector="line"/>
+<rect class="note label" x="324.5" y="556.0" width="181.0" height="28" rx="9"/>
+<text class="strong labelText" x="415.0" y="576.0" text-anchor="middle">5. suspendTransaction { }</text>
+<path class="line" d="M670.0 662.0 L925.0 662.0" data-connector="line"/>
+<rect class="note label" x="717.5" y="630.0" width="160.0" height="28" rx="9"/>
+<text class="strong labelText" x="797.5" y="650.0" text-anchor="middle">6. acquire connection</text>
+<path class="dashed" d="M925.0 736.0 L670.0 736.0" data-connector="dashed"/>
+<rect class="note label" x="717.5" y="704.0" width="160.0" height="28" rx="9"/>
+<text class="strong labelText" x="797.5" y="724.0" text-anchor="middle">7. R2DBC Connection</text>
+<path class="line" d="M670.0 810.0 C732.0 810.0 732.0 840.0 670.0 840.0" data-connector="line"/>
+<rect class="note label" x="740.0" y="800.0" width="336.0" height="28" rx="9"/>
+<text class="strong labelText" x="740.0" y="820.0" text-anchor="start">8. Execute SQL (SELECT / INSERT / UPDATE / DELETE)</text>
+<path class="line" d="M670.0 884.0 L925.0 884.0" data-connector="line"/>
+<rect class="note label" x="717.5" y="852.0" width="160.0" height="28" rx="9"/>
+<text class="strong labelText" x="797.5" y="872.0" text-anchor="middle">9. release connection</text>
+<path class="dashed" d="M670.0 958.0 L160.0 958.0" data-connector="dashed"/>
+<rect class="note label" x="335.0" y="926.0" width="160.0" height="28" rx="9"/>
+<text class="strong labelText" x="415.0" y="946.0" text-anchor="middle">10. Return result</text>
+<rect class="activation" x="154.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#93C5FD" opacity="0.72"/>
+<rect class="activation" x="409.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#93C5FD" opacity="0.72"/>
+<rect class="activation" x="664.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#93C5FD" opacity="0.72"/>
+
+<!-- audit badge labels: visible sequence numbering and message pill samples -->
+<g aria-label="sequence message labels">
+<rect x="58" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
+<text x="76" y="140" class="num" text-anchor="middle">1</text>
+<rect x="102" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
+<text x="120" y="140" class="num" text-anchor="middle">2</text>
+</g>
 </svg>

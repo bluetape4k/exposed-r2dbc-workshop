@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1378" height="858" viewBox="0 0 1378 858" role="img" aria-label="Java Time Type to DB Mapping Decision Flow">
 <defs>
   <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,4.5 L1,8 Z" fill="#5D6B7A"/></marker>
-  <marker id="inherit" markerWidth="14" markerHeight="12" refX="12" refY="6" orient="auto" markerUnits="strokeWidth"><path d="M 0 1 L 12 6 L 0 11 Z" fill="#ffffff" stroke="#758297" stroke-width="1.8"/></marker>
+  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
+  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
   <style>
     .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
     .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
@@ -16,32 +16,32 @@
     .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
     .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
     .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inherit)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inherit)}
+    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
+    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
   </style>
 </defs>
 <rect class="canvas" width="1378" height="858"/>
 <rect class="frame" x="32" y="28" width="1314" height="802" rx="28"/>
 <text class="title" x="66" y="82">Java Time Type to DB Mapping Decision Flow</text>
 <text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M1040 552 C1040 635 839 635 839 718"/>
-<path class="line" d="M706 552 C706 635 839 635 839 718"/>
-<path class="line" d="M672 552 C672 635 539 635 539 718"/>
-<path class="line" d="M1040 386 C1040 552 839 552 839 718"/>
-<path class="line" d="M856 446 C856 552 689 552 689 658"/>
-<path class="line" d="M522 446 C522 552 689 552 689 658"/>
-<path class="line" d="M338 386 C338 552 539 552 539 718"/>
-<path class="line" d="M338 552 C338 552 1040 552 1040 552"/>
-<path class="line" d="M338 552 C338 552 706 552 706 552"/>
-<path class="line" d="M1040 220 C1040 386 672 386 672 552"/>
-<path class="line" d="M1040 220 C1040 386 338 386 338 552"/>
-<path class="line" d="M1190 280 C1190 303 1190 303 1190 326"/>
-<path class="line" d="M1040 220 C1040 303 1006 303 1006 386"/>
-<path class="line" d="M706 220 C706 303 672 303 672 386"/>
-<path class="line" d="M706 220 C706 303 338 303 338 386"/>
-<path class="line" d="M672 220 C672 220 1040 220 1040 220"/>
-<path class="line" d="M672 220 C672 220 706 220 706 220"/>
-<path class="line" d="M338 220 C338 220 372 220 372 220"/>
+<path class="line" d="M1040 552 C1040 635 839 635 839 718" data-connector="line"/>
+<path class="line" d="M706 552 C706 635 839 635 839 718" data-connector="line"/>
+<path class="line" d="M672 552 C672 635 539 635 539 718" data-connector="line"/>
+<path class="line" d="M1040 386 C1040 552 839 552 839 718" data-connector="line"/>
+<path class="line" d="M856 446 C856 552 689 552 689 658" data-connector="line"/>
+<path class="line" d="M522 446 C522 552 689 552 689 658" data-connector="line"/>
+<path class="line" d="M338 386 C338 552 539 552 539 718" data-connector="line"/>
+<path class="line" d="M338 552 C338 552 1040 552 1040 552" data-connector="line"/>
+<path class="line" d="M338 552 C338 552 706 552 706 552" data-connector="line"/>
+<path class="line" d="M1040 220 C1040 386 672 386 672 552" data-connector="line"/>
+<path class="line" d="M1040 220 C1040 386 338 386 338 552" data-connector="line"/>
+<path class="line" d="M1190 280 C1190 303 1190 303 1190 326" data-connector="line"/>
+<path class="line" d="M1040 220 C1040 303 1006 303 1006 386" data-connector="line"/>
+<path class="line" d="M706 220 C706 303 672 303 672 386" data-connector="line"/>
+<path class="line" d="M706 220 C706 303 338 303 338 386" data-connector="line"/>
+<path class="line" d="M672 220 C672 220 1040 220 1040 220" data-connector="line"/>
+<path class="line" d="M672 220 C672 220 706 220 706 220" data-connector="line"/>
+<path class="line" d="M338 220 C338 220 372 220 372 220" data-connector="line"/>
 <g transform="translate(48,170)">
   <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
   <text class="smallLabel" x="140" y="33" text-anchor="middle">Decide data</text>
