@@ -3,8 +3,8 @@
   <desc id="desc">A caller registers and authenticates, creates work, replays realtime outbox events, enqueues outbound HTTP, and dispatches persisted requests through Spring or Ktor runtime boundaries.</desc>
   <defs>
     <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
-    <marker id="seqArrowBlue" markerWidth="16" markerHeight="16" viewBox="0 0 10 10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f86c6" stroke="#4f86c6"/></marker>
-    <marker id="seqArrowGreen" markerWidth="16" markerHeight="16" viewBox="0 0 10 10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#4d9470" stroke="#4d9470"/></marker>
+    <marker id="seqArrowBlue" markerWidth="16" markerHeight="16" viewBox="0 0 10 10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5067c5" stroke="#5067c5"/></marker>
+    <marker id="seqArrowGreen" markerWidth="16" markerHeight="16" viewBox="0 0 10 10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#3a8b57" stroke="#3a8b57"/></marker>
     <marker id="seqArrowAmber" markerWidth="16" markerHeight="16" viewBox="0 0 10 10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#b7791f" stroke="#b7791f"/></marker>
     <marker id="seqArrowTeal" markerWidth="16" markerHeight="16" viewBox="0 0 10 10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2f8f8c" stroke="#2f8f8c"/></marker>
     <marker id="seqArrowRed" markerWidth="16" markerHeight="16" viewBox="0 0 10 10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#bf5b64" stroke="#bf5b64"/></marker>
@@ -19,11 +19,11 @@
       .badgeText { font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif; font-size:13px; fill:#2f3f52; }
       .header { filter:url(#shadow); fill:#f8fafc; stroke:#607385; stroke-width:2; }
       .lifeline { stroke:#a7b5c5; stroke-width:1.7; stroke-dasharray:8 9; }
-      .activation { fill:#f7f3ff; stroke:#8a63d2; stroke-width:2; }
+      .activation { fill:#eef6f2; stroke:#3a8b57; stroke-width:2; }
       .label { fill:#ffffff; stroke:#d7e0ea; stroke-width:1.5; }
       .num { fill:#f8fbff; stroke-width:1.4; }
-      .callBlue { stroke:#4f86c6; stroke-width:3; fill:none; marker-end:url(#seqArrowBlue); stroke-linecap:round; }
-      .callGreen { stroke:#4d9470; stroke-width:3; fill:none; marker-end:url(#seqArrowGreen); stroke-linecap:round; }
+      .callBlue { stroke:#5067c5; stroke-width:3; fill:none; marker-end:url(#seqArrowBlue); stroke-linecap:round; }
+      .callGreen { stroke:#3a8b57; stroke-width:3; fill:none; marker-end:url(#seqArrowGreen); stroke-linecap:round; }
       .callAmber { stroke:#b7791f; stroke-width:3; fill:none; marker-end:url(#seqArrowAmber); stroke-linecap:round; }
       .callRed { stroke:#bf5b64; stroke-width:3; fill:none; marker-end:url(#seqArrowRed); stroke-linecap:round; }
       .seqReturn { stroke:#2f8f8c; stroke-width:2.6; fill:none; marker-end:url(#seqArrowTeal); stroke-dasharray:8 6; stroke-linecap:round; }
@@ -74,37 +74,37 @@
 
   <path class="call callBlue" d="M187 326 H499"/>
   <rect class="label labelPill" x="288" y="288" width="150" height="28" rx="12"/>
-  <circle class="num" cx="306" cy="302" r="13" stroke="#4f86c6"/>
+  <circle class="num" cx="306" cy="302" r="13" stroke="#5067c5"/>
   <text class="badgeText" x="306" y="307" text-anchor="middle">1</text>
   <text class="labelText" x="329" y="307">register / session</text>
 
   <path class="call callBlue" d="M499 398 H833"/>
   <rect class="label labelPill" x="596" y="360" width="150" height="28" rx="12"/>
-  <circle class="num" cx="614" cy="374" r="13" stroke="#4f86c6"/>
+  <circle class="num" cx="614" cy="374" r="13" stroke="#5067c5"/>
   <text class="badgeText" x="614" y="379" text-anchor="middle">2</text>
   <text class="labelText" x="637" y="379">auth + permission</text>
 
   <path class="call callGreen" d="M833 470 H1394"/>
   <rect class="label labelPill" x="1010" y="432" width="206" height="28" rx="12"/>
-  <circle class="num" cx="1028" cy="446" r="13" stroke="#4d9470"/>
+  <circle class="num" cx="1028" cy="446" r="13" stroke="#3a8b57"/>
   <text class="badgeText" x="1028" y="451" text-anchor="middle">3</text>
   <text class="labelText" x="1051" y="451">insert account/session row</text>
 
   <path class="call callBlue" d="M187 542 H499"/>
   <rect class="label labelPill" x="276" y="504" width="174" height="28" rx="12"/>
-  <circle class="num" cx="294" cy="518" r="13" stroke="#4f86c6"/>
+  <circle class="num" cx="294" cy="518" r="13" stroke="#5067c5"/>
   <text class="badgeText" x="294" y="523" text-anchor="middle">4</text>
   <text class="labelText" x="317" y="523">create work item</text>
 
   <path class="call callGreen" d="M499 614 H833"/>
   <rect class="label labelPill" x="589" y="576" width="164" height="28" rx="12"/>
-  <circle class="num" cx="607" cy="590" r="13" stroke="#4d9470"/>
+  <circle class="num" cx="607" cy="590" r="13" stroke="#3a8b57"/>
   <text class="badgeText" x="607" y="595" text-anchor="middle">5</text>
   <text class="labelText" x="630" y="595">repository command</text>
 
   <path class="call callGreen" d="M833 686 H1394"/>
   <rect class="label labelPill" x="1000" y="648" width="226" height="28" rx="12"/>
-  <circle class="num" cx="1018" cy="662" r="13" stroke="#4d9470"/>
+  <circle class="num" cx="1018" cy="662" r="13" stroke="#3a8b57"/>
   <text class="badgeText" x="1018" y="667" text-anchor="middle">6</text>
   <text class="labelText" x="1041" y="667">write work + PENDING outbox</text>
 
@@ -145,7 +145,7 @@
 
   <path class="call callGreen" d="M833 1082 H1394"/>
   <rect class="label labelPill" x="995" y="1044" width="236" height="28" rx="12"/>
-  <circle class="num" cx="1013" cy="1058" r="13" stroke="#4d9470"/>
+  <circle class="num" cx="1013" cy="1058" r="13" stroke="#3a8b57"/>
   <text class="badgeText" x="1013" y="1063" text-anchor="middle">12</text>
   <text class="labelText" x="1039" y="1063">SUCCEEDED / retryable / permanent</text>
 
