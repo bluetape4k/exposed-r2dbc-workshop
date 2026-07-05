@@ -17,6 +17,7 @@ on:
       - '11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines/**'
       - '11-high-performance/06-routing-datasource-ktor-r2dbc/**'
       - '12-production-integration/**'
+      - '13-ecosystem-integrations/**'
       - 'README.md'
       - 'README.ko.md'
       - 'docs/assets/readme-diagrams/**'
@@ -42,6 +43,7 @@ on:
       - '11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines/**'
       - '11-high-performance/06-routing-datasource-ktor-r2dbc/**'
       - '12-production-integration/**'
+      - '13-ecosystem-integrations/**'
       - 'README.md'
       - 'README.ko.md'
       - 'docs/assets/readme-diagrams/**'
@@ -199,4 +201,45 @@ jobs:
           path: |
             12-production-integration/**/build/test-results/test/*.xml
             12-production-integration/**/build/reports/tests/test/
+          retention-days: 7
+
+  chapter-13:
+    name: Chapter 13 ecosystem integrations
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v5
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: wrapper
+          cache-read-only: ${{ github.event_name == 'pull_request' }}
+
+      - name: Run ecosystem integration examples
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+        # Weekly downstream gate: ecosystem examples keep external adapters at
+        # typed/local boundaries and run H2 R2DBC smoke tests by default.
+        run: >-
+          ./gradlew
+          :01-bigquery-dry-run:test
+          :02-trino-session-options:test
+          :03-cockroachdb-retry:test
+          :04-starrocks-olap-local:test
+          :09-duckdb-embedded-analytics:test
+          "-PuseDB=H2"
+          --continue
+
+      - name: Upload chapter 13 example test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: chapter-13-example-test-results
+          path: |
+            13-ecosystem-integrations/**/build/test-results/test/*.xml
+            13-ecosystem-integrations/**/build/reports/tests/test/
           retention-days: 7
