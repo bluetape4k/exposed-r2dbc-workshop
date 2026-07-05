@@ -22,7 +22,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.Instant
-import java.util.concurrent.CopyOnWriteArrayList
 
 class UserCredentialsCacheRepositoryTest(
     @param:Autowired private val repository: UserCredentialsCacheRepository,
@@ -30,20 +29,17 @@ class UserCredentialsCacheRepositoryTest(
 
     companion object: KLoggingChannel()
 
-    private val idsInDB = CopyOnWriteArrayList<String>()
+    private var idsInDB = emptyList<String>()
     private val idSize = 100
 
     @BeforeEach
     fun setup() {
         runBlocking(Dispatchers.IO) {
             repository.clear()
-            idsInDB.clear()
 
-            suspendTransaction {
+            idsInDB = suspendTransaction {
                 UserCredentialsTable.deleteAll()
-                repeat(idSize) {
-                    idsInDB.add(insertUserCredentials())
-                }
+                List(idSize) { insertUserCredentials() }
             }
         }
     }
