@@ -18,7 +18,13 @@ Future Chapter 12 R2DBC work should extend package slices inside the two
 existing modules unless a new issue proves that the module boundary itself is
 the learning goal.
 
+README diagrams for Chapter 12 should stay source-backed: update both the
+architecture parity map and caller sequence when parity tables, route flow, or
+outbox/realtime semantics change, then rerender PNGs from SVG.
+
 ## Verification
 
 - `./gradlew projects`
-- `repo-test-summary -- ./gradlew :01-spring-production-integration:test :02-ktor-production-integration:test -PuseDB=H2 --continue --console=plain`
+- `repo-test-summary -- ./gradlew :01-spring-production-integration:test :02-ktor-production-integration:test -PuseDB=H2 --continue --rerun-tasks --console=plain`
+- `~/.local/bin/cairosvg docs/assets/readme-diagrams/issue-114-chapter12-parity-architecture-01.svg -o docs/assets/readme-diagrams/issue-114-chapter12-parity-architecture-01.png -s 2`
+- `~/.local/bin/cairosvg docs/assets/readme-diagrams/issue-114-chapter12-caller-sequence-01.svg -o docs/assets/readme-diagrams/issue-114-chapter12-caller-sequence-01.png -s 2`

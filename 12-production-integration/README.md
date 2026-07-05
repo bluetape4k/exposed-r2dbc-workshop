@@ -75,6 +75,8 @@ degraded marker is cleared.
 intentionally keeps two modules, one per runtime stack, and maps each source
 example to package-level slices inside those modules.
 
+![Chapter 12 source example parity architecture map](../docs/assets/readme-diagrams/issue-114-chapter12-parity-architecture-01.png)
+
 | `exposed-workshop` example | R2DBC counterpart | Coverage decision |
 |---|---|---|
 | `01-ktor-application-architecture` | `02-ktor-production-integration` packages `app`, `config`, `routes`, `persistence` | Covered in the Ktor module instead of a standalone module |
@@ -92,6 +94,8 @@ Future Chapter 12 R2DBC work should extend these package slices unless a new
 issue proves that the module boundary itself is the teaching target.
 
 ## Caller Flow
+
+![Chapter 12 caller outbox and realtime sequence](../docs/assets/readme-diagrams/issue-114-chapter12-caller-sequence-01.png)
 
 | Step | Spring WebFlux | Ktor |
 |---|---|---|
