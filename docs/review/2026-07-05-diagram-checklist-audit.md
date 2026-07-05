@@ -115,3 +115,21 @@ PASS for all audited SVGs and rendered PNGs. SVG marker definitions use explicit
 - `docs/images/readme-diagrams/11-high-performance-architecture-01.svg` — PASS
 - `docs/images/readme-diagrams/11-high-performance-class-02.svg` — PASS
 - `docs/images/readme-diagrams/11-high-performance-sequence-03.svg` — PASS
+
+## 2026-07-05 full re-audit after reviewer geometry report
+
+Scope: all `docs/images/readme-diagrams/*.svg` assets, including ERD relationship-state checks, sequence style checks, and connector endpoint/geometry checks.
+
+| Gate | Evidence | Result |
+| --- | --- | --- |
+| XML parse | `find docs/images/readme-diagrams -name '*.svg' -print0 | xargs -0 -n1 xmllint --noout` | PASS, 97 SVGs |
+| Full connector checklist | `/tmp/run_diagram_audit.sh .../exposed-r2dbc-workshop/.worktrees/docs-diagram-checklist-audit` | PASS, `failures=0` |
+| Sequence best-practices style | `diagram-sequence-style-audit.py` over `*sequence*.svg` and `*flow*.svg` | PASS, `sequence_files=23` |
+| ERD relationship information | `/tmp/erd_relationship_audit.py .../exposed-r2dbc-workshop/.worktrees/docs-diagram-checklist-audit` | PASS, `total=10 fail=0`; independent-table ERDs now state `No FK relationship` explicitly |
+| Class arrowheads | `/tmp/class_arrow_audit.py .../exposed-r2dbc-workshop/.worktrees/docs-diagram-checklist-audit` | PASS, no markerless directional class paths |
+| Rendered PNG spot inspection | Full-size PNGs opened for high-risk samples: `06-advanced-05-exposed-r2dbc-money-erd-03.png`, `11-high-performance-06-routing-datasource-ktor-r2dbc-architecture-01.png` | PASS |
+
+Fixes applied in this pass:
+
+- Added reader-facing `No FK relationship` notes to independent-table ERDs.
+- Rerouted the three Ktor R2DBC high-performance architecture connectors that had non-orthogonal or diagonal endpoints.

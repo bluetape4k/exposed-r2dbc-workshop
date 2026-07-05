@@ -40,9 +40,9 @@
     <path d="M310 250 L390 250" stroke="#374151" stroke-width="3" fill="none" marker-end="url(#arrow)" data-connector="line"/>
     <path d="M650 250 L735 250" stroke="#374151" stroke-width="3" fill="none" marker-end="url(#arrow)" data-connector="line"/>
     <path d="M1015 205 L1090 205" stroke="#374151" stroke-width="3" fill="none" marker-end="url(#arrow)" data-connector="line"/>
-    <path d="M875 360 L1090 475" stroke="#374151" stroke-width="3" fill="none" marker-end="url(#arrow)" data-connector="line"/>
-    <path d="M1090 500 L650 520" stroke="#374151" stroke-width="3" fill="none" marker-end="url(#arrow)" data-connector="line"/>
-    <path d="M390 510 L195 315" stroke="#374151" stroke-width="3" fill="none" marker-end="url(#arrow)" data-connector="line"/>
+    <path d="M875 360 V457 Q875 475 893 475 H1090" stroke="#374151" stroke-width="3" fill="none" marker-end="url(#arrow)" data-connector="line"/>
+    <path d="M1090 500 H650" stroke="#374151" stroke-width="3" fill="none" marker-end="url(#arrow)" data-connector="line"/>
+    <path d="M390 510 H213 Q195 510 195 492 V315" stroke="#374151" stroke-width="3" fill="none" marker-end="url(#arrow)" data-connector="line"/>
 
     <rect x="735" y="455" width="280" height="110" rx="8" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
     <text x="875" y="496" text-anchor="middle" font-size="20" font-weight="700" fill="#7c2d12">Cancellation Contract</text>

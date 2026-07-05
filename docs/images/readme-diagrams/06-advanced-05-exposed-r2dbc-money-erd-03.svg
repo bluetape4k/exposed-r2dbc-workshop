@@ -51,4 +51,6 @@
 <text class="mono" x="18" y="131">decimal amount Manually defined a.</text>
 <text class="mono" x="18" y="158">varchar currency Manually defined.</text>
 </g>
+
+<text x="421" y="752" class="mono" text-anchor="middle">No FK relationship: tables are independent examples for this module.</text>
 </svg>

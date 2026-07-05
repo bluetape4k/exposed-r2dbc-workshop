@@ -57,4 +57,6 @@
 <text class="mono" x="18" y="192">+find()</text>
 <text class="mono" x="18" y="213">+merge()</text>
 </g>
+
+<text x="462" y="824" class="mono" text-anchor="middle">No FK relationship: tables are independent examples for this module.</text>
 </svg>

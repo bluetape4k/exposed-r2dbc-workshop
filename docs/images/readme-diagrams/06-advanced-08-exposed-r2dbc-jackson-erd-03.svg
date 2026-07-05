@@ -49,4 +49,6 @@
   <text class="mono" x="18" y="104">INT id PK</text>
 <text class="mono" x="18" y="131">JSON jackson_column DataHolder JS.</text>
 </g>
+
+<text x="421" y="698" class="mono" text-anchor="middle">No FK relationship: tables are independent examples for this module.</text>
 </svg>
