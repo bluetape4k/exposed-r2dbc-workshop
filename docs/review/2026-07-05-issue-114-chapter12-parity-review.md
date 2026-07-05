@@ -30,6 +30,7 @@
 | `issue-114-chapter12-caller-sequence-01.svg` | XML parse OK; rendered with `~/.local/bin/cairosvg -s 2`; PNG is 3000x2320 RGB; full-size visual inspection passed for participants, numbered labels 1-12, alt frame, and footer. |
 | Architecture audits | `diagram-connector-audit.py` PASS markers=2 connectors=10 cards=12 intrusions=0 crossings=0; `diagram-geometry-audit.py` geometry_failures=0; `diagram-endpoint-audit.py` PASS; `diagram-mixed-corner-audit.py` PASS paths=10 q_bends=0 failures=0. |
 | Sequence audits | `diagram-sequence-style-audit.py` PASS; `diagram-connector-audit.py` PASS markers=5 connectors=12 cards=5 intrusions=0 crossings=0; `diagram-geometry-audit.py` geometry_failures=0; `diagram-endpoint-audit.py` PASS; `diagram-mixed-corner-audit.py` PASS paths=12 q_bends=0 failures=0. |
+| Sequence references | Opened full-size best-practices reference `/Users/debop/work/bluetape4k/bluetape4k-wiki/docs/diagrams/best-practices/assets/sequence-workflow-sample.png` and repo-local reference `/Users/debop/work/bluetape4k/exposed-r2dbc-workshop/.worktrees/feat-issue-114-chapter12-parity/docs/images/readme-diagrams/11-high-performance-sequence-03.png` before validating the sequence family. |
 | Icon provenance | H2 cards embed `database/h2.svg` from the bluetape4k icon catalog via `data-bluetape4k-icon="database/h2.svg"`. |
 | Contact sheet | `/tmp/exposed-r2dbc-diagram-qa/issue-114-contact-sheet.png` was inspected for architecture/sequence family drift after each touched PNG passed full-size inspection. |
 
