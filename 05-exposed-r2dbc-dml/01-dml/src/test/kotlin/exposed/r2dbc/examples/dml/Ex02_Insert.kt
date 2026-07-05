@@ -366,7 +366,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
             val batchSize = 100
             val names = generateSequence { Uuid.V7.nextIdAsString() }.take(batchSize)
 
-            val inserted = cities.batchInsert(names) { name ->
+            val inserted = cities.batchInsert(names, shouldReturnGeneratedValues = false) { name ->
                 this[cities.name] = name
             }
             inserted shouldHaveSize batchSize
