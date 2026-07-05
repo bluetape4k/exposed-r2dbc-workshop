@@ -83,9 +83,9 @@
 <path class="dashed" d="M390.0 1624.0 L160.0 1624.0" data-connector="dashed"/>
 <rect class="note label" x="195.0" y="1592.0" width="160.0" height="28" rx="9"/>
 <text class="strong labelText" x="275.0" y="1612.0" text-anchor="middle">19. 201 JSON response</text>
-<rect class="activation" x="154.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#93C5FD" opacity="0.72"/>
-<rect class="activation" x="384.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#93C5FD" opacity="0.72"/>
-<rect class="activation" x="614.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#93C5FD" opacity="0.72"/>
+<rect class="activation" x="154.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
+<rect class="activation" x="384.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
+<rect class="activation" x="614.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
 
 <!-- audit badge labels: visible sequence numbering and message pill samples -->
 <g aria-label="sequence message labels">

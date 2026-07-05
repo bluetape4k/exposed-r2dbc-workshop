@@ -50,9 +50,9 @@
 <path class="dashed" d="M415.0 958.0 L160.0 958.0" data-connector="dashed"/>
 <rect class="note label" x="207.5" y="926.0" width="160.0" height="28" rx="9"/>
 <text class="strong labelText" x="287.5" y="946.0" text-anchor="middle">10. done</text>
-<rect class="activation" x="154.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#93C5FD" opacity="0.72"/>
-<rect class="activation" x="409.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#93C5FD" opacity="0.72"/>
-<rect class="activation" x="664.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#93C5FD" opacity="0.72"/>
+<rect class="activation" x="154.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
+<rect class="activation" x="409.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
+<rect class="activation" x="664.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
 
 <!-- audit badge labels: visible sequence numbering and message pill samples -->
 <g aria-label="sequence message labels">
