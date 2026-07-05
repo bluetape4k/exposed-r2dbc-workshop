@@ -74,6 +74,8 @@ clear하면 다시 `UP`으로 회복합니다.
 R2DBC workshop은 runtime stack별 두 module을 의도적으로 유지하고, source
 example을 module 내부 package slice에 매핑합니다.
 
+![Chapter 12 source example parity architecture map](../docs/assets/readme-diagrams/issue-114-chapter12-parity-architecture-01.png)
+
 | `exposed-workshop` 예제 | R2DBC 대응 | Coverage 결정 |
 |---|---|---|
 | `01-ktor-application-architecture` | `02-ktor-production-integration`의 `app`, `config`, `routes`, `persistence` package | 독립 module 대신 Ktor module 안에서 cover |
@@ -91,6 +93,8 @@ example을 module 내부 package slice에 매핑합니다.
 증명하지 않는 한 기존 package slice를 확장합니다.
 
 ## 호출자 흐름
+
+![Chapter 12 caller outbox and realtime sequence](../docs/assets/readme-diagrams/issue-114-chapter12-caller-sequence-01.png)
 
 | 단계 | Spring WebFlux | Ktor |
 |---|---|---|

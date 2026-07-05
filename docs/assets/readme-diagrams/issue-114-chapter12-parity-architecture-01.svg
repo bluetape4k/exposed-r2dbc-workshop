@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="980" viewBox="0 0 1500 980" role="img" aria-labelledby="title desc">
+  <title id="title">Chapter 12 Source Example Parity Architecture Map</title>
+  <desc id="desc">The ten exposed-workshop Chapter 12 production examples map into two exposed-r2dbc-workshop runtime modules, one for Spring WebFlux and one for Ktor.</desc>
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
+    <style>
+      .canvas { fill: #f7f9fc; }
+      .frame { fill: #ffffff; stroke: #d8e0ea; stroke-width: 1.5; }
+      .title { font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive; font-size:40px; font-weight:400; fill:#102033; }
+      .subtitle { font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif; font-size:17px; fill:#536273; }
+      .laneTitle { font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive; font-size:25px; fill:#26374a; }
+      .cardTitle { font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive; font-size:20px; fill:#102033; }
+      .body { font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif; font-size:14px; fill:#44546a; }
+      .small { font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif; font-size:12px; fill:#536273; }
+      .card { filter:url(#shadow); stroke-width:2; }
+      .source { fill:#f8fafc; stroke:#94a3b8; }
+      .spring { fill:#e8f7ee; stroke:#3a8b57; }
+      .ktor { fill:#edf1ff; stroke:#5067c5; }
+      .contract { fill:#fff7e6; stroke:#b7791f; }
+      .db { fill:#f1f5f9; stroke:#475569; }
+      .topic { fill:#fdfefe; stroke:#cbd5e1; stroke-width:1.5; }
+      .axis { stroke:#cbd5e1; stroke-width:1.2; stroke-dasharray:6 8; }
+    </style>
+  </defs>
+
+  <rect class="canvas" width="1500" height="980"/>
+  <rect class="frame" x="24" y="24" width="1452" height="932" rx="24"/>
+  <text class="title" x="70" y="82">Chapter 12 R2DBC Parity Map</text>
+  <text class="subtitle" x="74" y="114">Ten source examples stay visible while R2DBC keeps two stack-native runtime modules.</text>
+
+  <rect class="card source" x="58" y="155" width="390" height="690" rx="20"/>
+  <text class="laneTitle" x="92" y="195">exposed-workshop Chapter 12</text>
+  <text class="body" x="92" y="222">topic-focused JDBC examples</text>
+
+  <rect class="card spring" x="555" y="155" width="390" height="690" rx="20"/>
+  <text class="laneTitle" x="589" y="195">R2DBC Spring module</text>
+  <text class="body" x="589" y="222">01-spring-production-integration</text>
+
+  <rect class="card ktor" x="1052" y="155" width="390" height="690" rx="20"/>
+  <text class="laneTitle" x="1086" y="195">R2DBC Ktor module</text>
+  <text class="body" x="1086" y="222">02-ktor-production-integration</text>
+
+  <line class="axis" x1="60" y1="276" x2="1440" y2="276"/>
+  <line class="axis" x1="60" y1="392" x2="1440" y2="392"/>
+  <line class="axis" x1="60" y1="508" x2="1440" y2="508"/>
+  <line class="axis" x1="60" y1="624" x2="1440" y2="624"/>
+  <line class="axis" x1="60" y1="740" x2="1440" y2="740"/>
+
+  <g aria-label="Source topic cards">
+    <rect class="topic" x="92" y="248" width="320" height="76" rx="14"/>
+    <text class="cardTitle" x="112" y="279">Application architecture</text>
+    <text class="small" x="112" y="303">01 Ktor app + 02 Spring app</text>
+
+    <rect class="topic" x="92" y="364" width="320" height="76" rx="14"/>
+    <text class="cardTitle" x="112" y="395">Authentication/session</text>
+    <text class="small" x="112" y="419">05 Spring auth + 06 Ktor auth</text>
+
+    <rect class="topic" x="92" y="480" width="320" height="76" rx="14"/>
+    <text class="cardTitle" x="112" y="511">Realtime outbox</text>
+    <text class="small" x="112" y="535">07 SSE + 08 WebSocket replay</text>
+
+    <rect class="topic" x="92" y="596" width="320" height="76" rx="14"/>
+    <text class="cardTitle" x="112" y="627">HTTP outbox/idempotency</text>
+    <text class="small" x="112" y="651">03 Spring + 04 Ktor dispatch</text>
+
+    <rect class="topic" x="92" y="712" width="320" height="76" rx="14"/>
+    <text class="cardTitle" x="112" y="743">Observability/readiness</text>
+    <text class="small" x="112" y="767">09 Spring + 10 Ktor diagnostics</text>
+  </g>
+
+  <g aria-label="Spring counterpart cards">
+    <rect class="card spring" x="600" y="248" width="300" height="76" rx="14"/>
+    <text class="cardTitle" x="626" y="279">web + app + persistence</text>
+    <text class="small" x="626" y="303">controller, service, repository</text>
+
+    <rect class="card spring" x="600" y="364" width="300" height="76" rx="14"/>
+    <text class="cardTitle" x="626" y="395">auth slice</text>
+    <text class="small" x="626" y="419">Basic auth, API keys, sessions</text>
+
+    <rect class="card spring" x="600" y="480" width="300" height="76" rx="14"/>
+    <text class="cardTitle" x="626" y="511">realtime slice</text>
+    <text class="small" x="626" y="535">SSE replay + live sink</text>
+
+    <rect class="card spring" x="600" y="596" width="300" height="76" rx="14"/>
+    <text class="cardTitle" x="626" y="627">outbound slice</text>
+    <text class="small" x="626" y="651">WebClient + idempotency key</text>
+
+    <rect class="card spring" x="600" y="712" width="300" height="76" rx="14"/>
+    <text class="cardTitle" x="626" y="743">diagnostics slice</text>
+    <text class="small" x="626" y="767">request id + bounded ping</text>
+  </g>
+
+  <g aria-label="Ktor counterpart cards">
+    <rect class="card ktor" x="1097" y="248" width="300" height="76" rx="14"/>
+    <text class="cardTitle" x="1123" y="279">routes + app + config</text>
+    <text class="small" x="1123" y="303">routing DSL, plugins, repository</text>
+
+    <rect class="card ktor" x="1097" y="364" width="300" height="76" rx="14"/>
+    <text class="cardTitle" x="1123" y="395">auth slice</text>
+    <text class="small" x="1123" y="419">Basic auth + signed cookie</text>
+
+    <rect class="card ktor" x="1097" y="480" width="300" height="76" rx="14"/>
+    <text class="cardTitle" x="1123" y="511">realtime slice</text>
+    <text class="small" x="1123" y="535">WebSocket replay + live flow</text>
+
+    <rect class="card ktor" x="1097" y="596" width="300" height="76" rx="14"/>
+    <text class="cardTitle" x="1123" y="627">outbound slice</text>
+    <text class="small" x="1123" y="651">Ktor HttpClient + MockEngine tests</text>
+
+    <rect class="card ktor" x="1097" y="712" width="300" height="76" rx="14"/>
+    <text class="cardTitle" x="1123" y="743">diagnostics slice</text>
+    <text class="small" x="1123" y="767">CallId + status pages</text>
+  </g>
+
+  <g aria-label="Shared R2DBC database contracts">
+    <rect class="card contract" x="310" y="900" width="880" height="42" rx="16"/>
+    <text class="cardTitle" x="350" y="927">Guardrail: extend package slices, not modules, unless the module boundary is the lesson.</text>
+
+    <rect class="card db" x="682" y="810" width="136" height="76" rx="14"/>
+    <image data-bluetape4k-icon="database/h2.svg" x="704" y="829" width="30" height="30" href="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDk0NzZCIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+SDIgRGF0YWJhc2U8L3RpdGxlPjxwYXRoIGQ9Ik0xNy4xNyAxMy4yN2MuMTQtLjAxNS4yOC0uMDIzLjQxNi0uMDIzLjcgMCAxLjIyOC4xNTkgMS41OTkuNDY5LjM3LjMxNC41NTUuNzU2LjU1NSAxLjMzNGEyLjg2MSAyLjg2MSAwIDAgMS0uNDMgMS40NTVjLS4yOTEuNDkyLS43NzUgMS4wNjYtMS40NiAxLjcyNy0uNDUzLjQ0Ni0xLjA2MS45NzYtMS44MjEgMS41OTJhNDguMDIgNDguMDIgMCAwIDEtMi4yNzUgMS43NDJ2Mi4wODNoOS44OTVWMjEuMjRIMTcuOTljLjIxOS0uMTU5LjU5LS40MzUgMS4xMS0uODMyLjUxOS0uNCAxLjAzMy0uODM1IDEuNTUtMS4zMTEuODE3LS43NiAxLjQyNS0xLjUgMS44MjItMi4yMTVhNC42MjQgNC42MjQgMCAwIDAgLjU5Ny0yLjI2OGMwLTEuMjEzLS40MTYtMi4xNTQtMS4yNDctMi44MTUtLjgyOC0uNjYyLTIuMDMzLS45OTQtMy42MTMtLjk5NC0uMzQ0IDAtLjY5Mi4wMTUtMS4wMzYuMDQ5VjYuMDRIMTMuODZ2NC43MDFIOC45NjVWNi4wNEg1LjY1djEyLjg0NmgzLjMxNXYtNS42NjFoNC44OXY1LjY2MWguMDM5Yy4zMS0uMjQyLjYyMy0uNDg3LjkzMy0uNzRhMjguNTY0IDI4LjU2NCAwIDAgMCAxLjgyNi0xLjU4OCAxNC44NTQgMTQuODU0IDAgMCAwIC41MTctLjUyOXpNMTIuMDExIDIzLjNBMTEuMzI3IDExLjMyNyAwIDAgMSAuNyAxMS45OSAxMS4zMDUgMTEuMzA1IDAgMCAxIDEyLjAxMS42OTlhMTEuMjg2IDExLjI4NiAwIDAgMSAxMS4yOSAxMS4yOXYuMzUxSDI0di0uMzUxQTExLjk4NSAxMS45ODUgMCAwIDAgMTIuMDExIDAgMTIuMDA4IDEyLjAwOCAwIDAgMCAwIDExLjk4OSAxMi4wMjYgMTIuMDI2IDAgMCAwIDEyLjAxMSAyNGguMzUydi0uN3oiLz48L3N2Zz4="/>
+    <text class="small" x="746" y="846">H2 R2DBC</text>
+    <text class="small" x="704" y="869">module-local test DB</text>
+  </g>
+</svg>
