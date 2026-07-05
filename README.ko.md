@@ -91,6 +91,7 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 7. Spring Repository / Cache: [09-spring](09-spring/05-exposed-r2dbc-repository-coroutines/README.md)
 8. 멀티테넌시 / 고성능: [10-multi-tenant](10-multi-tenant/README.ko.md), [11-high-performance](11-high-performance/README.ko.md)
 9. Production integration: [12-production-integration](12-production-integration/README.ko.md)
+10. Ecosystem integrations: [13-ecosystem-integrations](13-ecosystem-integrations/README.ko.md)
 
 ## 모듈 맵
 
@@ -109,6 +110,7 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 | `10-multi-tenant`        | Schema, connection-factory, authorization, onboarding 멀티테넌시 + WebFlux/Ktor | [Multi-Tenant Strategies](10-multi-tenant/README.ko.md) |
 | `11-high-performance`    | 캐시 전략, routing datasource, read/write 분리 + Ktor 비교 | [High Performance](11-high-performance/README.ko.md)                          |
 | `12-production-integration` | Spring Boot 4/Ktor production service patterns, realtime replay, HTTP client outbox/idempotency, request correlation/readiness diagnostics | [Production Integration](12-production-integration/README.ko.md)              |
+| `13-ecosystem-integrations` | BigQuery/Trino/CockroachDB/StarRocks/DuckDB adapter boundary와 local R2DBC smoke test | [Ecosystem Integrations](13-ecosystem-integrations/README.ko.md)              |
 
 ## 주목할 예제
 
@@ -135,6 +137,8 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 - [12-production-integration/01-spring-production-integration](12-production-integration/01-spring-production-integration/README.ko.md),
   [12-production-integration/02-ktor-production-integration](12-production-integration/02-ktor-production-integration/README.ko.md)
   HTTP client outbox/idempotency와 request-correlation/readiness diagnostics
+- [13-ecosystem-integrations](13-ecosystem-integrations/README.ko.md)
+  BigQuery dry-run, Trino session, CockroachDB retry, StarRocks rollup, DuckDB-style analytics를 위한 local R2DBC adapter boundary
 
 ## 아키텍처 개요
 
@@ -162,6 +166,7 @@ R2DBC 전용 구조와 JDBC 전용 구조는 API 모델이 다르면 별도 예�
 | Ktor cache/routing issues `#47`, `#48`, `#49`, `#50` | Closed R2DBC issues `#34`, `#35`, `#36`, `#69`; modules `11-high-performance/04-06-*` | counterpart 있음 |
 | Spring Boot tenant strategy issues `#51`, `#55`, `#56` | Closed R2DBC issues `#37`-`#42`; modules `10-multi-tenant/03-06-*` | counterpart 있음 |
 | Chapter 12 production integration epic `#57` | Closed R2DBC issues `#43`-`#49`; modules `12-production-integration/01-*`, `02-*` | counterpart 있음 |
+| Chapter 13 database adapters | R2DBC issue `#115`; modules `13-ecosystem-integrations/01-*`, `02-*`, `03-*`, `04-*`, `09-*` | local/typed boundary로 cover |
 | R2DBC connection-factory-per-tenant | Closed R2DBC issue `#39`; exact JDBC equivalent 없음 | 플랫폼 전용, 중복 issue 없음 |
 | JDBC DAO/entities, transaction template, benchmark | `exposed-workshop`의 blocking/JDBC 전용 모듈 | 플랫폼 전용, 중복 issue 없음 |
 
