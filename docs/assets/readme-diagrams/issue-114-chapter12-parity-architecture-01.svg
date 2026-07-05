@@ -3,6 +3,8 @@
   <desc id="desc">The ten exposed-workshop Chapter 12 production examples map into two exposed-r2dbc-workshop runtime modules, one for Spring WebFlux and one for Ktor.</desc>
   <defs>
     <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
+    <marker id="archArrowSpring" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#3a8b57" stroke="#3a8b57" stroke-dasharray="none" style="stroke-dasharray:none"/></marker>
+    <marker id="archArrowKtor" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5067c5" stroke="#5067c5" stroke-dasharray="none" style="stroke-dasharray:none"/></marker>
     <style>
       .canvas { fill: #f7f9fc; }
       .frame { fill: #ffffff; stroke: #d8e0ea; stroke-width: 1.5; }
@@ -13,6 +15,7 @@
       .body { font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif; font-size:14px; fill:#44546a; }
       .small { font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif; font-size:12px; fill:#536273; }
       .card { filter:url(#shadow); stroke-width:2; }
+      .lane { filter:url(#shadow); stroke-width:2; }
       .source { fill:#f8fafc; stroke:#94a3b8; }
       .spring { fill:#e8f7ee; stroke:#3a8b57; }
       .ktor { fill:#edf1ff; stroke:#5067c5; }
@@ -20,6 +23,9 @@
       .db { fill:#f1f5f9; stroke:#475569; }
       .topic { fill:#fdfefe; stroke:#cbd5e1; stroke-width:1.5; }
       .axis { stroke:#cbd5e1; stroke-width:1.2; stroke-dasharray:6 8; }
+      .connector { fill:none; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; }
+      .mapSpring { stroke:#3a8b57; marker-end:url(#archArrowSpring); }
+      .mapKtor { stroke:#5067c5; marker-end:url(#archArrowKtor); }
     </style>
   </defs>
 
@@ -28,15 +34,15 @@
   <text class="title" x="70" y="82">Chapter 12 R2DBC Parity Map</text>
   <text class="subtitle" x="74" y="114">Ten source examples stay visible while R2DBC keeps two stack-native runtime modules.</text>
 
-  <rect class="card source" x="58" y="155" width="390" height="690" rx="20"/>
+  <rect class="lane source" x="58" y="155" width="390" height="690" rx="20"/>
   <text class="laneTitle" x="92" y="195">exposed-workshop Chapter 12</text>
   <text class="body" x="92" y="222">topic-focused JDBC examples</text>
 
-  <rect class="card spring" x="555" y="155" width="390" height="690" rx="20"/>
+  <rect class="lane spring" x="555" y="155" width="390" height="690" rx="20"/>
   <text class="laneTitle" x="589" y="195">R2DBC Spring module</text>
   <text class="body" x="589" y="222">01-spring-production-integration</text>
 
-  <rect class="card ktor" x="1052" y="155" width="390" height="690" rx="20"/>
+  <rect class="lane ktor" x="1052" y="155" width="390" height="690" rx="20"/>
   <text class="laneTitle" x="1086" y="195">R2DBC Ktor module</text>
   <text class="body" x="1086" y="222">02-ktor-production-integration</text>
 
@@ -45,6 +51,19 @@
   <line class="axis" x1="60" y1="508" x2="1440" y2="508"/>
   <line class="axis" x1="60" y1="624" x2="1440" y2="624"/>
   <line class="axis" x1="60" y1="740" x2="1440" y2="740"/>
+
+  <g aria-label="Parity mapping connectors">
+    <path class="connector mapSpring" data-connector="architecture-to-spring" d="M424 286 H588"/>
+    <path class="connector mapKtor" data-connector="spring-to-ktor" d="M912 286 H1085"/>
+    <path class="connector mapSpring" data-connector="auth-to-spring" d="M424 402 H588"/>
+    <path class="connector mapKtor" data-connector="auth-to-ktor" d="M912 402 H1085"/>
+    <path class="connector mapSpring" data-connector="realtime-to-spring" d="M424 518 H588"/>
+    <path class="connector mapKtor" data-connector="realtime-to-ktor" d="M912 518 H1085"/>
+    <path class="connector mapSpring" data-connector="outbound-to-spring" d="M424 634 H588"/>
+    <path class="connector mapKtor" data-connector="outbound-to-ktor" d="M912 634 H1085"/>
+    <path class="connector mapSpring" data-connector="diagnostics-to-spring" d="M424 750 H588"/>
+    <path class="connector mapKtor" data-connector="diagnostics-to-ktor" d="M912 750 H1085"/>
+  </g>
 
   <g aria-label="Source topic cards">
     <rect class="topic" x="92" y="248" width="320" height="76" rx="14"/>

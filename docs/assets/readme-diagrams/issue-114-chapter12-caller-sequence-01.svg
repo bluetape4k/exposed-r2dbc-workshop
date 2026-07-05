@@ -40,23 +40,23 @@
   <text class="subtitle" x="74" y="114">One caller story covers both runtime stacks: Spring uses API-key + SSE, Ktor uses session cookie + WebSocket.</text>
 
   <g aria-label="Participant headers">
-    <rect class="header participant" x="82" y="168" width="210" height="82" rx="14"/>
+    <rect class="header participant card" x="82" y="168" width="210" height="82" rx="14"/>
     <text class="participant-title" x="187" y="202" text-anchor="middle">Caller</text>
     <text class="role" x="187" y="226" text-anchor="middle">alice/admin account</text>
 
-    <rect class="header participant" x="374" y="168" width="250" height="82" rx="14"/>
+    <rect class="header participant card" x="374" y="168" width="250" height="82" rx="14"/>
     <text class="participant-title" x="499" y="202" text-anchor="middle">Runtime boundary</text>
     <text class="role" x="499" y="226" text-anchor="middle">Spring WebFlux or Ktor routes</text>
 
-    <rect class="header participant" x="708" y="168" width="250" height="82" rx="14"/>
+    <rect class="header participant card" x="708" y="168" width="250" height="82" rx="14"/>
     <text class="participant-title" x="833" y="202" text-anchor="middle">Repository</text>
     <text class="role" x="833" y="226" text-anchor="middle">Exposed R2DBC suspendTransaction</text>
 
-    <rect class="header participant" x="1042" y="168" width="240" height="82" rx="14"/>
+    <rect class="header participant card" x="1042" y="168" width="240" height="82" rx="14"/>
     <text class="participant-title" x="1162" y="202" text-anchor="middle">Delivery edge</text>
     <text class="role" x="1162" y="226" text-anchor="middle">SSE/WebSocket or HTTP client</text>
 
-    <rect class="header participant" x="1318" y="168" width="130" height="82" rx="14"/>
+    <rect class="header participant card" x="1318" y="168" width="130" height="82" rx="14"/>
     <image data-bluetape4k-icon="database/h2.svg" x="1367" y="178" width="28" height="28" href="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDk0NzZCIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+SDIgRGF0YWJhc2U8L3RpdGxlPjxwYXRoIGQ9Ik0xNy4xNyAxMy4yN2MuMTQtLjAxNS4yOC0uMDIzLjQxNi0uMDIzLjcgMCAxLjIyOC4xNTkgMS41OTkuNDY5LjM3LjMxNC41NTUuNzU2LjU1NSAxLjMzNGEyLjg2MSAyLjg2MSAwIDAgMS0uNDMgMS40NTVjLS4yOTEuNDkyLS43NzUgMS4wNjYtMS40NiAxLjcyNy0uNDUzLjQ0Ni0xLjA2MS45NzYtMS44MjEgMS41OTJhNDguMDIgNDguMDIgMCAwIDEtMi4yNzUgMS43NDJ2Mi4wODNoOS44OTVWMjEuMjRIMTcuOTljLjIxOS0uMTU5LjU5LS40MzUgMS4xMS0uODMyLjUxOS0uNCAxLjAzMy0uODM1IDEuNTUtMS4zMTEuODE3LS43NiAxLjQyNS0xLjUgMS44MjItMi4yMTVhNC42MjQgNC42MjQgMCAwIDAgLjU5Ny0yLjI2OGMwLTEuMjEzLS40MTYtMi4xNTQtMS4yNDctMi44MTUtLjgyOC0uNjYyLTIuMDMzLS45OTQtMy42MTMtLjk5NC0uMzQ0IDAtLjY5Mi4wMTUtMS4wMzYuMDQ5VjYuMDRIMTMuODZ2NC43MDFIOC45NjVWNi4wNEg1LjY1djEyLjg0NmgzLjMxNXYtNS42NjFoNC44OXY1LjY2MWguMDM5Yy4zMS0uMjQyLjYyMy0uNDg3LjkzMy0uNzRhMjguNTY0IDI4LjU2NCAwIDAgMCAxLjgyNi0xLjU4OCAxNC44NTQgMTQuODU0IDAgMCAwIC41MTctLjUyOXpNMTIuMDExIDIzLjNBMTEuMzI3IDExLjMyNyAwIDAgMSAuNyAxMS45OSAxMS4zMDUgMTEuMzA1IDAgMCAxIDEyLjAxMS42OTlhMTEuMjg2IDExLjI4NiAwIDAgMSAxMS4yOSAxMS4yOXYuMzUxSDI0di0uMzUxQTExLjk4NSAxMS45ODUgMCAwIDAgMTIuMDExIDAgMTIuMDA4IDEyLjAwOCAwIDAgMCAwIDExLjk4OSAxMi4wMjYgMTIuMDI2IDAgMCAwIDEyLjAxMSAyNGguMzUydi0uN3oiLz48L3N2Zz4="/>
     <text class="participant-title" x="1383" y="223" text-anchor="middle">H2</text>
     <text class="role" x="1383" y="240" text-anchor="middle">R2DBC DB</text>
