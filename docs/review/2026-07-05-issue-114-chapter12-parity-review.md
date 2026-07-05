@@ -27,13 +27,14 @@
 | Asset | Verification |
 |---|---|
 | `issue-114-chapter12-parity-architecture-01.svg` | XML parse OK; rendered with `~/.local/bin/cairosvg -s 2`; PNG is 3000x1960 RGB; full-size visual inspection passed for source/Spring/Ktor columns, mapping arrows, H2 catalog icon, and guardrail separation. |
-| `issue-114-chapter12-caller-sequence-01.svg` | XML parse OK; rendered with `~/.local/bin/cairosvg -s 2`; PNG is 3000x2320 RGB; full-size visual inspection passed for participants, numbered labels 1-12, alt frame, and footer. |
+| `issue-114-chapter12-caller-sequence-01.svg` | XML parse OK; rendered with `~/.local/bin/cairosvg -s 2`; PNG is 3000x2480 RGB; full-size visual inspection passed for participants, numbered labels 1-12, activation bars, alt frame, and footer. |
 | Architecture audits | `diagram-connector-audit.py` PASS markers=2 connectors=10 cards=12 intrusions=0 crossings=0; `diagram-geometry-audit.py` geometry_failures=0; `diagram-endpoint-audit.py` PASS; `diagram-mixed-corner-audit.py` PASS paths=10 q_bends=0 failures=0. |
 | Sequence audits | `diagram-sequence-style-audit.py` PASS; `diagram-connector-audit.py` PASS markers=5 connectors=12 cards=5 intrusions=0 crossings=0; `diagram-geometry-audit.py` geometry_failures=0; `diagram-endpoint-audit.py` PASS; `diagram-mixed-corner-audit.py` PASS paths=12 q_bends=0 failures=0. |
+| Sequence activation invariant | `delivery activation crossing audit` PASS stray_crossings=0 allowed_delivery_crossings=2 activation_bars=2. |
 | Sequence references | Opened full-size best-practices reference `/Users/debop/work/bluetape4k/bluetape4k-wiki/docs/diagrams/best-practices/assets/sequence-workflow-sample.png` and repo-local reference `/Users/debop/work/bluetape4k/exposed-r2dbc-workshop/.worktrees/feat-issue-114-chapter12-parity/docs/images/readme-diagrams/11-high-performance-sequence-03.png` before validating the sequence family. |
-| Sequence palette parity | Recolored sequence blue/green and activation bars to the same muted `#5067c5` / `#3a8b57` family used by the architecture map, then re-rendered the PNG and inspected the full-size asset plus contact sheet for palette drift. |
+| Sequence palette parity | Rechecked against `sequence-workflow-sample.png`; the sequence now uses the muted best-practices family: blue `#4f86c6`, green `#4d9470`, amber `#b7791f`, teal `#2f8f8c`, red `#bf5b64`, plus purple/green/amber activation bars. Full-size PNG inspection confirmed no Delivery-edge activation bar crosses unrelated DB-write lanes. |
 | Icon provenance | H2 cards embed `database/h2.svg` from the bluetape4k icon catalog via `data-bluetape4k-icon="database/h2.svg"`. |
-| Contact sheet | `/tmp/exposed-r2dbc-diagram-qa/issue-114-contact-sheet.png` was inspected for architecture/sequence family drift after each touched PNG passed full-size inspection. |
+| Contact sheet | `/tmp/exposed-r2dbc-diagram-qa/issue-114-contact-sheet.png` and `/tmp/exposed-r2dbc-diagram-qa/sequence-best-practices-comparison.png` were inspected for architecture/sequence family drift after each touched PNG passed full-size inspection. |
 
 ## 7-Tier Findings
 
