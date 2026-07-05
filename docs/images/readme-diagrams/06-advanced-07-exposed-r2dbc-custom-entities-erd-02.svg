@@ -65,4 +65,6 @@
 <text class="mono" x="18" y="131">VARCHAR name 255</text>
 <text class="mono" x="18" y="158">INT age</text>
 </g>
+
+<text x="654" y="706" class="mono" text-anchor="middle">No FK relationship: tables are independent examples for this module.</text>
 </svg>

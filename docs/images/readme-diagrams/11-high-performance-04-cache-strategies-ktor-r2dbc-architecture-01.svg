@@ -62,7 +62,7 @@
   <path d="M875 330 V410" class="dash"/>
   <path d="M760 490 H670" class="dash"/>
   <path d="M990 345 H1080" class="arrow" data-connector="arrow"/>
-  <path d="M545 390 Q545 575 385 575 Q225 575 225 370" class="arrow" data-connector="arrow"/>
+  <path d="M545 390 V470 Q545 488 527 488 H243 Q225 488 225 470 V370" class="arrow" data-connector="arrow"/>
 
   <text x="360" y="280" class="small">route call</text>
   <text x="690" y="240" class="small">read/write key</text>
