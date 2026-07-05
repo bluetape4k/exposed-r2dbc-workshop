@@ -65,9 +65,9 @@
 <path class="line" d="M160.0 1328.0 L415.0 1328.0" data-connector="line"/>
 <rect class="note label" x="207.5" y="1296.0" width="160.0" height="28" rx="9"/>
 <text class="strong labelText" x="287.5" y="1316.0" text-anchor="middle">19. evict(key)</text>
-<rect class="activation" x="154.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#93C5FD" opacity="0.72"/>
-<rect class="activation" x="409.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#93C5FD" opacity="0.72"/>
-<rect class="activation" x="664.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#93C5FD" opacity="0.72"/>
+<rect class="activation" x="154.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
+<rect class="activation" x="409.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
+<rect class="activation" x="664.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
 
 <!-- audit badge labels: visible sequence numbering and message pill samples -->
 <g aria-label="sequence message labels">

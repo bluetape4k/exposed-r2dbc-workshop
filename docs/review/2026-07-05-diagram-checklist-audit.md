@@ -133,3 +133,27 @@ Fixes applied in this pass:
 
 - Added reader-facing `No FK relationship` notes to independent-table ERDs.
 - Rerouted the three Ktor R2DBC high-performance architecture connectors that had non-orthogonal or diagonal endpoints.
+
+## 2026-07-05 grid-layout rebuild and sequence palette pass
+
+Scope: reviewer-requested full repair for ERD/Class grid layouts and Sequence best-practices palette/style across the current PR branch.
+
+| Gate | Evidence | Result |
+| --- | --- | --- |
+| Grid ERD rebuild | Regenerated `07-jpa-convert-01-convert-jpa-basic-erd-03` and `09-spring-05-exposed-r2dbc-repository-coroutines-erd-03`; each SVG rerendered with `~/.local/bin/cairosvg -s 2` | PASS |
+| ERD cardinality | `python3 /tmp/erd_cardinality_audit3.py .../exposed-r2dbc-workshop/.worktrees/docs-diagram-checklist-audit` | PASS, `total=10 fail=0` |
+| ERD label placement | `python3 /tmp/erd_label_bounds_audit.py .../exposed-r2dbc-workshop/.worktrees/docs-diagram-checklist-audit` | PASS, `labels=11 fail=0` |
+| Class grid rebuild | Regenerated `09-spring-07-spring-suspended-cache-class-02` from the old grid shape into a grouped class view with no hidden grid wiring or card-through connectors | PASS |
+| Class connector audit | `diagram-connector-audit.py $(grep 'class.*\.svg$' /tmp/diagram-scope.txt)` | PASS, `class_connector_failures=0` |
+| Sequence palette/style | Normalized all exposed-r2dbc-workshop sequence diagrams to the muted best-practices palette and rerendered PNGs | PASS |
+| Sequence style audit | `diagram-sequence-style-audit.py $(grep 'sequence.*\.svg$' /tmp/diagram-scope.txt)` | PASS, combined `sequence_files=54` |
+| Sequence connector audit | `diagram-connector-audit.py $(grep 'sequence.*\.svg$' /tmp/diagram-scope.txt)` | PASS, `seq_connector_failures=0` |
+| Full wrapper | `/tmp/run_diagram_audit.sh .../exposed-r2dbc-workshop/.worktrees/docs-diagram-checklist-audit` | PASS, `failures=0` |
+| Rendered visual inspection | Full-size PNGs opened: `07-jpa-convert-01-convert-jpa-basic-erd-03.png`, `09-spring-05-exposed-r2dbc-repository-coroutines-erd-03.png`, `09-spring-05-exposed-r2dbc-repository-coroutines-sequence-02.png`, `09-spring-07-spring-suspended-cache-class-02.png`; contact sheet `/tmp/diagram-final-contact-sheet.png` inspected | PASS |
+| Diff hygiene | `git diff --check` | PASS |
+
+Notes:
+
+- ERDs now show explicit `1 : N`, `1 : 1`, `0..1 : N`, or an explicit independent/no-FK note so the reader can distinguish relationships from sample tables.
+- The repository-coroutines Movie/Actor bridge is centered as a two-leg 1:N relation instead of a confusing N:M table placement.
+- Class assets that carried old grid/card-through wiring were rebuilt as grouped class views; relationship-bearing schema details are shown in the paired ERD/sequence assets.

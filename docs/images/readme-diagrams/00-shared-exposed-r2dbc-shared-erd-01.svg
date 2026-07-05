@@ -18,7 +18,10 @@
     .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
     .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
     .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
+
+  .cardinalityBox{fill:#ffffff;stroke:#94a3b8;stroke-width:1;rx:7;opacity:.94}
+  .cardinalityLabel{font-family:"Comic Mono", "SFMono-Regular", monospace;font-size:14px;font-weight:700;fill:#334155}
+</style>
 </defs>
 <rect class="canvas" width="842" height="722"/>
 <rect class="frame" x="32" y="28" width="778" height="666" rx="28"/>
@@ -50,4 +53,7 @@
   <text class="mono" x="18" y="104">int id PK SERIAL, auto increment</text>
 <text class="mono" x="18" y="131">varchar name NOT NULL</text>
 </g>
+
+<g class="cardinality" data-cardinality="1 : N"><rect class="cardinalityBox" x="245.5" y="638.0" width="74" height="22"/><text class="cardinalityLabel" x="282.5" y="654.0" text-anchor="middle">1 : N</text></g>
+<g class="cardinality" data-cardinality="1 : N"><rect class="cardinalityBox" x="474.0" y="372.0" width="74" height="22"/><text class="cardinalityLabel" x="511.0" y="388.0" text-anchor="middle">1 : N</text></g>
 </svg>
