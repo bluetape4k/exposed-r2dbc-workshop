@@ -69,6 +69,67 @@ degraded marker is cleared.
 | #48 | Observability/readiness | `diagnostics` | `diagnostics` |
 | #49 | Documentation and verification | README + Gradle/test evidence | README + Gradle/test evidence |
 
+## Source Example Parity
+
+`exposed-workshop` keeps Chapter 12 as ten focused modules. This R2DBC workshop
+intentionally keeps two modules, one per runtime stack, and maps each source
+example to package-level slices inside those modules.
+
+| `exposed-workshop` example | R2DBC counterpart | Coverage decision |
+|---|---|---|
+| `01-ktor-application-architecture` | `02-ktor-production-integration` packages `app`, `config`, `routes`, `persistence` | Covered in the Ktor module instead of a standalone module |
+| `02-spring-application-architecture` | `01-spring-production-integration` packages `app`, `persistence`, `web` | Covered in the Spring module instead of a standalone module |
+| `03-spring-http-outbox-idempotency` | Spring `outbound` slice, `SpringOutboundDispatcher`, outbound tests | Covered by the Spring package slice |
+| `04-ktor-http-outbox-idempotency` | Ktor `outbound` slice, `KtorOutboundDispatcher`, MockEngine tests | Covered by the Ktor package slice |
+| `05-spring-auth-session` | Spring `auth` slice and session metadata tests | Covered by the Spring package slice |
+| `06-ktor-auth-session` | Ktor authentication/session cookie flow and session metadata tests | Covered by the Ktor package slice |
+| `07-spring-outbox-realtime` | Spring `realtime` SSE replay and persisted outbox tests | Covered by the Spring package slice |
+| `08-ktor-outbox-realtime` | Ktor WebSocket replay/live stream and persisted outbox tests | Covered by the Ktor package slice |
+| `09-spring-observability-readiness` | Spring diagnostics/readiness and request-correlation tests | Covered by the Spring package slice |
+| `10-ktor-observability-readiness` | Ktor diagnostics/readiness and request-correlation tests | Covered by the Ktor package slice |
+
+Future Chapter 12 R2DBC work should extend these package slices unless a new
+issue proves that the module boundary itself is the teaching target.
+
+## Caller Flow
+
+| Step | Spring WebFlux | Ktor |
+|---|---|---|
+| Start point | `:01-spring-production-integration` | `:02-ktor-production-integration` |
+| Register a user | `POST /production/accounts` with `apiKey`, `username`, and optional `password` | `POST /production/accounts` with the same payload |
+| Authenticate | HTTP Basic for `/production/profile`, `/production/admin`, and `/production/sessions` | HTTP Basic creates a `production_session` cookie through `POST /production/sessions` |
+| Create work | `POST /production/work-items` with `X-Api-Key: alice-api-key` | `POST /production/work-items` with the signed session cookie |
+| Subscribe/replay realtime | `GET /production/realtime?after=<sequence>` returns SSE events | `ws://.../production/realtime?after=<sequence>` replays then streams WebSocket events |
+| Dispatch outbound HTTP | `POST /production/outbound` and `/production/outbound/dispatch` with `X-Api-Key: admin-api-key` | Same paths with the admin session cookie |
+| Inspect diagnostics | `GET /production/diagnostics/operations`, `GET /production/diagnostics/operations/{name}`, `GET /production/readiness` | Same paths |
+
+Seeded workshop accounts are `alice` / `password` with `alice-api-key` for
+work-item access and `admin` / `password` with `admin-api-key` for outbound and
+admin examples. These credentials are local workshop fixtures, not production
+defaults.
+
+## Delivery, Retry, And Readiness Semantics
+
+| Area | Caller-visible contract |
+|---|---|
+| Idempotency | The idempotency key is unique per module database. A duplicate key always returns HTTP 409, even if the payload matches an earlier request. The example does not replay the prior success response. |
+| Outbound retry | Dispatch claims eligible rows as `IN_FLIGHT`, calls the HTTP client outside the transaction, and records `SUCCEEDED`, `RETRYABLE_FAILED`, or `PERMANENT_FAILED`. Retryable failures can be dispatched again until the three-attempt cap turns them permanent. |
+| Realtime replay | Published outbox rows have monotonically increasing sequence values inside the module database. Reconnect with `after=<last-seen-sequence>` to replay only later `PUBLISHED` rows; clients should tolerate duplicate delivery around reconnects. |
+| Live delivery | Spring uses SSE and Ktor uses WebSockets. In both stacks, live delivery is best-effort after durable outbox persistence; the database replay path is the recovery contract. |
+| Readiness | Readiness returns `UP` only after a bounded live database ping. A persisted degraded marker or unreachable database reports `DEGRADED`; clearing the marker returns the example to `UP` after the next successful ping. |
+
+## Operator Notes
+
+- Disable or stop the dispatcher before manually changing outbound rows.
+- Inspect rows stuck in `IN_FLIGHT` or repeated `RETRYABLE_FAILED` state before
+  resetting them to `PENDING`; the idempotency key remains the duplicate
+  boundary.
+- Clear the degraded marker only after the database problem represented by the
+  diagnostic row is resolved.
+- Keep retry and replay operations idempotency-aware: do not change
+  idempotency keys to force a retry unless the caller intentionally wants a new
+  outbound request.
+
 ## Production Contracts
 
 - Database access runs through Exposed R2DBC `suspendTransaction`.

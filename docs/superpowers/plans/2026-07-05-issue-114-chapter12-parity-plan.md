@@ -33,7 +33,7 @@ entry with no current source/test counterpart.
 - Read: `12-production-integration/02-ktor-production-integration/src/test/kotlin/exposed/r2dbc/examples/production/ktor/KtorProductionIntegrationApplicationTest.kt`
 - Read: `/Users/debop/work/bluetape4k/exposed-workshop/12-production-integration/README.md`
 
-- [ ] **Step 1: Re-run the source/current mapping commands**
+- [x] **Step 1: Re-run the source/current mapping commands**
 
 Run:
 
@@ -54,7 +54,7 @@ Expected:
 - `gradle/libs.versions.toml` confirms the Kotlin and Spring Boot lines named
   in the spec and plan.
 
-- [ ] **Step 2: Record any actual gap before editing docs**
+- [x] **Step 2: Record any actual gap before editing docs**
 
 If a source topic lacks a current R2DBC counterpart, stop and add a narrow code/test task before Task 3. Otherwise continue with docs-only implementation.
 
@@ -63,7 +63,7 @@ If a source topic lacks a current R2DBC counterpart, stop and add a narrow code/
 **Files:**
 - Modify: `12-production-integration/README.md`
 
-- [ ] **Step 1: Insert a `Source Example Parity` section after `## Topic Map`**
+- [x] **Step 1: Insert a `Source Example Parity` section after `## Topic Map`**
 
 Add this table:
 
@@ -88,7 +88,7 @@ source example to package-level slices inside those modules.
 | `10-ktor-observability-readiness` | Ktor diagnostics/readiness and request-correlation tests | Covered by the Ktor package slice |
 ```
 
-- [ ] **Step 2: Add one sentence after the table**
+- [x] **Step 2: Add one sentence after the table**
 
 Add:
 
@@ -102,12 +102,12 @@ issue proves that the module boundary itself is the teaching target.
 **Files:**
 - Modify: `12-production-integration/README.ko.md`
 
-- [ ] **Step 1: Insert a Korean `Source Example Parity` section after `## 이슈별 주제 맵`**
+- [x] **Step 1: Insert a Korean `Source Example Parity` section after `## 이슈별 주제 맵`**
 
 Add the Korean equivalent table with the same ten source examples and the same
 R2DBC counterpart paths.
 
-- [ ] **Step 2: Add the same future guardrail in Korean**
+- [x] **Step 2: Add the same future guardrail in Korean**
 
 Required meaning:
 
@@ -121,7 +121,7 @@ Required meaning:
 - Maybe modify: `README.md`
 - Maybe modify: `README.ko.md`
 
-- [ ] **Step 1: Inspect Chapter 12 root rows**
+- [x] **Step 1: Inspect Chapter 12 root rows**
 
 Run:
 
@@ -133,7 +133,7 @@ Expected:
 
 - Root README already says Chapter 12 is covered by R2DBC issues `#43`-`#49`.
 
-- [ ] **Step 2: Edit only if the root wording is stale**
+- [x] **Step 2: Edit only if the root wording is stale**
 
 If edited, keep the change to one or two sentences that point readers to the
 chapter README parity table. Do not duplicate the full ten-row table in the
@@ -144,7 +144,7 @@ root README.
 **Files:**
 - Create: `docs/lessons/2026-07-05-issue-114-chapter12-parity.md`
 
-- [ ] **Step 1: Create the lesson**
+- [x] **Step 1: Create the lesson**
 
 Content:
 
@@ -180,7 +180,7 @@ the learning goal.
 **Files:**
 - No planned edits.
 
-- [ ] **Step 1: Check markdown diff hygiene**
+- [x] **Step 1: Check markdown diff hygiene**
 
 Run:
 
@@ -190,7 +190,7 @@ git diff --check
 
 Expected: no trailing whitespace or conflict markers.
 
-- [ ] **Step 2: Verify Gradle project discovery**
+- [x] **Step 2: Verify Gradle project discovery**
 
 Run:
 
@@ -200,7 +200,7 @@ Run:
 
 Expected: `:01-spring-production-integration` and `:02-ktor-production-integration` appear.
 
-- [ ] **Step 3: Verify targeted Chapter 12 tests**
+- [x] **Step 3: Verify targeted Chapter 12 tests**
 
 Run:
 
@@ -216,7 +216,7 @@ Expected: both module test tasks pass.
 - Create: `docs/review/2026-07-05-issue-114-chapter12-parity-review.md`
 - Create: `docs/lessons/2026-07-05-issue-114-chapter12-parity.md` if Task 5 has not already done so.
 
-- [ ] **Step 1: Run 7-Tier local/native review**
+- [x] **Step 1: Run 7-Tier local/native review**
 
 Review scope:
 

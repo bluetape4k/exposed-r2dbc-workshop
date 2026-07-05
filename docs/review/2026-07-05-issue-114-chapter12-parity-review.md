@@ -1,0 +1,35 @@
+# Issue #114 Chapter 12 Parity Review
+
+## Scope
+
+- `12-production-integration/README.md`
+- `12-production-integration/README.ko.md`
+- `docs/lessons/2026-07-05-issue-114-chapter12-parity.md`
+- `docs/superpowers/plans/2026-07-05-issue-114-chapter12-parity-plan.md`
+
+## Evidence
+
+- `find /Users/debop/work/bluetape4k/exposed-workshop/12-production-integration -maxdepth 2 -type d | sort`
+- `find 12-production-integration -maxdepth 2 -type d | sort`
+- `rg -n 'application architecture|HTTP Client Outbox|Authentication And Sessions|Realtime Outbox|Observability And Readiness' 12-production-integration/README.md 12-production-integration/README.ko.md`
+- `rg -n 'class .*Test|fun `' 12-production-integration/01-spring-production-integration/src/test/kotlin 12-production-integration/02-ktor-production-integration/src/test/kotlin`
+- `rg -n 'kotlin = |spring-boot = ' gradle/libs.versions.toml`
+- `git diff --check`
+- `./gradlew projects --console=plain`
+- `repo-test-summary -- ./gradlew :01-spring-production-integration:test :02-ktor-production-integration:test -PuseDB=H2 --continue --console=plain`
+
+## 7-Tier Findings
+
+| Tier | Verdict | Notes |
+|---|---|---|
+| Correctness | P0=0, P1=0 | Ten source examples map to the existing Spring/Ktor R2DBC modules, and tests cover auth/session, outbound idempotency, realtime replay/live delivery, diagnostics, and readiness. |
+| Security | P0=0, P1=0 | README keeps seeded credentials scoped to local workshop fixtures and documents duplicate/idempotency boundaries. |
+| Operations | P0=0, P1=0 | Operator notes cover dispatcher stop/reset, degraded marker cleanup, and idempotency-aware retry/replay. |
+| Compatibility | P0=0, P1=0 | No code, dependency, module, or Gradle topology change. Catalog version references are Kotlin 2.4.0 and Spring Boot 4.1.0. |
+| Tests | P0=0, P1=0 | Targeted Chapter 12 H2 module tests pass: 31 tests, exit code 0. |
+| Documentation | P0=0, P1=0 | English and Korean chapter README pair now include source-example parity, caller flow, delivery/retry/readiness semantics, and operator notes. |
+| Maintainability | P0=0, P1=0 | Lesson records the two-module guardrail so future Chapter 12 parity work does not duplicate modules unless that boundary is the lesson. |
+
+## Residual Risk
+
+- Full repository build was not run because the issue changes docs only and targeted Chapter 12 tests already exercise the described module surfaces.
