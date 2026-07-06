@@ -99,14 +99,14 @@
   <polygon points="520,360 512,346 528,346" fill="#4f86c6" stroke="#4f86c6" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <path class="dep" d="M 573 274 V 300 Q 573 322 595 322 H 698 Q 720 322 720 330 V 346" stroke="#6f8f52"/>
   <polygon points="720,360 712,346 728,346" fill="#6f8f52" stroke="#6f8f52" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-  <path class="dep" d="M 935 274 V 300 Q 935 322 920 322 V 346" stroke="#b68432"/>
+  <path class="dep" d="M 935 274 V 300 C 935 314 920 308 920 322 V 346" stroke="#b68432"/>
   <polygon points="920,360 912,346 928,346" fill="#b68432" stroke="#b68432" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <path class="dep" d="M 1245 274 V 320 Q 1245 342 1267 342 H 1303 Q 1325 342 1325 364 V 728 Q 1325 749 1303 749 H 1108" stroke="#805aa8"/>
   <polygon points="1094,749 1108,741 1108,757" fill="#805aa8" stroke="#805aa8" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
-  <path class="connector" d="M 590 418 V 448 Q 590 470 568 470 H 384 Q 362 470 362 492 V 506" stroke="#a66a3f"/>
+  <path class="connector" d="M 590 418 V 448 Q 590 470 568 470 H 384 Q 362 470 362 492 V 506" stroke="#a66a3f" style="stroke:#a66a3f"/>
   <polygon points="362,520 354,506 370,506" fill="#a66a3f" stroke="#a66a3f" stroke-width="1.6" stroke-linejoin="round"/>
-  <path class="connector" d="M 770 418 V 506" stroke="#4f8f8b"/>
+  <path class="connector" d="M 770 418 V 506" stroke="#4f8f8b" style="stroke:#4f8f8b"/>
   <polygon points="770,520 762,506 778,506" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1.6" stroke-linejoin="round"/>
   <path class="dep" d="M 922 561 H 988" stroke="#a85f7f"/>
   <polygon points="1002,561 988,553 988,569" fill="#a85f7f" stroke="#a85f7f" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
@@ -115,7 +115,7 @@
   <polygon points="330,712 322,698 338,698" fill="#a66a3f" stroke="#a66a3f" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <path class="dep" d="M 772 602 V 642 Q 772 664 750 664 H 454 Q 432 664 432 682 V 698" stroke="#4f8f8b"/>
   <polygon points="432,712 424,698 440,698" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-  <path class="dep" d="M 1020 418 V 450 Q 1020 472 1042 472 H 1280 V 650 Q 1280 672 1258 672 H 982 Q 960 672 960 680 V 698" stroke="#64748b"/>
+  <path class="dep" d="M 1020 418 V 450 Q 1020 472 1042 472 H 1258 Q 1280 472 1280 494 V 650 Q 1280 672 1258 672 H 982 Q 960 672 960 680 V 698" stroke="#64748b"/>
   <polygon points="960,712 952,698 968,698" fill="#64748b" stroke="#64748b" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <rect x="116" y="842" width="1208" height="30" rx="10" class="noteBox"/>
