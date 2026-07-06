@@ -1,87 +1,206 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 800" width="1320" height="800" role="img" aria-label="Issue 89 Example Parity Map diagram">
-<defs><filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12" /></filter><style>.canvas{fill:#f6f9fc}.frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}.lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}.card{filter:url(#shadow)}.header{opacity:.96}.title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:30px;fill:#1e293b}.subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}.tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}.laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:15px;letter-spacing:.08em;fill:#8ca2b4}.cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:17px;fill:#1e293b}.connector{fill:none;stroke:#64748b;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}.use{fill:none;stroke-width:2;stroke-dasharray:7 6;stroke-linecap:round;stroke-linejoin:round}.rel{fill:none;stroke:#64748b;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.head{fill:white;stroke:#64748b;stroke-width:2.4;stroke-dasharray:none;style:stroke-dasharray:none}.labelPill{fill:#fff;stroke:#d7e2ec;stroke-width:1}.noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.2}</style></defs>
-<rect width="1320" height="800" class="canvas"/><rect x="22" y="22" width="1276" height="756" rx="18" class="frame"/>
-<text x="58" y="68" class="title" text-anchor="start">Issue 89 Example Parity Map</text>
-<text x="58" y="96" class="subtitle" text-anchor="start">R2DBC workshop responsibility map for modules, runtime boundaries, and persistence contracts.</text>
-<rect x="48" y="128" width="1224" height="240" rx="16" class="lane"/><text x="72" y="158" class="laneTitle" text-anchor="start">REQUEST / COMMAND PATH</text>
-<rect x="48" y="392" width="1224" height="170" rx="16" class="lane"/><text x="72" y="422" class="laneTitle" text-anchor="start">DATA / INFRASTRUCTURE</text>
-<rect x="48" y="586" width="1224" height="104" rx="16" class="lane"/><text x="72" y="616" class="laneTitle" text-anchor="start">READER CONTRACT</text>
-<g data-card="Example parity map" data-x="82" data-y="210" data-width="200" data-height="104">
-<rect x="82" y="210" width="200" height="104" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card"/>
-<path class="header" d="M82,252 L82,224 Q82,210 96,210 L268,210 Q282,210 282,224 L282,252 Z" fill="#eef5fa"/>
-<text x="182.0" y="228" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
-<text x="182.0" y="247" class="cardTitle" text-anchor="middle">Example parity map</text>
-<text x="100" y="272" class="detail" text-anchor="start">reactive boundary</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1360" width="1600" height="1360" role="img" aria-label="Issue 89 example parity map diagram">
+<defs><filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12" /></filter><style>
+.canvas{fill:#f6f9fc}.frame{fill:#fff;stroke:#d7e2ec;stroke-width:2}.panel{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.6}.title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:44px;fill:#1e293b}.subtitle{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:18px;fill:#536476;font-weight:700}.header{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:16px;fill:#41566b;font-weight:800;letter-spacing:.04em}.cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:20px;fill:#1e293b}.detail{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#4b5f73;font-weight:700}.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:15px;fill:#41566b;font-weight:700}.connector{fill:none;stroke-width:3.8;stroke-linecap:round;stroke-linejoin:round}.card{filter:url(#shadow)}
+</style></defs>
+<rect width="1600" height="1360" class="canvas"/><rect x="24" y="24" width="1552" height="1312" rx="22" class="frame"/>
+<text x="70" y="82" class="title" text-anchor="start" >Issue 89 Example Parity Map</text>
+<text x="70" y="116" class="subtitle" text-anchor="start" >Root README maps exposed-workshop examples by concept: covered R2DBC counterparts, R2DBC-only work, and exclusions.</text>
+<rect x="58" y="154" width="1484" height="1068" rx="18" class="panel"/>
+<rect x="92" y="186" width="390" height="48" rx="12" fill="#eef5fa" stroke="#d7e2ec" stroke-width="1.6"/>
+<text x="287.0" y="216" class="header" text-anchor="middle" >exposed-workshop concept</text>
+<rect x="550" y="186" width="500" height="48" rx="12" fill="#eef5fa" stroke="#d7e2ec" stroke-width="1.6"/>
+<text x="800.0" y="216" class="header" text-anchor="middle" >R2DBC workshop counterpart</text>
+<rect x="1110" y="186" width="360" height="48" rx="12" fill="#eef5fa" stroke="#d7e2ec" stroke-width="1.6"/>
+<text x="1290.0" y="216" class="header" text-anchor="middle" >decision in root README</text>
+<rect x="78" y="246" width="1410" height="130" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" opacity="0.62"/>
+<g data-card="parity source 1" data-x="92" data-y="260" data-width="390" data-height="118">
+<rect x="92" y="260" width="390" height="118" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.3" class="card"/>
+<path d="M92,314 L92,278 Q92,260 110,260 L464,260 Q482,260 482,278 L482,314 Z" fill="#f1f6ec"/>
+<text x="110" y="285" class="cardTitle" text-anchor="start" >Ktor examples +</text>
+<text x="110" y="307" class="cardTitle" text-anchor="start" >multi-tenant</text>
+<text x="110" y="344" class="detail" text-anchor="start" >exposed-workshop</text>
+<text x="110" y="364" class="detail" text-anchor="start" >epic #45 / #46</text>
 </g>
-<g data-card="Issue #89 compares conc…" data-x="322" data-y="210" data-width="200" data-height="104">
-<rect x="322" y="210" width="200" height="104" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card"/>
-<path class="header" d="M322,252 L322,224 Q322,210 336,210 L508,210 Q522,210 522,224 L522,252 Z" fill="#f1f6ec"/>
-<text x="422.0" y="228" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
-<text x="422.0" y="247" class="cardTitle" text-anchor="middle">Issue #89 compares conc…</text>
-<text x="340" y="272" class="detail" text-anchor="start">reactive boundary</text>
+<g data-card="r2dbc counterpart 1" data-x="550" data-y="260" data-width="500" data-height="118">
+<rect x="550" y="260" width="500" height="118" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.3" class="card"/>
+<path d="M550,314 L550,278 Q550,260 568,260 L1032,260 Q1050,260 1050,278 L1050,314 Z" fill="#f1f6ec"/>
+<text x="568" y="285" class="cardTitle" text-anchor="start" >10-multi-tenant/07</text>
+<text x="568" y="344" class="detail" text-anchor="start" >Ktor tenant module</text>
+<text x="568" y="364" class="detail" text-anchor="start" >R2DBC #32 / #33</text>
 </g>
-<g data-card="exposed-r2dbc-workshop" data-x="562" data-y="210" data-width="200" data-height="104">
-<rect x="562" y="210" width="200" height="104" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card"/>
-<path class="header" d="M562,252 L562,224 Q562,210 576,210 L748,210 Q762,210 762,224 L762,252 Z" fill="#f5eee4"/>
-<text x="662.0" y="228" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
-<text x="662.0" y="247" class="cardTitle" text-anchor="middle">exposed-r2dbc-workshop</text>
-<text x="580" y="272" class="detail" text-anchor="start">R2DBC responsibility</text>
+<g data-card="parity decision 1" data-x="1110" data-y="260" data-width="360" data-height="118">
+<rect x="1110" y="260" width="360" height="118" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.3" class="card"/>
+<path d="M1110,314 L1110,278 Q1110,260 1128,260 L1452,260 Q1470,260 1470,278 L1470,314 Z" fill="#f1f6ec"/>
+<text x="1128" y="285" class="cardTitle" text-anchor="start" >Covered</text>
+<text x="1128" y="344" class="detail" text-anchor="start" >same concept</text>
+<text x="1128" y="364" class="detail" text-anchor="start" >R2DBC contracts</text>
 </g>
-<g data-card="Reactive R2DBC, Flow, W…" data-x="802" data-y="210" data-width="200" data-height="104">
-<rect x="802" y="210" width="200" height="104" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card"/>
-<path class="header" d="M802,252 L802,224 Q802,210 816,210 L988,210 Q1002,210 1002,224 L1002,252 Z" fill="#eef7f6"/>
-<text x="902.0" y="228" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
-<text x="902.0" y="247" class="cardTitle" text-anchor="middle">Reactive R2DBC, Flow, W…</text>
-<text x="820" y="272" class="detail" text-anchor="start">R2DBC responsibility</text>
+<path class="connector" data-connector="parity" d="M482 319.0 L550 319.0" stroke="#6f8f52"/>
+<polygon points="550,319.0 536,310.0 536,328.0" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="parity" d="M1050 319.0 L1110 319.0" stroke="#6f8f52"/>
+<polygon points="1110,319.0 1096,310.0 1096,328.0" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<rect x="78" y="382" width="1410" height="130" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" opacity="0.62"/>
+<g data-card="parity source 2" data-x="92" data-y="396" data-width="390" data-height="118">
+<rect x="92" y="396" width="390" height="118" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.3" class="card"/>
+<path d="M92,450 L92,414 Q92,396 110,396 L464,396 Q482,396 482,414 L482,450 Z" fill="#f1f6ec"/>
+<text x="110" y="421" class="cardTitle" text-anchor="start" >Ktor cache +</text>
+<text x="110" y="443" class="cardTitle" text-anchor="start" >routing</text>
+<text x="110" y="480" class="detail" text-anchor="start" >cache strategies</text>
+<text x="110" y="500" class="detail" text-anchor="start" >read/write routing</text>
 </g>
-<g data-card="10 / 07 Ktor multi-tena…" data-x="1042" data-y="210" data-width="200" data-height="104">
-<rect x="1042" y="210" width="200" height="104" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2" class="card"/>
-<path class="header" d="M1042,252 L1042,224 Q1042,210 1056,210 L1228,210 Q1242,210 1242,224 L1242,252 Z" fill="#f5eef2"/>
-<text x="1142.0" y="228" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
-<text x="1142.0" y="247" class="cardTitle" text-anchor="middle">10 / 07 Ktor multi-tena…</text>
-<text x="1060" y="272" class="detail" text-anchor="start">R2DBC responsibility</text>
+<g data-card="r2dbc counterpart 2" data-x="550" data-y="396" data-width="500" data-height="118">
+<rect x="550" y="396" width="500" height="118" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.3" class="card"/>
+<path d="M550,450 L550,414 Q550,396 568,396 L1032,396 Q1050,396 1050,414 L1050,450 Z" fill="#f1f6ec"/>
+<text x="568" y="421" class="cardTitle" text-anchor="start" >11-high-performance</text>
+<text x="568" y="480" class="detail" text-anchor="start" >04-06 Ktor parity</text>
+<text x="568" y="500" class="detail" text-anchor="start" >#34 #35 #36 #69</text>
 </g>
-<path class="connector" data-connector="flow" d="M 282 262 L 322 262" stroke="#6f8f52"/>
-<polyline points="322,262 310,255 310,269" fill="none" stroke="#6f8f52" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="connector" data-connector="flow" d="M 522 262 L 562 262" stroke="#a66a3f"/>
-<polyline points="562,262 550,255 550,269" fill="none" stroke="#a66a3f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="connector" data-connector="flow" d="M 762 262 L 802 262" stroke="#4f8f8b"/>
-<polyline points="802,262 790,255 790,269" fill="none" stroke="#4f8f8b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="connector" data-connector="flow" d="M 1002 262 L 1042 262" stroke="#a85f7f"/>
-<polyline points="1042,262 1030,255 1030,269" fill="none" stroke="#a85f7f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<g data-card="ConnectionFactory" data-x="180" data-y="432" data-width="210" data-height="88">
-<rect x="180" y="432" width="210" height="88" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card"/>
-<path class="header" d="M180,474 L180,446 Q180,432 194,432 L376,432 Q390,432 390,446 L390,474 Z" fill="#f5eee4"/>
-<text x="285.0" y="450" class="tiny" text-anchor="middle">&lt;&lt;runtime&gt;&gt;</text>
-<text x="285.0" y="469" class="cardTitle" text-anchor="middle">ConnectionFactory</text>
-<text x="198" y="494" class="detail" text-anchor="start">owned by the example</text>
+<g data-card="parity decision 2" data-x="1110" data-y="396" data-width="360" data-height="118">
+<rect x="1110" y="396" width="360" height="118" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.3" class="card"/>
+<path d="M1110,450 L1110,414 Q1110,396 1128,396 L1452,396 Q1470,396 1470,414 L1470,450 Z" fill="#f1f6ec"/>
+<text x="1128" y="421" class="cardTitle" text-anchor="start" >Covered</text>
+<text x="1128" y="480" class="detail" text-anchor="start" >cache + routing</text>
+<text x="1128" y="500" class="detail" text-anchor="start" >counterparts</text>
 </g>
-<g data-card="suspendTransaction" data-x="460" data-y="432" data-width="210" data-height="88">
-<rect x="460" y="432" width="210" height="88" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card"/>
-<path class="header" d="M460,474 L460,446 Q460,432 474,432 L656,432 Q670,432 670,446 L670,474 Z" fill="#eef7f6"/>
-<text x="565.0" y="450" class="tiny" text-anchor="middle">&lt;&lt;runtime&gt;&gt;</text>
-<text x="565.0" y="469" class="cardTitle" text-anchor="middle">suspendTransaction</text>
-<text x="478" y="494" class="detail" text-anchor="start">owned by the example</text>
+<path class="connector" data-connector="parity" d="M482 455.0 L550 455.0" stroke="#6f8f52"/>
+<polygon points="550,455.0 536,446.0 536,464.0" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="parity" d="M1050 455.0 L1110 455.0" stroke="#6f8f52"/>
+<polygon points="1110,455.0 1096,446.0 1096,464.0" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<rect x="78" y="518" width="1410" height="130" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" opacity="0.62"/>
+<g data-card="parity source 3" data-x="92" data-y="532" data-width="390" data-height="118">
+<rect x="92" y="532" width="390" height="118" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.3" class="card"/>
+<path d="M92,586 L92,550 Q92,532 110,532 L464,532 Q482,532 482,550 L482,586 Z" fill="#eef5fa"/>
+<text x="110" y="557" class="cardTitle" text-anchor="start" >Spring tenant</text>
+<text x="110" y="579" class="cardTitle" text-anchor="start" >strategies</text>
+<text x="110" y="616" class="detail" text-anchor="start" >schema / pool /</text>
+<text x="110" y="636" class="detail" text-anchor="start" >authentication</text>
 </g>
-<g data-card="Flow / Result" data-x="740" data-y="432" data-width="210" data-height="88">
-<rect x="740" y="432" width="210" height="88" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2" class="card"/>
-<path class="header" d="M740,474 L740,446 Q740,432 754,432 L936,432 Q950,432 950,446 L950,474 Z" fill="#f5eef2"/>
-<text x="845.0" y="450" class="tiny" text-anchor="middle">&lt;&lt;runtime&gt;&gt;</text>
-<text x="845.0" y="469" class="cardTitle" text-anchor="middle">Flow / Result</text>
-<text x="758" y="494" class="detail" text-anchor="start">owned by the example</text>
+<g data-card="r2dbc counterpart 3" data-x="550" data-y="532" data-width="500" data-height="118">
+<rect x="550" y="532" width="500" height="118" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.3" class="card"/>
+<path d="M550,586 L550,550 Q550,532 568,532 L1032,532 Q1050,532 1050,550 L1050,586 Z" fill="#eef5fa"/>
+<text x="568" y="557" class="cardTitle" text-anchor="start" >10-multi-tenant</text>
+<text x="568" y="616" class="detail" text-anchor="start" >03-06 Spring paths</text>
+<text x="568" y="636" class="detail" text-anchor="start" >R2DBC #37-#42</text>
 </g>
-<g data-card="Database" data-x="1020" data-y="432" data-width="210" data-height="88">
-<rect x="1020" y="432" width="210" height="88" rx="14" fill="#fff" stroke="#8a6f55" stroke-width="2" class="card"/>
-<path class="header" d="M1020,474 L1020,446 Q1020,432 1034,432 L1216,432 Q1230,432 1230,446 L1230,474 Z" fill="#f3eee8"/>
-<text x="1125.0" y="450" class="tiny" text-anchor="middle">&lt;&lt;runtime&gt;&gt;</text>
-<text x="1125.0" y="469" class="cardTitle" text-anchor="middle">Database</text>
-<text x="1038" y="494" class="detail" text-anchor="start">owned by the example</text>
+<g data-card="parity decision 3" data-x="1110" data-y="532" data-width="360" data-height="118">
+<rect x="1110" y="532" width="360" height="118" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.3" class="card"/>
+<path d="M1110,586 L1110,550 Q1110,532 1128,532 L1452,532 Q1470,532 1470,550 L1470,586 Z" fill="#eef5fa"/>
+<text x="1128" y="557" class="cardTitle" text-anchor="start" >Covered</text>
+<text x="1128" y="616" class="detail" text-anchor="start" >Spring WebFlux</text>
+<text x="1128" y="636" class="detail" text-anchor="start" >request contracts</text>
 </g>
-<path class="use connector" data-connector="runtime-use" d="M 422 432 L 422 390 Q 422 374 438 374 L 549 374 Q 565 374 565 390 L 565 432" stroke="#64748b"/>
-<polyline points="565,432 558,420 572,420" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="use connector" data-connector="runtime-use" d="M 662 432 L 662 390 Q 662 374 678 374 L 829 374 Q 845 374 845 390 L 845 432" stroke="#64748b"/>
-<polyline points="845,432 838,420 852,420" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="use connector" data-connector="runtime-use" d="M 902 432 L 902 390 Q 902 374 918 374 L 1109 374 Q 1125 374 1125 390 L 1125 432" stroke="#64748b"/>
-<polyline points="1125,432 1118,420 1132,420" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<rect x="86" y="634" width="1148" height="30" rx="10" class="noteBox"/><text x="660" y="654" class="note" text-anchor="middle">Static ownership view: components are arranged by responsibility, and arrows show concrete handoff direction.</text>
+<path class="connector" data-connector="parity" d="M482 591.0 L550 591.0" stroke="#4f86c6"/>
+<polygon points="550,591.0 536,582.0 536,600.0" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="parity" d="M1050 591.0 L1110 591.0" stroke="#4f86c6"/>
+<polygon points="1110,591.0 1096,582.0 1096,600.0" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<rect x="78" y="654" width="1410" height="130" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" opacity="0.62"/>
+<g data-card="parity source 4" data-x="92" data-y="668" data-width="390" data-height="118">
+<rect x="92" y="668" width="390" height="118" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2.3" class="card"/>
+<path d="M92,722 L92,686 Q92,668 110,668 L464,668 Q482,668 482,686 L482,722 Z" fill="#f5eef2"/>
+<text x="110" y="693" class="cardTitle" text-anchor="start" >Production</text>
+<text x="110" y="715" class="cardTitle" text-anchor="start" >integration</text>
+<text x="110" y="752" class="detail" text-anchor="start" >chapter 12</text>
+<text x="110" y="772" class="detail" text-anchor="start" >source parity</text>
+</g>
+<g data-card="r2dbc counterpart 4" data-x="550" data-y="668" data-width="500" data-height="118">
+<rect x="550" y="668" width="500" height="118" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2.3" class="card"/>
+<path d="M550,722 L550,686 Q550,668 568,668 L1032,668 Q1050,668 1050,686 L1050,722 Z" fill="#f5eef2"/>
+<text x="568" y="693" class="cardTitle" text-anchor="start" >12-production</text>
+<text x="568" y="752" class="detail" text-anchor="start" >01 Spring / 02 Ktor</text>
+<text x="568" y="772" class="detail" text-anchor="start" >R2DBC #43-#49</text>
+</g>
+<g data-card="parity decision 4" data-x="1110" data-y="668" data-width="360" data-height="118">
+<rect x="1110" y="668" width="360" height="118" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2.3" class="card"/>
+<path d="M1110,722 L1110,686 Q1110,668 1128,668 L1452,668 Q1470,668 1470,686 L1470,722 Z" fill="#f5eef2"/>
+<text x="1128" y="693" class="cardTitle" text-anchor="start" >Covered</text>
+<text x="1128" y="752" class="detail" text-anchor="start" >split by runtime</text>
+<text x="1128" y="772" class="detail" text-anchor="start" >and concern</text>
+</g>
+<path class="connector" data-connector="parity" d="M482 727.0 L550 727.0" stroke="#a85f7f"/>
+<polygon points="550,727.0 536,718.0 536,736.0" fill="#a85f7f" stroke="#a85f7f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="parity" d="M1050 727.0 L1110 727.0" stroke="#a85f7f"/>
+<polygon points="1110,727.0 1096,718.0 1096,736.0" fill="#a85f7f" stroke="#a85f7f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<rect x="78" y="790" width="1410" height="130" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" opacity="0.62"/>
+<g data-card="parity source 5" data-x="92" data-y="804" data-width="390" data-height="118">
+<rect x="92" y="804" width="390" height="118" rx="14" fill="#fff" stroke="#b78a3b" stroke-width="2.3" class="card"/>
+<path d="M92,858 L92,822 Q92,804 110,804 L464,804 Q482,804 482,822 L482,858 Z" fill="#fbf4df"/>
+<text x="110" y="829" class="cardTitle" text-anchor="start" >Database adapter</text>
+<text x="110" y="851" class="cardTitle" text-anchor="start" >examples</text>
+<text x="110" y="888" class="detail" text-anchor="start" >BigQuery / Trino /</text>
+<text x="110" y="908" class="detail" text-anchor="start" >StarRocks / DuckDB</text>
+</g>
+<g data-card="r2dbc counterpart 5" data-x="550" data-y="804" data-width="500" data-height="118">
+<rect x="550" y="804" width="500" height="118" rx="14" fill="#fff" stroke="#b78a3b" stroke-width="2.3" class="card"/>
+<path d="M550,858 L550,822 Q550,804 568,804 L1032,804 Q1050,804 1050,822 L1050,858 Z" fill="#fbf4df"/>
+<text x="568" y="829" class="cardTitle" text-anchor="start" >13/03 CockroachDB</text>
+<text x="568" y="888" class="detail" text-anchor="start" >retry via PostgreSQL</text>
+<text x="568" y="908" class="detail" text-anchor="start" >compatible R2DBC</text>
+</g>
+<g data-card="parity decision 5" data-x="1110" data-y="804" data-width="360" data-height="118">
+<rect x="1110" y="804" width="360" height="118" rx="14" fill="#fff" stroke="#b78a3b" stroke-width="2.3" class="card"/>
+<path d="M1110,858 L1110,822 Q1110,804 1128,804 L1452,804 Q1470,804 1470,822 L1470,858 Z" fill="#fbf4df"/>
+<text x="1128" y="829" class="cardTitle" text-anchor="start" >Scoped</text>
+<text x="1128" y="888" class="detail" text-anchor="start" >Cockroach covered</text>
+<text x="1128" y="908" class="detail" text-anchor="start" >non-R2DBC excluded</text>
+</g>
+<path class="connector" data-connector="parity" d="M482 863.0 L550 863.0" stroke="#b78a3b"/>
+<polygon points="550,863.0 536,854.0 536,872.0" fill="#b78a3b" stroke="#b78a3b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="parity" d="M1050 863.0 L1110 863.0" stroke="#b78a3b"/>
+<polygon points="1110,863.0 1096,854.0 1096,872.0" fill="#b78a3b" stroke="#b78a3b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<rect x="78" y="926" width="1410" height="130" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" opacity="0.62"/>
+<g data-card="parity source 6" data-x="92" data-y="940" data-width="390" data-height="118">
+<rect x="92" y="940" width="390" height="118" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.3" class="card"/>
+<path d="M92,994 L92,958 Q92,940 110,940 L464,940 Q482,940 482,958 L482,994 Z" fill="#eef7f6"/>
+<text x="110" y="965" class="cardTitle" text-anchor="start" >ConnectionFactory</text>
+<text x="110" y="987" class="cardTitle" text-anchor="start" >per tenant</text>
+<text x="110" y="1024" class="detail" text-anchor="start" >no exact JDBC</text>
+<text x="110" y="1044" class="detail" text-anchor="start" >counterpart</text>
+</g>
+<g data-card="r2dbc counterpart 6" data-x="550" data-y="940" data-width="500" data-height="118">
+<rect x="550" y="940" width="500" height="118" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.3" class="card"/>
+<path d="M550,994 L550,958 Q550,940 568,940 L1032,940 Q1050,940 1050,958 L1050,994 Z" fill="#eef7f6"/>
+<text x="568" y="965" class="cardTitle" text-anchor="start" >10/04 pool routing</text>
+<text x="568" y="1024" class="detail" text-anchor="start" >R2DBC #39</text>
+<text x="568" y="1044" class="detail" text-anchor="start" >factory boundary</text>
+</g>
+<g data-card="parity decision 6" data-x="1110" data-y="940" data-width="360" data-height="118">
+<rect x="1110" y="940" width="360" height="118" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.3" class="card"/>
+<path d="M1110,994 L1110,958 Q1110,940 1128,940 L1452,940 Q1470,940 1470,958 L1470,994 Z" fill="#eef7f6"/>
+<text x="1128" y="965" class="cardTitle" text-anchor="start" >R2DBC-only</text>
+<text x="1128" y="1024" class="detail" text-anchor="start" >platform-specific</text>
+<text x="1128" y="1044" class="detail" text-anchor="start" >lesson retained</text>
+</g>
+<path class="connector" data-connector="parity" d="M482 999.0 L550 999.0" stroke="#4f8f8b"/>
+<polygon points="550,999.0 536,990.0 536,1008.0" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="parity" d="M1050 999.0 L1110 999.0" stroke="#4f8f8b"/>
+<polygon points="1110,999.0 1096,990.0 1096,1008.0" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<rect x="78" y="1062" width="1410" height="130" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.2" opacity="0.62"/>
+<g data-card="parity source 7" data-x="92" data-y="1076" data-width="390" data-height="118">
+<rect x="92" y="1076" width="390" height="118" rx="14" fill="#fff" stroke="#64748b" stroke-width="2.3" class="card"/>
+<path d="M92,1130 L92,1094 Q92,1076 110,1076 L464,1076 Q482,1076 482,1094 L482,1130 Z" fill="#f1f5f9"/>
+<text x="110" y="1101" class="cardTitle" text-anchor="start" >JDBC DAO/entity</text>
+<text x="110" y="1123" class="cardTitle" text-anchor="start" >template examples</text>
+<text x="110" y="1160" class="detail" text-anchor="start" >blocking transaction</text>
+<text x="110" y="1180" class="detail" text-anchor="start" >benchmark material</text>
+</g>
+<g data-card="r2dbc counterpart 7" data-x="550" data-y="1076" data-width="500" data-height="118">
+<rect x="550" y="1076" width="500" height="118" rx="14" fill="#fff" stroke="#64748b" stroke-width="2.3" class="card"/>
+<path d="M550,1130 L550,1094 Q550,1076 568,1076 L1032,1076 Q1050,1076 1050,1094 L1050,1130 Z" fill="#f1f5f9"/>
+<text x="568" y="1101" class="cardTitle" text-anchor="start" >No duplicate module</text>
+<text x="568" y="1160" class="detail" text-anchor="start" >kept in JDBC workshop</text>
+<text x="568" y="1180" class="detail" text-anchor="start" >by design</text>
+</g>
+<g data-card="parity decision 7" data-x="1110" data-y="1076" data-width="360" data-height="118">
+<rect x="1110" y="1076" width="360" height="118" rx="14" fill="#fff" stroke="#64748b" stroke-width="2.3" class="card"/>
+<path d="M1110,1130 L1110,1094 Q1110,1076 1128,1076 L1452,1076 Q1470,1076 1470,1094 L1470,1130 Z" fill="#f1f5f9"/>
+<text x="1128" y="1101" class="cardTitle" text-anchor="start" >Excluded</text>
+<text x="1128" y="1160" class="detail" text-anchor="start" >JDBC-only surface</text>
+<text x="1128" y="1180" class="detail" text-anchor="start" >not parity debt</text>
+</g>
+<path class="connector" data-connector="parity" d="M482 1135.0 L550 1135.0" stroke="#64748b"/>
+<polygon points="550,1135.0 536,1126.0 536,1144.0" fill="#64748b" stroke="#64748b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="parity" d="M1050 1135.0 L1110 1135.0" stroke="#64748b"/>
+<polygon points="1110,1135.0 1096,1126.0 1096,1144.0" fill="#64748b" stroke="#64748b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<rect x="96" y="1250" width="1408" height="42" rx="12" fill="#ecfdf5" stroke="#86efac" stroke-width="1.6"/>
+<text x="800" y="1276" class="note" text-anchor="middle" >Parity is concept-level: covered examples point to R2DBC modules; JDBC-only and non-R2DBC client examples are explicitly out of scope.</text>
 </svg>
