@@ -3,9 +3,9 @@
 ## Scope
 
 - Kept ERD SVG+PNG:
-  - `docs/assets/readme-diagrams/issue-115-chapter13-03-cockroachdb-retry-erd-01`
+  - `docs/images/readme-diagrams/issue-115-chapter13-03-cockroachdb-retry-erd-01`
 - Kept sequence SVG+PNG:
-  - `docs/assets/readme-diagrams/issue-115-chapter13-03-cockroachdb-retry-sequence-01`
+  - `docs/images/readme-diagrams/issue-115-chapter13-03-cockroachdb-retry-sequence-01`
 - README embeds:
   - `13-ecosystem-integrations/03-cockroachdb-retry/README.md`
   - `13-ecosystem-integrations/03-cockroachdb-retry/README.ko.md`

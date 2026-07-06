@@ -13,7 +13,7 @@
 인증하는 것이 핵심이면 `05-spring-security-tenant-authorization-spring-webflux`를
 사용합니다.
 
-![Tenant onboarding R2DBC flow](../../docs/assets/readme-diagrams/issue-41-tenant-onboarding-r2dbc-01.png)
+![Tenant onboarding R2DBC flow](../../docs/images/readme-diagrams/issue-41-tenant-onboarding-r2dbc-01.png)
 
 ## Onboarding Flow
 

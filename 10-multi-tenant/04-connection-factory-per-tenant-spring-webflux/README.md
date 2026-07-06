@@ -17,7 +17,7 @@ This module demonstrates **connection-factory-per-tenant** isolation:
 - Startup initialization uses explicit tenant databases backed by the same
   registry-owned pools.
 
-![Connection Factory Per Tenant architecture](../../docs/assets/readme-diagrams/10-multi-tenant-04-connection-factory-per-tenant-architecture-01.png)
+![Connection Factory Per Tenant architecture](../../docs/images/readme-diagrams/10-multi-tenant-04-connection-factory-per-tenant-architecture-01.png)
 
 ## When To Use
 

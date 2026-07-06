@@ -8,7 +8,7 @@ Reactor context가 아니라 Ktor call attributes로 전달합니다.
 
 ## Architecture
 
-![Ktor R2DBC multi-tenant request flow](../../docs/assets/readme-diagrams/10-multi-tenant-07-multitenant-ktor-architecture-01.png)
+![Ktor R2DBC multi-tenant request flow](../../docs/images/readme-diagrams/10-multi-tenant-07-multitenant-ktor-architecture-01.png)
 
 ## 이 모듈의 핵심
 

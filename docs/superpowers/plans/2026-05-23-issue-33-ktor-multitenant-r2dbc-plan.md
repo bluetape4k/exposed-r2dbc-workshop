@@ -125,7 +125,7 @@ executed 15 tests; Ktor production integration tests also passed.
 9. Add documentation and diagram.
    - Add module `README.md` and `README.ko.md`.
    - Link from `10-multi-tenant/README.md` and `README.ko.md`.
-   - Add PNG diagram under `docs/assets/readme-diagrams/` with source file if
+   - Add PNG diagram under `docs/images/readme-diagrams/` with source file if
      the repo pattern stores one. Check the existing readme-diagram convention
      before generating assets and keep the committed PNG path stable.
    - Document that `X-TENANT-ID` is not authentication and production must bind

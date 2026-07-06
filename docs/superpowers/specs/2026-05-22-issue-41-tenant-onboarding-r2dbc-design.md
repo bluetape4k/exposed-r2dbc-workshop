@@ -492,7 +492,7 @@ Add `README.md` and `README.ko.md` for the new module:
 - include a production-credentials warning in the "Registry and resource model"
   section: non-H2 URLs may contain credentials and must not be stored plaintext
   in production.
-- include a generated PNG diagram under `docs/assets/readme-diagrams/` and
+- include a generated PNG diagram under `docs/images/readme-diagrams/` and
   reference the same relative path from both READMEs.
 
 The diagram should be a committed raster PNG, generated in the same style as
@@ -503,7 +503,7 @@ the PNG.
 Diagram asset path:
 
 ```text
-docs/assets/readme-diagrams/issue-41-tenant-onboarding-r2dbc-01.png
+docs/images/readme-diagrams/issue-41-tenant-onboarding-r2dbc-01.png
 ```
 
 ## CI/Nightly Decision

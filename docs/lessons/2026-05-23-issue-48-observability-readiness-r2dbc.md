@@ -17,7 +17,7 @@ operation persistence, and live database readiness checks to both stacks.
 - Use the same durable table shape across Spring and Ktor examples so the
   workshop compares framework boundaries instead of domain model drift.
 - README diagrams for this repository should be committed as PNG assets under
-  `docs/assets/readme-diagrams/`, with SVG sources kept beside them when useful.
+  `docs/images/readme-diagrams/`, with SVG sources kept beside them when useful.
 
 ## Verification
 

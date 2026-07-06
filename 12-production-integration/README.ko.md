@@ -15,15 +15,15 @@ diagnostics 경계는 각 프레임워크의 자연스러운 방식으로 보여
 
 ## Application Architecture
 
-![Chapter 12 production application architecture](../docs/assets/readme-diagrams/issue-44-production-architecture-r2dbc-01.png)
+![Chapter 12 production application architecture](../docs/images/readme-diagrams/issue-44-production-architecture-r2dbc-01.png)
 
 ## Authentication And Sessions
 
-![Chapter 12 authentication and session metadata](../docs/assets/readme-diagrams/issue-45-auth-session-r2dbc-01.png)
+![Chapter 12 authentication and session metadata](../docs/images/readme-diagrams/issue-45-auth-session-r2dbc-01.png)
 
 ## Realtime Outbox Delivery
 
-![Chapter 12 realtime outbox delivery](../docs/assets/readme-diagrams/issue-46-outbox-realtime-r2dbc-01.png)
+![Chapter 12 realtime outbox delivery](../docs/images/readme-diagrams/issue-46-outbox-realtime-r2dbc-01.png)
 
 Realtime slice는 accepted work item과 outbox event를 같은 Exposed R2DBC
 transaction에 저장합니다. Pending row publish는 Spring SSE 또는 Ktor
@@ -33,7 +33,7 @@ reconnect/replay는 in-memory event에만 의존하지 않습니다.
 
 ## HTTP Client Outbox And Idempotency
 
-![Chapter 12 HTTP client outbox and idempotency](../docs/assets/readme-diagrams/issue-47-http-outbox-idempotency-r2dbc-01.png)
+![Chapter 12 HTTP client outbox and idempotency](../docs/images/readme-diagrams/issue-47-http-outbox-idempotency-r2dbc-01.png)
 
 Outbound slice는 외부 HTTP 호출을 dispatch하기 전에 row로 먼저 저장하고,
 database-unique idempotency key를 duplicate boundary로 사용합니다. Dispatch는
@@ -46,7 +46,7 @@ retry, duplicate, permanent failure, concurrent single-send 동작을 검증합�
 
 ## Observability And Readiness
 
-![Chapter 12 observability and readiness](../docs/assets/readme-diagrams/issue-48-observability-readiness-r2dbc-01.png)
+![Chapter 12 observability and readiness](../docs/images/readme-diagrams/issue-48-observability-readiness-r2dbc-01.png)
 
 Observability slice는 Spring WebFlux와 Ktor에서 `X-Request-ID`를 같은
 계약으로 정규화합니다. 안전한 caller-provided ID는 응답에 그대로 echo하고,
@@ -74,7 +74,7 @@ clear하면 다시 `UP`으로 회복합니다.
 R2DBC workshop은 runtime stack별 두 module을 의도적으로 유지하고, source
 example을 module 내부 package slice에 매핑합니다.
 
-![Chapter 12 source example parity architecture map](../docs/assets/readme-diagrams/issue-114-chapter12-parity-architecture-01.png)
+![Chapter 12 source example parity architecture map](../docs/images/readme-diagrams/issue-114-chapter12-parity-architecture-01.png)
 
 | `exposed-workshop` 예제 | R2DBC 대응 | Coverage 결정 |
 |---|---|---|
@@ -94,7 +94,7 @@ example을 module 내부 package slice에 매핑합니다.
 
 ## 호출자 흐름
 
-![Chapter 12 caller outbox and realtime sequence](../docs/assets/readme-diagrams/issue-114-chapter12-caller-sequence-01.png)
+![Chapter 12 caller outbox and realtime sequence](../docs/images/readme-diagrams/issue-114-chapter12-caller-sequence-01.png)
 
 | 단계 | Spring WebFlux | Ktor |
 |---|---|---|

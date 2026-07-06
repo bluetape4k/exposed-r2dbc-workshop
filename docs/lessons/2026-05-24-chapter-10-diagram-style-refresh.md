@@ -15,7 +15,7 @@ R2DBC contracts band. Keep README paths stable.
 
 ## Outcome
 
-`docs/assets/readme-diagrams/10-multi-tenant-strategy-map-01.png` now presents
+`docs/images/readme-diagrams/10-multi-tenant-strategy-map-01.png` now presents
 chapter 10 using the preferred panel composition, smaller triangular arrows,
 and Architects Daughter headings.
 

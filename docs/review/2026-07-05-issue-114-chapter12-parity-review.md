@@ -4,10 +4,10 @@
 
 - `12-production-integration/README.md`
 - `12-production-integration/README.ko.md`
-- `docs/assets/readme-diagrams/issue-114-chapter12-parity-architecture-01.svg`
-- `docs/assets/readme-diagrams/issue-114-chapter12-parity-architecture-01.png`
-- `docs/assets/readme-diagrams/issue-114-chapter12-caller-sequence-01.svg`
-- `docs/assets/readme-diagrams/issue-114-chapter12-caller-sequence-01.png`
+- `docs/images/readme-diagrams/issue-114-chapter12-parity-architecture-01.svg`
+- `docs/images/readme-diagrams/issue-114-chapter12-parity-architecture-01.png`
+- `docs/images/readme-diagrams/issue-114-chapter12-caller-sequence-01.svg`
+- `docs/images/readme-diagrams/issue-114-chapter12-caller-sequence-01.png`
 - `docs/lessons/2026-07-05-issue-114-chapter12-parity.md`
 - `docs/superpowers/plans/2026-07-05-issue-114-chapter12-parity-plan.md`
 

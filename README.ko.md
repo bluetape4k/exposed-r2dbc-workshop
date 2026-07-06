@@ -30,11 +30,11 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 <!-- README_VISUAL_OVERVIEW:START -->
 ## Overview Diagram
 
-![Exposed R2DBC Workshop overview diagram](docs/assets/readme-diagrams/root-readme-overview-01.png)
+![Exposed R2DBC Workshop overview diagram](docs/images/readme-diagrams/root-readme-overview-01.png)
 
 ## Module Composition Chart
 
-![Exposed R2DBC Workshop module composition chart](docs/assets/readme-charts/root-readme-module-chart-01.png)
+![Exposed R2DBC Workshop module composition chart](docs/images/readme-charts/root-readme-module-chart-01.png)
 <!-- README_VISUAL_OVERVIEW:END -->
 
 ## 핵심 포인트
@@ -80,7 +80,7 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 
 ## 추천 학습 경로
 
-![exposed r2dbc workshop Architecture diagram](docs/assets/readme-diagrams/exposed-r2dbc-workshop-architecture-01.png)
+![exposed r2dbc workshop Architecture diagram](docs/images/readme-diagrams/exposed-r2dbc-workshop-architecture-01.png)
 
 1. Spring 진입: [01-spring-boot/spring-webflux-exposed](01-spring-boot/spring-webflux-exposed/README.md)
 2. SQL DSL 기초: [03-exposed-r2dbc-basic/exposed-r2dbc-sql-example](03-exposed-r2dbc-basic/exposed-r2dbc-sql-example/README.md)
@@ -142,7 +142,7 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 
 ## 아키텍처 개요
 
-![Exposed R2DBC Workshop runtime architecture](docs/assets/readme-diagrams/root-readme-runtime-architecture-02.png)
+![Exposed R2DBC Workshop runtime architecture](docs/images/readme-diagrams/root-readme-runtime-architecture-02.png)
 
 워크숍 README는 예제를 PNG 다이어그램으로 먼저 설명하는 방향을 따릅니다. 루트 아키텍처 다이어그램은 다음 흐름을 한 화면에서 보여줍니다.
 
@@ -153,7 +153,7 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 
 ## exposed-workshop 예제 parity
 
-![Example parity map with exposed-workshop](docs/assets/readme-diagrams/issue-89-example-parity-map-01.png)
+![Example parity map with exposed-workshop](docs/images/readme-diagrams/issue-89-example-parity-map-01.png)
 
 Issue [#89](https://github.com/bluetape4k/exposed-r2dbc-workshop/issues/89)는
 [`exposed-workshop`](https://github.com/bluetape4k/exposed-workshop)과의 개념 수준 parity를 추적합니다.
@@ -229,7 +229,7 @@ class Ex01_MyExample : AbstractR2dbcExposedTest() {
 
 ## 저장소 구조
 
-![Repository learning structure](docs/assets/readme-diagrams/root-readme-repository-structure-03.png)
+![Repository learning structure](docs/images/readme-diagrams/root-readme-repository-structure-03.png)
 
 ## 개발 팁
 

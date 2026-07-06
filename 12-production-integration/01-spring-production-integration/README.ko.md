@@ -9,11 +9,11 @@ realtime outbox slice, issue #47의 HTTP client outbox/idempotency slice를
 
 ## 아키텍처
 
-![Chapter 12 production application architecture](../../docs/assets/readme-diagrams/issue-44-production-architecture-r2dbc-01.png)
+![Chapter 12 production application architecture](../../docs/images/readme-diagrams/issue-44-production-architecture-r2dbc-01.png)
 
 ## 인증과 세션
 
-![Chapter 12 authentication and session metadata](../../docs/assets/readme-diagrams/issue-45-auth-session-r2dbc-01.png)
+![Chapter 12 authentication and session metadata](../../docs/images/readme-diagrams/issue-45-auth-session-r2dbc-01.png)
 
 Spring slice는 Exposed R2DBC account row로 backed되는 WebFlux Security HTTP
 Basic 인증을 사용합니다. Password는 BCrypt hash로 저장하고, session metadata는
@@ -28,7 +28,7 @@ authentication filter 대체물이 아닙니다.
 
 ## Realtime Outbox
 
-![Chapter 12 realtime outbox delivery](../../docs/assets/readme-diagrams/issue-46-outbox-realtime-r2dbc-01.png)
+![Chapter 12 realtime outbox delivery](../../docs/images/readme-diagrams/issue-46-outbox-realtime-r2dbc-01.png)
 
 Spring realtime slice는 기존 API-key permission 경계를 통해 work item을
 받고, work item과 `PENDING` outbox row를 하나의 R2DBC transaction에
@@ -38,7 +38,7 @@ count와 error text를 가진 `FAILED` 상태로 보존합니다.
 
 ## HTTP Client Outbox
 
-![Chapter 12 HTTP client outbox and idempotency](../../docs/assets/readme-diagrams/issue-47-http-outbox-idempotency-r2dbc-01.png)
+![Chapter 12 HTTP client outbox and idempotency](../../docs/images/readme-diagrams/issue-47-http-outbox-idempotency-r2dbc-01.png)
 
 Spring outbound slice는 `outbound:create` 권한이 있는 account에만
 `POST /production/outbound`를 허용하고, target URL, payload, unique
@@ -51,7 +51,7 @@ transaction 밖에서 수행하고, retryable failure는 최대 세 번으로 �
 
 ## Observability And Readiness
 
-![Chapter 12 observability and readiness](../../docs/assets/readme-diagrams/issue-48-observability-readiness-r2dbc-01.png)
+![Chapter 12 observability and readiness](../../docs/images/readme-diagrams/issue-48-observability-readiness-r2dbc-01.png)
 
 `SpringRequestCorrelationFilter`는 `X-Request-ID`를 정규화하고, 수용된 값을 모든
 응답 header에 echo하며, structured error mapping에서 사용할 수 있게 합니다.
@@ -64,7 +64,7 @@ diagnostics table이 database degraded marker를 가진 동안 sticky `DEGRADED`
 
 ## 패키지 구성
 
-![Spring production package layout](../../docs/assets/readme-diagrams/12-production-integration-01-spring-package-layout-01.png)
+![Spring production package layout](../../docs/images/readme-diagrams/12-production-integration-01-spring-package-layout-01.png)
 
 ## Spring Boot 4 vs Ktor
 

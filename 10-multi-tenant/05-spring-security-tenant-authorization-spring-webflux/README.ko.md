@@ -9,7 +9,7 @@ tenant별 `ConnectionFactory`로 라우팅하는 흐름을 보여줍니다.
 전략을 선택하세요. 인증 경계 없이 connection-factory 라우팅만 학습하려면
 `04-connection-factory-per-tenant-spring-webflux`를 사용하면 됩니다.
 
-![Spring Security Tenant Authorization architecture](../../docs/assets/readme-diagrams/10-multi-tenant-05-spring-security-tenant-authorization-architecture-01.png)
+![Spring Security Tenant Authorization architecture](../../docs/images/readme-diagrams/10-multi-tenant-05-spring-security-tenant-authorization-architecture-01.png)
 
 ## 인증 소스
 

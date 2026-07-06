@@ -8,7 +8,7 @@ tenant-owned R2DBC pool, an authorization gate, or a runtime onboarding flow.
 
 ## Architecture Diagram
 
-![Chapter 10 multi-tenant strategy map](../docs/assets/readme-diagrams/10-multi-tenant-strategy-map-01.png)
+![Chapter 10 multi-tenant strategy map](../docs/images/readme-diagrams/10-multi-tenant-strategy-map-01.png)
 
 Use this chapter-level diagram before opening an individual module README. It
 shows whether a request should route through Spring WebFlux filters, Ktor call

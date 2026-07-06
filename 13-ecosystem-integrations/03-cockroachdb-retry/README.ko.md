@@ -19,9 +19,9 @@ ERD는 inventory state, 성공한 reservation ledger row, snapshot projection,
 retry policy를 보여줍니다. Sequence Diagram은 retryable SQLSTATE branch와
 non-retryable failure branch를 함께 보여줍니다.
 
-![CockroachDB retry ERD](../../docs/assets/readme-diagrams/issue-115-chapter13-03-cockroachdb-retry-erd-01.png)
+![CockroachDB retry ERD](../../docs/images/readme-diagrams/issue-115-chapter13-03-cockroachdb-retry-erd-01.png)
 
-![CockroachDB retry sequence](../../docs/assets/readme-diagrams/issue-115-chapter13-03-cockroachdb-retry-sequence-01.png)
+![CockroachDB retry sequence](../../docs/images/readme-diagrams/issue-115-chapter13-03-cockroachdb-retry-sequence-01.png)
 
 ## 검증
 

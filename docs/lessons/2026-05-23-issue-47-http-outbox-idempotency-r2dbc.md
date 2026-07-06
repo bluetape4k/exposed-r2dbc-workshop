@@ -34,7 +34,7 @@ exhaustion, permanent client failure, duplicate idempotency keys, permission
 denial, invalid target validation, timeout mapping, cross-repository duplicate
 enqueue protection, and concurrent single-send dispatch. README
 diagrams use a committed PNG generated from the SVG source under
-`docs/assets/readme-diagrams/`.
+`docs/images/readme-diagrams/`.
 
 ## Verification
 

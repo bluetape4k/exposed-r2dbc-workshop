@@ -10,11 +10,11 @@ readiness slice from issue #48.
 
 ## Architecture
 
-![Chapter 12 production application architecture](../../docs/assets/readme-diagrams/issue-44-production-architecture-r2dbc-01.png)
+![Chapter 12 production application architecture](../../docs/images/readme-diagrams/issue-44-production-architecture-r2dbc-01.png)
 
 ## Authentication And Sessions
 
-![Chapter 12 authentication and session metadata](../../docs/assets/readme-diagrams/issue-45-auth-session-r2dbc-01.png)
+![Chapter 12 authentication and session metadata](../../docs/images/readme-diagrams/issue-45-auth-session-r2dbc-01.png)
 
 The Spring slice uses WebFlux Security with HTTP Basic authentication backed by
 Exposed R2DBC account rows. Passwords are stored as BCrypt hashes. Session
@@ -29,7 +29,7 @@ a replacement authentication filter.
 
 ## Realtime Outbox
 
-![Chapter 12 realtime outbox delivery](../../docs/assets/readme-diagrams/issue-46-outbox-realtime-r2dbc-01.png)
+![Chapter 12 realtime outbox delivery](../../docs/images/readme-diagrams/issue-46-outbox-realtime-r2dbc-01.png)
 
 The Spring realtime slice accepts work through the existing API-key permission
 boundary, stores the work item and `PENDING` outbox row in one R2DBC
@@ -39,7 +39,7 @@ is retained as `FAILED` with an attempt count and error text.
 
 ## HTTP Client Outbox
 
-![Chapter 12 HTTP client outbox and idempotency](../../docs/assets/readme-diagrams/issue-47-http-outbox-idempotency-r2dbc-01.png)
+![Chapter 12 HTTP client outbox and idempotency](../../docs/images/readme-diagrams/issue-47-http-outbox-idempotency-r2dbc-01.png)
 
 The Spring outbound slice accepts `POST /production/outbound` only from an
 account with `outbound:create`, persists the target URL, payload, and unique
@@ -52,7 +52,7 @@ at three attempts, and stores sanitized error text.
 
 ## Observability And Readiness
 
-![Chapter 12 observability and readiness](../../docs/assets/readme-diagrams/issue-48-observability-readiness-r2dbc-01.png)
+![Chapter 12 observability and readiness](../../docs/images/readme-diagrams/issue-48-observability-readiness-r2dbc-01.png)
 
 `SpringRequestCorrelationFilter` normalizes `X-Request-ID`, echoes the accepted
 value on every response, and makes it available to structured error mapping.
@@ -64,7 +64,7 @@ operation with optional coroutine delay outside the R2DBC transaction, while
 
 ## Package Layout
 
-![Spring production package layout](../../docs/assets/readme-diagrams/12-production-integration-01-spring-package-layout-01.png)
+![Spring production package layout](../../docs/images/readme-diagrams/12-production-integration-01-spring-package-layout-01.png)
 
 ## Spring Boot 4 vs Ktor
 

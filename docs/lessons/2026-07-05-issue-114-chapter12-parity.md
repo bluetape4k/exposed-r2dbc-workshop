@@ -26,5 +26,5 @@ outbox/realtime semantics change, then rerender PNGs from SVG.
 
 - `./gradlew projects`
 - `repo-test-summary -- ./gradlew :01-spring-production-integration:test :02-ktor-production-integration:test -PuseDB=H2 --continue --rerun-tasks --console=plain`
-- `~/.local/bin/cairosvg docs/assets/readme-diagrams/issue-114-chapter12-parity-architecture-01.svg -o docs/assets/readme-diagrams/issue-114-chapter12-parity-architecture-01.png -s 2`
-- `~/.local/bin/cairosvg docs/assets/readme-diagrams/issue-114-chapter12-caller-sequence-01.svg -o docs/assets/readme-diagrams/issue-114-chapter12-caller-sequence-01.png -s 2`
+- `~/.local/bin/cairosvg docs/images/readme-diagrams/issue-114-chapter12-parity-architecture-01.svg -o docs/images/readme-diagrams/issue-114-chapter12-parity-architecture-01.png -s 2`
+- `~/.local/bin/cairosvg docs/images/readme-diagrams/issue-114-chapter12-caller-sequence-01.svg -o docs/images/readme-diagrams/issue-114-chapter12-caller-sequence-01.png -s 2`

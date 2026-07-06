@@ -13,7 +13,7 @@ its own `ConnectionFactory` and Exposed `R2dbcDatabase`. Use
 startup, and `05-spring-security-tenant-authorization-spring-webflux` when the
 main concern is authorizing an already-existing tenant route.
 
-![Tenant onboarding R2DBC flow](../../docs/assets/readme-diagrams/issue-41-tenant-onboarding-r2dbc-01.png)
+![Tenant onboarding R2DBC flow](../../docs/images/readme-diagrams/issue-41-tenant-onboarding-r2dbc-01.png)
 
 ## Onboarding Flow
 

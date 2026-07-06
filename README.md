@@ -31,11 +31,11 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 <!-- README_VISUAL_OVERVIEW:START -->
 ## Overview Diagram
 
-![Exposed R2DBC Workshop overview diagram](docs/assets/readme-diagrams/root-readme-overview-01.png)
+![Exposed R2DBC Workshop overview diagram](docs/images/readme-diagrams/root-readme-overview-01.png)
 
 ## Module Composition Chart
 
-![Exposed R2DBC Workshop module composition chart](docs/assets/readme-charts/root-readme-module-chart-01.png)
+![Exposed R2DBC Workshop module composition chart](docs/images/readme-charts/root-readme-module-chart-01.png)
 <!-- README_VISUAL_OVERVIEW:END -->
 
 ## 핵심 포인트
@@ -81,7 +81,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 
 ## 추천 학습 경로
 
-![exposed r2dbc workshop Architecture diagram](docs/assets/readme-diagrams/exposed-r2dbc-workshop-architecture-01.png)
+![exposed r2dbc workshop Architecture diagram](docs/images/readme-diagrams/exposed-r2dbc-workshop-architecture-01.png)
 
 1. Spring 진입: [01-spring-boot/spring-webflux-exposed](01-spring-boot/spring-webflux-exposed/README.md)
 2. SQL DSL 기초: [03-exposed-r2dbc-basic/exposed-r2dbc-sql-example](03-exposed-r2dbc-basic/exposed-r2dbc-sql-example/README.md)
@@ -143,7 +143,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 
 ## Architecture diagram
 
-![Exposed R2DBC Workshop runtime architecture](docs/assets/readme-diagrams/root-readme-runtime-architecture-02.png)
+![Exposed R2DBC Workshop runtime architecture](docs/images/readme-diagrams/root-readme-runtime-architecture-02.png)
 
 The workshop README set should explain examples with rendered PNG diagrams first.
 The root architecture shows the shared mental model:
@@ -155,7 +155,7 @@ The root architecture shows the shared mental model:
 
 ## Example parity with exposed-workshop
 
-![Example parity map with exposed-workshop](docs/assets/readme-diagrams/issue-89-example-parity-map-01.png)
+![Example parity map with exposed-workshop](docs/images/readme-diagrams/issue-89-example-parity-map-01.png)
 
 Issue [#89](https://github.com/bluetape4k/exposed-r2dbc-workshop/issues/89) tracks concept-level parity with
 [`exposed-workshop`](https://github.com/bluetape4k/exposed-workshop), not exact module-name parity. R2DBC-only and
@@ -230,7 +230,7 @@ class Ex01_MyExample : AbstractR2dbcExposedTest() {
 
 ## 저장소 구조
 
-![Repository learning structure](docs/assets/readme-diagrams/root-readme-repository-structure-03.png)
+![Repository learning structure](docs/images/readme-diagrams/root-readme-repository-structure-03.png)
 
 ## 개발 팁
 
