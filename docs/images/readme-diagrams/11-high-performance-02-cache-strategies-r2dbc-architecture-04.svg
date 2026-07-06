@@ -109,29 +109,29 @@
 
   <g id="connectors">
     <path class="connector blue" data-connector="first" d="M300 312 L408 312"/>
-    <polyline class="head blue" points="408,305 420,312 408,319" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <polygon points="420,312 408,305 408,319" fill="#4f86c6" stroke="#4f86c6" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
     <path class="connector green" data-connector="first" d="M650 312 L688 312"/>
-    <polyline class="head green" points="688,305 700,312 688,319" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <polygon points="700,312 688,305 688,319" fill="#6f8f52" stroke="#6f8f52" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
     <path class="connector amber dash" data-connector="miss" d="M910 312 L998 312" stroke-linecap="butt"/>
-    <polyline class="head amber" points="998,305 1010,312 998,319" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <polygon points="1010,312 998,305 998,319" fill="#a36f3e" stroke="#a36f3e" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
     <path class="connector amber dash" data-connector="miss" d="M1220 312 L1288 312" stroke-linecap="butt"/>
-    <polyline class="head amber" points="1288,305 1300,312 1288,319" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <polygon points="1300,312 1288,305 1288,319" fill="#a36f3e" stroke="#a36f3e" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
     <path class="connector green" data-connector="populate" d="M1380 424 L817 424"/>
-    <polyline class="head green" points="817,417 805,424 817,431" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <polygon points="805,424 817,417 817,431" fill="#6f8f52" stroke="#6f8f52" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
     <path class="connector blue" data-connector="repeat" d="M300 572 L408 572"/>
-    <polyline class="head blue" points="408,565 420,572 408,579" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <polygon points="420,572 408,565 408,579" fill="#4f86c6" stroke="#4f86c6" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
     <path class="connector green" data-connector="repeat" d="M650 572 L688 572"/>
-    <polyline class="head green" points="688,565 700,572 688,579" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <polygon points="700,572 688,565 688,579" fill="#6f8f52" stroke="#6f8f52" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
     <path class="connector muted dash" data-connector="skipped" d="M910 572 L1115 572"/>
   </g>
 
   <g id="labels">
-    <rect class="label" x="1028" y="392" width="218" height="32" rx="16" stroke="#8ebf83"/>
-    <text class="labelText" x="1137" y="413" text-anchor="middle">populate near cache after miss</text>
-    <rect class="label" x="956" y="536" width="230" height="32" rx="16" stroke="#d7e3ed"/>
-    <text class="labelText" x="1071" y="557" text-anchor="middle">Redis round-trip skipped</text>
+    <rect class="label" x="1028" y="384" width="218" height="32" rx="16" stroke="#8ebf83"/>
+    <text class="labelText" x="1137" y="405" text-anchor="middle">populate near cache after miss</text>
+    <rect class="label" x="956" y="530" width="230" height="32" rx="16" stroke="#d7e3ed"/>
+    <text class="labelText" x="1071" y="551" text-anchor="middle">Redis round-trip skipped</text>
   </g>
 
   <rect x="110" y="770" width="1380" height="34" rx="12" fill="#fbfdff" stroke="#d7e3ed" stroke-width="2"/>

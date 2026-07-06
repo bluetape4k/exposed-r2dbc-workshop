@@ -93,11 +93,11 @@
   </g>
 
   <path class="connector blue" d="M400 580 H500" data-connector="module-routes"/>
-  <polyline points="500,580 488,573 488,587" fill="none" stroke="#3f83b8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="500,580 488,573 488,587" fill="#3f83b8" stroke="#3f83b8" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <path class="connector amber" d="M800 580 H900" data-connector="route-repository"/>
-  <polyline points="900,580 888,573 888,587" fill="none" stroke="#a36f3e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="900,580 888,573 888,587" fill="#a36f3e" stroke="#a36f3e" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <path class="connector rose" d="M1260 590 H1380" data-connector="repository-observation"/>
-  <polyline points="1380,590 1368,583 1368,597" fill="none" stroke="#a85f7f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="1380,590 1368,583 1368,597" fill="#a85f7f" stroke="#a85f7f" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <rect class="lane" x="60" y="795" width="1780" height="150" rx="18"/>
   <text class="laneTitle" x="86" y="830">OWNED RESOURCES</text>
@@ -112,9 +112,9 @@
   </g>
 
   <path class="connector teal" d="M1000 695 V860" data-connector="repository-cache"/>
-  <polyline points="1000,860 993,848 1007,848" fill="none" stroke="#4f8f8b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="1000,860 993,848 1007,848" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <path class="connector brown" d="M1160 695 V860" data-connector="repository-db"/>
-  <polyline points="1160,860 1153,848 1167,848" fill="none" stroke="#8a6f55" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="1160,860 1153,848 1167,848" fill="#8a6f55" stroke="#8a6f55" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <rect class="note" x="120" y="990" width="1660" height="34" rx="12"/>
   <text class="foot" x="950" y="1013" text-anchor="middle">Ktor keeps cache-aside behavior explicit: reads may use Redis, writes refresh cache, and invalidation is caller-visible.</text>

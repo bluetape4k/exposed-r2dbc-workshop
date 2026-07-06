@@ -109,16 +109,16 @@
   </g>
 
   <path class="connector blue" d="M420 500 H470" data-connector="flow"/>
-  <polyline points="470,500 458,493 458,507" fill="none" stroke="#3f83b8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="470,500 458,493 458,507" fill="#3f83b8" stroke="#3f83b8" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <path class="connector green" d="M800 500 H850" data-connector="flow"/>
-  <polyline points="850,500 838,493 838,507" fill="none" stroke="#6f8f52" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="850,500 838,493 838,507" fill="#6f8f52" stroke="#6f8f52" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <path class="connector amber" d="M1200 500 H1250" data-connector="flow"/>
-  <polyline points="1250,500 1238,493 1238,507" fill="none" stroke="#a36f3e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="1250,500 1238,493 1238,507" fill="#a36f3e" stroke="#a36f3e" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <path class="connector rose" d="M1600 500 H1650" data-connector="flow"/>
-  <polyline points="1650,500 1638,493 1638,507" fill="none" stroke="#a85f7f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="1650,500 1638,493 1638,507" fill="#a85f7f" stroke="#a85f7f" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <path class="connector blue" d="M200 284 V430" data-connector="signal"/>
-  <polyline points="200,430 193,418 207,418" fill="none" stroke="#3f83b8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="200,430 193,418 207,418" fill="#3f83b8" stroke="#3f83b8" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <rect class="lane" x="60" y="690" width="1860" height="170" rx="18"/>
   <text class="laneTitle" x="86" y="724">ROUTING KEY OUTCOMES</text>
