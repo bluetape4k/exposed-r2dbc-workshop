@@ -1,87 +1,161 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 800" width="1320" height="800" role="img" aria-label="Root Readme Repository Structure diagram">
-<defs><filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12" /></filter><style>.canvas{fill:#f6f9fc}.frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}.lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}.card{filter:url(#shadow)}.header{opacity:.96}.title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:30px;fill:#1e293b}.subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}.tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}.laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:15px;letter-spacing:.08em;fill:#8ca2b4}.cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:17px;fill:#1e293b}.connector{fill:none;stroke:#64748b;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}.use{fill:none;stroke-width:2;stroke-dasharray:7 6;stroke-linecap:round;stroke-linejoin:round}.rel{fill:none;stroke:#64748b;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.head{fill:white;stroke:#64748b;stroke-width:2.4;stroke-dasharray:none;style:stroke-dasharray:none}.labelPill{fill:#fff;stroke:#d7e2ec;stroke-width:1}.noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.2}</style></defs>
-<rect width="1320" height="800" class="canvas"/><rect x="22" y="22" width="1276" height="756" rx="18" class="frame"/>
-<text x="58" y="68" class="title" text-anchor="start">Root Readme Repository Structure</text>
-<text x="58" y="96" class="subtitle" text-anchor="start">R2DBC workshop responsibility map for modules, runtime boundaries, and persistence contracts.</text>
-<rect x="48" y="128" width="1224" height="240" rx="16" class="lane"/><text x="72" y="158" class="laneTitle" text-anchor="start">REQUEST / COMMAND PATH</text>
-<rect x="48" y="392" width="1224" height="170" rx="16" class="lane"/><text x="72" y="422" class="laneTitle" text-anchor="start">DATA / INFRASTRUCTURE</text>
-<rect x="48" y="586" width="1224" height="104" rx="16" class="lane"/><text x="72" y="616" class="laneTitle" text-anchor="start">READER CONTRACT</text>
-<g data-card="Repository Learning Str…" data-x="82" data-y="210" data-width="200" data-height="104">
-<rect x="82" y="210" width="200" height="104" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card"/>
-<path class="header" d="M82,252 L82,224 Q82,210 96,210 L268,210 Q282,210 282,224 L282,252 Z" fill="#eef5fa"/>
-<text x="182.0" y="228" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
-<text x="182.0" y="247" class="cardTitle" text-anchor="middle">Repository Learning Str…</text>
-<text x="100" y="272" class="detail" text-anchor="start">reactive boundary</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1190" width="1600" height="1190" role="img" aria-label="Root README repository structure diagram">
+<defs><filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12" /></filter><style>
+.canvas{fill:#f6f9fc}.frame{fill:#fff;stroke:#d7e2ec;stroke-width:2}.band{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.6}.laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:21px;letter-spacing:.05em;fill:#8096aa}.title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:46px;fill:#1e293b}.subtitle{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:18px;fill:#536476;font-weight:700}.cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:23px;fill:#1e293b}.detail{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:15px;fill:#4b5f73;font-weight:700}.tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#64748b;font-weight:700}.badge{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;font-weight:700}.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:15px;fill:#41566b;font-weight:700}.connector{fill:none;stroke-width:4.2;stroke-linecap:round;stroke-linejoin:round}.legend{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.4}.card{filter:url(#shadow)}
+</style></defs>
+<rect width="1600" height="1190" class="canvas"/><rect x="24" y="24" width="1552" height="1142" rx="22" class="frame"/>
+<text x="70" y="82" class="title">Repository Learning Structure</text>
+<text x="70" y="116" class="subtitle">Root README groups Gradle modules by learning responsibility: shared fixtures, R2DBC fundamentals, application patterns, and production edges.</text>
+<rect x="58" y="154" width="1484" height="150" rx="18" class="band"/><text x="84" y="188" class="laneTitle">ROOT CONTRACT</text>
+<g data-card="README.md / README.ko" data-x="92" data-y="204" data-width="310" data-height="82">
+<rect x="92" y="204" width="310" height="82" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.4" class="card"/>
+<path d="M92,250 L92,220 Q92,204 108,204 L386,204 Q402,204 402,220 L402,250 Z" fill="#eef5fa"/>
+<text x="110" y="236" class="cardTitle">README.md / README.ko</text>
+<text x="110" y="276" class="detail" text-anchor="start">module map + learning path</text>
 </g>
-<g data-card="The repository is organ…" data-x="322" data-y="210" data-width="200" data-height="104">
-<rect x="322" y="210" width="200" height="104" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card"/>
-<path class="header" d="M322,252 L322,224 Q322,210 336,210 L508,210 Q522,210 522,224 L522,252 Z" fill="#f1f6ec"/>
-<text x="422.0" y="228" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
-<text x="422.0" y="247" class="cardTitle" text-anchor="middle">The repository is organ…</text>
-<text x="340" y="272" class="detail" text-anchor="start">reactive boundary</text>
+<g data-card="settings.gradle.kts" data-x="468" data-y="204" data-width="310" data-height="82">
+<rect x="468" y="204" width="310" height="82" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.4" class="card"/>
+<path d="M468,250 L468,220 Q468,204 484,204 L762,204 Q778,204 778,220 L778,250 Z" fill="#f1f6ec"/>
+<text x="486" y="236" class="cardTitle">settings.gradle.kts</text>
+<text x="486" y="276" class="detail" text-anchor="start">includeModules scans chapter dirs</text>
 </g>
-<g data-card="00 shared" data-x="562" data-y="210" data-width="200" data-height="104">
-<rect x="562" y="210" width="200" height="104" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card"/>
-<path class="header" d="M562,252 L562,224 Q562,210 576,210 L748,210 Q762,210 762,224 L762,252 Z" fill="#f5eee4"/>
-<text x="662.0" y="228" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
-<text x="662.0" y="247" class="cardTitle" text-anchor="middle">00 shared</text>
-<text x="580" y="272" class="detail" text-anchor="start">R2DBC responsibility</text>
+<g data-card="Module README files" data-x="844" data-y="204" data-width="310" data-height="82">
+<rect x="844" y="204" width="310" height="82" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2.4" class="card"/>
+<path d="M844,250 L844,220 Q844,204 860,204 L1138,204 Q1154,204 1154,220 L1154,250 Z" fill="#f5eee4"/>
+<text x="862" y="236" class="cardTitle">Module README files</text>
+<text x="862" y="276" class="detail" text-anchor="start">chapter-local diagrams + commands</text>
 </g>
-<g data-card="test infrastructure and…" data-x="802" data-y="210" data-width="200" data-height="104">
-<rect x="802" y="210" width="200" height="104" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card"/>
-<path class="header" d="M802,252 L802,224 Q802,210 816,210 L988,210 Q1002,210 1002,224 L1002,252 Z" fill="#eef7f6"/>
-<text x="902.0" y="228" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
-<text x="902.0" y="247" class="cardTitle" text-anchor="middle">test infrastructure and…</text>
-<text x="820" y="272" class="detail" text-anchor="start">R2DBC responsibility</text>
+<g data-card="Examples / Nightly" data-x="1220" data-y="204" data-width="250" data-height="82">
+<rect x="1220" y="204" width="250" height="82" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.4" class="card"/>
+<path d="M1220,250 L1220,220 Q1220,204 1236,204 L1454,204 Q1470,204 1470,220 L1470,250 Z" fill="#eef7f6"/>
+<text x="1238" y="236" class="cardTitle">Examples / Nightly</text>
+<text x="1238" y="276" class="detail" text-anchor="start">H2 smoke + DB shards</text>
 </g>
-<g data-card="01 Spring Boot" data-x="1042" data-y="210" data-width="200" data-height="104">
-<rect x="1042" y="210" width="200" height="104" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2" class="card"/>
-<path class="header" d="M1042,252 L1042,224 Q1042,210 1056,210 L1228,210 Q1242,210 1242,224 L1242,252 Z" fill="#f5eef2"/>
-<text x="1142.0" y="228" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
-<text x="1142.0" y="247" class="cardTitle" text-anchor="middle">01 Spring Boot</text>
-<text x="1060" y="272" class="detail" text-anchor="start">R2DBC responsibility</text>
+<path class="connector" data-connector="flow" d="M402 232 L468 232" stroke="#6f8f52"/>
+<polygon points="468,232 454,223 454,241" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="flow" d="M778 232 L844 232" stroke="#a66a3f"/>
+<polygon points="844,232 830,223 830,241" fill="#a66a3f" stroke="#a66a3f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="flow" d="M1154 232 L1220 232" stroke="#4f8f8b"/>
+<polygon points="1220,232 1206,223 1206,241" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<rect x="58" y="314" width="1484" height="250" rx="18" class="band"/><text x="84" y="350" class="laneTitle">FOUNDATION AND R2DBC MECHANICS</text>
+<g data-card="00 shared" data-x="92" data-y="386" data-width="265" data-height="122">
+<rect x="92" y="386" width="265" height="122" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.4" class="card"/>
+<path d="M92,432 L92,402 Q92,386 108,386 L341,386 Q357,386 357,402 L357,432 Z" fill="#eef5fa"/>
+<text x="110" y="408" class="badge" fill="#4f86c6">test fixture</text>
+<text x="110" y="428" class="cardTitle">00 shared</text>
+<text x="110" y="458" class="detail" text-anchor="start">AbstractR2dbcExposedTest</text>
+<text x="110" y="480" class="detail" text-anchor="start">TestDB dialect matrix</text>
+<text x="110" y="502" class="detail" text-anchor="start">common schemas + repositories</text>
 </g>
-<path class="connector" data-connector="flow" d="M 282 262 L 322 262" stroke="#6f8f52"/>
-<polyline points="322,262 310,255 310,269" fill="none" stroke="#6f8f52" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="connector" data-connector="flow" d="M 522 262 L 562 262" stroke="#a66a3f"/>
-<polyline points="562,262 550,255 550,269" fill="none" stroke="#a66a3f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="connector" data-connector="flow" d="M 762 262 L 802 262" stroke="#4f8f8b"/>
-<polyline points="802,262 790,255 790,269" fill="none" stroke="#4f8f8b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="connector" data-connector="flow" d="M 1002 262 L 1042 262" stroke="#a85f7f"/>
-<polyline points="1042,262 1030,255 1030,269" fill="none" stroke="#a85f7f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<g data-card="ConnectionFactory" data-x="180" data-y="432" data-width="210" data-height="88">
-<rect x="180" y="432" width="210" height="88" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card"/>
-<path class="header" d="M180,474 L180,446 Q180,432 194,432 L376,432 Q390,432 390,446 L390,474 Z" fill="#f5eee4"/>
-<text x="285.0" y="450" class="tiny" text-anchor="middle">&lt;&lt;runtime&gt;&gt;</text>
-<text x="285.0" y="469" class="cardTitle" text-anchor="middle">ConnectionFactory</text>
-<text x="198" y="494" class="detail" text-anchor="start">owned by the example</text>
+<g data-card="01 / 03 entry + SQL" data-x="395" data-y="386" data-width="265" data-height="122">
+<rect x="395" y="386" width="265" height="122" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.4" class="card"/>
+<path d="M395,432 L395,402 Q395,386 411,386 L644,386 Q660,386 660,402 L660,432 Z" fill="#f1f6ec"/>
+<text x="413" y="408" class="badge" fill="#6f8f52">first read</text>
+<text x="413" y="428" class="cardTitle">01 / 03 entry + SQL</text>
+<text x="413" y="458" class="detail" text-anchor="start">Spring WebFlux starter</text>
+<text x="413" y="480" class="detail" text-anchor="start">SQL DSL joins and predicates</text>
+<text x="413" y="502" class="detail" text-anchor="start">Flow collection boundary</text>
 </g>
-<g data-card="suspendTransaction" data-x="460" data-y="432" data-width="210" data-height="88">
-<rect x="460" y="432" width="210" height="88" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card"/>
-<path class="header" d="M460,474 L460,446 Q460,432 474,432 L656,432 Q670,432 670,446 L670,474 Z" fill="#eef7f6"/>
-<text x="565.0" y="450" class="tiny" text-anchor="middle">&lt;&lt;runtime&gt;&gt;</text>
-<text x="565.0" y="469" class="cardTitle" text-anchor="middle">suspendTransaction</text>
-<text x="478" y="494" class="detail" text-anchor="start">owned by the example</text>
+<g data-card="04 / 05 DDL + DML" data-x="698" data-y="386" data-width="265" data-height="122">
+<rect x="698" y="386" width="265" height="122" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2.4" class="card"/>
+<path d="M698,432 L698,402 Q698,386 714,386 L947,386 Q963,386 963,402 L963,432 Z" fill="#f5eee4"/>
+<text x="716" y="408" class="badge" fill="#a66a3f">core API</text>
+<text x="716" y="428" class="cardTitle">04 / 05 DDL + DML</text>
+<text x="716" y="458" class="detail" text-anchor="start">connection lifecycle</text>
+<text x="716" y="480" class="detail" text-anchor="start">SchemaUtils and DDL checks</text>
+<text x="716" y="502" class="detail" text-anchor="start">CRUD, functions, transactions</text>
 </g>
-<g data-card="Flow / Result" data-x="740" data-y="432" data-width="210" data-height="88">
-<rect x="740" y="432" width="210" height="88" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2" class="card"/>
-<path class="header" d="M740,474 L740,446 Q740,432 754,432 L936,432 Q950,432 950,446 L950,474 Z" fill="#f5eef2"/>
-<text x="845.0" y="450" class="tiny" text-anchor="middle">&lt;&lt;runtime&gt;&gt;</text>
-<text x="845.0" y="469" class="cardTitle" text-anchor="middle">Flow / Result</text>
-<text x="758" y="494" class="detail" text-anchor="start">owned by the example</text>
+<g data-card="06 / 07 / 08 advanced" data-x="1001" data-y="386" data-width="265" data-height="122">
+<rect x="1001" y="386" width="265" height="122" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.4" class="card"/>
+<path d="M1001,432 L1001,402 Q1001,386 1017,386 L1250,386 Q1266,386 1266,402 L1266,432 Z" fill="#eef7f6"/>
+<text x="1019" y="408" class="badge" fill="#4f8f8b">type + runtime</text>
+<text x="1019" y="428" class="cardTitle">06 / 07 / 08 advanced</text>
+<text x="1019" y="458" class="detail" text-anchor="start">JSON, time, money, encryption</text>
+<text x="1019" y="480" class="detail" text-anchor="start">JPA migration examples</text>
+<text x="1019" y="502" class="detail" text-anchor="start">coroutines + virtual threads</text>
 </g>
-<g data-card="Database" data-x="1020" data-y="432" data-width="210" data-height="88">
-<rect x="1020" y="432" width="210" height="88" rx="14" fill="#fff" stroke="#8a6f55" stroke-width="2" class="card"/>
-<path class="header" d="M1020,474 L1020,446 Q1020,432 1034,432 L1216,432 Q1230,432 1230,446 L1230,474 Z" fill="#f3eee8"/>
-<text x="1125.0" y="450" class="tiny" text-anchor="middle">&lt;&lt;runtime&gt;&gt;</text>
-<text x="1125.0" y="469" class="cardTitle" text-anchor="middle">Database</text>
-<text x="1038" y="494" class="detail" text-anchor="start">owned by the example</text>
+<path class="connector" data-connector="flow" d="M357 447 L395 447" stroke="#6f8f52"/>
+<polygon points="395,447 381,438 381,456" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="flow" d="M660 447 L698 447" stroke="#a66a3f"/>
+<polygon points="698,447 684,438 684,456" fill="#a66a3f" stroke="#a66a3f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="flow" d="M963 447 L1001 447" stroke="#4f8f8b"/>
+<polygon points="1001,447 987,438 987,456" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<rect x="58" y="596" width="1484" height="250" rx="18" class="band"/><text x="84" y="632" class="laneTitle">APPLICATION PATTERNS</text>
+<g data-card="09 Spring repository/cache" data-x="92" data-y="668" data-width="300" data-height="150">
+<rect x="92" y="668" width="300" height="150" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2.4" class="card"/>
+<path d="M92,714 L92,684 Q92,668 108,668 L376,668 Q392,668 392,684 L392,714 Z" fill="#f5eef2"/>
+<text x="110" y="690" class="badge" fill="#a85f7f">service layer</text>
+<text x="110" y="710" class="cardTitle">09 Spring repository/cache</text>
+<text x="110" y="740" class="detail" text-anchor="start">R2dbcRepository over WebFlux</text>
+<text x="110" y="762" class="detail" text-anchor="start">Redis/Lettuce suspended cache</text>
+<text x="110" y="784" class="detail" text-anchor="start">runBlocking only for startup seed</text>
 </g>
-<path class="use connector" data-connector="runtime-use" d="M 422 432 L 422 390 Q 422 374 438 374 L 549 374 Q 565 374 565 390 L 565 432" stroke="#64748b"/>
-<polyline points="565,432 558,420 572,420" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="use connector" data-connector="runtime-use" d="M 662 432 L 662 390 Q 662 374 678 374 L 829 374 Q 845 374 845 390 L 845 432" stroke="#64748b"/>
-<polyline points="845,432 838,420 852,420" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="use connector" data-connector="runtime-use" d="M 902 432 L 902 390 Q 902 374 918 374 L 1109 374 Q 1125 374 1125 390 L 1125 432" stroke="#64748b"/>
-<polyline points="1125,432 1118,420 1132,420" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<rect x="86" y="634" width="1148" height="30" rx="10" class="noteBox"/><text x="660" y="654" class="note" text-anchor="middle">Static ownership view: components are arranged by responsibility, and arrows show concrete handoff direction.</text>
+<g data-card="10 Multi-tenant" data-x="444" data-y="668" data-width="300" data-height="150">
+<rect x="444" y="668" width="300" height="150" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.4" class="card"/>
+<path d="M444,714 L444,684 Q444,668 460,668 L728,668 Q744,668 744,684 L744,714 Z" fill="#f1f6ec"/>
+<text x="462" y="690" class="badge" fill="#6f8f52">tenant routing</text>
+<text x="462" y="710" class="cardTitle">10 Multi-tenant</text>
+<text x="462" y="740" class="detail" text-anchor="start">schema switch per request</text>
+<text x="462" y="762" class="detail" text-anchor="start">pool per tenant</text>
+<text x="462" y="784" class="detail" text-anchor="start">authorization + onboarding</text>
+<text x="462" y="806" class="detail" text-anchor="start">Ktor call attributes path</text>
+</g>
+<g data-card="11 High performance" data-x="796" data-y="668" data-width="300" data-height="150">
+<rect x="796" y="668" width="300" height="150" rx="14" fill="#fff" stroke="#b78a3b" stroke-width="2.4" class="card"/>
+<path d="M796,714 L796,684 Q796,668 812,668 L1080,668 Q1096,668 1096,684 L1096,714 Z" fill="#fbf4df"/>
+<text x="814" y="690" class="badge" fill="#b78a3b">scaling</text>
+<text x="814" y="710" class="cardTitle">11 High performance</text>
+<text x="814" y="740" class="detail" text-anchor="start">Redis/Redisson cache strategies</text>
+<text x="814" y="762" class="detail" text-anchor="start">tenant + read/write routing</text>
+<text x="814" y="784" class="detail" text-anchor="start">Ktor counterparts</text>
+<text x="814" y="806" class="detail" text-anchor="start">for cache/routing</text>
+</g>
+<g data-card="Shared runtime contract" data-x="1148" data-y="668" data-width="300" data-height="150">
+<rect x="1148" y="668" width="300" height="150" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.4" class="card"/>
+<path d="M1148,714 L1148,684 Q1148,668 1164,668 L1432,668 Q1448,668 1448,684 L1448,714 Z" fill="#eef7f6"/>
+<text x="1166" y="690" class="badge" fill="#4f8f8b">contract</text>
+<text x="1166" y="710" class="cardTitle">Shared runtime contract</text>
+<text x="1166" y="740" class="detail" text-anchor="start">validated request context</text>
+<text x="1166" y="762" class="detail" text-anchor="start">suspendTransaction boundary</text>
+<text x="1166" y="784" class="detail" text-anchor="start">R2DBC pool target is explicit</text>
+</g>
+<path class="connector" data-connector="flow" d="M392 729 L444 729" stroke="#6f8f52"/>
+<polygon points="444,729 430,720 430,738" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="flow" d="M744 729 L796 729" stroke="#b78a3b"/>
+<polygon points="796,729 782,720 782,738" fill="#b78a3b" stroke="#b78a3b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="flow" d="M1096 729 L1148 729" stroke="#4f8f8b"/>
+<polygon points="1148,729 1134,720 1134,738" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<rect x="58" y="878" width="1484" height="210" rx="18" class="band"/><text x="84" y="914" class="laneTitle">PRODUCTION AND ECOSYSTEM EDGES</text>
+<g data-card="12 Production integration" data-x="92" data-y="944" data-width="420" data-height="134">
+<rect x="92" y="944" width="420" height="134" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2.4" class="card"/>
+<path d="M92,990 L92,960 Q92,944 108,944 L496,944 Q512,944 512,960 L512,990 Z" fill="#f5eef2"/>
+<text x="110" y="966" class="badge" fill="#a85f7f">prod</text>
+<text x="110" y="986" class="cardTitle">12 Production integration</text>
+<text x="110" y="1016" class="detail" text-anchor="start">Spring Boot 4 and Ktor slices</text>
+<text x="110" y="1038" class="detail" text-anchor="start">auth/session, realtime outbox</text>
+<text x="110" y="1060" class="detail" text-anchor="start">HTTP outbox, diagnostics/readiness</text>
+</g>
+<g data-card="13 Ecosystem integrations" data-x="590" data-y="944" data-width="420" data-height="134">
+<rect x="590" y="944" width="420" height="134" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2.4" class="card"/>
+<path d="M590,990 L590,960 Q590,944 606,944 L994,944 Q1010,944 1010,960 L1010,990 Z" fill="#f5eee4"/>
+<text x="608" y="966" class="badge" fill="#a66a3f">scope</text>
+<text x="608" y="986" class="cardTitle">13 Ecosystem integrations</text>
+<text x="608" y="1016" class="detail" text-anchor="start">CockroachDB retry is covered</text>
+<text x="608" y="1038" class="detail" text-anchor="start">PostgreSQL-compatible R2DBC path</text>
+<text x="608" y="1060" class="detail" text-anchor="start">non-R2DBC adapters excluded</text>
+</g>
+<g data-card="Verification boundary" data-x="1088" data-y="944" data-width="390" data-height="134">
+<rect x="1088" y="944" width="390" height="134" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.4" class="card"/>
+<path d="M1088,990 L1088,960 Q1088,944 1104,944 L1462,944 Q1478,944 1478,960 L1478,990 Z" fill="#eef5fa"/>
+<text x="1106" y="966" class="badge" fill="#4f86c6">tests</text>
+<text x="1106" y="986" class="cardTitle">Verification boundary</text>
+<text x="1106" y="1016" class="detail" text-anchor="start">H2 fast path stays cheap</text>
+<text x="1106" y="1038" class="detail" text-anchor="start">PostgreSQL/MySQL/MariaDB</text>
+<text x="1106" y="1060" class="detail" text-anchor="start">covered where modules require them</text>
+</g>
+<path class="connector" data-connector="flow" d="M512 972 L590 972" stroke="#a66a3f"/>
+<polygon points="590,972 576,963 576,981" fill="#a66a3f" stroke="#a66a3f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="flow" d="M1010 972 L1088 972" stroke="#4f86c6"/>
+<polygon points="1088,972 1074,963 1074,981" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<rect x="96" y="1114" width="1408" height="36" rx="12" fill="#ecfdf5" stroke="#86efac" stroke-width="1.6"/>
+<text x="800" y="1138" class="note" text-anchor="middle">Reader contract: open root README for the path, then module README/tests for source-backed behavior.</text>
 </svg>
