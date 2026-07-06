@@ -14,6 +14,7 @@
       .small{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:15px;fill:#64748b;font-weight:700}
       .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#64748b;font-weight:700}
       .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:21px;letter-spacing:.08em;fill:#8ca2b4}
+      .laneLabelBg{fill:#f8fafc}
       .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:25px;fill:#1e293b}
       .card{filter:url(#softShadow)}
       .header{opacity:.96}
@@ -21,6 +22,7 @@
       .use{fill:none;stroke-width:2.7;stroke-dasharray:8 7;stroke-linecap:butt;stroke-linejoin:round}
       .tri{fill:#fff;stroke:#64748b;stroke-width:3.1;stroke-linejoin:round;stroke-dasharray:none;style:stroke-dasharray:none!important}
       .openHead{fill:none;stroke-width:2.9;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;style:stroke-dasharray:none!important}
+      .solidHead{stroke-width:0;stroke-dasharray:none;style:stroke-dasharray:none!important}
       .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.6}
     </style>
   </defs>
@@ -174,13 +176,20 @@
   <polygon class="tri" points="1405,324 1396,340 1414,340" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <path class="use" data-connector="dao-uses-tables" d="M 800 630 L 800 660 Q 800 674 786 674 L 334 674 Q 320 674 320 660 L 320 630" stroke="#6f8f52"/>
-  <polyline class="openHead" points="313,644 320,630 327,644" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon class="solidHead" points="320,630 313,644 327,644" fill="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <path class="use" data-connector="factory-creates-dao" d="M 970 590 L 935 590" stroke="#8a6f55"/>
-  <polyline class="openHead" points="949,583 935,590 949,597" stroke="#8a6f55" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon class="solidHead" points="935,590 949,583 949,597" fill="#8a6f55" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <path class="use" data-connector="records-read-result-row" d="M 1010 744 L 950 744" stroke="#4f8f8b"/>
-  <polyline class="openHead" points="964,737 950,744 964,751" stroke="#4f8f8b" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon class="solidHead" points="950,744 964,737 964,751" fill="#4f8f8b" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <rect class="laneLabelBg" x="78" y="162" width="420" height="30" rx="8"/>
+  <text x="88" y="183" class="laneTitle">EXPOSED BASE CONTRACTS</text>
+  <rect class="laneLabelBg" x="78" y="408" width="780" height="30" rx="8"/>
+  <text x="88" y="429" class="laneTitle">SOURCE IMPLEMENTATIONS IN 01-CONVERT-JPA-BASIC</text>
+  <rect class="laneLabelBg" x="78" y="894" width="280" height="30" rx="8"/>
+  <text x="88" y="915" class="laneTitle">READER CONTRACT</text>
 
   <g data-card="JpaMapping" data-x="102" data-y="943" data-width="1396" data-height="48">
     <rect x="102" y="943" width="1396" height="48" rx="13" class="noteBox"/>
@@ -192,7 +201,7 @@
     <polygon class="tri" points="58,16 40,8 40,24" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
     <text x="74" y="22" class="legendText">solid hollow triangle = Exposed inheritance/generalization</text>
     <path class="use" d="M 650 16 L 706 16" stroke="#6f8f52"/>
-    <polyline class="openHead" points="692,9 706,16 692,23" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-    <text x="724" y="22" class="legendText">dashed open arrow = source-level use/dependency</text>
+    <polygon class="solidHead" points="706,16 692,9 692,23" fill="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <text x="724" y="22" class="legendText">dashed connector + solid head = source-level use/dependency</text>
   </g>
 </svg>
