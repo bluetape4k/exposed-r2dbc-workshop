@@ -55,10 +55,10 @@
     <text class="detail" x="1168" y="326">profile reads stay fast after first miss</text>
     <text class="small" x="1168" y="350">cache stays hot after first miss</text>
 
-    <path class="connector blue" data-connector="flow" d="M428 314 L590 314"/>
-    <polyline class="head blue" points="590,314 578,307 578,321"/>
-    <path class="connector blue" data-connector="flow" d="M980 314 L1140 314"/>
-    <polyline class="head blue" points="1140,314 1128,307 1128,321"/>
+    <path class="connector blue" data-connector="flow" d="M428 314 L576 314"/>
+    <polyline class="head blue" points="576,307 590,314 576,321" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <path class="connector blue" data-connector="flow" d="M980 314 L1126 314"/>
+    <polyline class="head blue" points="1126,307 1140,314 1126,321" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   </g>
 
   <g id="write-through">
@@ -83,10 +83,10 @@
     <text class="detail" x="1168" y="496">cache and DB are updated together</text>
     <text class="small" x="1168" y="520">good for balanced read/write master data</text>
 
-    <path class="connector green" data-connector="flow" d="M428 484 L590 484"/>
-    <polyline class="head green" points="590,484 578,477 578,491"/>
-    <path class="connector green" data-connector="flow" d="M980 484 L1140 484"/>
-    <polyline class="head green" points="1140,484 1128,477 1128,491"/>
+    <path class="connector green" data-connector="flow" d="M428 484 L576 484"/>
+    <polyline class="head green" points="576,477 590,484 576,491" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <path class="connector green" data-connector="flow" d="M980 484 L1126 484"/>
+    <polyline class="head green" points="1126,477 1140,484 1126,491" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   </g>
 
   <g id="write-behind">
@@ -111,10 +111,10 @@
     <text class="detail" x="1168" y="666">bulk logs, events, analytics data</text>
     <text class="small" x="1168" y="690">DB write can lag cache acceptance</text>
 
-    <path class="connector amber" data-connector="flow" d="M428 654 L590 654"/>
-    <polyline class="head amber" points="590,654 578,647 578,661"/>
-    <path class="connector amber" data-connector="flow" d="M980 654 L1140 654"/>
-    <polyline class="head amber" points="1140,654 1128,647 1128,661"/>
+    <path class="connector amber" data-connector="flow" d="M428 654 L576 654"/>
+    <polyline class="head amber" points="576,647 590,654 576,661" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <path class="connector amber" data-connector="flow" d="M980 654 L1126 654"/>
+    <polyline class="head amber" points="1126,647 1140,654 1126,661" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   </g>
 
   <g id="read-only">
@@ -139,10 +139,10 @@
     <text class="detail" x="1168" y="836">credentials and code-table data</text>
     <text class="small" x="1168" y="860">invalidated explicitly when needed</text>
 
-    <path class="connector rose" data-connector="flow" d="M428 824 L590 824"/>
-    <polyline class="head rose" points="590,824 578,817 578,831"/>
-    <path class="connector rose" data-connector="flow" d="M980 824 L1140 824"/>
-    <polyline class="head rose" points="1140,824 1128,817 1128,831"/>
+    <path class="connector rose" data-connector="flow" d="M428 824 L576 824"/>
+    <polyline class="head rose" points="576,817 590,824 576,831" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <path class="connector rose" data-connector="flow" d="M980 824 L1126 824"/>
+    <polyline class="head rose" points="1126,817 1140,824 1126,831" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   </g>
 
   <rect x="110" y="1010" width="1480" height="34" rx="12" fill="#fbfdff" stroke="#d7e3ed" stroke-width="2"/>

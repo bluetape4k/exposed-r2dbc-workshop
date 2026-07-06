@@ -70,8 +70,8 @@
 </g>
 <path data-connector="movie-repo-implements" class="connector use" d="M 650 370 L 650 280" stroke="#6f8f52"/>
 <polygon points="650,264 641,280 659,280" fill="#fff" stroke="#6f8f52" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path data-connector="actor-repo-implements" class="connector use" d="M 1021 370 L 1021 304 Q 1021 286 1003 286 L 840 286" stroke="#6f8f52"/>
-<polygon points="822,270 813,286 831,286" fill="#fff" stroke="#6f8f52" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path data-connector="actor-repo-implements" class="connector use" d="M 1021 370 L 1021 322 Q 1021 304 1003 304 L 808 304 Q 790 304 790 286 L 790 280" stroke="#6f8f52"/>
+<polygon points="790,264 781,280 799,280" fill="#fff" stroke="#6f8f52" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 <path data-connector="controllers-use-movie" class="connector use" d="M 390 432 L 488 432" stroke="#4f86c6"/>
 <polyline points="488,425 500,432 488,439" fill="none" stroke="#4f86c6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 <path data-connector="movie-repo-schema" class="connector use" d="M 590 498 L 590 556 Q 590 574 572 574 L 397 574 Q 379 574 379 592 L 379 624" stroke="#4f8f8b"/>
