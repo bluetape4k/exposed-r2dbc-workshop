@@ -1,91 +1,165 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="1680" viewBox="0 0 1240 1680" role="img" aria-label="Query Execution Flow">
-<defs>
-<filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A" stroke="#5D6B7A" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker>
-<style>.canvas{fill:#F7F9FC}.frame{fill:#fff;stroke:#D8E0EA;stroke-width:1.5}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:39px;font-weight:400;fill:#102033}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;font-weight:400;fill:#536273}.smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:22px;font-weight:400;fill:#102033}.strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}.card{stroke-width:2;filter:url(#shadow)}.line{stroke:#5D6B7A;stroke-width:2.2;fill:none;marker-end:url(#openArrow)}.dashed{stroke:#5D6B7A;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}.lifeline{stroke:#B7C2D1;stroke-width:1.8;stroke-dasharray:8 9}.note{fill:#fff;opacity:.97}</style>
-</defs>
-<rect class="canvas" width="1240" height="1680"/>
-<rect class="frame" x="24" y="24" width="1192" height="1624" rx="22"/>
-<text class="title" x="58" y="76">Query Execution Flow</text>
-<text class="subtitle" x="62" y="106">Compact sequence flow with reduced outer and inner whitespace</text>
-<rect class="card" x="50.0" y="156" width="220" height="66" rx="16" fill="#E8F3FF" stroke="#5B8DEF"/>
-<text class="smallLabel participant" x="160.0" y="196" text-anchor="middle">Test Code</text>
-<line class="lifeline" x1="160.0" y1="250" x2="160.0" y2="1618"/>
-<rect class="card" x="280.0" y="156" width="220" height="66" rx="16" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel participant" x="390.0" y="196" text-anchor="middle">withTables</text>
-<line class="lifeline" x1="390.0" y1="250" x2="390.0" y2="1618"/>
-<rect class="card" x="510.0" y="156" width="220" height="66" rx="16" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel participant" x="620.0" y="196" text-anchor="middle">suspendTransaction</text>
-<line class="lifeline" x1="620.0" y1="250" x2="620.0" y2="1618"/>
-<rect class="card" x="740.0" y="156" width="220" height="66" rx="16" fill="#FDECEF" stroke="#DC6B82"/>
-<text class="smallLabel participant" x="850.0" y="196" text-anchor="middle">Exposed DSL</text>
-<line class="lifeline" x1="850.0" y1="250" x2="850.0" y2="1618"/>
-<rect class="card" x="970.0" y="156" width="220" height="66" rx="16" fill="#F1ECFF" stroke="#8A72D6"/>
-<text class="smallLabel participant" x="1080.0" y="196" text-anchor="middle">R2DBC Database</text>
-<line class="lifeline" x1="1080.0" y1="250" x2="1080.0" y2="1618"/>
-<path class="line" d="M160.0 292.0 L390.0 292.0" data-connector="line"/>
-<rect class="note label" x="128.7" y="260.0" width="292.6" height="28" rx="9"/>
-<text class="strong labelText" x="275.0" y="280.0" text-anchor="middle">1. withTables(testDB, CityTable, UserTable)</text>
-<path class="line" d="M390.0 366.0 L620.0 366.0" data-connector="line"/>
-<rect class="note label" x="349.4" y="334.0" width="311.2" height="28" rx="9"/>
-<text class="strong labelText" x="505.0" y="354.0" text-anchor="middle">2. suspendTransaction { SchemaUtils.create() }</text>
-<path class="line" d="M620.0 440.0 L1080.0 440.0" data-connector="line"/>
-<rect class="note label" x="747.1" y="408.0" width="205.8" height="28" rx="9"/>
-<text class="strong labelText" x="850.0" y="428.0" text-anchor="middle">3. CREATE TABLE cities, users</text>
-<path class="dashed" d="M1080.0 514.0 L620.0 514.0" data-connector="dashed"/>
-<rect class="note label" x="770.0" y="482.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="850.0" y="502.0" text-anchor="middle">4. done</text>
-<path class="dashed" d="M620.0 588.0 L390.0 588.0" data-connector="dashed"/>
-<rect class="note label" x="425.0" y="556.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="505.0" y="576.0" text-anchor="middle">5. Tables created</text>
-<path class="line" d="M390.0 662.0 L160.0 662.0" data-connector="line"/>
-<rect class="note label" x="195.0" y="630.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="275.0" y="650.0" text-anchor="middle">6. Execute block</text>
-<path class="line" d="M160.0 736.0 L850.0 736.0" data-connector="line"/>
-<rect class="note label" x="368.0" y="704.0" width="274.0" height="28" rx="9"/>
-<text class="strong labelText" x="505.0" y="724.0" text-anchor="middle">7. CityTable.insert { it[name] = Seoul }</text>
-<path class="line" d="M850.0 810.0 L1080.0 810.0" data-connector="line"/>
-<rect class="note label" x="846.6" y="778.0" width="236.8" height="28" rx="9"/>
-<text class="strong labelText" x="965.0" y="798.0" text-anchor="middle">8. INSERT INTO cities VALUES (...)</text>
-<path class="dashed" d="M1080.0 884.0 L850.0 884.0" data-connector="dashed"/>
-<rect class="note label" x="885.0" y="852.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="965.0" y="872.0" text-anchor="middle">9. ResultRow (id=1)</text>
-<path class="dashed" d="M850.0 958.0 L160.0 958.0" data-connector="dashed"/>
-<rect class="note label" x="425.0" y="926.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="505.0" y="946.0" text-anchor="middle">10. id</text>
-<path class="line" d="M160.0 1032.0 L850.0 1032.0" data-connector="line"/>
-<rect class="note label" x="306.0" y="1000.0" width="398.0" height="28" rx="9"/>
-<text class="strong labelText" x="505.0" y="1020.0" text-anchor="middle">11. UserTable.innerJoin(CityTable).select(...).where { ... }</text>
-<path class="line" d="M850.0 1106.0 L1080.0 1106.0" data-connector="line"/>
-<rect class="note label" x="797.0" y="1074.0" width="336.0" height="28" rx="9"/>
-<text class="strong labelText" x="965.0" y="1094.0" text-anchor="middle">12. SELECT ... FROM users INNER JOIN cities ON ...</text>
-<path class="dashed" d="M1080.0 1180.0 L850.0 1180.0" data-connector="dashed"/>
-<rect class="note label" x="874.5" y="1148.0" width="181.0" height="28" rx="9"/>
-<text class="strong labelText" x="965.0" y="1168.0" text-anchor="middle">13. Flow&amp;lt;ResultRow&amp;gt;</text>
-<path class="dashed" d="M850.0 1254.0 L160.0 1254.0" data-connector="dashed"/>
-<rect class="note label" x="414.5" y="1222.0" width="181.0" height="28" rx="9"/>
-<text class="strong labelText" x="505.0" y="1242.0" text-anchor="middle">14. List&amp;lt;ResultRow&amp;gt;</text>
-<path class="line" d="M160.0 1328.0 L390.0 1328.0" data-connector="line"/>
-<rect class="note label" x="195.0" y="1296.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="275.0" y="1316.0" text-anchor="middle">15. Block complete</text>
-<path class="line" d="M390.0 1402.0 L620.0 1402.0" data-connector="line"/>
-<rect class="note label" x="352.5" y="1370.0" width="305.0" height="28" rx="9"/>
-<text class="strong labelText" x="505.0" y="1390.0" text-anchor="middle">16. suspendTransaction { SchemaUtils.drop() }</text>
-<path class="line" d="M620.0 1476.0 L1080.0 1476.0" data-connector="line"/>
-<rect class="note label" x="750.2" y="1444.0" width="199.6" height="28" rx="9"/>
-<text class="strong labelText" x="850.0" y="1464.0" text-anchor="middle">17. DROP TABLE users, cities</text>
-<path class="dashed" d="M1080.0 1550.0 L620.0 1550.0" data-connector="dashed"/>
-<rect class="note label" x="770.0" y="1518.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="850.0" y="1538.0" text-anchor="middle">18. done</text>
-<rect class="activation" x="154.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="384.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="614.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1300" width="1600" height="1300" role="img" aria-label="Exposed R2DBC SQL DSL query execution sequence">
+  <defs>
+    <marker id="seqArrowBlue" viewBox="0 0 10 10" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f86c6" stroke="#4f86c6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="seqArrowGreen" viewBox="0 0 10 10" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f8f52" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="seqArrowAmber" viewBox="0 0 10 10" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#b68432" stroke="#b68432" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="seqArrowTeal" viewBox="0 0 10 10" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="seqArrowSlate" viewBox="0 0 10 10" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#64748b" stroke="#64748b" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="seqArrowPurple" viewBox="0 0 10 10" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#8a6bb8" stroke="#8a6bb8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <style>
+      .canvas{fill:#fbfaf7}.frame{fill:#fffefb;stroke:#425563;stroke-width:3}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:40px;fill:#1e293b}
+      .subtitle,.role,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:16px;fill:#536476;font-weight:700}
+      .small{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#64748b;font-weight:700}
+      .header{fill:#ffffff;stroke:#5a7180;stroke-width:2.2}
+      .participant,.participantTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:24px;fill:#1e293b;stroke:none}
+      .lifeline{stroke:#9eb0bd;stroke-width:2.2;stroke-dasharray:7 9}
+      .activationBlue{fill:#eaf5ff;stroke:#9ecdf0;stroke-width:1.8}
+      .activationGreen{fill:#eff9ef;stroke:#87b578;stroke-width:1.8}
+      .activationAmber{fill:#fff7e7;stroke:#c69443;stroke-width:1.8}
+      .activationTeal{fill:#eaf8f7;stroke:#63aaa6;stroke-width:1.8}
+      .activationSlate{fill:#f5f7fb;stroke:#7b8794;stroke-width:1.8}
+      .msg{fill:none;stroke-width:3;stroke-linecap:butt}
+      .ret{fill:none;stroke-width:2.8;stroke-dasharray:8 7;stroke-linecap:butt}
+      .pill{fill:#ffffff;stroke-width:1.7}
+      .num{fill:#ffffff;stroke-width:1.7}
+      .label{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:15px;font-weight:700}
+      .altFrame{fill:none;stroke:#7d98a8;stroke-width:2.5;stroke-dasharray:8 7}
+      .altHeader{fill:#fffaf0;stroke:#d1a257;stroke-width:1.8}
+      .footer{fill:#ffffff;stroke:#d7e2ec;stroke-width:1.4}
+    </style>
+  </defs>
 
-<!-- audit badge labels: visible sequence numbering and message pill samples -->
-<g aria-label="sequence message labels">
-<rect x="58" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="76" y="140" class="num" text-anchor="middle">1</text>
-<rect x="102" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="120" y="140" class="num" text-anchor="middle">2</text>
-</g>
+  <rect class="canvas" width="1600" height="1300"/>
+  <rect class="frame" x="26" y="26" width="1548" height="1248" rx="26"/>
+  <text class="title" x="72" y="88">Exposed R2DBC SQL DSL Query Flow</text>
+  <text class="subtitle" x="74" y="124">withCityUsers creates schema, seeds sample rows, then R2DBC Flow terminal operators verify update/delete/join/groupBy queries.</text>
+
+  <g data-participant="WorkshopTest">
+    <rect class="header" x="70" y="170" width="240" height="78" rx="10"/>
+    <text class="participant participantTitle" x="190" y="210" text-anchor="middle">Workshop Test</text>
+    <text class="role" x="190" y="232" text-anchor="middle">R2dbcExposedSQLExample</text>
+    <line class="lifeline" x1="190" y1="248" x2="190" y2="1134"/>
+  </g>
+  <g data-participant="Fixture">
+    <rect class="header" x="360" y="170" width="240" height="78" rx="10"/>
+    <text class="participant participantTitle" x="480" y="210" text-anchor="middle">withCityUsers</text>
+    <text class="role" x="480" y="232" text-anchor="middle">withTables fixture</text>
+    <line class="lifeline" x1="480" y1="248" x2="480" y2="1134"/>
+  </g>
+  <g data-participant="Transaction">
+    <rect class="header" x="660" y="170" width="260" height="78" rx="10"/>
+    <text class="participant participantTitle" x="790" y="210" text-anchor="middle">R2dbcTransaction</text>
+    <text class="role" x="790" y="232" text-anchor="middle">statement receiver</text>
+    <line class="lifeline" x1="790" y1="248" x2="790" y2="1134"/>
+  </g>
+  <g data-participant="ExposedDSL">
+    <rect class="header" x="1000" y="170" width="240" height="78" rx="10"/>
+    <text class="participant participantTitle" x="1120" y="210" text-anchor="middle">Exposed DSL</text>
+    <text class="role" x="1120" y="232" text-anchor="middle">CityTable / UserTable</text>
+    <line class="lifeline" x1="1120" y1="248" x2="1120" y2="1134"/>
+  </g>
+  <g data-participant="Database">
+    <rect class="header" x="1330" y="170" width="210" height="78" rx="10"/>
+    <text class="participant participantTitle" x="1435" y="210" text-anchor="middle">R2DBC DB</text>
+    <text class="role" x="1435" y="232" text-anchor="middle">tables + rows</text>
+    <line class="lifeline" x1="1435" y1="248" x2="1435" y2="1134"/>
+  </g>
+
+  <rect class="activationBlue" x="180" y="304" width="18" height="754" rx="5"/>
+  <rect class="activationGreen" x="471" y="330" width="18" height="258" rx="5"/>
+  <rect class="activationTeal" x="781" y="360" width="18" height="210" rx="5"/>
+  <rect class="activationAmber" x="1111" y="596" width="18" height="370" rx="5"/>
+  <rect class="activationSlate" x="1426" y="444" width="18" height="630" rx="5"/>
+
+  <rect class="pill" x="90" y="272" width="360" height="32" rx="15" stroke="#9ecdf0"/>
+  <circle class="num" cx="116" cy="288" r="15" stroke="#9ecdf0"/>
+  <text class="label" x="116" y="294" text-anchor="middle" fill="#276b9d">1</text>
+  <text class="label" x="155" y="294" fill="#276b9d">withCityUsers(testDB)</text>
+  <path class="msg" d="M 198 318 H 466" stroke="#4f86c6" marker-end="url(#seqArrowBlue)"/>
+
+  <rect class="pill" x="318" y="346" width="430" height="32" rx="15" stroke="#9ecdf0"/>
+  <circle class="num" cx="344" cy="362" r="15" stroke="#9ecdf0"/>
+  <text class="label" x="344" y="368" text-anchor="middle" fill="#276b9d">2</text>
+  <text class="label" x="382" y="368" fill="#276b9d">withTables(testDB, CityTable, UserTable)</text>
+  <path class="msg" d="M 489 392 H 776" stroke="#4f86c6" marker-end="url(#seqArrowBlue)"/>
+
+  <rect class="pill" x="798" y="424" width="430" height="32" rx="15" stroke="#91ad78"/>
+  <circle class="num" cx="824" cy="440" r="15" stroke="#91ad78"/>
+  <text class="label" x="824" y="446" text-anchor="middle" fill="#557339">3</text>
+  <text class="label" x="862" y="446" fill="#557339">create cities and users tables</text>
+  <path class="msg" d="M 799 470 H 1421" stroke="#6f8f52" marker-end="url(#seqArrowGreen)"/>
+
+  <rect class="pill" x="1048" y="504" width="250" height="32" rx="15" stroke="#d1a257"/>
+  <circle class="num" cx="1074" cy="520" r="15" stroke="#d1a257"/>
+  <text class="label" x="1074" y="526" text-anchor="middle" fill="#8a5f22">4</text>
+  <text class="label" x="1112" y="526" fill="#8a5f22">DDL committed</text>
+  <path class="ret" d="M 1426 548 H 804" stroke="#b68432" marker-end="url(#seqArrowAmber)"/>
+
+  <rect class="pill" x="238" y="574" width="324" height="32" rx="15" stroke="#63aaa6"/>
+  <circle class="num" cx="264" cy="590" r="15" stroke="#63aaa6"/>
+  <text class="label" x="264" y="596" text-anchor="middle" fill="#2f7774">5</text>
+  <text class="label" x="302" y="596" fill="#2f7774">statement block starts</text>
+  <path class="ret" d="M 471 620 H 204" stroke="#4f8f8b" marker-end="url(#seqArrowTeal)"/>
+
+  <rect class="pill" x="316" y="652" width="560" height="32" rx="15" stroke="#d1a257"/>
+  <circle class="num" cx="342" cy="668" r="15" stroke="#d1a257"/>
+  <text class="label" x="342" y="674" text-anchor="middle" fill="#8a5f22">6</text>
+  <text class="label" x="380" y="674" fill="#8a5f22">insertSampleData: city + user inserts</text>
+  <path class="msg" d="M 198 698 H 1106" stroke="#b68432" marker-end="url(#seqArrowAmber)"/>
+
+  <rect class="pill" x="1042" y="724" width="350" height="32" rx="15" stroke="#d1a257"/>
+  <circle class="num" cx="1068" cy="740" r="15" stroke="#d1a257"/>
+  <text class="label" x="1068" y="746" text-anchor="middle" fill="#8a5f22">7</text>
+  <text class="label" x="1106" y="746" fill="#8a5f22">INSERT cities/users rows</text>
+  <path class="msg" d="M 1129 770 H 1421" stroke="#b68432" marker-end="url(#seqArrowAmber)"/>
+
+  <rect class="branch altFrame" x="642" y="812" width="838" height="244" rx="22"/>
+  <rect class="altHeader" x="760" y="792" width="420" height="34" rx="16"/>
+  <text class="label" x="970" y="815" text-anchor="middle" fill="#8a5f22">alt query variant: mutation, join, or aggregate</text>
+
+  <rect class="pill" x="300" y="838" width="585" height="32" rx="15" stroke="#9ecdf0"/>
+  <circle class="num" cx="326" cy="854" r="15" stroke="#9ecdf0"/>
+  <text class="label" x="326" y="860" text-anchor="middle" fill="#276b9d">8</text>
+  <text class="label" x="364" y="860" fill="#276b9d">update/deleteWhere/innerJoin/groupBy DSL</text>
+  <path class="msg" d="M 198 884 H 1106" stroke="#4f86c6" marker-end="url(#seqArrowBlue)"/>
+
+  <rect class="pill" x="1075" y="902" width="340" height="32" rx="15" stroke="#b996da"/>
+  <circle class="num" cx="1101" cy="918" r="15" stroke="#b996da"/>
+  <text class="label" x="1101" y="924" text-anchor="middle" fill="#6e4fa3">9</text>
+  <text class="label" x="1139" y="924" fill="#6e4fa3">SQL statement over R2DBC</text>
+  <path class="msg" d="M 1129 946 H 1421" stroke="#8a6bb8" marker-end="url(#seqArrowPurple)"/>
+
+  <rect class="pill" x="1048" y="990" width="285" height="32" rx="15" stroke="#63aaa6"/>
+  <circle class="num" cx="1074" cy="1006" r="15" stroke="#63aaa6"/>
+  <text class="label" x="1074" y="1012" text-anchor="middle" fill="#2f7774">10</text>
+  <text class="label" x="1114" y="1012" fill="#2f7774">rows / Flow&lt;ResultRow&gt;</text>
+  <path class="ret" d="M 1426 1034 H 1134" stroke="#4f8f8b" marker-end="url(#seqArrowTeal)"/>
+
+  <rect class="pill" x="635" y="1070" width="410" height="32" rx="15" stroke="#63aaa6"/>
+  <circle class="num" cx="661" cy="1086" r="15" stroke="#63aaa6"/>
+  <text class="label" x="661" y="1092" text-anchor="middle" fill="#2f7774">11</text>
+  <text class="label" x="700" y="1092" fill="#2f7774">collect / single / toList assertions</text>
+  <path class="ret" d="M 1111 1114 H 204" stroke="#4f8f8b" marker-end="url(#seqArrowTeal)"/>
+
+  <rect class="pill" x="760" y="1130" width="358" height="32" rx="15" stroke="#91ad78"/>
+  <circle class="num" cx="786" cy="1146" r="15" stroke="#91ad78"/>
+  <text class="label" x="786" y="1152" text-anchor="middle" fill="#557339">12</text>
+  <text class="label" x="824" y="1152" fill="#557339">drop tables and leave fixture</text>
+  <path class="msg" d="M 489 1174 H 1421" stroke="#6f8f52" marker-end="url(#seqArrowGreen)"/>
+
+  <rect class="footer" x="84" y="1228" width="1432" height="30" rx="8"/>
+  <text class="note" x="800" y="1248" text-anchor="middle">The module verifies SQL DSL behavior through R2DBC Flow results, not blocking JDBC calls.</text>
 </svg>

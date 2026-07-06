@@ -1,46 +1,69 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 830" width="1280" height="830" role="img" aria-label="Exposed R2DBC Basic Exposed R2DBC Sql Example Erd diagram">
-<defs><filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12" /></filter><style>.canvas{fill:#f6f9fc}.frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}.lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}.card{filter:url(#shadow)}.header{opacity:.96}.title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:30px;fill:#1e293b}.subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}.tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}.laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:15px;letter-spacing:.08em;fill:#8ca2b4}.cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:17px;fill:#1e293b}.connector{fill:none;stroke:#64748b;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}.use{fill:none;stroke-width:2;stroke-dasharray:7 6;stroke-linecap:round;stroke-linejoin:round}.rel{fill:none;stroke:#64748b;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.head{fill:white;stroke:#64748b;stroke-width:2.4;stroke-dasharray:none;style:stroke-dasharray:none}.labelPill{fill:#fff;stroke:#d7e2ec;stroke-width:1}.noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.2}</style></defs>
-<rect width="1280" height="830" class="canvas"/><rect x="22" y="22" width="1236" height="786" rx="18" class="frame"/>
-<text x="58" y="68" class="title" text-anchor="start">Exposed R2DBC Basic Exposed R2DBC Sql Example Erd</text>
-<text x="58" y="96" class="subtitle" text-anchor="start">ERD relationship view: explicit 1/N cardinalities and non-overlapping relationship labels.</text>
-<rect x="48" y="126" width="1184" height="438" rx="16" class="lane"/><text x="72" y="156" class="laneTitle" text-anchor="start">RELATIONAL MODEL</text>
-<rect x="48" y="588" width="1184" height="118" rx="16" class="lane"/><text x="72" y="618" class="laneTitle" text-anchor="start">READER CONTRACT</text>
-<g data-card="ERD tables and relation…" data-x="105" data-y="250" data-width="270" data-height="118">
-<rect x="105" y="250" width="270" height="118" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card"/>
-<path class="header" d="M105,292 L105,264 Q105,250 119,250 L361,250 Q375,250 375,264 L375,292 Z" fill="#eef5fa"/>
-<text x="240.0" y="268" class="tiny" text-anchor="middle">&lt;&lt;table&gt;&gt;</text>
-<text x="240.0" y="287" class="cardTitle" text-anchor="middle">ERD tables and relation…</text>
-<text x="123" y="312" class="detail" text-anchor="start">id primary key</text>
-<text x="123" y="329" class="detail" text-anchor="start">domain columns</text>
-<text x="123" y="346" class="detail" text-anchor="start">relation endpoint</text>
-</g>
-<g data-card="users" data-x="505" data-y="250" data-width="270" data-height="118">
-<rect x="505" y="250" width="270" height="118" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card"/>
-<path class="header" d="M505,292 L505,264 Q505,250 519,250 L761,250 Q775,250 775,264 L775,292 Z" fill="#f1f6ec"/>
-<text x="640.0" y="268" class="tiny" text-anchor="middle">&lt;&lt;table&gt;&gt;</text>
-<text x="640.0" y="287" class="cardTitle" text-anchor="middle">users</text>
-<text x="523" y="312" class="detail" text-anchor="start">id primary key</text>
-<text x="523" y="329" class="detail" text-anchor="start">domain columns</text>
-<text x="523" y="346" class="detail" text-anchor="start">relation endpoint</text>
-</g>
-<g data-card="int city_id FK NULL, re…" data-x="905" data-y="250" data-width="270" data-height="118">
-<rect x="905" y="250" width="270" height="118" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card"/>
-<path class="header" d="M905,292 L905,264 Q905,250 919,250 L1161,250 Q1175,250 1175,264 L1175,292 Z" fill="#f5eee4"/>
-<text x="1040.0" y="268" class="tiny" text-anchor="middle">&lt;&lt;table&gt;&gt;</text>
-<text x="1040.0" y="287" class="cardTitle" text-anchor="middle">int city_id FK NULL, re…</text>
-<text x="923" y="312" class="detail" text-anchor="start">id primary key</text>
-<text x="923" y="329" class="detail" text-anchor="start">domain columns</text>
-<text x="923" y="346" class="detail" text-anchor="start">relation endpoint</text>
-</g>
-<path class="rel connector" data-connector="erd-relation" d="M 375 309 L 505 309" stroke="#a66a3f"/>
-<text x="397" y="297" class="cardTitle" text-anchor="middle">1</text>
-<text x="483" y="297" class="cardTitle" text-anchor="middle">N</text>
-<rect x="385" y="271" width="110" height="24" rx="9" class="labelPill"/>
-<text x="440" y="288" class="tiny" text-anchor="middle">fk / owner</text>
-<path class="rel connector" data-connector="erd-relation" d="M 775 309 L 905 309" stroke="#4f8f8b"/>
-<text x="797" y="297" class="cardTitle" text-anchor="middle">1</text>
-<text x="883" y="297" class="cardTitle" text-anchor="middle">N</text>
-<rect x="785" y="271" width="110" height="24" rx="9" class="labelPill"/>
-<text x="840" y="288" class="tiny" text-anchor="middle">fk / child</text>
-<rect x="86" y="646" width="1108" height="30" rx="10" class="noteBox"/><text x="640" y="666" class="note" text-anchor="middle">Card placement avoids grid ambiguity; each relation shows endpoint cardinality and a separate label pill.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 680" width="1280" height="680" role="img" aria-label="Cities and users ERD for Exposed R2DBC SQL example">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="126%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .canvas{fill:#f6f9fc}.frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.6}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.3}.laneAlt{fill:#fbfdff;stroke:#d7e2ec;stroke-width:1.3}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:34px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:17px;letter-spacing:.08em;fill:#8ca2b4}
+      .tableTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:23px;fill:#1e293b}
+      .stereo{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#6b7f92;font-weight:700}
+      .table{filter:url(#shadow)}
+      .row{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#536476;font-weight:700}
+      .pk{fill:#1f5f8f}.fk{fill:#9a4f6d}.muted{fill:#64748b}
+      .rel{fill:none;stroke:#64748b;stroke-width:2.4;stroke-linecap:round}
+      .relLabel{fill:#ffffff;stroke:#d7e2ec;stroke-width:1.2}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.3}
+    </style>
+  </defs>
+
+  <rect class="canvas" width="1280" height="680"/>
+  <rect class="frame" x="24" y="24" width="1232" height="632" rx="22"/>
+  <text class="title" x="72" y="84">Cities and Users ERD</text>
+  <text class="subtitle" x="74" y="118">Source-backed schema view: users optionally reference a city through nullable city_id.</text>
+
+  <rect class="lane" x="54" y="150" width="1172" height="360" rx="18"/>
+  <text class="laneTitle" x="84" y="184">RELATIONAL MODEL</text>
+  <rect class="laneAlt" x="54" y="535" width="1172" height="78" rx="18"/>
+  <text class="laneTitle" x="84" y="565">READER CONTRACT</text>
+
+  <g class="table" data-table="cities">
+    <rect x="160" y="248" width="360" height="210" rx="14" fill="#eef6ff" stroke="#4f86c6" stroke-width="2"/>
+    <path d="M160,296 L160,262 Q160,248 174,248 L506,248 Q520,248 520,262 L520,296 Z" fill="#e8f2ff"/>
+    <text class="stereo" x="340" y="272" text-anchor="middle">&lt;&lt;Table("cities")&gt;&gt;</text>
+    <text class="tableTitle" x="340" y="296" text-anchor="middle">CityTable</text>
+    <line x1="160" y1="316" x2="520" y2="316" stroke="#d7e2ec" stroke-width="1.2"/>
+    <text class="row pk" x="190" y="344">PK id: integer autoIncrement</text>
+    <text class="row" x="190" y="372">name: varchar(50) NOT NULL</text>
+    <line x1="160" y1="394" x2="520" y2="394" stroke="#d7e2ec" stroke-width="1.2"/>
+    <text class="row muted" x="190" y="422">primaryKey = PK_Cities_ID</text>
+  </g>
+
+  <g class="table" data-table="users">
+    <rect x="760" y="248" width="360" height="210" rx="14" fill="#fff7ed" stroke="#a66a3f" stroke-width="2"/>
+    <path d="M760,296 L760,262 Q760,248 774,248 L1106,248 Q1120,248 1120,262 L1120,296 Z" fill="#f6eadc"/>
+    <text class="stereo" x="940" y="272" text-anchor="middle">&lt;&lt;Table("users")&gt;&gt;</text>
+    <text class="tableTitle" x="940" y="296" text-anchor="middle">UserTable</text>
+    <line x1="760" y1="316" x2="1120" y2="316" stroke="#d7e2ec" stroke-width="1.2"/>
+    <text class="row pk" x="790" y="344">PK id: varchar(10)</text>
+    <text class="row" x="790" y="372">name: varchar(50) NOT NULL</text>
+    <text class="row fk" x="790" y="400">FK city_id: integer NULL</text>
+    <line x1="760" y1="416" x2="1120" y2="416" stroke="#d7e2ec" stroke-width="1.2"/>
+    <text class="row muted" x="790" y="444">primaryKey = PK_User_ID</text>
+  </g>
+
+  <path class="rel" d="M 520 356 H 760"/>
+  <text class="tiny" x="538" y="348" text-anchor="middle">1</text>
+  <text class="tiny" x="742" y="348" text-anchor="middle">N</text>
+  <rect class="relLabel" x="568" y="318" width="144" height="28" rx="9"/>
+  <text class="tiny" x="640" y="337" text-anchor="middle">users.city_id -&gt; cities.id</text>
+  <rect class="relLabel" x="592" y="370" width="96" height="26" rx="9"/>
+  <text class="tiny" x="640" y="388" text-anchor="middle">nullable FK</text>
+
+  <rect x="116" y="574" width="1048" height="28" rx="10" class="noteBox"/>
+  <text class="note" x="640" y="593" text-anchor="middle">One city can own many users; a user may have no city because city_id is nullable.</text>
 </svg>
