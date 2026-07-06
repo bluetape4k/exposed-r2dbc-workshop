@@ -1,19 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1420" width="1800" height="1420" role="img" aria-label="Root README runtime architecture diagram">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1240" width="1800" height="1240" role="img" aria-label="Root README runtime architecture diagram">
 <defs><filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12" /></filter><style>
 .canvas{fill:#f6f9fc}.frame{fill:#fff;stroke:#d7e2ec;stroke-width:2}.lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.6}.title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:44px;fill:#1e293b}.subtitle{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:18px;fill:#536476;font-weight:700}.laneTitle{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:15px;fill:#8096aa;font-weight:800;letter-spacing:.06em}.rowLabel{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#8096aa;font-weight:800}.cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:21px;fill:#1e293b}.detail{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#4b5f73;font-weight:700}.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:15px;fill:#41566b;font-weight:700}.connector{fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.card{filter:url(#shadow)}
 </style></defs>
-<rect width="1800" height="1420" class="canvas"/><rect x="24" y="24" width="1752" height="1372" rx="22" class="frame"/>
+<rect width="1800" height="1240" class="canvas"/><rect x="24" y="24" width="1752" height="1192" rx="22" class="frame"/>
 <text x="70" y="82" class="title" text-anchor="start" >Runtime Architecture from Root README</text>
 <text x="70" y="116" class="subtitle" text-anchor="start" >Requests enter WebFlux or Ktor, carry tenant/auth/correlation context, then cross coroutine, R2DBC/data, and infrastructure boundaries.</text>
-<rect x="80" y="174" width="300" height="1040" rx="18" class="lane"/>
+<rect x="80" y="174" width="300" height="862" rx="18" class="lane"/>
 <text x="230" y="214" class="laneTitle" text-anchor="middle" >INGRESS ADAPTERS</text>
-<rect x="410" y="174" width="300" height="1040" rx="18" class="lane"/>
+<rect x="410" y="174" width="300" height="862" rx="18" class="lane"/>
 <text x="560" y="214" class="laneTitle" text-anchor="middle" >REQUEST CONTEXT</text>
-<rect x="740" y="174" width="300" height="1040" rx="18" class="lane"/>
+<rect x="740" y="174" width="300" height="862" rx="18" class="lane"/>
 <text x="890" y="214" class="laneTitle" text-anchor="middle" >COROUTINE SERVICES</text>
-<rect x="1070" y="174" width="300" height="1040" rx="18" class="lane"/>
+<rect x="1070" y="174" width="300" height="862" rx="18" class="lane"/>
 <text x="1220" y="214" class="laneTitle" text-anchor="middle" >DATA BOUNDARY</text>
-<rect x="1400" y="174" width="300" height="1040" rx="18" class="lane"/>
+<rect x="1400" y="174" width="300" height="862" rx="18" class="lane"/>
 <text x="1550" y="214" class="laneTitle" text-anchor="middle" >INFRASTRUCTURE</text>
 <text x="78" y="244" class="rowLabel" text-anchor="start" >WebFlux query path</text>
 <g data-card="WebFlux query path col 1" data-x="110" data-y="262" data-width="240" data-height="126">
@@ -197,19 +197,19 @@
 <polygon points="1100,937.0 1085,928.0 1085,946.0" fill="#b78a3b" stroke="#b78a3b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 <path class="connector" data-connector="runtime" d="M1340 937.0 L1430 937.0" stroke="#b78a3b"/>
 <polygon points="1430,937.0 1415,928.0 1415,946.0" fill="#b78a3b" stroke="#b78a3b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<rect x="92" y="1224" width="1608" height="70" rx="16" fill="#ffffff" stroke="#d7e2ec" stroke-width="1.4"/>
-<path d="M128 1266 L174 1266" stroke="#6f8f52" stroke-width="4" stroke-linecap="round"/>
-<polygon points="174,1266 160,1257 160,1275" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<text x="190" y="1271" class="note" text-anchor="start" >WebFlux query path</text>
-<path d="M508 1266 L554 1266" stroke="#4f8f8b" stroke-width="4" stroke-linecap="round"/>
-<polygon points="554,1266 540,1257 540,1275" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<text x="570" y="1271" class="note" text-anchor="start" >Ktor tenant path</text>
-<path d="M888 1266 L934 1266" stroke="#a85f7f" stroke-width="4" stroke-linecap="round"/>
-<polygon points="934,1266 920,1257 920,1275" fill="#a85f7f" stroke="#a85f7f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<text x="950" y="1271" class="note" text-anchor="start" >production outbox path</text>
-<path d="M1268 1266 L1314 1266" stroke="#b78a3b" stroke-width="4" stroke-linecap="round"/>
-<polygon points="1314,1266 1300,1257 1300,1275" fill="#b78a3b" stroke="#b78a3b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<text x="1330" y="1271" class="note" text-anchor="start" >Redis cache side path</text>
-<rect x="132" y="1320" width="1536" height="38" rx="12" fill="#ecfdf5" stroke="#86efac" stroke-width="1.6"/>
-<text x="900" y="1345" class="note" text-anchor="middle" >Root README contract: adapter-specific context is explicit before transaction, routing, cache, and durable storage choices.</text>
+<rect x="92" y="1064" width="1608" height="70" rx="16" fill="#ffffff" stroke="#d7e2ec" stroke-width="1.4"/>
+<path d="M128 1106 L174 1106" stroke="#6f8f52" stroke-width="4" stroke-linecap="round"/>
+<polygon points="174,1106 160,1097 160,1115" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<text x="190" y="1111" class="note" text-anchor="start" >WebFlux query path</text>
+<path d="M508 1106 L554 1106" stroke="#4f8f8b" stroke-width="4" stroke-linecap="round"/>
+<polygon points="554,1106 540,1097 540,1115" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<text x="570" y="1111" class="note" text-anchor="start" >Ktor tenant path</text>
+<path d="M888 1106 L934 1106" stroke="#a85f7f" stroke-width="4" stroke-linecap="round"/>
+<polygon points="934,1106 920,1097 920,1115" fill="#a85f7f" stroke="#a85f7f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<text x="950" y="1111" class="note" text-anchor="start" >production outbox path</text>
+<path d="M1268 1106 L1314 1106" stroke="#b78a3b" stroke-width="4" stroke-linecap="round"/>
+<polygon points="1314,1106 1300,1097 1300,1115" fill="#b78a3b" stroke="#b78a3b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<text x="1330" y="1111" class="note" text-anchor="start" >Redis cache side path</text>
+<rect x="132" y="1152" width="1536" height="38" rx="12" fill="#ecfdf5" stroke="#86efac" stroke-width="1.6"/>
+<text x="900" y="1177" class="note" text-anchor="middle" >Root README contract: adapter-specific context is explicit before transaction, routing, cache, and durable storage choices.</text>
 </svg>
