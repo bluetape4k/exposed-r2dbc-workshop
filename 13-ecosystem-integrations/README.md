@@ -2,78 +2,48 @@
 
 [English](README.md) | [한국어](README.ko.md)
 
-Chapter 13 introduces R2DBC-safe ecosystem integration examples. The source
-`exposed-workshop` chapter includes cloud warehouses, distributed SQL engines,
-and embedded analytics stores. This R2DBC workshop keeps the same learning
-targets but makes the default path local, deterministic, and credential-free.
+Chapter 13 keeps only ecosystem examples that can be taught as real R2DBC
+workshop material. In this branch, that means CockroachDB retry handling through
+the PostgreSQL-compatible R2DBC boundary. BigQuery, Trino, StarRocks, and DuckDB
+are intentionally not ported here because their practical workshop paths are
+JDBC, HTTP/native client, or embedded-client centered rather than R2DBC.
 
 ## Modules
 
 | Module | Scenario | Default execution |
 |---|---|---|
-| [`01-bigquery-dry-run`](01-bigquery-dry-run/) | Build a typed BigQuery dry-run request from locally rendered Exposed R2DBC SQL | H2 R2DBC SQL rendering; no BigQuery credentials |
-| [`02-trino-session-options`](02-trino-session-options/) | Keep Trino catalog/schema/source/tags/session properties explicit at the query boundary | H2 R2DBC SQL rendering plus EXPLAIN request shape |
 | [`03-cockroachdb-retry`](03-cockroachdb-retry/) | Rerun an inventory reservation transaction for CockroachDB retryable SQLSTATE `40001` | H2 R2DBC transaction replay with a synthetic SQLSTATE failure |
-| [`04-starrocks-olap-local`](04-starrocks-olap-local/) | Prepare OLAP rollup rows and document the StarRocks adapter boundary | H2 R2DBC local projection; no StarRocks server |
-| [`09-duckdb-embedded-analytics`](09-duckdb-embedded-analytics/) | Preserve the embedded analytics lesson while documenting the DuckDB JDBC boundary | H2 R2DBC local projection; no DuckDB driver |
 
-Each example README includes its own ERD and sequence diagram so the local
-schema/request model and the default execution flow can be reviewed without
-opening the source first.
+The example README includes its own ERD and sequence diagram so the local schema
+and retry flow can be reviewed without opening the source first.
 
-## Architecture
+## R2DBC Scope
 
-The chapter separates three concerns:
+CockroachDB speaks the PostgreSQL wire protocol, so a production deployment can
+use a PostgreSQL R2DBC driver and apply CockroachDB's retry contract at the
+transaction boundary. The workshop keeps the default run local and deterministic:
+tests use H2 R2DBC plus a synthetic SQLSTATE `40001` failure to prove that only
+retryable serialization failures are replayed.
 
-![Chapter 13 R2DBC ecosystem boundary architecture](../docs/assets/readme-diagrams/issue-115-chapter13-ecosystem-architecture-01.png)
+The removed source examples are not covered by local adapter stand-ins:
 
-Solid green arrows are the default local H2 R2DBC path executed by tests.
-Dashed amber arrows are opt-in external adapter handoff boundaries; they
-document request and driver contracts but do not call live vendor systems by
-default.
-
-| Boundary | Responsibility | Default test strategy |
-|---|---|---|
-| Typed adapter model | Capture the external system options that production code must pass deliberately | Data-class validation and header/request assertions |
-| Exposed R2DBC local work | Render SQL, collect Flow results, or rerun a transaction inside `suspendTransaction` helpers | H2 R2DBC via `withDb` / `withTables` |
-| External system handoff | Explain where a real BigQuery, Trino, CockroachDB, StarRocks, or DuckDB adapter would run | Documentation-only or synthetic failure, never live by default |
-
-Default tests do not require real credentials, external networks, or vendor
-containers. When a real adapter is needed later, it should be added behind an
-explicit opt-in issue and test profile.
-
-## Source Example Parity
-
-| `exposed-workshop` example | R2DBC counterpart | Coverage decision |
-|---|---|---|
-| `01-bigquery-dry-run` | `01-bigquery-dry-run` | Covered with typed dry-run request plus local R2DBC SQL rendering |
-| `02-trino-session-options` | `02-trino-session-options` | Covered with typed session headers plus local R2DBC EXPLAIN SQL |
-| `03-cockroachdb-retry` | `03-cockroachdb-retry` | Covered with SQLSTATE retry policy and H2 R2DBC transaction replay |
-| `04-starrocks-olap-local` | `04-starrocks-olap-local` | Covered with local OLAP projection and explicit StarRocks R2DBC boundary |
-| `09-duckdb-embedded-analytics` | `09-duckdb-embedded-analytics` | Covered with local analytics projection and explicit DuckDB JDBC boundary |
-| `05-ktor-exposed-integration` | Future issue #116 | Framework integration scope |
-| `06-spring-modulith-publications` | Future issue #116 | Framework integration scope |
-| `07-ddd-aggregate-repository` | Future issue #117 | Domain modeling scope |
-| `08-ddd-modulith-boundaries` | Future issue #117 | Domain modeling scope |
-
-## Adapter Boundary Notes
-
-- BigQuery dry-run tests validate request shape only; a production client would
-  submit the request outside the database transaction.
-- Trino session tests keep catalog, schema, source, client tags, and session
-  properties visible as headers.
-- CockroachDB retry examples retry only SQLSTATE `40001`; non-retryable
-  SQLSTATEs fail immediately.
-- StarRocks examples produce local rollup rows and a JDBC URL preview but do
-  not claim a default StarRocks R2DBC driver.
-- DuckDB examples keep the embedded analytics concept local; this workshop
-  uses H2 R2DBC because DuckDB remains a JDBC-centered embedded engine here.
+| `exposed-workshop` example | Chapter 13 decision |
+|---|---|
+| `01-bigquery-dry-run` | Excluded; BigQuery dry-run is client/API centered, not R2DBC centered |
+| `02-trino-session-options` | Excluded; Trino session options belong to Trino's client/coordinator protocol, not a default R2DBC path |
+| `03-cockroachdb-retry` | Covered through PostgreSQL-compatible R2DBC transaction retry behavior |
+| `04-starrocks-olap-local` | Excluded; this workshop should not imply a default StarRocks R2DBC driver |
+| `09-duckdb-embedded-analytics` | Excluded; DuckDB is treated here as an embedded/JDBC-centered analytics engine |
+| `05-ktor-exposed-integration` | Future issue #116 |
+| `06-spring-modulith-publications` | Future issue #116 |
+| `07-ddd-aggregate-repository` | Future issue #117 |
+| `08-ddd-modulith-boundaries` | Future issue #117 |
 
 ## Verification
 
 ```bash
 ./gradlew projects --console=plain
-repo-test-summary -- ./gradlew :01-bigquery-dry-run:test :02-trino-session-options:test :03-cockroachdb-retry:test :04-starrocks-olap-local:test :09-duckdb-embedded-analytics:test -PuseDB=H2 --continue --console=plain
+repo-test-summary -- ./gradlew :03-cockroachdb-retry:test -PuseDB=H2 --continue --console=plain
 ```
 
 `.github/workflows/Examples.yml` runs the same Chapter 13 H2 smoke coverage

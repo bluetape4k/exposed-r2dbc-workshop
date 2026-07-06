@@ -219,18 +219,14 @@ jobs:
           gradle-version: wrapper
           cache-read-only: ${{ github.event_name == 'pull_request' }}
 
-      - name: Run ecosystem integration examples
+      - name: Run CockroachDB ecosystem example
         env:
           GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-        # Weekly downstream gate: ecosystem examples keep external adapters at
-        # typed/local boundaries and run H2 R2DBC smoke tests by default.
+        # Weekly downstream gate: Chapter 13 keeps only the real R2DBC-shaped
+        # ecosystem example, using H2 to smoke-test CockroachDB retry behavior.
         run: >-
           ./gradlew
-          :01-bigquery-dry-run:test
-          :02-trino-session-options:test
           :03-cockroachdb-retry:test
-          :04-starrocks-olap-local:test
-          :09-duckdb-embedded-analytics:test
           "-PuseDB=H2"
           --continue
 

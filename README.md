@@ -111,7 +111,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 | `10-multi-tenant`        | Schema, connection-factory, authorization, onboarding 멀티테넌시 + WebFlux/Ktor | [Multi-Tenant Strategies](10-multi-tenant/README.md) |
 | `11-high-performance`    | 캐시 전략, routing datasource, read/write 분리 + Ktor 비교 | [High Performance](11-high-performance/README.md)                             |
 | `12-production-integration` | Spring Boot 4/Ktor production service patterns, realtime replay, HTTP client outbox/idempotency, request correlation/readiness diagnostics | [Production Integration](12-production-integration/README.md)                 |
-| `13-ecosystem-integrations` | BigQuery/Trino/CockroachDB/StarRocks/DuckDB adapter boundaries with local R2DBC smoke tests | [Ecosystem Integrations](13-ecosystem-integrations/README.md)                 |
+| `13-ecosystem-integrations` | CockroachDB retry handling through a PostgreSQL-compatible R2DBC boundary | [Ecosystem Integrations](13-ecosystem-integrations/README.md)                 |
 
 ## 주목할 예제
 
@@ -139,7 +139,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
   [12-production-integration/02-ktor-production-integration](12-production-integration/02-ktor-production-integration/README.md)
   HTTP client outbox/idempotency plus request-correlation and readiness diagnostics
 - [13-ecosystem-integrations](13-ecosystem-integrations/README.md)
-  Local R2DBC adapter boundaries for BigQuery dry-runs, Trino sessions, CockroachDB retry, StarRocks rollups, and DuckDB-style analytics
+  CockroachDB retry handling through PostgreSQL-compatible R2DBC; BigQuery, Trino, StarRocks, and DuckDB are documented as out of R2DBC scope
 
 ## Architecture diagram
 
@@ -167,7 +167,7 @@ JDBC-only architecture choices remain distinct when the API model is different.
 | Ktor cache/routing issues `#47`, `#48`, `#49`, `#50` | Closed R2DBC issues `#34`, `#35`, `#36`, `#69`; modules `11-high-performance/04-06-*` | Covered by counterpart |
 | Spring Boot tenant strategy issues `#51`, `#55`, `#56` | Closed R2DBC issues `#37`-`#42`; modules `10-multi-tenant/03-06-*` | Covered by counterpart |
 | Chapter 12 production integration epic `#57` | Closed R2DBC issues `#43`-`#49`; modules `12-production-integration/01-*`, `02-*` | Covered by counterpart |
-| Chapter 13 database adapters | R2DBC issue `#115`; modules `13-ecosystem-integrations/01-*`, `02-*`, `03-*`, `04-*`, `09-*` | Covered with local/typed boundaries |
+| Chapter 13 database adapters | R2DBC issue `#115`; module `13-ecosystem-integrations/03-cockroachdb-retry` | CockroachDB covered through PostgreSQL-compatible R2DBC; BigQuery/Trino/StarRocks/DuckDB excluded as JDBC/HTTP/native-client centered |
 | R2DBC connection-factory-per-tenant | Closed R2DBC issue `#39`; no exact JDBC equivalent | Platform-specific, no duplicate issue |
 | JDBC DAO/entities, transaction template, benchmark | Blocking/JDBC-only modules in `exposed-workshop` | Platform-specific, no duplicate issue |
 
