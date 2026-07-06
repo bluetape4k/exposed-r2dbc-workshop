@@ -22,6 +22,12 @@ engine, embedded analytics store를 포함합니다. 이 R2DBC workshop은 같�
 
 13장은 세 가지 경계를 분리합니다.
 
+![Chapter 13 R2DBC ecosystem boundary architecture](../docs/assets/readme-diagrams/issue-115-chapter13-ecosystem-architecture-01.png)
+
+초록 실선 화살표는 테스트가 실행하는 기본 local H2 R2DBC 경로입니다. 황색
+점선 화살표는 opt-in external adapter handoff boundary이며, request와 driver
+contract를 문서화하지만 기본값으로 live vendor system을 호출하지 않습니다.
+
 | 경계 | 책임 | 기본 테스트 전략 |
 |---|---|---|
 | Typed adapter model | Production code가 외부 시스템에 넘겨야 하는 option을 명시적으로 표현 | Data class validation과 header/request assertion |
