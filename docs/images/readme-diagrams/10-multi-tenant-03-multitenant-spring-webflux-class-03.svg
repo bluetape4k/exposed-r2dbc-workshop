@@ -155,22 +155,22 @@
   <polygon points="1060,318 1048,338 1072,338" fill="#fff" stroke="#607386" stroke-width="3.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <path class="connector blue dash" data-connector="controller-uses-repo" d="M1060 512 L1074 512" stroke-linecap="butt"/>
-  <polyline data-head="controller-uses-repo" points="1074,503 1090,512 1074,521" fill="none" stroke="#3c82b4" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon data-head="controller-uses-repo" points="1090,512 1074,503 1074,521" fill="#3c82b4" stroke="#3c82b4" stroke-width="3.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
-  <path class="connector gold dash" data-connector="controller-uses-tx" d="M925 570 L925 632 Q925 648 909 648 L651 648 Q635 648 635 664 L635 708" stroke-linecap="butt"/>
-  <polyline data-head="controller-uses-tx" points="626,708 635,724 644,708" fill="none" stroke="#b78632" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector gold dash" data-connector="controller-uses-tx" d="M925 570 L925 632 Q925 648 909 648 L681 648 Q665 648 665 664 L665 708" stroke-linecap="butt"/>
+  <polygon data-head="controller-uses-tx" points="665,724 656,708 674,708" fill="#b78632" stroke="#b78632" stroke-width="3.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
-  <path class="connector teal dash" data-connector="tx-reads-tenant-id" d="M635 724 L635 670 Q635 654 619 654 Q605 654 605 638 L605 586" stroke-linecap="butt"/>
-  <polyline data-head="tx-reads-tenant-id" points="596,586 605,570 614,586" fill="none" stroke="#4f8f8b" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector teal dash" data-connector="tx-reads-tenant-id" d="M585 724 L585 670 Q585 654 601 654 L605 654 Q621 654 621 638 L621 586" stroke-linecap="butt"/>
+  <polygon data-head="tx-reads-tenant-id" points="621,570 612,586 630,586" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="3.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <path class="connector green dash" data-connector="tx-uses-tenants" d="M455 772 L401 772" stroke-linecap="butt"/>
-  <polyline data-head="tx-uses-tenants" points="401,763 385,772 401,781" fill="none" stroke="#5f8848" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon data-head="tx-uses-tenants" points="385,772 401,763 401,781" fill="#5f8848" stroke="#5f8848" stroke-width="3.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <path class="connector blue dash" data-connector="repos-map-dto" d="M1210 570 L1210 632 Q1210 648 1194 648 L1056 648 Q1040 648 1040 664 L1040 708" stroke-linecap="butt"/>
-  <polyline data-head="repos-map-dto" points="1031,708 1040,724 1049,708" fill="none" stroke="#3c82b4" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon data-head="repos-map-dto" points="1040,724 1031,708 1049,708" fill="#3c82b4" stroke="#3c82b4" stroke-width="3.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <path class="connector gold dash" data-connector="repos-use-schema" d="M1445 570 L1445 632 Q1445 648 1429 648 L1386 648 Q1370 648 1370 664 L1370 708" stroke-linecap="butt"/>
-  <polyline data-head="repos-use-schema" points="1361,708 1370,724 1379,708" fill="none" stroke="#b78632" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon data-head="repos-use-schema" points="1370,724 1361,708 1379,708" fill="#b78632" stroke="#b78632" stroke-width="3.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <path class="connector slate" data-connector="schema-extends-table" d="M1370 724 L1370 660 Q1370 644 1386 644 L1542 644 Q1558 644 1558 628 L1558 293 Q1558 277 1542 277 L1505 277"/>
   <polygon points="1505,277 1525,265 1525,289" fill="#fff" stroke="#607386" stroke-width="3.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>

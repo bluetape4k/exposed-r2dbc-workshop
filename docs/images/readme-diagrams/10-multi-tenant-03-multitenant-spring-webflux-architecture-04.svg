@@ -99,13 +99,13 @@
   </g>
 
   <path class="connector blue" data-connector="request-to-context" d="M410 763 L499 763"/>
-  <polyline points="499,754 515,763 499,772" fill="none" stroke="#3c82b4" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="515,763 499,754 499,772" fill="#3c82b4" stroke="#3c82b4" stroke-width="3.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <path class="connector teal" data-connector="context-to-schema-switch" d="M765 763 L854 763"/>
-  <polyline points="854,754 870,763 854,772" fill="none" stroke="#4f8f8b" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="870,763 854,754 854,772" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="3.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <path class="connector gold" data-connector="schema-switch-to-schema" d="M1140 763 L1229 763"/>
-  <polyline points="1229,754 1245,763 1229,772" fill="none" stroke="#b78632" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="1245,763 1229,754 1229,772" fill="#b78632" stroke="#b78632" stroke-width="3.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <rect x="260" y="842" width="1080" height="34" rx="11" class="noteBox"/>
   <text x="800" y="866" class="note" text-anchor="middle">MySQL is excluded in this module because schema creation is not supported reliably in the R2DBC workshop path.</text>
