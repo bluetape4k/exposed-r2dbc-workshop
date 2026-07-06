@@ -1,88 +1,128 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
-  <title id="title">Chapter 12 Spring Boot and Ktor R2DBC Application Architecture</title>
-  <desc id="desc">Paired Spring Boot WebFlux and Ktor routes delegate to service boundaries, Exposed R2DBC repositories, and H2 R2DBC persistence with structured error handling.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1160" viewBox="0 0 1800 1160" role="img" aria-label="Chapter 12 production integration architecture">
   <defs>
+    <filter id="softShadow" x="-8%" y="-10%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#25384d" flood-opacity="0.12"/>
+    </filter>
+    <marker id="arrowBlue" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowGreen" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowAmber" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#a36f3e" stroke="#a36f3e" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
     <style>
-      .bg { fill: #f7f9fc; }
-      .panel { fill: #ffffff; stroke: #bcc7d6; stroke-width: 2; rx: 18; }
-      .spring { fill: #e8f7ee; stroke: #3a8b57; }
-      .ktor { fill: #edf1ff; stroke: #5067c5; }
-      .shared { fill: #fff7e6; stroke: #b7791f; }
-      .db { fill: #f1f5f9; stroke: #475569; }
-      .title { font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive; font-size:34px; font-weight:400; fill: #172033; }
-      .subtitle { font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif; font-size:18px; font-weight:400; fill: #516070; }
-      .label { font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive; font-size:20px; font-weight:400; fill: #172033; }
-      .small { font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif; font-size:15px; font-weight:400; fill: #425466; }
-      .mono { font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive; font-size:14px; font-weight:400; fill: #172033; }
-      .arrow { stroke: #5d6b7a; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fffefa;stroke:#d7e3ed;stroke-width:2}
+      .lane{fill:#f8fbfd;stroke:#d7e3ed;stroke-width:1.8}
+      .laneSpring{fill:#f5f9ff;stroke:#bdd7ee}
+      .laneKtor{fill:#f7fbf2;stroke:#c9dfbb}
+      .laneShared{fill:#fbf7f0;stroke:#dfc39d}
+      .card{filter:url(#softShadow);stroke-width:2.6}
+      .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:52px;fill:#192538;font-weight:400}
+      .subtitle,.laneTitle,.body,.foot{font-family:"Comic Mono","Comic Sans MS","Comic Sans",monospace;font-weight:700;fill:#556678}
+      .subtitle{font-size:20px}
+      .laneTitle{font-size:16px;letter-spacing:.07em;fill:#8aa0b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:27px;fill:#192538;font-weight:400}
+      .body{font-size:16px}
+      .small{font-size:14px}
+      .foot{font-size:15px}
+      .connector{fill:none;stroke-width:4.4;stroke-linecap:round;stroke-linejoin:round}
+      .blue{stroke:#4f86c6;marker-end:url(#arrowBlue)}
+      .green{stroke:#6f8f52;marker-end:url(#arrowGreen)}
+      .amber{stroke:#a36f3e;marker-end:url(#arrowAmber)}
+      .h2Icon path{fill:#09476B}
     </style>
-    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,4.5 L1,8 Z" fill="#5D6B7A"/></marker>
   </defs>
 
-  <rect class="bg" width="1400" height="760"/>
-  <text x="70" y="70" class="title">Chapter 12 Production Application Architecture</text>
-  <text x="70" y="105" class="subtitle">Two stack-native HTTP boundaries, one aligned Exposed R2DBC service/repository shape</text>
+  <rect class="canvas" width="1800" height="1160"/>
+  <rect class="frame" x="32" y="32" width="1736" height="1096" rx="26"/>
 
-  <rect x="60" y="145" width="590" height="470" class="panel spring"/>
-  <text x="95" y="190" class="label">Spring Boot 4 WebFlux</text>
-  <text x="95" y="220" class="small">Annotation controller + RestControllerAdvice</text>
+  <text class="title" x="86" y="112">Chapter 12 Production Integration Architecture</text>
+  <text class="subtitle" x="90" y="154">Spring WebFlux and Ktor expose the same production slices while keeping framework-native HTTP, realtime, client, and diagnostics boundaries.</text>
 
-  <rect x="100" y="255" width="190" height="80" class="panel"/>
-  <text x="126" y="287" class="mono">web</text>
-  <text x="126" y="312" class="small">Controller / SSE</text>
+  <rect class="lane laneSpring" x="70" y="205" width="795" height="690" rx="18"/>
+  <text class="laneTitle" x="96" y="239">SPRING BOOT 4 WEBFLUX STACK</text>
 
-  <rect x="330" y="255" width="190" height="80" class="panel"/>
-  <text x="356" y="287" class="mono">app</text>
-  <text x="356" y="312" class="small">Service validation</text>
+  <rect class="lane laneKtor" x="935" y="205" width="795" height="690" rx="18"/>
+  <text class="laneTitle" x="961" y="239">KTOR 3 STACK</text>
 
-  <rect x="330" y="380" width="190" height="80" class="panel"/>
-  <text x="356" y="412" class="mono">app</text>
-  <text x="356" y="437" class="small">R2DBC repository</text>
+  <rect class="lane laneShared" x="70" y="925" width="1660" height="140" rx="18"/>
+  <text class="laneTitle" x="96" y="959">READER CONTRACT</text>
 
-  <rect x="100" y="380" width="190" height="80" class="panel"/>
-  <text x="126" y="412" class="mono">web</text>
-  <text x="126" y="437" class="small">Structured errors</text>
+  <g data-card="Spring HTTP boundary">
+    <rect class="card" x="115" y="285" width="315" height="125" rx="14" fill="#ffffff" stroke="#4f86c6"/>
+    <text class="cardTitle" x="272.5" y="326" text-anchor="middle">WebFlux API Boundary</text>
+    <text class="body" x="272.5" y="357" text-anchor="middle">SpringProductionController</text>
+    <text class="body small" x="272.5" y="383" text-anchor="middle">Basic auth, SSE, WebClient, readiness</text>
+  </g>
 
-  <rect x="215" y="505" width="190" height="70" class="panel db"/>
-  <text x="241" y="535" class="mono">persistence</text>
-  <text x="241" y="558" class="small">Spring tables</text>
+  <g data-card="Spring application service">
+    <rect class="card" x="115" y="505" width="315" height="135" rx="14" fill="#ffffff" stroke="#4f86c6"/>
+    <text class="cardTitle" x="272.5" y="546" text-anchor="middle">Workflow Service</text>
+    <text class="body" x="272.5" y="577" text-anchor="middle">SpringProductionWorkflowService</text>
+    <text class="body small" x="272.5" y="603" text-anchor="middle">auth, realtime, outbound, diagnostics</text>
+  </g>
 
-  <path class="arrow" d="M290 295 H330"/>
-  <path class="arrow" d="M425 335 V380"/>
-  <path class="arrow" d="M425 460 C425 500 405 520 405 540"/>
-  <path class="arrow" d="M330 420 H290"/>
+  <g data-card="Spring repository">
+    <rect class="card" x="510" y="505" width="315" height="135" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+    <text class="cardTitle" x="667.5" y="546" text-anchor="middle">R2DBC Repository</text>
+    <text class="body" x="667.5" y="577" text-anchor="middle">SpringProductionRepository</text>
+    <text class="body small" x="667.5" y="603" text-anchor="middle">repository-owned suspendTransaction</text>
+  </g>
 
-  <rect x="750" y="145" width="590" height="470" class="panel ktor"/>
-  <text x="785" y="190" class="label">Ktor 3</text>
-  <text x="785" y="220" class="small">Routing DSL + StatusPages + Sessions</text>
+  <g data-card="Spring H2 database">
+    <rect class="card" x="510" y="730" width="315" height="120" rx="14" fill="#ffffff" stroke="#a36f3e"/>
+    <g class="h2Icon" data-bluetape4k-icon="database/h2.svg" transform="translate(548 765) scale(1.55)">
+      <path d="M17.17 13.27c.14-.015.28-.023.416-.023.7 0 1.228.159 1.599.469.37.314.555.756.555 1.334a2.861 2.861 0 0 1-.43 1.455c-.291.492-.775 1.066-1.46 1.727-.453.446-1.061.976-1.821 1.592a48.02 48.02 0 0 1-2.275 1.742v2.083h9.895V21.24H17.99c.219-.159.59-.435 1.11-.832.519-.4 1.033-.835 1.55-1.311.817-.76 1.425-1.5 1.822-2.215a4.624 4.624 0 0 0 .597-2.268c0-1.213-.416-2.154-1.247-2.815-.828-.662-2.033-.994-3.613-.994-.344 0-.692.015-1.036.049V6.04H13.86v4.701H8.965V6.04H5.65v12.846h3.315v-5.661h4.89v5.661h.039c.31-.242.623-.487.933-.74a28.564 28.564 0 0 0 1.826-1.588 14.854 14.854 0 0 0 .517-.529zM12.011 23.3A11.327 11.327 0 0 1 .7 11.99 11.305 11.305 0 0 1 12.011.699a11.286 11.286 0 0 1 11.29 11.29v.351H24v-.351A11.985 11.985 0 0 0 12.011 0 12.008 12.008 0 0 0 0 11.989 12.026 12.026 0 0 0 12.011 24h.352v-.7z"/>
+    </g>
+    <text class="cardTitle" x="715" y="773" text-anchor="middle">Spring H2 R2DBC</text>
+    <text class="body small" x="715" y="802" text-anchor="middle">accounts, sessions, work</text>
+    <text class="body small" x="715" y="826" text-anchor="middle">outbox, diagnostics</text>
+  </g>
 
-  <rect x="790" y="255" width="190" height="80" class="panel"/>
-  <text x="816" y="287" class="mono">routes</text>
-  <text x="816" y="312" class="small">HTTP / WebSocket</text>
+  <g data-card="Ktor HTTP boundary">
+    <rect class="card" x="980" y="285" width="315" height="125" rx="14" fill="#ffffff" stroke="#6f8f52"/>
+    <text class="cardTitle" x="1137.5" y="326" text-anchor="middle">Ktor Routing Boundary</text>
+    <text class="body" x="1137.5" y="357" text-anchor="middle">productionRoutes + plugins</text>
+    <text class="body small" x="1137.5" y="383" text-anchor="middle">Basic auth, session cookie, WebSocket</text>
+  </g>
 
-  <rect x="1020" y="255" width="190" height="80" class="panel"/>
-  <text x="1046" y="287" class="mono">app</text>
-  <text x="1046" y="312" class="small">Validation + DTOs</text>
+  <g data-card="Ktor application core">
+    <rect class="card" x="980" y="505" width="315" height="135" rx="14" fill="#ffffff" stroke="#6f8f52"/>
+    <text class="cardTitle" x="1137.5" y="546" text-anchor="middle">Route-Owned Core</text>
+    <text class="body" x="1137.5" y="577" text-anchor="middle">repository + hub + dispatcher</text>
+    <text class="body small" x="1137.5" y="603" text-anchor="middle">auth, realtime, outbound, diagnostics</text>
+  </g>
 
-  <rect x="1020" y="380" width="190" height="80" class="panel"/>
-  <text x="1046" y="412" class="mono">app</text>
-  <text x="1046" y="437" class="small">R2DBC repository</text>
+  <g data-card="Ktor repository">
+    <rect class="card" x="1375" y="505" width="315" height="135" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+    <text class="cardTitle" x="1532.5" y="546" text-anchor="middle">R2DBC Repository</text>
+    <text class="body" x="1532.5" y="577" text-anchor="middle">KtorProductionRepository</text>
+    <text class="body small" x="1532.5" y="603" text-anchor="middle">same suspendTransaction contract</text>
+  </g>
 
-  <rect x="790" y="380" width="190" height="80" class="panel"/>
-  <text x="816" y="412" class="mono">config</text>
-  <text x="816" y="437" class="small">JSON / errors</text>
+  <g data-card="Ktor H2 database">
+    <rect class="card" x="1375" y="730" width="315" height="120" rx="14" fill="#ffffff" stroke="#a36f3e"/>
+    <g class="h2Icon" data-bluetape4k-icon="database/h2.svg" transform="translate(1413 765) scale(1.55)">
+      <path d="M17.17 13.27c.14-.015.28-.023.416-.023.7 0 1.228.159 1.599.469.37.314.555.756.555 1.334a2.861 2.861 0 0 1-.43 1.455c-.291.492-.775 1.066-1.46 1.727-.453.446-1.061.976-1.821 1.592a48.02 48.02 0 0 1-2.275 1.742v2.083h9.895V21.24H17.99c.219-.159.59-.435 1.11-.832.519-.4 1.033-.835 1.55-1.311.817-.76 1.425-1.5 1.822-2.215a4.624 4.624 0 0 0 .597-2.268c0-1.213-.416-2.154-1.247-2.815-.828-.662-2.033-.994-3.613-.994-.344 0-.692.015-1.036.049V6.04H13.86v4.701H8.965V6.04H5.65v12.846h3.315v-5.661h4.89v5.661h.039c.31-.242.623-.487.933-.74a28.564 28.564 0 0 0 1.826-1.588 14.854 14.854 0 0 0 .517-.529zM12.011 23.3A11.327 11.327 0 0 1 .7 11.99 11.305 11.305 0 0 1 12.011.699a11.286 11.286 0 0 1 11.29 11.29v.351H24v-.351A11.985 11.985 0 0 0 12.011 0 12.008 12.008 0 0 0 0 11.989 12.026 12.026 0 0 0 12.011 24h.352v-.7z"/>
+    </g>
+    <text class="cardTitle" x="1580" y="773" text-anchor="middle">Ktor H2 R2DBC</text>
+    <text class="body small" x="1580" y="802" text-anchor="middle">matching table groups</text>
+    <text class="body small" x="1580" y="826" text-anchor="middle">under Ktor prefixes</text>
+  </g>
 
-  <rect x="905" y="505" width="190" height="70" class="panel db"/>
-  <text x="931" y="535" class="mono">persistence</text>
-  <text x="931" y="558" class="small">Ktor tables</text>
+  <path class="connector blue" data-connector="spring-controller-service" d="M 272.5 410 L 272.5 500"/>
+  <path class="connector blue" data-connector="spring-service-repository" d="M 430 572.5 L 505 572.5"/>
+  <path class="connector amber" data-connector="spring-repository-db" d="M 667.5 640 L 667.5 725"/>
 
-  <path class="arrow" d="M980 295 H1020"/>
-  <path class="arrow" d="M1115 335 V380"/>
-  <path class="arrow" d="M1115 460 C1115 500 1095 520 1095 540"/>
-  <path class="arrow" d="M1020 420 H980"/>
+  <path class="connector green" data-connector="ktor-routes-core" d="M 1137.5 410 L 1137.5 500"/>
+  <path class="connector green" data-connector="ktor-core-repository" d="M 1295 572.5 L 1370 572.5"/>
+  <path class="connector amber" data-connector="ktor-repository-db" d="M 1532.5 640 L 1532.5 725"/>
 
-  <rect x="410" y="638" width="580" height="88" class="panel shared"/>
-  <text x="440" y="668" class="label">Aligned contracts</text>
-  <text x="440" y="693" class="small">suspendTransaction, request validation, JSON serialization</text>
-  <text x="440" y="713" class="small">structured HTTP errors, focused tests</text>
+  <rect x="115" y="980" width="1570" height="44" rx="14" fill="#fbfdff" stroke="#d7e3ed" stroke-width="2"/>
+  <text class="foot" x="900" y="1008" text-anchor="middle">Blue paths are Spring-native boundaries; green paths are Ktor-native boundaries; amber paths are Exposed R2DBC persistence into isolated H2 databases.</text>
+  <rect x="115" y="1038" width="1570" height="38" rx="12" fill="#ecfdf5" stroke="#86cfa0" stroke-width="1.8"/>
+  <text class="foot" x="900" y="1063" text-anchor="middle">Both stacks keep the same production contracts: auth/session metadata, persisted realtime outbox, outbound idempotency, diagnostics, and readiness.</text>
 </svg>

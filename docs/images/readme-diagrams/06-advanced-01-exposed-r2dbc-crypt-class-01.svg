@@ -1,83 +1,148 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1754" height="958" viewBox="0 0 1754 958" role="img" aria-label="Class Structure Diagram">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1754" height="958"/>
-<rect class="frame" x="32" y="28" width="1690" height="902" rx="28"/>
-<text class="title" x="66" y="82">Class Structure Diagram</text>
-<text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="line" d="M1492 376 L1492 102 L1082 102 L1082 180" data-connector="line"/>
-<path class="line" d="M1492 376 L1492 112 L262 112 L262 180" data-connector="line"/>
-<path class="line" d="M1082 180 L1082 122 L672 122 L672 355" data-connector="line"/>
-<path class="line" d="M262 180 L262 132 L672 132 L672 355" data-connector="line"/>
-<path class="implLine" d="M877 542 L877 451 L672 451 L672 355"/>
-<g transform="translate(92,180)">
-  <rect filter="url(#shadow)" x="0" y="0" width="340" height="212" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="94" x2="340" y2="94" stroke="#5B8DEF"/>
-  <text class="small" x="170" y="26" text-anchor="middle">«ColumnType»</text>
-  <text class="label" x="170" y="56.5" text-anchor="middle">Encrypted Varchar Column</text>
-<text class="label" x="170" y="81.5" text-anchor="middle">Type</text>
-  <text class="mono" x="18" y="124">+encryptor: Encryptor</text>
-<text class="mono" x="18" y="145">+colLength: Int</text>
-<text class="mono" x="18" y="166">+valueFromDB(value: Any) String</text>
-<text class="mono" x="18" y="187">+notNullValueToDB(value: String) Any</text>
-</g>
-<g transform="translate(502,180)">
-  <rect filter="url(#shadow)" x="0" y="0" width="340" height="175" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#58A978"/>
-  <text class="small" x="170" y="26" text-anchor="middle">«interface»</text>
-  <text class="label" x="170" y="61" text-anchor="middle">Encryptor</text>
-  <text class="mono" x="18" y="108">+encrypt(str: String) String</text>
-<text class="mono" x="18" y="129">+decrypt(str: String) String</text>
-<text class="mono" x="18" y="150">+maxColLength(inputByteSize: Int) Int</text>
-</g>
-<g transform="translate(912,180)">
-  <rect filter="url(#shadow)" x="0" y="0" width="340" height="212" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="94" x2="340" y2="94" stroke="#D6A441"/>
-  <text class="small" x="170" y="26" text-anchor="middle">«ColumnType»</text>
-  <text class="label" x="170" y="56.5" text-anchor="middle">Encrypted Binary Column</text>
-<text class="label" x="170" y="81.5" text-anchor="middle">Type</text>
-  <text class="mono" x="18" y="124">+encryptor: Encryptor</text>
-<text class="mono" x="18" y="145">+colLength: Int</text>
-<text class="mono" x="18" y="166">+valueFromDB(value: Any) ByteArray</text>
-<text class="mono" x="18" y="187">+notNullValueToDB(value: ByteArray) Any</text>
-</g>
-<g transform="translate(1322,180)">
-  <rect filter="url(#shadow)" x="0" y="0" width="340" height="196" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#DC6B82"/>
-  <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="61" text-anchor="middle">Table</text>
-  <text class="mono" x="18" y="108">+encryptedVarchar(name, colLength,</text>
-<text class="mono" x="18" y="129">encryptor) Column~String~</text>
-<text class="mono" x="18" y="150">+encryptedBinary(name, colLength,</text>
-<text class="mono" x="18" y="171">encryptor) Column~ByteArray~</text>
-</g>
-<g transform="translate(707,542)">
-  <rect filter="url(#shadow)" x="0" y="0" width="340" height="196" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#45A7A1"/>
-  <text class="small" x="170" y="26" text-anchor="middle">«object»</text>
-  <text class="label" x="170" y="61" text-anchor="middle">Algorithms</text>
-  <text class="mono" x="18" y="108">+AES_256_PBE_GCM(password, salt) Encryptor</text>
-<text class="mono" x="18" y="129">+AES_256_PBE_CBC(password, salt) Encryptor</text>
-<text class="mono" x="18" y="150">+BLOW_FISH(key) Encryptor</text>
-<text class="mono" x="18" y="171">+TRIPLE_DES(key) Encryptor</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 860" width="1320" height="860" role="img" aria-label="Exposed R2DBC crypt test class structure diagram">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12" />
+    </filter>
+    <marker id="arrow-blue" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-green" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-brown" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#a66a3f" stroke="#a66a3f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-teal" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-rose" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#a85f7f" stroke="#a85f7f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}
+      .card{filter:url(#shadow)}
+      .header{opacity:.96}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:30px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:15px;letter-spacing:.08em;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:17px;fill:#1e293b}
+      .connector{fill:none;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+      .inherit{fill:none;stroke:#64748b;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+      .head{fill:white;stroke:#64748b;stroke-width:2.4;stroke-dasharray:none;style:stroke-dasharray:none}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.2}
+    </style>
+  </defs>
+  <rect width="1320" height="860" class="canvas" />
+  <rect x="22" y="22" width="1276" height="816" rx="18" class="frame" />
+  <text x="58" y="68" class="title" text-anchor="start">Crypt Test Class Structure</text>
+  <text x="58" y="96" class="subtitle" text-anchor="start">Concrete view of Ex01_EncryptedColumn: encryptors, local tables, column helpers, and test assertions.</text>
+
+  <rect x="48" y="126" width="1224" height="174" rx="16" class="lane" />
+  <text x="72" y="156" class="laneTitle" text-anchor="start">TEST CLASS CONTRACT</text>
+  <rect x="48" y="324" width="1224" height="238" rx="16" class="lane" />
+  <text x="72" y="354" class="laneTitle" text-anchor="start">LOCAL TABLES AND COLUMN HELPERS</text>
+  <rect x="48" y="586" width="1224" height="170" rx="16" class="lane" />
+  <text x="72" y="616" class="laneTitle" text-anchor="start">ASSERTED BEHAVIOR</text>
+
+  <g data-card="AbstractR2dbcExposedTest" data-x="120" data-y="188" data-width="320" data-height="82">
+    <rect x="120" y="188" width="320" height="82" rx="14" fill="#fff" stroke="#64748b" stroke-width="2" class="card" />
+    <path class="header" d="M120,228 L120,202 Q120,188 134,188 L426,188 Q440,188 440,202 L440,228 Z" fill="#f8fafc" />
+    <text x="280" y="206" class="tiny" text-anchor="middle">&lt;&lt;base test&gt;&gt;</text>
+    <text x="280" y="225" class="cardTitle" text-anchor="middle">AbstractR2dbcExposedTest</text>
+    <text x="140" y="250" class="detail" text-anchor="start">ENABLE_DIALECTS_METHOD</text>
+  </g>
+  <g data-card="Ex01 EncryptedColumn" data-x="520" data-y="188" data-width="320" data-height="82">
+    <rect x="520" y="188" width="320" height="82" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card" />
+    <path class="header" d="M520,228 L520,202 Q520,188 534,188 L826,188 Q840,188 840,202 L840,228 Z" fill="#eef5fa" />
+    <text x="680" y="206" class="tiny" text-anchor="middle">&lt;&lt;test class&gt;&gt;</text>
+    <text x="680" y="225" class="cardTitle" text-anchor="middle">Ex01_EncryptedColumn</text>
+    <text x="540" y="250" class="detail" text-anchor="start">runTest + withTables</text>
+  </g>
+  <g data-card="Encryptor Algorithms" data-x="920" data-y="188" data-width="260" data-height="82">
+    <rect x="920" y="188" width="260" height="82" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card" />
+    <path class="header" d="M920,228 L920,202 Q920,188 934,188 L1166,188 Q1180,188 1180,202 L1180,228 Z" fill="#f5eee4" />
+    <text x="1050" y="206" class="tiny" text-anchor="middle">&lt;&lt;provider&gt;&gt;</text>
+    <text x="1050" y="225" class="cardTitle" text-anchor="middle">Encryptor Algorithms</text>
+    <text x="940" y="250" class="detail" text-anchor="start">AES GCM/CBC, Blowfish, 3DES</text>
+  </g>
+
+  <g data-card="StringTable Insert" data-x="86" data-y="388" data-width="250" data-height="108">
+    <rect x="86" y="388" width="250" height="108" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card" />
+    <path class="header" d="M86,430 L86,402 Q86,388 100,388 L322,388 Q336,388 336,402 L336,430 Z" fill="#eef5fa" />
+    <text x="211" y="406" class="tiny" text-anchor="middle">&lt;&lt;local table&gt;&gt;</text>
+    <text x="211" y="425" class="cardTitle" text-anchor="middle">StringTable Insert</text>
+    <text x="106" y="450" class="detail" text-anchor="start">name/city/address/age</text>
+    <text x="106" y="469" class="detail" text-anchor="start">encryptedVarchar()</text>
+  </g>
+  <g data-card="StringTable Update" data-x="386" data-y="388" data-width="250" data-height="108">
+    <rect x="386" y="388" width="250" height="108" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card" />
+    <path class="header" d="M386,430 L386,402 Q386,388 400,388 L622,388 Q636,388 636,402 L636,430 Z" fill="#eef7f6" />
+    <text x="511" y="406" class="tiny" text-anchor="middle">&lt;&lt;local table&gt;&gt;</text>
+    <text x="511" y="425" class="cardTitle" text-anchor="middle">StringTable Update</text>
+    <text x="406" y="450" class="detail" text-anchor="start">varchar + binary columns</text>
+    <text x="406" y="469" class="detail" text-anchor="start">encryptedBinary()</text>
+  </g>
+  <g data-card="Column Helpers" data-x="686" data-y="388" data-width="250" data-height="108">
+    <rect x="686" y="388" width="250" height="108" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card" />
+    <path class="header" d="M686,430 L686,402 Q686,388 700,388 L922,388 Q936,388 936,402 L936,430 Z" fill="#f5eee4" />
+    <text x="811" y="406" class="tiny" text-anchor="middle">&lt;&lt;extension&gt;&gt;</text>
+    <text x="811" y="425" class="cardTitle" text-anchor="middle">Column Helpers</text>
+    <text x="706" y="450" class="detail" text-anchor="start">encryptedVarchar</text>
+    <text x="706" y="469" class="detail" text-anchor="start">encryptedBinary</text>
+  </g>
+  <g data-card="SQL Log Captor" data-x="986" data-y="388" data-width="250" data-height="108">
+    <rect x="986" y="388" width="250" height="108" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2" class="card" />
+    <path class="header" d="M986,430 L986,402 Q986,388 1000,388 L1222,388 Q1236,388 1236,402 L1236,430 Z" fill="#f5eef2" />
+    <text x="1111" y="406" class="tiny" text-anchor="middle">&lt;&lt;assertion helper&gt;&gt;</text>
+    <text x="1111" y="425" class="cardTitle" text-anchor="middle">SQL Log Captor</text>
+    <text x="1006" y="450" class="detail" text-anchor="start">LogCaptor.forName()</text>
+    <text x="1006" y="469" class="detail" text-anchor="start">plaintext not logged</text>
+  </g>
+
+  <g data-card="Search Limitation" data-x="104" data-y="650" data-width="250" data-height="82">
+    <rect x="104" y="650" width="250" height="82" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card" />
+    <path class="header" d="M104,690 L104,664 Q104,650 118,650 L340,650 Q354,650 354,664 L354,690 Z" fill="#f5eee4" />
+    <text x="229" y="668" class="tiny" text-anchor="middle">&lt;&lt;test&gt;&gt;</text>
+    <text x="229" y="687" class="cardTitle" text-anchor="middle">Search Limitation</text>
+    <text x="124" y="712" class="detail" text-anchor="start">eq encrypted value fails</text>
+  </g>
+  <g data-card="Transparent CRUD" data-x="386" data-y="650" data-width="250" data-height="82">
+    <rect x="386" y="650" width="250" height="82" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card" />
+    <path class="header" d="M386,690 L386,664 Q386,650 400,650 L622,650 Q636,650 636,664 L636,690 Z" fill="#eef5fa" />
+    <text x="511" y="668" class="tiny" text-anchor="middle">&lt;&lt;test&gt;&gt;</text>
+    <text x="511" y="687" class="cardTitle" text-anchor="middle">Transparent CRUD</text>
+    <text x="406" y="712" class="detail" text-anchor="start">insert/update then decrypt</text>
+  </g>
+  <g data-card="Length Contract" data-x="668" data-y="650" data-width="250" data-height="82">
+    <rect x="668" y="650" width="250" height="82" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card" />
+    <path class="header" d="M668,690 L668,664 Q668,650 682,650 L904,650 Q918,650 918,664 L918,690 Z" fill="#f1f6ec" />
+    <text x="793" y="668" class="tiny" text-anchor="middle">&lt;&lt;test&gt;&gt;</text>
+    <text x="793" y="687" class="cardTitle" text-anchor="middle">Length Contract</text>
+    <text x="688" y="712" class="detail" text-anchor="start">maxColLength matches output</text>
+  </g>
+  <g data-card="No Plaintext SQL" data-x="950" data-y="650" data-width="250" data-height="82">
+    <rect x="950" y="650" width="250" height="82" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2" class="card" />
+    <path class="header" d="M950,690 L950,664 Q950,650 964,650 L1186,650 Q1200,650 1200,664 L1200,690 Z" fill="#f5eef2" />
+    <text x="1075" y="668" class="tiny" text-anchor="middle">&lt;&lt;test&gt;&gt;</text>
+    <text x="1075" y="687" class="cardTitle" text-anchor="middle">No Plaintext SQL</text>
+    <text x="970" y="712" class="detail" text-anchor="start">logs contain no secrets</text>
+  </g>
+
+  <path class="inherit" data-connector="inherits"  d="M520 229 L456 229" />
+  <polygon class="head"  points="440,229 456,220 456,238"  stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector" data-connector="class-algorithms" d="M840 229 L920 229" stroke="#a66a3f" marker-end="url(#arrow-brown)" />
+  <path class="connector" data-connector="class-insert-table" d="M680 270 L680 302 Q680 318 664 318 L227 318 Q211 318 211 334 L211 388" stroke="#4f86c6" marker-end="url(#arrow-blue)" />
+  <path class="connector" data-connector="class-update-table" d="M680 270 L680 302 Q680 318 664 318 L527 318 Q511 318 511 334 L511 388" stroke="#4f8f8b" marker-end="url(#arrow-teal)" />
+  <path class="connector" data-connector="algorithms-helpers" d="M1050 270 L1050 318 Q1050 334 1034 334 L827 334 Q811 334 811 350 L811 388" stroke="#a66a3f" marker-end="url(#arrow-brown)" />
+  <path class="connector" data-connector="helpers-log" d="M936 442 L986 442" stroke="#a85f7f" marker-end="url(#arrow-rose)" />
+  <path class="connector" data-connector="update-crud" d="M511 496 L511 650" stroke="#4f8f8b" marker-end="url(#arrow-teal)" />
+  <path class="connector" data-connector="helpers-length" d="M811 496 L811 650" stroke="#6f8f52" marker-end="url(#arrow-green)" />
+  <path class="connector" data-connector="log-no-plain" d="M1111 496 L1111 650" stroke="#a85f7f" marker-end="url(#arrow-rose)" />
+  <path class="connector" data-connector="insert-search" d="M211 496 L211 650" stroke="#a66a3f" marker-end="url(#arrow-brown)" />
+
+  <rect x="86" y="788" width="1148" height="30" rx="10" class="noteBox" />
+  <text x="660" y="808" class="note" text-anchor="middle">Default encryptors are non-deterministic: plaintext is transparent to Kotlin code, hidden from SQL logs, and unsuitable for equality search.</text>
 </svg>

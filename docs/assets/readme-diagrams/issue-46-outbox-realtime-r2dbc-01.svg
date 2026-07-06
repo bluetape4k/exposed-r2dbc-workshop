@@ -1,87 +1,153 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
-  <title id="title">Chapter 12 Realtime Outbox Delivery</title>
-  <desc id="desc">Spring Boot 4 SSE and Ktor WebSocket examples persist work-item events to an Exposed R2DBC outbox before publishing PUBLISHED or FAILED delivery state.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1160" viewBox="0 0 1800 1160" role="img" aria-label="Chapter 12 realtime outbox delivery">
   <defs>
+    <filter id="softShadow" x="-8%" y="-10%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#25384d" flood-opacity="0.12"/>
+    </filter>
+    <marker id="arrowBlue" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowGreen" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowAmber" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#a36f3e" stroke="#a36f3e" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
     <style>
-      .bg { fill: #f8fafc; }
-      .panel { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; rx: 18; }
-      .spring { fill: #ecfdf5; stroke: #2f855a; }
-      .ktor { fill: #eef2ff; stroke: #4f46e5; }
-      .db { fill: #fff7ed; stroke: #c2410c; }
-      .state { fill: #fefce8; stroke: #a16207; }
-      .title { font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive; font-size:34px; font-weight:400; fill: #172033; }
-      .subtitle { font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif; font-size:18px; font-weight:400; fill: #516070; }
-      .label { font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive; font-size:20px; font-weight:400; fill: #172033; }
-      .small { font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif; font-size:15px; font-weight:400; fill: #425466; }
-      .mono { font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive; font-size:14px; font-weight:400; fill: #172033; }
-      .arrow { stroke: #5d6b7a; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fffefa;stroke:#d7e3ed;stroke-width:2}
+      .lane{stroke-width:1.8}
+      .laneSpring{fill:#f5f9ff;stroke:#bdd7ee}
+      .laneKtor{fill:#f7fbf2;stroke:#c9dfbb}
+      .laneData{fill:#fbf7f0;stroke:#dfc39d}
+      .card{filter:url(#softShadow);stroke-width:2.6}
+      .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:52px;fill:#192538;font-weight:400}
+      .subtitle,.laneTitle,.body,.foot{font-family:"Comic Mono","Comic Sans MS","Comic Sans",monospace;font-weight:700;fill:#556678}
+      .subtitle{font-size:20px}
+      .laneTitle{font-size:16px;letter-spacing:.07em;fill:#8aa0b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:26px;fill:#192538;font-weight:400}
+      .body{font-size:16px}
+      .small{font-size:14px}
+      .foot{font-size:15px}
+      .connector{fill:none;stroke-width:4.4;stroke-linecap:round;stroke-linejoin:round}
+      .blue{stroke:#4f86c6;marker-end:url(#arrowBlue)}
+      .green{stroke:#6f8f52;marker-end:url(#arrowGreen)}
+      .amber{stroke:#a36f3e;marker-end:url(#arrowAmber)}
+      .h2Icon path{fill:#09476B}
     </style>
-    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,4.5 L1,8 Z" fill="#5D6B7A"/></marker>
   </defs>
 
-  <rect class="bg" width="1400" height="760"/>
-  <text x="70" y="70" class="title">Realtime Outbox Delivery</text>
-  <text x="70" y="105" class="subtitle">Persist domain events first, publish pending rows, then replay only published events by cursor</text>
+  <rect class="canvas" width="1800" height="1160"/>
+  <rect class="frame" x="32" y="32" width="1736" height="1096" rx="26"/>
 
-  <rect x="60" y="145" width="590" height="450" class="panel spring"/>
-  <text x="95" y="190" class="label">Spring Boot 4 WebFlux SSE</text>
-  <text x="95" y="220" class="small">API-key protected work writes feed an SSE replay and live hub</text>
+  <text class="title" x="86" y="112">Realtime Outbox Delivery</text>
+  <text class="subtitle" x="90" y="154">Accepted work writes a pending outbox row first; delivery must accept before the row becomes publishable replay state.</text>
 
-  <rect x="100" y="260" width="180" height="78" class="panel"/>
-  <text x="125" y="292" class="mono">work-items</text>
-  <text x="125" y="315" class="small">validate + accept</text>
+  <rect class="lane laneSpring" x="70" y="205" width="795" height="575" rx="18"/>
+  <text class="laneTitle" x="96" y="239">SPRING SSE PATH</text>
 
-  <rect x="330" y="260" width="190" height="78" class="panel db"/>
-  <text x="355" y="292" class="mono">R2DBC tx</text>
-  <text x="355" y="315" class="small">work row + outbox row</text>
+  <rect class="lane laneKtor" x="935" y="205" width="795" height="575" rx="18"/>
+  <text class="laneTitle" x="961" y="239">KTOR WEBSOCKET PATH</text>
 
-  <rect x="330" y="385" width="190" height="78" class="panel state"/>
-  <text x="355" y="417" class="mono">PENDING</text>
-  <text x="355" y="440" class="small">attempt counter = 0</text>
+  <rect class="lane laneData" x="70" y="810" width="1660" height="255" rx="18"/>
+  <text class="laneTitle" x="96" y="844">R2DBC OUTBOX STATE CONTRACT</text>
 
-  <rect x="100" y="385" width="180" height="78" class="panel"/>
-  <text x="125" y="417" class="mono">publish</text>
-  <text x="125" y="440" class="small">delivery boundary</text>
+  <g data-card="Spring work command">
+    <rect class="card" x="115" y="285" width="320" height="120" rx="14" fill="#ffffff" stroke="#4f86c6"/>
+    <text class="cardTitle" x="275" y="326" text-anchor="middle">Work Command API</text>
+    <text class="body" x="275" y="357" text-anchor="middle">POST /production/work-items</text>
+    <text class="body small" x="275" y="381" text-anchor="middle">X-Api-Key requires work:create</text>
+  </g>
 
-  <rect x="215" y="510" width="210" height="60" class="panel state"/>
-  <text x="240" y="535" class="mono">PUBLISHED / FAILED</text>
-  <text x="240" y="557" class="small">status is stored</text>
+  <g data-card="Spring write transaction">
+    <rect class="card" x="115" y="500" width="320" height="130" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+    <text class="cardTitle" x="275" y="542" text-anchor="middle">Repository Transaction</text>
+    <text class="body" x="275" y="573" text-anchor="middle">createWorkItem()</text>
+    <text class="body small" x="275" y="599" text-anchor="middle">WorkItems + PENDING OutboxEvents</text>
+  </g>
 
-  <path class="arrow" d="M280 299 H330"/>
-  <path class="arrow" d="M425 338 V385"/>
-  <path class="arrow" d="M330 424 H280"/>
-  <path class="arrow" d="M190 463 C190 500 215 510 260 520"/>
+  <g data-card="Spring sse stream">
+    <rect class="card" x="505" y="285" width="320" height="120" rx="14" fill="#ffffff" stroke="#4f86c6"/>
+    <text class="cardTitle" x="665" y="326" text-anchor="middle">SSE Replay Stream</text>
+    <text class="body" x="665" y="357" text-anchor="middle">GET /production/realtime</text>
+    <text class="body small" x="665" y="381" text-anchor="middle">replay after sequence, then hub live()</text>
+  </g>
 
-  <rect x="750" y="145" width="590" height="450" class="panel ktor"/>
-  <text x="785" y="190" class="label">Ktor WebSocket Realtime</text>
-  <text x="785" y="220" class="small">Signed session cookie protects work, publish, outbox, and WebSocket endpoints</text>
+  <g data-card="Spring publish pending">
+    <rect class="card" x="505" y="500" width="320" height="130" rx="14" fill="#ffffff" stroke="#6f8f52"/>
+    <text class="cardTitle" x="665" y="542" text-anchor="middle">Publish Pending</text>
+    <text class="body" x="665" y="573" text-anchor="middle">POST /production/outbox/publish</text>
+    <text class="body small" x="665" y="599" text-anchor="middle">deliver() true -> PUBLISHED</text>
+  </g>
 
-  <rect x="790" y="260" width="180" height="78" class="panel"/>
-  <text x="815" y="292" class="mono">auth-session</text>
-  <text x="815" y="315" class="small">cookie token check</text>
+  <g data-card="Ktor work command">
+    <rect class="card" x="980" y="285" width="320" height="120" rx="14" fill="#ffffff" stroke="#6f8f52"/>
+    <text class="cardTitle" x="1140" y="326" text-anchor="middle">Work Command Route</text>
+    <text class="body" x="1140" y="357" text-anchor="middle">POST /production/work-items</text>
+    <text class="body small" x="1140" y="381" text-anchor="middle">signed session requires work:create</text>
+  </g>
 
-  <rect x="1020" y="260" width="190" height="78" class="panel db"/>
-  <text x="1045" y="292" class="mono">R2DBC outbox</text>
-  <text x="1045" y="315" class="small">same table shape</text>
+  <g data-card="Ktor write transaction">
+    <rect class="card" x="980" y="500" width="320" height="130" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+    <text class="cardTitle" x="1140" y="542" text-anchor="middle">Repository Transaction</text>
+    <text class="body" x="1140" y="573" text-anchor="middle">createWorkItem()</text>
+    <text class="body small" x="1140" y="599" text-anchor="middle">matching table write contract</text>
+  </g>
 
-  <rect x="1020" y="385" width="190" height="78" class="panel state"/>
-  <text x="1045" y="417" class="mono">replay after=N</text>
-  <text x="1045" y="440" class="small">published rows only</text>
+  <g data-card="Ktor websocket stream">
+    <rect class="card" x="1370" y="285" width="320" height="120" rx="14" fill="#ffffff" stroke="#6f8f52"/>
+    <text class="cardTitle" x="1530" y="326" text-anchor="middle">WebSocket Stream</text>
+    <text class="body" x="1530" y="357" text-anchor="middle">/production/realtime</text>
+    <text class="body small" x="1530" y="381" text-anchor="middle">replay first, then MutableSharedFlow live</text>
+  </g>
 
-  <rect x="790" y="385" width="180" height="78" class="panel"/>
-  <text x="815" y="417" class="mono">live hub</text>
-  <text x="815" y="440" class="small">dedupe by sequence</text>
+  <g data-card="Ktor publish pending">
+    <rect class="card" x="1370" y="500" width="320" height="130" rx="14" fill="#ffffff" stroke="#6f8f52"/>
+    <text class="cardTitle" x="1530" y="542" text-anchor="middle">Publish Pending</text>
+    <text class="body" x="1530" y="573" text-anchor="middle">POST /production/outbox/publish</text>
+    <text class="body small" x="1530" y="599" text-anchor="middle">delivery failure keeps error state</text>
+  </g>
 
-  <rect x="905" y="510" width="210" height="60" class="panel state"/>
-  <text x="930" y="535" class="mono">WebSocket frames</text>
-  <text x="930" y="557" class="small">replay + live stream</text>
+  <g data-card="Spring realtime tables">
+    <rect class="card" x="145" y="885" width="510" height="125" rx="14" fill="#ffffff" stroke="#a36f3e"/>
+    <g class="h2Icon" data-bluetape4k-icon="database/h2.svg" transform="translate(181 917) scale(1.45)">
+      <path d="M17.17 13.27c.14-.015.28-.023.416-.023.7 0 1.228.159 1.599.469.37.314.555.756.555 1.334a2.861 2.861 0 0 1-.43 1.455c-.291.492-.775 1.066-1.46 1.727-.453.446-1.061.976-1.821 1.592a48.02 48.02 0 0 1-2.275 1.742v2.083h9.895V21.24H17.99c.219-.159.59-.435 1.11-.832.519-.4 1.033-.835 1.55-1.311.817-.76 1.425-1.5 1.822-2.215a4.624 4.624 0 0 0 .597-2.268c0-1.213-.416-2.154-1.247-2.815-.828-.662-2.033-.994-3.613-.994-.344 0-.692.015-1.036.049V6.04H13.86v4.701H8.965V6.04H5.65v12.846h3.315v-5.661h4.89v5.661h.039c.31-.242.623-.487.933-.74a28.564 28.564 0 0 0 1.826-1.588 14.854 14.854 0 0 0 .517-.529zM12.011 23.3A11.327 11.327 0 0 1 .7 11.99 11.305 11.305 0 0 1 12.011.699a11.286 11.286 0 0 1 11.29 11.29v.351H24v-.351A11.985 11.985 0 0 0 12.011 0 12.008 12.008 0 0 0 0 11.989 12.026 12.026 0 0 0 12.011 24h.352v-.7z"/>
+    </g>
+    <text class="cardTitle" x="430" y="925" text-anchor="middle">Spring Work + Outbox Tables</text>
+    <text class="body small" x="430" y="955" text-anchor="middle">spring_prod_work_items and spring_prod_outbox_events</text>
+    <text class="body small" x="430" y="979" text-anchor="middle">sequence, status, attempts, last_error drive replay</text>
+  </g>
 
-  <path class="arrow" d="M970 299 H1020"/>
-  <path class="arrow" d="M1115 338 V385"/>
-  <path class="arrow" d="M1020 424 H970"/>
-  <path class="arrow" d="M880 463 C880 500 905 510 950 520"/>
+  <g data-card="Outbox status rule">
+    <rect class="card" x="715" y="885" width="370" height="125" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+    <text class="cardTitle" x="900" y="925" text-anchor="middle">Publish State Rule</text>
+    <text class="body small" x="900" y="955" text-anchor="middle">PENDING rows are attempted under a mutex</text>
+    <text class="body small" x="900" y="979" text-anchor="middle">PUBLISHED rows are replayed when sequence &gt; after</text>
+  </g>
 
-  <rect x="305" y="630" width="790" height="70" class="panel"/>
-  <text x="335" y="660" class="label">Verified realtime outcomes</text>
-  <text x="335" y="685" class="small">event persistence, publish transition, cursor replay boundary, live stream delivery, and failed delivery retention</text>
+  <g data-card="Ktor realtime tables">
+    <rect class="card" x="1145" y="885" width="510" height="125" rx="14" fill="#ffffff" stroke="#a36f3e"/>
+    <g class="h2Icon" data-bluetape4k-icon="database/h2.svg" transform="translate(1181 917) scale(1.45)">
+      <path d="M17.17 13.27c.14-.015.28-.023.416-.023.7 0 1.228.159 1.599.469.37.314.555.756.555 1.334a2.861 2.861 0 0 1-.43 1.455c-.291.492-.775 1.066-1.46 1.727-.453.446-1.061.976-1.821 1.592a48.02 48.02 0 0 1-2.275 1.742v2.083h9.895V21.24H17.99c.219-.159.59-.435 1.11-.832.519-.4 1.033-.835 1.55-1.311.817-.76 1.425-1.5 1.822-2.215a4.624 4.624 0 0 0 .597-2.268c0-1.213-.416-2.154-1.247-2.815-.828-.662-2.033-.994-3.613-.994-.344 0-.692.015-1.036.049V6.04H13.86v4.701H8.965V6.04H5.65v12.846h3.315v-5.661h4.89v5.661h.039c.31-.242.623-.487.933-.74a28.564 28.564 0 0 0 1.826-1.588 14.854 14.854 0 0 0 .517-.529zM12.011 23.3A11.327 11.327 0 0 1 .7 11.99 11.305 11.305 0 0 1 12.011.699a11.286 11.286 0 0 1 11.29 11.29v.351H24v-.351A11.985 11.985 0 0 0 12.011 0 12.008 12.008 0 0 0 0 11.989 12.026 12.026 0 0 0 12.011 24h.352v-.7z"/>
+    </g>
+    <text class="cardTitle" x="1430" y="925" text-anchor="middle">Ktor Work + Outbox Tables</text>
+    <text class="body small" x="1430" y="955" text-anchor="middle">ktor_prod_work_items and ktor_prod_outbox_events</text>
+    <text class="body small" x="1430" y="979" text-anchor="middle">same status columns back WebSocket replay/live flow</text>
+  </g>
+
+  <path class="connector blue" data-connector="spring-command-transaction" d="M 275 405 L 275 495"/>
+  <path class="connector amber" data-connector="spring-transaction-tables" d="M 275 630 L 275 880"/>
+  <path class="connector blue" data-connector="spring-transaction-publish" d="M 435 565 L 500 565"/>
+  <path class="connector green" data-connector="spring-publish-sse" d="M 665 500 L 665 410"/>
+  <path class="connector amber" data-connector="spring-publish-state" d="M 665 630 L 665 738 Q 665 754 649 754 L 416 754 Q 400 754 400 770 L 400 880"/>
+  <path class="connector blue" data-connector="spring-tables-status" d="M 655 947 L 710 947"/>
+
+  <path class="connector green" data-connector="ktor-command-transaction" d="M 1140 405 L 1140 495"/>
+  <path class="connector amber" data-connector="ktor-transaction-tables" d="M 1140 630 L 1140 738 Q 1140 754 1156 754 L 1400 754 Q 1416 754 1416 770 L 1416 880"/>
+  <path class="connector green" data-connector="ktor-transaction-publish" d="M 1300 565 L 1365 565"/>
+  <path class="connector green" data-connector="ktor-publish-websocket" d="M 1530 500 L 1530 410"/>
+  <path class="connector amber" data-connector="ktor-publish-state" d="M 1530 630 L 1530 880"/>
+  <path class="connector blue" data-connector="ktor-tables-status" d="M 1145 947 L 1090 947"/>
+
+  <rect x="180" y="1028" width="1440" height="38" rx="12" fill="#ecfdf5" stroke="#86cfa0" stroke-width="1.8"/>
+  <text class="foot" x="900" y="1053" text-anchor="middle">Spring emits Server-Sent Events and Ktor emits WebSocket frames, but both replay only persisted PUBLISHED outbox rows.</text>
 </svg>

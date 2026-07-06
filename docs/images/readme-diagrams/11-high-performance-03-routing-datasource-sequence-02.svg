@@ -1,91 +1,202 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="2850" height="1162" viewBox="0 0 2850 1162" role="img" aria-label="Request → Routing → DB Selection Flow (sequenceDiagram)">
-<defs>
-<filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
-<marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-<style>.canvas{fill:#F7F9FC}.frame{fill:#fff;stroke:#D8E0EA;stroke-width:1.5}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:39px;font-weight:400;fill:#102033}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;font-weight:400;fill:#536273}.smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:22px;font-weight:400;fill:#102033}.strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}.card{stroke-width:2;filter:url(#shadow)}.line{stroke:#5D6B7A;stroke-width:2.2;fill:none;marker-end:url(#openArrow)}.dashed{stroke:#5D6B7A;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}.lifeline{stroke:#B7C2D1;stroke-width:1.8;stroke-dasharray:8 9}.note{fill:#fff;opacity:.97}</style>
-</defs>
-<rect class="canvas" width="2850" height="1162"/>
-<rect class="frame" x="24" y="24" width="2802" height="1106" rx="22"/>
-<text class="title" x="58" y="76">Request → Routing → DB Selection Flow (sequenceDiagram)</text>
-<text class="subtitle" x="62" y="106">Compact sequence flow with reduced outer and inner whitespace</text>
-<rect class="card" x="50.0" y="156" width="220" height="66" rx="16" fill="#E8F3FF" stroke="#5B8DEF"/>
-<text class="smallLabel participant" x="160.0" y="196" text-anchor="middle">HTTP Client</text>
-<line class="lifeline" x1="160.0" y1="250" x2="160.0" y2="1100"/>
-<rect class="card" x="280.0" y="156" width="220" height="66" rx="16" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel participant" x="390.0" y="196" text-anchor="middle">Tenant Routing Web</text>
-<line class="lifeline" x1="390.0" y1="250" x2="390.0" y2="1100"/>
-<rect class="card" x="510.0" y="156" width="220" height="66" rx="16" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel participant" x="620.0" y="196" text-anchor="middle">Filter</text>
-<line class="lifeline" x1="620.0" y1="250" x2="620.0" y2="1100"/>
-<rect class="card" x="740.0" y="156" width="220" height="66" rx="16" fill="#FDECEF" stroke="#DC6B82"/>
-<text class="smallLabel participant" x="850.0" y="196" text-anchor="middle">Routing Marker</text>
-<line class="lifeline" x1="850.0" y1="250" x2="850.0" y2="1100"/>
-<rect class="card" x="970.0" y="156" width="220" height="66" rx="16" fill="#F1ECFF" stroke="#8A72D6"/>
-<text class="smallLabel participant" x="1080.0" y="196" text-anchor="middle">Controller</text>
-<line class="lifeline" x1="1080.0" y1="250" x2="1080.0" y2="1100"/>
-<rect class="card" x="1200.0" y="156" width="220" height="66" rx="16" fill="#E9F7F6" stroke="#45A7A1"/>
-<text class="smallLabel participant" x="1310.0" y="196" text-anchor="middle">Routing</text>
-<line class="lifeline" x1="1310.0" y1="250" x2="1310.0" y2="1100"/>
-<rect class="card" x="1430.0" y="156" width="220" height="66" rx="16" fill="#E8F3FF" stroke="#5B8DEF"/>
-<text class="smallLabel participant" x="1540.0" y="196" text-anchor="middle">Transactional</text>
-<line class="lifeline" x1="1540.0" y1="250" x2="1540.0" y2="1100"/>
-<rect class="card" x="1660.0" y="156" width="220" height="66" rx="16" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel participant" x="1770.0" y="196" text-anchor="middle">Dynamic Routing</text>
-<line class="lifeline" x1="1770.0" y1="250" x2="1770.0" y2="1100"/>
-<rect class="card" x="1890.0" y="156" width="220" height="66" rx="16" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel participant" x="2000.0" y="196" text-anchor="middle">Connection Factory</text>
-<line class="lifeline" x1="2000.0" y1="250" x2="2000.0" y2="1100"/>
-<rect class="card" x="2120.0" y="156" width="220" height="66" rx="16" fill="#FDECEF" stroke="#DC6B82"/>
-<text class="smallLabel participant" x="2230.0" y="196" text-anchor="middle">Connection Factory</text>
-<line class="lifeline" x1="2230.0" y1="250" x2="2230.0" y2="1100"/>
-<rect class="card" x="2350.0" y="156" width="220" height="66" rx="16" fill="#F1ECFF" stroke="#8A72D6"/>
-<text class="smallLabel participant" x="2460.0" y="196" text-anchor="middle">Registry</text>
-<line class="lifeline" x1="2460.0" y1="250" x2="2460.0" y2="1100"/>
-<rect class="card" x="2580.0" y="156" width="220" height="66" rx="16" fill="#E9F7F6" stroke="#45A7A1"/>
-<text class="smallLabel participant" x="2690.0" y="196" text-anchor="middle">Actual DB</text>
-<line class="lifeline" x1="2690.0" y1="250" x2="2690.0" y2="1100"/>
-<path class="line" d="M160.0 292.0 L390.0 292.0" data-connector="line"/>
-<rect class="note label" x="110.1" y="260.0" width="329.8" height="28" rx="9"/>
-<text class="strong labelText" x="275.0" y="280.0" text-anchor="middle">1. GET /routing/marker/readonly X-Tenant-Id: acme</text>
-<path class="line" d="M390.0 366.0 C452.0 366.0 452.0 396.0 390.0 396.0" data-connector="line"/>
-<rect class="note label" x="460.0" y="356.0" width="212.0" height="28" rx="9"/>
-<text class="strong labelText" x="460.0" y="376.0" text-anchor="start">2. TENANT=acme, READ_ONLY=true</text>
-<path class="line" d="M390.0 440.0 L850.0 440.0" data-connector="line"/>
-<rect class="note label" x="501.6" y="408.0" width="236.8" height="28" rx="9"/>
-<text class="strong labelText" x="620.0" y="428.0" text-anchor="middle">3. contextWrite(TENANT, READ_ONLY)</text>
-<path class="line" d="M850.0 514.0 L1310.0 514.0" data-connector="line"/>
-<rect class="note label" x="974.0" y="482.0" width="212.0" height="28" rx="9"/>
-<text class="strong labelText" x="1080.0" y="502.0" text-anchor="middle">4. txExecutor.readOnly { ... }</text>
-<path class="line" d="M1310.0 588.0 L1770.0 588.0" data-connector="line"/>
-<rect class="note label" x="1331.7" y="556.0" width="416.6" height="28" rx="9"/>
-<text class="strong labelText" x="1540.0" y="576.0" text-anchor="middle">5. readOnlyOperator.execute(Mono) contextWrite(READ_ONLY, true)</text>
-<path class="line" d="M1770.0 662.0 C1832.0 662.0 1832.0 692.0 1770.0 692.0" data-connector="line"/>
-<rect class="note label" x="1840.0" y="652.0" width="379.4" height="28" rx="9"/>
-<text class="strong labelText" x="1840.0" y="672.0" text-anchor="start">6. Mono.deferContextual keyResolver.currentLookupKey(ctx)</text>
-<path class="line" d="M1770.0 736.0 L2230.0 736.0" data-connector="line"/>
-<rect class="note label" x="1920.0" y="704.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="2000.0" y="724.0" text-anchor="middle">7. get(acme:ro)</text>
-<path class="dashed" d="M2230.0 810.0 L1770.0 810.0" data-connector="dashed"/>
-<rect class="note label" x="1894.0" y="778.0" width="212.0" height="28" rx="9"/>
-<text class="strong labelText" x="2000.0" y="798.0" text-anchor="middle">8. ConnectionFactory (acme RO)</text>
-<path class="line" d="M1770.0 884.0 L2690.0 884.0" data-connector="line"/>
-<rect class="note label" x="2142.6" y="852.0" width="174.8" height="28" rx="9"/>
-<text class="strong labelText" x="2230.0" y="872.0" text-anchor="middle">9. create() → Connection</text>
-<path class="dashed" d="M2690.0 958.0 L850.0 958.0" data-connector="dashed"/>
-<rect class="note label" x="1690.0" y="926.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="1770.0" y="946.0" text-anchor="middle">10. Query result</text>
-<path class="dashed" d="M850.0 1032.0 L160.0 1032.0" data-connector="dashed"/>
-<rect class="note label" x="349.4" y="1000.0" width="311.2" height="28" rx="9"/>
-<text class="strong labelText" x="505.0" y="1020.0" text-anchor="middle">11. JSON response {tenant:acme, readOnly:true}</text>
-<rect class="activation" x="154.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="384.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="614.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="2380" height="1480" viewBox="0 0 2380 1480" role="img" aria-label="Request routing to tenant read-only database selection sequence">
+  <defs>
+    <filter id="softShadow" x="-8%" y="-10%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#25384d" flood-opacity="0.10"/>
+    </filter>
+    <marker id="arrowBlue" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#3f83b8" stroke="#3f83b8" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowGreen" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowAmber" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#a36f3e" stroke="#a36f3e" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowTeal" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fffefa;stroke:#d7e3ed;stroke-width:2}
+      .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:44px;fill:#192538;font-weight:400}
+      .subtitle,.foot{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:17px;font-weight:700;fill:#556678}
+      .participantTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:24px;fill:#192538;font-weight:400}
+      .participantRole,.role{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:700;fill:#556678}
+      .labelText{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:700;fill:#40566e}
+      .num{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:16px;font-weight:700}
+      .card{stroke-width:2.4;filter:url(#softShadow)}
+      .lifeline{stroke:#9fb1c2;stroke-width:2.1;stroke-dasharray:8 10}
+      .activation{fill:#f9fffb;stroke:#7ca985;stroke-width:2.2}
+      .connector{fill:none;stroke-width:3.1;stroke-linecap:round;stroke-linejoin:round}
+      .blue{stroke:#3f83b8;marker-end:url(#arrowBlue)}
+      .green{stroke:#6f8f52;marker-end:url(#arrowGreen)}
+      .amber{stroke:#a36f3e;marker-end:url(#arrowAmber)}
+      .teal{stroke:#4f8f8b;marker-end:url(#arrowTeal)}
+      .return{stroke-dasharray:10 8}
+      .label{fill:#fffefa;stroke-width:2}
+      .labelBlue{stroke:#abd0e9}
+      .labelGreen{stroke:#b9d5aa}
+      .labelAmber{stroke:#d7b37e}
+      .labelTeal{stroke:#a7d0cc}
+      .pillBlue{fill:#f9fcff;stroke:#74afd7}
+      .pillGreen{fill:#fbfff7;stroke:#91b576}
+      .pillAmber{fill:#fff9ee;stroke:#bd8b50}
+      .pillTeal{fill:#f7fffe;stroke:#79b8b3}
+    </style>
+  </defs>
 
-<!-- audit badge labels: visible sequence numbering and message pill samples -->
-<g aria-label="sequence message labels">
-<rect x="58" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="76" y="140" class="num" text-anchor="middle">1</text>
-<rect x="102" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="120" y="140" class="num" text-anchor="middle">2</text>
-</g>
+  <rect class="canvas" width="2380" height="1480"/>
+  <rect class="frame" x="32" y="32" width="2316" height="1416" rx="24"/>
+
+  <text class="title" x="82" y="96">Request Routing To Tenant Read-Only DB</text>
+  <text class="subtitle" x="86" y="132">Spring WebFlux request writes tenant/read-only hints; DynamicRoutingConnectionFactory resolves acme:ro and delegates to the registered target ConnectionFactory.</text>
+
+  <g id="participants">
+    <rect class="card" x="60" y="180" width="180" height="88" rx="13" fill="#ffffff" stroke="#5d7486"/>
+    <text class="participantTitle participant" x="150" y="222" text-anchor="middle">HTTP Client</text>
+    <text class="participantRole role" x="150" y="248" text-anchor="middle">WebTestClient</text>
+    <line class="lifeline" x1="150" y1="306" x2="150" y2="1370"/>
+
+    <rect class="card" x="290" y="180" width="220" height="88" rx="13" fill="#f8fcf7" stroke="#5d7486"/>
+    <text class="participantTitle participant" x="400" y="222" text-anchor="middle">TenantRouting</text>
+    <text class="participantRole role" x="400" y="248" text-anchor="middle">WebFilter</text>
+    <line class="lifeline" x1="400" y1="306" x2="400" y2="1370"/>
+
+    <rect class="card" x="540" y="180" width="230" height="88" rx="13" fill="#f7fcff" stroke="#5d7486"/>
+    <text class="participantTitle participant" x="655" y="222" text-anchor="middle">RoutingMarker</text>
+    <text class="participantRole role" x="655" y="248" text-anchor="middle">Controller</text>
+    <line class="lifeline" x1="655" y1="306" x2="655" y2="1370"/>
+
+    <rect class="card" x="805" y="180" width="230" height="88" rx="13" fill="#f8fcf7" stroke="#5d7486"/>
+    <text class="participantTitle participant" x="920" y="222" text-anchor="middle">RoutingTx</text>
+    <text class="participantRole role" x="920" y="248" text-anchor="middle">Executor</text>
+    <line class="lifeline" x1="920" y1="306" x2="920" y2="1370"/>
+
+    <rect class="card" x="1070" y="180" width="230" height="88" rx="13" fill="#f7fffe" stroke="#5d7486"/>
+    <text class="participantTitle participant" x="1185" y="222" text-anchor="middle">RoutingMarker</text>
+    <text class="participantRole role" x="1185" y="248" text-anchor="middle">Repository</text>
+    <line class="lifeline" x1="1185" y1="306" x2="1185" y2="1370"/>
+
+    <rect class="card" x="1335" y="180" width="250" height="88" rx="13" fill="#fff9ef" stroke="#5d7486"/>
+    <text class="participantTitle participant" x="1460" y="222" text-anchor="middle">DynamicRouting</text>
+    <text class="participantRole role" x="1460" y="248" text-anchor="middle">ConnectionFactory</text>
+    <line class="lifeline" x1="1460" y1="306" x2="1460" y2="1370"/>
+
+    <rect class="card" x="1625" y="180" width="230" height="88" rx="13" fill="#fff7f7" stroke="#5d7486"/>
+    <text class="participantTitle participant" x="1740" y="222" text-anchor="middle">ContextAware</text>
+    <text class="participantRole role" x="1740" y="248" text-anchor="middle">KeyResolver</text>
+    <line class="lifeline" x1="1740" y1="306" x2="1740" y2="1370"/>
+
+    <rect class="card" x="1875" y="180" width="220" height="88" rx="13" fill="#f8fcff" stroke="#5d7486"/>
+    <text class="participantTitle participant" x="1985" y="214" text-anchor="middle">Connection</text>
+    <text class="participantTitle participant" x="1985" y="238" text-anchor="middle">Factory</text>
+    <text class="participantRole role" x="1985" y="260" text-anchor="middle">Registry</text>
+    <line class="lifeline" x1="1985" y1="306" x2="1985" y2="1370"/>
+
+    <rect class="card" x="2115" y="180" width="220" height="88" rx="13" fill="#fff9ef" stroke="#5d7486"/>
+    <text class="participantTitle participant" x="2225" y="222" text-anchor="middle">Tenant DB</text>
+    <text class="participantRole role" x="2225" y="248" text-anchor="middle">acme:ro H2</text>
+    <line class="lifeline" x1="2225" y1="306" x2="2225" y2="1370"/>
+  </g>
+
+  <g id="activations">
+    <rect class="activation" x="144" y="360" width="12" height="1000" rx="5"/>
+    <rect class="activation" x="394" y="360" width="12" height="100" rx="5"/>
+    <rect class="activation" x="649" y="435" width="12" height="910" rx="5"/>
+    <rect class="activation" x="914" y="510" width="12" height="720" rx="5"/>
+    <rect class="activation" x="1179" y="585" width="12" height="645" rx="5"/>
+    <rect class="activation" x="1454" y="660" width="12" height="390" rx="5"/>
+    <rect class="activation" x="1734" y="735" width="12" height="90" rx="5"/>
+    <rect class="activation" x="1979" y="885" width="12" height="90" rx="5"/>
+    <rect class="activation" x="2219" y="1035" width="12" height="150" rx="5"/>
+  </g>
+
+  <g id="messages">
+    <path class="connector blue" d="M156 374 L392 374" data-connector="call"/>
+    <rect class="label labelBlue" x="96" y="318" width="308" height="34" rx="17"/>
+    <circle class="pillBlue" cx="124" cy="335" r="17" stroke-width="2"/>
+    <text class="num" x="124" y="341" text-anchor="middle" fill="#3f83b8">1</text>
+    <text class="labelText" x="254" y="341" text-anchor="middle">GET /routing/marker/readonly</text>
+
+    <path class="connector green" d="M406 435 L647 435" data-connector="call"/>
+    <rect class="label labelGreen" x="423" y="393" width="300" height="34" rx="17"/>
+    <circle class="pillGreen" cx="451" cy="410" r="17" stroke-width="2"/>
+    <text class="num" x="451" y="416" text-anchor="middle" fill="#6f8f52">2</text>
+    <text class="labelText" x="581" y="416" text-anchor="middle">contextWrite acme + readOnly</text>
+
+    <path class="connector blue" d="M661 510 L912 510" data-connector="call"/>
+    <rect class="label labelBlue" x="684" y="468" width="270" height="34" rx="17"/>
+    <circle class="pillBlue" cx="712" cy="485" r="17" stroke-width="2"/>
+    <text class="num" x="712" y="491" text-anchor="middle" fill="#3f83b8">3</text>
+    <text class="labelText" x="828" y="491" text-anchor="middle">txExecutor.readOnly { ... }</text>
+
+    <path class="connector green" d="M926 585 L1177 585" data-connector="call"/>
+    <rect class="label labelGreen" x="956" y="543" width="250" height="34" rx="17"/>
+    <circle class="pillGreen" cx="984" cy="560" r="17" stroke-width="2"/>
+    <text class="num" x="984" y="566" text-anchor="middle" fill="#6f8f52">4</text>
+    <text class="labelText" x="1090" y="566" text-anchor="middle">findCurrentMarker()</text>
+
+    <path class="connector amber" d="M1191 660 L1452 660" data-connector="call"/>
+    <rect class="label labelAmber" x="1226" y="618" width="260" height="34" rx="17"/>
+    <circle class="pillAmber" cx="1254" cy="635" r="17" stroke-width="2"/>
+    <text class="num" x="1254" y="641" text-anchor="middle" fill="#a36f3e">5</text>
+    <text class="labelText" x="1365" y="641" text-anchor="middle">suspendTransaction asks CF</text>
+
+    <path class="connector amber" d="M1466 735 L1732 735" data-connector="call"/>
+    <rect class="label labelAmber" x="1515" y="693" width="250" height="34" rx="17"/>
+    <circle class="pillAmber" cx="1543" cy="710" r="17" stroke-width="2"/>
+    <text class="num" x="1543" y="716" text-anchor="middle" fill="#a36f3e">6</text>
+    <text class="labelText" x="1650" y="716" text-anchor="middle">currentLookupKey(context)</text>
+
+    <path class="connector teal return" d="M1732 810 L1466 810" data-connector="return"/>
+    <rect class="label labelTeal" x="1530" y="768" width="180" height="34" rx="17"/>
+    <circle class="pillTeal" cx="1558" cy="785" r="17" stroke-width="2"/>
+    <text class="num" x="1558" y="791" text-anchor="middle" fill="#4f8f8b">7</text>
+    <text class="labelText" x="1634" y="791" text-anchor="middle">key = acme:ro</text>
+
+    <path class="connector amber" d="M1466 885 L1977 885" data-connector="call"/>
+    <rect class="label labelAmber" x="1644" y="843" width="200" height="34" rx="17"/>
+    <circle class="pillAmber" cx="1672" cy="860" r="17" stroke-width="2"/>
+    <text class="num" x="1672" y="866" text-anchor="middle" fill="#a36f3e">8</text>
+    <text class="labelText" x="1758" y="866" text-anchor="middle">registry.get(acme:ro)</text>
+
+    <path class="connector teal return" d="M1977 960 L1466 960" data-connector="return"/>
+    <rect class="label labelTeal" x="1630" y="918" width="255" height="34" rx="17"/>
+    <circle class="pillTeal" cx="1658" cy="935" r="17" stroke-width="2"/>
+    <text class="num" x="1658" y="941" text-anchor="middle" fill="#4f8f8b">9</text>
+    <text class="labelText" x="1771" y="941" text-anchor="middle">ConnectionFactory(acme RO)</text>
+
+    <path class="connector amber" d="M1466 1035 L2217 1035" data-connector="call"/>
+    <rect class="label labelAmber" x="1774" y="993" width="180" height="34" rx="17"/>
+    <circle class="pillAmber" cx="1802" cy="1010" r="17" stroke-width="2"/>
+    <text class="num" x="1802" y="1016" text-anchor="middle" fill="#a36f3e">10</text>
+    <text class="labelText" x="1876" y="1016" text-anchor="middle">target.create()</text>
+
+    <path class="connector amber" d="M1191 1110 L2217 1110" data-connector="call"/>
+    <rect class="label labelAmber" x="1610" y="1068" width="260" height="34" rx="17"/>
+    <circle class="pillAmber" cx="1638" cy="1085" r="17" stroke-width="2"/>
+    <text class="num" x="1638" y="1091" text-anchor="middle" fill="#a36f3e">11</text>
+    <text class="labelText" x="1750" y="1091" text-anchor="middle">SELECT RoutingMarkerTable</text>
+
+    <path class="connector teal return" d="M2217 1185 L1191 1185" data-connector="return"/>
+    <rect class="label labelTeal" x="1620" y="1143" width="180" height="34" rx="17"/>
+    <circle class="pillTeal" cx="1648" cy="1160" r="17" stroke-width="2"/>
+    <text class="num" x="1648" y="1166" text-anchor="middle" fill="#4f8f8b">12</text>
+    <text class="labelText" x="1724" y="1166" text-anchor="middle">marker = acme-ro</text>
+
+    <path class="connector teal return" d="M1177 1260 L661 1260" data-connector="return"/>
+    <rect class="label labelTeal" x="820" y="1218" width="220" height="34" rx="17"/>
+    <circle class="pillTeal" cx="848" cy="1235" r="17" stroke-width="2"/>
+    <text class="num" x="848" y="1241" text-anchor="middle" fill="#4f8f8b">13</text>
+    <text class="labelText" x="946" y="1241" text-anchor="middle">RoutingMarkerResponse</text>
+
+    <path class="connector teal return" d="M647 1335 L156 1335" data-connector="return"/>
+    <rect class="label labelTeal" x="248" y="1293" width="420" height="34" rx="17"/>
+    <circle class="pillTeal" cx="276" cy="1310" r="17" stroke-width="2"/>
+    <text class="num" x="276" y="1316" text-anchor="middle" fill="#4f8f8b">14</text>
+    <text class="labelText" x="470" y="1316" text-anchor="middle">HTTP 200 tenant=acme readOnly=true</text>
+  </g>
+
+  <rect x="96" y="1410" width="2188" height="34" rx="12" fill="#fbfdff" stroke="#d7e3ed" stroke-width="2"/>
+  <text class="foot" x="1190" y="1433" text-anchor="middle">Readonly acme requests stay on the acme:ro route; the response marker proves tenant and read-only selection.</text>
 </svg>

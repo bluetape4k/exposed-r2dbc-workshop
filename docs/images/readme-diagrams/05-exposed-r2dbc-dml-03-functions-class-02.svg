@@ -1,230 +1,160 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="2222" height="3022" viewBox="0 0 2222 3022" role="img" aria-label="Function Class Hierarchy (Class Diagram)">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="2222" height="3022"/>
-<rect class="frame" x="32" y="28" width="2158" height="2966" rx="28"/>
-<text class="title" x="66" y="82">Function Class Hierarchy (Class Diagram)</text>
-<text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="inheritLine" d="M1111 2616 L1111 2540 L2172 2540 L2172 2190 L1533 2190 L1533 2070"/>
-<path class="inheritLine" d="M1955 2294 L1955 2182 L1533 2182 L1533 2070"/>
-<path class="inheritLine" d="M1533 1958 L1533 1838 L1111 1838 L1111 1734"/>
-<path class="inheritLine" d="M267 2294 L267 2166 L689 2166 L689 2070"/>
-<path class="inheritLine" d="M1111 2294 L1111 2198 L689 2198 L689 2070"/>
-<path class="inheritLine" d="M689 1958 L689 1854 L1111 1854 L1111 1734"/>
-<path class="line" d="M267 1958 L267 1174 L60 1174 L60 439 L689 439 L689 308" data-connector="line"/>
-<path class="inheritLine" d="M267 1958 L267 1838 L1111 1838 L1111 1734"/>
-<path class="inheritLine" d="M1955 1958 L1955 1830 L1111 1830 L1111 1734"/>
-<path class="inheritLine" d="M689 2294 L689 2198 L1111 2198 L1111 2070"/>
-<path class="inheritLine" d="M1533 2294 L1533 2190 L1111 2190 L1111 2070"/>
-<path class="inheritLine" d="M1111 1958 L1111 1734"/>
-<path class="inheritLine" d="M1111 1622 L1111 1398"/>
-<path class="inheritLine" d="M1111 1286 L1111 724 L80 724 L80 423 L1111 423 L1111 292"/>
-<g transform="translate(112,180)">
-  <rect class="card" x="0" y="0" width="310" height="175" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#5B8DEF"/>
-  <text class="small" x="155" y="26" text-anchor="middle"></text>
-  <text class="label" x="155" y="61" text-anchor="middle">CustomFunctionT</text>
-  <text class="mono" x="18" y="108">+functionName: String</text>
-<text class="mono" x="18" y="129">+columnType: IColumnType</text>
-<text class="mono" x="18" y="150">+params: Array~Expression~</text>
-</g>
-<g transform="translate(534,180)">
-  <rect class="card" x="0" y="0" width="310" height="128" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="94" x2="310" y2="94" stroke="#58A978"/>
-  <text class="small" x="155" y="26" text-anchor="middle"></text>
-  <text class="label" x="155" y="56.5" text-anchor="middle">Window Function With</text>
-<text class="label" x="155" y="81.5" text-anchor="middle">Frame</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 940" width="1440" height="940" role="img" aria-label="Exposed R2DBC SQL function test class hierarchy">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fffdf9;stroke:#d7e2ec;stroke-width:1.6}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.3}
+      .card{filter:url(#shadow)}
+      .header{opacity:.96}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:34px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:15px;letter-spacing:.08em;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:18px;fill:#1e293b}
+      .inherit{fill:none;stroke:#64748b;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+      .connector{fill:none;stroke:#64748b;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#solidArrow)}
+      .hollowHead{fill:#fffdf9;stroke:#64748b;stroke-width:2.4;stroke-dasharray:none}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.3}
+    </style>
+    <marker id="solidArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#64748b" stroke="#64748b" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+  </defs>
 
-</g>
-<g transform="translate(956,180)">
-  <rect class="card" x="0" y="0" width="310" height="112" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#D6A441"/>
-  <text class="small" x="155" y="26" text-anchor="middle"></text>
-  <text class="label" x="155" y="61" text-anchor="middle">Expression</text>
+  <rect width="1440" height="940" class="canvas"/>
+  <rect x="22" y="22" width="1396" height="896" rx="18" class="frame"/>
 
-</g>
-<g transform="translate(1378,180)">
-  <rect class="card" x="0" y="0" width="310" height="133" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#DC6B82"/>
-  <text class="small" x="155" y="26" text-anchor="middle"></text>
-  <text class="label" x="155" y="61" text-anchor="middle">AbsFunctionT</text>
-  <text class="mono" x="18" y="108">+expr: Expression</text>
-</g>
-<g transform="translate(1800,180)">
-  <rect class="card" x="0" y="0" width="310" height="175" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#45A7A1"/>
-  <text class="small" x="155" y="26" text-anchor="middle"></text>
-  <text class="label" x="155" y="61" text-anchor="middle">CustomOperatorT</text>
-  <text class="mono" x="18" y="108">+operator: String</text>
-<text class="mono" x="18" y="129">+left: Expression</text>
-<text class="mono" x="18" y="150">+right: Expression</text>
-</g>
-<g transform="translate(112,523)">
-  <rect class="card" x="0" y="0" width="310" height="112" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#8A72D6"/>
-  <text class="small" x="155" y="26" text-anchor="middle">«abstract»</text>
-  <text class="label" x="155" y="61" text-anchor="middle">SqlFunctionT</text>
+  <text x="58" y="70" class="title" text-anchor="start">SQL Function Test Class Hierarchy</text>
+  <text x="58" y="100" class="subtitle" text-anchor="start">Concrete class view: all function tests extend Ex00_FunctionBase and use concrete evaluation fixtures.</text>
 
-</g>
-<g transform="translate(534,523)">
-  <rect class="card" x="0" y="0" width="310" height="133" rx="5" fill="#F7F1E7" stroke="#B88A44"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#B88A44"/>
-  <text class="small" x="155" y="26" text-anchor="middle">«abstract»</text>
-  <text class="label" x="155" y="61" text-anchor="middle">FunctionT</text>
-  <text class="mono" x="18" y="108">+columnType: IColumnType</text>
-</g>
-<g transform="translate(956,523)">
-  <rect class="card" x="0" y="0" width="310" height="133" rx="5" fill="#EEF6D9" stroke="#8BA84D"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#8BA84D"/>
-  <text class="small" x="155" y="26" text-anchor="middle">«abstract»</text>
-  <text class="label" x="155" y="61" text-anchor="middle">ExpressionT</text>
-  <text class="mono" x="18" y="108">+toQueryBuilder(builder)</text>
-</g>
-<g transform="translate(1378,523)">
-  <rect class="card" x="0" y="0" width="310" height="112" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#5B8DEF"/>
-  <text class="small" x="155" y="26" text-anchor="middle">«abstract»</text>
-  <text class="label" x="155" y="61" text-anchor="middle">MathFunctionT</text>
+  <rect x="50" y="130" width="1340" height="204" rx="16" class="lane"/>
+  <text x="76" y="160" class="laneTitle" text-anchor="start">BASE TEST CONTRACT</text>
 
-</g>
-<g transform="translate(1800,523)">
-  <rect class="card" x="0" y="0" width="310" height="112" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#58A978"/>
-  <text class="small" x="155" y="26" text-anchor="middle">«abstract»</text>
-  <text class="label" x="155" y="61" text-anchor="middle">StatisticsFunctionT</text>
+  <rect x="50" y="364" width="1340" height="242" rx="16" class="lane"/>
+  <text x="76" y="394" class="laneTitle" text-anchor="start">CONCRETE FUNCTION TEST CLASSES</text>
 
-</g>
-<g transform="translate(745,824)">
-  <rect class="card" x="0" y="0" width="310" height="238" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#D6A441"/>
-  <text class="small" x="155" y="26" text-anchor="middle"></text>
-  <text class="label" x="155" y="61" text-anchor="middle">WindowFunctionT</text>
-  <text class="mono" x="18" y="108">+function: Function</text>
-<text class="mono" x="18" y="129">+partitionByColumns: List</text>
-<text class="mono" x="18" y="150">+orderByColumns: List</text>
-<text class="mono" x="18" y="171">+over()</text>
-<text class="mono" x="18" y="192">+partitionBy(cols)</text>
-<text class="mono" x="18" y="213">+orderBy(col, order)</text>
-</g>
-<g transform="translate(1167,824)">
-  <rect class="card" x="0" y="0" width="310" height="191" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
-  <line class="compartment" x1="0" y1="94" x2="310" y2="94" stroke="#DC6B82"/>
-  <text class="small" x="155" y="26" text-anchor="middle"></text>
-  <text class="label" x="155" y="56.5" text-anchor="middle">Window Function With</text>
-<text class="label" x="155" y="81.5" text-anchor="middle">Frame T</text>
-  <text class="mono" x="18" y="124">+frameType: WindowFrameUnit</text>
-<text class="mono" x="18" y="145">+start: WindowFrameBound</text>
-<text class="mono" x="18" y="166">+end: WindowFrameBound</text>
-</g>
-<g transform="translate(956,1286)">
-  <rect class="card" x="0" y="0" width="310" height="112" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#45A7A1"/>
-  <text class="small" x="155" y="26" text-anchor="middle"></text>
-  <text class="label" x="155" y="61" text-anchor="middle">Function</text>
+  <rect x="50" y="636" width="1340" height="190" rx="16" class="lane"/>
+  <text x="76" y="666" class="laneTitle" text-anchor="start">SOURCE FIXTURES AND EVALUATION TARGETS</text>
 
-</g>
-<g transform="translate(956,1622)">
-  <rect class="card" x="0" y="0" width="310" height="112" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#8A72D6"/>
-  <text class="small" x="155" y="26" text-anchor="middle"></text>
-  <text class="label" x="155" y="61" text-anchor="middle">SqlFunction</text>
+  <g data-card="Ex00_FunctionBase" data-x="520" data-y="194" data-width="400" data-height="102">
+    <rect x="520" y="194" width="400" height="102" rx="14" fill="#ffffff" stroke="#4f86c6" stroke-width="2" class="card"/>
+    <path class="header" d="M520,236 L520,208 Q520,194 534,194 L906,194 Q920,194 920,208 L920,236 Z" fill="#eef5fa"/>
+    <text x="720" y="212" class="tiny" text-anchor="middle">&lt;&lt;abstract class&gt;&gt;</text>
+    <text x="720" y="231" class="cardTitle" text-anchor="middle">Ex00_FunctionBase</text>
+    <text x="540" y="262" class="detail" text-anchor="start">typealias SqlFunction&lt;T&gt; = Function&lt;T&gt;</text>
+    <text x="540" y="280" class="detail" text-anchor="start">shouldExpressionEqualTo(expected)</text>
+  </g>
 
-</g>
-<g transform="translate(112,1958)">
-  <rect class="card" x="0" y="0" width="310" height="112" rx="5" fill="#F7F1E7" stroke="#B88A44"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#B88A44"/>
-  <text class="small" x="155" y="26" text-anchor="middle"></text>
-  <text class="label" x="155" y="61" text-anchor="middle">WindowFunction</text>
+  <g data-card="Ex01_Functions" data-x="74" data-y="442" data-width="220" data-height="112">
+    <rect x="74" y="442" width="220" height="112" rx="14" fill="#ffffff" stroke="#6f8f52" stroke-width="2" class="card"/>
+    <path class="header" d="M74,484 L74,456 Q74,442 88,442 L280,442 Q294,442 294,456 L294,484 Z" fill="#f1f6ec"/>
+    <text x="184" y="460" class="tiny" text-anchor="middle">&lt;&lt;extends Ex00&gt;&gt;</text>
+    <text x="184" y="479" class="cardTitle" text-anchor="middle">Ex01 Functions</text>
+    <text x="94" y="510" class="detail" text-anchor="start">string / bitwise</text>
+    <text x="94" y="528" class="detail" text-anchor="start">case / coalesce</text>
+    <text x="94" y="546" class="detail" text-anchor="start">custom operators</text>
+  </g>
 
-</g>
-<g transform="translate(534,1958)">
-  <rect class="card" x="0" y="0" width="310" height="112" rx="5" fill="#EEF6D9" stroke="#8BA84D"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#8BA84D"/>
-  <text class="small" x="155" y="26" text-anchor="middle"></text>
-  <text class="label" x="155" y="61" text-anchor="middle">MathFunction</text>
+  <g data-card="Ex02_MathFunction" data-x="334" data-y="442" data-width="220" data-height="112">
+    <rect x="334" y="442" width="220" height="112" rx="14" fill="#ffffff" stroke="#a66a3f" stroke-width="2" class="card"/>
+    <path class="header" d="M334,484 L334,456 Q334,442 348,442 L540,442 Q554,442 554,456 L554,484 Z" fill="#f5eee4"/>
+    <text x="444" y="460" class="tiny" text-anchor="middle">&lt;&lt;extends Ex00&gt;&gt;</text>
+    <text x="444" y="479" class="cardTitle" text-anchor="middle">Ex02 Math</text>
+    <text x="354" y="510" class="detail" text-anchor="start">abs / sign</text>
+    <text x="354" y="528" class="detail" text-anchor="start">round / sqrt</text>
+    <text x="354" y="546" class="detail" text-anchor="start">exp / log / power</text>
+  </g>
 
-</g>
-<g transform="translate(956,1958)">
-  <rect class="card" x="0" y="0" width="310" height="112" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#5B8DEF"/>
-  <text class="small" x="155" y="26" text-anchor="middle"></text>
-  <text class="label" x="155" y="61" text-anchor="middle">CustomFunction</text>
+  <g data-card="Ex03_StatisticsFunction" data-x="594" data-y="442" data-width="220" data-height="112">
+    <rect x="594" y="442" width="220" height="112" rx="14" fill="#ffffff" stroke="#4f8f8b" stroke-width="2" class="card"/>
+    <path class="header" d="M594,484 L594,456 Q594,442 608,442 L800,442 Q814,442 814,456 L814,484 Z" fill="#eef7f6"/>
+    <text x="704" y="460" class="tiny" text-anchor="middle">&lt;&lt;extends Ex00&gt;&gt;</text>
+    <text x="704" y="479" class="cardTitle" text-anchor="middle">Ex03 Statistics</text>
+    <text x="614" y="510" class="detail" text-anchor="start">stdDevPop/Samp</text>
+    <text x="614" y="528" class="detail" text-anchor="start">varPop / varSamp</text>
+    <text x="614" y="546" class="detail" text-anchor="start">SampleTestTable</text>
+  </g>
 
-</g>
-<g transform="translate(1378,1958)">
-  <rect class="card" x="0" y="0" width="310" height="112" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#58A978"/>
-  <text class="small" x="155" y="26" text-anchor="middle"></text>
-  <text class="label" x="155" y="61" text-anchor="middle">StatisticsFunction</text>
+  <g data-card="Ex04_TrigonometricalFunction" data-x="854" data-y="442" data-width="220" data-height="112">
+    <rect x="854" y="442" width="220" height="112" rx="14" fill="#ffffff" stroke="#8a6f55" stroke-width="2" class="card"/>
+    <path class="header" d="M854,484 L854,456 Q854,442 868,442 L1060,442 Q1074,442 1074,456 L1074,484 Z" fill="#f3eee8"/>
+    <text x="964" y="460" class="tiny" text-anchor="middle">&lt;&lt;extends Ex00&gt;&gt;</text>
+    <text x="964" y="479" class="cardTitle" text-anchor="middle">Ex04 Trig</text>
+    <text x="874" y="510" class="detail" text-anchor="start">sin / cos / tan</text>
+    <text x="874" y="528" class="detail" text-anchor="start">asin / acos / atan</text>
+    <text x="874" y="546" class="detail" text-anchor="start">degrees / radians</text>
+  </g>
 
-</g>
-<g transform="translate(1800,1958)">
-  <rect class="card" x="0" y="0" width="310" height="112" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#D6A441"/>
-  <text class="small" x="155" y="26" text-anchor="middle"></text>
-  <text class="label" x="155" y="61" text-anchor="middle">CustomOperator</text>
+  <g data-card="Ex05_WindowFunction" data-x="1114" data-y="442" data-width="220" data-height="112">
+    <rect x="1114" y="442" width="220" height="112" rx="14" fill="#ffffff" stroke="#a85f7f" stroke-width="2" class="card"/>
+    <path class="header" d="M1114,484 L1114,456 Q1114,442 1128,442 L1320,442 Q1334,442 1334,456 L1334,484 Z" fill="#f5eef2"/>
+    <text x="1224" y="460" class="tiny" text-anchor="middle">&lt;&lt;extends Ex00&gt;&gt;</text>
+    <text x="1224" y="479" class="cardTitle" text-anchor="middle">Ex05 Window</text>
+    <text x="1134" y="510" class="detail" text-anchor="start">rank / rowNumber</text>
+    <text x="1134" y="528" class="detail" text-anchor="start">lead / lag values</text>
+    <text x="1134" y="546" class="detail" text-anchor="start">WindowFrameBound</text>
+  </g>
 
-</g>
-<g transform="translate(112,2294)">
-  <rect class="card" x="0" y="0" width="310" height="154" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#DC6B82"/>
-  <text class="small" x="155" y="26" text-anchor="middle"></text>
-  <text class="label" x="155" y="61" text-anchor="middle">RoundFunction</text>
-  <text class="mono" x="18" y="108">+expr: Expression</text>
-<text class="mono" x="18" y="129">+scale: Int</text>
-</g>
-<g transform="translate(534,2294)">
-  <rect class="card" x="0" y="0" width="310" height="133" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#45A7A1"/>
-  <text class="small" x="155" y="26" text-anchor="middle"></text>
-  <text class="label" x="155" y="61" text-anchor="middle">CustomLongFunction</text>
-  <text class="mono" x="18" y="108">+functionName: String</text>
-</g>
-<g transform="translate(956,2294)">
-  <rect class="card" x="0" y="0" width="310" height="112" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#8A72D6"/>
-  <text class="small" x="155" y="26" text-anchor="middle"></text>
-  <text class="label" x="155" y="61" text-anchor="middle">AbsFunction</text>
+  <g data-card="DMLTestData" data-x="74" data-y="704" data-width="220" data-height="88">
+    <rect x="74" y="704" width="220" height="88" rx="14" fill="#ffffff" stroke="#6f8f52" stroke-width="2" class="card"/>
+    <path class="header" d="M74,738 L74,718 Q74,704 88,704 L280,704 Q294,704 294,718 L294,738 Z" fill="#f1f6ec"/>
+    <text x="184" y="728" class="cardTitle" text-anchor="middle">DMLTestData</text>
+    <text x="94" y="758" class="detail" text-anchor="start">Cities / Users</text>
+    <text x="94" y="776" class="detail" text-anchor="start">UserData fixtures</text>
+  </g>
 
-</g>
-<g transform="translate(1378,2294)">
-  <rect class="card" x="0" y="0" width="310" height="133" rx="5" fill="#F7F1E7" stroke="#B88A44"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#B88A44"/>
-  <text class="small" x="155" y="26" text-anchor="middle"></text>
-  <text class="label" x="155" y="61" text-anchor="middle">CustomStringFunction</text>
-  <text class="mono" x="18" y="108">+functionName: String</text>
-</g>
-<g transform="translate(1800,2294)">
-  <rect class="card" x="0" y="0" width="310" height="112" rx="5" fill="#EEF6D9" stroke="#8BA84D"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#8BA84D"/>
-  <text class="small" x="155" y="26" text-anchor="middle"></text>
-  <text class="label" x="155" y="61" text-anchor="middle">StdDevPopFunction</text>
+  <g data-card="Table.Dual" data-x="334" data-y="704" data-width="220" data-height="88">
+    <rect x="334" y="704" width="220" height="88" rx="14" fill="#ffffff" stroke="#a66a3f" stroke-width="2" class="card"/>
+    <path class="header" d="M334,738 L334,718 Q334,704 348,704 L540,704 Q554,704 554,718 L554,738 Z" fill="#f5eee4"/>
+    <text x="444" y="728" class="cardTitle" text-anchor="middle">Table.Dual</text>
+    <text x="354" y="758" class="detail" text-anchor="start">single expression</text>
+    <text x="354" y="776" class="detail" text-anchor="start">scalar result row</text>
+  </g>
 
-</g>
-<g transform="translate(956,2616)">
-  <rect class="card" x="0" y="0" width="310" height="112" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="78" x2="310" y2="78" stroke="#5B8DEF"/>
-  <text class="small" x="155" y="26" text-anchor="middle"></text>
-  <text class="label" x="155" y="61" text-anchor="middle">VarPopFunction</text>
+  <g data-card="SampleTestTable" data-x="594" data-y="704" data-width="220" data-height="88">
+    <rect x="594" y="704" width="220" height="88" rx="14" fill="#ffffff" stroke="#4f8f8b" stroke-width="2" class="card"/>
+    <path class="header" d="M594,738 L594,718 Q594,704 608,704 L800,704 Q814,704 814,718 L814,738 Z" fill="#eef7f6"/>
+    <text x="704" y="728" class="cardTitle" text-anchor="middle">SampleTestTable</text>
+    <text x="614" y="758" class="detail" text-anchor="start">number column</text>
+    <text x="614" y="776" class="detail" text-anchor="start">statistics dataset</text>
+  </g>
 
-</g>
+  <g data-card="Trig Literals" data-x="854" data-y="704" data-width="220" data-height="88">
+    <rect x="854" y="704" width="220" height="88" rx="14" fill="#ffffff" stroke="#8a6f55" stroke-width="2" class="card"/>
+    <path class="header" d="M854,738 L854,718 Q854,704 868,704 L1060,704 Q1074,704 1074,718 L1074,738 Z" fill="#f3eee8"/>
+    <text x="964" y="728" class="cardTitle" text-anchor="middle">Trig Literals</text>
+    <text x="874" y="758" class="detail" text-anchor="start">int / double args</text>
+    <text x="874" y="776" class="detail" text-anchor="start">decimal precision</text>
+  </g>
+
+  <g data-card="Sales Window Data" data-x="1114" data-y="704" data-width="220" data-height="88">
+    <rect x="1114" y="704" width="220" height="88" rx="14" fill="#ffffff" stroke="#a85f7f" stroke-width="2" class="card"/>
+    <path class="header" d="M1114,738 L1114,718 Q1114,704 1128,704 L1320,704 Q1334,704 1334,718 L1334,738 Z" fill="#f5eef2"/>
+    <text x="1224" y="728" class="cardTitle" text-anchor="middle">Sales Windows</text>
+    <text x="1134" y="758" class="detail" text-anchor="start">withSales(testDB)</text>
+    <text x="1134" y="776" class="detail" text-anchor="start">partition/frame tests</text>
+  </g>
+
+  <path class="inherit" data-connector="ex01-base" d="M 184 442 L 184 350 Q 184 340 194 340 L 570 340 Q 580 340 580 330 L 580 296"/>
+  <polygon class="hollowHead" points="580,296 571,312 589,312" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="inherit" data-connector="ex02-base" d="M 444 442 L 444 370 Q 444 360 454 360 L 646 360 Q 656 360 656 350 L 656 296"/>
+  <polygon class="hollowHead" points="656,296 647,312 665,312" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="inherit" data-connector="ex03-base" d="M 704 442 L 704 296"/>
+  <polygon class="hollowHead" points="704,296 695,312 713,312" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="inherit" data-connector="ex04-base" d="M 964 442 L 964 370 Q 964 360 954 360 L 794 360 Q 784 360 784 350 L 784 296"/>
+  <polygon class="hollowHead" points="784,296 775,312 793,312" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="inherit" data-connector="ex05-base" d="M 1224 442 L 1224 350 Q 1224 340 1214 340 L 870 340 Q 860 340 860 330 L 860 296"/>
+  <polygon class="hollowHead" points="860,296 851,312 869,312" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="connector" data-connector="ex01-data" d="M 184 554 L 184 704"/>
+  <path class="connector" data-connector="ex02-dual" d="M 444 554 L 444 704"/>
+  <path class="connector" data-connector="ex03-sample" d="M 704 554 L 704 704"/>
+  <path class="connector" data-connector="ex04-literals" d="M 964 554 L 964 704"/>
+  <path class="connector" data-connector="ex05-sales" d="M 1224 554 L 1224 704"/>
+
+  <rect x="96" y="850" width="1248" height="30" rx="10" class="noteBox"/>
+  <text x="720" y="870" class="note" text-anchor="middle">Hollow triangles show inheritance; solid arrows show repository-backed fixture or evaluation targets used by each concrete function test.</text>
 </svg>

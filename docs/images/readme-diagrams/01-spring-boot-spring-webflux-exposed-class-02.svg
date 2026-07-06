@@ -1,89 +1,70 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1366" height="1216" viewBox="0 0 1366 1216" role="img" aria-label="Layer Structure">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1366" height="1216"/>
-<rect class="frame" x="32" y="28" width="1302" height="1160" rx="28"/>
-<text class="title" x="66" y="82">Layer Structure</text>
-<text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="line" d="M473 355 L473 439 L1103 439 L1103 502" data-connector="line"/>
-<path class="line" d="M893 376 L893 753 L683 753 L683 824" data-connector="line"/>
-<path class="line" d="M683 502 L683 423 L473 423 L473 355" data-connector="line"/>
-<path class="line" d="M263 502 L263 415 L893 415 L893 376" data-connector="line"/>
-<g transform="translate(298,180)">
-  <rect class="card" x="0" y="0" width="350" height="175" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#5B8DEF"/>
-  <text class="small" x="175" y="26" text-anchor="middle"></text>
-  <text class="label" x="175" y="61" text-anchor="middle">ActorRepository</text>
-  <text class="mono" x="18" y="108">+findById(id)</text>
-<text class="mono" x="18" y="129">+findAll()</text>
-<text class="mono" x="18" y="150">+create(actor)</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 880" width="1280" height="880" role="img" aria-label="Spring Boot Spring Webflux Exposed Class diagram">
+<defs><filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12" /></filter><style>.canvas{fill:#f6f9fc}.frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}.lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}.card{filter:url(#shadow)}.header{opacity:.96}.title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:30px;fill:#1e293b}.subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}.tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}.laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:15px;letter-spacing:.08em;fill:#8ca2b4}.cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:17px;fill:#1e293b}.connector{fill:none;stroke:#64748b;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}.use{fill:none;stroke-width:2;stroke-dasharray:7 6;stroke-linecap:round;stroke-linejoin:round}.rel{fill:none;stroke:#64748b;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.head{fill:white;stroke:#64748b;stroke-width:2.4;stroke-dasharray:none;style:stroke-dasharray:none}.labelPill{fill:#fff;stroke:#d7e2ec;stroke-width:1}.noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.2}</style></defs>
+<rect width="1280" height="880" class="canvas"/><rect x="22" y="22" width="1236" height="836" rx="18" class="frame"/>
+<text x="58" y="68" class="title" text-anchor="start">Spring Boot Spring Webflux Exposed Class</text>
+<text x="58" y="96" class="subtitle" text-anchor="start">Concrete UML class view with explicit inheritance and dependency corridors.</text>
+<rect x="48" y="126" width="1184" height="190" rx="16" class="lane"/><text x="72" y="156" class="laneTitle" text-anchor="start">ABSTRACTIONS / CONTRACTS</text>
+<rect x="48" y="340" width="1184" height="300" rx="16" class="lane"/><text x="72" y="370" class="laneTitle" text-anchor="start">IMPLEMENTATIONS / COLLABORATORS</text>
+<rect x="48" y="662" width="1184" height="126" rx="16" class="lane"/><text x="72" y="692" class="laneTitle" text-anchor="start">READER CONTRACT</text>
+<g data-card="Layer Structure" data-x="210" data-y="178" data-width="250" data-height="96">
+<rect x="210" y="178" width="250" height="96" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card"/>
+<path class="header" d="M210,220 L210,192 Q210,178 224,178 L446,178 Q460,178 460,192 L460,220 Z" fill="#eef5fa"/>
+<text x="335.0" y="196" class="tiny" text-anchor="middle">&lt;&lt;contract&gt;&gt;</text>
+<text x="335.0" y="215" class="cardTitle" text-anchor="middle">Layer Structure</text>
+<text x="228" y="240" class="detail" text-anchor="start">shared R2DBC boundary</text>
 </g>
-<g transform="translate(718,180)">
-  <rect class="card" x="0" y="0" width="350" height="196" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#58A978"/>
-  <text class="small" x="175" y="26" text-anchor="middle"></text>
-  <text class="label" x="175" y="61" text-anchor="middle">MovieRepository</text>
-  <text class="mono" x="18" y="108">+findById(id)</text>
-<text class="mono" x="18" y="129">+findAll()</text>
-<text class="mono" x="18" y="150">+create(movie)</text>
-<text class="mono" x="18" y="171">+deleteById(id)</text>
+<g data-card="UML classes from the or…" data-x="820" data-y="178" data-width="250" data-height="96">
+<rect x="820" y="178" width="250" height="96" rx="14" fill="#fff" stroke="#64748b" stroke-width="2" class="card"/>
+<path class="header" d="M820,220 L820,192 Q820,178 834,178 L1056,178 Q1070,178 1070,192 L1070,220 Z" fill="#f8fafc"/>
+<text x="945.0" y="196" class="tiny" text-anchor="middle">&lt;&lt;base&gt;&gt;</text>
+<text x="945.0" y="215" class="cardTitle" text-anchor="middle">UML classes from the or…</text>
+<text x="838" y="240" class="detail" text-anchor="start">common coroutine support</text>
 </g>
-<g transform="translate(88,502)">
-  <rect class="card" x="0" y="0" width="350" height="196" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#D6A441"/>
-  <text class="small" x="175" y="26" text-anchor="middle"></text>
-  <text class="label" x="175" y="61" text-anchor="middle">MovieController</text>
-  <text class="mono" x="18" y="108">+getMovieById(id)</text>
-<text class="mono" x="18" y="129">+searchMovies(request)</text>
-<text class="mono" x="18" y="150">+createMovie(movie)</text>
-<text class="mono" x="18" y="171">+deleteMovie(id)</text>
+<g data-card="ActorRepository" data-x="90" data-y="410" data-width="230" data-height="106">
+<rect x="90" y="410" width="230" height="106" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card"/>
+<path class="header" d="M90,452 L90,424 Q90,410 104,410 L306,410 Q320,410 320,424 L320,452 Z" fill="#f5eee4"/>
+<text x="205.0" y="428" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+<text x="205.0" y="447" class="cardTitle" text-anchor="middle">ActorRepository</text>
+<text x="108" y="472" class="detail" text-anchor="start">suspendTransaction</text>
+<text x="108" y="489" class="detail" text-anchor="start">Flow / DTO mapping</text>
 </g>
-<g transform="translate(508,502)">
-  <rect class="card" x="0" y="0" width="350" height="175" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
-  <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#DC6B82"/>
-  <text class="small" x="175" y="26" text-anchor="middle"></text>
-  <text class="label" x="175" y="61" text-anchor="middle">ActorController</text>
-  <text class="mono" x="18" y="108">+getAllActors()</text>
-<text class="mono" x="18" y="129">+getActorById(id)</text>
-<text class="mono" x="18" y="150">+createActor(actor)</text>
+<g data-card="+findByIdid" data-x="380" data-y="410" data-width="230" data-height="106">
+<rect x="380" y="410" width="230" height="106" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card"/>
+<path class="header" d="M380,452 L380,424 Q380,410 394,410 L596,410 Q610,410 610,424 L610,452 Z" fill="#eef7f6"/>
+<text x="495.0" y="428" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+<text x="495.0" y="447" class="cardTitle" text-anchor="middle">+findByIdid</text>
+<text x="398" y="472" class="detail" text-anchor="start">suspendTransaction</text>
+<text x="398" y="489" class="detail" text-anchor="start">Flow / DTO mapping</text>
 </g>
-<g transform="translate(928,502)">
-  <rect class="card" x="0" y="0" width="350" height="196" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
-  <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#45A7A1"/>
-  <text class="small" x="175" y="26" text-anchor="middle">«object»</text>
-  <text class="label" x="175" y="61" text-anchor="middle">ActorTable</text>
-  <text class="mono" x="18" y="108">+id LongIdTable</text>
-<text class="mono" x="18" y="129">+firstName varchar</text>
-<text class="mono" x="18" y="150">+lastName varchar</text>
-<text class="mono" x="18" y="171">+birthday date</text>
+<g data-card="+findAll" data-x="670" data-y="410" data-width="230" data-height="106">
+<rect x="670" y="410" width="230" height="106" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2" class="card"/>
+<path class="header" d="M670,452 L670,424 Q670,410 684,410 L886,410 Q900,410 900,424 L900,452 Z" fill="#f5eef2"/>
+<text x="785.0" y="428" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+<text x="785.0" y="447" class="cardTitle" text-anchor="middle">+findAll</text>
+<text x="688" y="472" class="detail" text-anchor="start">suspendTransaction</text>
+<text x="688" y="489" class="detail" text-anchor="start">Flow / DTO mapping</text>
 </g>
-<g transform="translate(508,824)">
-  <rect class="card" x="0" y="0" width="350" height="196" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
-  <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#8A72D6"/>
-  <text class="small" x="175" y="26" text-anchor="middle">«object»</text>
-  <text class="label" x="175" y="61" text-anchor="middle">MovieTable</text>
-  <text class="mono" x="18" y="108">+id LongIdTable</text>
-<text class="mono" x="18" y="129">+name varchar</text>
-<text class="mono" x="18" y="150">+producerName varchar</text>
-<text class="mono" x="18" y="171">+releaseDate datetime</text>
+<g data-card="+createactor" data-x="960" data-y="410" data-width="230" data-height="106">
+<rect x="960" y="410" width="230" height="106" rx="14" fill="#fff" stroke="#8a6f55" stroke-width="2" class="card"/>
+<path class="header" d="M960,452 L960,424 Q960,410 974,410 L1176,410 Q1190,410 1190,424 L1190,452 Z" fill="#f3eee8"/>
+<text x="1075.0" y="428" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+<text x="1075.0" y="447" class="cardTitle" text-anchor="middle">+createactor</text>
+<text x="978" y="472" class="detail" text-anchor="start">suspendTransaction</text>
+<text x="978" y="489" class="detail" text-anchor="start">Flow / DTO mapping</text>
 </g>
+<path class="connector" data-connector="uml-inherit" d="M 205 410 L 205 332 Q 205 316 221 316 L 319 316 Q 335 316 335 300 L 335 274"/>
+<polygon class="head" points="335,274 326,290 344,290" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="uml-inherit" d="M 495 410 L 495 332 Q 495 316 479 316 L 351 316 Q 335 316 335 300 L 335 274"/>
+<polygon class="head" points="335,274 326,290 344,290" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="uml-inherit" d="M 785 410 L 785 332 Q 785 316 801 316 L 929 316 Q 945 316 945 300 L 945 274"/>
+<polygon class="head" points="945,274 936,290 954,290" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="uml-inherit" d="M 1075 410 L 1075 332 Q 1075 316 1059 316 L 961 316 Q 945 316 945 300 L 945 274"/>
+<polygon class="head" points="945,274 936,290 954,290" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="use connector" data-connector="uml-use" d="M 320 463 L 380 463" stroke="#6f8f52"/>
+<polyline points="380,463 368,456 368,470" fill="none" stroke="#6f8f52" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="use connector" data-connector="uml-use" d="M 610 463 L 670 463" stroke="#a66a3f"/>
+<polyline points="670,463 658,456 658,470" fill="none" stroke="#a66a3f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="use connector" data-connector="uml-use" d="M 900 463 L 960 463" stroke="#4f8f8b"/>
+<polyline points="960,463 948,456 948,470" fill="none" stroke="#4f8f8b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<rect x="86" y="720" width="1108" height="30" rx="10" class="noteBox"/><text x="640" y="740" class="note" text-anchor="middle">Hollow triangles show generalization; dashed arrows show use/dependency. Lane labels stay left-aligned and unobstructed.</text>
 </svg>

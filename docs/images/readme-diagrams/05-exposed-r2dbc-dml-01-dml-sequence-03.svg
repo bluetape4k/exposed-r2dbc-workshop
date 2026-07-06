@@ -1,67 +1,169 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="920" height="1236" viewBox="0 0 920 1236" role="img" aria-label="CTE / UPSERT Execution Flow">
-<defs>
-<filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
-<marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-<style>.canvas{fill:#F7F9FC}.frame{fill:#fff;stroke:#D8E0EA;stroke-width:1.5}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:39px;font-weight:400;fill:#102033}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;font-weight:400;fill:#536273}.smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:22px;font-weight:400;fill:#102033}.strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}.card{stroke-width:2;filter:url(#shadow)}.line{stroke:#5D6B7A;stroke-width:2.2;fill:none;marker-end:url(#openArrow)}.dashed{stroke:#5D6B7A;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}.lifeline{stroke:#B7C2D1;stroke-width:1.8;stroke-dasharray:8 9}.note{fill:#fff;opacity:.97}</style>
-</defs>
-<rect class="canvas" width="920" height="1236"/>
-<rect class="frame" x="24" y="24" width="872" height="1180" rx="22"/>
-<text class="title" x="58" y="76">CTE / UPSERT Execution Flow</text>
-<text class="subtitle" x="62" y="106">Compact sequence flow with reduced outer and inner whitespace</text>
-<rect class="card" x="95.0" y="156" width="220" height="66" rx="16" fill="#E8F3FF" stroke="#5B8DEF"/>
-<text class="smallLabel participant" x="205.0" y="196" text-anchor="middle">Application</text>
-<line class="lifeline" x1="205.0" y1="250" x2="205.0" y2="1174"/>
-<rect class="card" x="350.0" y="156" width="220" height="66" rx="16" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel participant" x="460.0" y="196" text-anchor="middle">Exposed DSL</text>
-<line class="lifeline" x1="460.0" y1="250" x2="460.0" y2="1174"/>
-<rect class="card" x="605.0" y="156" width="220" height="66" rx="16" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel participant" x="715.0" y="196" text-anchor="middle">Database</text>
-<line class="lifeline" x1="715.0" y1="250" x2="715.0" y2="1174"/>
-<path class="line" d="M205.0 292.0 L460.0 292.0" data-connector="line"/>
-<rect class="note label" x="207.9" y="260.0" width="249.2" height="28" rx="9"/>
-<text class="strong labelText" x="332.5" y="280.0" text-anchor="middle">1. Words.upsert { it[word] = hello }</text>
-<path class="line" d="M460.0 366.0 L715.0 366.0" data-connector="line"/>
-<rect class="note label" x="431.9" y="334.0" width="311.2" height="28" rx="9"/>
-<text class="strong labelText" x="587.5" y="354.0" text-anchor="middle">2. INSERT INTO words ... ON CONFLICT DO UPDATE</text>
-<path class="dashed" d="M715.0 440.0 L460.0 440.0" data-connector="dashed"/>
-<rect class="note label" x="507.5" y="408.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="587.5" y="428.0" text-anchor="middle">3. affected rows</text>
-<path class="dashed" d="M460.0 514.0 L205.0 514.0" data-connector="dashed"/>
-<rect class="note label" x="242.0" y="482.0" width="181.0" height="28" rx="9"/>
-<text class="strong labelText" x="332.5" y="502.0" text-anchor="middle">4. UpsertStatement result</text>
-<path class="line" d="M205.0 588.0 L460.0 588.0" data-connector="line"/>
-<rect class="note label" x="183.1" y="556.0" width="298.8" height="28" rx="9"/>
-<text class="strong labelText" x="332.5" y="576.0" text-anchor="middle">5. Words.batchUpsert(list, onUpdate = {...})</text>
-<path class="line" d="M460.0 662.0 L715.0 662.0" data-connector="line"/>
-<rect class="note label" x="466.0" y="630.0" width="243.0" height="28" rx="9"/>
-<text class="strong labelText" x="587.5" y="650.0" text-anchor="middle">7. INSERT ... ON CONFLICT DO UPDATE</text>
-<path class="dashed" d="M715.0 736.0 L460.0 736.0" data-connector="dashed"/>
-<rect class="note label" x="507.5" y="704.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="587.5" y="724.0" text-anchor="middle">8. batch results</text>
-<path class="dashed" d="M460.0 810.0 L205.0 810.0" data-connector="dashed"/>
-<rect class="note label" x="252.5" y="778.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="332.5" y="798.0" text-anchor="middle">9. List of results</text>
-<path class="line" d="M205.0 884.0 L460.0 884.0" data-connector="line"/>
-<rect class="note label" x="167.6" y="852.0" width="329.8" height="28" rx="9"/>
-<text class="strong labelText" x="332.5" y="872.0" text-anchor="middle">10. withRecursive(cte, baseQuery, recursiveQuery)</text>
-<path class="line" d="M460.0 958.0 L715.0 958.0" data-connector="line"/>
-<rect class="note label" x="413.3" y="926.0" width="348.4" height="28" rx="9"/>
-<text class="strong labelText" x="587.5" y="946.0" text-anchor="middle">11. WITH RECURSIVE cte AS (base UNION ALL recursive)</text>
-<path class="dashed" d="M715.0 1032.0 L460.0 1032.0" data-connector="dashed"/>
-<rect class="note label" x="497.0" y="1000.0" width="181.0" height="28" rx="9"/>
-<text class="strong labelText" x="587.5" y="1020.0" text-anchor="middle">12. ResultSet (hierarchy)</text>
-<path class="dashed" d="M460.0 1106.0 L205.0 1106.0" data-connector="dashed"/>
-<rect class="note label" x="252.5" y="1074.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="332.5" y="1094.0" text-anchor="middle">13. List of rows</text>
-<rect class="activation" x="199.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="454.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="709.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1660 1240" width="1660" height="1240" role="img" aria-label="DML upsert and CTE execution sequence">
+  <defs>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fffdf9;stroke:#40515c;stroke-width:3}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:39px;fill:#1e293b}
+      .subtitle,.role,.labelText,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}
+      .participant{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:22px;fill:#1e293b}
+      .participantCard{fill:#fffdf9;stroke:#5c7080;stroke-width:2}
+      .lifeline{stroke:#9eb0bf;stroke-width:2;stroke-dasharray:7 9}
+      .activation{stroke-width:2;opacity:.86}
+      .callBlue{fill:none;stroke:#4f86c6;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#seqArrowBlue)}
+      .callGreen{fill:none;stroke:#6f8f52;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#seqArrowGreen)}
+      .callPurple,.purple{fill:none;stroke:#8b66b1;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#seqArrowPurple)}
+      .callAmber{fill:none;stroke:#b9842f;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#seqArrowAmber)}
+      .seqReturn{fill:none;stroke:#2f9b95;stroke-width:2.8;stroke-dasharray:8 7;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#seqArrowTeal)}
+      .labelPill{fill:#fffdf9;stroke:#d7e2ec;stroke-width:1.4}
+      .numCircle{fill:#fffdf9;stroke-width:1.8}
+      .num{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;font-weight:800}
+      .alt{fill:none;stroke:#7d98a8;stroke-width:2.4;stroke-dasharray:8 8}
+      .branchDivider{stroke:#7d98a8;stroke-width:1.6;stroke-dasharray:6 8}
+      .branchHeader{fill:#fffdf9;stroke:#c9d6df;stroke-width:1.4}
+      .noteBox{fill:#fffdf9;stroke:#d7e2ec;stroke-width:1.4}
+    </style>
+    <marker id="seqArrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f86c6" stroke="#4f86c6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="seqArrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f8f52" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="seqArrowPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#8b66b1" stroke="#8b66b1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="seqArrowAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#b9842f" stroke="#b9842f" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="seqArrowTeal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#2f9b95" stroke="#2f9b95" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+  </defs>
 
-<!-- audit badge labels: visible sequence numbering and message pill samples -->
-<g aria-label="sequence message labels">
-<rect x="58" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="76" y="140" class="num" text-anchor="middle">1</text>
-<rect x="102" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="120" y="140" class="num" text-anchor="middle">2</text>
-</g>
+  <rect width="1660" height="1240" class="canvas"/>
+  <rect x="28" y="28" width="1604" height="1184" rx="24" class="frame"/>
+
+  <text x="70" y="84" class="title">DML UPSERT and CTE Execution Flow</text>
+  <text x="74" y="116" class="subtitle">The 01-dml tests create temporary tables, emit dialect SQL, collect R2DBC Flow rows, and assert generated SQL/results.</text>
+
+  <g data-participant="JUnit test">
+    <rect x="70" y="164" width="200" height="78" rx="10" class="participantCard"/>
+    <text x="170" y="198" class="participant" text-anchor="middle">JUnit Test</text>
+    <text x="170" y="224" class="role" text-anchor="middle">runTest cases</text>
+    <line x1="170" y1="242" x2="170" y2="1142" class="lifeline"/>
+  </g>
+  <g data-participant="withTables">
+    <rect x="316" y="164" width="210" height="78" rx="10" class="participantCard"/>
+    <text x="421" y="198" class="participant" text-anchor="middle">withTables</text>
+    <text x="421" y="224" class="role" text-anchor="middle">test schema scope</text>
+    <line x1="421" y1="242" x2="421" y2="1142" class="lifeline"/>
+  </g>
+  <g data-participant="Exposed DSL">
+    <rect x="582" y="164" width="220" height="78" rx="10" class="participantCard"/>
+    <text x="692" y="198" class="participant" text-anchor="middle">Exposed DSL</text>
+    <text x="692" y="224" class="role" text-anchor="middle">upsert / withCte</text>
+    <line x1="692" y1="242" x2="692" y2="1142" class="lifeline"/>
+  </g>
+  <g data-participant="SQL builder">
+    <rect x="858" y="164" width="220" height="78" rx="10" class="participantCard"/>
+    <text x="968" y="198" class="participant" text-anchor="middle">SQL Builder</text>
+    <text x="968" y="224" class="role" text-anchor="middle">dialect mapping</text>
+    <line x1="968" y1="242" x2="968" y2="1142" class="lifeline"/>
+  </g>
+  <g data-participant="R2DBC database">
+    <rect x="1150" y="164" width="220" height="78" rx="10" class="participantCard"/>
+    <text x="1260" y="198" class="participant" text-anchor="middle">R2DBC DB</text>
+    <text x="1260" y="224" class="role" text-anchor="middle">H2 / PG / MySQL</text>
+    <line x1="1260" y1="242" x2="1260" y2="1142" class="lifeline"/>
+  </g>
+  <g data-participant="Assertions">
+    <rect x="1424" y="164" width="180" height="78" rx="10" class="participantCard"/>
+    <text x="1514" y="198" class="participant" text-anchor="middle">Assertions</text>
+    <text x="1514" y="224" class="role" text-anchor="middle">rows + SQL</text>
+    <line x1="1514" y1="242" x2="1514" y2="1142" class="lifeline"/>
+  </g>
+
+  <rect x="164" y="312" width="12" height="552" rx="4" class="activation" fill="#e0f2fe" stroke="#88bce3"/>
+  <rect x="415" y="322" width="12" height="570" rx="4" class="activation" fill="#eef7f6" stroke="#6bb6b0"/>
+  <rect x="686" y="454" width="12" height="652" rx="4" class="activation" fill="#f1f6ec" stroke="#a1bf83"/>
+  <rect x="962" y="532" width="12" height="138" rx="4" class="activation" fill="#f4ecfb" stroke="#b99ad5"/>
+  <rect x="1254" y="374" width="12" height="636" rx="4" class="activation" fill="#fff3d9" stroke="#d8ad55"/>
+  <rect x="1508" y="1080" width="12" height="60" rx="4" class="activation" fill="#eef7f6" stroke="#66b8b1"/>
+
+  <path class="callBlue" data-connector="m1-with-tables" d="M 170 330 L 421 330"/>
+  <rect x="112" y="292" width="330" height="31" rx="14" class="labelPill label"/>
+  <circle cx="132" cy="307" r="12" class="numCircle" stroke="#4f86c6"/>
+  <text x="132" y="312" class="num" fill="#276b9d" text-anchor="middle">1</text>
+  <text x="270" y="312" class="labelText" text-anchor="middle">enter withTables(testDB, tables)</text>
+
+  <path class="callAmber" data-connector="m2-seed-rows" d="M 421 402 L 1260 402"/>
+  <rect x="582" y="364" width="498" height="31" rx="14" class="labelPill label"/>
+  <circle cx="602" cy="379" r="12" class="numCircle" stroke="#b9842f"/>
+  <text x="602" y="384" class="num" fill="#8c5f23" text-anchor="middle">2</text>
+  <text x="842" y="384" class="labelText" text-anchor="middle">create temporary table and seed rows</text>
+
+  <path class="callBlue" data-connector="m3-upsert-builder" d="M 170 474 L 692 474"/>
+  <rect x="254" y="436" width="386" height="31" rx="14" class="labelPill label"/>
+  <circle cx="274" cy="451" r="12" class="numCircle" stroke="#4f86c6"/>
+  <text x="274" y="456" class="num" fill="#276b9d" text-anchor="middle">3</text>
+  <text x="454" y="456" class="labelText" text-anchor="middle">upsert / batchUpsert builder call</text>
+
+  <rect x="646" y="510" width="706" height="196" rx="18" class="alt"/>
+  <rect x="672" y="492" width="250" height="30" rx="14" class="branchHeader"/>
+  <text x="797" y="512" class="labelText" text-anchor="middle">dialect-specific upsert SQL</text>
+  <line x1="666" y1="604" x2="1332" y2="604" class="branchDivider"/>
+
+  <path class="purple" data-connector="m4-dialect-conflict-clause" d="M 692 552 L 968 552"/>
+  <rect x="716" y="514" width="328" height="31" rx="14" class="labelPill label"/>
+  <circle cx="736" cy="529" r="12" class="numCircle" stroke="#8b66b1"/>
+  <text x="736" y="534" class="num" fill="#76529f" text-anchor="middle">4</text>
+  <text x="880" y="534" class="labelText" text-anchor="middle">choose conflict clause by dialect</text>
+
+  <path class="callAmber" data-connector="m5-execute-upsert-sql" d="M 968 646 L 1260 646"/>
+  <rect x="998" y="608" width="320" height="31" rx="14" class="labelPill label"/>
+  <circle cx="1018" cy="623" r="12" class="numCircle" stroke="#b9842f"/>
+  <text x="1018" y="628" class="num" fill="#8c5f23" text-anchor="middle">5</text>
+  <text x="1158" y="628" class="labelText" text-anchor="middle">INSERT ... ON CONFLICT / MERGE</text>
+
+  <path class="seqReturn" data-connector="m6-upsert-result" d="M 1260 692 L 692 692"/>
+  <rect x="828" y="654" width="296" height="31" rx="14" class="labelPill label"/>
+  <circle cx="848" cy="669" r="12" class="numCircle" stroke="#2f9b95"/>
+  <text x="848" y="674" class="num" fill="#287f7a" text-anchor="middle">6</text>
+  <text x="986" y="674" class="labelText" text-anchor="middle">affected rows or statement result</text>
+
+  <path class="callBlue" data-connector="m7-cte-builder-call" d="M 170 760 L 692 760"/>
+  <rect x="244" y="722" width="416" height="31" rx="14" class="labelPill label"/>
+  <circle cx="264" cy="737" r="12" class="numCircle" stroke="#4f86c6"/>
+  <text x="264" y="742" class="num" fill="#276b9d" text-anchor="middle">7</text>
+  <text x="452" y="742" class="labelText" text-anchor="middle">CteTable query or WITH RECURSIVE SQL</text>
+
+  <rect x="646" y="796" width="706" height="230" rx="18" class="alt"/>
+  <rect x="672" y="778" width="220" height="30" rx="14" class="branchHeader"/>
+  <text x="782" y="798" class="labelText" text-anchor="middle">CTE builder path</text>
+
+  <path class="purple" data-connector="m8-prepare-sql" d="M 692 838 L 968 838"/>
+  <rect x="724" y="800" width="316" height="31" rx="14" class="labelPill label"/>
+  <circle cx="744" cy="815" r="12" class="numCircle" stroke="#8b66b1"/>
+  <text x="744" y="820" class="num" fill="#76529f" text-anchor="middle">8</text>
+  <text x="882" y="820" class="labelText" text-anchor="middle">prepareSQL(QueryBuilder)</text>
+
+  <path class="callAmber" data-connector="m9-execute-cte-query" d="M 968 910 L 1260 910"/>
+  <rect x="998" y="872" width="320" height="31" rx="14" class="labelPill label"/>
+  <circle cx="1018" cy="887" r="12" class="numCircle" stroke="#b9842f"/>
+  <text x="1018" y="892" class="num" fill="#8c5f23" text-anchor="middle">9</text>
+  <text x="1158" y="892" class="labelText" text-anchor="middle">execute WITH / WITH RECURSIVE</text>
+
+  <path class="seqReturn" data-connector="m10-flow-results" d="M 1260 990 L 692 990"/>
+  <rect x="842" y="952" width="270" height="31" rx="14" class="labelPill label"/>
+  <circle cx="862" cy="967" r="12" class="numCircle" stroke="#2f9b95"/>
+  <text x="862" y="972" class="num" fill="#287f7a" text-anchor="middle">10</text>
+  <text x="982" y="972" class="labelText" text-anchor="middle">Flow&lt;ResultRow&gt;.toList()</text>
+
+  <path class="callGreen" data-connector="m11-assertions" d="M 692 1092 L 1514 1092"/>
+  <rect x="1062" y="1054" width="384" height="31" rx="14" class="labelPill label"/>
+  <circle cx="1082" cy="1069" r="12" class="numCircle" stroke="#6f8f52"/>
+  <text x="1082" y="1074" class="num" fill="#52703b" text-anchor="middle">11</text>
+  <text x="1262" y="1074" class="labelText" text-anchor="middle">assert SQL fragments and row order</text>
+
+  <rect x="90" y="1162" width="1480" height="32" rx="10" class="noteBox"/>
+  <text x="830" y="1183" class="note" text-anchor="middle">Sequence combines Ex04 upsert and Ex50/Ex51 CTE paths: execution stays inside temporary test tables and returns collected Flow rows for assertions.</text>
 </svg>

@@ -1,65 +1,135 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="924" height="1029" viewBox="0 0 924 1029" role="img" aria-label="Structure Diagram">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="924" height="1029"/>
-<rect class="frame" x="32" y="28" width="860" height="973" rx="28"/>
-<text class="title" x="66" y="82">Structure Diagram</text>
-<text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="line" d="M314 366 L314 411 L240 411 L240 456" data-connector="line"/>
-<path class="line" d="M314 784 L314 689 L240 689 L240 589" data-connector="line"/>
-<path class="implLine" d="M314 784 L314 681 L684 681 L684 610"/>
-<path class="line" d="M314 366 L314 142 L684 142 L684 456" data-connector="line"/>
-<g transform="translate(144,784)">
-  <rect filter="url(#shadow)" x="0" y="0" width="340" height="175" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#5B8DEF"/>
-  <text class="small" x="170" y="26" text-anchor="middle">«Moneta implementation»</text>
-  <text class="label" x="170" y="61" text-anchor="middle">Money</text>
-  <text class="mono" x="18" y="108">+of(amount, currency) Money</text>
-<text class="mono" x="18" y="129">+getNumber() NumberValue</text>
-<text class="mono" x="18" y="150">+getCurrency() CurrencyUnit</text>
-</g>
-<g transform="translate(70,456)">
-  <rect filter="url(#shadow)" x="0" y="0" width="340" height="133" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#58A978"/>
-  <text class="small" x="170" y="26" text-anchor="middle">«JSR-354»</text>
-  <text class="label" x="170" y="61" text-anchor="middle">CurrencyUnit</text>
-  <text class="mono" x="18" y="108">+currencyCode: String</text>
-</g>
-<g transform="translate(144,170)">
-  <rect filter="url(#shadow)" x="0" y="0" width="340" height="196" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#D6A441"/>
-  <text class="small" x="170" y="26" text-anchor="middle">«Exposed extension»</text>
-  <text class="label" x="170" y="61" text-anchor="middle">CompositeMoney</text>
-  <text class="mono" x="18" y="108">+compositeMoney(precision, scale, name)</text>
-<text class="mono" x="18" y="129">CompositeColumn~MonetaryAmount?~</text>
-<text class="mono" x="18" y="150">+amount: Column~BigDecimal?~</text>
-<text class="mono" x="18" y="171">+currency: Column~CurrencyUnit?~</text>
-</g>
-<g transform="translate(514,456)">
-  <rect filter="url(#shadow)" x="0" y="0" width="340" height="154" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#DC6B82"/>
-  <text class="small" x="170" y="26" text-anchor="middle">«interface — JSR-354»</text>
-  <text class="label" x="170" y="61" text-anchor="middle">MonetaryAmount</text>
-  <text class="mono" x="18" y="108">+getNumber() NumberValue</text>
-<text class="mono" x="18" y="129">+getCurrency() CurrencyUnit</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1040" width="1600" height="1040" role="img" aria-label="Exposed R2DBC Money class structure diagram">
+  <defs>
+    <filter id="softShadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="#1f2937" flood-opacity="0.11"/>
+    </filter>
+    <marker id="arrow-teal" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#4f8f8b"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#6f8f52"/>
+    </marker>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:2}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.6}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:42px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:17px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:22px;letter-spacing:0;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:23px;fill:#1e293b}
+      .card{filter:url(#softShadow)}
+      .header{opacity:.96}
+      .inherit{fill:none;stroke:#64748b;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+      .rel{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .head{fill:#fff;stroke:#64748b;stroke-width:3;stroke-dasharray:none}
+      .foot{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}
+    </style>
+  </defs>
+
+  <rect width="1600" height="1040" class="canvas"/>
+  <rect x="28" y="28" width="1544" height="984" rx="20" class="frame"/>
+  <text x="72" y="88" class="title">Exposed R2DBC Money Class Structure</text>
+  <text x="72" y="122" class="subtitle">UML view from MoneyData, Ex01_MoneyDefaults, and Ex02_Money; only repository-backed classes and inline table shapes are shown.</text>
+
+  <rect x="64" y="160" width="1472" height="276" rx="18" class="lane"/>
+  <text x="92" y="195" class="laneTitle">TEST CLASS INHERITANCE</text>
+
+  <g data-card="AbstractR2dbcExposedTest" data-x="490" data-y="218" data-width="620" data-height="88">
+    <rect x="490" y="218" width="620" height="88" rx="13" fill="#fff" stroke="#64748b" stroke-width="2.4" class="card"/>
+    <path class="header" d="M490,258 L490,231 Q490,218 503,218 L1097,218 Q1110,218 1110,231 L1110,258 Z" fill="#f8fafc"/>
+    <text x="800" y="239" class="tiny" text-anchor="middle">&lt;&lt;shared test base&gt;&gt;</text>
+    <text x="800" y="263" class="cardTitle" text-anchor="middle">AbstractR2dbcExposedTest</text>
+    <text x="800" y="287" class="detail" text-anchor="middle">ENABLE_DIALECTS_METHOD + withDb</text>
+  </g>
+
+  <g data-card="Ex01_MoneyDefaults" data-x="445" data-y="338" data-width="330" data-height="76">
+    <rect x="445" y="338" width="330" height="76" rx="13" fill="#fff" stroke="#3f7fb5" stroke-width="2.4" class="card"/>
+    <path class="header" d="M445,374 L445,351 Q445,338 458,338 L762,338 Q775,338 775,351 L775,374 Z" fill="#eef5fa"/>
+    <text x="610" y="359" class="tiny" text-anchor="middle">&lt;&lt;parameterized test&gt;&gt;</text>
+    <text x="610" y="384" class="cardTitle" text-anchor="middle">Ex01_MoneyDefaults</text>
+    <text x="469" y="405" class="detail">default, nullable, clientDefault</text>
+  </g>
+
+  <g data-card="Ex02_Money" data-x="825" data-y="338" data-width="330" data-height="76">
+    <rect x="825" y="338" width="330" height="76" rx="13" fill="#fff" stroke="#4f8f8b" stroke-width="2.4" class="card"/>
+    <path class="header" d="M825,374 L825,351 Q825,338 838,338 L1142,338 Q1155,338 1155,351 L1155,374 Z" fill="#eef7f6"/>
+    <text x="990" y="359" class="tiny" text-anchor="middle">&lt;&lt;parameterized test&gt;&gt;</text>
+    <text x="990" y="384" class="cardTitle" text-anchor="middle">Ex02_Money</text>
+    <text x="849" y="405" class="detail">CRUD, precision, manual composite</text>
+  </g>
+
+  <path data-connector="ex01-inherits" class="inherit"  d="M 610 338 L 610 322"/>
+  <polygon class="head"  points="610,306 601,322 619,322" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path data-connector="ex02-inherits" class="inherit"  d="M 990 338 L 990 322"/>
+  <polygon class="head"  points="990,306 981,322 999,322" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <rect x="64" y="450" width="1472" height="226" rx="18" class="lane"/>
+  <text x="92" y="485" class="laneTitle">TABLE DEFINITIONS</text>
+
+  <g data-card="AccountTable" data-x="108" data-y="522" data-width="330" data-height="106">
+    <rect x="108" y="522" width="330" height="106" rx="13" fill="#fff" stroke="#3f7fb5" stroke-width="2.4" class="card"/>
+    <path class="header" d="M108,565 L108,535 Q108,522 121,522 L425,522 Q438,522 438,535 L438,565 Z" fill="#eef5fa"/>
+    <text x="273" y="545" class="tiny" text-anchor="middle">IntIdTable("Accounts")</text>
+    <text x="273" y="572" class="cardTitle" text-anchor="middle">AccountTable</text>
+    <text x="132" y="600" class="detail">compositeMoney(8, 5).nullable</text>
+  </g>
+
+  <g data-card="Composite parts" data-x="530" data-y="522" data-width="300" data-height="106">
+    <rect x="530" y="522" width="300" height="106" rx="13" fill="#fff" stroke="#4f8f8b" stroke-width="2.4" class="card"/>
+    <path class="header" d="M530,565 L530,535 Q530,522 543,522 L817,522 Q830,522 830,535 L830,565 Z" fill="#eef7f6"/>
+    <text x="680" y="545" class="tiny" text-anchor="middle">CompositeColumn</text>
+    <text x="680" y="572" class="cardTitle" text-anchor="middle">Amount + currency</text>
+    <text x="554" y="600" class="detail">.amount and .currency</text>
+  </g>
+
+  <g data-card="TableWithDBDefault" data-x="922" data-y="522" data-width="300" data-height="106">
+    <rect x="922" y="522" width="300" height="106" rx="13" fill="#fff" stroke="#6f8f52" stroke-width="2.4" class="card"/>
+    <path class="header" d="M922,565 L922,535 Q922,522 935,522 L1209,522 Q1222,522 1222,535 L1222,565 Z" fill="#f1f6ec"/>
+    <text x="1072" y="545" class="tiny" text-anchor="middle">IntIdTable</text>
+    <text x="1072" y="572" class="cardTitle" text-anchor="middle">TableWithDBDefault</text>
+    <text x="946" y="600" class="detail">t1 default, t2 nullable</text>
+  </g>
+
+  <g data-card="Manual tester table" data-x="1314" data-y="522" data-width="170" data-height="106">
+    <rect x="1314" y="522" width="170" height="106" rx="13" fill="#fff" stroke="#a66a3f" stroke-width="2.4" class="card"/>
+    <path class="header" d="M1314,565 L1314,535 Q1314,522 1327,522 L1471,522 Q1484,522 1484,535 L1484,565 Z" fill="#f5eee4"/>
+    <text x="1399" y="545" class="tiny" text-anchor="middle">inline Table</text>
+    <text x="1399" y="572" class="cardTitle" text-anchor="middle">tester</text>
+    <text x="1338" y="600" class="detail">manual columns</text>
+  </g>
+
+  <path data-connector="account-parts" class="rel" d="M 438 575 L 520 575" stroke="#4f8f8b" marker-end="url(#arrow-teal)"/>
+  <path data-connector="parts-default" class="rel" d="M 830 575 L 912 575" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+  <path data-connector="default-manual" class="rel" d="M 1222 575 L 1304 575" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+
+  <rect x="64" y="706" width="1472" height="210" rx="18" class="lane"/>
+  <text x="92" y="741" class="laneTitle">MONEY API AND TEST HELPERS</text>
+
+  <g data-card="Money values" data-x="118" data-y="776" data-width="320" data-height="96">
+    <rect x="118" y="776" width="320" height="96" rx="13" fill="#fff" stroke="#3f7fb5" stroke-width="2.4" class="card"/>
+    <path class="header" d="M118,816 L118,789 Q118,776 131,776 L425,776 Q438,776 438,789 L438,816 Z" fill="#eef5fa"/>
+    <text x="278" y="797" class="tiny" text-anchor="middle">javax.money / Moneta</text>
+    <text x="278" y="821" class="cardTitle" text-anchor="middle">Money values</text>
+    <text x="142" y="848" class="detail">Money.of, moneyOf, CurrencyUnit</text>
+  </g>
+
+  <g data-card="Composite helper" data-x="514" data-y="776" data-width="350" data-height="96">
+    <rect x="514" y="776" width="350" height="96" rx="13" fill="#fff" stroke="#4f8f8b" stroke-width="2.4" class="card"/>
+    <path class="header" d="M514,816 L514,789 Q514,776 527,776 L851,776 Q864,776 864,789 L864,816 Z" fill="#eef7f6"/>
+    <text x="689" y="797" class="tiny" text-anchor="middle">private suspend helper</text>
+    <text x="689" y="821" class="cardTitle" text-anchor="middle">insert composite value</text>
+    <text x="538" y="848" class="detail">it[composite_money] = Money?</text>
+  </g>
+
+  <g data-card="Component helper" data-x="940" data-y="776" data-width="350" data-height="96">
+    <rect x="940" y="776" width="350" height="96" rx="13" fill="#fff" stroke="#6f8f52" stroke-width="2.4" class="card"/>
+    <path class="header" d="M940,816 L940,789 Q940,776 953,776 L1277,776 Q1290,776 1290,789 L1290,816 Z" fill="#f1f6ec"/>
+    <text x="1115" y="797" class="tiny" text-anchor="middle">private suspend helper</text>
+    <text x="1115" y="821" class="cardTitle" text-anchor="middle">insert component values</text>
+    <text x="964" y="848" class="detail">set amount and currency separately</text>
+  </g>
+
+  <rect x="108" y="948" width="1385" height="36" rx="11" class="foot"/>
+  <text x="800.5" y="972" class="note" text-anchor="middle">Hollow triangles show test inheritance. Solid arrows show repository-backed table and composite-column relationships without dashed dependency heads.</text>
 </svg>

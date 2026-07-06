@@ -1,97 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1470" height="1754" viewBox="0 0 1470 1754" role="img" aria-label="HTTP Request Flow">
-<defs>
-<filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
-<marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-<style>.canvas{fill:#F7F9FC}.frame{fill:#fff;stroke:#D8E0EA;stroke-width:1.5}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:39px;font-weight:400;fill:#102033}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;font-weight:400;fill:#536273}.smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:22px;font-weight:400;fill:#102033}.strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}.card{stroke-width:2;filter:url(#shadow)}.line{stroke:#5D6B7A;stroke-width:2.2;fill:none;marker-end:url(#openArrow)}.dashed{stroke:#5D6B7A;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}.lifeline{stroke:#B7C2D1;stroke-width:1.8;stroke-dasharray:8 9}.note{fill:#fff;opacity:.97}</style>
-</defs>
-<rect class="canvas" width="1470" height="1754"/>
-<rect class="frame" x="24" y="24" width="1422" height="1698" rx="22"/>
-<text class="title" x="58" y="76">HTTP Request Flow</text>
-<text class="subtitle" x="62" y="106">Compact sequence flow with reduced outer and inner whitespace</text>
-<rect class="card" x="50.0" y="156" width="220" height="66" rx="16" fill="#E8F3FF" stroke="#5B8DEF"/>
-<text class="smallLabel participant" x="160.0" y="196" text-anchor="middle">HTTP Client</text>
-<line class="lifeline" x1="160.0" y1="250" x2="160.0" y2="1692"/>
-<rect class="card" x="280.0" y="156" width="220" height="66" rx="16" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel participant" x="390.0" y="196" text-anchor="middle">MovieController</text>
-<line class="lifeline" x1="390.0" y1="250" x2="390.0" y2="1692"/>
-<rect class="card" x="510.0" y="156" width="220" height="66" rx="16" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel participant" x="620.0" y="196" text-anchor="middle">Movie R2dbc</text>
-<line class="lifeline" x1="620.0" y1="250" x2="620.0" y2="1692"/>
-<rect class="card" x="740.0" y="156" width="220" height="66" rx="16" fill="#FDECEF" stroke="#DC6B82"/>
-<text class="smallLabel participant" x="850.0" y="196" text-anchor="middle">Repository</text>
-<line class="lifeline" x1="850.0" y1="250" x2="850.0" y2="1692"/>
-<rect class="card" x="970.0" y="156" width="220" height="66" rx="16" fill="#F1ECFF" stroke="#8A72D6"/>
-<text class="smallLabel participant" x="1080.0" y="196" text-anchor="middle">suspendTransaction</text>
-<line class="lifeline" x1="1080.0" y1="250" x2="1080.0" y2="1692"/>
-<rect class="card" x="1200.0" y="156" width="220" height="66" rx="16" fill="#E9F7F6" stroke="#45A7A1"/>
-<text class="smallLabel participant" x="1310.0" y="196" text-anchor="middle">R2DBC Database</text>
-<line class="lifeline" x1="1310.0" y1="250" x2="1310.0" y2="1692"/>
-<path class="line" d="M160.0 292.0 L390.0 292.0" data-connector="line"/>
-<rect class="note label" x="195.0" y="260.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="275.0" y="280.0" text-anchor="middle">1. GET /movies/{id}</text>
-<path class="line" d="M390.0 366.0 L1080.0 366.0" data-connector="line"/>
-<rect class="note label" x="644.5" y="334.0" width="181.0" height="28" rx="9"/>
-<text class="strong labelText" x="735.0" y="354.0" text-anchor="middle">2. suspendTransaction { }</text>
-<path class="line" d="M1080.0 440.0 L1310.0 440.0" data-connector="line"/>
-<rect class="note label" x="1115.0" y="408.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="1195.0" y="428.0" text-anchor="middle">3. BEGIN</text>
-<path class="line" d="M1080.0 514.0 L620.0 514.0" data-connector="line"/>
-<rect class="note label" x="759.5" y="482.0" width="181.0" height="28" rx="9"/>
-<text class="strong labelText" x="850.0" y="502.0" text-anchor="middle">4. getMovieWithActors(id)</text>
-<path class="line" d="M620.0 588.0 L1310.0 588.0" data-connector="line"/>
-<rect class="note label" x="797.0" y="556.0" width="336.0" height="28" rx="9"/>
-<text class="strong labelText" x="965.0" y="576.0" text-anchor="middle">5. SELECT movies JOIN actors_in_movies JOIN actors</text>
-<path class="dashed" d="M1310.0 662.0 L620.0 662.0" data-connector="dashed"/>
-<rect class="note label" x="885.0" y="630.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="965.0" y="650.0" text-anchor="middle">6. ResultRow Flow</text>
-<path class="dashed" d="M620.0 736.0 L1080.0 736.0" data-connector="dashed"/>
-<rect class="note label" x="765.7" y="704.0" width="168.6" height="28" rx="9"/>
-<text class="strong labelText" x="850.0" y="724.0" text-anchor="middle">7. MovieWithActorRecord</text>
-<path class="line" d="M1080.0 810.0 L1310.0 810.0" data-connector="line"/>
-<rect class="note label" x="1115.0" y="778.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="1195.0" y="798.0" text-anchor="middle">8. COMMIT</text>
-<path class="dashed" d="M1080.0 884.0 L390.0 884.0" data-connector="dashed"/>
-<rect class="note label" x="650.7" y="852.0" width="168.6" height="28" rx="9"/>
-<text class="strong labelText" x="735.0" y="872.0" text-anchor="middle">9. MovieWithActorRecord</text>
-<path class="dashed" d="M390.0 958.0 L160.0 958.0" data-connector="dashed"/>
-<rect class="note label" x="195.0" y="926.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="275.0" y="946.0" text-anchor="middle">10. 200 JSON response</text>
-<path class="line" d="M160.0 1032.0 L390.0 1032.0" data-connector="line"/>
-<rect class="note label" x="195.0" y="1000.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="275.0" y="1020.0" text-anchor="middle">11. POST /movies</text>
-<path class="line" d="M390.0 1106.0 L1080.0 1106.0" data-connector="line"/>
-<rect class="note label" x="641.4" y="1074.0" width="187.2" height="28" rx="9"/>
-<text class="strong labelText" x="735.0" y="1094.0" text-anchor="middle">12. suspendTransaction { }</text>
-<path class="line" d="M1080.0 1180.0 L620.0 1180.0" data-connector="line"/>
-<rect class="note label" x="770.0" y="1148.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="850.0" y="1168.0" text-anchor="middle">13. save(movie)</text>
-<path class="line" d="M620.0 1254.0 L1310.0 1254.0" data-connector="line"/>
-<rect class="note label" x="871.4" y="1222.0" width="187.2" height="28" rx="9"/>
-<text class="strong labelText" x="965.0" y="1242.0" text-anchor="middle">14. INSERT INTO movies ...</text>
-<path class="dashed" d="M1310.0 1328.0 L620.0 1328.0" data-connector="dashed"/>
-<rect class="note label" x="885.0" y="1296.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="965.0" y="1316.0" text-anchor="middle">15. generated id</text>
-<path class="dashed" d="M620.0 1402.0 L1080.0 1402.0" data-connector="dashed"/>
-<rect class="note label" x="770.0" y="1370.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="850.0" y="1390.0" text-anchor="middle">16. MovieRecord</text>
-<path class="line" d="M1080.0 1476.0 L1310.0 1476.0" data-connector="line"/>
-<rect class="note label" x="1115.0" y="1444.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="1195.0" y="1464.0" text-anchor="middle">17. COMMIT</text>
-<path class="dashed" d="M1080.0 1550.0 L390.0 1550.0" data-connector="dashed"/>
-<rect class="note label" x="655.0" y="1518.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="735.0" y="1538.0" text-anchor="middle">18. MovieRecord</text>
-<path class="dashed" d="M390.0 1624.0 L160.0 1624.0" data-connector="dashed"/>
-<rect class="note label" x="195.0" y="1592.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="275.0" y="1612.0" text-anchor="middle">19. 201 JSON response</text>
-<rect class="activation" x="154.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="384.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="614.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-
-<!-- audit badge labels: visible sequence numbering and message pill samples -->
-<g aria-label="sequence message labels">
-<rect x="58" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="76" y="140" class="num" text-anchor="middle">1</text>
-<rect x="102" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="120" y="140" class="num" text-anchor="middle">2</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="940" viewBox="0 0 1500 940" role="img" aria-label="Spring repository coroutine HTTP sequence"><defs><filter id="shadow" x="-8%" y="-8%" width="116%" height="122%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter><marker id="arrow-blue" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#3c82b4" stroke="#3c82b4" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker><marker id="arrow-green" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5f8848" stroke="#5f8848" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker><marker id="arrow-amber" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#b78632" stroke="#b78632" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker><marker id="arrow-return" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker><marker id="arrow-red" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#a85f7f" stroke="#a85f7f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker><style>.canvas{fill:#f6f9fc} .frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5} .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:34px;fill:#1e293b} .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700} .participantText{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:19px;fill:#1e293b} .participantHint,.labelText,.num{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#344256;font-weight:700} .card{filter:url(#shadow)} .lifeline{stroke:#9fb0bf;stroke-width:2;stroke-dasharray:8 10} .activation{fill:#ecfdf5;stroke:#7aa083;stroke-width:2} .call{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none} .return{fill:none;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:8 7} .label{fill:#fff;stroke-width:1.4} .labelBlue{stroke:#b8d9eb} .labelGreen{stroke:#c5d9b6} .labelAmber{stroke:#dfc396} .labelReturn{stroke:#bdd9d3} .numCircle{fill:#fff} .noteBox{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}</style></defs><rect class="canvas" width="1500" height="940"/><rect class="frame" x="28" y="26" width="1444" height="888" rx="22"/><text x="64" y="76" class="title" text-anchor="start">Spring Repository Coroutine Request Sequence</text><text x="66" y="106" class="subtitle" text-anchor="start">Concrete sequence from MovieActorsController and MovieR2dbcRepository.getMovieWithActors().</text>
+<g data-card="HTTP Client" data-x="58" data-y="146" data-width="184" data-height="72"><rect class="card participant" x="58" y="146" width="184" height="72" rx="14" fill="#ffffff" stroke="#546e7a" stroke-width="2"/><text x="150" y="182" class="participantText participant" text-anchor="middle">HTTP Client</text><text x="150" y="202" class="participantHint" text-anchor="middle">WebFlux caller</text></g><line class="lifeline" x1="150" y1="248" x2="150" y2="844"/>
+<g data-card="MovieActors" data-x="308" data-y="146" data-width="184" data-height="72"><rect class="card participant" x="308" y="146" width="184" height="72" rx="14" fill="#ffffff" stroke="#546e7a" stroke-width="2"/><text x="400" y="182" class="participantText participant" text-anchor="middle">MovieActors</text><text x="400" y="202" class="participantHint" text-anchor="middle">Controller</text></g><line class="lifeline" x1="400" y1="248" x2="400" y2="844"/>
+<g data-card="suspend tx" data-x="558" data-y="146" data-width="184" data-height="72"><rect class="card participant" x="558" y="146" width="184" height="72" rx="14" fill="#ffffff" stroke="#546e7a" stroke-width="2"/><text x="650" y="182" class="participantText participant" text-anchor="middle">suspend tx</text><text x="650" y="202" class="participantHint" text-anchor="middle">Exposed boundary</text></g><line class="lifeline" x1="650" y1="248" x2="650" y2="844"/>
+<g data-card="MovieRepo" data-x="808" data-y="146" data-width="184" data-height="72"><rect class="card participant" x="808" y="146" width="184" height="72" rx="14" fill="#ffffff" stroke="#546e7a" stroke-width="2"/><text x="900" y="182" class="participantText participant" text-anchor="middle">MovieRepo</text><text x="900" y="202" class="participantHint" text-anchor="middle">R2dbcRepository</text></g><line class="lifeline" x1="900" y1="248" x2="900" y2="844"/>
+<g data-card="Exposed Flow" data-x="1058" data-y="146" data-width="184" data-height="72"><rect class="card participant" x="1058" y="146" width="184" height="72" rx="14" fill="#ffffff" stroke="#546e7a" stroke-width="2"/><text x="1150" y="182" class="participantText participant" text-anchor="middle">Exposed Flow</text><text x="1150" y="202" class="participantHint" text-anchor="middle">join + grouping</text></g><line class="lifeline" x1="1150" y1="248" x2="1150" y2="844"/>
+<g data-card="R2DBC DB" data-x="1258" data-y="146" data-width="184" data-height="72"><rect class="card participant" x="1258" y="146" width="184" height="72" rx="14" fill="#ffffff" stroke="#546e7a" stroke-width="2"/><text x="1350" y="182" class="participantText participant" text-anchor="middle">R2DBC DB</text><text x="1350" y="202" class="participantHint" text-anchor="middle">tables</text></g><line class="lifeline" x1="1350" y1="248" x2="1350" y2="844"/>
+<rect class="activation" x="144" y="278" width="12" height="528" rx="4"/>
+<rect class="activation" x="394" y="292" width="12" height="500" rx="4"/>
+<rect class="activation" x="644" y="334" width="12" height="430" rx="4"/>
+<rect class="activation" x="894" y="386" width="12" height="340" rx="4"/>
+<rect class="activation" x="1144" y="438" width="12" height="252" rx="4"/>
+<rect class="activation" x="1344" y="492" width="12" height="136" rx="4"/>
+<path class="call" data-connector="seq-01" d="M 150 300 L 400 300" stroke="#3c82b4" marker-end="url(#arrow-blue)"/>
+<rect class="label labelBlue" x="163.0" y="264" width="224" height="28" rx="14" stroke="#b8d9eb"/><circle class="numCircle" cx="181.0" cy="278" r="13" stroke="#3c82b4" stroke-width="1.7"/><text class="num" x="181.0" y="282" text-anchor="middle">1</text><text class="labelText" x="203.0" y="282" text-anchor="start">GET /movie-actors/{id}</text>
+<path class="call" data-connector="seq-02" d="M 400 354 L 650 354" stroke="#5f8848" marker-end="url(#arrow-green)"/>
+<rect class="label labelGreen" x="407.0" y="318" width="236" height="28" rx="14" stroke="#c5d9b6"/><circle class="numCircle" cx="425.0" cy="332" r="13" stroke="#5f8848" stroke-width="1.7"/><text class="num" x="425.0" y="336" text-anchor="middle">2</text><text class="labelText" x="447.0" y="336" text-anchor="start">suspendTransaction { }</text>
+<path class="call" data-connector="seq-03" d="M 650 408 L 900 408" stroke="#3c82b4" marker-end="url(#arrow-blue)"/>
+<rect class="label labelBlue" x="653.0" y="372" width="244" height="28" rx="14" stroke="#b8d9eb"/><circle class="numCircle" cx="671.0" cy="386" r="13" stroke="#3c82b4" stroke-width="1.7"/><text class="num" x="671.0" y="390" text-anchor="middle">3</text><text class="labelText" x="693.0" y="390" text-anchor="start">getMovieWithActors(id)</text>
+<path class="call" data-connector="seq-04" d="M 900 462 L 1150 462" stroke="#b78632" marker-end="url(#arrow-amber)"/>
+<rect class="label labelAmber" x="882.0" y="426" width="286" height="28" rx="14" stroke="#dfc396"/><circle class="numCircle" cx="900.0" cy="440" r="13" stroke="#b78632" stroke-width="1.7"/><text class="num" x="900.0" y="444" text-anchor="middle">4</text><text class="labelText" x="922.0" y="444" text-anchor="start">MovieActorJoin.select().where</text>
+<path class="call" data-connector="seq-05" d="M 1150 516 L 1350 516" stroke="#b78632" marker-end="url(#arrow-amber)"/>
+<rect class="label labelAmber" x="1137.0" y="480" width="226" height="28" rx="14" stroke="#dfc396"/><circle class="numCircle" cx="1155.0" cy="494" r="13" stroke="#b78632" stroke-width="1.7"/><text class="num" x="1155.0" y="498" text-anchor="middle">5</text><text class="labelText" x="1177.0" y="498" text-anchor="start">SELECT movie + actors</text>
+<path class="return" data-connector="seq-06" d="M 1350 570 L 1150 570" stroke="#4f8f8b" marker-end="url(#arrow-return)"/>
+<rect class="label labelReturn" x="1164.0" y="534" width="172" height="28" rx="14" stroke="#bdd9d3"/><circle class="numCircle" cx="1182.0" cy="548" r="13" stroke="#4f8f8b" stroke-width="1.7"/><text class="num" x="1182.0" y="552" text-anchor="middle">6</text><text class="labelText" x="1204.0" y="552" text-anchor="start">ResultRow Flow</text>
+<path class="call" data-connector="seq-07" d="M 1150 624 L 900 624" stroke="#5f8848" marker-end="url(#arrow-green)"/>
+<rect class="label labelGreen" x="878.0" y="588" width="294" height="28" rx="14" stroke="#c5d9b6"/><circle class="numCircle" cx="896.0" cy="602" r="13" stroke="#5f8848" stroke-width="1.7"/><text class="num" x="896.0" y="606" text-anchor="middle">7</text><text class="labelText" x="918.0" y="606" text-anchor="start">bufferUntilChanged + mapNotNull</text>
+<path class="return" data-connector="seq-08" d="M 900 678 L 650 678" stroke="#4f8f8b" marker-end="url(#arrow-return)"/>
+<rect class="label labelReturn" x="680.0" y="642" width="190" height="28" rx="14" stroke="#bdd9d3"/><circle class="numCircle" cx="698.0" cy="656" r="13" stroke="#4f8f8b" stroke-width="1.7"/><text class="num" x="698.0" y="660" text-anchor="middle">8</text><text class="labelText" x="720.0" y="660" text-anchor="start">firstOrNull result</text>
+<path class="return" data-connector="seq-09" d="M 650 732 L 400 732" stroke="#4f8f8b" marker-end="url(#arrow-return)"/>
+<rect class="label labelReturn" x="411.0" y="696" width="228" height="28" rx="14" stroke="#bdd9d3"/><circle class="numCircle" cx="429.0" cy="710" r="13" stroke="#4f8f8b" stroke-width="1.7"/><text class="num" x="429.0" y="714" text-anchor="middle">9</text><text class="labelText" x="451.0" y="714" text-anchor="start">MovieWithActorRecord?</text>
+<path class="return" data-connector="seq-10" d="M 400 786 L 150 786" stroke="#4f8f8b" marker-end="url(#arrow-return)"/>
+<rect class="label labelReturn" x="174.0" y="750" width="202" height="28" rx="14" stroke="#bdd9d3"/><circle class="numCircle" cx="192.0" cy="764" r="13" stroke="#4f8f8b" stroke-width="1.7"/><text class="num" x="192.0" y="768" text-anchor="middle">10</text><text class="labelText" x="214.0" y="768" text-anchor="start">200 JSON response</text>
+<rect x="84" y="858" width="1332" height="34" rx="10" class="noteBox"/>
+<text x="750" y="880" class="note" text-anchor="middle">The Flow is transformed and resolved inside suspendTransaction before the controller writes the JSON response.</text>
 </svg>

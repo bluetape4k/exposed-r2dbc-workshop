@@ -1,52 +1,126 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760">
-  <rect width="1400" height="760" fill="#f8fafc"/>
-  <text x="700" y="64" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#111827">Ktor R2DBC Coroutine Cache Flow</text>
-  <text x="700" y="101" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#4b5563">Single-flight DB fallback keeps concurrent suspend callers from stampeding the database</text>
-
+<svg xmlns="http://www.w3.org/2000/svg" width="2000" height="1100" viewBox="0 0 2000 1100" role="img" aria-label="Ktor R2DBC coroutine cache single-flight architecture">
   <defs>
-<marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-
-
+    <filter id="softShadow" x="-8%" y="-10%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#25384d" flood-opacity="0.10"/>
+    </filter>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fffefa;stroke:#d7e3ed;stroke-width:2}
+      .lane{fill:#f8fbfd;stroke:#dce8f2;stroke-width:2}
+      .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:42px;fill:#192538;font-weight:400}
+      .subtitle,.detail,.foot{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:17px;font-weight:700;fill:#556678}
+      .laneTitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:17px;font-weight:700;letter-spacing:.08em;fill:#91a5b7}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:24px;fill:#192538;font-weight:400}
+      .smallTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:20px;fill:#192538;font-weight:400}
+      .mono{font-family:"Comic Mono","SFMono-Regular",ui-monospace,monospace;font-size:15px;font-weight:700;fill:#506176}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",ui-monospace,monospace;font-size:13px;font-weight:700;fill:#627287}
+      .card{filter:url(#softShadow);stroke-width:2.4}
+      .header{opacity:.96}
+      .connector{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .blue{stroke:#3f83b8}
+      .green{stroke:#6f8f52}
+      .amber{stroke:#a36f3e}
+      .teal{stroke:#4f8f8b}
+      .rose{stroke:#a85f7f}
+      .brown{stroke:#8a6f55}
+      .note{fill:#f7fffe;stroke:#9fd0cb;stroke-width:2}
+    </style>
   </defs>
 
-  <g font-family="Arial, sans-serif">
-    <rect x="80" y="185" width="230" height="130" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
-    <text x="195" y="232" text-anchor="middle" font-size="22" font-weight="700" fill="#1e3a8a">Ktor Route</text>
-    <text x="195" y="266" text-anchor="middle" font-size="15" fill="#1e40af">suspend handler</text>
+  <rect class="canvas" width="2000" height="1100"/>
+  <rect class="frame" x="30" y="30" width="1940" height="1040" rx="24"/>
+  <text class="title" x="72" y="92">Coroutine Single-Flight Cache</text>
+  <text class="subtitle" x="76" y="126">Concurrent Ktor suspend callers share one in-flight DB producer per key; cancellation and timeout clean up the producer state.</text>
 
-    <rect x="390" y="165" width="260" height="170" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
-    <text x="520" y="214" text-anchor="middle" font-size="22" font-weight="700" fill="#14532d">Repository</text>
-    <text x="520" y="250" text-anchor="middle" font-size="15" fill="#166534">cache read on IO dispatcher</text>
-    <text x="520" y="276" text-anchor="middle" font-size="15" fill="#166534">R2DBC fallback in transaction</text>
+  <rect class="lane" x="60" y="155" width="1880" height="230" rx="18"/>
+  <text class="laneTitle" x="86" y="190">HTTP CONTRACTS AND COROUTINE OUTCOMES</text>
 
-    <rect x="735" y="140" width="280" height="220" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
-    <text x="875" y="189" text-anchor="middle" font-size="22" font-weight="700" fill="#7c2d12">SingleFlight Loader</text>
-    <text x="875" y="225" text-anchor="middle" font-size="15" fill="#92400e">ConcurrentHashMap key - Deferred</text>
-    <text x="875" y="251" text-anchor="middle" font-size="15" fill="#92400e">SupervisorJob app scope</text>
-    <text x="875" y="277" text-anchor="middle" font-size="15" fill="#92400e">timeout and cleanup</text>
-
-    <rect x="1090" y="150" width="230" height="110" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
-    <text x="1205" y="193" text-anchor="middle" font-size="22" font-weight="700" fill="#7f1d1d">Redis RMap</text>
-    <text x="1205" y="224" text-anchor="middle" font-size="15" fill="#991b1b">distributed cache</text>
-
-    <rect x="1090" y="420" width="230" height="110" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
-    <text x="1205" y="463" text-anchor="middle" font-size="22" font-weight="700" fill="#4c1d95">Exposed R2DBC</text>
-    <text x="1205" y="494" text-anchor="middle" font-size="15" fill="#5b21b6">DB fallback</text>
-
-    <rect x="390" y="450" width="260" height="120" rx="8" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
-    <text x="520" y="494" text-anchor="middle" font-size="22" font-weight="700" fill="#0c4a6e">Responses</text>
-    <text x="520" y="526" text-anchor="middle" font-size="15" fill="#075985">HIT / MISS / COALESCED</text>
-
-    <path d="M310 250 L390 250" stroke="#374151" stroke-width="3" fill="none" marker-end="url(#arrow)" data-connector="line"/>
-    <path d="M650 250 L735 250" stroke="#374151" stroke-width="3" fill="none" marker-end="url(#arrow)" data-connector="line"/>
-    <path d="M1015 205 L1090 205" stroke="#374151" stroke-width="3" fill="none" marker-end="url(#arrow)" data-connector="line"/>
-    <path d="M875 360 V457 Q875 475 893 475 H1090" stroke="#374151" stroke-width="3" fill="none" marker-end="url(#arrow)" data-connector="line"/>
-    <path d="M1090 500 H650" stroke="#374151" stroke-width="3" fill="none" marker-end="url(#arrow)" data-connector="line"/>
-    <path d="M390 510 H213 Q195 510 195 492 V315" stroke="#374151" stroke-width="3" fill="none" marker-end="url(#arrow)" data-connector="line"/>
-
-    <rect x="735" y="455" width="280" height="110" rx="8" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
-    <text x="875" y="496" text-anchor="middle" font-size="20" font-weight="700" fill="#7c2d12">Cancellation Contract</text>
-    <text x="875" y="528" text-anchor="middle" font-size="15" fill="#9a3412">waiter cancellation rethrows</text>
-    <text x="875" y="552" text-anchor="middle" font-size="15" fill="#9a3412">producer cleanup uses compare-remove</text>
+  <g data-card="Read endpoint outcomes" data-x="100" data-y="235" data-width="560" data-height="105">
+    <rect class="card" x="100" y="235" width="560" height="105" rx="15" fill="#ffffff" stroke="#5d7486"/>
+    <text class="smallTitle" x="380" y="270" text-anchor="middle">GET /users/{id}</text>
+    <text class="mono" x="132" y="302">HIT / MISS / COALESCED / NOT_FOUND</text>
+    <text class="mono" x="132" y="326">loadDelayMillis=0..1000 validates test timing</text>
   </g>
+
+  <g data-card="Timeout and cancellation" data-x="720" data-y="235" data-width="520" data-height="105">
+    <rect class="card" x="720" y="235" width="520" height="105" rx="15" fill="#fff9ef" stroke="#a36f3e"/>
+    <text class="smallTitle" x="980" y="270" text-anchor="middle">Timeout and cancellation</text>
+    <text class="mono" x="752" y="302">producer timeout -> CACHE_LOAD_TIMEOUT</text>
+    <text class="mono" x="752" y="326">cancelled waiter rethrows cancellation</text>
+  </g>
+
+  <g data-card="Write invalidation stats" data-x="1300" data-y="235" data-width="520" data-height="105">
+    <rect class="card" x="1300" y="235" width="520" height="105" rx="15" fill="#f8fcf7" stroke="#6f8f52"/>
+    <text class="smallTitle" x="1560" y="270" text-anchor="middle">Write, invalidation, stats</text>
+    <text class="mono" x="1332" y="302">POST/PUT refresh cache after DB write</text>
+    <text class="mono" x="1332" y="326">stats add coalesced, failures, cancellations</text>
+  </g>
+
+  <rect class="lane" x="60" y="420" width="1880" height="385" rx="18"/>
+  <text class="laneTitle" x="86" y="455">SUSPEND CACHE-ASIDE CORE</text>
+
+  <g data-card="Coroutine routes" data-x="100" data-y="535" data-width="300" data-height="150">
+    <rect class="card" x="100" y="535" width="300" height="150" rx="16" fill="#f7fcff" stroke="#3f83b8"/>
+    <path class="header" d="M100,587 L100,551 Q100,535 116,535 L384,535 Q400,535 400,551 L400,587 Z" fill="#eef5fa"/>
+    <text class="cardTitle" x="250" y="569" text-anchor="middle">Coroutine routes</text>
+    <text class="mono" x="132" y="624">validate id + delay</text>
+    <text class="mono" x="132" y="652">map read result to status</text>
+  </g>
+
+  <g data-card="CoroutineUserCacheRepository" data-x="500" data-y="510" data-width="390" data-height="205">
+    <rect class="card" x="500" y="510" width="390" height="205" rx="16" fill="#fff9ef" stroke="#a36f3e"/>
+    <path class="header" d="M500,562 L500,526 Q500,510 516,510 L874,510 Q890,510 890,526 L890,562 Z" fill="#f5eee4"/>
+    <text class="cardTitle" x="695" y="544" text-anchor="middle">CoroutineUserCache</text>
+    <text class="cardTitle" x="695" y="572" text-anchor="middle">Repository</text>
+    <text class="mono" x="532" y="618">read cache on Dispatchers.IO</text>
+    <text class="mono" x="532" y="646">cold miss joins loader.load(id)</text>
+    <text class="mono" x="532" y="674">writeCacheSafely records failures</text>
+  </g>
+
+  <g data-card="SingleFlightCacheLoader" data-x="990" data-y="510" data-width="390" data-height="205">
+    <rect class="card" x="990" y="510" width="390" height="205" rx="16" fill="#f8fcf7" stroke="#6f8f52"/>
+    <path class="header" d="M990,562 L990,526 Q990,510 1006,510 L1364,510 Q1380,510 1380,526 L1380,562 Z" fill="#f1f6ec"/>
+    <text class="cardTitle" x="1185" y="544" text-anchor="middle">SingleFlight</text>
+    <text class="cardTitle" x="1185" y="572" text-anchor="middle">CacheLoader</text>
+    <text class="mono" x="1022" y="618">ConcurrentHashMap&lt;K, Deferred&gt;</text>
+    <text class="mono" x="1022" y="646">Primary performs DB fallback</text>
+    <text class="mono" x="1022" y="674">Shared returns COALESCED</text>
+  </g>
+
+  <g data-card="CoroutineCacheObservation" data-x="1480" data-y="535" data-width="340" data-height="150">
+    <rect class="card" x="1480" y="535" width="340" height="150" rx="16" fill="#fff7f7" stroke="#a85f7f"/>
+    <path class="header" d="M1480,587 L1480,551 Q1480,535 1496,535 L1804,535 Q1820,535 1820,551 L1820,587 Z" fill="#f5eef2"/>
+    <text class="cardTitle" x="1650" y="569" text-anchor="middle">Observation</text>
+    <text class="mono" x="1512" y="624">hits misses coalesced</text>
+    <text class="mono" x="1512" y="652">load/cache failures</text>
+  </g>
+
+  <path class="connector blue" d="M400 610 H500" data-connector="routes-repository"/>
+  <polyline points="500,610 488,603 488,617" fill="none" stroke="#3f83b8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector amber" d="M890 610 H990" data-connector="repository-loader"/>
+  <polyline points="990,610 978,603 978,617" fill="none" stroke="#a36f3e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector rose" d="M1380 610 H1480" data-connector="loader-observation"/>
+  <polyline points="1480,610 1468,603 1468,617" fill="none" stroke="#a85f7f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <rect class="lane" x="60" y="835" width="1880" height="150" rx="18"/>
+  <text class="laneTitle" x="86" y="870">OWNED RESOURCES</text>
+
+  <g data-card="Redisson coroutine cache store" data-x="470" data-y="900" data-width="420" data-height="58">
+    <rect class="card" x="470" y="900" width="420" height="58" rx="14" fill="#f7fffe" stroke="#4f8f8b"/>
+    <image data-bluetape4k-icon="redis/redis-icon.svg" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBoZWlnaHQ9IjY0IiB2aWV3Qm94PSIwIDAgMzIgMzIiIHdpZHRoPSI2NCI+PGcgdHJhbnNmb3JtPSJtYXRyaXgoLjg0ODMyNyAwIDAgLjg0ODMyNyAtNy44ODM1NzMgLTkuNDQ5NjkxKSI+PHVzZSB4bGluazpocmVmPSIjQiIgZmlsbD0iI2E0MWUxMSIvPjxwYXRoIGQ9Ik00NS41MzYgMzQuOTVjLTIuMDEzIDEuMDUtMTIuNDQgNS4zMzctMTQuNjYgNi40OTRzLTMuNDUzIDEuMTQ2LTUuMjA3LjMwOC0xMi44NS01LjMyLTE0Ljg1LTYuMjc2LTIuMDQtMS42MTMtLjA3Ny0yLjM4MmwxNS4zMzItNS45MzZjMi4zMzItLjgzNiAzLjE0LS44NjcgNS4xMjYtLjE0UzQzLjU1IDMxLjg3IDQ1LjUxIDMyLjZzMi4wMzcgMS4zMS4wMjQgMi4zNnoiIGZpbGw9IiNkODJjMjAiLz48dXNlIHhsaW5rOmhyZWY9IiNCIiB5PSItNi4yMTgiIGZpbGw9IiNhNDFlMTEiLz48dXNlIHhsaW5rOmhyZWY9IiNDIiBmaWxsPSIjZDgyYzIwIi8+PHBhdGggZD0iTTQ1LjUzNiAyNi4wOThjLTIuMDEzIDEuMDUtMTIuNDQgNS4zMzctMTQuNjYgNi40OTVzLTMuNDUzIDEuMTQ2LTUuMjA3LjMwOC0xMi44NS01LjMyLTE0Ljg1LTYuMjc2Yy0xLS40NzgtMS41MjQtLjg4LTEuNTI0LTEuMjZWMjEuNTVzMTQuNDQ3LTMuMTQ1IDE2Ljc4LTMuOTgyIDMuMTQtLjg2NyA1LjEyNi0uMTQgMTMuODUzIDIuODY4IDE1LjgxNCAzLjU4N3YzLjc2YzAgLjM3Ny0uNDUyLjgtMS40NzcgMS4zMjR6IiBmaWxsPSIjYTQxZTExIi8+PHVzZSB4bGluazpocmVmPSIjQyIgeT0iLTYuNDQ5IiBmaWxsPSIjZDgyYzIwIi8+PGcgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTI5LjA5NiAyMC43MTJsLTEuMTgyLTEuOTY1LTMuNzc0LS4zNCAyLjgxNi0xLjAxNi0uODQ1LTEuNTYgMi42MzYgMS4wMyAyLjQ4Ni0uODE0LS42NzIgMS42MTIgMi41MzQuOTUtMy4yNjguMzR6TTIyLjggMjQuNjI0bDguNzQtMS4zNDItMi42NCAzLjg3MnoiLz48ZWxsaXBzZSBjeD0iMjAuNDQ0IiByeD0iNC42NzIiIHJ5PSIxLjgxMSIgY3k9IjIxLjQwMiIvPjwvZz48cGF0aCBkPSJNNDIuMTMyIDIxLjEzOGwtNS4xNyAyLjA0Mi0uMDA0LTQuMDg3eiIgZmlsbD0iIzdhMGMwMCIvPjxwYXRoIGQ9Ik0zNi45NjMgMjMuMThsLS41Ni4yMi01LjE2Ni0yLjA0MiA1LjcyMy0yLjI2NHoiIGZpbGw9IiNhZDIxMTUiLz48L2c+PGRlZnMgPjxwYXRoIGlkPSJCIiBkPSJNNDUuNTM2IDM4Ljc2NGMtMi4wMTMgMS4wNS0xMi40NCA1LjMzNy0xNC42NiA2LjQ5NHMtMy40NTMgMS4xNDYtNS4yMDcuMzA4LTEyLjg1LTUuMzItMTQuODUtNi4yNzZjLTEtLjQ3OC0xLjUyNC0uODgtMS41MjQtMS4yNnYtMy44MTNzMTQuNDQ3LTMuMTQ1IDE2Ljc4LTMuOTgyIDMuMTQtLjg2NyA1LjEyNi0uMTQgMTMuODUzIDIuODY4IDE1LjgxNCAzLjU4N3YzLjc2YzAgLjM3Ny0uNDUyLjgtMS40NzcgMS4zMjR6Ii8+PHBhdGggaWQ9IkMiIGQ9Ik00NS41MzYgMjguNzMzYy0yLjAxMyAxLjA1LTEyLjQ0IDUuMzM3LTE0LjY2IDYuNDk0cy0zLjQ1MyAxLjE0Ni01LjIwNy4zMDgtMTIuODUtNS4zMi0xNC44NS02LjI3Ni0yLjA0LTEuNjEzLS4wNzctMi4zODJsMTUuMzMyLTUuOTM1YzIuMzMyLS44MzcgMy4xNC0uODY3IDUuMTI2LS4xNHMxMi4zNSA0Ljg1MyAxNC4zMTIgNS41NyAyLjAzNyAxLjMxLjAyNCAyLjM2eiIvPjwvZGVmcz48L3N2Zz4=" x="500" y="911" width="36" height="36"/>
+    <text class="mono" x="710" y="935" text-anchor="middle">Redis RMap on Dispatchers.IO</text>
+  </g>
+  <g data-card="Exposed R2DBC H2" data-x="1010" data-y="900" data-width="420" data-height="58">
+    <rect class="card" x="1010" y="900" width="420" height="58" rx="14" fill="#ffffff" stroke="#5d7486"/>
+    <image data-bluetape4k-icon="database/h2.svg" href="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDk0NzZCIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+SDIgRGF0YWJhc2U8L3RpdGxlPjxwYXRoIGQ9Ik0xNy4xNyAxMy4yN2MuMTQtLjAxNS4yOC0uMDIzLjQxNi0uMDIzLjcgMCAxLjIyOC4xNTkgMS41OTkuNDY5LjM3LjMxNC41NTUuNzU2LjU1NSAxLjMzNGEyLjg2MSAyLjg2MSAwIDAgMS0uNDMgMS40NTVjLS4yOTEuNDkyLS43NzUgMS4wNjYtMS40NiAxLjcyNy0uNDUzLjQ0Ni0xLjA2MS45NzYtMS44MjEgMS41OTJhNDguMDIgNDguMDIgMCAwIDEtMi4yNzUgMS43NDJ2Mi4wODNoOS44OTVWMjEuMjRIMTcuOTljLjIxOS0uMTU5LjU5LS40MzUgMS4xMS0uODMyLjUxOS0uNCAxLjAzMy0uODM1IDEuNTUtMS4zMTEuODE3LS43NiAxLjQyNS0xLjUgMS44MjItMi4yMTVhNC42MjQgNC42MjQgMCAwIDAgLjU5Ny0yLjI2OGMwLTEuMjEzLS40MTYtMi4xNTQtMS4yNDctMi44MTUtLjgyOC0uNjYyLTIuMDMzLS45OTQtMy42MTMtLjk5NC0uMzQ0IDAtLjY5Mi4wMTUtMS4wMzYuMDQ5VjYuMDRIMTMuODZ2NC43MDFIOC45NjVWNi4wNEg1LjY1djEyLjg0NmgzLjMxNXYtNS42NjFoNC44OXY1LjY2MWguMDM5Yy4zMS0uMjQyLjYyMy0uNDg3LjkzMy0uNzRhMjguNTY0IDI4LjU2NCAwIDAgMCAxLjgyNi0xLjU4OCAxNC44NTQgMTQuODU0IDAgMCAwIC41MTctLjUyOXpNMTIuMDExIDIzLjNBMTEuMzI3IDExLjMyNyAwIDAgMSAuNyAxMS45OSAxMS4zMDUgMTEuMzA1IDAgMCAxIDEyLjAxMS42OTlhMTEuMjg2IDExLjI4NiAwIDAgMSAxMS4yOSAxMS4yOXYuMzUxSDI0di0uMzUxQTExLjk4NSAxMS45ODUgMCAwIDAgMTIuMDExIDAgMTIuMDA4IDEyLjAwOCAwIDAgMCAwIDExLjk4OSAxMi4wMjYgMTIuMDI2IDAgMCAwIDEyLjAxMSAyNGguMzUydi0uN3oiLz48L3N2Zz4=" x="1045" y="913" width="32" height="32"/>
+    <text class="mono" x="1252" y="935" text-anchor="middle">Exposed R2DBC H2 pool UserTable</text>
+  </g>
+
+  <path class="connector teal" d="M680 715 V900" data-connector="repository-cache"/>
+  <polyline points="680,900 673,888 687,888" fill="none" stroke="#4f8f8b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector brown" d="M1185 715 V900" data-connector="loader-db"/>
+  <polyline points="1185,900 1178,888 1192,888" fill="none" stroke="#8a6f55" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <rect class="note" x="120" y="1025" width="1760" height="34" rx="12"/>
+  <text class="foot" x="1000" y="1048" text-anchor="middle">One producer owns DB fallback; waiters share the result or cancellation without stale in-flight entries.</text>
 </svg>

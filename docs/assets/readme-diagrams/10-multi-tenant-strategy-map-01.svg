@@ -1,97 +1,152 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
-  <title id="title">Chapter 10 Multi-Tenant R2DBC Strategy Architecture</title>
-  <desc id="desc">Chapter 10 compares Spring WebFlux and Ktor tenant request boundaries with shared Exposed R2DBC isolation contracts.</desc>
-  <defs>
-    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
-      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/>
-    </filter>
-    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth">
-      <path d="M1,1 L8,4.5 L1,8 Z" fill="#5D6B7A"/>
-    </marker>
-    <style>
-      .bg{fill:#F7F9FC}
-      .panel{fill:#FFFFFF;stroke:#BCC7D6;stroke-width:2;rx:18;filter:url(#shadow)}
-      .spring{fill:#E8F7EE;stroke:#3A8B57}
-      .ktor{fill:#EDF1FF;stroke:#5067C5}
-      .shared{fill:#FFF7E6;stroke:#B7791F}
-      .db{fill:#F1F5F9;stroke:#475569}
-      .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:37px;fill:#172033;font-weight:400}
-      .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:17px;fill:#516070;font-weight:400}
-      .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:24px;fill:#172033;font-weight:400}
-      .component{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;fill:#172033;font-weight:400}
-      .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;fill:#425466;font-weight:400}
-      .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;fill:#172033;font-weight:400}
-      .arrow{stroke:#5D6B7A;stroke-width:2.4;fill:none;marker-end:url(#arrow)}
-      .dashed{stroke:#5D6B7A;stroke-width:2.2;stroke-dasharray:7 6;fill:none;marker-end:url(#arrow)}
-    </style>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="940" viewBox="0 0 1600 940" role="img" aria-label="Chapter 10 multi tenant strategy map">
+<defs>
+<filter id="shadow" x="-8%" y="-8%" width="116%" height="122%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
+<marker id="arrow-blue" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker>
+<marker id="arrow-green" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker>
+<marker id="arrow-amber" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#b78632" stroke="#b78632" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker>
+<marker id="arrow-teal" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker>
+<marker id="arrow-red" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#a85f7f" stroke="#a85f7f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker>
+<style>
+.canvas{fill:#f6f9fc}
+.frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}
+.lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.4}
+.title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:36px;fill:#1e293b}
+.subtitle,.detail,.note,.legend{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}
+.laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:18px;letter-spacing:.08em;fill:#8ca2b4}
+.cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:21px;fill:#1e293b}
+.tag{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#66758a;font-weight:700}
+.card{filter:url(#shadow)}
+.header{opacity:.96}
+.connector{fill:none;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none}
+.noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.4}
+</style>
+</defs>
+<rect class="canvas" width="1600" height="940"/>
+<rect class="frame" x="28" y="26" width="1544" height="888" rx="22"/>
+<text x="70" y="80" class="title">Chapter 10 Multi-Tenant Strategy Map</text>
+<text x="72" y="112" class="subtitle">Repository-backed chooser for schema switching, tenant-owned pools, authorization, runtime onboarding, and Ktor call-scoped routing.</text>
 
-  <rect class="bg" width="1400" height="760"/>
-  <text x="70" y="70" class="title">Chapter 10 Multi-Tenant Strategy Architecture</text>
-  <text x="70" y="105" class="subtitle">Two request boundaries, one Exposed R2DBC tenant-isolation decision model</text>
+<rect class="lane" x="54" y="148" width="1492" height="246" rx="18"/>
+<text x="82" y="180" class="laneTitle">REQUEST ROUTING STRATEGY</text>
+<rect class="lane" x="54" y="430" width="1492" height="158" rx="18"/>
+<text x="82" y="462" class="laneTitle">ISOLATION MODEL</text>
+<rect class="lane" x="54" y="624" width="1492" height="174" rx="18"/>
+<text x="82" y="656" class="laneTitle">WHEN TO CHOOSE</text>
 
-  <rect x="60" y="145" width="590" height="470" class="panel spring"/>
-  <text x="95" y="190" class="label">Spring WebFlux tenant boundary</text>
-  <text x="95" y="220" class="small">Filters, ReactorContext, authorization, and tenant-owned pool variants</text>
+<g data-card="03 Schema Switch" data-x="76" data-y="210" data-width="270" data-height="136">
+<rect class="card" x="76" y="210" width="270" height="136" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.2"/>
+<path class="header" d="M76,254 L76,224 Q76,210 90,210 L332,210 Q346,210 346,224 L346,254 Z" fill="#eef5fa"/>
+<text x="211" y="230" class="tag" text-anchor="middle">03-multitenant-spring-webflux</text>
+<text x="211" y="251" class="cardTitle" text-anchor="middle">Schema Switch</text>
+<text x="100" y="282" class="detail">TenantFilter -> ReactorContext</text>
+<text x="100" y="306" class="detail">currentReactorTenant()</text>
+<text x="100" y="330" class="detail">SchemaUtils.setSchema(...)</text>
+</g>
 
-  <rect x="100" y="255" width="190" height="80" class="panel"/>
-  <text x="126" y="287" class="component">request filter</text>
-  <text x="126" y="312" class="small">X-TENANT-ID</text>
+<g data-card="04 Tenant Pool" data-x="376" data-y="210" data-width="270" data-height="136">
+<rect class="card" x="376" y="210" width="270" height="136" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.2"/>
+<path class="header" d="M376,254 L376,224 Q376,210 390,210 L632,210 Q646,210 646,224 L646,254 Z" fill="#f1f6ec"/>
+<text x="511" y="230" class="tag" text-anchor="middle">04-connection-factory</text>
+<text x="511" y="251" class="cardTitle" text-anchor="middle">Tenant Pool</text>
+<text x="400" y="282" class="detail">TenantFilter validates header</text>
+<text x="400" y="306" class="detail">RoutingConnectionFactory</text>
+<text x="400" y="330" class="detail">TenantTransactionExecutor</text>
+</g>
 
-  <rect x="330" y="255" width="190" height="80" class="panel"/>
-  <text x="356" y="287" class="component">tenant context</text>
-  <text x="356" y="312" class="small">Reactor to coroutine</text>
+<g data-card="05 Authorized Pool" data-x="676" data-y="210" data-width="270" data-height="136">
+<rect class="card" x="676" y="210" width="270" height="136" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2.2"/>
+<path class="header" d="M676,254 L676,224 Q676,210 690,210 L932,210 Q946,210 946,224 L946,254 Z" fill="#f5eef2"/>
+<text x="811" y="230" class="tag" text-anchor="middle">05-spring-security</text>
+<text x="811" y="251" class="cardTitle" text-anchor="middle">Authorized Pool</text>
+<text x="700" y="282" class="detail">tenant_id from auth</text>
+<text x="700" y="306" class="detail">compare X-TENANT-ID</text>
+<text x="700" y="330" class="detail">write context only on match</text>
+</g>
 
-  <rect x="330" y="380" width="190" height="80" class="panel"/>
-  <text x="356" y="412" class="component">strategy service</text>
-  <text x="356" y="437" class="small">schema, auth, onboarding</text>
+<g data-card="06 Runtime Onboarding" data-x="976" data-y="210" data-width="270" data-height="136">
+<rect class="card" x="976" y="210" width="270" height="136" rx="14" fill="#fff" stroke="#b78632" stroke-width="2.2"/>
+<path class="header" d="M976,254 L976,224 Q976,210 990,210 L1232,210 Q1246,210 1246,224 L1246,254 Z" fill="#f5eee4"/>
+<text x="1111" y="230" class="tag" text-anchor="middle">06-tenant-onboarding</text>
+<text x="1111" y="251" class="cardTitle" text-anchor="middle">Runtime Onboarding</text>
+<text x="1000" y="282" class="detail">POST /api/tenants</text>
+<text x="1000" y="306" class="detail">reserve -> pool -> schema</text>
+<text x="1000" y="330" class="detail">register runtime resources</text>
+</g>
 
-  <rect x="100" y="380" width="190" height="80" class="panel"/>
-  <text x="126" y="412" class="component">fail closed</text>
-  <text x="126" y="437" class="small">invalid tenant</text>
+<g data-card="07 Ktor Attributes" data-x="1276" data-y="210" data-width="270" data-height="136">
+<rect class="card" x="1276" y="210" width="270" height="136" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.2"/>
+<path class="header" d="M1276,254 L1276,224 Q1276,210 1290,210 L1532,210 Q1546,210 1546,224 L1546,254 Z" fill="#eef7f6"/>
+<text x="1411" y="230" class="tag" text-anchor="middle">07-multitenant-ktor</text>
+<text x="1411" y="251" class="cardTitle" text-anchor="middle">Ktor Attributes</text>
+<text x="1300" y="282" class="detail">TenantPlugin validates header</text>
+<text x="1300" y="306" class="detail">call.attributes stores tenant</text>
+<text x="1300" y="330" class="detail">suspendTransactionWithTenant</text>
+</g>
 
-  <rect x="215" y="505" width="190" height="70" class="panel db"/>
-  <text x="241" y="535" class="component">tenant registry</text>
-  <text x="241" y="558" class="small">startup pools or metadata</text>
+<path class="connector" data-connector="strategy-03-isolation" d="M 211 346 L 211 430" stroke="#4f86c6" marker-end="url(#arrow-blue)"/>
+<path class="connector" data-connector="strategy-04-isolation" d="M 511 346 L 511 430" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+<path class="connector" data-connector="strategy-05-isolation" d="M 811 346 L 811 430" stroke="#a85f7f" marker-end="url(#arrow-red)"/>
+<path class="connector" data-connector="strategy-06-isolation" d="M 1111 346 L 1111 430" stroke="#b78632" marker-end="url(#arrow-amber)"/>
+<path class="connector" data-connector="strategy-07-isolation" d="M 1411 346 L 1411 430" stroke="#4f8f8b" marker-end="url(#arrow-teal)"/>
 
-  <path class="arrow" d="M290 295 H330"/>
-  <path class="arrow" d="M425 335 V380"/>
-  <path class="arrow" d="M425 460 C425 500 405 520 405 540"/>
-  <path class="arrow" d="M330 420 H290"/>
+<g data-card="One DB, Schema per Tenant" data-x="76" data-y="480" data-width="270" data-height="72">
+<rect class="card" x="76" y="480" width="270" height="72" rx="14" fill="#eef5fa" stroke="#4f86c6" stroke-width="2"/>
+<text x="211" y="510" class="cardTitle" text-anchor="middle">One R2DBC DB</text>
+<text x="211" y="535" class="detail" text-anchor="middle">schema per tenant</text>
+</g>
+<g data-card="R2DBC URL per Tenant" data-x="376" data-y="480" data-width="270" data-height="72">
+<rect class="card" x="376" y="480" width="270" height="72" rx="14" fill="#f1f6ec" stroke="#6f8f52" stroke-width="2"/>
+<text x="511" y="510" class="cardTitle" text-anchor="middle">Tenant-owned Pool</text>
+<text x="511" y="535" class="detail" text-anchor="middle">R2DBC URL per tenant</text>
+</g>
+<g data-card="Auth Gate plus Pool" data-x="676" data-y="480" data-width="270" data-height="72">
+<rect class="card" x="676" y="480" width="270" height="72" rx="14" fill="#f5eef2" stroke="#a85f7f" stroke-width="2"/>
+<text x="811" y="510" class="cardTitle" text-anchor="middle">Auth Gate + Pool</text>
+<text x="811" y="535" class="detail" text-anchor="middle">authorized tenant routes</text>
+</g>
+<g data-card="Runtime Registry" data-x="976" data-y="480" data-width="270" data-height="72">
+<rect class="card" x="976" y="480" width="270" height="72" rx="14" fill="#f5eee4" stroke="#b78632" stroke-width="2"/>
+<text x="1111" y="510" class="cardTitle" text-anchor="middle">Runtime Registry</text>
+<text x="1111" y="535" class="detail" text-anchor="middle">pool + database wrappers</text>
+</g>
+<g data-card="Ktor Schema Switch" data-x="1276" data-y="480" data-width="270" data-height="72">
+<rect class="card" x="1276" y="480" width="270" height="72" rx="14" fill="#eef7f6" stroke="#4f8f8b" stroke-width="2"/>
+<text x="1411" y="510" class="cardTitle" text-anchor="middle">One R2DBC DB</text>
+<text x="1411" y="535" class="detail" text-anchor="middle">Ktor schema switch</text>
+</g>
 
-  <rect x="750" y="145" width="590" height="470" class="panel ktor"/>
-  <text x="785" y="190" class="label">Ktor tenant boundary</text>
-  <text x="785" y="220" class="small">Plugin and call attributes model the same schema-per-tenant request flow</text>
+<path class="connector" data-connector="isolation-03-choice" d="M 211 552 L 211 624" stroke="#4f86c6" marker-end="url(#arrow-blue)"/>
+<path class="connector" data-connector="isolation-04-choice" d="M 511 552 L 511 624" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+<path class="connector" data-connector="isolation-05-choice" d="M 811 552 L 811 624" stroke="#a85f7f" marker-end="url(#arrow-red)"/>
+<path class="connector" data-connector="isolation-06-choice" d="M 1111 552 L 1111 624" stroke="#b78632" marker-end="url(#arrow-amber)"/>
+<path class="connector" data-connector="isolation-07-choice" d="M 1411 552 L 1411 624" stroke="#4f8f8b" marker-end="url(#arrow-teal)"/>
 
-  <rect x="790" y="255" width="190" height="80" class="panel"/>
-  <text x="816" y="287" class="component">routing plugin</text>
-  <text x="816" y="312" class="small">header validation</text>
+<g data-card="Choose 03" data-x="76" data-y="682" data-width="270" data-height="76">
+<rect x="76" y="682" width="270" height="76" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2"/>
+<text x="211" y="710" class="detail" text-anchor="middle">shared DB is enough</text>
+<text x="211" y="735" class="detail" text-anchor="middle">need WebFlux + schema isolation</text>
+</g>
+<g data-card="Choose 04" data-x="376" data-y="682" data-width="270" data-height="76">
+<rect x="376" y="682" width="270" height="76" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2"/>
+<text x="511" y="710" class="detail" text-anchor="middle">tenants are known at startup</text>
+<text x="511" y="735" class="detail" text-anchor="middle">separate pools are required</text>
+</g>
+<g data-card="Choose 05" data-x="676" data-y="682" data-width="270" data-height="76">
+<rect x="676" y="682" width="270" height="76" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2"/>
+<text x="811" y="710" class="detail" text-anchor="middle">tenant claim must match header</text>
+<text x="811" y="735" class="detail" text-anchor="middle">reject mismatch before routing</text>
+</g>
+<g data-card="Choose 06" data-x="976" data-y="682" data-width="270" data-height="76">
+<rect x="976" y="682" width="270" height="76" rx="14" fill="#fff" stroke="#b78632" stroke-width="2"/>
+<text x="1111" y="710" class="detail" text-anchor="middle">tenants are created at runtime</text>
+<text x="1111" y="735" class="detail" text-anchor="middle">provision + cleanup must exist</text>
+</g>
+<g data-card="Choose 07" data-x="1276" data-y="682" data-width="270" data-height="76">
+<rect x="1276" y="682" width="270" height="76" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2"/>
+<text x="1411" y="710" class="detail" text-anchor="middle">same schema strategy in Ktor</text>
+<text x="1411" y="735" class="detail" text-anchor="middle">no ReactorContext or filters</text>
+</g>
 
-  <rect x="1020" y="255" width="190" height="80" class="panel"/>
-  <text x="1046" y="287" class="component">call attributes</text>
-  <text x="1046" y="312" class="small">tenant context</text>
-
-  <rect x="1020" y="380" width="190" height="80" class="panel"/>
-  <text x="1046" y="412" class="component">schema switch</text>
-  <text x="1046" y="437" class="small">module 07 flow</text>
-
-  <rect x="790" y="380" width="190" height="80" class="panel"/>
-  <text x="816" y="412" class="component">status pages</text>
-  <text x="816" y="437" class="small">tenant errors</text>
-
-  <rect x="905" y="505" width="190" height="70" class="panel db"/>
-  <text x="931" y="535" class="component">tenant schema</text>
-  <text x="931" y="558" class="small">H2-focused verification</text>
-
-  <path class="arrow" d="M980 295 H1020"/>
-  <path class="arrow" d="M1115 335 V380"/>
-  <path class="arrow" d="M1115 460 C1115 500 1095 520 1095 540"/>
-  <path class="arrow" d="M1020 420 H980"/>
-
-  <rect x="365" y="645" width="670" height="72" class="panel shared"/>
-  <text x="395" y="674" class="label">Shared R2DBC contracts</text>
-  <text x="395" y="700" class="small">suspendTransaction, fail-closed tenant validation, schema-per-tenant, connection-factory-per-tenant, onboarding cleanup</text>
-
-  <path class="dashed" d="M520 420 C610 520 650 610 700 645"/>
-  <path class="dashed" d="M1020 420 C930 520 850 610 770 645"/>
+<rect x="96" y="832" width="1408" height="34" rx="10" class="noteBox"/>
+<text x="800" y="854" class="legend" text-anchor="middle">Every request-routed example validates X-TENANT-ID and fails closed; 05 adds identity authorization, 06 adds admin-token onboarding.</text>
 </svg>

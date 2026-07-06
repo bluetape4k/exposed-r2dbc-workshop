@@ -1,76 +1,109 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1044" height="692" viewBox="0 0 1044 692" role="img" aria-label="High-Performance Strategy Overview">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1044" height="692"/>
-<rect class="frame" x="32" y="28" width="980" height="636" rx="28"/>
-<text class="title" x="66" y="82">High-Performance Strategy Overview</text>
-<text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M706 552 C706 469 338 469 338 386" data-connector="line"/>
-<path class="line" d="M672 552 C672 552 706 552 706 552" data-connector="line"/>
-<path class="line" d="M338 552 C338 552 706 552 706 552" data-connector="line"/>
-<path class="line" d="M338 552 C338 552 372 552 372 552" data-connector="line"/>
-<path class="line" d="M188 280 C188 386 188 386 188 492" data-connector="line"/>
-<path class="line" d="M856 280 C856 303 856 303 856 326" data-connector="line"/>
-<path class="line" d="M706 220 C706 303 672 303 672 386" data-connector="line"/>
-<path class="line" d="M706 220 C706 303 338 303 338 386" data-connector="line"/>
-<path class="line" d="M672 220 C672 220 706 220 706 220" data-connector="line"/>
-<path class="line" d="M338 220 C338 220 372 220 372 220" data-connector="line"/>
-<g transform="translate(48,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Application</text>
-</g>
-<g transform="translate(382,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Dynamic Routing</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">Connection Factory</text>
-</g>
-<g transform="translate(716,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Routing Strategy</text>
-</g>
-<g transform="translate(48,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Primary DB (Write)</text>
-</g>
-<g transform="translate(382,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Replica DB (Read)</text>
-</g>
-<g transform="translate(716,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Tenant-specific DB</text>
-</g>
-<g transform="translate(48,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Cache Layer</text>
-</g>
-<g transform="translate(382,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">L1: In-Memory</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">(Caffeine)</text>
-</g>
-<g transform="translate(716,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">L2: Redis (Lettuce</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">Coroutines)</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 820" width="1320" height="820" role="img" aria-label="Chapter 11 high performance strategy map">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="#1f2937" flood-opacity="0.11"/>
+    </filter>
+    <style>
+      .canvas{fill:#f5f8fb}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.6}
+      .lane{fill:#f8fbfd;stroke:#d9e5ee;stroke-width:1.3}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:32px;fill:#1f2a37}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#526477;font-weight:700}
+      .small{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#65768a;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:15px;letter-spacing:.08em;fill:#8ba1b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:18px;fill:#1f2a37}
+      .card{filter:url(#shadow)}
+      .header{opacity:.96}
+      .flow{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .pill{fill:#fff;stroke-width:1.4}
+      .foot{fill:#ecfdf5;stroke:#86efac;stroke-width:1.4}
+    </style>
+  </defs>
+  <rect width="1320" height="820" class="canvas"/>
+  <rect x="24" y="24" width="1272" height="772" rx="20" class="frame"/>
+  <text x="64" y="73" class="title">Chapter 11 High-Performance Strategy Map</text>
+  <text x="64" y="103" class="subtitle">Guide to cache and routing choices before diving into module-specific diagrams.</text>
+
+  <rect x="54" y="132" width="1212" height="228" rx="18" class="lane"/>
+  <text x="78" y="162" class="laneTitle">CACHE STRATEGIES: REDUCE DATABASE LOAD</text>
+  <rect x="54" y="388" width="1212" height="206" rx="18" class="lane"/>
+  <text x="78" y="418" class="laneTitle">ROUTING STRATEGIES: CHOOSE TENANT AND READ/WRITE TARGET</text>
+  <rect x="54" y="622" width="1212" height="86" rx="18" class="lane"/>
+  <text x="78" y="652" class="laneTitle">READER PATH</text>
+  <rect x="80" y="740" width="1160" height="34" rx="11" class="foot"/>
+  <text x="660" y="762" class="note" text-anchor="middle">Spring examples use Reactor Context; Ktor examples keep the same lessons explicit through routes, call attributes, and coroutine ownership.</text>
+
+  <g data-card="02 Spring cache" data-x="92" data-y="206" data-width="300" data-height="106">
+    <rect x="92" y="206" width="300" height="106" rx="14" fill="#ffffff" stroke="#4f86c6" stroke-width="2.2" class="card"/>
+    <path class="header" d="M92,250 L92,220 Q92,206 106,206 L378,206 Q392,206 392,220 L392,250 Z" fill="#eef5fa"/>
+    <text x="242" y="226" class="small" text-anchor="middle">02-cache-strategies-r2dbc</text>
+    <text x="242" y="247" class="cardTitle" text-anchor="middle">Spring WebFlux Cache</text>
+    <text x="114" y="276" class="detail">Read/write-through + near cache</text>
+    <text x="114" y="298" class="detail">Write-behind events via Redisson</text>
+  </g>
+  <g data-card="04 Ktor cache" data-x="510" data-y="206" data-width="300" data-height="106">
+    <rect x="510" y="206" width="300" height="106" rx="14" fill="#ffffff" stroke="#4f8f8b" stroke-width="2.2" class="card"/>
+    <path class="header" d="M510,250 L510,220 Q510,206 524,206 L796,206 Q810,206 810,220 L810,250 Z" fill="#eef7f6"/>
+    <text x="660" y="226" class="small" text-anchor="middle">04-cache-strategies-ktor-r2dbc</text>
+    <text x="660" y="247" class="cardTitle" text-anchor="middle">Ktor Cache Routes</text>
+    <text x="532" y="276" class="detail">HIT / MISS / NOT_FOUND visible</text>
+    <text x="532" y="298" class="detail">Create/update refresh cache</text>
+  </g>
+  <g data-card="05 coroutine cache" data-x="928" data-y="206" data-width="300" data-height="106">
+    <rect x="928" y="206" width="300" height="106" rx="14" fill="#ffffff" stroke="#6f8f52" stroke-width="2.2" class="card"/>
+    <path class="header" d="M928,250 L928,220 Q928,206 942,206 L1214,206 Q1228,206 1228,220 L1228,250 Z" fill="#f1f6ec"/>
+    <text x="1078" y="226" class="small" text-anchor="middle">05-cache-strategies-ktor-r2dbc-coroutines</text>
+    <text x="1078" y="247" class="cardTitle" text-anchor="middle">Single-Flight Cache</text>
+    <text x="950" y="276" class="detail">One producer per cold key</text>
+    <text x="950" y="298" class="detail">Cancellation and timeout tracked</text>
+  </g>
+
+  <path data-connector="cache-spring-to-ktor" class="flow" d="M392 259 L510 259" stroke="#4f8f8b"/>
+  <polygon points="510,259 496,251 496,267" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path data-connector="cache-ktor-to-coroutine" class="flow" d="M810 259 L928 259" stroke="#6f8f52"/>
+  <polygon points="928,259 914,251 914,267" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <rect x="416" y="231" width="70" height="26" rx="10" class="pill" stroke="#b7d7d5"/>
+  <text x="451" y="249" class="small" text-anchor="middle">same topic</text>
+  <rect x="832" y="231" width="74" height="26" rx="10" class="pill" stroke="#bed5a9"/>
+  <text x="869" y="249" class="small" text-anchor="middle">deep dive</text>
+
+  <g data-card="03 Spring routing" data-x="156" data-y="448" data-width="360" data-height="126">
+    <rect x="156" y="448" width="360" height="126" rx="14" fill="#ffffff" stroke="#a66a3f" stroke-width="2.2" class="card"/>
+    <path class="header" d="M156,492 L156,462 Q156,448 170,448 L502,448 Q516,448 516,462 L516,492 Z" fill="#f5eee4"/>
+    <text x="336" y="468" class="small" text-anchor="middle">03-routing-datasource</text>
+    <text x="336" y="489" class="cardTitle" text-anchor="middle">Spring Reactor Routing</text>
+    <text x="178" y="518" class="detail">TenantRoutingWebFilter writes context</text>
+    <text x="178" y="540" class="detail">DynamicRoutingConnectionFactory selects</text>
+    <text x="178" y="562" class="detail">tenant:rw or tenant:ro target</text>
+  </g>
+  <g data-card="06 Ktor routing" data-x="804" data-y="448" data-width="360" data-height="126">
+    <rect x="804" y="448" width="360" height="126" rx="14" fill="#ffffff" stroke="#a85f7f" stroke-width="2.2" class="card"/>
+    <path class="header" d="M804,492 L804,462 Q804,448 818,448 L1150,448 Q1164,448 1164,462 L1164,492 Z" fill="#f5eef2"/>
+    <text x="984" y="468" class="small" text-anchor="middle">06-routing-datasource-ktor-r2dbc</text>
+    <text x="984" y="489" class="cardTitle" text-anchor="middle">Ktor Attribute Routing</text>
+    <text x="826" y="518" class="detail">RoutingRequestPlugin validates headers</text>
+    <text x="826" y="540" class="detail">Explicit request chooses default/acme</text>
+    <text x="826" y="562" class="detail">and rw/ro target</text>
+  </g>
+  <path data-connector="spring-routing-to-ktor-routing" class="flow" d="M516 510 L804 510" stroke="#a85f7f"/>
+  <polygon points="804,510 790,502 790,518" fill="#a85f7f" stroke="#a85f7f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <rect x="590" y="482" width="140" height="26" rx="10" class="pill" stroke="#e0bdcf"/>
+  <text x="660" y="500" class="small" text-anchor="middle">same routing lesson</text>
+
+  <g data-card="Start with cache" data-x="118" data-y="664" data-width="260" data-height="38">
+    <rect x="118" y="664" width="260" height="38" rx="12" fill="#ffffff" stroke="#4f86c6" stroke-width="1.6"/>
+    <text x="248" y="688" class="detail" text-anchor="middle">Start: cache hit/miss and DB fallback</text>
+  </g>
+  <g data-card="Then route" data-x="530" data-y="664" data-width="260" data-height="38">
+    <rect x="530" y="664" width="260" height="38" rx="12" fill="#ffffff" stroke="#a66a3f" stroke-width="1.6"/>
+    <text x="660" y="688" class="detail" text-anchor="middle">Then: tenant + read/write routing</text>
+  </g>
+  <g data-card="Compare Ktor" data-x="942" data-y="664" data-width="260" data-height="38">
+    <rect x="942" y="664" width="260" height="38" rx="12" fill="#ffffff" stroke="#4f8f8b" stroke-width="1.6"/>
+    <text x="1072" y="688" class="detail" text-anchor="middle">Compare: Ktor route contracts</text>
+  </g>
+  <path data-connector="reader-cache-to-route" class="flow" d="M378 683 L530 683" stroke="#a66a3f"/>
+  <polygon points="530,683 516,675 516,691" fill="#a66a3f" stroke="#a66a3f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path data-connector="reader-route-to-ktor" class="flow" d="M790 683 L942 683" stroke="#4f8f8b"/>
+  <polygon points="942,683 928,675 928,691" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 </svg>

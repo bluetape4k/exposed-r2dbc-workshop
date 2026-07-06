@@ -1,171 +1,164 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="5270" height="1308" viewBox="0 0 5270 1308" role="img" aria-label="Structure Diagram">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 980" width="1440" height="980" role="img" aria-label="Exposed R2DBC column type test class structure">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fffdf9;stroke:#d7e2ec;stroke-width:1.6}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.3}
+      .card{filter:url(#shadow)}
+      .header{opacity:.96}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:34px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:15px;letter-spacing:.08em;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:19px;fill:#1e293b}
+      .connector{fill:none;stroke:#64748b;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#solidArrow)}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.3}
+    </style>
+    <marker id="solidArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#64748b" stroke="#64748b" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+  </defs>
 
+  <rect width="1440" height="980" class="canvas"/>
+  <rect x="22" y="22" width="1396" height="936" rx="18" class="frame"/>
 
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none}
-  </style>
-</defs>
-<rect class="canvas" width="5270" height="1308"/>
-<rect class="frame" x="32" y="28" width="5206" height="1252" rx="28"/>
-<text class="title" x="66" y="82">Structure Diagram</text>
-<text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="inheritLine" d="M1435 412 L1435 352 L2635 352 L2635 292"/>
-<path class="inheritLine" d="M3835 412 L3835 352 L2635 352 L2635 292"/>
-<path class="inheritLine" d="M3435 412 L3435 352 L2635 352 L2635 292"/>
-<path class="inheritLine" d="M1035 412 L1035 352 L2635 352 L2635 292"/>
-<path class="inheritLine" d="M4635 412 L4635 352 L2635 352 L2635 292"/>
-<path class="inheritLine" d="M2635 412 L2635 352 L2635 352 L2635 292"/>
-<path class="inheritLine" d="M5035 412 L5035 352 L2635 352 L2635 292"/>
-<path class="inheritLine" d="M635 412 L635 352 L2635 352 L2635 292"/>
-<path class="inheritLine" d="M3035 412 L3035 352 L2635 352 L2635 292"/>
-<path class="inheritLine" d="M2235 412 L2235 352 L2635 352 L2635 292"/>
-<path class="inheritLine" d="M235 412 L235 352 L2635 352 L2635 292"/>
-<path class="inheritLine" d="M1835 412 L1835 352 L2635 352 L2635 292"/>
-<path class="inheritLine" d="M4235 412 L4235 352 L2635 352 L2635 292"/>
-<g transform="translate(70,412)">
-  <rect class="card" x="0" y="0" width="330" height="154" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#5B8DEF"/>
-  <text class="small" x="165" y="26" text-anchor="middle"></text>
-  <text class="label" x="165" y="61" text-anchor="middle">VarCharColumn</text>
-  <text class="mono" x="18" y="108">+varchar(name, length)</text>
-<text class="mono" x="18" y="129">+length: Int</text>
-</g>
-<g transform="translate(2070,412)">
-  <rect class="card" x="0" y="0" width="330" height="175" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#58A978"/>
-  <text class="small" x="165" y="26" text-anchor="middle"></text>
-  <text class="label" x="165" y="61" text-anchor="middle">TextColumn</text>
-  <text class="mono" x="18" y="108">+text(name)</text>
-<text class="mono" x="18" y="129">+mediumText(name)</text>
-<text class="mono" x="18" y="150">+largeText(name)</text>
-</g>
-<g transform="translate(3670,412)">
-  <rect class="card" x="0" y="0" width="330" height="154" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#D6A441"/>
-  <text class="small" x="165" y="26" text-anchor="middle"></text>
-  <text class="label" x="165" y="61" text-anchor="middle">JavaUUIDColumn</text>
-  <text class="mono" x="18" y="108">+javaUUID(name)</text>
-<text class="mono" x="18" y="129">+autoGenerate()</text>
-</g>
-<g transform="translate(470,412)">
-  <rect class="card" x="0" y="0" width="330" height="133" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
-  <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#DC6B82"/>
-  <text class="small" x="165" y="26" text-anchor="middle"></text>
-  <text class="label" x="165" y="61" text-anchor="middle">FloatColumn</text>
-  <text class="mono" x="18" y="108">+float(name)</text>
-</g>
-<g transform="translate(2470,412)">
-  <rect class="card" x="0" y="0" width="330" height="175" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
-  <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#45A7A1"/>
-  <text class="small" x="165" y="26" text-anchor="middle"></text>
-  <text class="label" x="165" y="61" text-anchor="middle">DecimalColumn</text>
-  <text class="mono" x="18" y="108">+decimal(name, precision, scale)</text>
-<text class="mono" x="18" y="129">+precision: Int</text>
-<text class="mono" x="18" y="150">+scale: Int</text>
-</g>
-<g transform="translate(4070,412)">
-  <rect class="card" x="0" y="0" width="330" height="154" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
-  <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#8A72D6"/>
-  <text class="small" x="165" y="26" text-anchor="middle"></text>
-  <text class="label" x="165" y="61" text-anchor="middle">BooleanColumn</text>
-  <text class="mono" x="18" y="108">+bool(name)</text>
-<text class="mono" x="18" y="129">+booleanParam(value)</text>
-</g>
-<g transform="translate(870,412)">
-  <rect class="card" x="0" y="0" width="330" height="112" rx="5" fill="#F7F1E7" stroke="#B88A44"/>
-  <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#B88A44"/>
-  <text class="small" x="165" y="26" text-anchor="middle"></text>
-  <text class="label" x="165" y="61" text-anchor="middle">ArrayColumn</text>
+  <text x="58" y="70" class="title" text-anchor="start">Column Type Test Class Structure</text>
+  <text x="58" y="100" class="subtitle" text-anchor="start">The 02-types module groups nine R2DBC tests by source class, table fixture, and column DSL responsibility.</text>
 
-</g>
-<g transform="translate(2470,180)">
-  <rect class="card" x="0" y="0" width="330" height="112" rx="5" fill="#EEF6D9" stroke="#8BA84D"/>
-  <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#8BA84D"/>
-  <text class="small" x="165" y="26" text-anchor="middle"></text>
-  <text class="label" x="165" y="61" text-anchor="middle">Column</text>
+  <rect x="50" y="130" width="1340" height="244" rx="16" class="lane"/>
+  <text x="76" y="160" class="laneTitle" text-anchor="start">TEST CLASS GROUPS</text>
 
-</g>
-<g transform="translate(4470,412)">
-  <rect class="card" x="0" y="0" width="330" height="196" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#5B8DEF"/>
-  <text class="small" x="165" y="26" text-anchor="middle"></text>
-  <text class="label" x="165" y="61" text-anchor="middle">UnsignedColumn</text>
-  <text class="mono" x="18" y="108">+ubyte(name)</text>
-<text class="mono" x="18" y="129">+ushort(name)</text>
-<text class="mono" x="18" y="150">+uint(name)</text>
-<text class="mono" x="18" y="171">+ulong(name)</text>
-</g>
-<g transform="translate(1270,412)">
-  <rect class="card" x="0" y="0" width="330" height="154" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#58A978"/>
-  <text class="small" x="165" y="26" text-anchor="middle"></text>
-  <text class="label" x="165" y="61" text-anchor="middle">KotlinUUIDColumn</text>
-  <text class="mono" x="18" y="108">+kotlinUUID(name)</text>
-<text class="mono" x="18" y="129">+generateV7()</text>
-</g>
-<g transform="translate(2870,412)">
-  <rect class="card" x="0" y="0" width="330" height="196" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#D6A441"/>
-  <text class="small" x="165" y="26" text-anchor="middle"></text>
-  <text class="label" x="165" y="61" text-anchor="middle">IntegerColumn</text>
-  <text class="mono" x="18" y="108">+byte(name)</text>
-<text class="mono" x="18" y="129">+short(name)</text>
-<text class="mono" x="18" y="150">+integer(name)</text>
-<text class="mono" x="18" y="171">+long(name)</text>
-</g>
-<g transform="translate(4870,412)">
-  <rect class="card" x="0" y="0" width="330" height="133" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
-  <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#DC6B82"/>
-  <text class="small" x="165" y="26" text-anchor="middle"></text>
-  <text class="label" x="165" y="61" text-anchor="middle">DoubleColumn</text>
-  <text class="mono" x="18" y="108">+double(name)</text>
-</g>
-<g transform="translate(1670,412)">
-  <rect class="card" x="0" y="0" width="330" height="133" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
-  <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#45A7A1"/>
-  <text class="small" x="165" y="26" text-anchor="middle"></text>
-  <text class="label" x="165" y="61" text-anchor="middle">CharColumn</text>
-  <text class="mono" x="18" y="108">+char(name, length)</text>
-</g>
-<g transform="translate(3270,412)">
-  <rect class="card" x="0" y="0" width="330" height="154" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
-  <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#8A72D6"/>
-  <text class="small" x="165" y="26" text-anchor="middle"></text>
-  <text class="label" x="165" y="61" text-anchor="middle">BlobColumn</text>
-  <text class="mono" x="18" y="108">+blob(name)</text>
-<text class="mono" x="18" y="129">+blobParam(value)</text>
-</g>
-<g transform="translate(2470,728)">
-  <rect class="card" x="0" y="0" width="330" height="196" rx="5" fill="#F7F1E7" stroke="#B88A44"/>
-  <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#B88A44"/>
-  <text class="small" x="165" y="26" text-anchor="middle"></text>
-  <text class="label" x="165" y="61" text-anchor="middle">ArrayColumnT</text>
-  <text class="mono" x="18" y="108">+array(name)</text>
-<text class="mono" x="18" y="129">+anyFrom(column)</text>
-<text class="mono" x="18" y="150">+allFrom(column)</text>
-<text class="mono" x="18" y="171">+slice(column, lower, upper)</text>
-</g>
-<g transform="translate(2470,1044)">
-  <rect class="card" x="0" y="0" width="330" height="154" rx="5" fill="#EEF6D9" stroke="#8BA84D"/>
-  <line class="compartment" x1="0" y1="78" x2="330" y2="78" stroke="#8BA84D"/>
-  <text class="small" x="165" y="26" text-anchor="middle">«abstract»</text>
-  <text class="label" x="165" y="61" text-anchor="middle">ColumnT</text>
-  <text class="mono" x="18" y="108">+columnType: IColumnType</text>
-<text class="mono" x="18" y="129">+name: String</text>
-</g>
+  <rect x="50" y="404" width="1340" height="244" rx="16" class="lane"/>
+  <text x="76" y="434" class="laneTitle" text-anchor="start">TABLE OBJECTS AND LOCAL TABLES</text>
+
+  <rect x="50" y="678" width="1340" height="172" rx="16" class="lane"/>
+  <text x="76" y="708" class="laneTitle" text-anchor="start">COLUMN TYPE HELPERS AND CONTRACTS</text>
+
+  <g data-card="Scalar Tests" data-x="92" data-y="204" data-width="292" data-height="118">
+    <rect x="92" y="204" width="292" height="118" rx="14" fill="#ffffff" stroke="#4f86c6" stroke-width="2" class="card"/>
+    <path class="header" d="M92,248 L92,218 Q92,204 106,204 L370,204 Q384,204 384,218 L384,248 Z" fill="#eef5fa"/>
+    <text x="238" y="223" class="tiny" text-anchor="middle">&lt;&lt;extends base test&gt;&gt;</text>
+    <text x="238" y="243" class="cardTitle" text-anchor="middle">Scalar Tests</text>
+    <text x="112" y="274" class="detail" text-anchor="start">Ex01 Boolean</text>
+    <text x="112" y="292" class="detail" text-anchor="start">Ex03 Numeric</text>
+    <text x="112" y="310" class="detail" text-anchor="start">Ex04 Double</text>
+  </g>
+
+  <g data-card="Text Tests" data-x="416" data-y="204" data-width="292" data-height="118">
+    <rect x="416" y="204" width="292" height="118" rx="14" fill="#ffffff" stroke="#6f8f52" stroke-width="2" class="card"/>
+    <path class="header" d="M416,248 L416,218 Q416,204 430,204 L694,204 Q708,204 708,218 L708,248 Z" fill="#f1f6ec"/>
+    <text x="562" y="223" class="tiny" text-anchor="middle">&lt;&lt;char/string family&gt;&gt;</text>
+    <text x="562" y="243" class="cardTitle" text-anchor="middle">Text Tests</text>
+    <text x="436" y="274" class="detail" text-anchor="start">Ex02 CharColumnType</text>
+    <text x="436" y="292" class="detail" text-anchor="start">char / varchar / text</text>
+    <text x="436" y="310" class="detail" text-anchor="start">collation path</text>
+  </g>
+
+  <g data-card="Array and Unsigned Tests" data-x="740" data-y="204" data-width="292" data-height="118">
+    <rect x="740" y="204" width="292" height="118" rx="14" fill="#ffffff" stroke="#a66a3f" stroke-width="2" class="card"/>
+    <path class="header" d="M740,248 L740,218 Q740,204 754,204 L1018,204 Q1032,204 1032,218 L1032,248 Z" fill="#f5eee4"/>
+    <text x="886" y="223" class="tiny" text-anchor="middle">&lt;&lt;advanced DB support&gt;&gt;</text>
+    <text x="886" y="243" class="cardTitle" text-anchor="middle">Array + Unsigned</text>
+    <text x="760" y="274" class="detail" text-anchor="start">Ex05 ArrayColumnType</text>
+    <text x="760" y="292" class="detail" text-anchor="start">Ex07 UnsignedColumnType</text>
+    <text x="760" y="310" class="detail" text-anchor="start">bounds + any/all ops</text>
+  </g>
+
+  <g data-card="Binary and UUID Tests" data-x="1064" data-y="204" data-width="292" data-height="118">
+    <rect x="1064" y="204" width="292" height="118" rx="14" fill="#ffffff" stroke="#a85f7f" stroke-width="2" class="card"/>
+    <path class="header" d="M1064,248 L1064,218 Q1064,204 1078,204 L1342,204 Q1356,204 1356,218 L1356,248 Z" fill="#f5eef2"/>
+    <text x="1210" y="223" class="tiny" text-anchor="middle">&lt;&lt;binary identity&gt;&gt;</text>
+    <text x="1210" y="243" class="cardTitle" text-anchor="middle">Blob + UUID</text>
+    <text x="1084" y="274" class="detail" text-anchor="start">Ex08 BlobColumnType</text>
+    <text x="1084" y="292" class="detail" text-anchor="start">Ex09 JavaUUID</text>
+    <text x="1084" y="310" class="detail" text-anchor="start">Ex10 KotlinUUID</text>
+  </g>
+
+  <g data-card="Scalar Tables" data-x="92" data-y="478" data-width="292" data-height="118">
+    <rect x="92" y="478" width="292" height="118" rx="14" fill="#ffffff" stroke="#4f86c6" stroke-width="2" class="card"/>
+    <path class="header" d="M92,522 L92,492 Q92,478 106,478 L370,478 Q384,478 384,492 L384,522 Z" fill="#eef5fa"/>
+    <text x="238" y="497" class="tiny" text-anchor="middle">&lt;&lt;source fixtures&gt;&gt;</text>
+    <text x="238" y="517" class="cardTitle" text-anchor="middle">Scalar Tables</text>
+    <text x="112" y="548" class="detail" text-anchor="start">BooleanTable</text>
+    <text x="112" y="566" class="detail" text-anchor="start">numeric tester tables</text>
+    <text x="112" y="584" class="detail" text-anchor="start">double_table</text>
+  </g>
+
+  <g data-card="Text Tables" data-x="416" data-y="478" data-width="292" data-height="118">
+    <rect x="416" y="478" width="292" height="118" rx="14" fill="#ffffff" stroke="#6f8f52" stroke-width="2" class="card"/>
+    <path class="header" d="M416,522 L416,492 Q416,478 430,478 L694,478 Q708,478 708,492 L708,522 Z" fill="#f1f6ec"/>
+    <text x="562" y="497" class="tiny" text-anchor="middle">&lt;&lt;source fixtures&gt;&gt;</text>
+    <text x="562" y="517" class="cardTitle" text-anchor="middle">Text Tables</text>
+    <text x="436" y="548" class="detail" text-anchor="start">CharTable</text>
+    <text x="436" y="566" class="detail" text-anchor="start">letter collate tester</text>
+    <text x="436" y="584" class="detail" text-anchor="start">string column family</text>
+  </g>
+
+  <g data-card="Array and Unsigned Tables" data-x="740" data-y="478" data-width="292" data-height="118">
+    <rect x="740" y="478" width="292" height="118" rx="14" fill="#ffffff" stroke="#a66a3f" stroke-width="2" class="card"/>
+    <path class="header" d="M740,522 L740,492 Q740,478 754,478 L1018,478 Q1032,478 1032,492 L1032,522 Z" fill="#f5eee4"/>
+    <text x="886" y="497" class="tiny" text-anchor="middle">&lt;&lt;source fixtures&gt;&gt;</text>
+    <text x="886" y="517" class="cardTitle" text-anchor="middle">Array + Unsigned</text>
+    <text x="760" y="548" class="detail" text-anchor="start">ArrayTestTable</text>
+    <text x="760" y="566" class="detail" text-anchor="start">UByte / UShort</text>
+    <text x="760" y="584" class="detail" text-anchor="start">UInt / ULong tables</text>
+  </g>
+
+  <g data-card="Binary and UUID Tables" data-x="1064" data-y="478" data-width="292" data-height="118">
+    <rect x="1064" y="478" width="292" height="118" rx="14" fill="#ffffff" stroke="#a85f7f" stroke-width="2" class="card"/>
+    <path class="header" d="M1064,522 L1064,492 Q1064,478 1078,478 L1342,478 Q1356,478 1356,492 L1356,522 Z" fill="#f5eef2"/>
+    <text x="1210" y="497" class="tiny" text-anchor="middle">&lt;&lt;source fixtures&gt;&gt;</text>
+    <text x="1210" y="517" class="cardTitle" text-anchor="middle">Blob + UUID Tables</text>
+    <text x="1084" y="548" class="detail" text-anchor="start">BlobTable</text>
+    <text x="1084" y="566" class="detail" text-anchor="start">test_java_uuid locals</text>
+    <text x="1084" y="584" class="detail" text-anchor="start">native MariaDB UUID</text>
+  </g>
+
+  <g data-card="Custom Boolean Type" data-x="92" data-y="742" data-width="292" data-height="84">
+    <rect x="92" y="742" width="292" height="84" rx="14" fill="#ffffff" stroke="#4f8f8b" stroke-width="2" class="card"/>
+    <path class="header" d="M92,776 L92,756 Q92,742 106,742 L370,742 Q384,742 384,756 L384,776 Z" fill="#eef7f6"/>
+    <text x="238" y="766" class="cardTitle" text-anchor="middle">Custom Boolean Type</text>
+    <text x="112" y="796" class="detail" text-anchor="start">CharBooleanColumnType</text>
+    <text x="112" y="814" class="detail" text-anchor="start">Table.charBool(name)</text>
+  </g>
+
+  <g data-card="Scalar Builders" data-x="416" data-y="742" data-width="292" data-height="84">
+    <rect x="416" y="742" width="292" height="84" rx="14" fill="#ffffff" stroke="#8a6f55" stroke-width="2" class="card"/>
+    <path class="header" d="M416,776 L416,756 Q416,742 430,742 L694,742 Q708,742 708,756 L708,776 Z" fill="#f3eee8"/>
+    <text x="562" y="766" class="cardTitle" text-anchor="middle">Scalar Builders</text>
+    <text x="436" y="796" class="detail" text-anchor="start">bool / char / double</text>
+    <text x="436" y="814" class="detail" text-anchor="start">byte..decimal params</text>
+  </g>
+
+  <g data-card="Capability Gates" data-x="740" data-y="742" data-width="292" data-height="84">
+    <rect x="740" y="742" width="292" height="84" rx="14" fill="#ffffff" stroke="#6f8f52" stroke-width="2" class="card"/>
+    <path class="header" d="M740,776 L740,756 Q740,742 754,742 L1018,742 Q1032,742 1032,756 L1032,776 Z" fill="#f1f6ec"/>
+    <text x="886" y="766" class="cardTitle" text-anchor="middle">Capability Gates</text>
+    <text x="760" y="796" class="detail" text-anchor="start">PostgreSQL/H2 arrays</text>
+    <text x="760" y="814" class="detail" text-anchor="start">unsigned range checks</text>
+  </g>
+
+  <g data-card="Binary and UUID Builders" data-x="1064" data-y="742" data-width="292" data-height="84">
+    <rect x="1064" y="742" width="292" height="84" rx="14" fill="#ffffff" stroke="#a66a3f" stroke-width="2" class="card"/>
+    <path class="header" d="M1064,776 L1064,756 Q1064,742 1078,742 L1342,742 Q1356,742 1356,756 L1356,776 Z" fill="#f5eee4"/>
+    <text x="1210" y="766" class="cardTitle" text-anchor="middle">Blob + UUID Builders</text>
+    <text x="1084" y="796" class="detail" text-anchor="start">blob / blobParam</text>
+    <text x="1084" y="814" class="detail" text-anchor="start">javaUUID / uuid</text>
+  </g>
+
+  <path class="connector" data-connector="scalar-table" d="M 238 322 L 238 478"/>
+  <path class="connector" data-connector="text-table" d="M 562 322 L 562 478"/>
+  <path class="connector" data-connector="array-table" d="M 886 322 L 886 478"/>
+  <path class="connector" data-connector="binary-table" d="M 1210 322 L 1210 478"/>
+
+  <path class="connector" data-connector="scalar-helper" d="M 238 596 L 238 742"/>
+  <path class="connector" data-connector="text-builder" d="M 562 596 L 562 742"/>
+  <path class="connector" data-connector="array-gate" d="M 886 596 L 886 742"/>
+  <path class="connector" data-connector="binary-builder" d="M 1210 596 L 1210 742"/>
+
+  <rect x="96" y="892" width="1248" height="30" rx="10" class="noteBox"/>
+  <text x="720" y="912" class="note" text-anchor="middle">All classes extend the shared R2DBC test base; cards summarize source-local tables and column builders exercised by the README examples.</text>
 </svg>

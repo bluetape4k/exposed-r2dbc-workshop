@@ -1,34 +1,87 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="720" viewBox="0 0 1260 720" role="img" aria-label="Repository Learning Structure">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
-  <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,4.5 L1,8 Z" fill="#5D6B7A"/></marker>
-  <style>.bg{fill:#F7F9FC}.panel{fill:#FFFFFF;stroke:#BCC7D6;stroke-width:2;rx:18;filter:url(#shadow)}.blue{fill:#E8F3FF;stroke:#5B8DEF}.green{fill:#E8F7EE;stroke:#3A8B57}.amber{fill:#FFF7E6;stroke:#B7791F}.pink{fill:#FDECEF;stroke:#DC6B82}.teal{fill:#E9F7F6;stroke:#45A7A1}.lav{fill:#EDF1FF;stroke:#5067C5}.gray{fill:#F1F5F9;stroke:#475569}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:36px;fill:#172033;font-weight:400}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:16px;fill:#516070;font-weight:400}.label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:23px;fill:#172033;font-weight:400}.small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;fill:#425466;font-weight:400}.tiny{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;fill:#425466;font-weight:400}.arrow{stroke:#5D6B7A;stroke-width:2.4;fill:none;marker-end:url(#arrow)}.dashed{stroke:#5D6B7A;stroke-width:2.2;stroke-dasharray:7 6;fill:none;marker-end:url(#arrow)}</style>
-</defs>
-<rect class="bg" width="1260" height="720"/>
-<text x="64" y="70" class="title">Repository Learning Structure</text>
-<text x="66" y="102" class="subtitle">The repository is organized as a progressive Exposed R2DBC learning path.</text>
-<rect x="110" y="145" width="440" height="100" class="panel blue"/>
-<text x="136" y="181" class="label">00 shared</text>
-<text x="136" y="209" class="small">test infrastructure and sample schema</text>
-<rect x="640" y="145" width="440" height="100" class="panel green"/>
-<text x="666" y="181" class="label">01 Spring Boot</text>
-<text x="666" y="209" class="small">WebFlux entrypoint</text>
-<rect x="110" y="295" width="440" height="100" class="panel amber"/>
-<text x="136" y="331" class="label">03-05 R2DBC basics</text>
-<text x="136" y="359" class="small">SQL DSL, DDL, DML, transactions</text>
-<rect x="640" y="295" width="440" height="100" class="panel pink"/>
-<text x="666" y="331" class="label">06 advanced</text>
-<text x="666" y="359" class="small">JSON, crypto, money, custom columns</text>
-<rect x="110" y="445" width="440" height="100" class="panel teal"/>
-<text x="136" y="481" class="label">07-09 migration/runtime</text>
-<text x="136" y="509" class="small">JPA conversion, coroutines, Spring cache</text>
-<rect x="640" y="445" width="440" height="100" class="panel lav"/>
-<text x="666" y="481" class="label">10-12 production patterns</text>
-<text x="666" y="509" class="small">multi-tenant, performance, production integration</text>
-<path class="arrow" d="M550 195 H640"/>
-<path class="arrow" d="M330 245 V295"/>
-<path class="arrow" d="M860 245 V295"/>
-<path class="arrow" d="M550 345 H640"/>
-<path class="arrow" d="M330 395 V445"/>
-<path class="arrow" d="M860 395 V445"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 800" width="1320" height="800" role="img" aria-label="Root Readme Repository Structure diagram">
+<defs><filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12" /></filter><style>.canvas{fill:#f6f9fc}.frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}.lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}.card{filter:url(#shadow)}.header{opacity:.96}.title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:30px;fill:#1e293b}.subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}.tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}.laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:15px;letter-spacing:.08em;fill:#8ca2b4}.cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:17px;fill:#1e293b}.connector{fill:none;stroke:#64748b;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}.use{fill:none;stroke-width:2;stroke-dasharray:7 6;stroke-linecap:round;stroke-linejoin:round}.rel{fill:none;stroke:#64748b;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.head{fill:white;stroke:#64748b;stroke-width:2.4;stroke-dasharray:none;style:stroke-dasharray:none}.labelPill{fill:#fff;stroke:#d7e2ec;stroke-width:1}.noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.2}</style></defs>
+<rect width="1320" height="800" class="canvas"/><rect x="22" y="22" width="1276" height="756" rx="18" class="frame"/>
+<text x="58" y="68" class="title" text-anchor="start">Root Readme Repository Structure</text>
+<text x="58" y="96" class="subtitle" text-anchor="start">R2DBC workshop responsibility map for modules, runtime boundaries, and persistence contracts.</text>
+<rect x="48" y="128" width="1224" height="240" rx="16" class="lane"/><text x="72" y="158" class="laneTitle" text-anchor="start">REQUEST / COMMAND PATH</text>
+<rect x="48" y="392" width="1224" height="170" rx="16" class="lane"/><text x="72" y="422" class="laneTitle" text-anchor="start">DATA / INFRASTRUCTURE</text>
+<rect x="48" y="586" width="1224" height="104" rx="16" class="lane"/><text x="72" y="616" class="laneTitle" text-anchor="start">READER CONTRACT</text>
+<g data-card="Repository Learning Str…" data-x="82" data-y="210" data-width="200" data-height="104">
+<rect x="82" y="210" width="200" height="104" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card"/>
+<path class="header" d="M82,252 L82,224 Q82,210 96,210 L268,210 Q282,210 282,224 L282,252 Z" fill="#eef5fa"/>
+<text x="182.0" y="228" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+<text x="182.0" y="247" class="cardTitle" text-anchor="middle">Repository Learning Str…</text>
+<text x="100" y="272" class="detail" text-anchor="start">reactive boundary</text>
+</g>
+<g data-card="The repository is organ…" data-x="322" data-y="210" data-width="200" data-height="104">
+<rect x="322" y="210" width="200" height="104" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card"/>
+<path class="header" d="M322,252 L322,224 Q322,210 336,210 L508,210 Q522,210 522,224 L522,252 Z" fill="#f1f6ec"/>
+<text x="422.0" y="228" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+<text x="422.0" y="247" class="cardTitle" text-anchor="middle">The repository is organ…</text>
+<text x="340" y="272" class="detail" text-anchor="start">reactive boundary</text>
+</g>
+<g data-card="00 shared" data-x="562" data-y="210" data-width="200" data-height="104">
+<rect x="562" y="210" width="200" height="104" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card"/>
+<path class="header" d="M562,252 L562,224 Q562,210 576,210 L748,210 Q762,210 762,224 L762,252 Z" fill="#f5eee4"/>
+<text x="662.0" y="228" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+<text x="662.0" y="247" class="cardTitle" text-anchor="middle">00 shared</text>
+<text x="580" y="272" class="detail" text-anchor="start">R2DBC responsibility</text>
+</g>
+<g data-card="test infrastructure and…" data-x="802" data-y="210" data-width="200" data-height="104">
+<rect x="802" y="210" width="200" height="104" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card"/>
+<path class="header" d="M802,252 L802,224 Q802,210 816,210 L988,210 Q1002,210 1002,224 L1002,252 Z" fill="#eef7f6"/>
+<text x="902.0" y="228" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+<text x="902.0" y="247" class="cardTitle" text-anchor="middle">test infrastructure and…</text>
+<text x="820" y="272" class="detail" text-anchor="start">R2DBC responsibility</text>
+</g>
+<g data-card="01 Spring Boot" data-x="1042" data-y="210" data-width="200" data-height="104">
+<rect x="1042" y="210" width="200" height="104" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2" class="card"/>
+<path class="header" d="M1042,252 L1042,224 Q1042,210 1056,210 L1228,210 Q1242,210 1242,224 L1242,252 Z" fill="#f5eef2"/>
+<text x="1142.0" y="228" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+<text x="1142.0" y="247" class="cardTitle" text-anchor="middle">01 Spring Boot</text>
+<text x="1060" y="272" class="detail" text-anchor="start">R2DBC responsibility</text>
+</g>
+<path class="connector" data-connector="flow" d="M 282 262 L 322 262" stroke="#6f8f52"/>
+<polyline points="322,262 310,255 310,269" fill="none" stroke="#6f8f52" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="flow" d="M 522 262 L 562 262" stroke="#a66a3f"/>
+<polyline points="562,262 550,255 550,269" fill="none" stroke="#a66a3f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="flow" d="M 762 262 L 802 262" stroke="#4f8f8b"/>
+<polyline points="802,262 790,255 790,269" fill="none" stroke="#4f8f8b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="flow" d="M 1002 262 L 1042 262" stroke="#a85f7f"/>
+<polyline points="1042,262 1030,255 1030,269" fill="none" stroke="#a85f7f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<g data-card="ConnectionFactory" data-x="180" data-y="432" data-width="210" data-height="88">
+<rect x="180" y="432" width="210" height="88" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card"/>
+<path class="header" d="M180,474 L180,446 Q180,432 194,432 L376,432 Q390,432 390,446 L390,474 Z" fill="#f5eee4"/>
+<text x="285.0" y="450" class="tiny" text-anchor="middle">&lt;&lt;runtime&gt;&gt;</text>
+<text x="285.0" y="469" class="cardTitle" text-anchor="middle">ConnectionFactory</text>
+<text x="198" y="494" class="detail" text-anchor="start">owned by the example</text>
+</g>
+<g data-card="suspendTransaction" data-x="460" data-y="432" data-width="210" data-height="88">
+<rect x="460" y="432" width="210" height="88" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card"/>
+<path class="header" d="M460,474 L460,446 Q460,432 474,432 L656,432 Q670,432 670,446 L670,474 Z" fill="#eef7f6"/>
+<text x="565.0" y="450" class="tiny" text-anchor="middle">&lt;&lt;runtime&gt;&gt;</text>
+<text x="565.0" y="469" class="cardTitle" text-anchor="middle">suspendTransaction</text>
+<text x="478" y="494" class="detail" text-anchor="start">owned by the example</text>
+</g>
+<g data-card="Flow / Result" data-x="740" data-y="432" data-width="210" data-height="88">
+<rect x="740" y="432" width="210" height="88" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2" class="card"/>
+<path class="header" d="M740,474 L740,446 Q740,432 754,432 L936,432 Q950,432 950,446 L950,474 Z" fill="#f5eef2"/>
+<text x="845.0" y="450" class="tiny" text-anchor="middle">&lt;&lt;runtime&gt;&gt;</text>
+<text x="845.0" y="469" class="cardTitle" text-anchor="middle">Flow / Result</text>
+<text x="758" y="494" class="detail" text-anchor="start">owned by the example</text>
+</g>
+<g data-card="Database" data-x="1020" data-y="432" data-width="210" data-height="88">
+<rect x="1020" y="432" width="210" height="88" rx="14" fill="#fff" stroke="#8a6f55" stroke-width="2" class="card"/>
+<path class="header" d="M1020,474 L1020,446 Q1020,432 1034,432 L1216,432 Q1230,432 1230,446 L1230,474 Z" fill="#f3eee8"/>
+<text x="1125.0" y="450" class="tiny" text-anchor="middle">&lt;&lt;runtime&gt;&gt;</text>
+<text x="1125.0" y="469" class="cardTitle" text-anchor="middle">Database</text>
+<text x="1038" y="494" class="detail" text-anchor="start">owned by the example</text>
+</g>
+<path class="use connector" data-connector="runtime-use" d="M 422 432 L 422 390 Q 422 374 438 374 L 549 374 Q 565 374 565 390 L 565 432" stroke="#64748b"/>
+<polyline points="565,432 558,420 572,420" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="use connector" data-connector="runtime-use" d="M 662 432 L 662 390 Q 662 374 678 374 L 829 374 Q 845 374 845 390 L 845 432" stroke="#64748b"/>
+<polyline points="845,432 838,420 852,420" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="use connector" data-connector="runtime-use" d="M 902 432 L 902 390 Q 902 374 918 374 L 1109 374 Q 1125 374 1125 390 L 1125 432" stroke="#64748b"/>
+<polyline points="1125,432 1118,420 1132,420" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<rect x="86" y="634" width="1148" height="30" rx="10" class="noteBox"/><text x="660" y="654" class="note" text-anchor="middle">Static ownership view: components are arranged by responsibility, and arrows show concrete handoff direction.</text>
 </svg>

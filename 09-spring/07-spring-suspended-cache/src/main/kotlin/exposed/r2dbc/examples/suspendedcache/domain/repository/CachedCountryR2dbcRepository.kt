@@ -12,7 +12,7 @@ import io.bluetape4k.logging.coroutines.KLoggingChannel
  * ```
  * 읽기: Cache 조회 → miss 시 DB 조회 후 Cache 저장 → 결과 반환
  * 쓰기: Cache 무효화 → DB 업데이트
- * 전체 삭제: Cache namespace의 모든 키 SCAN+UNLINK
+ * 전체 삭제: Cache namespace index에 기록된 키를 UNLINK로 배치 삭제
  * ```
  *
  * ## 구성
@@ -73,7 +73,8 @@ class CachedCountryR2dbcRepository(
     /**
      * 현재 캐시 네임스페이스(`caches:country:code:*`)의 모든 캐시를 삭제합니다.
      *
-     * SCAN 기반으로 100개씩 배치 처리하므로 대량 키 환경에서도 Redis 메인 스레드를 차단하지 않습니다.
+     * Redis 전체 keyspace를 훑지 않고 namespace index를 읽어 100개씩 배치 삭제하므로
+     * 대량 키 환경에서도 Redis 메인 스레드 부담을 줄입니다.
      */
     override suspend fun evictCacheAll() {
         cache.clear()

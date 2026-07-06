@@ -1,91 +1,208 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1085" height="1754" viewBox="0 0 1085 1754" role="img" aria-label="Schema Migration Flow">
-<defs>
-<filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
-<marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-<style>.canvas{fill:#F7F9FC}.frame{fill:#fff;stroke:#D8E0EA;stroke-width:1.5}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:39px;font-weight:400;fill:#102033}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;font-weight:400;fill:#536273}.smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:22px;font-weight:400;fill:#102033}.strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}.card{stroke-width:2;filter:url(#shadow)}.line{stroke:#5D6B7A;stroke-width:2.2;fill:none;marker-end:url(#openArrow)}.dashed{stroke:#5D6B7A;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}.lifeline{stroke:#B7C2D1;stroke-width:1.8;stroke-dasharray:8 9}.note{fill:#fff;opacity:.97}</style>
-</defs>
-<rect class="canvas" width="1085" height="1754"/>
-<rect class="frame" x="24" y="24" width="1037" height="1698" rx="22"/>
-<text class="title" x="58" y="76">Schema Migration Flow</text>
-<text class="subtitle" x="62" y="106">Compact sequence flow with reduced outer and inner whitespace</text>
-<rect class="card" x="50.0" y="156" width="220" height="66" rx="16" fill="#E8F3FF" stroke="#5B8DEF"/>
-<text class="smallLabel participant" x="160.0" y="196" text-anchor="middle">Application</text>
-<line class="lifeline" x1="160.0" y1="250" x2="160.0" y2="1692"/>
-<rect class="card" x="305.0" y="156" width="220" height="66" rx="16" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel participant" x="415.0" y="196" text-anchor="middle">suspendTransaction</text>
-<line class="lifeline" x1="415.0" y1="250" x2="415.0" y2="1692"/>
-<rect class="card" x="560.0" y="156" width="220" height="66" rx="16" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel participant" x="670.0" y="196" text-anchor="middle">SchemaUtils</text>
-<line class="lifeline" x1="670.0" y1="250" x2="670.0" y2="1692"/>
-<rect class="card" x="815.0" y="156" width="220" height="66" rx="16" fill="#FDECEF" stroke="#DC6B82"/>
-<text class="smallLabel participant" x="925.0" y="196" text-anchor="middle">Database</text>
-<line class="lifeline" x1="925.0" y1="250" x2="925.0" y2="1692"/>
-<path class="line" d="M160.0 292.0 L415.0 292.0" data-connector="line"/>
-<rect class="note label" x="197.0" y="260.0" width="181.0" height="28" rx="9"/>
-<text class="strong labelText" x="287.5" y="280.0" text-anchor="middle">1. suspendTransaction { }</text>
-<path class="line" d="M415.0 366.0 L670.0 366.0" data-connector="line"/>
-<rect class="note label" x="417.9" y="334.0" width="249.2" height="28" rx="9"/>
-<text class="strong labelText" x="542.5" y="354.0" text-anchor="middle">2. SchemaUtils.create(Users, Orders)</text>
-<path class="line" d="M670.0 440.0 L925.0 440.0" data-connector="line"/>
-<rect class="note label" x="657.4" y="408.0" width="280.2" height="28" rx="9"/>
-<text class="strong labelText" x="797.5" y="428.0" text-anchor="middle">3. CREATE TABLE IF NOT EXISTS users (...)</text>
-<path class="line" d="M670.0 514.0 L925.0 514.0" data-connector="line"/>
-<rect class="note label" x="654.3" y="482.0" width="286.4" height="28" rx="9"/>
-<text class="strong labelText" x="797.5" y="502.0" text-anchor="middle">4. CREATE TABLE IF NOT EXISTS orders (...)</text>
-<path class="dashed" d="M925.0 588.0 L670.0 588.0" data-connector="dashed"/>
-<rect class="note label" x="717.5" y="556.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="797.5" y="576.0" text-anchor="middle">5. done</text>
-<path class="dashed" d="M670.0 662.0 L415.0 662.0" data-connector="dashed"/>
-<rect class="note label" x="462.5" y="630.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="542.5" y="650.0" text-anchor="middle">6. Tables created</text>
-<path class="line" d="M160.0 736.0 L415.0 736.0" data-connector="line"/>
-<rect class="note label" x="197.0" y="704.0" width="181.0" height="28" rx="9"/>
-<text class="strong labelText" x="287.5" y="724.0" text-anchor="middle">7. suspendTransaction { }</text>
-<path class="line" d="M415.0 810.0 L670.0 810.0" data-connector="line"/>
-<rect class="note label" x="421.0" y="778.0" width="243.0" height="28" rx="9"/>
-<text class="strong labelText" x="542.5" y="798.0" text-anchor="middle">8. SchemaUtils.createMissing(Users)</text>
-<path class="line" d="M670.0 884.0 L925.0 884.0" data-connector="line"/>
-<rect class="note label" x="657.4" y="852.0" width="280.2" height="28" rx="9"/>
-<text class="strong labelText" x="797.5" y="872.0" text-anchor="middle">9. SHOW TABLES / query information_schema</text>
-<path class="dashed" d="M925.0 958.0 L670.0 958.0" data-connector="dashed"/>
-<rect class="note label" x="713.2" y="926.0" width="168.6" height="28" rx="9"/>
-<text class="strong labelText" x="797.5" y="946.0" text-anchor="middle">10. Current schema info</text>
-<path class="line" d="M670.0 1032.0 C732.0 1032.0 732.0 1062.0 670.0 1062.0" data-connector="line"/>
-<rect class="note label" x="740.0" y="1022.0" width="230.6" height="28" rx="9"/>
-<text class="strong labelText" x="740.0" y="1042.0" text-anchor="start">11. Detect missing tables/columns</text>
-<path class="line" d="M670.0 1106.0 L925.0 1106.0" data-connector="line"/>
-<rect class="note label" x="679.1" y="1074.0" width="236.8" height="28" rx="9"/>
-<text class="strong labelText" x="797.5" y="1094.0" text-anchor="middle">12. ALTER TABLE ... ADD COLUMN ...</text>
-<path class="dashed" d="M925.0 1180.0 L670.0 1180.0" data-connector="dashed"/>
-<rect class="note label" x="716.3" y="1148.0" width="162.4" height="28" rx="9"/>
-<text class="strong labelText" x="797.5" y="1168.0" text-anchor="middle">13. Migration complete</text>
-<path class="dashed" d="M670.0 1254.0 L415.0 1254.0" data-connector="dashed"/>
-<rect class="note label" x="458.2" y="1222.0" width="168.6" height="28" rx="9"/>
-<text class="strong labelText" x="542.5" y="1242.0" text-anchor="middle">14. Missing items added</text>
-<path class="line" d="M160.0 1328.0 L415.0 1328.0" data-connector="line"/>
-<rect class="note label" x="193.9" y="1296.0" width="187.2" height="28" rx="9"/>
-<text class="strong labelText" x="287.5" y="1316.0" text-anchor="middle">15. suspendTransaction { }</text>
-<path class="line" d="M415.0 1402.0 L670.0 1402.0" data-connector="line"/>
-<rect class="note label" x="421.0" y="1370.0" width="243.0" height="28" rx="9"/>
-<text class="strong labelText" x="542.5" y="1390.0" text-anchor="middle">16. SchemaUtils.drop(Orders, Users)</text>
-<path class="line" d="M670.0 1476.0 L925.0 1476.0" data-connector="line"/>
-<rect class="note label" x="717.5" y="1444.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="797.5" y="1464.0" text-anchor="middle">17. DROP TABLE orders</text>
-<path class="line" d="M670.0 1550.0 L925.0 1550.0" data-connector="line"/>
-<rect class="note label" x="717.5" y="1518.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="797.5" y="1538.0" text-anchor="middle">18. DROP TABLE users</text>
-<path class="dashed" d="M925.0 1624.0 L670.0 1624.0" data-connector="dashed"/>
-<rect class="note label" x="717.5" y="1592.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="797.5" y="1612.0" text-anchor="middle">19. done</text>
-<rect class="activation" x="154.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="409.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="664.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1220" viewBox="0 0 1600 1220" role="img" aria-label="Exposed R2DBC schema migration sequence">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&amp;display=swap');
+      @font-face{font-family:'Comic Mono';src:local('Comic Mono');}
+      .canvas{fill:#F6F8FB;}
+      .frame{fill:#FFFDF9;stroke:#3f535c;stroke-width:3.2;}
+      .title{font-family:'Architects Daughter','Comic Mono',monospace;font-size:44px;fill:#1f2937;}
+      .subtitle,.note{font-family:'Comic Mono','Architects Daughter',monospace;font-size:17px;fill:#435363;font-weight:700;}
+      .header{fill:#FFFFFF;stroke:#587080;stroke-width:2.4;}
+      .participant{font-family:'Architects Daughter','Comic Mono',monospace;font-size:23px;fill:#23323f;}
+      .role{font-family:'Comic Mono','Architects Daughter',monospace;font-size:14px;fill:#64748b;font-weight:700;}
+      .lifeline{stroke:#9db1bf;stroke-width:2.4;stroke-dasharray:8 10;stroke-linecap:butt;}
+      .activation{fill:#F4FAF6;stroke:#77a984;stroke-width:2;}
+      .activationBlue{fill:#EEF6FF;stroke:#7eb2d5;}
+      .activationAmber{fill:#FFF7E6;stroke:#bd8b3b;}
+      .activationTeal{fill:#EFFAF9;stroke:#5fa8a2;}
+      .call{fill:none;stroke:#3f86bd;stroke-width:3;marker-end:url(#seqArrowBlue);}
+      .state{fill:none;stroke:#6f8f52;stroke-width:3;marker-end:url(#seqArrowGreen);}
+      .sql{fill:none;stroke:#b68432;stroke-width:3;marker-end:url(#seqArrowAmber);}
+      .return{fill:none;stroke:#2f9b95;stroke-width:3;stroke-dasharray:8 7;marker-end:url(#seqArrowTeal);}
+      .work{fill:none;stroke:#805aa8;stroke-width:3;marker-end:url(#seqArrowPurple);}
+      .pill{fill:#FFFFFF;stroke-width:1.8;}
+      .pillBlue{stroke:#9ec5e8;}
+      .pillGreen{stroke:#a9c58f;}
+      .pillAmber{stroke:#d4b06d;}
+      .pillTeal{stroke:#9cccca;}
+      .pillPurple{stroke:#c5b0dd;}
+      .badgeCircle{fill:#FFFDF9;stroke-width:1.8;}
+      .badge{font-family:'Comic Mono','Architects Daughter',monospace;font-size:14px;font-weight:800;dominant-baseline:middle;text-anchor:middle;}
+      .msg{font-family:'Comic Mono','Architects Daughter',monospace;font-size:15px;font-weight:800;dominant-baseline:middle;}
+      .blueText{fill:#276b9d;stroke:none;}
+      .greenText{fill:#587a3d;stroke:none;}
+      .amberText{fill:#8a6128;stroke:none;}
+      .tealText{fill:#277f7a;stroke:none;}
+      .purpleText{fill:#694989;stroke:none;}
+      .badgeCircle.blueText{fill:#FFFDF9;stroke:#9ec5e8;}
+      .badgeCircle.greenText{fill:#FFFDF9;stroke:#a9c58f;}
+      .badgeCircle.amberText{fill:#FFFDF9;stroke:#d4b06d;}
+      .badgeCircle.tealText{fill:#FFFDF9;stroke:#9cccca;}
+      .badgeCircle.purpleText{fill:#FFFDF9;stroke:#c5b0dd;}
+      .branch{fill:none;stroke:#7892a0;stroke-width:2.8;stroke-dasharray:8 8;}
+      .branchLabel{fill:#FFFDF9;stroke:#d4b06d;stroke-width:1.8;}
+      .branchText{font-family:'Comic Mono','Architects Daughter',monospace;font-size:15px;fill:#7c5a2b;font-weight:800;dominant-baseline:middle;}
+      .noteBox{fill:#FFFFFF;stroke:#d7e2ec;stroke-width:1.8;}
+    </style>
+    <marker id="seqArrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#3f86bd" stroke="#3f86bd" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="seqArrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f8f52" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="seqArrowAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#b68432" stroke="#b68432" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="seqArrowTeal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#2f9b95" stroke="#2f9b95" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="seqArrowPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#805aa8" stroke="#805aa8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+  </defs>
 
-<!-- audit badge labels: visible sequence numbering and message pill samples -->
-<g aria-label="sequence message labels">
-<rect x="58" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="76" y="140" class="num" text-anchor="middle">1</text>
-<rect x="102" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="120" y="140" class="num" text-anchor="middle">2</text>
-</g>
+  <rect class="canvas" x="0" y="0" width="1600" height="1220"/>
+  <rect class="frame" x="26" y="26" width="1548" height="1168" rx="26"/>
+
+  <text class="title" x="70" y="88">Schema Migration Flow</text>
+  <text class="subtitle" x="72" y="122">V1 tester table is created, V2 mapping produces a unique-index migration, then batch execution commits the schema change.</text>
+
+  <g transform="translate(78,162)">
+    <rect class="header" x="0" y="0" width="222" height="76" rx="10"/>
+    <text class="participant" x="111" y="35" text-anchor="middle">JUnit test</text>
+    <text class="role" x="111" y="57" text-anchor="middle">Ex03 migration case</text>
+  </g>
+  <g transform="translate(338,162)">
+    <rect class="header" x="0" y="0" width="242" height="76" rx="10"/>
+    <text class="participant" x="121" y="35" text-anchor="middle">suspendTransaction</text>
+    <text class="role" x="121" y="57" text-anchor="middle">withDb(testDB)</text>
+  </g>
+  <g transform="translate(632,162)">
+    <rect class="header" x="0" y="0" width="224" height="76" rx="10"/>
+    <text class="participant" x="112" y="35" text-anchor="middle">tester V1 / V2</text>
+    <text class="role" x="112" y="57" text-anchor="middle">same table name</text>
+  </g>
+  <g transform="translate(902,162)">
+    <rect class="header" x="0" y="0" width="214" height="76" rx="10"/>
+    <text class="participant" x="107" y="35" text-anchor="middle">SchemaUtils</text>
+    <text class="role" x="107" y="57" text-anchor="middle">create / drop</text>
+  </g>
+  <g transform="translate(1170,162)">
+    <rect class="header" x="0" y="0" width="230" height="76" rx="10"/>
+    <text class="participant" x="115" y="35" text-anchor="middle">MigrationUtils</text>
+    <text class="role" x="115" y="57" text-anchor="middle">statementsRequired</text>
+  </g>
+  <g transform="translate(1430,162)">
+    <rect class="header" x="0" y="0" width="128" height="76" rx="10"/>
+    <text class="participant" x="64" y="35" text-anchor="middle">H2 DB</text>
+    <text class="role" x="64" y="57" text-anchor="middle">DDL state</text>
+  </g>
+
+  <path class="lifeline" d="M 189 238 V 1110"/>
+  <path class="lifeline" d="M 459 238 V 1110"/>
+  <path class="lifeline" d="M 744 238 V 1110"/>
+  <path class="lifeline" d="M 1009 238 V 1110"/>
+  <path class="lifeline" d="M 1285 238 V 1110"/>
+  <path class="lifeline" d="M 1494 238 V 1110"/>
+
+  <rect class="activation activationBlue" x="180" y="286" width="18" height="766" rx="5"/>
+  <rect class="activation activationTeal" x="450" y="318" width="18" height="682" rx="5"/>
+  <rect class="activation activationAmber" x="1000" y="430" width="18" height="108" rx="5"/>
+  <rect class="activation activation" x="1276" y="610" width="18" height="210" rx="5"/>
+  <rect class="activation activationAmber" x="1485" y="466" width="18" height="528" rx="5"/>
+
+  <g>
+    <rect class="pill pillBlue" x="108" y="254" width="310" height="32" rx="16"/>
+    <circle class="badgeCircle blueText" cx="133" cy="270" r="13"/>
+    <text class="badge blueText" x="133" y="270">1</text>
+    <text class="msg blueText" x="170" y="270">enter withDb(testDB)</text>
+    <path class="call" d="M 189 292 H 435 Q 459 292 459 316 V 318"/>
+  </g>
+
+  <g>
+    <rect class="pill pillPurple" x="276" y="342" width="436" height="32" rx="16"/>
+    <circle class="badgeCircle purpleText" cx="301" cy="358" r="13"/>
+    <text class="badge purpleText" x="301" y="358">2</text>
+    <text class="msg purpleText" x="338" y="358">define testerV1 and testerV2 mappings</text>
+    <path class="work" d="M 189 394 H 744"/>
+  </g>
+
+  <g>
+    <rect class="pill pillGreen" x="692" y="426" width="334" height="32" rx="16"/>
+    <circle class="badgeCircle greenText" cx="717" cy="442" r="13"/>
+    <text class="badge greenText" x="717" y="442">3</text>
+    <text class="msg greenText" x="754" y="442">SchemaUtils.create(testerV1)</text>
+    <path class="state" d="M 459 478 H 1009"/>
+  </g>
+
+  <g>
+    <rect class="pill pillAmber" x="1052" y="502" width="414" height="32" rx="16"/>
+    <circle class="badgeCircle amberText" cx="1077" cy="518" r="13"/>
+    <text class="badge amberText" x="1077" y="518">4</text>
+    <text class="msg amberText" x="1114" y="518">CREATE TABLE tester(id, name, time)</text>
+    <path class="sql" d="M 1009 554 H 1494"/>
+  </g>
+
+  <rect class="branch" x="1112" y="580" width="414" height="326" rx="18"/>
+  <rect class="branchLabel" x="1138" y="565" width="298" height="30" rx="15"/>
+  <text class="branchText" x="1158" y="580">migration diff and batch execution</text>
+
+  <g>
+    <rect class="pill pillPurple" x="850" y="610" width="388" height="32" rx="16"/>
+    <circle class="badgeCircle purpleText" cx="875" cy="626" r="13"/>
+    <text class="badge purpleText" x="875" y="626">5</text>
+    <text class="msg purpleText" x="912" y="626">statementsRequired(testerV2)</text>
+    <path class="work" d="M 459 662 H 1285"/>
+  </g>
+
+  <g>
+    <rect class="pill pillAmber" x="1248" y="686" width="272" height="32" rx="16"/>
+    <circle class="badgeCircle amberText" cx="1273" cy="702" r="13"/>
+    <text class="badge amberText" x="1273" y="702">6</text>
+    <text class="msg amberText" x="1310" y="702">inspect tester schema</text>
+    <path class="sql" d="M 1285 738 H 1494"/>
+  </g>
+
+  <g>
+    <rect class="pill pillTeal" x="1198" y="762" width="326" height="32" rx="16"/>
+    <circle class="badgeCircle tealText" cx="1223" cy="778" r="13"/>
+    <text class="badge tealText" x="1223" y="778">7</text>
+    <text class="msg tealText" x="1260" y="778">ALTER UNIQUE(time) statement</text>
+    <path class="return" d="M 1494 814 H 1285"/>
+  </g>
+
+  <g>
+    <rect class="pill pillAmber" x="1040" y="840" width="276" height="32" rx="16"/>
+    <circle class="badgeCircle amberText" cx="1065" cy="856" r="13"/>
+    <text class="badge amberText" x="1065" y="856">8</text>
+    <text class="msg amberText" x="1102" y="856">execInBatch(stmts)</text>
+    <path class="sql" d="M 459 892 H 1494"/>
+  </g>
+
+  <g>
+    <rect class="pill pillGreen" x="662" y="922" width="178" height="32" rx="16"/>
+    <circle class="badgeCircle greenText" cx="687" cy="938" r="13"/>
+    <text class="badge greenText" x="687" y="938">9</text>
+    <text class="msg greenText" x="724" y="938">commit()</text>
+    <path class="state" d="M 459 974 H 1494"/>
+  </g>
+
+  <g>
+    <rect class="pill pillGreen" x="706" y="1002" width="320" height="32" rx="16"/>
+    <circle class="badgeCircle greenText" cx="731" cy="1018" r="13"/>
+    <text class="badge greenText" x="731" y="1018">10</text>
+    <text class="msg greenText" x="770" y="1018">SchemaUtils.drop(testerV2)</text>
+    <path class="state" d="M 459 1054 H 1009"/>
+  </g>
+
+  <g>
+    <rect class="pill pillAmber" x="1114" y="1074" width="248" height="32" rx="16"/>
+    <circle class="badgeCircle amberText" cx="1139" cy="1090" r="13"/>
+    <text class="badge amberText" x="1139" y="1090">11</text>
+    <text class="msg amberText" x="1178" y="1090">DROP TABLE tester</text>
+    <path class="sql" d="M 1009 1126 H 1494"/>
+  </g>
+
+  <rect class="noteBox" x="84" y="1146" width="1432" height="30" rx="10"/>
+  <text class="note" x="800" y="1166" text-anchor="middle">The V2 object keeps table name tester and adds uniqueIndex(time); MigrationUtils emits the ALTER statement before batch execution.</text>
 </svg>

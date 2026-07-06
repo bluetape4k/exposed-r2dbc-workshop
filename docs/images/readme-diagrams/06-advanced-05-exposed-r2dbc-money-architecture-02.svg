@@ -1,89 +1,162 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1378" height="692" viewBox="0 0 1378 692" role="img" aria-label="MonetaryAmount Storage/Restoration Flow">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1378" height="692"/>
-<rect class="frame" x="32" y="28" width="1314" height="636" rx="28"/>
-<text class="title" x="66" y="82">MonetaryAmount Storage/Restoration Flow</text>
-<text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M672 552 C672 552 706 552 706 552" data-connector="line"/>
-<path class="line" d="M1040 386 C1040 469 672 469 672 552" data-connector="line"/>
-<path class="line" d="M706 386 C706 469 672 469 672 552" data-connector="line"/>
-<path class="line" d="M672 386 C672 386 1040 386 1040 386" data-connector="line"/>
-<path class="line" d="M672 386 C672 386 706 386 706 386" data-connector="line"/>
-<path class="line" d="M338 386 C338 386 372 386 372 386" data-connector="line"/>
-<path class="line" d="M1040 220 C1040 303 338 303 338 386" data-connector="line"/>
-<path class="line" d="M706 220 C706 303 338 303 338 386" data-connector="line"/>
-<path class="line" d="M672 220 C672 220 1040 220 1040 220" data-connector="line"/>
-<path class="line" d="M672 220 C672 220 706 220 706 220" data-connector="line"/>
-<path class="line" d="M338 220 C338 220 372 220 372 220" data-connector="line"/>
-<g transform="translate(48,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">Application</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">MonetaryAmount</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">(amount=10.00,</text>
-</g>
-<g transform="translate(382,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">CompositeMoney split</text>
-</g>
-<g transform="translate(716,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">DECIMAL column</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">composite_money</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">value: 10.00000</text>
-</g>
-<g transform="translate(1050,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">VARCHAR(3) column</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">composite_money_C</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">value: USD</text>
-</g>
-<g transform="translate(48,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">(Database)</text>
-</g>
-<g transform="translate(382,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">CompositeMoney</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">restore</text>
-</g>
-<g transform="translate(716,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">BigDecimal: 10.00000</text>
-</g>
-<g transform="translate(1050,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">CurrencyUnit: USD</text>
-</g>
-<g transform="translate(382,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">MonetaryAmount</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">Money.of(10.00000,</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">USD)</text>
-</g>
-<g transform="translate(716,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">Application</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">MonetaryAmount</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">object returned</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 960" width="1600" height="960" role="img" aria-label="Exposed R2DBC Money architecture diagram">
+  <defs>
+    <filter id="softShadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="#1f2937" flood-opacity="0.11"/>
+    </filter>
+    <marker id="arrow-blue" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#3f7fb5"/>
+    </marker>
+    <marker id="arrow-teal" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#4f8f8b"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#6f8f52"/>
+    </marker>
+    <marker id="arrow-amber" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#a66a3f"/>
+    </marker>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:2}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.6}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:42px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:17px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:22px;letter-spacing:0;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:24px;fill:#1e293b}
+      .card{filter:url(#softShadow)}
+      .header{opacity:.96}
+      .connector{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .foot{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}
+    </style>
+  </defs>
+
+  <rect width="1600" height="960" class="canvas"/>
+  <rect x="28" y="28" width="1544" height="904" rx="20" class="frame"/>
+  <text x="72" y="88" class="title">Exposed R2DBC Money Storage and Query Architecture</text>
+  <text x="72" y="122" class="subtitle">Concrete map for JavaMoney values, compositeMoney split columns, defaults, manual composites, and R2DBC checks.</text>
+
+  <rect x="64" y="160" width="1472" height="188" rx="18" class="lane"/>
+  <text x="92" y="195" class="laneTitle">MONEY DOMAIN MODEL</text>
+
+  <g data-card="Money factory" data-x="108" data-y="222" data-width="270" data-height="96">
+    <rect x="108" y="222" width="270" height="96" rx="13" fill="#fff" stroke="#3f7fb5" stroke-width="2.4" class="card"/>
+    <path class="header" d="M108,262 L108,235 Q108,222 121,222 L365,222 Q378,222 378,235 L378,262 Z" fill="#eef5fa"/>
+    <text x="243" y="243" class="tiny" text-anchor="middle">Moneta + bluetape4k</text>
+    <text x="243" y="267" class="cardTitle" text-anchor="middle">Money factory</text>
+    <text x="132" y="292" class="detail">Money.of / moneyOf</text>
+  </g>
+
+  <g data-card="MonetaryAmount" data-x="472" data-y="222" data-width="300" data-height="96">
+    <rect x="472" y="222" width="300" height="96" rx="13" fill="#fff" stroke="#4f8f8b" stroke-width="2.4" class="card"/>
+    <path class="header" d="M472,262 L472,235 Q472,222 485,222 L759,222 Q772,222 772,235 L772,262 Z" fill="#eef7f6"/>
+    <text x="622" y="243" class="tiny" text-anchor="middle">JSR-354 value</text>
+    <text x="622" y="267" class="cardTitle" text-anchor="middle">MonetaryAmount</text>
+    <text x="496" y="292" class="detail">amount + CurrencyUnit</text>
+  </g>
+
+  <g data-card="CompositeColumn" data-x="866" data-y="222" data-width="300" data-height="96">
+    <rect x="866" y="222" width="300" height="96" rx="13" fill="#fff" stroke="#6f8f52" stroke-width="2.4" class="card"/>
+    <path class="header" d="M866,262 L866,235 Q866,222 879,222 L1153,222 Q1166,222 1166,235 L1166,262 Z" fill="#f1f6ec"/>
+    <text x="1016" y="243" class="tiny" text-anchor="middle">exposed-money</text>
+    <text x="1016" y="267" class="cardTitle" text-anchor="middle">compositeMoney</text>
+    <text x="890" y="292" class="detail">single logical property</text>
+  </g>
+
+  <g data-card="R2DBC DSL" data-x="1260" data-y="222" data-width="235" data-height="96">
+    <rect x="1260" y="222" width="235" height="96" rx="13" fill="#fff" stroke="#a66a3f" stroke-width="2.4" class="card"/>
+    <path class="header" d="M1260,262 L1260,235 Q1260,222 1273,222 L1482,222 Q1495,222 1495,235 L1495,262 Z" fill="#f5eee4"/>
+    <text x="1377.5" y="243" class="tiny" text-anchor="middle">Exposed R2DBC</text>
+    <text x="1377.5" y="267" class="cardTitle" text-anchor="middle">Insert / select</text>
+    <text x="1284" y="292" class="detail">typed Money values</text>
+  </g>
+
+  <path data-connector="factory-money" class="connector" d="M 378 270 L 462 270" stroke="#3f7fb5" marker-end="url(#arrow-blue)"/>
+  <path data-connector="money-composite" class="connector" d="M 772 270 L 856 270" stroke="#4f8f8b" marker-end="url(#arrow-teal)"/>
+  <path data-connector="composite-r2dbc" class="connector" d="M 1166 270 L 1250 270" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+
+  <rect x="64" y="378" width="1472" height="206" rx="18" class="lane"/>
+  <text x="92" y="413" class="laneTitle">DATABASE COLUMN SPLIT</text>
+
+  <g data-card="AccountTable" data-x="108" data-y="450" data-width="300" data-height="100">
+    <rect x="108" y="450" width="300" height="100" rx="13" fill="#fff" stroke="#3f7fb5" stroke-width="2.4" class="card"/>
+    <path class="header" d="M108,491 L108,463 Q108,450 121,450 L395,450 Q408,450 408,463 L408,491 Z" fill="#eef5fa"/>
+    <text x="258" y="472" class="tiny" text-anchor="middle">IntIdTable("Accounts")</text>
+    <text x="258" y="497" class="cardTitle" text-anchor="middle">AccountTable</text>
+    <text x="132" y="523" class="detail">composite_money nullable</text>
+  </g>
+
+  <g data-card="Amount column" data-x="492" data-y="450" data-width="290" data-height="100">
+    <rect x="492" y="450" width="290" height="100" rx="13" fill="#fff" stroke="#4f8f8b" stroke-width="2.4" class="card"/>
+    <path class="header" d="M492,491 L492,463 Q492,450 505,450 L769,450 Q782,450 782,463 L782,491 Z" fill="#eef7f6"/>
+    <text x="637" y="472" class="tiny" text-anchor="middle">amount storage</text>
+    <text x="637" y="497" class="cardTitle" text-anchor="middle">DECIMAL(8,5)</text>
+    <text x="516" y="523" class="detail">indexed by ix_money_amount</text>
+  </g>
+
+  <g data-card="Currency column" data-x="866" data-y="450" data-width="300" data-height="100">
+    <rect x="866" y="450" width="300" height="100" rx="13" fill="#fff" stroke="#6f8f52" stroke-width="2.4" class="card"/>
+    <path class="header" d="M866,491 L866,463 Q866,450 879,450 L1153,450 Q1166,450 1166,463 L1166,491 Z" fill="#f1f6ec"/>
+    <text x="1016" y="472" class="tiny" text-anchor="middle">currency storage</text>
+    <text x="1016" y="497" class="cardTitle" text-anchor="middle">VARCHAR(3)</text>
+    <text x="890" y="523" class="detail">column suffix _C, ISO code</text>
+  </g>
+
+  <g data-card="Default table" data-x="1250" data-y="450" data-width="245" data-height="100">
+    <rect x="1250" y="450" width="245" height="100" rx="13" fill="#fff" stroke="#a66a3f" stroke-width="2.4" class="card"/>
+    <path class="header" d="M1250,491 L1250,463 Q1250,450 1263,450 L1482,450 Q1495,450 1495,463 L1495,491 Z" fill="#f5eee4"/>
+    <text x="1372.5" y="472" class="tiny" text-anchor="middle">Ex01_MoneyDefaults</text>
+    <text x="1372.5" y="497" class="cardTitle" text-anchor="middle">DB defaults</text>
+    <text x="1274" y="523" class="detail">t1 default, t2 nullable</text>
+  </g>
+
+  <path data-connector="account-amount" class="connector" d="M 408 500 L 482 500" stroke="#3f7fb5" marker-end="url(#arrow-blue)"/>
+  <path data-connector="amount-currency" class="connector" d="M 782 500 L 856 500" stroke="#4f8f8b" marker-end="url(#arrow-teal)"/>
+  <path data-connector="currency-default" class="connector" d="M 1166 500 L 1240 500" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+
+  <rect x="64" y="614" width="1472" height="220" rx="18" class="lane"/>
+  <text x="92" y="649" class="laneTitle">TESTED BEHAVIOR</text>
+
+  <g data-card="Composite insert" data-x="108" data-y="690" data-width="300" data-height="112">
+    <rect x="108" y="690" width="300" height="112" rx="13" fill="#fff" stroke="#3f7fb5" stroke-width="2.4" class="card"/>
+    <path class="header" d="M108,733 L108,703 Q108,690 121,690 L395,690 Q408,690 408,703 L408,733 Z" fill="#eef5fa"/>
+    <text x="258" y="713" class="tiny" text-anchor="middle">Ex02_Money</text>
+    <text x="258" y="740" class="cardTitle" text-anchor="middle">Composite insert</text>
+    <text x="132" y="768" class="detail">it[composite_money] = Money</text>
+    <text x="132" y="790" class="detail">select restores value</text>
+  </g>
+
+  <g data-card="Component insert" data-x="482" data-y="690" data-width="310" data-height="112">
+    <rect x="482" y="690" width="310" height="112" rx="13" fill="#fff" stroke="#4f8f8b" stroke-width="2.4" class="card"/>
+    <path class="header" d="M482,733 L482,703 Q482,690 495,690 L779,690 Q792,690 792,703 L792,733 Z" fill="#eef7f6"/>
+    <text x="637" y="713" class="tiny" text-anchor="middle">amount + currency</text>
+    <text x="637" y="740" class="cardTitle" text-anchor="middle">Component insert</text>
+    <text x="506" y="768" class="detail">set amount and currency</text>
+    <text x="506" y="790" class="detail">query each component</text>
+  </g>
+
+  <g data-card="Manual composite" data-x="866" data-y="690" data-width="300" data-height="112">
+    <rect x="866" y="690" width="300" height="112" rx="13" fill="#fff" stroke="#6f8f52" stroke-width="2.4" class="card"/>
+    <path class="header" d="M866,733 L866,703 Q866,690 879,690 L1153,690 Q1166,690 1166,703 L1166,733 Z" fill="#f1f6ec"/>
+    <text x="1016" y="713" class="tiny" text-anchor="middle">decimal + currency columns</text>
+    <text x="1016" y="740" class="cardTitle" text-anchor="middle">Manual composite</text>
+    <text x="890" y="768" class="detail">amount/currency named freely</text>
+    <text x="890" y="790" class="detail">nullable composite comparisons</text>
+  </g>
+
+  <g data-card="Guards and defaults" data-x="1250" data-y="690" data-width="245" data-height="112">
+    <rect x="1250" y="690" width="245" height="112" rx="13" fill="#fff" stroke="#a66a3f" stroke-width="2.4" class="card"/>
+    <path class="header" d="M1250,733 L1250,703 Q1250,690 1263,690 L1482,690 Q1495,690 1495,703 L1495,733 Z" fill="#f5eee4"/>
+    <text x="1372.5" y="713" class="tiny" text-anchor="middle">validation path</text>
+    <text x="1372.5" y="740" class="cardTitle" text-anchor="middle">Guards</text>
+    <text x="1274" y="768" class="detail">precision overflow</text>
+    <text x="1274" y="790" class="detail">defaults/nulls checked</text>
+  </g>
+
+  <path data-connector="test-composite-component" class="connector" d="M 408 746 L 472 746" stroke="#3f7fb5" marker-end="url(#arrow-blue)"/>
+  <path data-connector="test-component-manual" class="connector" d="M 792 746 L 856 746" stroke="#4f8f8b" marker-end="url(#arrow-teal)"/>
+  <path data-connector="test-manual-guards" class="connector" d="M 1166 746 L 1240 746" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+
+  <rect x="108" y="862" width="1385" height="36" rx="11" class="foot"/>
+  <text x="800.5" y="886" class="note" text-anchor="middle">Reader contract: a MonetaryAmount is one Kotlin value, two database columns, and one R2DBC verification path for full and component access.</text>
 </svg>

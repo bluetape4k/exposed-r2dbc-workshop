@@ -1,72 +1,156 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1754" height="1075" viewBox="0 0 1754 1075" role="img" aria-label="Structure Diagram">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1754" height="1075"/>
-<rect class="frame" x="32" y="28" width="1690" height="1019" rx="28"/>
-<text class="title" x="66" y="82">Structure Diagram</text>
-<text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="line" d="M672 292 L672 132 L1082 132 L1082 180" data-connector="line"/>
-<path class="inheritLine" d="M877 743 L877 652 L672 652 L672 292"/>
-<g transform="translate(92,180)">
-  <rect class="card" x="0" y="0" width="340" height="133" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#5B8DEF"/>
-  <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="61" text-anchor="middle">JsonBColumnT</text>
-  <text class="mono" x="18" y="108">+jsonb(name, jsonMapper) Column~T~</text>
-</g>
-<g transform="translate(502,180)">
-  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#58A978"/>
-  <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="61" text-anchor="middle">JsonColumn</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1040" width="1600" height="1040" role="img" aria-label="Exposed R2DBC JSON class structure diagram">
+  <defs>
+    <filter id="softShadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="#1f2937" flood-opacity="0.11"/>
+    </filter>
+    <marker id="arrow-teal" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#4f8f8b"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#6f8f52"/>
+    </marker>
+    <marker id="arrow-brown" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#a66a3f" stroke="#a66a3f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:2}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.6}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:42px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:17px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:22px;letter-spacing:0;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:23px;fill:#1e293b}
+      .card{filter:url(#softShadow)}
+      .header{opacity:.96}
+      .inherit{fill:none;stroke:#64748b;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+      .rel{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .head{fill:#fff;stroke:#64748b;stroke-width:3;stroke-dasharray:none}
+      .foot{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}
+    </style>
+  </defs>
 
-</g>
-<g transform="translate(912,180)">
-  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#D6A441"/>
-  <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="61" text-anchor="middle">KotlinxJsonMapper</text>
+  <rect width="1600" height="1040" class="canvas"/>
+  <rect x="28" y="28" width="1544" height="984" rx="20" class="frame"/>
+  <text x="72" y="88" class="title">Exposed R2DBC JSON Class Structure</text>
+  <text x="72" y="122" class="subtitle">UML view from JsonTestData, R2dbcExposedJsonTest, Ex01_JsonColumn, and Ex02_JsonBColumn.</text>
 
-</g>
-<g transform="translate(1322,180)">
-  <rect class="card" x="0" y="0" width="340" height="133" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#DC6B82"/>
-  <text class="small" x="170" y="26" text-anchor="middle">«Exposed extension»</text>
-  <text class="label" x="170" y="61" text-anchor="middle">JsonColumnT</text>
-  <text class="mono" x="18" y="108">+json(name, jsonMapper) Column~T~</text>
-</g>
-<g transform="translate(707,439)">
-  <rect class="card" x="0" y="0" width="340" height="154" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#45A7A1"/>
-  <text class="small" x="170" y="26" text-anchor="middle">«kotlinx.serialization»</text>
-  <text class="label" x="170" y="61" text-anchor="middle">KotlinxJsonMapperT</text>
-  <text class="mono" x="18" y="108">+serialize(value: T) String</text>
-<text class="mono" x="18" y="129">+deserialize(value: String) T</text>
-</g>
-<g transform="translate(707,743)">
-  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#8A72D6"/>
-  <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="61" text-anchor="middle">JsonBColumn</text>
+  <rect x="64" y="160" width="1472" height="286" rx="18" class="lane"/>
+  <text x="92" y="195" class="laneTitle">TEST CLASS INHERITANCE</text>
 
-</g>
+  <g data-card="AbstractR2dbcExposedTest" data-x="625" data-y="218" data-width="350" data-height="88">
+    <rect x="625" y="218" width="350" height="88" rx="13" fill="#fff" stroke="#64748b" stroke-width="2.4" class="card"/>
+    <path class="header" d="M625,258 L625,231 Q625,218 638,218 L962,218 Q975,218 975,231 L975,258 Z" fill="#f8fafc"/>
+    <text x="800" y="239" class="tiny" text-anchor="middle">&lt;&lt;shared test base&gt;&gt;</text>
+    <text x="800" y="263" class="cardTitle" text-anchor="middle">AbstractR2dbcExposedTest</text>
+    <text x="649" y="287" class="detail">testDB matrix + withDb support</text>
+  </g>
+
+  <g data-card="R2dbcExposedJsonTest" data-x="615" data-y="350" data-width="370" data-height="88">
+    <rect x="615" y="350" width="370" height="88" rx="13" fill="#fff" stroke="#a66a3f" stroke-width="2.4" class="card"/>
+    <path class="header" d="M615,390 L615,363 Q615,350 628,350 L972,350 Q985,350 985,363 L985,390 Z" fill="#f5eee4"/>
+    <text x="800" y="371" class="tiny" text-anchor="middle">&lt;&lt;abstract fixture&gt;&gt;</text>
+    <text x="800" y="395" class="cardTitle" text-anchor="middle">R2dbcExposedJsonTest</text>
+    <text x="639" y="419" class="detail">withJsonTable / arrays fixtures</text>
+  </g>
+
+  <g data-card="Ex01_JsonColumn" data-x="220" data-y="350" data-width="310" data-height="88">
+    <rect x="220" y="350" width="310" height="88" rx="13" fill="#fff" stroke="#3f7fb5" stroke-width="2.4" class="card"/>
+    <path class="header" d="M220,390 L220,363 Q220,350 233,350 L517,350 Q530,350 530,363 L530,390 Z" fill="#eef5fa"/>
+    <text x="375" y="371" class="tiny" text-anchor="middle">&lt;&lt;parameterized test&gt;&gt;</text>
+    <text x="375" y="395" class="cardTitle" text-anchor="middle">Ex01_JsonColumn</text>
+    <text x="244" y="419" class="detail">json CRUD and query ops</text>
+  </g>
+
+  <g data-card="Ex02_JsonBColumn" data-x="1070" data-y="350" data-width="310" data-height="88">
+    <rect x="1070" y="350" width="310" height="88" rx="13" fill="#fff" stroke="#4f8f8b" stroke-width="2.4" class="card"/>
+    <path class="header" d="M1070,390 L1070,363 Q1070,350 1083,350 L1367,350 Q1380,350 1380,363 L1380,390 Z" fill="#eef7f6"/>
+    <text x="1225" y="371" class="tiny" text-anchor="middle">&lt;&lt;parameterized test&gt;&gt;</text>
+    <text x="1225" y="395" class="cardTitle" text-anchor="middle">Ex02_JsonBColumn</text>
+    <text x="1094" y="419" class="detail">jsonb arrays/defaults/upsert</text>
+  </g>
+
+  <path data-connector="json-base-inherits" class="inherit"  d="M 800 350 L 800 322"/>
+  <polygon class="head"  points="800,306 791,322 809,322" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path data-connector="ex01-inherits" class="inherit"  d="M 530 394 L 599 394"/>
+  <polygon class="head"  points="615,394 599,385 599,403" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path data-connector="ex02-inherits" class="inherit"  d="M 1070 394 L 1001 394"/>
+  <polygon class="head"  points="985,394 1001,385 1001,403" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <rect x="64" y="476" width="1472" height="216" rx="18" class="lane"/>
+  <text x="92" y="511" class="laneTitle">JSON PAYLOAD CLASSES AND TABLE OBJECTS</text>
+
+  <g data-card="Payload classes" data-x="108" data-y="548" data-width="330" data-height="106">
+    <rect x="108" y="548" width="330" height="106" rx="13" fill="#fff" stroke="#3f7fb5" stroke-width="2.4" class="card"/>
+    <path class="header" d="M108,591 L108,561 Q108,548 121,548 L425,548 Q438,548 438,561 L438,591 Z" fill="#eef5fa"/>
+    <text x="273" y="571" class="tiny" text-anchor="middle">@Serializable data classes</text>
+    <text x="273" y="598" class="cardTitle" text-anchor="middle">Payload classes</text>
+    <text x="132" y="626" class="detail">User, DataHolder, UserGroup</text>
+  </g>
+
+  <g data-card="JsonTable" data-x="530" data-y="548" data-width="278" data-height="106">
+    <rect x="530" y="548" width="278" height="106" rx="13" fill="#fff" stroke="#4f8f8b" stroke-width="2.4" class="card"/>
+    <path class="header" d="M530,591 L530,561 Q530,548 543,548 L795,548 Q808,548 808,561 L808,591 Z" fill="#eef7f6"/>
+    <text x="669" y="571" class="tiny" text-anchor="middle">IntIdTable("j_table")</text>
+    <text x="669" y="598" class="cardTitle" text-anchor="middle">JsonTable</text>
+    <text x="554" y="626" class="detail">json&lt;DataHolder&gt; column</text>
+  </g>
+
+  <g data-card="JsonBTable" data-x="900" data-y="548" data-width="288" data-height="106">
+    <rect x="900" y="548" width="288" height="106" rx="13" fill="#fff" stroke="#6f8f52" stroke-width="2.4" class="card"/>
+    <path class="header" d="M900,591 L900,561 Q900,548 913,548 L1175,548 Q1188,548 1188,561 L1188,591 Z" fill="#f1f6ec"/>
+    <text x="1044" y="571" class="tiny" text-anchor="middle">IntIdTable("j_b_table")</text>
+    <text x="1044" y="598" class="cardTitle" text-anchor="middle">JsonBTable</text>
+    <text x="924" y="626" class="detail">jsonb&lt;DataHolder&gt; column</text>
+  </g>
+
+  <g data-card="Array tables" data-x="1270" data-y="548" data-width="225" data-height="106">
+    <rect x="1270" y="548" width="225" height="106" rx="13" fill="#fff" stroke="#a66a3f" stroke-width="2.4" class="card"/>
+    <path class="header" d="M1270,591 L1270,561 Q1270,548 1283,548 L1482,548 Q1495,548 1495,561 L1495,591 Z" fill="#f5eee4"/>
+    <text x="1382.5" y="571" class="tiny" text-anchor="middle">arrays</text>
+    <text x="1382.5" y="598" class="cardTitle" text-anchor="middle">Json Array Tables</text>
+    <text x="1294" y="626" class="detail">groups + numbers</text>
+  </g>
+
+  <path data-connector="payload-json" class="rel" d="M 438 601 L 520 601" stroke="#4f8f8b" marker-end="url(#arrow-teal)"/>
+  <path data-connector="json-jsonb" class="rel" d="M 808 601 L 890 601" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+  <path data-connector="jsonb-array" class="rel" d="M 1188 601 L 1260 601" stroke="#a66a3f" marker-end="url(#arrow-brown)"/>
+
+  <rect x="64" y="722" width="1472" height="194" rx="18" class="lane"/>
+  <text x="92" y="757" class="laneTitle">JSONB-SPECIFIC EDGE CASES IN EX02</text>
+
+  <g data-card="Default and nullable tables" data-x="118" data-y="792" data-width="320" data-height="90">
+    <rect x="118" y="792" width="320" height="90" rx="13" fill="#fff" stroke="#3f7fb5" stroke-width="2.4" class="card"/>
+    <path class="header" d="M118,832 L118,805 Q118,792 131,792 L425,792 Q438,792 438,805 L438,832 Z" fill="#eef5fa"/>
+    <text x="278" y="813" class="tiny" text-anchor="middle">inline Table / IntIdTable</text>
+    <text x="278" y="837" class="cardTitle" text-anchor="middle">Defaults</text>
+    <text x="142" y="862" class="detail">default / client / nullable</text>
+  </g>
+
+  <g data-card="Iterable serializer tables" data-x="485" data-y="792" data-width="320" data-height="90">
+    <rect x="485" y="792" width="320" height="90" rx="13" fill="#fff" stroke="#4f8f8b" stroke-width="2.4" class="card"/>
+    <path class="header" d="M485,832 L485,805 Q485,792 498,792 L792,792 Q805,792 805,805 L805,832 Z" fill="#eef7f6"/>
+    <text x="645" y="813" class="tiny" text-anchor="middle">iterables_tester</text>
+    <text x="645" y="837" class="cardTitle" text-anchor="middle">Collections</text>
+    <text x="509" y="862" class="detail">List + Array serializers</text>
+  </g>
+
+  <g data-card="Transformer table" data-x="852" data-y="792" data-width="300" data-height="90">
+    <rect x="852" y="792" width="300" height="90" rx="13" fill="#fff" stroke="#6f8f52" stroke-width="2.4" class="card"/>
+    <path class="header" d="M852,832 L852,805 Q852,792 865,792 L1139,792 Q1152,792 1152,805 L1152,832 Z" fill="#f1f6ec"/>
+    <text x="1002" y="813" class="tiny" text-anchor="middle">tester.numbers</text>
+    <text x="1002" y="837" class="cardTitle" text-anchor="middle">Transformer</text>
+    <text x="876" y="862" class="detail">IntArray to DoubleArray</text>
+  </g>
+
+  <g data-card="KeyExistsOp" data-x="1198" data-y="792" data-width="295" data-height="90">
+    <rect x="1198" y="792" width="295" height="90" rx="13" fill="#fff" stroke="#a85f7f" stroke-width="2.4" class="card"/>
+    <path class="header" d="M1198,832 L1198,805 Q1198,792 1211,792 L1480,792 Q1493,792 1493,805 L1493,832 Z" fill="#f5eef2"/>
+    <text x="1345.5" y="813" class="tiny" text-anchor="middle">private custom operator</text>
+    <text x="1345.5" y="837" class="cardTitle" text-anchor="middle">KeyExistsOp</text>
+    <text x="1222" y="862" class="detail">Postgres ?? key lookup</text>
+  </g>
+
+  <rect x="108" y="948" width="1385" height="36" rx="11" class="foot"/>
+  <text x="800.5" y="972" class="note" text-anchor="middle">Hollow triangles show inheritance; solid arrows show payload reuse. Ex02 owns JSONB defaults, collections, transformers, and custom operators.</text>
 </svg>

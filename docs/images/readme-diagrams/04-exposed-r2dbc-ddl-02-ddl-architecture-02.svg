@@ -1,108 +1,162 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1378" height="858" viewBox="0 0 1378 858" role="img" aria-label="Structure Diagram">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1378" height="858"/>
-<rect class="frame" x="32" y="28" width="1314" height="802" rx="28"/>
-<text class="title" x="66" y="82">Structure Diagram</text>
-<text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M672 718 C672 718 706 718 706 718" data-connector="line"/>
-<path class="line" d="M1040 552 C1040 635 1006 635 1006 718" data-connector="line"/>
-<path class="line" d="M706 552 C706 635 672 635 672 718" data-connector="line"/>
-<path class="line" d="M1006 552 C1006 552 1040 552 1040 552" data-connector="line"/>
-<path class="line" d="M672 552 C672 552 706 552 706 552" data-connector="line"/>
-<path class="line" d="M338 552 C338 552 372 552 372 552" data-connector="line"/>
-<path class="line" d="M672 386 C672 386 1040 386 1040 386" data-connector="line"/>
-<path class="line" d="M1006 386 C1006 386 1040 386 1040 386" data-connector="line"/>
-<path class="line" d="M338 386 C338 386 706 386 706 386" data-connector="line"/>
-<path class="line" d="M1040 220 C1040 303 672 303 672 386" data-connector="line"/>
-<path class="line" d="M1040 220 C1040 303 338 303 338 386" data-connector="line"/>
-<path class="line" d="M1006 220 C1006 220 1040 220 1040 220" data-connector="line"/>
-<path class="line" d="M672 220 C672 220 706 220 706 220" data-connector="line"/>
-<path class="line" d="M338 220 C338 220 372 220 372 220" data-connector="line"/>
-<g transform="translate(48,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">Table definition</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">object MyTable :</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">IntIdTable()</text>
-</g>
-<g transform="translate(382,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">suspendTransaction {</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">}</text>
-</g>
-<g transform="translate(716,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">Schema</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">Utils.create(My</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">Table)</text>
-</g>
-<g transform="translate(1050,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Table exists?</text>
-</g>
-<g transform="translate(48,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Execute CREATE TABLE</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">IF NOT EXISTS</text>
-</g>
-<g transform="translate(382,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Skip (IF NOT EXISTS)</text>
-</g>
-<g transform="translate(716,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Create columns /</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">indices / FKs</text>
-</g>
-<g transform="translate(1050,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Done</text>
-</g>
-<g transform="translate(48,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">suspendTransaction {</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">}</text>
-</g>
-<g transform="translate(382,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Schema Utils.create</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">Missing(My Table)</text>
-</g>
-<g transform="translate(716,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Missing</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">tables/columns?</text>
-</g>
-<g transform="translate(1050,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">ALTER / CREATE</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">missing items only</text>
-</g>
-<g transform="translate(382,668)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Skip</text>
-</g>
-<g transform="translate(716,668)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Done</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&amp;display=swap');
+      @font-face{font-family:'Comic Mono';src:local('Comic Mono');}
+      .canvas{fill:#F6F8FB;}
+      .frame{fill:#FFFDF9;stroke:#d7e2ec;stroke-width:2;}
+      .title{font-family:'Architects Daughter','Comic Mono',monospace;font-size:39px;fill:#1f2937;}
+      .subtitle,.note{font-family:'Comic Mono','Architects Daughter',monospace;font-size:16px;fill:#526173;font-weight:700;}
+      .lane{fill:#F7FAFD;stroke:#d7e2ec;stroke-width:1.6;}
+      .laneTitle{font-family:'Architects Daughter','Comic Mono',monospace;font-size:20px;letter-spacing:3px;fill:#9aaec0;}
+      .card{fill:#FFFFFF;stroke-width:2.2;}
+      .blue{stroke:#4f86c6;fill:#EEF6FF;}
+      .green{stroke:#6f8f52;fill:#F1F8EC;}
+      .amber{stroke:#a66a3f;fill:#FFF6EA;}
+      .teal{stroke:#4f9d96;fill:#ECFAF8;}
+      .rose{stroke:#b05d83;fill:#FDF0F6;}
+      .cardBand{fill:#ffffff;opacity:.72;}
+      .kind{font-family:'Comic Mono','Architects Daughter',monospace;font-size:14px;font-weight:800;fill:#64748b;}
+      .cardTitle{font-family:'Architects Daughter','Comic Mono',monospace;font-size:25px;fill:#263241;}
+      .detail{font-family:'Comic Mono','Architects Daughter',monospace;font-size:16px;font-weight:800;fill:#526173;}
+      .edge{fill:none;stroke:#5f7180;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#flowArrow);}
+      .edgeBlue{stroke:#3f86bd;marker-end:url(#arrowBlue);}
+      .edgeGreen{stroke:#6f8f52;marker-end:url(#arrowGreen);}
+      .edgeAmber{stroke:#a66a3f;marker-end:url(#arrowAmber);}
+      .edgeTeal{stroke:#4f9d96;marker-end:url(#arrowTeal);}
+      .edgeRose{stroke:#b05d83;marker-end:url(#arrowRose);}
+      .label{fill:#FFFFFF;stroke:#d7e2ec;stroke-width:1.4;}
+      .labelText{font-family:'Comic Mono','Architects Daughter',monospace;font-size:13px;font-weight:800;fill:#536473;}
+      .noteBox{fill:#ECFFF4;stroke:#65df93;stroke-width:1.6;}
+    </style>
+    <marker id="flowArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#5f7180" stroke="#5f7180" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#3f86bd" stroke="#3f86bd" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f8f52" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#a66a3f" stroke="#a66a3f" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowTeal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f9d96" stroke="#4f9d96" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowRose" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#b05d83" stroke="#b05d83" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+  </defs>
+
+  <rect class="canvas" width="1600" height="1120"/>
+  <rect class="frame" x="28" y="28" width="1544" height="1064" rx="24"/>
+  <text class="title" x="70" y="86">Exposed R2DBC DDL Architecture</text>
+  <text class="subtitle" x="72" y="124">Static responsibility map for SchemaUtils, MigrationUtils, and source-defined schema objects.</text>
+
+  <rect class="lane" x="58" y="166" width="1484" height="246" rx="18"/>
+  <text class="laneTitle" x="86" y="210">WORKSHOP DDL DECLARATIONS</text>
+  <rect class="lane" x="58" y="446" width="1484" height="248" rx="18"/>
+  <text class="laneTitle" x="86" y="490">EXPOSED R2DBC DDL API</text>
+  <rect class="lane" x="58" y="728" width="1484" height="236" rx="18"/>
+  <text class="laneTitle" x="86" y="772">DATABASE SCHEMA EFFECTS</text>
+
+  <g data-card="table-dsl" data-x="126" data-y="248" data-width="250" data-height="116">
+    <rect class="card blue" x="126" y="248" width="250" height="116" rx="12"/>
+    <rect class="cardBand" x="128" y="304" width="246" height="1"/>
+    <text class="kind" x="251" y="274" text-anchor="middle">&lt;&lt;Table DSL&gt;&gt;</text>
+    <text class="cardTitle" x="251" y="304" text-anchor="middle">Table / IdTable</text>
+    <text class="detail" x="151" y="336">IntIdTable, LongIdTable</text>
+  </g>
+  <g data-card="column-constraints" data-x="470" data-y="248" data-width="250" data-height="116">
+    <rect class="card green" x="470" y="248" width="250" height="116" rx="12"/>
+    <rect class="cardBand" x="472" y="304" width="246" height="1"/>
+    <text class="kind" x="595" y="274" text-anchor="middle">&lt;&lt;columns&gt;&gt;</text>
+    <text class="cardTitle" x="595" y="304" text-anchor="middle">Constraints</text>
+    <text class="detail" x="495" y="336">PK, FK, unique, check</text>
+  </g>
+  <g data-card="index-sequence" data-x="814" data-y="248" data-width="250" data-height="116">
+    <rect class="card amber" x="814" y="248" width="250" height="116" rx="12"/>
+    <rect class="cardBand" x="816" y="304" width="246" height="1"/>
+    <text class="kind" x="939" y="274" text-anchor="middle">&lt;&lt;database objects&gt;&gt;</text>
+    <text class="cardTitle" x="939" y="304" text-anchor="middle">Index / Sequence</text>
+    <text class="detail" x="839" y="336">index(), nextIntVal()</text>
+  </g>
+  <g data-card="migration-models" data-x="1158" data-y="248" data-width="250" data-height="116">
+    <rect class="card rose" x="1158" y="248" width="250" height="116" rx="12"/>
+    <rect class="cardBand" x="1160" y="304" width="246" height="1"/>
+    <text class="kind" x="1283" y="274" text-anchor="middle">&lt;&lt;migration input&gt;&gt;</text>
+    <text class="cardTitle" x="1283" y="304" text-anchor="middle">V1 / V2 mapping</text>
+    <text class="detail" x="1183" y="336">same table, new shape</text>
+  </g>
+
+  <g data-card="schema-utils" data-x="126" data-y="528" data-width="250" data-height="116">
+    <rect class="card blue" x="126" y="528" width="250" height="116" rx="12"/>
+    <rect class="cardBand" x="128" y="584" width="246" height="1"/>
+    <text class="kind" x="251" y="554" text-anchor="middle">&lt;&lt;SchemaUtils&gt;&gt;</text>
+    <text class="cardTitle" x="251" y="584" text-anchor="middle">create / drop</text>
+    <text class="detail" x="151" y="616">tables and sequences</text>
+  </g>
+  <g data-card="create-missing" data-x="470" data-y="528" data-width="250" data-height="116">
+    <rect class="card green" x="470" y="528" width="250" height="116" rx="12"/>
+    <rect class="cardBand" x="472" y="584" width="246" height="1"/>
+    <text class="kind" x="595" y="554" text-anchor="middle">&lt;&lt;SchemaUtils&gt;&gt;</text>
+    <text class="cardTitle" x="595" y="584" text-anchor="middle">createMissing...</text>
+    <text class="detail" x="495" y="616">missing tables/columns</text>
+  </g>
+  <g data-card="migration-utils" data-x="814" data-y="528" data-width="250" data-height="116">
+    <rect class="card amber" x="814" y="528" width="250" height="116" rx="12"/>
+    <rect class="cardBand" x="816" y="584" width="246" height="1"/>
+    <text class="kind" x="939" y="554" text-anchor="middle">&lt;&lt;MigrationUtils&gt;&gt;</text>
+    <text class="cardTitle" x="939" y="584" text-anchor="middle">statementsRequired</text>
+    <text class="detail" x="839" y="616">diff current vs target</text>
+  </g>
+  <g data-card="exec-batch" data-x="1158" data-y="528" data-width="250" data-height="116">
+    <rect class="card rose" x="1158" y="528" width="250" height="116" rx="12"/>
+    <rect class="cardBand" x="1160" y="584" width="246" height="1"/>
+    <text class="kind" x="1283" y="554" text-anchor="middle">&lt;&lt;transaction&gt;&gt;</text>
+    <text class="cardTitle" x="1283" y="584" text-anchor="middle">execInBatch</text>
+    <text class="detail" x="1183" y="616">apply DDL, commit</text>
+  </g>
+
+  <g data-card="tables-effect" data-x="126" data-y="808" data-width="250" data-height="106">
+    <rect class="card blue" x="126" y="808" width="250" height="106" rx="12"/>
+    <text class="kind" x="251" y="834" text-anchor="middle">&lt;&lt;schema&gt;&gt;</text>
+    <text class="cardTitle" x="251" y="864" text-anchor="middle">Tables + PK/FK</text>
+    <text class="detail" x="151" y="896">Book, Person, Child</text>
+  </g>
+  <g data-card="columns-effect" data-x="470" data-y="808" data-width="250" data-height="106">
+    <rect class="card green" x="470" y="808" width="250" height="106" rx="12"/>
+    <text class="kind" x="595" y="834" text-anchor="middle">&lt;&lt;schema&gt;&gt;</text>
+    <text class="cardTitle" x="595" y="864" text-anchor="middle">Columns + unique</text>
+    <text class="detail" x="495" y="896">nullable, defaults, checks</text>
+  </g>
+  <g data-card="indexes-effect" data-x="814" data-y="808" data-width="250" data-height="106">
+    <rect class="card amber" x="814" y="808" width="250" height="106" rx="12"/>
+    <text class="kind" x="939" y="834" text-anchor="middle">&lt;&lt;schema&gt;&gt;</text>
+    <text class="cardTitle" x="939" y="864" text-anchor="middle">Indexes + sequences</text>
+    <text class="detail" x="839" y="896">unique, partial, nextVal</text>
+  </g>
+  <g data-card="dialect-effect" data-x="1158" data-y="808" data-width="250" data-height="106">
+    <rect class="card rose" x="1158" y="808" width="250" height="106" rx="12"/>
+    <text class="kind" x="1283" y="834" text-anchor="middle">&lt;&lt;SQL verification&gt;&gt;</text>
+    <text class="cardTitle" x="1283" y="864" text-anchor="middle">Dialect DDL</text>
+    <text class="detail" x="1183" y="896">H2, Postgres, MySQL</text>
+  </g>
+
+  <path class="edge edgeBlue" d="M 251 364 V 518"/>
+  <path class="edge edgeGreen" d="M 595 364 V 518"/>
+  <path class="edge edgeAmber" d="M 939 364 V 518"/>
+  <path class="edge edgeRose" d="M 1283 364 V 518"/>
+  <path class="edge edgeAmber" d="M 1064 586 H 1148"/>
+  <rect class="label" x="1068" y="550" width="80" height="24" rx="12"/>
+  <text class="labelText" x="1108" y="566" text-anchor="middle">batch</text>
+
+  <path class="edge edgeBlue" d="M 251 644 V 798"/>
+  <path class="edge edgeGreen" d="M 595 644 V 798"/>
+  <path class="edge edgeAmber" d="M 939 644 V 798"/>
+  <path class="edge edgeRose" d="M 1283 644 V 798"/>
+
+  <rect class="noteBox" x="96" y="1010" width="1408" height="34" rx="12"/>
+  <text class="note" x="800" y="1032" text-anchor="middle">Solid arrows show source-code responsibility handoffs from table declarations to R2DBC DDL APIs and persisted schema effects.</text>
 </svg>

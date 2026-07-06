@@ -1,118 +1,153 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1378" height="1024" viewBox="0 0 1378 1024" role="img" aria-label="ID Strategy Selection Flowchart">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1378" height="1024"/>
-<rect class="frame" x="32" y="28" width="1314" height="968" rx="28"/>
-<text class="title" x="66" y="82">ID Strategy Selection Flowchart</text>
-<text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M522 778 C522 801 522 801 522 824" data-connector="line"/>
-<path class="line" d="M672 718 C672 718 706 718 706 718" data-connector="line"/>
-<path class="line" d="M372 386 C372 552 338 552 338 718" data-connector="line"/>
-<path class="line" d="M1040 386 C1040 469 1006 469 1006 552" data-connector="line"/>
-<path class="line" d="M1040 386 C1040 469 338 469 338 552" data-connector="line"/>
-<path class="line" d="M672 386 C672 386 706 386 706 386" data-connector="line"/>
-<path class="line" d="M338 386 C338 386 372 386 372 386" data-connector="line"/>
-<path class="line" d="M372 220 C372 303 338 303 338 386" data-connector="line"/>
-<path class="line" d="M672 220 C672 220 706 220 706 220" data-connector="line"/>
-<path class="line" d="M338 220 C338 220 372 220 372 220" data-connector="line"/>
-<g transform="translate(48,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Choose ID Strategy</text>
-</g>
-<g transform="translate(382,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">ID Type</text>
-</g>
-<g transform="translate(716,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Numeric Long</text>
-</g>
-<g transform="translate(1050,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">SnowflakeIdTable</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">milli-sorted, 64bit</text>
-</g>
-<g transform="translate(48,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">String</text>
-</g>
-<g transform="translate(382,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Need UUID standard?</text>
-</g>
-<g transform="translate(716,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Yes</text>
-</g>
-<g transform="translate(1050,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Compact</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">representation?</text>
-</g>
-<g transform="translate(48,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">No</text>
-</g>
-<g transform="translate(382,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">TimebasedUUIDTable</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">UUID 36 chars, RFC</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">4122</text>
-</g>
-<g transform="translate(716,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Yes</text>
-</g>
-<g transform="translate(1050,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">Timebased UUIDBase62</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">Table String 22</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">chars</text>
-</g>
-<g transform="translate(48,668)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">No</text>
-</g>
-<g transform="translate(382,668)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Millisecond</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">precision?</text>
-</g>
-<g transform="translate(716,668)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">No</text>
-</g>
-<g transform="translate(1050,668)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">KsuidTable second</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">precision, 27 chars</text>
-</g>
-<g transform="translate(382,834)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Yes</text>
-</g>
-<g transform="translate(716,834)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">KsuidMillisTable</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">millis, 27 chars</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1360" viewBox="0 0 2200 1360" role="img" aria-label="Advanced 07 Exposed R2DBC Custom Entities architecture diagram">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.11"/>
+    </filter>
+    <style>
+      .canvas{fill:#f4f7fa}
+      .frame{fill:#fffefb;stroke:#b8ccdf;stroke-width:5}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:3}
+      .laneWarm{fill:#fffaf0;stroke:#dccb9e;stroke-width:3}
+      .laneGreen{fill:#f2f8f2;stroke:#c5dab6;stroke-width:3}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:64px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:24px;fill:#536476;font-weight:700}
+      .laneTitle{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:24px;letter-spacing:.06em;fill:#8ca2b4;font-weight:800}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:32px;fill:#1e293b}
+      .cardSub{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:22px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:19px;fill:#64748b;font-weight:800}
+      .card{filter:url(#shadow)}
+      .cardWhite{fill:#ffffff}
+      .blue{stroke:#4f86c6}
+      .green{stroke:#6f8f52}
+      .amber{stroke:#b8891f}
+      .teal{stroke:#4f8f8b}
+      .red{stroke:#ad5f82}
+      .brown{stroke:#8a6f55}
+      .blueFill{fill:#eef5fa}
+      .greenFill{fill:#f1f6ec}
+      .amberFill{fill:#fff8e6}
+      .tealFill{fill:#eef7f6}
+      .redFill{fill:#f8edf3}
+      .brownFill{fill:#f3eee8}
+      .connector{fill:none;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round}
+      .head{stroke-dasharray:none;style:stroke-dasharray:none!important}
+      .footer{fill:#ffffff;stroke:#d9e3ec;stroke-width:2.4}
+    </style>
+  </defs>
+
+  <rect class="canvas" width="2200" height="1360"/>
+  <rect class="frame" x="36" y="34" width="2128" height="1292" rx="38"/>
+  <text class="title" x="1100" y="126" text-anchor="middle">Custom Entity ID Strategy Map</text>
+  <text class="subtitle" x="1100" y="176" text-anchor="middle">Choose a reusable table base by storage type, sort precision, and URL-safety; tests assert the same insert contract.</text>
+
+  <rect class="lane" x="92" y="238" width="580" height="790" rx="30"/>
+  <text class="laneTitle" x="132" y="286">SELECTION PRESSURE</text>
+  <rect class="laneWarm" x="810" y="238" width="580" height="790" rx="30"/>
+  <text class="laneTitle" x="850" y="286">REUSABLE BASE TABLE</text>
+  <rect class="laneGreen" x="1528" y="238" width="580" height="790" rx="30"/>
+  <text class="laneTitle" x="1568" y="286">PERSISTED PRIMARY KEY</text>
+
+  <g data-card="High Throughput Numeric" data-x="150" data-y="334" data-width="420" data-height="116">
+    <rect class="card cardWhite blue" x="150" y="334" width="420" height="116" rx="22" stroke-width="4"/>
+    <text class="cardTitle" x="360" y="382" text-anchor="middle">High Throughput Numeric</text>
+    <text class="cardSub" x="360" y="418" text-anchor="middle">64-bit, millis ordered</text>
+  </g>
+  <g data-card="Sortable String ID" data-x="150" data-y="506" data-width="420" data-height="116">
+    <rect class="card cardWhite green" x="150" y="506" width="420" height="116" rx="22" stroke-width="4"/>
+    <text class="cardTitle" x="360" y="554" text-anchor="middle">Sortable String ID</text>
+    <text class="cardSub" x="360" y="590" text-anchor="middle">KSUID seconds or millis</text>
+  </g>
+  <g data-card="Standard UUID Contract" data-x="150" data-y="678" data-width="420" data-height="116">
+    <rect class="card cardWhite teal" x="150" y="678" width="420" height="116" rx="22" stroke-width="4"/>
+    <text class="cardTitle" x="360" y="726" text-anchor="middle">Standard UUID Contract</text>
+    <text class="cardSub" x="360" y="762" text-anchor="middle">UUIDv1, RFC 4122</text>
+  </g>
+  <g data-card="Compact URL Safe UUID" data-x="150" data-y="850" data-width="420" data-height="116">
+    <rect class="card cardWhite red" x="150" y="850" width="420" height="116" rx="22" stroke-width="4"/>
+    <text class="cardTitle" x="360" y="898" text-anchor="middle">Compact URL-Safe UUID</text>
+    <text class="cardSub" x="360" y="934" text-anchor="middle">22-char Base62 UUIDv1</text>
+  </g>
+
+  <g data-card="SnowflakeIdTable" data-x="888" data-y="334" data-width="424" data-height="116">
+    <rect class="card cardWhite blue" x="888" y="334" width="424" height="116" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1100" y="366" text-anchor="middle">&lt;&lt;IdTable base&gt;&gt;</text>
+    <text class="cardTitle" x="1100" y="406" text-anchor="middle">SnowflakeIdTable</text>
+    <text class="cardSub" x="1100" y="436" text-anchor="middle">clientDefault Snowflake Long</text>
+  </g>
+  <g data-card="Ksuid Table Family" data-x="888" data-y="506" data-width="424" data-height="116">
+    <rect class="card cardWhite green" x="888" y="506" width="424" height="116" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1100" y="538" text-anchor="middle">&lt;&lt;IdTable base&gt;&gt;</text>
+    <text class="cardTitle" x="1100" y="578" text-anchor="middle">KsuidTable Family</text>
+    <text class="cardSub" x="1100" y="608" text-anchor="middle">KsuidTable / KsuidMillisTable</text>
+  </g>
+  <g data-card="TimebasedUUIDTable" data-x="888" data-y="678" data-width="424" data-height="116">
+    <rect class="card cardWhite teal" x="888" y="678" width="424" height="116" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1100" y="710" text-anchor="middle">&lt;&lt;IdTable base&gt;&gt;</text>
+    <text class="cardTitle" x="1100" y="750" text-anchor="middle">TimebasedUUIDTable</text>
+    <text class="cardSub" x="1100" y="780" text-anchor="middle">clientDefault UUIDv1</text>
+  </g>
+  <g data-card="TimebasedUUIDBase62Table" data-x="888" data-y="850" data-width="424" data-height="116">
+    <rect class="card cardWhite red" x="888" y="850" width="424" height="116" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1100" y="882" text-anchor="middle">&lt;&lt;IdTable base&gt;&gt;</text>
+    <text class="cardTitle" x="1100" y="922" text-anchor="middle">TimebasedUUIDBase62</text>
+    <text class="cardSub" x="1100" y="952" text-anchor="middle">Base62 UUIDv1 string</text>
+  </g>
+
+  <g data-card="BIGINT Primary Key" data-x="1612" data-y="334" data-width="420" data-height="116">
+    <rect class="card cardWhite blue" x="1612" y="334" width="420" height="116" rx="22" stroke-width="4"/>
+    <text class="cardTitle" x="1822" y="382" text-anchor="middle">BIGINT PRIMARY KEY</text>
+    <text class="cardSub" x="1822" y="418" text-anchor="middle">t_snowflake.id</text>
+  </g>
+  <g data-card="VARCHAR27 Primary Key" data-x="1612" data-y="506" data-width="420" data-height="116">
+    <rect class="card cardWhite green" x="1612" y="506" width="420" height="116" rx="22" stroke-width="4"/>
+    <text class="cardTitle" x="1822" y="554" text-anchor="middle">VARCHAR(27) PK</text>
+    <text class="cardSub" x="1822" y="590" text-anchor="middle">t_ksuid / t_ksuid_millis</text>
+  </g>
+  <g data-card="UUID Primary Key" data-x="1612" data-y="678" data-width="420" data-height="116">
+    <rect class="card cardWhite teal" x="1612" y="678" width="420" height="116" rx="22" stroke-width="4"/>
+    <text class="cardTitle" x="1822" y="726" text-anchor="middle">UUID PRIMARY KEY</text>
+    <text class="cardSub" x="1822" y="762" text-anchor="middle">t_timebased_uuid.id</text>
+  </g>
+  <g data-card="VARCHAR22 Primary Key" data-x="1612" data-y="850" data-width="420" data-height="116">
+    <rect class="card cardWhite red" x="1612" y="850" width="420" height="116" rx="22" stroke-width="4"/>
+    <text class="cardTitle" x="1822" y="898" text-anchor="middle">VARCHAR(22) PK</text>
+    <text class="cardSub" x="1822" y="934" text-anchor="middle">t_timebased_uuid_base62</text>
+  </g>
+
+  <path class="connector blue" data-connector="numeric-to-snowflake"  d="M 570 392 L 874 392"/>
+  <polygon class="head"  points="888,392 874,385 874,399" fill="#4f86c6" stroke="#4f86c6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector blue" data-connector="snowflake-to-bigint"  d="M 1312 392 L 1598 392"/>
+  <polygon class="head"  points="1612,392 1598,385 1598,399" fill="#4f86c6" stroke="#4f86c6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="connector green" data-connector="string-to-ksuid"  d="M 570 564 L 874 564"/>
+  <polygon class="head"  points="888,564 874,557 874,571" fill="#6f8f52" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector green" data-connector="ksuid-to-varchar27"  d="M 1312 564 L 1598 564"/>
+  <polygon class="head"  points="1612,564 1598,557 1598,571" fill="#6f8f52" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="connector teal" data-connector="uuid-to-timebased"  d="M 570 736 L 874 736"/>
+  <polygon class="head"  points="888,736 874,729 874,743" fill="#4f8f8b" stroke="#4f8f8b" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector teal" data-connector="timebased-to-uuid"  d="M 1312 736 L 1598 736"/>
+  <polygon class="head"  points="1612,736 1598,729 1598,743" fill="#4f8f8b" stroke="#4f8f8b" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="connector red" data-connector="compact-to-base62"  d="M 570 908 L 874 908"/>
+  <polygon class="head"  points="888,908 874,901 874,915" fill="#ad5f82" stroke="#ad5f82" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector red" data-connector="base62-to-varchar22"  d="M 1312 908 L 1598 908"/>
+  <polygon class="head"  points="1612,908 1598,901 1598,915" fill="#ad5f82" stroke="#ad5f82" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <rect class="lane" x="186" y="1082" width="1828" height="140" rx="30"/>
+  <text class="laneTitle" x="226" y="1130">SHARED TEST CONTRACT</text>
+  <g data-card="Parameterized Test Matrix" data-x="350" data-y="1148" data-width="370" data-height="56">
+    <rect class="cardWhite amber" x="350" y="1148" width="370" height="56" rx="18" stroke-width="3"/>
+    <text class="cardSub" x="535" y="1185" text-anchor="middle">TestDB x 50 / 500 records</text>
+  </g>
+  <g data-card="Mutation Paths" data-x="852" data-y="1148" data-width="496" data-height="56">
+    <rect class="cardWhite brown" x="852" y="1148" width="496" height="56" rx="18" stroke-width="3"/>
+    <text class="cardSub" x="1100" y="1185" text-anchor="middle">insert, batchInsert, coroutine chunks</text>
+  </g>
+  <g data-card="Count Assertion" data-x="1480" data-y="1148" data-width="370" data-height="56">
+    <rect class="cardWhite amber" x="1480" y="1148" width="370" height="56" rx="18" stroke-width="3"/>
+    <text class="cardSub" x="1665" y="1185" text-anchor="middle">selectAll().count() matches</text>
+  </g>
+  <rect class="footer" x="216" y="1258" width="1768" height="48" rx="18"/>
+  <text class="note" x="1100" y="1290" text-anchor="middle">Reader contract: inherit the base table to pick ID storage and generator; table rows keep the same name/age payload and test assertions.</text>
 </svg>

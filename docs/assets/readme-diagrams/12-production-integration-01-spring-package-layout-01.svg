@@ -1,22 +1,116 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="560" viewBox="0 0 1160 560" role="img" aria-label="Spring Production Package Layout">
-<defs><filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,4.5 L1,8 Z" fill="#5D6B7A"/></marker><style>.bg{fill:#F7F9FC}.panel{fill:#FFFFFF;stroke:#BCC7D6;stroke-width:2;rx:18;filter:url(#shadow)}.blue{fill:#E8F3FF;stroke:#5B8DEF}.green{fill:#E8F7EE;stroke:#3A8B57}.amber{fill:#FFF7E6;stroke:#B7791F}.pink{fill:#FDECEF;stroke:#DC6B82}.teal{fill:#E9F7F6;stroke:#45A7A1}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:36px;fill:#172033;font-weight:400}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:16px;fill:#516070;font-weight:400}.label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:23px;fill:#172033;font-weight:400}.small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;fill:#425466;font-weight:400}.arrow{stroke:#5D6B7A;stroke-width:2.4;fill:none;marker-end:url(#arrow)}</style></defs>
-<rect class="bg" width="1160" height="560"/>
-<text x="64" y="70" class="title">Spring Production Package Layout</text>
-<text x="66" y="102" class="subtitle">exposed.r2dbc.examples.production.spring package boundaries.</text>
-<rect x="105" y="145" width="405" height="92" class="panel green"/>
-<text x="131" y="181" class="label">auth</text>
-<text x="131" y="209" class="small">WebFlux Security and user details</text>
-<rect x="605" y="145" width="405" height="92" class="panel blue"/>
-<text x="631" y="181" class="label">app</text>
-<text x="631" y="209" class="small">DTOs, validation, service boundary</text>
-<rect x="105" y="300" width="405" height="92" class="panel amber"/>
-<text x="131" y="336" class="label">persistence</text>
-<text x="131" y="364" class="small">table definitions owned by repositories</text>
-<rect x="605" y="300" width="405" height="92" class="panel pink"/>
-<text x="631" y="336" class="label">web</text>
-<text x="631" y="364" class="small">controllers, SSE hub, WebClient dispatcher, errors</text>
-<path class="arrow" d="M510 190 H605"/>
-<path class="arrow" d="M310 237 V300"/>
-<path class="arrow" d="M810 237 V300"/>
-<path class="arrow" d="M510 345 H605"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1160" viewBox="0 0 1800 1160" role="img" aria-label="Spring production package layout">
+  <defs>
+    <filter id="softShadow" x="-8%" y="-10%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#25384d" flood-opacity="0.12"/>
+    </filter>
+    <marker id="arrowBlue" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowTeal" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowAmber" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#a36f3e" stroke="#a36f3e" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fffefa;stroke:#d7e3ed;stroke-width:2}
+      .lane{fill:#f8fbfd;stroke:#d7e3ed;stroke-width:1.8}
+      .laneWeb{fill:#f5f9ff;stroke:#bdd7ee}
+      .laneApp{fill:#f7fbf2;stroke:#c9dfbb}
+      .laneData{fill:#fbf7f0;stroke:#dfc39d}
+      .card{filter:url(#softShadow);stroke-width:2.6}
+      .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:52px;fill:#192538;font-weight:400}
+      .subtitle,.laneTitle,.body,.foot{font-family:"Comic Mono","Comic Sans MS","Comic Sans",monospace;font-weight:700;fill:#556678}
+      .subtitle{font-size:20px}
+      .laneTitle{font-size:16px;letter-spacing:.07em;fill:#8aa0b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:26px;fill:#192538;font-weight:400}
+      .body{font-size:16px}
+      .small{font-size:14px}
+      .foot{font-size:15px}
+      .connector{fill:none;stroke-width:4.4;stroke-linecap:round;stroke-linejoin:round}
+      .blue{stroke:#4f86c6;marker-end:url(#arrowBlue)}
+      .teal{stroke:#4f8f8b;marker-end:url(#arrowTeal)}
+      .amber{stroke:#a36f3e;marker-end:url(#arrowAmber)}
+      .h2Icon path{fill:#09476B}
+    </style>
+  </defs>
+
+  <rect class="canvas" width="1800" height="1160"/>
+  <rect class="frame" x="32" y="32" width="1736" height="1096" rx="26"/>
+
+  <text class="title" x="86" y="112">Spring Production Package Layout</text>
+  <text class="subtitle" x="90" y="154">The Spring slice keeps framework entrypoints in root/web/auth and puts Exposed R2DBC persistence behind the app package.</text>
+
+  <rect class="lane laneWeb" x="70" y="205" width="1660" height="295" rx="18"/>
+  <text class="laneTitle" x="96" y="239">FRAMEWORK ENTRY AND WEB BOUNDARIES</text>
+
+  <rect class="lane laneApp" x="70" y="530" width="1660" height="270" rx="18"/>
+  <text class="laneTitle" x="96" y="564">APPLICATION PACKAGE</text>
+
+  <rect class="lane laneData" x="70" y="830" width="1660" height="235" rx="18"/>
+  <text class="laneTitle" x="96" y="864">PERSISTENCE PACKAGE AND TABLE CONTRACT</text>
+
+  <g data-card="Root application">
+    <rect class="card" x="115" y="285" width="320" height="120" rx="14" fill="#ffffff" stroke="#4f86c6"/>
+    <text class="cardTitle" x="275" y="326" text-anchor="middle">Root Application</text>
+    <text class="body small" x="275" y="354" text-anchor="middle">SpringProductionIntegration</text>
+    <text class="body small" x="275" y="378" text-anchor="middle">Application</text>
+  </g>
+
+  <g data-card="Auth package">
+    <rect class="card" x="505" y="285" width="320" height="120" rx="14" fill="#ffffff" stroke="#4f86c6"/>
+    <text class="cardTitle" x="665" y="326" text-anchor="middle">auth Package</text>
+    <text class="body" x="665" y="357" text-anchor="middle">SpringProductionSecurityConfig</text>
+    <text class="body small" x="665" y="381" text-anchor="middle">BCrypt + ReactiveUserDetailsService</text>
+  </g>
+
+  <g data-card="Web controller package">
+    <rect class="card" x="895" y="285" width="320" height="120" rx="14" fill="#ffffff" stroke="#4f86c6"/>
+    <text class="cardTitle" x="1055" y="326" text-anchor="middle">web Controller Boundary</text>
+    <text class="body" x="1055" y="357" text-anchor="middle">SpringProductionController</text>
+    <text class="body small" x="1055" y="381" text-anchor="middle">accounts, realtime, outbound, readiness</text>
+  </g>
+
+  <g data-card="Web support package">
+    <rect class="card" x="1285" y="285" width="320" height="120" rx="14" fill="#ffffff" stroke="#4f86c6"/>
+    <text class="cardTitle" x="1445" y="326" text-anchor="middle">web Support Boundary</text>
+    <text class="body" x="1445" y="357" text-anchor="middle">error, correlation, hub, dispatcher</text>
+    <text class="body small" x="1445" y="381" text-anchor="middle">SSE + WebClient adapter classes</text>
+  </g>
+
+  <g data-card="Workflow service">
+    <rect class="card" x="330" y="610" width="420" height="125" rx="14" fill="#ffffff" stroke="#6f8f52"/>
+    <text class="cardTitle" x="540" y="652" text-anchor="middle">Workflow Service</text>
+    <text class="body" x="540" y="683" text-anchor="middle">SpringProductionWorkflowService</text>
+    <text class="body small" x="540" y="709" text-anchor="middle">controller-facing use cases and permission checks</text>
+  </g>
+
+  <g data-card="Repository and models">
+    <rect class="card" x="1050" y="610" width="420" height="125" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+    <text class="cardTitle" x="1260" y="652" text-anchor="middle">Repository And Models</text>
+    <text class="body" x="1260" y="683" text-anchor="middle">SpringProductionRepository</text>
+    <text class="body small" x="1260" y="709" text-anchor="middle">request/view DTOs live beside repository contracts</text>
+  </g>
+
+  <g data-card="Persistence tables">
+    <rect class="card" x="520" y="900" width="760" height="120" rx="14" fill="#ffffff" stroke="#a36f3e"/>
+    <g class="h2Icon" data-bluetape4k-icon="database/h2.svg" transform="translate(560 934) scale(1.55)">
+      <path d="M17.17 13.27c.14-.015.28-.023.416-.023.7 0 1.228.159 1.599.469.37.314.555.756.555 1.334a2.861 2.861 0 0 1-.43 1.455c-.291.492-.775 1.066-1.46 1.727-.453.446-1.061.976-1.821 1.592a48.02 48.02 0 0 1-2.275 1.742v2.083h9.895V21.24H17.99c.219-.159.59-.435 1.11-.832.519-.4 1.033-.835 1.55-1.311.817-.76 1.425-1.5 1.822-2.215a4.624 4.624 0 0 0 .597-2.268c0-1.213-.416-2.154-1.247-2.815-.828-.662-2.033-.994-3.613-.994-.344 0-.692.015-1.036.049V6.04H13.86v4.701H8.965V6.04H5.65v12.846h3.315v-5.661h4.89v5.661h.039c.31-.242.623-.487.933-.74a28.564 28.564 0 0 0 1.826-1.588 14.854 14.854 0 0 0 .517-.529zM12.011 23.3A11.327 11.327 0 0 1 .7 11.99 11.305 11.305 0 0 1 12.011.699a11.286 11.286 0 0 1 11.29 11.29v.351H24v-.351A11.985 11.985 0 0 0 12.011 0 12.008 12.008 0 0 0 0 11.989 12.026 12.026 0 0 0 12.011 24h.352v-.7z"/>
+    </g>
+    <text class="cardTitle" x="940" y="943" text-anchor="middle">persistence Package</text>
+    <text class="body" x="940" y="974" text-anchor="middle">SpringProductionTables</text>
+    <text class="body small" x="940" y="998" text-anchor="middle">accounts, sessions, work items, outbox, outbound, diagnostics</text>
+  </g>
+
+  <path class="connector blue" data-connector="root-auth" d="M 435 345 L 500 345"/>
+  <path class="connector blue" data-connector="auth-controller" d="M 825 345 L 890 345"/>
+  <path class="connector blue" data-connector="controller-web-support" d="M 1215 345 L 1280 345"/>
+  <path class="connector blue" data-connector="controller-service" d="M 1055 405 L 1055 468 Q 1055 484 1039 484 L 556 484 Q 540 484 540 500 L 540 605"/>
+  <path class="connector teal" data-connector="web-support-service" d="M 1445 405 L 1445 468 Q 1445 484 1429 484 L 556 484 Q 540 484 540 500 L 540 605"/>
+  <path class="connector teal" data-connector="service-repository" d="M 750 672.5 L 1045 672.5"/>
+  <path class="connector amber" data-connector="repository-tables" d="M 1260 735 L 1260 792 Q 1260 808 1244 808 L 916 808 Q 900 808 900 824 L 900 895"/>
+
+  <rect x="250" y="1030" width="1300" height="38" rx="12" fill="#ecfdf5" stroke="#86cfa0" stroke-width="1.8"/>
+  <text class="foot" x="900" y="1055" text-anchor="middle">Spring controllers depend on workflow service methods; only the repository package owns Exposed R2DBC transactions and table access.</text>
 </svg>

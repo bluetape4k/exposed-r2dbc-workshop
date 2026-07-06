@@ -1,67 +1,139 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1378" height="526" viewBox="0 0 1378 526" role="img" aria-label="Near Cache Effect">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1378" height="526"/>
-<rect class="frame" x="32" y="28" width="1314" height="470" rx="28"/>
-<text class="title" x="66" y="82">Near Cache Effect</text>
-<text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M1006 386 C1006 386 1040 386 1040 386" data-connector="line"/>
-<path class="line" d="M338 386 C338 386 706 386 706 386" data-connector="line"/>
-<path class="line" d="M338 386 C338 386 372 386 372 386" data-connector="line"/>
-<path class="line" d="M372 220 C372 303 338 303 338 386" data-connector="line"/>
-<path class="line" d="M672 220 C672 220 1040 220 1040 220" data-connector="line"/>
-<path class="line" d="M338 220 C338 220 706 220 706 220" data-connector="line"/>
-<g transform="translate(48,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">cache.get(key)</text>
-</g>
-<g transform="translate(382,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Caffeine Near Cache</text>
-</g>
-<g transform="translate(716,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">key</text>
-</g>
-<g transform="translate(1050,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Return ⚡ nanoseconds</text>
-</g>
-<g transform="translate(48,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Redis MapCache</text>
-</g>
-<g transform="translate(382,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Return ⚡</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">microseconds</text>
-</g>
-<g transform="translate(716,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">DB Exposed R2DBC</text>
-</g>
-<g transform="translate(1050,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Return ⏱</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">milliseconds</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="920" viewBox="0 0 1600 920" role="img" aria-label="Near cache effect for R2DBC read-through repository">
+  <defs>
+    <filter id="softShadow" x="-8%" y="-10%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#25384d" flood-opacity="0.10"/>
+    </filter>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fffefa;stroke:#d7e3ed;stroke-width:2}
+      .lane{fill:#f9fbfd;stroke:#dbe7f0;stroke-width:1.8}
+      .appBoundary{fill:none;stroke:#b9d5aa;stroke-width:2;stroke-dasharray:10 8}
+      .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:40px;fill:#192538;font-weight:400}
+      .subtitle,.detail,.foot,.labelText{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:700;fill:#556678}
+      .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:700;fill:#66788c}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:18px;letter-spacing:0.08em;fill:#8ba4b8;font-weight:400}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;fill:#192538;font-weight:400}
+      .stereo{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:700;fill:#66788c}
+      .card{filter:url(#softShadow);stroke-width:2.4}
+      .header{opacity:.96}
+      .connector{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .dash{stroke-dasharray:8 7}
+      .head{fill:none;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none}
+      .label{fill:#fffefa;stroke-width:1.8}
+      .blue{stroke:#4f86c6}
+      .green{stroke:#6f8f52}
+      .amber{stroke:#a36f3e}
+      .teal{stroke:#4f8f8b}
+      .muted{stroke:#9fb1c2}
+    </style>
+  </defs>
+
+  <rect class="canvas" width="1600" height="920"/>
+  <rect class="frame" x="30" y="30" width="1540" height="860" rx="24"/>
+  <text class="title" x="72" y="94">Near Cache Effect</text>
+  <text class="subtitle" x="76" y="128">READ_WRITE_THROUGH_WITH_NEAR_CACHE keeps a Caffeine local cache inside the application so repeated lookups avoid a Redis round-trip.</text>
+
+  <rect class="lane" x="60" y="160" width="1480" height="245" rx="18"/>
+  <text class="laneTitle" x="92" y="194">FIRST LOOKUP / CACHE WARM</text>
+  <rect class="lane" x="60" y="430" width="1480" height="245" rx="18"/>
+  <text class="laneTitle" x="92" y="464">REPEATED LOOKUP IN SAME PROCESS</text>
+  <rect class="lane" x="60" y="710" width="1480" height="100" rx="18"/>
+  <text class="laneTitle" x="92" y="744">READER CONTRACT</text>
+
+  <rect class="appBoundary" x="360" y="210" width="580" height="430" rx="18"/>
+  <text class="laneTitle" x="386" y="240">APPLICATION PROCESS</text>
+
+  <g data-card="First GET" data-x="100" data-y="260" data-width="200" data-height="104">
+    <rect class="card" x="100" y="260" width="200" height="104" rx="14" fill="#ffffff" stroke="#4f86c6"/>
+    <path class="header" d="M100,304 L100,274 Q100,260 114,260 L286,260 Q300,260 300,274 L300,304 Z" fill="#eef6fc"/>
+    <text class="stereo" x="200" y="283" text-anchor="middle">&lt;&lt;request&gt;&gt;</text>
+    <text class="cardTitle" x="200" y="306" text-anchor="middle">First GET</text>
+    <text class="detail" x="124" y="335">/users/{id}</text>
+  </g>
+
+  <g data-card="UserCacheRepository" data-x="420" data-y="260" data-width="230" data-height="104">
+    <rect class="card" x="420" y="260" width="230" height="104" rx="14" fill="#ffffff" stroke="#6f8f52"/>
+    <path class="header" d="M420,304 L420,274 Q420,260 434,260 L636,260 Q650,260 650,274 L650,304 Z" fill="#f2f8ed"/>
+    <text class="stereo" x="535" y="283" text-anchor="middle">&lt;&lt;repository&gt;&gt;</text>
+    <text class="cardTitle" x="535" y="306" text-anchor="middle">UserCacheRepository</text>
+    <text class="small" x="444" y="335">get(id) checks local key first</text>
+  </g>
+
+  <g data-card="Caffeine Near Cache" data-x="700" data-y="260" data-width="210" data-height="104">
+    <rect class="card" x="700" y="260" width="210" height="104" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+    <path class="header" d="M700,304 L700,274 Q700,260 714,260 L896,260 Q910,260 910,274 L910,304 Z" fill="#eef8f7"/>
+    <text class="stereo" x="805" y="283" text-anchor="middle">&lt;&lt;local cache&gt;&gt;</text>
+    <text class="cardTitle" x="805" y="306" text-anchor="middle">Caffeine Near Cache</text>
+    <text class="detail" x="724" y="335">miss on cold key</text>
+  </g>
+
+  <g data-card="Redis MapCache" data-x="1010" data-y="260" data-width="210" data-height="104">
+    <rect class="card" x="1010" y="260" width="210" height="104" rx="14" fill="#ffffff" stroke="#a36f3e"/>
+    <path class="header" d="M1010,304 L1010,274 Q1010,260 1024,260 L1206,260 Q1220,260 1220,274 L1220,304 Z" fill="#fff5e8"/>
+    <text class="stereo" x="1115" y="283" text-anchor="middle">&lt;&lt;distributed&gt;&gt;</text>
+    <text class="cardTitle" x="1115" y="306" text-anchor="middle">Redis MapCache</text>
+    <text class="detail" x="1034" y="335">read-through tier</text>
+  </g>
+
+  <g data-card="H2 R2DBC DB" data-x="1300" data-y="260" data-width="160" data-height="104">
+    <rect class="card" x="1300" y="260" width="160" height="104" rx="14" fill="#ffffff" stroke="#8a6f55"/>
+    <path class="header" d="M1300,304 L1300,274 Q1300,260 1314,260 L1446,260 Q1460,260 1460,274 L1460,304 Z" fill="#f3eee8"/>
+    <text class="stereo" x="1380" y="283" text-anchor="middle">&lt;&lt;DB&gt;&gt;</text>
+    <text class="cardTitle" x="1380" y="306" text-anchor="middle">H2 R2DBC</text>
+    <text class="detail" x="1322" y="335">UserTable</text>
+  </g>
+
+  <g data-card="Repeated GET" data-x="100" data-y="520" data-width="200" data-height="104">
+    <rect class="card" x="100" y="520" width="200" height="104" rx="14" fill="#ffffff" stroke="#4f86c6"/>
+    <path class="header" d="M100,564 L100,534 Q100,520 114,520 L286,520 Q300,520 300,534 L300,564 Z" fill="#eef6fc"/>
+    <text class="stereo" x="200" y="543" text-anchor="middle">&lt;&lt;request&gt;&gt;</text>
+    <text class="cardTitle" x="200" y="566" text-anchor="middle">Repeated GET</text>
+    <text class="detail" x="124" y="595">same process</text>
+  </g>
+
+  <g data-card="Same UserCacheRepository" data-x="420" data-y="520" data-width="230" data-height="104">
+    <rect class="card" x="420" y="520" width="230" height="104" rx="14" fill="#ffffff" stroke="#6f8f52"/>
+    <path class="header" d="M420,564 L420,534 Q420,520 434,520 L636,520 Q650,520 650,534 L650,564 Z" fill="#f2f8ed"/>
+    <text class="stereo" x="535" y="543" text-anchor="middle">&lt;&lt;same bean&gt;&gt;</text>
+    <text class="cardTitle" x="535" y="566" text-anchor="middle">UserCacheRepository</text>
+    <text class="detail" x="444" y="595">near cache already warm</text>
+  </g>
+
+  <g data-card="Near hit" data-x="700" data-y="520" data-width="210" data-height="104">
+    <rect class="card" x="700" y="520" width="210" height="104" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+    <path class="header" d="M700,564 L700,534 Q700,520 714,520 L896,520 Q910,520 910,534 L910,564 Z" fill="#eef8f7"/>
+    <text class="stereo" x="805" y="543" text-anchor="middle">&lt;&lt;local hit&gt;&gt;</text>
+    <text class="cardTitle" x="805" y="566" text-anchor="middle">Caffeine Hit</text>
+    <text class="detail" x="724" y="595">returns in-process</text>
+  </g>
+
+  <g id="connectors">
+    <path class="connector blue" data-connector="first" d="M300 312 L420 312"/>
+    <polyline class="head blue" points="420,312 408,305 408,319"/>
+    <path class="connector green" data-connector="first" d="M650 312 L700 312"/>
+    <polyline class="head green" points="700,312 688,305 688,319"/>
+    <path class="connector amber dash" data-connector="miss" d="M910 312 L1010 312"/>
+    <polyline class="head amber" points="1010,312 998,305 998,319"/>
+    <path class="connector amber dash" data-connector="miss" d="M1220 312 L1300 312"/>
+    <polyline class="head amber" points="1300,312 1288,305 1288,319"/>
+
+    <path class="connector green" data-connector="populate" d="M1380 424 L805 424"/>
+    <polyline class="head green" points="805,424 817,417 817,431"/>
+
+    <path class="connector blue" data-connector="repeat" d="M300 572 L420 572"/>
+    <polyline class="head blue" points="420,572 408,565 408,579"/>
+    <path class="connector green" data-connector="repeat" d="M650 572 L700 572"/>
+    <polyline class="head green" points="700,572 688,565 688,579"/>
+    <path class="connector muted dash" data-connector="skipped" d="M910 572 L1115 572"/>
+  </g>
+
+  <g id="labels">
+    <rect class="label" x="1028" y="392" width="218" height="32" rx="16" stroke="#8ebf83"/>
+    <text class="labelText" x="1137" y="413" text-anchor="middle">populate near cache after miss</text>
+    <rect class="label" x="956" y="536" width="230" height="32" rx="16" stroke="#d7e3ed"/>
+    <text class="labelText" x="1071" y="557" text-anchor="middle">Redis round-trip skipped</text>
+  </g>
+
+  <rect x="110" y="770" width="1380" height="34" rx="12" fill="#fbfdff" stroke="#d7e3ed" stroke-width="2"/>
+  <text class="foot" x="800" y="793" text-anchor="middle">Repeated lookups within the same application process respond from Caffeine Near Cache, reducing Redis calls and improving P99 latency.</text>
 </svg>

@@ -1,72 +1,140 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1044" height="692" viewBox="0 0 1044 692" role="img" aria-label="Cache Lookup Flow">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1044" height="692"/>
-<rect class="frame" x="32" y="28" width="980" height="636" rx="28"/>
-<text class="title" x="66" y="82">Cache Lookup Flow</text>
-<text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M839 552 C839 469 706 469 706 386" data-connector="line"/>
-<path class="line" d="M505 552 C505 552 539 552 539 552" data-connector="line"/>
-<path class="line" d="M372 386 C372 469 505 469 505 552" data-connector="line"/>
-<path class="line" d="M672 386 C672 386 706 386 706 386" data-connector="line"/>
-<path class="line" d="M522 280 C522 303 522 303 522 326" data-connector="line"/>
-<path class="line" d="M372 220 C372 303 338 303 338 386" data-connector="line"/>
-<path class="line" d="M338 220 C338 220 706 220 706 220" data-connector="line"/>
-<g transform="translate(48,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">cache.get(key)</text>
-</g>
-<g transform="translate(382,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">L1 Caffeine Near</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">Cache HIT?</text>
-</g>
-<g transform="translate(716,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">key</text>
-</g>
-<g transform="translate(48,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Return immediately</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">nanoseconds ⚡</text>
-</g>
-<g transform="translate(382,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">L2 Redisson MapCache</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">HIT?</text>
-</g>
-<g transform="translate(716,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Sync L1 + Return</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">microseconds ⚡</text>
-</g>
-<g transform="translate(215,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">DB query</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">suspendTransaction</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">Exposed R2DBC</text>
-</g>
-<g transform="translate(549,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Store in L2 with TTL</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="960" viewBox="0 0 1700 960" role="img" aria-label="Cache lookup flow for R2DBC read-through repository">
+  <defs>
+    <filter id="softShadow" x="-8%" y="-10%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#25384d" flood-opacity="0.10"/>
+    </filter>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fffefa;stroke:#d7e3ed;stroke-width:2}
+      .lane{fill:#f9fbfd;stroke:#dbe7f0;stroke-width:1.8}
+      .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:40px;fill:#192538;font-weight:400}
+      .subtitle,.detail,.foot,.labelText{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:700;fill:#556678}
+      .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:700;fill:#66788c}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:18px;letter-spacing:0.08em;fill:#8ba4b8;font-weight:400}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:23px;fill:#192538;font-weight:400}
+      .stereo{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:700;fill:#66788c}
+      .card{filter:url(#softShadow);stroke-width:2.4}
+      .header{opacity:.96}
+      .connector{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .dash{stroke-dasharray:8 7}
+      .head{fill:none;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none}
+      .label{fill:#fffefa;stroke-width:1.8}
+      .blue{stroke:#4f86c6}
+      .green{stroke:#6f8f52}
+      .amber{stroke:#a36f3e}
+      .teal{stroke:#4f8f8b}
+    </style>
+  </defs>
+
+  <rect class="canvas" width="1700" height="960"/>
+  <rect class="frame" x="30" y="30" width="1640" height="900" rx="24"/>
+  <text class="title" x="72" y="94">Cache Lookup Flow - Read Through with Near Cache</text>
+  <text class="subtitle" x="76" y="128">UserController.get(id) calls UserCacheRepository.get(id); cache miss falls through Near Cache, Redis MapCache, and H2 R2DBC before re-populating both caches.</text>
+
+  <rect class="lane" x="60" y="160" width="1580" height="286" rx="18"/>
+  <text class="laneTitle" x="92" y="194">REQUEST / LOOKUP PATH</text>
+  <rect class="lane" x="60" y="482" width="1580" height="240" rx="18"/>
+  <text class="laneTitle" x="92" y="516">MISS POPULATE PATH</text>
+  <rect class="lane" x="60" y="756" width="1580" height="110" rx="18"/>
+  <text class="laneTitle" x="92" y="790">READER CONTRACT</text>
+
+  <g data-card="HTTP Client" data-x="96" data-y="240" data-width="210" data-height="120">
+    <rect class="card" x="96" y="240" width="210" height="120" rx="14" fill="#ffffff" stroke="#4f86c6"/>
+    <path class="header" d="M96,286 L96,254 Q96,240 110,240 L292,240 Q306,240 306,254 L306,286 Z" fill="#eef6fc"/>
+    <text class="stereo" x="201" y="264" text-anchor="middle">&lt;&lt;request&gt;&gt;</text>
+    <text class="cardTitle" x="201" y="287" text-anchor="middle">HTTP Client</text>
+    <text class="detail" x="120" y="318">GET /users/{id}</text>
+    <text class="small" x="120" y="342">WebTestClient / caller</text>
+  </g>
+
+  <g data-card="UserController" data-x="356" data-y="240" data-width="230" data-height="120">
+    <rect class="card" x="356" y="240" width="230" height="120" rx="14" fill="#ffffff" stroke="#4f86c6"/>
+    <path class="header" d="M356,286 L356,254 Q356,240 370,240 L572,240 Q586,240 586,254 L586,286 Z" fill="#eef6fc"/>
+    <text class="stereo" x="471" y="264" text-anchor="middle">&lt;&lt;webflux&gt;&gt;</text>
+    <text class="cardTitle" x="471" y="287" text-anchor="middle">UserController</text>
+    <text class="detail" x="380" y="314">suspend fun get(id)</text>
+    <text class="small" x="380" y="338">delegates to repository</text>
+    <text class="small" x="380" y="356">no transaction block</text>
+  </g>
+
+  <g data-card="UserCacheRepository" data-x="642" data-y="240" data-width="260" data-height="120">
+    <rect class="card" x="642" y="240" width="260" height="120" rx="14" fill="#ffffff" stroke="#6f8f52"/>
+    <path class="header" d="M642,286 L642,254 Q642,240 656,240 L888,240 Q902,240 902,254 L902,286 Z" fill="#f2f8ed"/>
+    <text class="stereo" x="772" y="264" text-anchor="middle">&lt;&lt;repository&gt;&gt;</text>
+    <text class="cardTitle" x="772" y="287" text-anchor="middle">UserCacheRepository</text>
+    <text class="detail" x="666" y="318">READ_WRITE_THROUGH</text>
+    <text class="small" x="666" y="342">key: exposed:coroutines:users:&lt;id&gt;</text>
+  </g>
+
+  <g data-card="Near Cache" data-x="958" data-y="240" data-width="220" data-height="120">
+    <rect class="card" x="958" y="240" width="220" height="120" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+    <path class="header" d="M958,286 L958,254 Q958,240 972,240 L1164,240 Q1178,240 1178,254 L1178,286 Z" fill="#eef8f7"/>
+    <text class="stereo" x="1068" y="264" text-anchor="middle">&lt;&lt;L1 cache&gt;&gt;</text>
+    <text class="cardTitle" x="1068" y="287" text-anchor="middle">Caffeine Near Cache</text>
+    <text class="detail" x="982" y="318">first local lookup</text>
+    <text class="small" x="982" y="342">hit avoids Redis round trip</text>
+  </g>
+
+  <g data-card="Redis MapCache" data-x="1230" data-y="240" data-width="210" data-height="120">
+    <rect class="card" x="1230" y="240" width="210" height="120" rx="14" fill="#ffffff" stroke="#a36f3e"/>
+    <path class="header" d="M1230,286 L1230,254 Q1230,240 1244,240 L1426,240 Q1440,240 1440,254 L1440,286 Z" fill="#fff5e8"/>
+    <text class="stereo" x="1335" y="264" text-anchor="middle">&lt;&lt;L2 cache&gt;&gt;</text>
+    <text class="cardTitle" x="1335" y="287" text-anchor="middle">Redis MapCache</text>
+    <text class="detail" x="1254" y="318">RedissonClient</text>
+    <text class="small" x="1254" y="342">distributed cache tier</text>
+  </g>
+
+  <g data-card="H2 R2DBC DB" data-x="1482" data-y="240" data-width="130" data-height="120">
+    <rect class="card" x="1482" y="240" width="130" height="120" rx="14" fill="#ffffff" stroke="#8a6f55"/>
+    <path class="header" d="M1482,286 L1482,254 Q1482,240 1496,240 L1598,240 Q1612,240 1612,254 L1612,286 Z" fill="#f3eee8"/>
+    <text class="stereo" x="1547" y="264" text-anchor="middle">&lt;&lt;DB&gt;&gt;</text>
+    <text class="cardTitle" x="1547" y="287" text-anchor="middle">H2 R2DBC</text>
+    <text class="detail" x="1502" y="318">UserTable</text>
+    <text class="small" x="1502" y="342">DB fallback</text>
+  </g>
+
+  <g id="lookup-connectors">
+    <path class="connector blue" data-connector="lookup" d="M306 300 L356 300"/>
+    <polyline class="head blue" points="356,300 344,293 344,307"/>
+    <path class="connector blue" data-connector="lookup" d="M586 300 L642 300"/>
+    <polyline class="head blue" points="642,300 630,293 630,307"/>
+    <path class="connector green" data-connector="lookup" d="M902 300 L958 300"/>
+    <polyline class="head green" points="958,300 946,293 946,307"/>
+    <path class="connector amber dash" data-connector="miss" d="M1178 300 L1230 300"/>
+    <polyline class="head amber" points="1230,300 1218,293 1218,307"/>
+    <path class="connector amber dash" data-connector="miss" d="M1440 300 L1482 300"/>
+    <polyline class="head amber" points="1482,300 1470,293 1470,307"/>
+  </g>
+
+  <g id="labels">
+    <rect class="label" x="1018" y="382" width="126" height="32" rx="16" stroke="#8ebf83"/>
+    <text class="labelText" x="1081" y="403" text-anchor="middle">hit returns</text>
+    <rect class="label" x="1214" y="382" width="144" height="32" rx="16" stroke="#c59a63"/>
+    <text class="labelText" x="1286" y="403" text-anchor="middle">miss continues</text>
+  </g>
+
+  <g id="populate-corridor">
+    <path class="connector amber" data-connector="db-read" d="M1547 360 L1547 562"/>
+    <polyline class="head amber" points="1547,562 1540,550 1554,550"/>
+    <path class="connector green" data-connector="populate" d="M1547 562 L1335 562"/>
+    <polyline class="head green" points="1335,562 1347,555 1347,569"/>
+    <path class="connector green" data-connector="populate" d="M1335 562 L1068 562"/>
+    <polyline class="head green" points="1068,562 1080,555 1080,569"/>
+    <path class="connector teal" data-connector="return" d="M1068 620 L772 620"/>
+    <polyline class="head teal" points="772,620 784,613 784,627"/>
+    <path class="connector teal" data-connector="return" d="M772 620 L471 620"/>
+    <polyline class="head teal" points="471,620 483,613 483,627"/>
+
+    <rect class="label" x="1418" y="526" width="198" height="32" rx="16" stroke="#c59a63"/>
+    <text class="labelText" x="1517" y="547" text-anchor="middle">select + map ResultRow</text>
+    <rect class="label" x="1156" y="526" width="178" height="32" rx="16" stroke="#8ebf83"/>
+    <text class="labelText" x="1245" y="547" text-anchor="middle">store Redis value</text>
+    <rect class="label" x="870" y="526" width="176" height="32" rx="16" stroke="#8ebf83"/>
+    <text class="labelText" x="958" y="547" text-anchor="middle">warm near cache</text>
+    <rect class="label" x="554" y="584" width="190" height="32" rx="16" stroke="#8ac7c2"/>
+    <text class="labelText" x="649" y="605" text-anchor="middle">return UserRecord</text>
+  </g>
+
+  <rect x="110" y="815" width="1480" height="34" rx="12" fill="#fbfdff" stroke="#d7e3ed" stroke-width="2"/>
+  <text class="foot" x="850" y="838" text-anchor="middle">Read-through miss fetches from DB, writes Redis MapCache, warms Caffeine Near Cache, then returns the UserRecord to the suspend endpoint.</text>
 </svg>

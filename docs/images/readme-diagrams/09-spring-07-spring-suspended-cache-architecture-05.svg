@@ -1,43 +1,138 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="560" viewBox="0 0 1100 560" role="img" aria-label="SCAN-Based Cache Eviction">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:24px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:20px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12.5px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12.5px;font-weight:400;fill:#536273}
-    .card{stroke-width:2.1;filter:url(#shadow)}.soft{stroke-width:1.7}
-    .line{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#arrow)}
-    .plain{stroke:#758297;stroke-width:2.0;fill:none}.dash{stroke:#758297;stroke-width:2.0;stroke-dasharray:7 6;fill:none;marker-end:url(#arrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1100" height="560"/>
-<rect class="frame" x="32" y="28" width="1036" height="504" rx="28"/>
-<text class="title" x="66" y="82">SCAN-Based Cache Eviction</text>
-<text class="subtitle" x="70" y="118">Cursor based scan deletes Redis keys without blocking the event loop</text>
-<g transform="translate(80,230)">
-  <rect class="card" x="0" y="0" width="250" height="96" rx="8" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="125" y="30" text-anchor="middle">Start cursor</text>
-<text class="smallLabel" x="125" y="55" text-anchor="middle">MATCH caches:country:*</text>
-<text class="smallLabel" x="125" y="80" text-anchor="middle">COUNT 100</text>
-</g><g transform="translate(405,230)">
-  <rect class="card" x="0" y="0" width="250" height="96" rx="8" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="125" y="30" text-anchor="middle">Fetch key batch</text>
-<text class="smallLabel" x="125" y="55" text-anchor="middle">KeyScanArgs</text>
-<text class="smallLabel" x="125" y="80" text-anchor="middle">up to 100 keys</text>
-</g><g transform="translate(730,230)">
-  <rect class="card" x="0" y="0" width="250" height="96" rx="8" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="125" y="30" text-anchor="middle">UNLINK keys</text>
-<text class="smallLabel" x="125" y="55" text-anchor="middle">async memory release</text>
-<text class="smallLabel" x="125" y="80" text-anchor="middle">safer than DEL</text>
-</g><g transform="translate(405,400)">
-  <rect class="card" x="0" y="0" width="250" height="82" rx="8" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="125" y="35.5" text-anchor="middle">cursor.isFinished?</text>
-<text class="smallLabel" x="125" y="60.5" text-anchor="middle">repeat until true</text>
-</g><path class="line" d="M330 278 L405 278" data-connector="line"/><path class="line" d="M655 278 L730 278" data-connector="line"/><path class="line" d="M855 326 C855 355 530 355 530 400" data-connector="line"/>
-<text class="small" x="692.5" y="347" text-anchor="middle">next cursor</text><path class="line" d="M405 441 C405 375.5 205 375.5 205 326" data-connector="line"/>
-<text class="small" x="305" y="367.5" text-anchor="middle">not finished</text><text class="small" x="550" y="506" text-anchor="middle">KEYS is avoided because it can block Redis on large datasets.</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1380 860" width="1380" height="860" role="img" aria-label="Spring suspended cache indexed eviction architecture">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12"/>
+    </filter>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f86c6" stroke="#4f86c6" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f8f52" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#a66a3f" stroke="#a66a3f" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.3}
+      .card{filter:url(#shadow)}
+      .header{opacity:.96}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:32px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#536476;font-weight:700}
+      .small{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#64748b;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:16px;letter-spacing:.08em;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:18px;fill:#1e293b}
+      .connector{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .labelPill{fill:#fff;stroke:#d7e2ec;stroke-width:1.2}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.4}
+    </style>
+  </defs>
+
+  <rect width="1380" height="860" class="canvas"/>
+  <rect x="24" y="24" width="1332" height="812" rx="18" class="frame"/>
+
+  <text x="62" y="72" class="title">Spring Suspended Cache Indexed Eviction</text>
+  <text x="62" y="101" class="subtitle">LettuceSuspendedCache tracks its own Redis keys in name:__keys, so clear() does not scan the full keyspace.</text>
+
+  <rect x="52" y="130" width="1276" height="430" rx="16" class="lane"/>
+  <text x="78" y="160" class="laneTitle">CACHE KEY OWNERSHIP</text>
+
+  <rect x="52" y="588" width="1276" height="132" rx="16" class="lane"/>
+  <text x="78" y="618" class="laneTitle">FULL EVICTION CONTRACT</text>
+
+  <rect x="52" y="748" width="1276" height="48" rx="16" class="lane"/>
+
+  <g data-card="LettuceSuspendedCache" data-x="94" data-y="268" data-width="318" data-height="144">
+    <rect x="94" y="268" width="318" height="144" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card"/>
+    <path class="header" d="M94,314 L94,282 Q94,268 108,268 L398,268 Q412,268 412,282 L412,314 Z" fill="#eef5fa"/>
+    <text x="253" y="288" class="tiny" text-anchor="middle">&lt;&lt;suspend cache&gt;&gt;</text>
+    <text x="253" y="309" class="cardTitle" text-anchor="middle">LettuceSuspendedCache</text>
+    <text x="120" y="342" class="detail">keyStr(key) = name:key</text>
+    <text x="120" y="366" class="detail">indexKey = name:__keys</text>
+    <text x="120" y="390" class="small">commands + keyCommands</text>
+  </g>
+
+  <g data-card="Value Entry Keys" data-x="596" data-y="198" data-width="310" data-height="126">
+    <rect x="596" y="198" width="310" height="126" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card"/>
+    <path class="header" d="M596,244 L596,212 Q596,198 610,198 L892,198 Q906,198 906,212 L906,244 Z" fill="#eef7f6"/>
+    <text x="751" y="218" class="tiny" text-anchor="middle">&lt;&lt;Redis values&gt;&gt;</text>
+    <text x="751" y="239" class="cardTitle" text-anchor="middle">Value Entry Keys</text>
+    <text x="622" y="272" class="detail">caches:country:code:KR</text>
+    <text x="622" y="296" class="small">SETEX ttl=60 or SET</text>
+  </g>
+
+  <g data-card="Cache-Owned Key Index" data-x="596" data-y="362" data-width="310" data-height="126">
+    <rect x="596" y="362" width="310" height="126" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card"/>
+    <path class="header" d="M596,408 L596,376 Q596,362 610,362 L892,362 Q906,362 906,376 L906,408 Z" fill="#f1f6ec"/>
+    <text x="751" y="382" class="tiny" text-anchor="middle">&lt;&lt;Redis set&gt;&gt;</text>
+    <text x="751" y="403" class="cardTitle" text-anchor="middle">Cache-Owned Key Index</text>
+    <text x="622" y="436" class="detail">caches:country:code:__keys</text>
+    <text x="622" y="460" class="small">SADD on put, SREM on evict</text>
+  </g>
+
+  <g data-card="Single Entry Evict" data-x="1016" data-y="250" data-width="246" data-height="116">
+    <rect x="1016" y="250" width="246" height="116" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card"/>
+    <path class="header" d="M1016,294 L1016,264 Q1016,250 1030,250 L1248,250 Q1262,250 1262,264 L1262,294 Z" fill="#f5eee4"/>
+    <text x="1139" y="270" class="tiny" text-anchor="middle">&lt;&lt;evict(key)&gt;&gt;</text>
+    <text x="1139" y="290" class="cardTitle" text-anchor="middle">Single Entry Evict</text>
+    <text x="1040" y="320" class="detail">DEL value key</text>
+    <text x="1040" y="342" class="detail">SREM index member</text>
+  </g>
+
+  <g data-card="clear()" data-x="190" data-y="642" data-width="260" data-height="68">
+    <rect x="190" y="642" width="260" height="68" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card"/>
+    <path class="header" d="M190,676 L190,656 Q190,642 204,642 L436,642 Q450,642 450,656 L450,676 Z" fill="#eef5fa"/>
+    <text x="320" y="671" class="cardTitle" text-anchor="middle">clear()</text>
+    <text x="214" y="695" class="small">namespace-wide cache eviction</text>
+  </g>
+
+  <g data-card="Collect Indexed Keys" data-x="560" data-y="642" data-width="278" data-height="68">
+    <rect x="560" y="642" width="278" height="68" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card"/>
+    <path class="header" d="M560,676 L560,656 Q560,642 574,642 L824,642 Q838,642 838,656 L838,676 Z" fill="#f1f6ec"/>
+    <text x="699" y="671" class="cardTitle" text-anchor="middle">Collect Indexed Keys</text>
+    <text x="584" y="695" class="small">SMEMBERS -> filterNotNull -> toList</text>
+  </g>
+
+  <g data-card="Batch Unlink" data-x="948" data-y="642" data-width="278" data-height="68">
+    <rect x="948" y="642" width="278" height="68" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card"/>
+    <path class="header" d="M948,676 L948,656 Q948,642 962,642 L1212,642 Q1226,642 1226,656 L1226,676 Z" fill="#f5eee4"/>
+    <text x="1087" y="671" class="cardTitle" text-anchor="middle">Batch Unlink</text>
+    <text x="972" y="695" class="small">chunked(100), UNLINK keys + index</text>
+  </g>
+
+  <path class="connector" data-connector="value-write" d="M412 316 L596 316" stroke="#4f8f8b" marker-end="url(#arrow-teal)"/>
+  <rect x="452" y="284" width="94" height="24" rx="12" class="labelPill"/>
+  <text x="499" y="301" class="tiny" text-anchor="middle">SETEX / SET</text>
+
+  <path class="connector" data-connector="index-write" d="M412 372 L596 372" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+  <rect x="456" y="340" width="82" height="24" rx="12" class="labelPill"/>
+  <text x="497" y="357" class="tiny" text-anchor="middle">SADD</text>
+
+  <path class="connector" data-connector="single-evict-value" d="M906 262 L1016 262" stroke="#a66a3f" marker-end="url(#arrow-amber)"/>
+  <rect x="930" y="230" width="64" height="24" rx="12" class="labelPill"/>
+  <text x="962" y="247" class="tiny" text-anchor="middle">DEL</text>
+
+  <path class="connector" data-connector="single-evict-index" d="M906 426 L956 426 Q972 426 972 410 L972 330 Q972 314 988 314 L1016 314" stroke="#a66a3f" marker-end="url(#arrow-amber)"/>
+  <rect x="928" y="360" width="68" height="24" rx="12" class="labelPill"/>
+  <text x="962" y="377" class="tiny" text-anchor="middle">SREM</text>
+
+  <path class="connector" data-connector="clear-index" d="M450 676 L560 676" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+  <rect x="474" y="644" width="62" height="24" rx="12" class="labelPill"/>
+  <text x="505" y="661" class="tiny" text-anchor="middle">read set</text>
+
+  <path class="connector" data-connector="clear-unlink" d="M838 676 L948 676" stroke="#a66a3f" marker-end="url(#arrow-amber)"/>
+  <rect x="862" y="644" width="62" height="24" rx="12" class="labelPill"/>
+  <text x="893" y="661" class="tiny" text-anchor="middle">unlink</text>
+
+  <path class="connector" data-connector="clear-uses-index" d="M699 642 L699 488" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+  <rect x="630" y="560" width="138" height="24" rx="12" class="labelPill"/>
+  <text x="699" y="577" class="tiny" text-anchor="middle">SMEMBERS index</text>
+
+  <rect x="100" y="758" width="1180" height="28" rx="10" class="noteBox"/>
+  <text x="690" y="777" class="note" text-anchor="middle">Legend: teal = value-key write, green = cache-owned key index, amber = delete/unlink; no Redis keyspace SCAN is used.</text>
+</svg>

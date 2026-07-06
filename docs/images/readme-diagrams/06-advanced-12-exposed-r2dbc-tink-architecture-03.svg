@@ -1,37 +1,168 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="980" height="548" viewBox="0 0 980 548" role="img" aria-label="DAEAD vs AEAD Selection Guide">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:24px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:20px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12.5px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12.5px;font-weight:400;fill:#536273}
-    .card{stroke-width:2.1;filter:url(#shadow)}.soft{stroke-width:1.7}
-    .line{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#arrow)}
-    .plain{stroke:#758297;stroke-width:2.0;fill:none}.dash{stroke:#758297;stroke-width:2.0;stroke-dasharray:7 6;fill:none;marker-end:url(#arrow)}
-  </style>
-</defs>
-<rect class="canvas" width="980" height="548"/>
-<rect class="frame" x="32" y="28" width="916" height="492" rx="28"/>
-<text class="title" x="66" y="82">DAEAD vs AEAD Selection Guide</text>
-<text class="subtitle" x="70" y="118">Choose deterministic encryption only when query predicates require it</text>
-<g transform="translate(350,170)">
-  <rect class="card" x="0" y="0" width="280" height="92" rx="8" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="53" text-anchor="middle">Need WHERE search?</text>
-</g><g transform="translate(92,330)">
-  <rect class="card" x="0" y="0" width="300" height="124" rx="8" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="150" y="44" text-anchor="middle">DAEAD columns</text>
-<text class="smallLabel" x="150" y="69" text-anchor="middle">tinkDaeadVarChar</text>
-<text class="smallLabel" x="150" y="94" text-anchor="middle">names, email, partial IDs</text>
-</g><g transform="translate(588,330)">
-  <rect class="card" x="0" y="0" width="300" height="124" rx="8" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="150" y="44" text-anchor="middle">AEAD columns</text>
-<text class="smallLabel" x="150" y="69" text-anchor="middle">tinkAeadVarChar / Binary</text>
-<text class="smallLabel" x="150" y="94" text-anchor="middle">addresses, cards, secrets</text>
-</g><path class="line" d="M425 262 L275 330" data-connector="line"/>
-<text class="small" x="350" y="288" text-anchor="middle">YES</text><path class="line" d="M555 262 L735 330" data-connector="line"/>
-<text class="small" x="645" y="288" text-anchor="middle">NO</text><text class="small" x="490" y="494" text-anchor="middle">DAEAD repeats ciphertext for equal plaintext. Prefer AEAD unless lookup is required.</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1360" viewBox="0 0 2200 1360" role="img" aria-label="Advanced 12 Exposed R2DBC Tink architecture diagram">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.11"/>
+    </filter>
+    <style>
+      .canvas{fill:#f4f7fa}
+      .frame{fill:#fffefb;stroke:#b8ccdf;stroke-width:5}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:3}
+      .laneWarm{fill:#fffaf0;stroke:#dccb9e;stroke-width:3}
+      .laneGreen{fill:#f2f8f2;stroke:#c5dab6;stroke-width:3}
+      .laneTeal{fill:#eef7f6;stroke:#bdd9d6;stroke-width:3}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:64px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:24px;fill:#536476;font-weight:700}
+      .laneTitle{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:24px;letter-spacing:.06em;fill:#8ca2b4;font-weight:800}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:32px;fill:#1e293b}
+      .cardSub{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:22px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:19px;fill:#64748b;font-weight:800}
+      .card{filter:url(#shadow)}
+      .cardWhite{fill:#ffffff}
+      .blue{stroke:#4f86c6}
+      .green{stroke:#6f8f52}
+      .amber{stroke:#b8891f}
+      .teal{stroke:#4f8f8b}
+      .red{stroke:#ad5f82}
+      .brown{stroke:#8a6f55}
+      .connector{fill:none;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round}
+      .head{stroke-dasharray:none;style:stroke-dasharray:none!important}
+      .footer{fill:#ffffff;stroke:#d9e3ec;stroke-width:2.4}
+    </style>
+  </defs>
+
+  <rect class="canvas" width="2200" height="1360"/>
+  <rect class="frame" x="36" y="34" width="2128" height="1292" rx="38"/>
+  <text class="title" x="1100" y="126" text-anchor="middle">Tink AEAD / DAEAD Selection Map</text>
+  <text class="subtitle" x="1100" y="176" text-anchor="middle">The module chooses deterministic DAEAD only for equality search; AEAD covers non-searchable secrets with stronger randomized encryption.</text>
+
+  <rect class="lane" x="92" y="238" width="466" height="790" rx="30"/>
+  <text class="laneTitle" x="132" y="286">USE CASE DECISION</text>
+  <rect class="laneWarm" x="612" y="238" width="466" height="790" rx="30"/>
+  <text class="laneTitle" x="652" y="286">EXPOSED COLUMN DSL</text>
+  <rect class="laneGreen" x="1132" y="238" width="466" height="790" rx="30"/>
+  <text class="laneTitle" x="1172" y="286">GOOGLE TINK PRIMITIVE</text>
+  <rect class="laneTeal" x="1652" y="238" width="456" height="790" rx="30"/>
+  <text class="laneTitle" x="1692" y="286">PERSISTENCE CHECK</text>
+
+  <g data-card="Searchable PII" data-x="136" data-y="334" data-width="378" data-height="126">
+    <rect class="card cardWhite blue" x="136" y="334" width="378" height="126" rx="22" stroke-width="4"/>
+    <text class="tiny" x="325" y="366" text-anchor="middle">&lt;&lt;needs WHERE&gt;&gt;</text>
+    <text class="cardTitle" x="325" y="408" text-anchor="middle">Searchable PII</text>
+    <text class="cardSub" x="325" y="442" text-anchor="middle">email/fingerprint/blob keys</text>
+  </g>
+  <g data-card="Non-searchable secrets" data-x="136" data-y="550" data-width="378" data-height="126">
+    <rect class="card cardWhite amber" x="136" y="550" width="378" height="126" rx="22" stroke-width="4"/>
+    <text class="tiny" x="325" y="582" text-anchor="middle">&lt;&lt;no WHERE&gt;&gt;</text>
+    <text class="cardTitle" x="325" y="624" text-anchor="middle">Non-searchable Secrets</text>
+    <text class="cardSub" x="325" y="658" text-anchor="middle">addresses, payloads, secrets</text>
+  </g>
+  <g data-card="Column shape guard" data-x="136" data-y="766" data-width="378" data-height="126">
+    <rect class="card cardWhite green" x="136" y="766" width="378" height="126" rx="22" stroke-width="4"/>
+    <text class="tiny" x="325" y="798" text-anchor="middle">&lt;&lt;schema guard&gt;&gt;</text>
+    <text class="cardTitle" x="325" y="840" text-anchor="middle">Column Shape</text>
+    <text class="cardSub" x="325" y="874" text-anchor="middle">nullable, length, binary/blob</text>
+  </g>
+
+  <g data-card="DAEAD Column DSL" data-x="656" data-y="334" data-width="378" data-height="126">
+    <rect class="card cardWhite blue" x="656" y="334" width="378" height="126" rx="22" stroke-width="4"/>
+    <text class="tiny" x="845" y="366" text-anchor="middle">&lt;&lt;deterministic DSL&gt;&gt;</text>
+    <text class="cardTitle" x="845" y="408" text-anchor="middle">tinkDaead*</text>
+    <text class="cardSub" x="845" y="442" text-anchor="middle">VarChar, Binary, Blob</text>
+  </g>
+  <g data-card="AEAD Column DSL" data-x="656" data-y="550" data-width="378" data-height="126">
+    <rect class="card cardWhite amber" x="656" y="550" width="378" height="126" rx="22" stroke-width="4"/>
+    <text class="tiny" x="845" y="582" text-anchor="middle">&lt;&lt;randomized DSL&gt;&gt;</text>
+    <text class="cardTitle" x="845" y="624" text-anchor="middle">tinkAead*</text>
+    <text class="cardSub" x="845" y="658" text-anchor="middle">VarChar, Binary, Blob</text>
+  </g>
+  <g data-card="Column validation" data-x="656" data-y="766" data-width="378" data-height="126">
+    <rect class="card cardWhite green" x="656" y="766" width="378" height="126" rx="22" stroke-width="4"/>
+    <text class="tiny" x="845" y="798" text-anchor="middle">&lt;&lt;constructor guard&gt;&gt;</text>
+    <text class="cardTitle" x="845" y="840" text-anchor="middle">Length + Nullable</text>
+    <text class="cardSub" x="845" y="874" text-anchor="middle">0 length rejected, null kept</text>
+  </g>
+
+  <g data-card="AES256_SIV" data-x="1176" data-y="334" data-width="378" data-height="126">
+    <rect class="card cardWhite blue" x="1176" y="334" width="378" height="126" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1365" y="366" text-anchor="middle">&lt;&lt;TinkDaeads&gt;&gt;</text>
+    <text class="cardTitle" x="1365" y="408" text-anchor="middle">AES256_SIV</text>
+    <text class="cardSub" x="1365" y="442" text-anchor="middle">same plaintext, same ciphertext</text>
+  </g>
+  <g data-card="AEAD algorithms" data-x="1176" data-y="550" data-width="378" data-height="138">
+    <rect class="card cardWhite amber" x="1176" y="550" width="378" height="138" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1365" y="582" text-anchor="middle">&lt;&lt;TinkAeads&gt;&gt;</text>
+    <text class="cardTitle" x="1365" y="624" text-anchor="middle">AES-GCM / ChaCha20</text>
+    <text class="cardSub" x="1365" y="654" text-anchor="middle">AES256_GCM, AES128_GCM</text>
+    <text class="cardSub" x="1365" y="680" text-anchor="middle">CHACHA20_POLY1305</text>
+  </g>
+  <g data-card="Encoding boundary" data-x="1176" data-y="766" data-width="378" data-height="126">
+    <rect class="card cardWhite green" x="1176" y="766" width="378" height="126" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1365" y="798" text-anchor="middle">&lt;&lt;column boundary&gt;&gt;</text>
+    <text class="cardTitle" x="1365" y="840" text-anchor="middle">String / ByteArray</text>
+    <text class="cardSub" x="1365" y="874" text-anchor="middle">UTF-8 bytes and Base64 text</text>
+  </g>
+
+  <g data-card="DAEAD WHERE count" data-x="1694" data-y="334" data-width="370" data-height="126">
+    <rect class="card cardWhite blue" x="1694" y="334" width="370" height="126" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1879" y="366" text-anchor="middle">&lt;&lt;search assertion&gt;&gt;</text>
+    <text class="cardTitle" x="1879" y="408" text-anchor="middle">WHERE Equality</text>
+    <text class="cardSub" x="1879" y="442" text-anchor="middle">email/fingerprint/blob count=1</text>
+  </g>
+  <g data-card="AEAD CRUD check" data-x="1694" data-y="550" data-width="370" data-height="138">
+    <rect class="card cardWhite amber" x="1694" y="550" width="370" height="138" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1879" y="582" text-anchor="middle">&lt;&lt;storage assertion&gt;&gt;</text>
+    <text class="cardTitle" x="1879" y="624" text-anchor="middle">Transparent CRUD</text>
+    <text class="cardSub" x="1879" y="654" text-anchor="middle">insert/select/update</text>
+    <text class="cardSub" x="1879" y="680" text-anchor="middle">returns original plaintext</text>
+  </g>
+  <g data-card="Guard test matrix" data-x="1694" data-y="766" data-width="370" data-height="138">
+    <rect class="card cardWhite green" x="1694" y="766" width="370" height="138" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1879" y="798" text-anchor="middle">&lt;&lt;matrix assertion&gt;&gt;</text>
+    <text class="cardTitle" x="1879" y="840" text-anchor="middle">Nulls + Algorithms</text>
+    <text class="cardSub" x="1879" y="870" text-anchor="middle">nullable table</text>
+    <text class="cardSub" x="1879" y="896" text-anchor="middle">multi-algo AEAD table</text>
+  </g>
+
+  <path class="connector blue" data-connector="search-to-daead-dsl"  d="M 514 397 L 642 397"/>
+  <polygon class="head"  points="656,397 642,390 642,404" fill="#4f86c6" stroke="#4f86c6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector blue" data-connector="daead-dsl-to-primitive"  d="M 1034 397 L 1162 397"/>
+  <polygon class="head"  points="1176,397 1162,390 1162,404" fill="#4f86c6" stroke="#4f86c6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector blue" data-connector="primitive-to-search"  d="M 1554 397 L 1680 397"/>
+  <polygon class="head"  points="1694,397 1680,390 1680,404" fill="#4f86c6" stroke="#4f86c6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="connector amber" data-connector="secret-to-aead-dsl"  d="M 514 613 L 642 613"/>
+  <polygon class="head"  points="656,613 642,606 642,620" fill="#b8891f" stroke="#b8891f" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector amber" data-connector="aead-dsl-to-primitive"  d="M 1034 613 L 1162 613"/>
+  <polygon class="head"  points="1176,613 1162,606 1162,620" fill="#b8891f" stroke="#b8891f" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector amber" data-connector="primitive-to-crud"  d="M 1554 613 L 1680 613"/>
+  <polygon class="head"  points="1694,613 1680,606 1680,620" fill="#b8891f" stroke="#b8891f" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="connector green" data-connector="guard-to-validation"  d="M 514 829 L 642 829"/>
+  <polygon class="head"  points="656,829 642,822 642,836" fill="#6f8f52" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector green" data-connector="validation-to-boundary"  d="M 1034 829 L 1162 829"/>
+  <polygon class="head"  points="1176,829 1162,822 1162,836" fill="#6f8f52" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector green" data-connector="boundary-to-matrix"  d="M 1554 829 L 1680 829"/>
+  <polygon class="head"  points="1694,829 1680,822 1680,836" fill="#6f8f52" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <rect class="lane" x="156" y="1082" width="1888" height="148" rx="30"/>
+  <text class="laneTitle" x="196" y="1130">ENCRYPTION MODULE COMPARISON</text>
+  <g data-card="crypt comparison" data-x="286" data-y="1152" data-width="400" data-height="56">
+    <rect class="cardWhite green" x="286" y="1152" width="400" height="56" rx="18" stroke-width="3"/>
+    <text class="cardSub" x="486" y="1189" text-anchor="middle">crypt: non-searchable AES</text>
+  </g>
+  <g data-card="jasypt comparison" data-x="730" data-y="1152" data-width="400" data-height="56">
+    <rect class="cardWhite blue" x="730" y="1152" width="400" height="56" rx="18" stroke-width="3"/>
+    <text class="cardSub" x="930" y="1189" text-anchor="middle">jasypt: deterministic</text>
+  </g>
+  <g data-card="tink comparison" data-x="1174" data-y="1152" data-width="400" data-height="56">
+    <rect class="cardWhite amber" x="1174" y="1152" width="400" height="56" rx="18" stroke-width="3"/>
+    <text class="cardSub" x="1374" y="1189" text-anchor="middle">tink: AEAD or DAEAD</text>
+  </g>
+  <g data-card="custom columns comparison" data-x="1618" data-y="1152" data-width="400" data-height="56">
+    <rect class="cardWhite brown" x="1618" y="1152" width="400" height="56" rx="18" stroke-width="3"/>
+    <text class="cardSub" x="1818" y="1189" text-anchor="middle">custom: implementation-specific</text>
+  </g>
+
+  <rect class="footer" x="216" y="1258" width="1768" height="48" rx="18"/>
+  <text class="note" x="1100" y="1290" text-anchor="middle">Reader contract: colors separate DAEAD search, AEAD storage, and guard paths; arrows show left-to-right responsibility handoff.</text>
+</svg>

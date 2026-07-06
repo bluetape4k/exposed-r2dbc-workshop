@@ -1,67 +1,96 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1470" height="1014" viewBox="0 0 1470 1014" role="img" aria-label="Execution Flow">
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1120" viewBox="0 0 1500 1120" role="img" aria-label="Spring suspended cache read-through sequence">
 <defs>
-<filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
-<marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-<style>.canvas{fill:#F7F9FC}.frame{fill:#fff;stroke:#D8E0EA;stroke-width:1.5}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:39px;font-weight:400;fill:#102033}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;font-weight:400;fill:#536273}.smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:22px;font-weight:400;fill:#102033}.strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}.card{stroke-width:2;filter:url(#shadow)}.line{stroke:#5D6B7A;stroke-width:2.2;fill:none;marker-end:url(#openArrow)}.dashed{stroke:#5D6B7A;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}.lifeline{stroke:#B7C2D1;stroke-width:1.8;stroke-dasharray:8 9}.note{fill:#fff;opacity:.97}</style>
+<filter id="shadow" x="-8%" y="-8%" width="116%" height="122%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
+<marker id="arrow-blue" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#3c82b4" stroke="#3c82b4" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker>
+<marker id="arrow-green" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5f8848" stroke="#5f8848" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker>
+<marker id="arrow-amber" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#b78632" stroke="#b78632" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker>
+<marker id="arrow-return" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker>
+<style>
+.canvas{fill:#f6f9fc}
+.frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}
+.title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:34px;fill:#1e293b}
+.subtitle,.detail,.note,.branchText{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}
+.participantText{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:19px;fill:#1e293b}
+.participantHint,.labelText,.num{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#344256;font-weight:700}
+.card{filter:url(#shadow)}
+.lifeline{stroke:#9fb0bf;stroke-width:2;stroke-dasharray:8 10}
+.activation{fill:#ecfdf5;stroke:#7aa083;stroke-width:2}
+.call{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none}
+.return{fill:none;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:8 7}
+.label{fill:#fff;stroke-width:1.4}
+.labelBlue{stroke:#b8d9eb}
+.labelGreen{stroke:#c5d9b6}
+.labelAmber{stroke:#dfc396}
+.labelReturn{stroke:#bdd9d3}
+.numCircle{fill:#fff}
+.region{fill:none;stroke:#8aa0af;stroke-width:2.4;stroke-dasharray:8 8}
+.divider{stroke:#8aa0af;stroke-width:1.6;stroke-dasharray:7 7}
+.branchPill{fill:#fff;stroke-width:1.6}
+.noteBox{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}
+</style>
 </defs>
-<rect class="canvas" width="1470" height="1014"/>
-<rect class="frame" x="24" y="24" width="1422" height="958" rx="22"/>
-<text class="title" x="58" y="76">Execution Flow</text>
-<text class="subtitle" x="62" y="106">Compact sequence flow with reduced outer and inner whitespace</text>
-<rect class="card" x="50.0" y="156" width="220" height="66" rx="16" fill="#E8F3FF" stroke="#5B8DEF"/>
-<text class="smallLabel participant" x="160.0" y="196" text-anchor="middle">Controller/Service</text>
-<line class="lifeline" x1="160.0" y1="250" x2="160.0" y2="952"/>
-<rect class="card" x="280.0" y="156" width="220" height="66" rx="16" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel participant" x="390.0" y="196" text-anchor="middle">Lettuce Suspended</text>
-<line class="lifeline" x1="390.0" y1="250" x2="390.0" y2="952"/>
-<rect class="card" x="510.0" y="156" width="220" height="66" rx="16" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel participant" x="620.0" y="196" text-anchor="middle">Cache (Redis)</text>
-<line class="lifeline" x1="620.0" y1="250" x2="620.0" y2="952"/>
-<rect class="card" x="740.0" y="156" width="220" height="66" rx="16" fill="#FDECEF" stroke="#DC6B82"/>
-<text class="smallLabel participant" x="850.0" y="196" text-anchor="middle">Default Country</text>
-<line class="lifeline" x1="850.0" y1="250" x2="850.0" y2="952"/>
-<rect class="card" x="970.0" y="156" width="220" height="66" rx="16" fill="#F1ECFF" stroke="#8A72D6"/>
-<text class="smallLabel participant" x="1080.0" y="196" text-anchor="middle">R2dbc Repository</text>
-<line class="lifeline" x1="1080.0" y1="250" x2="1080.0" y2="952"/>
-<rect class="card" x="1200.0" y="156" width="220" height="66" rx="16" fill="#E9F7F6" stroke="#45A7A1"/>
-<text class="smallLabel participant" x="1310.0" y="196" text-anchor="middle">R2DBC Database</text>
-<line class="lifeline" x1="1310.0" y1="250" x2="1310.0" y2="952"/>
-<path class="line" d="M160.0 292.0 L390.0 292.0" data-connector="line"/>
-<rect class="note label" x="195.0" y="260.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="275.0" y="280.0" text-anchor="middle">1. cache.get(code)</text>
-<path class="dashed" d="M390.0 366.0 L160.0 366.0" data-connector="dashed"/>
-<rect class="note label" x="190.7" y="334.0" width="168.6" height="28" rx="9"/>
-<text class="strong labelText" x="275.0" y="354.0" text-anchor="middle">3. return cached result</text>
-<path class="dashed" d="M390.0 440.0 L160.0 440.0" data-connector="dashed"/>
-<rect class="note label" x="195.0" y="408.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="275.0" y="428.0" text-anchor="middle">5. null</text>
-<path class="line" d="M160.0 514.0 L850.0 514.0" data-connector="line"/>
-<rect class="note label" x="374.2" y="482.0" width="261.6" height="28" rx="9"/>
-<text class="strong labelText" x="505.0" y="502.0" text-anchor="middle">6. delegate.findByCode(code) (suspend)</text>
-<path class="line" d="M850.0 588.0 L1310.0 588.0" data-connector="line"/>
-<rect class="note label" x="967.8" y="556.0" width="224.4" height="28" rx="9"/>
-<text class="strong labelText" x="1080.0" y="576.0" text-anchor="middle">7. suspendTransaction { SELECT }</text>
-<path class="dashed" d="M1310.0 662.0 L850.0 662.0" data-connector="dashed"/>
-<rect class="note label" x="1000.0" y="630.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="1080.0" y="650.0" text-anchor="middle">8. ResultRow</text>
-<path class="dashed" d="M850.0 736.0 L160.0 736.0" data-connector="dashed"/>
-<rect class="note label" x="425.0" y="704.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="505.0" y="724.0" text-anchor="middle">9. CountryRecord</text>
-<path class="line" d="M160.0 810.0 L390.0 810.0" data-connector="line"/>
-<rect class="note label" x="147.3" y="778.0" width="255.4" height="28" rx="9"/>
-<text class="strong labelText" x="275.0" y="798.0" text-anchor="middle">10. cache.put(code, result) (TTL 60s)</text>
-<path class="dashed" d="M390.0 884.0 L160.0 884.0" data-connector="dashed"/>
-<rect class="note label" x="159.7" y="852.0" width="230.6" height="28" rx="9"/>
-<text class="strong labelText" x="275.0" y="872.0" text-anchor="middle">11. return freshly fetched result</text>
-<rect class="activation" x="154.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="384.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="614.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
+<rect class="canvas" width="1500" height="1120"/>
+<rect class="frame" x="28" y="26" width="1444" height="1068" rx="22"/>
+<text x="64" y="76" class="title" text-anchor="start">Spring Suspended Cache Read-Through Sequence</text>
+<text x="66" y="106" class="subtitle" text-anchor="start">CachedCountryController delegates to a Redis-backed decorator before falling back to Exposed R2DBC.</text>
 
-<!-- audit badge labels: visible sequence numbering and message pill samples -->
-<g aria-label="sequence message labels">
-<rect x="58" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="76" y="140" class="num" text-anchor="middle">1</text>
-<rect x="102" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="120" y="140" class="num" text-anchor="middle">2</text>
-</g>
+<g data-card="HTTP Client" data-x="52" data-y="146" data-width="196" data-height="72"><rect class="card participant" x="52" y="146" width="196" height="72" rx="14" fill="#ffffff" stroke="#546e7a" stroke-width="2"/><text x="150" y="182" class="participantText participant" text-anchor="middle">HTTP Client</text><text x="150" y="202" class="participantHint" text-anchor="middle">WebFlux caller</text></g><line class="lifeline" x1="150" y1="248" x2="150" y2="1018"/>
+<g data-card="Cached API" data-x="292" data-y="146" data-width="196" data-height="72"><rect class="card participant" x="292" y="146" width="196" height="72" rx="14" fill="#ffffff" stroke="#546e7a" stroke-width="2"/><text x="390" y="182" class="participantText participant" text-anchor="middle">Cached API</text><text x="390" y="202" class="participantHint" text-anchor="middle">Controller</text></g><line class="lifeline" x1="390" y1="248" x2="390" y2="1018"/>
+<g data-card="CachedRepo" data-x="542" data-y="146" data-width="196" data-height="72"><rect class="card participant" x="542" y="146" width="196" height="72" rx="14" fill="#ffffff" stroke="#546e7a" stroke-width="2"/><text x="640" y="182" class="participantText participant" text-anchor="middle">CachedRepo</text><text x="640" y="202" class="participantHint" text-anchor="middle">decorator</text></g><line class="lifeline" x1="640" y1="248" x2="640" y2="1018"/>
+<g data-card="LettuceCache" data-x="792" data-y="146" data-width="196" data-height="72"><rect class="card participant" x="792" y="146" width="196" height="72" rx="14" fill="#ffffff" stroke="#546e7a" stroke-width="2"/><text x="890" y="182" class="participantText participant" text-anchor="middle">LettuceCache</text><text x="890" y="202" class="participantHint" text-anchor="middle">Redis GET / SETEX</text></g><line class="lifeline" x1="890" y1="248" x2="890" y2="1018"/>
+<g data-card="DefaultRepo" data-x="1042" data-y="146" data-width="196" data-height="72"><rect class="card participant" x="1042" y="146" width="196" height="72" rx="14" fill="#ffffff" stroke="#546e7a" stroke-width="2"/><text x="1140" y="182" class="participantText participant" text-anchor="middle">DefaultRepo</text><text x="1140" y="202" class="participantHint" text-anchor="middle">delegate</text></g><line class="lifeline" x1="1140" y1="248" x2="1140" y2="1018"/>
+<g data-card="R2DBC DB" data-x="1252" data-y="146" data-width="196" data-height="72"><rect class="card participant" x="1252" y="146" width="196" height="72" rx="14" fill="#ffffff" stroke="#546e7a" stroke-width="2"/><text x="1350" y="182" class="participantText participant" text-anchor="middle">R2DBC DB</text><text x="1350" y="202" class="participantHint" text-anchor="middle">CountryTable</text></g><line class="lifeline" x1="1350" y1="248" x2="1350" y2="1018"/>
+
+<rect class="activation" x="144" y="278" width="12" height="734" rx="4"/>
+<rect class="activation" x="384" y="292" width="12" height="694" rx="4"/>
+<rect class="activation" x="634" y="346" width="12" height="642" rx="4"/>
+<rect class="activation" x="884" y="400" width="12" height="458" rx="4"/>
+<rect class="activation" x="1134" y="650" width="12" height="174" rx="4"/>
+<rect class="activation" x="1344" y="704" width="12" height="66" rx="4"/>
+
+<path class="call" data-connector="seq-01" d="M 150 300 L 390 300" stroke="#3c82b4" marker-end="url(#arrow-blue)"/>
+<rect class="label labelBlue" x="126" y="264" width="288" height="28" rx="14" stroke="#b8d9eb"/><circle class="numCircle" cx="144" cy="278" r="13" stroke="#3c82b4" stroke-width="1.7"/><text class="num" x="144" y="282" text-anchor="middle">1</text><text class="labelText" x="166" y="282" text-anchor="start">GET /cached/countries/{code}</text>
+
+<path class="call" data-connector="seq-02" d="M 390 354 L 640 354" stroke="#3c82b4" marker-end="url(#arrow-blue)"/>
+<rect class="label labelBlue" x="394" y="318" width="242" height="28" rx="14" stroke="#b8d9eb"/><circle class="numCircle" cx="412" cy="332" r="13" stroke="#3c82b4" stroke-width="1.7"/><text class="num" x="412" y="336" text-anchor="middle">2</text><text class="labelText" x="434" y="336" text-anchor="start">findByCode(code)</text>
+
+<path class="call" data-connector="seq-03" d="M 640 408 L 890 408" stroke="#5f8848" marker-end="url(#arrow-green)"/>
+<rect class="label labelGreen" x="661" y="372" width="208" height="28" rx="14" stroke="#c5d9b6"/><circle class="numCircle" cx="679" cy="386" r="13" stroke="#5f8848" stroke-width="1.7"/><text class="num" x="679" y="390" text-anchor="middle">3</text><text class="labelText" x="701" y="390" text-anchor="start">cache.get(code)</text>
+
+<rect class="region" x="580" y="452" width="826" height="438" rx="18"/>
+<rect class="branchPill" x="602" y="434" width="168" height="30" rx="15" stroke="#c5d9b6"/>
+<text class="branchText" x="686" y="454" text-anchor="middle">alt cache hit</text>
+<line class="divider" x1="580" y1="546" x2="1406" y2="546"/>
+<rect class="branchPill" x="602" y="530" width="178" height="30" rx="15" stroke="#dfc396"/>
+<text class="branchText" x="691" y="550" text-anchor="middle">else cache miss</text>
+
+<path class="return" data-connector="seq-04" d="M 890 504 L 640 504" stroke="#4f8f8b" marker-end="url(#arrow-return)"/>
+<rect class="label labelReturn" x="678" y="468" width="174" height="28" rx="14" stroke="#bdd9d3"/><circle class="numCircle" cx="696" cy="482" r="13" stroke="#4f8f8b" stroke-width="1.7"/><text class="num" x="696" y="486" text-anchor="middle">4</text><text class="labelText" x="718" y="486" text-anchor="start">CountryRecord</text>
+
+<path class="return" data-connector="seq-05" d="M 890 600 L 640 600" stroke="#4f8f8b" marker-end="url(#arrow-return)"/>
+<rect class="label labelReturn" x="699" y="564" width="132" height="28" rx="14" stroke="#bdd9d3"/><circle class="numCircle" cx="717" cy="578" r="13" stroke="#4f8f8b" stroke-width="1.7"/><text class="num" x="717" y="582" text-anchor="middle">5</text><text class="labelText" x="739" y="582" text-anchor="start">miss null</text>
+
+<path class="call" data-connector="seq-06" d="M 640 654 L 1140 654" stroke="#b78632" marker-end="url(#arrow-amber)"/>
+<rect class="label labelAmber" x="772" y="618" width="236" height="28" rx="14" stroke="#dfc396"/><circle class="numCircle" cx="790" cy="632" r="13" stroke="#b78632" stroke-width="1.7"/><text class="num" x="790" y="636" text-anchor="middle">6</text><text class="labelText" x="812" y="636" text-anchor="start">delegate.findByCode</text>
+
+<path class="call" data-connector="seq-07" d="M 1140 708 L 1350 708" stroke="#b78632" marker-end="url(#arrow-amber)"/>
+<rect class="label labelAmber" x="1127" y="672" width="236" height="28" rx="14" stroke="#dfc396"/><circle class="numCircle" cx="1145" cy="686" r="13" stroke="#b78632" stroke-width="1.7"/><text class="num" x="1145" y="690" text-anchor="middle">7</text><text class="labelText" x="1167" y="690" text-anchor="start">suspend SELECT code</text>
+
+<path class="return" data-connector="seq-08" d="M 1350 762 L 1140 762" stroke="#4f8f8b" marker-end="url(#arrow-return)"/>
+<rect class="label labelReturn" x="1162" y="726" width="166" height="28" rx="14" stroke="#bdd9d3"/><circle class="numCircle" cx="1180" cy="740" r="13" stroke="#4f8f8b" stroke-width="1.7"/><text class="num" x="1180" y="744" text-anchor="middle">8</text><text class="labelText" x="1202" y="744" text-anchor="start">ResultRow?</text>
+
+<path class="return" data-connector="seq-09" d="M 1140 816 L 640 816" stroke="#4f8f8b" marker-end="url(#arrow-return)"/>
+<rect class="label labelReturn" x="786" y="780" width="208" height="28" rx="14" stroke="#bdd9d3"/><circle class="numCircle" cx="804" cy="794" r="13" stroke="#4f8f8b" stroke-width="1.7"/><text class="num" x="804" y="798" text-anchor="middle">9</text><text class="labelText" x="826" y="798" text-anchor="start">CountryRecord?</text>
+
+<path class="call" data-connector="seq-10" d="M 640 870 L 890 870" stroke="#5f8848" marker-end="url(#arrow-green)"/>
+<rect class="label labelGreen" x="633" y="834" width="264" height="28" rx="14" stroke="#c5d9b6"/><circle class="numCircle" cx="651" cy="848" r="13" stroke="#5f8848" stroke-width="1.7"/><text class="num" x="651" y="852" text-anchor="middle">10</text><text class="labelText" x="677" y="852" text-anchor="start">cache.put: SETEX + SADD</text>
+
+<path class="return" data-connector="seq-11" d="M 640 934 L 390 934" stroke="#4f8f8b" marker-end="url(#arrow-return)"/>
+<rect class="label labelReturn" x="401" y="898" width="228" height="28" rx="14" stroke="#bdd9d3"/><circle class="numCircle" cx="419" cy="912" r="13" stroke="#4f8f8b" stroke-width="1.7"/><text class="num" x="419" y="916" text-anchor="middle">11</text><text class="labelText" x="445" y="916" text-anchor="start">CountryRecord?</text>
+
+<path class="return" data-connector="seq-12" d="M 390 988 L 150 988" stroke="#4f8f8b" marker-end="url(#arrow-return)"/>
+<rect class="label labelReturn" x="178" y="952" width="184" height="28" rx="14" stroke="#bdd9d3"/><circle class="numCircle" cx="196" cy="966" r="13" stroke="#4f8f8b" stroke-width="1.7"/><text class="num" x="196" y="970" text-anchor="middle">12</text><text class="labelText" x="222" y="970" text-anchor="start">200 JSON / null</text>
+
+<rect x="84" y="1034" width="1332" height="34" rx="10" class="noteBox"/>
+<text x="750" y="1056" class="note" text-anchor="middle">Reads use cache-aside lazy loading: Redis hit returns immediately; miss stores the Exposed R2DBC result with a 60-second TTL.</text>
 </svg>

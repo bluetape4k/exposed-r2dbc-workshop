@@ -1,36 +1,155 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="660" viewBox="0 0 1260 660" role="img" aria-label="Connection Factory Per Tenant">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1040" width="1500" height="1040" role="img" aria-label="Connection Factory Per Tenant Routing architecture">
 <defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
-  <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,4.5 L1,8 Z" fill="#5D6B7A"/></marker>
-  <style>.bg{fill:#F7F9FC}.panel{fill:#FFFFFF;stroke:#BCC7D6;stroke-width:2;rx:18;filter:url(#shadow)}.blue{fill:#E8F3FF;stroke:#5B8DEF}.green{fill:#E8F7EE;stroke:#3A8B57}.amber{fill:#FFF7E6;stroke:#B7791F}.pink{fill:#FDECEF;stroke:#DC6B82}.teal{fill:#E9F7F6;stroke:#45A7A1}.lav{fill:#EDF1FF;stroke:#5067C5}.gray{fill:#F1F5F9;stroke:#475569}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:36px;fill:#172033;font-weight:400}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:16px;fill:#516070;font-weight:400}.label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:23px;fill:#172033;font-weight:400}.small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;fill:#425466;font-weight:400}.tiny{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;fill:#425466;font-weight:400}.arrow{stroke:#5D6B7A;stroke-width:2.4;fill:none;marker-end:url(#arrow)}.dashed{stroke:#5D6B7A;stroke-width:2.2;stroke-dasharray:7 6;fill:none;marker-end:url(#arrow)}</style>
+  <filter id="shadow" x="-8%" y="-8%" width="116%" height="124%"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12"/></filter>
+  <style>
+    .canvas{fill:#f6f9fc}.frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}.lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.3}.card{filter:url(#shadow)}.header{opacity:.98}
+    .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:38px;fill:#1e293b}.subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#536476;font-weight:700}
+    .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#64748b;font-weight:700}.laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:18px;letter-spacing:.08em;fill:#91a4b6}
+    .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:21px;fill:#1f2937}.cardTitleSmall{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:18px;fill:#1f2937}
+    .connector{fill:none;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}.legend{fill:#fff;stroke:#d7e2ec;stroke-width:1.1}.noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.3}
+  </style>
+  <g id="h2Icon"><image data-bluetape4k-icon="database/h2.svg" href="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDk0NzZCIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+SDIgRGF0YWJhc2U8L3RpdGxlPjxwYXRoIGQ9Ik0xNy4xNyAxMy4yN2MuMTQtLjAxNS4yOC0uMDIzLjQxNi0uMDIzLjcgMCAxLjIyOC4xNTkgMS41OTkuNDY5LjM3LjMxNC41NTUuNzU2LjU1NSAxLjMzNGEyLjg2MSAyLjg2MSAwIDAgMS0uNDMgMS40NTVjLS4yOTEuNDkyLS43NzUgMS4wNjYtMS40NiAxLjcyNy0uNDUzLjQ0Ni0xLjA2MS45NzYtMS44MjEgMS41OTJhNDguMDIgNDguMDIgMCAwIDEtMi4yNzUgMS43NDJ2Mi4wODNoOS44OTVWMjEuMjRIMTcuOTljLjIxOS0uMTU5LjU5LS40MzUgMS4xMS0uODMyLjUxOS0uNCAxLjAzMy0uODM1IDEuNTUtMS4zMTEuODE3LS43NiAxLjQyNS0xLjUgMS44MjItMi4yMTVhNC42MjQgNC42MjQgMCAwIDAgLjU5Ny0yLjI2OGMwLTEuMjEzLS40MTYtMi4xNTQtMS4yNDctMi44MTUtLjgyOC0uNjYyLTIuMDMzLS45OTQtMy42MTMtLjk5NC0uMzQ0IDAtLjY5Mi4wMTUtMS4wMzYuMDQ5VjYuMDRIMTMuODZ2NC43MDFIOC45NjVWNi4wNEg1LjY1djEyLjg0NmgzLjMxNXYtNS42NjFoNC44OXY1LjY2MWguMDM5Yy4zMS0uMjQyLjYyMy0uNDg3LjkzMy0uNzRhMjguNTY0IDI4LjU2NCAwIDAgMCAxLjgyNi0xLjU4OCAxNC44NTQgMTQuODU0IDAgMCAwIC41MTctLjUyOXpNMTIuMDExIDIzLjNBMTEuMzI3IDExLjMyNyAwIDAgMSAuNyAxMS45OSAxMS4zMDUgMTEuMzA1IDAgMCAxIDEyLjAxMS42OTlhMTEuMjg2IDExLjI4NiAwIDAgMSAxMS4yOSAxMS4yOXYuMzUxSDI0di0uMzUxQTExLjk4NSAxMS45ODUgMCAwIDAgMTIuMDExIDAgMTIuMDA4IDEyLjAwOCAwIDAgMCAwIDExLjk4OSAxMi4wMjYgMTIuMDI2IDAgMCAwIDEyLjAxMSAyNGguMzUydi0uN3oiLz48L3N2Zz4=" width="40" height="40"/></g>
 </defs>
-<rect class="bg" width="1260" height="660"/>
-<text x="64" y="70" class="title">Connection Factory Per Tenant</text>
-<text x="66" y="102" class="subtitle">Startup registry maps each tenant to its own R2DBC pool before Exposed transactions run.</text>
-<rect x="70" y="155" width="220" height="90" class="panel blue"/>
-<text x="96" y="191" class="label">HTTP request</text>
-<text x="96" y="219" class="small">X-TENANT-ID</text>
-<rect x="355" y="130" width="260" height="120" class="panel green"/>
-<text x="381" y="166" class="label">Tenant filter</text>
-<text x="381" y="194" class="small">validates tenant header</text>
-<text x="381" y="216" class="small">stores Reactor context</text>
-<rect x="690" y="130" width="260" height="120" class="panel amber"/>
-<text x="716" y="166" class="label">Coroutine service</text>
-<text x="716" y="194" class="small">reads tenant context</text>
-<text x="716" y="216" class="small">calls suspendTransaction</text>
-<rect x="690" y="345" width="260" height="120" class="panel teal"/>
-<text x="716" y="381" class="label">Tenant router</text>
-<text x="716" y="409" class="small">TenantRoutingConnectionFactory</text>
-<text x="716" y="431" class="small">selects tenant pool</text>
-<rect x="1010" y="255" width="190" height="90" class="panel pink"/>
-<text x="1036" y="291" class="label">korean DB</text>
-<text x="1036" y="319" class="small">tenant_cf_korean</text>
-<rect x="1010" y="410" width="190" height="90" class="panel lav"/>
-<text x="1036" y="446" class="label">english DB</text>
-<text x="1036" y="474" class="small">tenant_cf_english</text>
-<path class="arrow" d="M290 200 H355"/>
-<path class="arrow" d="M615 190 H690"/>
-<path class="arrow" d="M820 250 V345"/>
-<path class="arrow" d="M950 390 C980 345 990 315 1010 300"/>
-<path class="arrow" d="M950 410 C980 430 990 445 1010 455"/>
+<rect width="1500" height="1040" class="canvas"/>
+<rect x="28" y="28" width="1444" height="984" rx="22" class="frame"/>
+<text x="70" y="82" class="title">Connection Factory Per Tenant Routing</text>
+<text x="70" y="113" class="subtitle">Spring WebFlux validates X-TENANT-ID, then Exposed uses an explicit routing R2dbcDatabase backed by tenant-owned pools.</text>
+
+<rect x="56" y="145" width="1388" height="210" rx="18" class="lane"/><text x="86" y="177" class="laneTitle">REQUEST PATH</text>
+<rect x="56" y="388" width="1388" height="260" rx="18" class="lane"/><text x="86" y="420" class="laneTitle">EXPOSED + SPRING R2DBC ROUTING</text>
+<rect x="56" y="681" width="1388" height="220" rx="18" class="lane"/><text x="86" y="713" class="laneTitle">TENANT-OWNED POOLS AND STARTUP INIT</text>
+<rect x="56" y="924" width="1388" height="62" rx="18" class="lane"/><text x="86" y="958" class="laneTitle">READER CONTRACT</text>
+
+<g data-card="HTTP request" data-x="82" data-y="218" data-width="220" data-height="98">
+  <rect x="82" y="218" width="220" height="98" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.2" class="card"/>
+  <path class="header" d="M82,259 L82,232 Q82,218 96,218 L288,218 Q302,218 302,232 L302,259 Z" fill="#eef5fa"/>
+  <text x="192" y="237" class="tiny" text-anchor="middle">&lt;&lt;webflux&gt;&gt;</text>
+  <text x="192" y="258" class="cardTitle" text-anchor="middle">HTTP request</text>
+  <text x="105" y="283" class="detail">GET /actors</text>
+  <text x="105" y="303" class="detail">X-TENANT-ID</text>
+</g>
+<g data-card="TenantFilter" data-x="352" data-y="218" data-width="230" data-height="98">
+  <rect x="352" y="218" width="230" height="98" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.2" class="card"/>
+  <path class="header" d="M352,259 L352,232 Q352,218 366,218 L568,218 Q582,218 582,232 L582,259 Z" fill="#f1f6ec"/>
+  <text x="467" y="237" class="tiny" text-anchor="middle">&lt;&lt;WebFilter&gt;&gt;</text>
+  <text x="467" y="258" class="cardTitle" text-anchor="middle">TenantFilter</text>
+  <text x="374" y="283" class="detail">normalize + validate</text>
+  <text x="374" y="303" class="detail">bad header =&gt; 400</text>
+</g>
+<g data-card="Reactor context" data-x="632" data-y="218" data-width="230" data-height="98">
+  <rect x="632" y="218" width="230" height="98" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.2" class="card"/>
+  <path class="header" d="M632,259 L632,232 Q632,218 646,218 L848,218 Q862,218 862,232 L862,259 Z" fill="#eef7f6"/>
+  <text x="747" y="237" class="tiny" text-anchor="middle">&lt;&lt;lookup key&gt;&gt;</text>
+  <text x="747" y="258" class="cardTitle" text-anchor="middle">Reactor context</text>
+  <text x="654" y="283" class="detail">TENANT_ID string</text>
+  <text x="654" y="303" class="detail">korean | english</text>
+</g>
+<g data-card="ActorController" data-x="912" data-y="218" data-width="250" data-height="98">
+  <rect x="912" y="218" width="250" height="98" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2.2" class="card"/>
+  <path class="header" d="M912,259 L912,232 Q912,218 926,218 L1148,218 Q1162,218 1162,232 L1162,259 Z" fill="#f5eee4"/>
+  <text x="1037" y="237" class="tiny" text-anchor="middle">&lt;&lt;REST controller&gt;&gt;</text>
+  <text x="1037" y="258" class="cardTitle" text-anchor="middle">ActorController</text>
+  <text x="934" y="283" class="detail">transactionExecutor.execute</text>
+  <text x="934" y="303" class="detail">repository Flow.toList()</text>
+</g>
+<g data-card="Default fallback" data-x="1212" data-y="222" data-width="205" data-height="90">
+  <rect x="1212" y="222" width="205" height="90" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2.2" class="card"/>
+  <path class="header" d="M1212,259 L1212,236 Q1212,222 1226,222 L1403,222 Q1417,222 1417,236 L1417,259 Z" fill="#f5eef2"/>
+  <text x="1314.5" y="241" class="tiny" text-anchor="middle">&lt;&lt;outside HTTP&gt;&gt;</text>
+  <text x="1314.5" y="259" class="cardTitleSmall" text-anchor="middle">Default fallback</text>
+  <text x="1232" y="285" class="detail">default tenant: korean</text>
+  <text x="1232" y="304" class="detail">unknown key fails closed</text>
+</g>
+
+<g data-card="TenantTransactionExecutor" data-x="172" data-y="478" data-width="286" data-height="112">
+  <rect x="172" y="478" width="286" height="112" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.2" class="card"/>
+  <path class="header" d="M172,521 L172,492 Q172,478 186,478 L444,478 Q458,478 458,492 L458,521 Z" fill="#eef5fa"/>
+  <text x="315" y="498" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+  <text x="315" y="520" class="cardTitleSmall" text-anchor="middle">TenantTransactionExecutor</text>
+  <text x="195" y="547" class="detail">bridges ReactorContext</text>
+  <text x="195" y="567" class="detail">suspendTransaction(db=...)</text>
+</g>
+<g data-card="tenantRoutingDatabase" data-x="516" data-y="478" data-width="260" data-height="112">
+  <rect x="516" y="478" width="260" height="112" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.2" class="card"/>
+  <path class="header" d="M516,521 L516,492 Q516,478 530,478 L762,478 Q776,478 776,492 L776,521 Z" fill="#f1f6ec"/>
+  <text x="646" y="498" class="tiny" text-anchor="middle">&lt;&lt;R2dbcDatabase&gt;&gt;</text>
+  <text x="646" y="520" class="cardTitleSmall" text-anchor="middle">tenantRoutingDatabase</text>
+  <text x="538" y="547" class="detail">explicit Exposed database</text>
+  <text x="538" y="567" class="detail">uses routing factory</text>
+</g>
+<g data-card="TenantRoutingConnectionFactory" data-x="836" data-y="478" data-width="286" data-height="112">
+  <rect x="836" y="478" width="286" height="112" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.2" class="card"/>
+  <path class="header" d="M836,521 L836,492 Q836,478 850,478 L1108,478 Q1122,478 1122,492 L1122,521 Z" fill="#eef7f6"/>
+  <text x="979" y="498" class="tiny" text-anchor="middle">&lt;&lt;AbstractRoutingConnectionFactory&gt;&gt;</text>
+  <text x="979" y="520" class="cardTitleSmall" text-anchor="middle">Routing ConnectionFactory</text>
+  <text x="858" y="547" class="detail">determineCurrentLookupKey()</text>
+  <text x="858" y="567" class="detail">Mono.deferContextual</text>
+</g>
+<g data-card="TenantConnectionFactoryRegistry" data-x="1192" data-y="478" data-width="240" data-height="112">
+  <rect x="1192" y="478" width="240" height="112" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2.2" class="card"/>
+  <path class="header" d="M1192,521 L1192,492 Q1192,478 1206,478 L1418,478 Q1432,478 1432,492 L1432,521 Z" fill="#f5eee4"/>
+  <text x="1312" y="498" class="tiny" text-anchor="middle">&lt;&lt;pool owner&gt;&gt;</text>
+  <text x="1312" y="520" class="cardTitleSmall" text-anchor="middle">Tenant CF Registry</text>
+  <text x="1214" y="547" class="detail">targetConnectionFactories()</text>
+  <text x="1214" y="567" class="detail">dispose pools on shutdown</text>
+</g>
+
+<g data-card="app.tenants configuration" data-x="82" data-y="756" data-width="250" data-height="112">
+  <rect x="82" y="756" width="250" height="112" rx="14" fill="#fff" stroke="#8a6f55" stroke-width="2.2" class="card"/>
+  <path class="header" d="M82,799 L82,770 Q82,756 96,756 L318,756 Q332,756 332,770 L332,799 Z" fill="#f3eee8"/>
+  <text x="207" y="776" class="tiny" text-anchor="middle">&lt;&lt;properties&gt;&gt;</text>
+  <text x="207" y="798" class="cardTitleSmall" text-anchor="middle">app.tenants config</text>
+  <text x="104" y="825" class="detail">defaultTenant=korean</text>
+  <text x="104" y="845" class="detail">bounded tenant set</text>
+</g>
+<g data-card="Korean tenant pool" data-x="382" data-y="740" data-width="330" data-height="144">
+  <rect x="382" y="740" width="330" height="144" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.2" class="card"/>
+  <path class="header" d="M382,789 L382,754 Q382,740 396,740 L698,740 Q712,740 712,754 L712,789 Z" fill="#eef5fa"/>
+  <use href="#h2Icon" x="406" y="751"/>
+  <text x="558" y="767" class="tiny" text-anchor="middle">&lt;&lt;ConnectionPool&gt;&gt;</text>
+  <text x="558" y="789" class="cardTitle" text-anchor="middle">Korean tenant pool</text>
+  <text x="416" y="823" class="detail">id: korean</text>
+  <text x="416" y="844" class="detail">r2dbc:h2:mem:///tenant_cf_korean</text>
+  <text x="416" y="865" class="detail">Actor/Movie fixture data</text>
+</g>
+<g data-card="English tenant pool" data-x="762" data-y="740" data-width="330" data-height="144">
+  <rect x="762" y="740" width="330" height="144" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.2" class="card"/>
+  <path class="header" d="M762,789 L762,754 Q762,740 776,740 L1078,740 Q1092,740 1092,754 L1092,789 Z" fill="#f1f6ec"/>
+  <use href="#h2Icon" x="786" y="751"/>
+  <text x="938" y="767" class="tiny" text-anchor="middle">&lt;&lt;ConnectionPool&gt;&gt;</text>
+  <text x="938" y="789" class="cardTitle" text-anchor="middle">English tenant pool</text>
+  <text x="796" y="823" class="detail">id: english</text>
+  <text x="796" y="844" class="detail">r2dbc:h2:mem:///tenant_cf_english</text>
+  <text x="796" y="865" class="detail">Actor/Movie fixture data</text>
+</g>
+<g data-card="Startup initialization" data-x="1142" data-y="756" data-width="250" data-height="112">
+  <rect x="1142" y="756" width="250" height="112" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2.2" class="card"/>
+  <path class="header" d="M1142,799 L1142,770 Q1142,756 1156,756 L1378,756 Q1392,756 1392,770 L1392,799 Z" fill="#f5eef2"/>
+  <text x="1267" y="776" class="tiny" text-anchor="middle">&lt;&lt;ApplicationReadyEvent&gt;&gt;</text>
+  <text x="1267" y="798" class="cardTitleSmall" text-anchor="middle">Startup initialization</text>
+  <text x="1164" y="825" class="detail">TenantInitializer loops tenants</text>
+  <text x="1164" y="845" class="detail">DataInitializer creates + seeds</text>
+</g>
+
+<path class="connector" data-connector="request-header" d="M302 267 L352 267" stroke="#4f86c6"/><polygon points="352,267 338,260 338,274" fill="#4f86c6"/>
+<path class="connector" data-connector="validated-tenant" d="M582 267 L632 267" stroke="#6f8f52"/><polygon points="632,267 618,260 618,274" fill="#6f8f52"/>
+<path class="connector" data-connector="controller-context" d="M862 267 L912 267" stroke="#4f8f8b"/><polygon points="912,267 898,260 898,274" fill="#4f8f8b"/>
+<path class="connector" data-connector="controller-executor" d="M1037 316 L1037 374 Q1037 390 1021 390 L331 390 Q315 390 315 406 L315 478" stroke="#4f86c6"/><polygon points="315,478 308,464 322,464" fill="#4f86c6"/>
+<path class="connector" data-connector="executor-database" d="M458 534 L516 534" stroke="#6f8f52"/><polygon points="516,534 502,527 502,541" fill="#6f8f52"/>
+<path class="connector" data-connector="database-routing-factory" d="M776 534 L836 534" stroke="#4f8f8b"/><polygon points="836,534 822,527 822,541" fill="#4f8f8b"/>
+<path class="connector" data-connector="factory-targets" d="M1122 534 L1192 534" stroke="#a66a3f"/><polygon points="1192,534 1178,527 1178,541" fill="#a66a3f"/>
+<path class="connector" data-connector="registry-korean-pool" d="M1275 590 L1275 660 Q1275 676 1259 676 L563 676 Q547 676 547 692 L547 740" stroke="#4f86c6"/><polygon points="547,740 540,726 554,726" fill="#4f86c6"/>
+<path class="connector" data-connector="registry-english-pool" d="M1349 590 L1349 688 Q1349 704 1333 704 L943 704 Q927 704 927 720 L927 740" stroke="#6f8f52"/><polygon points="927,740 920,726 934,726" fill="#6f8f52"/>
+<path class="connector" data-connector="config-builds-pools" d="M332 812 L382 812" stroke="#8a6f55"/><polygon points="382,812 368,805 368,819" fill="#8a6f55"/>
+<path class="connector" data-connector="startup-seeds-pools" d="M1142 812 L1092 812" stroke="#a85f7f"/><polygon points="1092,812 1106,805 1106,819" fill="#a85f7f"/>
+
+<g>
+  <rect x="1208" y="156" width="210" height="50" rx="12" class="legend"/>
+  <line x1="1226" y1="176" x2="1268" y2="176" stroke="#4f86c6" stroke-width="3.2" stroke-linecap="round"/><polygon points="1268,176 1254,169 1254,183" fill="#4f86c6"/>
+  <text x="1280" y="181" class="tiny">request / execution</text>
+  <line x1="1226" y1="196" x2="1268" y2="196" stroke="#a66a3f" stroke-width="3.2" stroke-linecap="round"/><polygon points="1268,196 1254,189 1254,203" fill="#a66a3f"/>
+  <text x="1280" y="201" class="tiny">routing / ownership</text>
+</g>
+<rect x="355" y="943" width="850" height="30" rx="10" class="noteBox"/>
+<text x="780" y="964" class="note" text-anchor="middle">Known tenant IDs select separate H2 pools; invalid HTTP headers return 400 before routing.</text>
 </svg>

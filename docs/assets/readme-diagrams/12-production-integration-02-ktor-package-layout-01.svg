@@ -1,26 +1,142 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="560" viewBox="0 0 1160 560" role="img" aria-label="Ktor Production Package Layout">
-<defs><filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,4.5 L1,8 Z" fill="#5D6B7A"/></marker><style>.bg{fill:#F7F9FC}.panel{fill:#FFFFFF;stroke:#BCC7D6;stroke-width:2;rx:18;filter:url(#shadow)}.blue{fill:#E8F3FF;stroke:#5B8DEF}.green{fill:#E8F7EE;stroke:#3A8B57}.amber{fill:#FFF7E6;stroke:#B7791F}.pink{fill:#FDECEF;stroke:#DC6B82}.teal{fill:#E9F7F6;stroke:#45A7A1}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:36px;fill:#172033;font-weight:400}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:16px;fill:#516070;font-weight:400}.label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:23px;fill:#172033;font-weight:400}.small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;fill:#425466;font-weight:400}.arrow{stroke:#5D6B7A;stroke-width:2.4;fill:none;marker-end:url(#arrow)}</style></defs>
-<rect class="bg" width="1160" height="560"/>
-<text x="64" y="70" class="title">Ktor Production Package Layout</text>
-<text x="66" y="102" class="subtitle">exposed.r2dbc.examples.production.ktor package boundaries.</text>
-<rect x="105" y="145" width="405" height="92" class="panel green"/>
-<text x="131" y="181" class="label">app</text>
-<text x="131" y="209" class="small">DTOs, validation, repository boundary</text>
-<rect x="605" y="145" width="405" height="92" class="panel blue"/>
-<text x="631" y="181" class="label">config</text>
-<text x="631" y="209" class="small">JSON, request correlation, status pages</text>
-<rect x="105" y="300" width="405" height="92" class="panel amber"/>
-<text x="131" y="336" class="label">outbound</text>
-<text x="131" y="364" class="small">Ktor HTTP client dispatcher</text>
-<rect x="605" y="300" width="405" height="92" class="panel pink"/>
-<text x="631" y="336" class="label">persistence</text>
-<text x="631" y="364" class="small">table definitions owned by repositories</text>
-<rect x="355" y="435" width="405" height="92" class="panel teal"/>
-<text x="381" y="471" class="label">routes</text>
-<text x="381" y="499" class="small">HTTP routes, diagnostics, WebSocket replay</text>
-<path class="arrow" d="M510 190 H605"/>
-<path class="arrow" d="M310 237 V300"/>
-<path class="arrow" d="M810 237 V300"/>
-<path class="arrow" d="M510 345 H605"/>
-<path class="arrow" d="M310 392 C350 420 390 435 430 435"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1160" width="1800" height="1160" role="img" aria-label="Ktor production integration package layout">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12"/>
+    </filter>
+    <marker id="arrowBlue" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowGreen" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowTeal" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowAmber" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#a66a3f" stroke="#a66a3f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowRose" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#a85f7f" stroke="#a85f7f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:2}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.6}
+      .card{filter:url(#shadow)}
+      .header{opacity:.96}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:46px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:20px;fill:#536476;font-weight:700}
+      .small{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:17px;fill:#64748b;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:15px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:24px;letter-spacing:.08em;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:29px;fill:#1e293b}
+      .connector{fill:none;stroke-width:4.2;stroke-linecap:round;stroke-linejoin:round}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.8}
+      .h2Icon{fill:#4f8f8b}
+    </style>
+  </defs>
+
+  <rect width="1800" height="1160" class="canvas"/>
+  <rect x="30" y="30" width="1740" height="1100" rx="24" class="frame"/>
+
+  <text x="78" y="92" class="title">Ktor Production Package Layout</text>
+  <text x="78" y="130" class="subtitle">Ktor plugins, routes, repository, realtime, outbound, and H2 schema stay in explicit packages.</text>
+
+  <rect x="70" y="178" width="1660" height="255" rx="18" class="lane"/>
+  <text x="104" y="220" class="laneTitle">FRAMEWORK ENTRY AND ROUTING BOUNDARIES</text>
+
+  <rect x="70" y="468" width="1660" height="300" rx="18" class="lane"/>
+  <text x="104" y="510" class="laneTitle">APPLICATION AND OUTBOUND PACKAGES</text>
+
+  <rect x="70" y="804" width="1660" height="236" rx="18" class="lane"/>
+  <text x="104" y="846" class="laneTitle">PERSISTENCE PACKAGE AND TABLE CONTRACT</text>
+
+  <g data-card="Ktor production integration module" data-x="120" data-y="260" data-width="310" data-height="130">
+    <rect x="120" y="260" width="310" height="130" rx="16" fill="#fff" stroke="#4f86c6" stroke-width="2.6" class="card"/>
+    <path class="header" d="M120,318 L120,276 Q120,260 136,260 L414,260 Q430,260 430,276 L430,318 Z" fill="#eef5fa"/>
+    <text x="275" y="284" class="tiny" text-anchor="middle">&lt;&lt;root package&gt;&gt;</text>
+    <text x="275" y="309" class="cardTitle" text-anchor="middle">KtorProduction</text>
+    <text x="275" y="339" class="cardTitle" text-anchor="middle">Integration Module</text>
+    <text x="145" y="366" class="small">default H2 database</text>
+  </g>
+
+  <g data-card="config package" data-x="510" data-y="260" data-width="310" data-height="130">
+    <rect x="510" y="260" width="310" height="130" rx="16" fill="#fff" stroke="#6f8f52" stroke-width="2.6" class="card"/>
+    <path class="header" d="M510,318 L510,276 Q510,260 526,260 L804,260 Q820,260 820,276 L820,318 Z" fill="#f1f6ec"/>
+    <text x="665" y="284" class="tiny" text-anchor="middle">&lt;&lt;config&gt;&gt;</text>
+    <text x="665" y="309" class="cardTitle" text-anchor="middle">ProductionKtor</text>
+    <text x="665" y="339" class="cardTitle" text-anchor="middle">Plugins</text>
+    <text x="535" y="366" class="small">CallId, JSON, StatusPages</text>
+  </g>
+
+  <g data-card="routes package" data-x="900" data-y="260" data-width="340" data-height="130">
+    <rect x="900" y="260" width="340" height="130" rx="16" fill="#fff" stroke="#4f8f8b" stroke-width="2.6" class="card"/>
+    <path class="header" d="M900,318 L900,276 Q900,260 916,260 L1224,260 Q1240,260 1240,276 L1240,318 Z" fill="#eef7f6"/>
+    <text x="1070" y="284" class="tiny" text-anchor="middle">&lt;&lt;routes&gt;&gt;</text>
+    <text x="1070" y="309" class="cardTitle" text-anchor="middle">productionRoutes</text>
+    <text x="928" y="339" class="small">accounts, sessions, realtime</text>
+    <text x="928" y="366" class="small">outbound, diagnostics, readiness</text>
+  </g>
+
+  <g data-card="session and authentication boundary" data-x="1330" data-y="260" data-width="310" data-height="130">
+    <rect x="1330" y="260" width="310" height="130" rx="16" fill="#fff" stroke="#a85f7f" stroke-width="2.6" class="card"/>
+    <path class="header" d="M1330,318 L1330,276 Q1330,260 1346,260 L1624,260 Q1640,260 1640,276 L1640,318 Z" fill="#f5eef2"/>
+    <text x="1485" y="284" class="tiny" text-anchor="middle">&lt;&lt;auth boundary&gt;&gt;</text>
+    <text x="1485" y="309" class="cardTitle" text-anchor="middle">Sessions And</text>
+    <text x="1485" y="339" class="cardTitle" text-anchor="middle">Authentication</text>
+    <text x="1355" y="366" class="small">basic + signed cookie token</text>
+  </g>
+
+  <path class="connector" data-connector="entry-to-config" d="M430 325 L510 325" stroke="#4f86c6" marker-end="url(#arrowBlue)"/>
+  <path class="connector" data-connector="config-to-routes" d="M820 325 L900 325" stroke="#6f8f52" marker-end="url(#arrowGreen)"/>
+  <path class="connector" data-connector="routes-to-auth" d="M1240 325 L1330 325" stroke="#4f8f8b" marker-end="url(#arrowTeal)"/>
+
+  <g data-card="app repository and models" data-x="150" data-y="570" data-width="410" data-height="150">
+    <rect x="150" y="570" width="410" height="150" rx="16" fill="#fff" stroke="#a66a3f" stroke-width="2.6" class="card"/>
+    <path class="header" d="M150,632 L150,586 Q150,570 166,570 L544,570 Q560,570 560,586 L560,632 Z" fill="#f5eee4"/>
+    <text x="355" y="596" class="tiny" text-anchor="middle">&lt;&lt;app&gt;&gt;</text>
+    <text x="355" y="624" class="cardTitle" text-anchor="middle">Repository And Models</text>
+    <text x="180" y="657" class="small">KtorProductionRepository</text>
+    <text x="180" y="684" class="small">DTOs, validation, auth, diagnostics</text>
+  </g>
+
+  <g data-card="app realtime hub" data-x="700" data-y="570" data-width="350" data-height="150">
+    <rect x="700" y="570" width="350" height="150" rx="16" fill="#fff" stroke="#4f8f8b" stroke-width="2.6" class="card"/>
+    <path class="header" d="M700,632 L700,586 Q700,570 716,570 L1034,570 Q1050,570 1050,586 L1050,632 Z" fill="#eef7f6"/>
+    <text x="875" y="596" class="tiny" text-anchor="middle">&lt;&lt;app&gt;&gt;</text>
+    <text x="875" y="624" class="cardTitle" text-anchor="middle">KtorRealtimeHub</text>
+    <text x="730" y="657" class="small">MutableSharedFlow live events</text>
+    <text x="730" y="684" class="small">WebSocket replay + fan-out</text>
+  </g>
+
+  <g data-card="outbound package" data-x="1170" data-y="570" data-width="430" data-height="150">
+    <rect x="1170" y="570" width="430" height="150" rx="16" fill="#fff" stroke="#a85f7f" stroke-width="2.6" class="card"/>
+    <path class="header" d="M1170,632 L1170,586 Q1170,570 1186,570 L1584,570 Q1600,570 1600,586 L1600,632 Z" fill="#f5eef2"/>
+    <text x="1385" y="596" class="tiny" text-anchor="middle">&lt;&lt;outbound&gt;&gt;</text>
+    <text x="1385" y="624" class="cardTitle" text-anchor="middle">KtorOutboundDispatcher</text>
+    <text x="1200" y="657" class="small">Ktor HttpClient + JSON body</text>
+    <text x="1200" y="684" class="small">Idempotency-Key header</text>
+  </g>
+
+  <path class="connector" data-connector="routes-to-repository" d="M1030 390 L1030 515 Q1030 535 1010 535 L375 535 Q355 535 355 555 L355 570" stroke="#a66a3f" marker-end="url(#arrowAmber)"/>
+  <path class="connector" data-connector="routes-to-realtime" d="M1120 390 L1120 525 Q1120 545 1100 545 L895 545 Q875 545 875 565 L875 570" stroke="#4f8f8b" marker-end="url(#arrowTeal)"/>
+  <path class="connector" data-connector="routes-to-outbound" d="M1210 390 L1210 515 Q1210 535 1230 535 L1365 535 Q1385 535 1385 555 L1385 570" stroke="#a85f7f" marker-end="url(#arrowRose)"/>
+
+  <g data-card="persistence package H2 schema" data-x="435" data-y="900" data-width="930" data-height="130">
+    <rect x="435" y="900" width="930" height="130" rx="16" fill="#fff" stroke="#4f8f8b" stroke-width="2.6" class="card"/>
+    <path class="header" d="M435,962 L435,916 Q435,900 451,900 L1349,900 Q1365,900 1365,916 L1365,962 Z" fill="#eef7f6"/>
+    <g class="h2Icon" data-bluetape4k-icon="database/h2.svg" transform="translate(480 935) scale(2.25)">
+      <path d="M17.17 13.27c.14-.015.28-.023.416-.023.7 0 1.228.159 1.599.469.37.314.555.756.555 1.334a2.861 2.861 0 0 1-.43 1.455c-.291.492-.775 1.066-1.46 1.727-.453.446-1.061.976-1.821 1.592a48.02 48.02 0 0 1-2.275 1.742v2.083h9.895V21.24H17.99c.219-.159.59-.435 1.11-.832.519-.4 1.033-.835 1.55-1.311.817-.76 1.425-1.5 1.822-2.215a4.624 4.624 0 0 0 .597-2.268c0-1.213-.416-2.154-1.247-2.815-.828-.662-2.033-.994-3.613-.994-.344 0-.692.015-1.036.049V6.04H13.86v4.701H8.965V6.04H5.65v12.846h3.315v-5.661h4.89v5.661h.039c.31-.242.623-.487.933-.74a28.564 28.564 0 0 0 1.826-1.588 14.854 14.854 0 0 0 .517-.529zM12.011 23.3A11.327 11.327 0 0 1 .7 11.99 11.305 11.305 0 0 1 12.011.699a11.286 11.286 0 0 1 11.29 11.29v.351H24v-.351A11.985 11.985 0 0 0 12.011 0 12.008 12.008 0 0 0 0 11.989 12.026 12.026 0 0 0 12.011 24h.352v-.7z"/>
+    </g>
+    <text x="900" y="925" class="tiny" text-anchor="middle">&lt;&lt;persistence&gt;&gt;</text>
+    <text x="900" y="953" class="cardTitle" text-anchor="middle">KtorProductionTables</text>
+    <text x="560" y="988" class="small">accounts, sessions, work items, outbox events, outbound requests, diagnostics</text>
+  </g>
+
+  <path class="connector" data-connector="repository-to-schema" d="M355 720 L355 855 Q355 875 375 875 L780 875 Q800 875 800 895 L800 900" stroke="#a66a3f" marker-end="url(#arrowAmber)"/>
+  <path class="connector" data-connector="hub-publish-state" d="M875 720 L875 900" stroke="#4f8f8b" marker-end="url(#arrowTeal)"/>
+  <path class="connector" data-connector="outbound-request-state" d="M1385 720 L1385 855 Q1385 875 1365 875 L1020 875 Q1000 875 1000 895 L1000 900" stroke="#a85f7f" marker-end="url(#arrowRose)"/>
+
+  <rect x="135" y="1074" width="1530" height="34" rx="12" class="noteBox"/>
+  <text x="900" y="1097" class="note" text-anchor="middle">Package seams mirror the test surface: Ktor boundary first, Exposed R2DBC state changes inside repository-owned suspendTransaction calls.</text>
 </svg>

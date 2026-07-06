@@ -1,41 +1,160 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="660" viewBox="0 0 1260 660" role="img" aria-label="Spring Security Tenant Authorization">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1040" width="1500" height="1040" role="img" aria-label="Spring Security Tenant Authorization architecture">
 <defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
-  <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,4.5 L1,8 Z" fill="#5D6B7A"/></marker>
-  <style>.bg{fill:#F7F9FC}.panel{fill:#FFFFFF;stroke:#BCC7D6;stroke-width:2;rx:18;filter:url(#shadow)}.blue{fill:#E8F3FF;stroke:#5B8DEF}.green{fill:#E8F7EE;stroke:#3A8B57}.amber{fill:#FFF7E6;stroke:#B7791F}.pink{fill:#FDECEF;stroke:#DC6B82}.teal{fill:#E9F7F6;stroke:#45A7A1}.lav{fill:#EDF1FF;stroke:#5067C5}.gray{fill:#F1F5F9;stroke:#475569}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:36px;fill:#172033;font-weight:400}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:16px;fill:#516070;font-weight:400}.label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:23px;fill:#172033;font-weight:400}.small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;fill:#425466;font-weight:400}.tiny{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;fill:#425466;font-weight:400}.arrow{stroke:#5D6B7A;stroke-width:2.4;fill:none;marker-end:url(#arrow)}.dashed{stroke:#5D6B7A;stroke-width:2.2;stroke-dasharray:7 6;fill:none;marker-end:url(#arrow)}</style>
+  <filter id="shadow" x="-8%" y="-8%" width="116%" height="124%"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12"/></filter>
+  <style>
+    .canvas{fill:#f6f9fc}.frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}.lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.3}.card{filter:url(#shadow)}.header{opacity:.98}
+    .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:36px;fill:#1e293b}.subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#536476;font-weight:700}
+    .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#64748b;font-weight:700}.laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:18px;letter-spacing:.08em;fill:#91a4b6}
+    .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:21px;fill:#1f2937}.cardTitleSmall{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:18px;fill:#1f2937}
+    .connector{fill:none;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}.legend{fill:#fff;stroke:#d7e2ec;stroke-width:1.1}.noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.3}
+  </style>
+  <g id="h2Icon"><image data-bluetape4k-icon="database/h2.svg" href="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDk0NzZCIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+SDIgRGF0YWJhc2U8L3RpdGxlPjxwYXRoIGQ9Ik0xNy4xNyAxMy4yN2MuMTQtLjAxNS4yOC0uMDIzLjQxNi0uMDIzLjcgMCAxLjIyOC4xNTkgMS41OTkuNDY5LjM3LjMxNC41NTUuNzU2LjU1NSAxLjMzNGEyLjg2MSAyLjg2MSAwIDAgMS0uNDMgMS40NTVjLS4yOTEuNDkyLS43NzUgMS4wNjYtMS40NiAxLjcyNy0uNDUzLjQ0Ni0xLjA2MS45NzYtMS44MjEgMS41OTJhNDguMDIgNDguMDIgMCAwIDEtMi4yNzUgMS43NDJ2Mi4wODNoOS44OTVWMjEuMjRIMTcuOTljLjIxOS0uMTU5LjU5LS40MzUgMS4xMS0uODMyLjUxOS0uNCAxLjAzMy0uODM1IDEuNTUtMS4zMTEuODE3LS43NiAxLjQyNS0xLjUgMS44MjItMi4yMTVhNC42MjQgNC42MjQgMCAwIDAgLjU5Ny0yLjI2OGMwLTEuMjEzLS40MTYtMi4xNTQtMS4yNDctMi44MTUtLjgyOC0uNjYyLTIuMDMzLS45OTQtMy42MTMtLjk5NC0uMzQ0IDAtLjY5Mi4wMTUtMS4wMzYuMDQ5VjYuMDRIMTMuODZ2NC43MDFIOC45NjVWNi4wNEg1LjY1djEyLjg0NmgzLjMxNXYtNS42NjFoNC44OXY1LjY2MWguMDM5Yy4zMS0uMjQyLjYyMy0uNDg3LjkzMy0uNzRhMjguNTY0IDI4LjU2NCAwIDAgMCAxLjgyNi0xLjU4OCAxNC44NTQgMTQuODU0IDAgMCAwIC41MTctLjUyOXpNMTIuMDExIDIzLjNBMTEuMzI3IDExLjMyNyAwIDAgMSAuNyAxMS45OSAxMS4zMDUgMTEuMzA1IDAgMCAxIDEyLjAxMS42OTlhMTEuMjg2IDExLjI4NiAwIDAgMSAxMS4yOSAxMS4yOXYuMzUxSDI0di0uMzUxQTExLjk4NSAxMS45ODUgMCAwIDAgMTIuMDExIDAgMTIuMDA4IDEyLjAwOCAwIDAgMCAwIDExLjk4OSAxMi4wMjYgMTIuMDI2IDAgMCAwIDEyLjAxMSAyNGguMzUydi0uN3oiLz48L3N2Zz4=" width="40" height="40"/></g>
 </defs>
-<rect class="bg" width="1260" height="660"/>
-<text x="64" y="70" class="title">Spring Security Tenant Authorization</text>
-<text x="66" y="102" class="subtitle">Authentication, tenant authorization, and R2DBC routing fail closed before database access.</text>
-<rect x="70" y="155" width="220" height="90" class="panel blue"/>
-<text x="96" y="191" class="label">HTTP request</text>
-<text x="96" y="219" class="small">X-TENANT-ID</text>
-<text x="96" y="241" class="small">X-API-KEY</text>
-<rect x="355" y="130" width="250" height="120" class="panel green"/>
-<text x="381" y="166" class="label">Spring Security</text>
-<text x="381" y="194" class="small">API key authentication</text>
-<text x="381" y="216" class="small">principal tenant claims</text>
-<rect x="675" y="130" width="270" height="120" class="panel amber"/>
-<text x="701" y="166" class="label">Tenant auth filter</text>
-<text x="701" y="194" class="small">compares authenticated tenant</text>
-<text x="701" y="216" class="small">with X-TENANT-ID</text>
-<rect x="675" y="345" width="270" height="120" class="panel teal"/>
-<text x="701" y="381" class="label">Exposed transaction</text>
-<text x="701" y="409" class="small">authorized tenant context</text>
-<text x="701" y="431" class="small">suspendTransaction</text>
-<rect x="1010" y="250" width="190" height="90" class="panel pink"/>
-<text x="1036" y="286" class="label">korean DB</text>
-<text x="1036" y="314" class="small">authorized route</text>
-<rect x="1010" y="405" width="190" height="90" class="panel lav"/>
-<text x="1036" y="441" class="label">english DB</text>
-<text x="1036" y="469" class="small">authorized route</text>
-<path class="arrow" d="M290 200 H355"/>
-<path class="arrow" d="M605 190 H675"/>
-<path class="arrow" d="M810 250 V345"/>
-<path class="arrow" d="M945 390 C980 345 990 305 1010 295"/>
-<path class="arrow" d="M945 415 C980 430 990 445 1010 450"/>
-<path class="dashed" d="M675 190 C620 300 500 390 355 420"/>
-<rect x="355" y="380" width="250" height="90" class="panel gray"/>
-<text x="381" y="416" class="label">Unauthorized</text>
-<text x="381" y="444" class="small">401 or 403, no DB route</text>
+<rect width="1500" height="1040" class="canvas"/>
+<rect x="28" y="28" width="1444" height="984" rx="22" class="frame"/>
+<text x="70" y="82" class="title">Spring Security Tenant Authorization</text>
+<text x="70" y="113" class="subtitle">Only an authenticated tenant that matches X-TENANT-ID can write the R2DBC routing key into Reactor context.</text>
+
+<rect x="56" y="145" width="1388" height="268" rx="18" class="lane"/><text x="86" y="177" class="laneTitle">SECURITY GATE</text>
+<rect x="56" y="446" width="1388" height="238" rx="18" class="lane"/><text x="86" y="478" class="laneTitle">AUTHORIZED REQUEST PATH</text>
+<rect x="56" y="716" width="1388" height="188" rx="18" class="lane"/><text x="86" y="748" class="laneTitle">TENANT-OWNED ROUTING TARGETS</text>
+<rect x="56" y="928" width="1388" height="58" rx="18" class="lane"/><text x="86" y="960" class="laneTitle">READER CONTRACT</text>
+
+<g data-card="HTTP request" data-x="82" data-y="230" data-width="220" data-height="102">
+  <rect x="82" y="230" width="220" height="102" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.2" class="card"/>
+  <path class="header" d="M82,272 L82,244 Q82,230 96,230 L288,230 Q302,230 302,244 L302,272 Z" fill="#eef5fa"/>
+  <text x="192" y="250" class="tiny" text-anchor="middle">&lt;&lt;stateless API&gt;&gt;</text>
+  <text x="192" y="271" class="cardTitle" text-anchor="middle">HTTP request</text>
+  <text x="104" y="297" class="detail">GET /actors</text>
+  <text x="104" y="317" class="detail">X-TENANT-ID + auth</text>
+</g>
+<g data-card="Authentication filters" data-x="352" data-y="230" data-width="250" data-height="102">
+  <rect x="352" y="230" width="250" height="102" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.2" class="card"/>
+  <path class="header" d="M352,272 L352,244 Q352,230 366,230 L588,230 Q602,230 602,244 L602,272 Z" fill="#f1f6ec"/>
+  <text x="477" y="250" class="tiny" text-anchor="middle">&lt;&lt;AUTHENTICATION&gt;&gt;</text>
+  <text x="477" y="271" class="cardTitleSmall" text-anchor="middle">Authentication filters</text>
+  <text x="374" y="297" class="detail">JWT tenant_id claim</text>
+  <text x="374" y="317" class="detail">API key / demo session</text>
+</g>
+<g data-card="SecurityContext" data-x="652" data-y="230" data-width="230" data-height="102">
+  <rect x="652" y="230" width="230" height="102" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.2" class="card"/>
+  <path class="header" d="M652,272 L652,244 Q652,230 666,230 L868,230 Q882,230 882,244 L882,272 Z" fill="#eef7f6"/>
+  <text x="767" y="250" class="tiny" text-anchor="middle">&lt;&lt;ReactiveSecurityContext&gt;&gt;</text>
+  <text x="767" y="271" class="cardTitle" text-anchor="middle">SecurityContext</text>
+  <text x="674" y="297" class="detail">TenantAuthenticationToken</text>
+  <text x="674" y="317" class="detail">or JwtAuthenticationToken</text>
+</g>
+<g data-card="AuthorizedTenantContextWebFilter" data-x="932" data-y="230" data-width="280" data-height="102">
+  <rect x="932" y="230" width="280" height="102" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2.2" class="card"/>
+  <path class="header" d="M932,272 L932,244 Q932,230 946,230 L1198,230 Q1212,230 1212,244 L1212,272 Z" fill="#f5eee4"/>
+  <text x="1072" y="250" class="tiny" text-anchor="middle">&lt;&lt;SecurityWebFiltersOrder.LAST&gt;&gt;</text>
+  <text x="1072" y="271" class="cardTitleSmall" text-anchor="middle">Authorized tenant filter</text>
+  <text x="954" y="297" class="detail">auth tenant == header tenant</text>
+  <text x="954" y="317" class="detail">only writer to TENANT_ID</text>
+</g>
+<g data-card="Reactor routing context" data-x="1248" data-y="230" data-width="170" data-height="102">
+  <rect x="1248" y="230" width="170" height="102" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2.2" class="card"/>
+  <path class="header" d="M1248,272 L1248,244 Q1248,230 1262,230 L1404,230 Q1418,230 1418,244 L1418,272 Z" fill="#f5eef2"/>
+  <text x="1333" y="250" class="tiny" text-anchor="middle">&lt;&lt;lookup key&gt;&gt;</text>
+  <text x="1333" y="271" class="cardTitleSmall" text-anchor="middle">Reactor context</text>
+  <text x="1268" y="297" class="detail">TENANT_ID</text>
+  <text x="1268" y="317" class="detail">authorized only</text>
+</g>
+<g data-card="Failure outcomes" data-x="908" data-y="344" data-width="340" data-height="58">
+  <rect x="908" y="344" width="340" height="58" rx="14" fill="#fff7f7" stroke="#b85f64" stroke-width="2" class="card"/>
+  <text x="1078" y="369" class="detail" text-anchor="middle">401 missing/invalid auth, 400 bad header</text>
+  <text x="1078" y="390" class="detail" text-anchor="middle">403 tenant mismatch or missing claim</text>
+</g>
+
+<g data-card="ActorController" data-x="118" data-y="535" data-width="245" data-height="100">
+  <rect x="118" y="535" width="245" height="100" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.2" class="card"/>
+  <path class="header" d="M118,577 L118,549 Q118,535 132,535 L349,535 Q363,535 363,549 L363,577 Z" fill="#eef5fa"/>
+  <text x="240.5" y="555" class="tiny" text-anchor="middle">&lt;&lt;REST controller&gt;&gt;</text>
+  <text x="240.5" y="576" class="cardTitle" text-anchor="middle">ActorController</text>
+  <text x="140" y="603" class="detail">transactionExecutor.execute</text>
+  <text x="140" y="623" class="detail">repository Flow.toList()</text>
+</g>
+<g data-card="TenantTransactionExecutor" data-x="418" data-y="535" data-width="270" data-height="100">
+  <rect x="418" y="535" width="270" height="100" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.2" class="card"/>
+  <path class="header" d="M418,577 L418,549 Q418,535 432,535 L674,535 Q688,535 688,549 L688,577 Z" fill="#f1f6ec"/>
+  <text x="553" y="555" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+  <text x="553" y="576" class="cardTitleSmall" text-anchor="middle">TenantTransactionExecutor</text>
+  <text x="440" y="603" class="detail">preserves ReactorContext</text>
+  <text x="440" y="623" class="detail">suspendTransaction(db=...)</text>
+</g>
+<g data-card="tenantRoutingDatabase" data-x="742" data-y="535" data-width="250" data-height="100">
+  <rect x="742" y="535" width="250" height="100" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.2" class="card"/>
+  <path class="header" d="M742,577 L742,549 Q742,535 756,535 L978,535 Q992,535 992,549 L992,577 Z" fill="#eef7f6"/>
+  <text x="867" y="555" class="tiny" text-anchor="middle">&lt;&lt;R2dbcDatabase&gt;&gt;</text>
+  <text x="867" y="576" class="cardTitleSmall" text-anchor="middle">tenantRoutingDatabase</text>
+  <text x="764" y="603" class="detail">explicit Exposed database</text>
+  <text x="764" y="623" class="detail">uses routing factory</text>
+</g>
+<g data-card="Routing ConnectionFactory" data-x="1048" data-y="535" data-width="280" data-height="100">
+  <rect x="1048" y="535" width="280" height="100" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2.2" class="card"/>
+  <path class="header" d="M1048,577 L1048,549 Q1048,535 1062,535 L1314,535 Q1328,535 1328,549 L1328,577 Z" fill="#f5eee4"/>
+  <text x="1188" y="555" class="tiny" text-anchor="middle">&lt;&lt;AbstractRoutingConnectionFactory&gt;&gt;</text>
+  <text x="1188" y="576" class="cardTitleSmall" text-anchor="middle">Routing ConnectionFactory</text>
+  <text x="1070" y="603" class="detail">deferContextual lookup</text>
+  <text x="1070" y="623" class="detail">lenientFallback=false</text>
+</g>
+
+<g data-card="Tenant CF Registry" data-x="88" data-y="784" data-width="245" data-height="90">
+  <rect x="88" y="784" width="245" height="90" rx="14" fill="#fff" stroke="#8a6f55" stroke-width="2.2" class="card"/>
+  <path class="header" d="M88,822 L88,798 Q88,784 102,784 L319,784 Q333,784 333,798 L333,822 Z" fill="#f3eee8"/>
+  <text x="210.5" y="803" class="tiny" text-anchor="middle">&lt;&lt;pool owner&gt;&gt;</text>
+  <text x="210.5" y="822" class="cardTitleSmall" text-anchor="middle">Tenant CF Registry</text>
+  <text x="110" y="848" class="detail">targetConnectionFactories()</text>
+</g>
+<g data-card="Korean tenant pool" data-x="410" data-y="760" data-width="330" data-height="122">
+  <rect x="410" y="760" width="330" height="122" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.2" class="card"/>
+  <path class="header" d="M410,809 L410,774 Q410,760 424,760 L726,760 Q740,760 740,774 L740,809 Z" fill="#eef5fa"/>
+  <use href="#h2Icon" x="434" y="771"/>
+  <text x="586" y="787" class="tiny" text-anchor="middle">&lt;&lt;ConnectionPool&gt;&gt;</text>
+  <text x="586" y="809" class="cardTitle" text-anchor="middle">Korean tenant pool</text>
+  <text x="444" y="844" class="detail">r2dbc:h2:mem:///tenant_cf_korean</text>
+  <text x="444" y="864" class="detail">authorized tenant id: korean</text>
+</g>
+<g data-card="English tenant pool" data-x="800" data-y="760" data-width="330" data-height="122">
+  <rect x="800" y="760" width="330" height="122" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.2" class="card"/>
+  <path class="header" d="M800,809 L800,774 Q800,760 814,760 L1116,760 Q1130,760 1130,774 L1130,809 Z" fill="#f1f6ec"/>
+  <use href="#h2Icon" x="824" y="771"/>
+  <text x="976" y="787" class="tiny" text-anchor="middle">&lt;&lt;ConnectionPool&gt;&gt;</text>
+  <text x="976" y="809" class="cardTitle" text-anchor="middle">English tenant pool</text>
+  <text x="834" y="844" class="detail">r2dbc:h2:mem:///tenant_cf_english</text>
+  <text x="834" y="864" class="detail">authorized tenant id: english</text>
+</g>
+<g data-card="Startup initialization" data-x="1190" data-y="784" data-width="220" data-height="90">
+  <rect x="1190" y="784" width="220" height="90" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2.2" class="card"/>
+  <path class="header" d="M1190,822 L1190,798 Q1190,784 1204,784 L1396,784 Q1410,784 1410,798 L1410,822 Z" fill="#f5eef2"/>
+  <text x="1300" y="803" class="tiny" text-anchor="middle">&lt;&lt;ApplicationReadyEvent&gt;&gt;</text>
+  <text x="1300" y="822" class="cardTitleSmall" text-anchor="middle">Startup init</text>
+  <text x="1212" y="848" class="detail">same tenant pools seeded</text>
+</g>
+
+<path class="connector" data-connector="request-to-auth" d="M302 281 L352 281" stroke="#4f86c6"/><polygon points="352,281 338,274 338,288" fill="#4f86c6"/>
+<path class="connector" data-connector="auth-to-context" d="M602 281 L652 281" stroke="#6f8f52"/><polygon points="652,281 638,274 638,288" fill="#6f8f52"/>
+<path class="connector" data-connector="context-to-authorize" d="M882 281 L932 281" stroke="#4f8f8b"/><polygon points="932,281 918,274 918,288" fill="#4f8f8b"/>
+<path class="connector" data-connector="authorized-to-reactor" d="M1212 281 L1248 281" stroke="#a66a3f"/><polygon points="1248,281 1234,274 1234,288" fill="#a66a3f"/>
+<path class="connector" data-connector="authorization-failure" d="M1072 332 L1072 344" stroke="#b85f64"/><polygon points="1072,344 1065,330 1079,330" fill="#b85f64"/>
+<path class="connector" data-connector="reactor-to-controller" d="M1333 332 L1333 430 Q1333 446 1317 446 L256 446 Q240 446 240 462 L240 535" stroke="#4f86c6"/><polygon points="240,535 233,521 247,521" fill="#4f86c6"/>
+<path class="connector" data-connector="controller-to-executor" d="M363 585 L418 585" stroke="#6f8f52"/><polygon points="418,585 404,578 404,592" fill="#6f8f52"/>
+<path class="connector" data-connector="executor-to-db" d="M688 585 L742 585" stroke="#4f8f8b"/><polygon points="742,585 728,578 728,592" fill="#4f8f8b"/>
+<path class="connector" data-connector="db-to-routing-factory" d="M992 585 L1048 585" stroke="#a66a3f"/><polygon points="1048,585 1034,578 1034,592" fill="#a66a3f"/>
+<path class="connector" data-connector="factory-to-registry" d="M1188 635 L1188 698 Q1188 714 1172 714 L226 714 Q210 714 210 730 L210 784" stroke="#8a6f55"/><polygon points="210,784 203,770 217,770" fill="#8a6f55"/>
+<path class="connector" data-connector="registry-korean" d="M333 829 L410 829" stroke="#4f86c6"/><polygon points="410,829 396,822 396,836" fill="#4f86c6"/>
+<path class="connector" data-connector="registry-english" d="M333 858 L376 858 Q392 858 392 874 L392 900 Q392 916 408 916 L960 916 Q976 916 976 900 L976 882" stroke="#6f8f52"/><polygon points="976,882 969,896 983,896" fill="#6f8f52"/>
+<path class="connector" data-connector="startup-seeds" d="M1190 829 L1130 829" stroke="#a85f7f"/><polygon points="1130,829 1144,822 1144,836" fill="#a85f7f"/>
+
+<g>
+  <rect x="1198" y="158" width="220" height="70" rx="12" class="legend"/>
+  <line x1="1216" y1="178" x2="1258" y2="178" stroke="#4f86c6" stroke-width="3.2" stroke-linecap="round"/><polygon points="1258,178 1244,171 1244,185" fill="#4f86c6"/>
+  <text x="1270" y="183" class="tiny">request / execution</text>
+  <line x1="1216" y1="198" x2="1258" y2="198" stroke="#a66a3f" stroke-width="3.2" stroke-linecap="round"/><polygon points="1258,198 1244,191 1244,205" fill="#a66a3f"/>
+  <text x="1270" y="203" class="tiny">authorization / routing</text>
+  <line x1="1216" y1="218" x2="1258" y2="218" stroke="#b85f64" stroke-width="3.2" stroke-linecap="round"/><polygon points="1258,218 1244,211 1244,225" fill="#b85f64"/>
+  <text x="1270" y="223" class="tiny">rejection path</text>
+</g>
+<rect x="350" y="946" width="870" height="28" rx="10" class="noteBox"/>
+<text x="785" y="966" class="note" text-anchor="middle">The header alone is not trusted; only the authorized filter writes TenantContextKeys.TENANT_ID.</text>
 </svg>
