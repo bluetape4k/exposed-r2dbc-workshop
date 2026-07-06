@@ -1,70 +1,123 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 880" width="1280" height="880" role="img" aria-label="Spring Boot Spring Webflux Exposed Class diagram">
-<defs><filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12" /></filter><style>.canvas{fill:#f6f9fc}.frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}.lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}.card{filter:url(#shadow)}.header{opacity:.96}.title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:30px;fill:#1e293b}.subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}.tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}.laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:15px;letter-spacing:.08em;fill:#8ca2b4}.cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:17px;fill:#1e293b}.connector{fill:none;stroke:#64748b;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}.use{fill:none;stroke-width:2;stroke-dasharray:7 6;stroke-linecap:round;stroke-linejoin:round}.rel{fill:none;stroke:#64748b;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.head{fill:white;stroke:#64748b;stroke-width:2.4;stroke-dasharray:none;style:stroke-dasharray:none}.labelPill{fill:#fff;stroke:#d7e2ec;stroke-width:1}.noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.2}</style></defs>
-<rect width="1280" height="880" class="canvas"/><rect x="22" y="22" width="1236" height="836" rx="18" class="frame"/>
-<text x="58" y="68" class="title" text-anchor="start">Spring Boot Spring Webflux Exposed Class</text>
-<text x="58" y="96" class="subtitle" text-anchor="start">Concrete UML class view with explicit inheritance and dependency corridors.</text>
-<rect x="48" y="126" width="1184" height="190" rx="16" class="lane"/><text x="72" y="156" class="laneTitle" text-anchor="start">ABSTRACTIONS / CONTRACTS</text>
-<rect x="48" y="340" width="1184" height="300" rx="16" class="lane"/><text x="72" y="370" class="laneTitle" text-anchor="start">IMPLEMENTATIONS / COLLABORATORS</text>
-<rect x="48" y="662" width="1184" height="126" rx="16" class="lane"/><text x="72" y="692" class="laneTitle" text-anchor="start">READER CONTRACT</text>
-<g data-card="Layer Structure" data-x="210" data-y="178" data-width="250" data-height="96">
-<rect x="210" y="178" width="250" height="96" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card"/>
-<path class="header" d="M210,220 L210,192 Q210,178 224,178 L446,178 Q460,178 460,192 L460,220 Z" fill="#eef5fa"/>
-<text x="335.0" y="196" class="tiny" text-anchor="middle">&lt;&lt;contract&gt;&gt;</text>
-<text x="335.0" y="215" class="cardTitle" text-anchor="middle">Layer Structure</text>
-<text x="228" y="240" class="detail" text-anchor="start">shared R2DBC boundary</text>
-</g>
-<g data-card="UML classes from the or…" data-x="820" data-y="178" data-width="250" data-height="96">
-<rect x="820" y="178" width="250" height="96" rx="14" fill="#fff" stroke="#64748b" stroke-width="2" class="card"/>
-<path class="header" d="M820,220 L820,192 Q820,178 834,178 L1056,178 Q1070,178 1070,192 L1070,220 Z" fill="#f8fafc"/>
-<text x="945.0" y="196" class="tiny" text-anchor="middle">&lt;&lt;base&gt;&gt;</text>
-<text x="945.0" y="215" class="cardTitle" text-anchor="middle">UML classes from the or…</text>
-<text x="838" y="240" class="detail" text-anchor="start">common coroutine support</text>
-</g>
-<g data-card="ActorRepository" data-x="90" data-y="410" data-width="230" data-height="106">
-<rect x="90" y="410" width="230" height="106" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card"/>
-<path class="header" d="M90,452 L90,424 Q90,410 104,410 L306,410 Q320,410 320,424 L320,452 Z" fill="#f5eee4"/>
-<text x="205.0" y="428" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
-<text x="205.0" y="447" class="cardTitle" text-anchor="middle">ActorRepository</text>
-<text x="108" y="472" class="detail" text-anchor="start">suspendTransaction</text>
-<text x="108" y="489" class="detail" text-anchor="start">Flow / DTO mapping</text>
-</g>
-<g data-card="+findByIdid" data-x="380" data-y="410" data-width="230" data-height="106">
-<rect x="380" y="410" width="230" height="106" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card"/>
-<path class="header" d="M380,452 L380,424 Q380,410 394,410 L596,410 Q610,410 610,424 L610,452 Z" fill="#eef7f6"/>
-<text x="495.0" y="428" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
-<text x="495.0" y="447" class="cardTitle" text-anchor="middle">+findByIdid</text>
-<text x="398" y="472" class="detail" text-anchor="start">suspendTransaction</text>
-<text x="398" y="489" class="detail" text-anchor="start">Flow / DTO mapping</text>
-</g>
-<g data-card="+findAll" data-x="670" data-y="410" data-width="230" data-height="106">
-<rect x="670" y="410" width="230" height="106" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2" class="card"/>
-<path class="header" d="M670,452 L670,424 Q670,410 684,410 L886,410 Q900,410 900,424 L900,452 Z" fill="#f5eef2"/>
-<text x="785.0" y="428" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
-<text x="785.0" y="447" class="cardTitle" text-anchor="middle">+findAll</text>
-<text x="688" y="472" class="detail" text-anchor="start">suspendTransaction</text>
-<text x="688" y="489" class="detail" text-anchor="start">Flow / DTO mapping</text>
-</g>
-<g data-card="+createactor" data-x="960" data-y="410" data-width="230" data-height="106">
-<rect x="960" y="410" width="230" height="106" rx="14" fill="#fff" stroke="#8a6f55" stroke-width="2" class="card"/>
-<path class="header" d="M960,452 L960,424 Q960,410 974,410 L1176,410 Q1190,410 1190,424 L1190,452 Z" fill="#f3eee8"/>
-<text x="1075.0" y="428" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
-<text x="1075.0" y="447" class="cardTitle" text-anchor="middle">+createactor</text>
-<text x="978" y="472" class="detail" text-anchor="start">suspendTransaction</text>
-<text x="978" y="489" class="detail" text-anchor="start">Flow / DTO mapping</text>
-</g>
-<path class="connector" data-connector="uml-inherit" d="M 205 410 L 205 332 Q 205 316 221 316 L 319 316 Q 335 316 335 300 L 335 274"/>
-<polygon class="head" points="335,274 326,290 344,290" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="connector" data-connector="uml-inherit" d="M 495 410 L 495 332 Q 495 316 479 316 L 351 316 Q 335 316 335 300 L 335 274"/>
-<polygon class="head" points="335,274 326,290 344,290" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="connector" data-connector="uml-inherit" d="M 785 410 L 785 332 Q 785 316 801 316 L 929 316 Q 945 316 945 300 L 945 274"/>
-<polygon class="head" points="945,274 936,290 954,290" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="connector" data-connector="uml-inherit" d="M 1075 410 L 1075 332 Q 1075 316 1059 316 L 961 316 Q 945 316 945 300 L 945 274"/>
-<polygon class="head" points="945,274 936,290 954,290" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="use connector" data-connector="uml-use" d="M 320 463 L 380 463" stroke="#6f8f52"/>
-<polyline points="380,463 368,456 368,470" fill="none" stroke="#6f8f52" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="use connector" data-connector="uml-use" d="M 610 463 L 670 463" stroke="#a66a3f"/>
-<polyline points="670,463 658,456 658,470" fill="none" stroke="#a66a3f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="use connector" data-connector="uml-use" d="M 900 463 L 960 463" stroke="#4f8f8b"/>
-<polyline points="960,463 948,456 948,470" fill="none" stroke="#4f8f8b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<rect x="86" y="720" width="1108" height="30" rx="10" class="noteBox"/><text x="640" y="740" class="note" text-anchor="middle">Hollow triangles show generalization; dashed arrows show use/dependency. Lane labels stay left-aligned and unobstructed.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 920" width="1440" height="920" role="img" aria-label="Spring WebFlux Exposed R2DBC class and layer map">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="126%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .canvas{fill:#f6f9fc}.frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.6}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.3}.laneAlt{fill:#fbfdff;stroke:#d7e2ec;stroke-width:1.3}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:34px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:17px;letter-spacing:.08em;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:20px;fill:#1e293b}
+      .stereo{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#6b7f92;font-weight:700}
+      .card{filter:url(#shadow)}
+      .connector{fill:none;stroke:#64748b;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+      .dep{fill:none;stroke-width:2.3;stroke-dasharray:8 7;stroke-linecap:butt;stroke-linejoin:round}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.3}
+    </style>
+  </defs>
+  <rect class="canvas" width="1440" height="920"/>
+  <rect class="frame" x="24" y="24" width="1392" height="872" rx="22"/>
+  <text class="title" x="72" y="86">Spring WebFlux Exposed R2DBC Layer Map</text>
+  <text class="subtitle" x="74" y="120">Source-backed class view: suspend controllers call repositories inside Exposed R2DBC transactions.</text>
+
+  <rect class="lane" x="54" y="150" width="1332" height="146" rx="18"/>
+  <text class="laneTitle" x="84" y="184">WEBFLUX API</text>
+  <rect class="laneAlt" x="54" y="318" width="1332" height="126" rx="18"/>
+  <text class="laneTitle" x="84" y="352">TRANSACTION BOUNDARY</text>
+  <rect class="lane" x="54" y="466" width="1332" height="170" rx="18"/>
+  <text class="laneTitle" x="84" y="500">REPOSITORY + DSL</text>
+  <rect class="laneAlt" x="54" y="658" width="1332" height="156" rx="18"/>
+  <text class="laneTitle" x="84" y="692">SCHEMA + R2DBC CONFIG</text>
+
+  <g class="card" data-node="MovieController">
+    <rect x="106" y="200" width="270" height="74" rx="14" fill="#eef6ff" stroke="#4f86c6" stroke-width="2"/>
+    <text class="stereo" x="241" y="222" text-anchor="middle">&lt;&lt;RestController&gt;&gt;</text>
+    <text class="cardTitle" x="241" y="246" text-anchor="middle">MovieController</text>
+    <text class="detail" x="241" y="264" text-anchor="middle">/movies CRUD + search</text>
+  </g>
+  <g class="card" data-node="ActorController">
+    <rect x="438" y="200" width="270" height="74" rx="14" fill="#f1f8ed" stroke="#6f8f52" stroke-width="2"/>
+    <text class="stereo" x="573" y="222" text-anchor="middle">&lt;&lt;RestController&gt;&gt;</text>
+    <text class="cardTitle" x="573" y="246" text-anchor="middle">ActorController</text>
+    <text class="detail" x="573" y="264" text-anchor="middle">/actors CRUD + search</text>
+  </g>
+  <g class="card" data-node="MovieActorsController">
+    <rect x="770" y="200" width="330" height="74" rx="14" fill="#fff5e8" stroke="#b68432" stroke-width="2"/>
+    <text class="stereo" x="935" y="222" text-anchor="middle">&lt;&lt;RestController&gt;&gt;</text>
+    <text class="cardTitle" x="935" y="246" text-anchor="middle">MovieActorsController</text>
+    <text class="detail" x="935" y="264" text-anchor="middle">/movie-actors join views</text>
+  </g>
+  <g class="card" data-node="DataInitializer">
+    <rect x="1160" y="200" width="170" height="74" rx="14" fill="#f6f1fb" stroke="#805aa8" stroke-width="2"/>
+    <text class="stereo" x="1245" y="222" text-anchor="middle">&lt;&lt;Component&gt;&gt;</text>
+    <text class="cardTitle" x="1245" y="246" text-anchor="middle">DataInitializer</text>
+    <text class="detail" x="1245" y="264" text-anchor="middle">seed data</text>
+  </g>
+
+  <g class="card" data-node="suspendTransaction">
+    <rect x="385" y="360" width="670" height="58" rx="14" fill="#ffffff" stroke="#4f8f8b" stroke-width="2.2"/>
+    <text class="cardTitle" x="720" y="386" text-anchor="middle">suspendTransaction { ... }</text>
+    <text class="detail" x="720" y="405" text-anchor="middle">controller handlers execute repository calls in Exposed R2DBC coroutine transactions</text>
+  </g>
+
+  <g class="card" data-node="MovieRepository">
+    <rect x="182" y="520" width="360" height="82" rx="14" fill="#fff7ed" stroke="#a66a3f" stroke-width="2"/>
+    <text class="stereo" x="362" y="542" text-anchor="middle">&lt;&lt;Repository&gt;&gt;</text>
+    <text class="cardTitle" x="362" y="566" text-anchor="middle">MovieRepository</text>
+    <text class="detail" x="362" y="584" text-anchor="middle">CRUD, joins, counts, acting producers</text>
+  </g>
+  <g class="card" data-node="ActorRepository">
+    <rect x="622" y="520" width="300" height="82" rx="14" fill="#edf8f7" stroke="#4f8f8b" stroke-width="2"/>
+    <text class="stereo" x="772" y="542" text-anchor="middle">&lt;&lt;Repository&gt;&gt;</text>
+    <text class="cardTitle" x="772" y="566" text-anchor="middle">ActorRepository</text>
+    <text class="detail" x="772" y="584" text-anchor="middle">CRUD + query-param search</text>
+  </g>
+  <g class="card" data-node="DTOs">
+    <rect x="1002" y="520" width="250" height="82" rx="14" fill="#fdf2f8" stroke="#a85f7f" stroke-width="2"/>
+    <text class="stereo" x="1127" y="542" text-anchor="middle">&lt;&lt;model&gt;&gt;</text>
+    <text class="cardTitle" x="1127" y="566" text-anchor="middle">DTO + Mappers</text>
+    <text class="detail" x="1127" y="584" text-anchor="middle">ResultRow -&gt; records</text>
+  </g>
+
+  <g class="card" data-node="MovieSchema">
+    <rect x="190" y="712" width="382" height="74" rx="14" fill="#eef6ff" stroke="#4f86c6" stroke-width="2"/>
+    <text class="stereo" x="381" y="734" text-anchor="middle">&lt;&lt;Exposed schema&gt;&gt;</text>
+    <text class="cardTitle" x="381" y="758" text-anchor="middle">MovieSchema</text>
+    <text class="detail" x="381" y="776" text-anchor="middle">movies, actors, actors_in_movies</text>
+  </g>
+  <g class="card" data-node="ExposedR2dbcConfig">
+    <rect x="690" y="712" width="404" height="74" rx="14" fill="#f5f7fb" stroke="#64748b" stroke-width="2"/>
+    <text class="stereo" x="892" y="734" text-anchor="middle">&lt;&lt;Configuration&gt;&gt;</text>
+    <text class="cardTitle" x="892" y="758" text-anchor="middle">ExposedR2dbcConfig</text>
+    <text class="detail" x="892" y="776" text-anchor="middle">profiles -&gt; ConnectionPool -&gt; R2dbcDatabase</text>
+  </g>
+
+  <path class="dep" d="M 241 274 V 306 Q 241 328 263 328 H 498 Q 520 328 520 350 V 360" stroke="#4f86c6"/>
+  <polygon points="520,360 512,346 528,346" fill="#4f86c6" stroke="#4f86c6" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="dep" d="M 573 274 V 306 Q 573 328 595 328 H 698 Q 720 328 720 350 V 360" stroke="#6f8f52"/>
+  <polygon points="720,360 712,346 728,346" fill="#6f8f52" stroke="#6f8f52" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="dep" d="M 935 274 V 318 Q 935 340 920 340 V 360" stroke="#b68432"/>
+  <polygon points="920,360 912,346 928,346" fill="#b68432" stroke="#b68432" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="dep" d="M 1245 274 V 320 Q 1245 342 1267 342 H 1303 Q 1325 342 1325 364 V 728 Q 1325 749 1303 749 H 1094" stroke="#805aa8"/>
+  <polygon points="1094,749 1108,741 1108,757" fill="#805aa8" stroke="#805aa8" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="connector" d="M 590 418 V 470 Q 590 492 568 492 H 384 Q 362 492 362 508 V 520" stroke="#a66a3f"/>
+  <polygon points="362,520 354,506 370,506" fill="#a66a3f" stroke="#a66a3f" stroke-width="1.6" stroke-linejoin="round"/>
+  <path class="connector" d="M 770 418 V 520" stroke="#4f8f8b"/>
+  <polygon points="770,520 762,506 778,506" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1.6" stroke-linejoin="round"/>
+  <path class="dep" d="M 922 561 H 980 Q 1002 561 1002 561" stroke="#a85f7f"/>
+  <polygon points="1002,561 988,553 988,569" fill="#a85f7f" stroke="#a85f7f" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="dep" d="M 362 602 V 670 Q 362 692 381 692 V 712" stroke="#a66a3f"/>
+  <polygon points="381,712 373,698 389,698" fill="#a66a3f" stroke="#a66a3f" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="dep" d="M 772 602 V 642 Q 772 664 750 664 H 403 Q 381 664 381 686 V 712" stroke="#4f8f8b"/>
+  <polygon points="381,712 373,698 389,698" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="dep" d="M 1020 418 V 450 Q 1020 472 1042 472 H 1280 V 680 Q 1280 702 1258 702 H 982 Q 960 702 960 712" stroke="#64748b"/>
+  <polygon points="960,712 952,698 968,698" fill="#64748b" stroke="#64748b" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <rect x="116" y="842" width="1208" height="30" rx="10" class="noteBox"/>
+  <text class="note" x="720" y="862" text-anchor="middle">Dashed arrows are source dependencies; solid arrows show transaction dispatch. Arrowheads are direct solid geometry for PNG safety.</text>
 </svg>
