@@ -8,7 +8,7 @@ tenant is carried by Ktor call attributes instead of Reactor context.
 
 ## Architecture
 
-![Ktor R2DBC multi-tenant request flow](../../docs/assets/readme-diagrams/10-multi-tenant-07-multitenant-ktor-architecture-01.png)
+![Ktor R2DBC multi-tenant request flow](../../docs/images/readme-diagrams/10-multi-tenant-07-multitenant-ktor-architecture-01.png)
 
 ## What This Module Shows
 

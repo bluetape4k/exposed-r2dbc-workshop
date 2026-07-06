@@ -38,7 +38,7 @@
    validation errors, malformed query/body handling, request id on 400/403/409
    paths, `delayMs > 2000` rejection, operation-name pattern rejection,
    degraded-to-UP recovery, and CR/LF request-id replacement.
-9. Add a committed PNG diagram under `docs/assets/readme-diagrams/` and update
+9. Add a committed PNG diagram under `docs/images/readme-diagrams/` and update
    root, chapter, and module README pairs.
 10. Add `docs/lessons/2026-05-23-issue-48-observability-readiness-r2dbc.md`.
 11. Run targeted tests, detekt, anti-pattern scan, Codex 6-tier review, Claude

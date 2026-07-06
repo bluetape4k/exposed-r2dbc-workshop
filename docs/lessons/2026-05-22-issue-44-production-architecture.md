@@ -21,4 +21,4 @@ stack-native.
 
 Future chapter 12 child issues should extend these package slices instead of
 re-collapsing logic into the application entrypoint. README diagrams should use
-committed PNG assets under `docs/assets/readme-diagrams/`.
+committed PNG assets under `docs/images/readme-diagrams/`.

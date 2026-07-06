@@ -32,7 +32,7 @@ requests.
 - `./gradlew detekt --parallel --console=plain`
 - `actionlint .github/workflows/Examples.yml`
 - `git diff --check`
-- PNG diagram: `docs/assets/readme-diagrams/10-multi-tenant-07-multitenant-ktor-architecture-01.png`, 1400 x 760.
+- PNG diagram: `docs/images/readme-diagrams/10-multi-tenant-07-multitenant-ktor-architecture-01.png`, 1400 x 760.
 - IntelliJ diagnostics were unavailable for this worktree (`project_not_found`); compile/test/static checks were used as fallback.
 
 ## Future Notes

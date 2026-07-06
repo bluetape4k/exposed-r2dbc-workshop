@@ -10,11 +10,11 @@ from issue #48.
 
 ## Architecture
 
-![Chapter 12 production application architecture](../../docs/assets/readme-diagrams/issue-44-production-architecture-r2dbc-01.png)
+![Chapter 12 production application architecture](../../docs/images/readme-diagrams/issue-44-production-architecture-r2dbc-01.png)
 
 ## Authentication And Sessions
 
-![Chapter 12 authentication and session metadata](../../docs/assets/readme-diagrams/issue-45-auth-session-r2dbc-01.png)
+![Chapter 12 authentication and session metadata](../../docs/images/readme-diagrams/issue-45-auth-session-r2dbc-01.png)
 
 The Ktor slice uses Basic authentication to create database-backed session
 metadata, then stores only the opaque token in a signed `production_session`
@@ -29,7 +29,7 @@ left as production-hardening notes rather than enabled defaults.
 
 ## Realtime Outbox
 
-![Chapter 12 realtime outbox delivery](../../docs/assets/readme-diagrams/issue-46-outbox-realtime-r2dbc-01.png)
+![Chapter 12 realtime outbox delivery](../../docs/images/readme-diagrams/issue-46-outbox-realtime-r2dbc-01.png)
 
 The Ktor realtime slice protects work, publish, outbox, and WebSocket endpoints
 with the signed session cookie. Work-item creation stores a `PENDING` outbox row
@@ -39,7 +39,7 @@ and failed delivery stays visible as `FAILED` state.
 
 ## HTTP Client Outbox
 
-![Chapter 12 HTTP client outbox and idempotency](../../docs/assets/readme-diagrams/issue-47-http-outbox-idempotency-r2dbc-01.png)
+![Chapter 12 HTTP client outbox and idempotency](../../docs/images/readme-diagrams/issue-47-http-outbox-idempotency-r2dbc-01.png)
 
 The Ktor outbound slice protects `/production/outbound` and
 `/production/outbound/dispatch` with the signed admin session. It persists the
@@ -52,7 +52,7 @@ state with sanitized error text.
 
 ## Observability And Readiness
 
-![Chapter 12 observability and readiness](../../docs/assets/readme-diagrams/issue-48-observability-readiness-r2dbc-01.png)
+![Chapter 12 observability and readiness](../../docs/images/readme-diagrams/issue-48-observability-readiness-r2dbc-01.png)
 
 Ktor installs `CallId` and `CallLogging` so safe `X-Request-ID` values are
 echoed and invalid IDs are replaced with UUIDs before structured errors are
@@ -64,7 +64,7 @@ ping and respects sticky degraded database state from diagnostics.
 
 ## Package Layout
 
-![Ktor production package layout](../../docs/assets/readme-diagrams/12-production-integration-02-ktor-package-layout-01.png)
+![Ktor production package layout](../../docs/images/readme-diagrams/12-production-integration-02-ktor-package-layout-01.png)
 
 ## Ktor vs Spring Boot 4
 

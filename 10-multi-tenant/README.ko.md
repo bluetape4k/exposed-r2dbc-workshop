@@ -8,7 +8,7 @@ onboarding 중 어디에 둘지 선택할 때 이 문서에서 시작하세요.
 
 ## Architecture Diagram
 
-![Chapter 10 multi-tenant strategy map](../docs/assets/readme-diagrams/10-multi-tenant-strategy-map-01.png)
+![Chapter 10 multi-tenant strategy map](../docs/images/readme-diagrams/10-multi-tenant-strategy-map-01.png)
 
 개별 모듈 README를 열기 전에 이 chapter-level 다이어그램을 먼저 보세요. 요청이
 Spring WebFlux filter, Ktor call attributes, shared schema switch, tenant-owned

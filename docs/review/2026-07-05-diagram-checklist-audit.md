@@ -160,7 +160,7 @@ Notes:
 
 ## 2026-07-06 final one-by-one audit
 
-Scope: all final README diagram SVG/PNG assets under `docs/assets/readme-diagrams` and `docs/images/readme-diagrams`, using the corrected diagrams in this branch as the baseline for style, palette, arrowhead, connector, and layout consistency.
+Scope: all final README diagram SVG/PNG assets under `docs/images/readme-diagrams` and `docs/images/readme-diagrams`, using the corrected diagrams in this branch as the baseline for style, palette, arrowhead, connector, and layout consistency.
 
 | Gate | Evidence | Result |
 | --- | --- | --- |

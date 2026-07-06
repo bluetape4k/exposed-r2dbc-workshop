@@ -25,7 +25,7 @@ schema drop, pool close, and metadata delete failures.
 
 The module documents when onboarding is a better fit than shared-table tenancy,
 fixed tenant pools, or tenant authorization. README diagrams use a committed PNG
-under `docs/assets/readme-diagrams/` with the SVG source kept next to it.
+under `docs/images/readme-diagrams/` with the SVG source kept next to it.
 `Examples.yml` now runs the onboarding module with the other chapter 10
 examples.
 

@@ -16,15 +16,15 @@ surfaces each framework expects.
 
 ## Application Architecture
 
-![Chapter 12 production application architecture](../docs/assets/readme-diagrams/issue-44-production-architecture-r2dbc-01.png)
+![Chapter 12 production application architecture](../docs/images/readme-diagrams/issue-44-production-architecture-r2dbc-01.png)
 
 ## Authentication And Sessions
 
-![Chapter 12 authentication and session metadata](../docs/assets/readme-diagrams/issue-45-auth-session-r2dbc-01.png)
+![Chapter 12 authentication and session metadata](../docs/images/readme-diagrams/issue-45-auth-session-r2dbc-01.png)
 
 ## Realtime Outbox Delivery
 
-![Chapter 12 realtime outbox delivery](../docs/assets/readme-diagrams/issue-46-outbox-realtime-r2dbc-01.png)
+![Chapter 12 realtime outbox delivery](../docs/images/readme-diagrams/issue-46-outbox-realtime-r2dbc-01.png)
 
 The realtime slice persists each accepted work item and outbox event in the
 same Exposed R2DBC transaction. Publishing pending rows moves events to
@@ -34,7 +34,7 @@ error note, so reconnect/replay never depends on an in-memory event alone.
 
 ## HTTP Client Outbox And Idempotency
 
-![Chapter 12 HTTP client outbox and idempotency](../docs/assets/readme-diagrams/issue-47-http-outbox-idempotency-r2dbc-01.png)
+![Chapter 12 HTTP client outbox and idempotency](../docs/images/readme-diagrams/issue-47-http-outbox-idempotency-r2dbc-01.png)
 
 The outbound slice persists each external HTTP request before dispatch and
 uses a database-unique idempotency key as the duplicate boundary. Dispatch
@@ -47,7 +47,7 @@ concurrent single-send behavior are covered without a real external service.
 
 ## Observability And Readiness
 
-![Chapter 12 observability and readiness](../docs/assets/readme-diagrams/issue-48-observability-readiness-r2dbc-01.png)
+![Chapter 12 observability and readiness](../docs/images/readme-diagrams/issue-48-observability-readiness-r2dbc-01.png)
 
 The observability slice normalizes `X-Request-ID` across Spring WebFlux and
 Ktor. Safe caller-provided IDs are echoed in responses, invalid IDs are replaced
@@ -75,7 +75,7 @@ degraded marker is cleared.
 intentionally keeps two modules, one per runtime stack, and maps each source
 example to package-level slices inside those modules.
 
-![Chapter 12 source example parity architecture map](../docs/assets/readme-diagrams/issue-114-chapter12-parity-architecture-01.png)
+![Chapter 12 source example parity architecture map](../docs/images/readme-diagrams/issue-114-chapter12-parity-architecture-01.png)
 
 | `exposed-workshop` example | R2DBC counterpart | Coverage decision |
 |---|---|---|
@@ -95,7 +95,7 @@ issue proves that the module boundary itself is the teaching target.
 
 ## Caller Flow
 
-![Chapter 12 caller outbox and realtime sequence](../docs/assets/readme-diagrams/issue-114-chapter12-caller-sequence-01.png)
+![Chapter 12 caller outbox and realtime sequence](../docs/images/readme-diagrams/issue-114-chapter12-caller-sequence-01.png)
 
 | Step | Spring WebFlux | Ktor |
 |---|---|---|

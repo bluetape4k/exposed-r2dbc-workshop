@@ -84,8 +84,8 @@ Expected: CockroachDB retry example passes on H2.
 - [x] Validate kept CockroachDB diagrams:
 
 ```bash
-~/.local/bin/cairosvg docs/assets/readme-diagrams/issue-115-chapter13-03-cockroachdb-retry-erd-01.svg -o docs/assets/readme-diagrams/issue-115-chapter13-03-cockroachdb-retry-erd-01.png -s 2
-~/.local/bin/cairosvg docs/assets/readme-diagrams/issue-115-chapter13-03-cockroachdb-retry-sequence-01.svg -o docs/assets/readme-diagrams/issue-115-chapter13-03-cockroachdb-retry-sequence-01.png -s 2
+~/.local/bin/cairosvg docs/images/readme-diagrams/issue-115-chapter13-03-cockroachdb-retry-erd-01.svg -o docs/images/readme-diagrams/issue-115-chapter13-03-cockroachdb-retry-erd-01.png -s 2
+~/.local/bin/cairosvg docs/images/readme-diagrams/issue-115-chapter13-03-cockroachdb-retry-sequence-01.svg -o docs/images/readme-diagrams/issue-115-chapter13-03-cockroachdb-retry-sequence-01.png -s 2
 ```
 
 Then run the diagram style/audit scripts and eye-inspect the final PNGs.

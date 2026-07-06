@@ -167,7 +167,7 @@ unknown tenant cases.
 - Add module `README.md` and `README.ko.md`.
 - Link the module from `10-multi-tenant/README.md` and
   `10-multi-tenant/README.ko.md`.
-- Add a PNG diagram under `docs/assets/readme-diagrams/` and reference the
+- Add a PNG diagram under `docs/images/readme-diagrams/` and reference the
   same relative path from both README files.
 - Explain why Ktor uses call-scoped attributes instead of ReactorContext.
 - Explain the schema switch cost and link forward to #35 for connection-factory

@@ -10,7 +10,7 @@ identity matches the tenant selected by `X-TENANT-ID`. Use
 `04-connection-factory-per-tenant-spring-webflux` when you only want to study
 connection-factory routing without an authentication boundary.
 
-![Spring Security Tenant Authorization architecture](../../docs/assets/readme-diagrams/10-multi-tenant-05-spring-security-tenant-authorization-architecture-01.png)
+![Spring Security Tenant Authorization architecture](../../docs/images/readme-diagrams/10-multi-tenant-05-spring-security-tenant-authorization-architecture-01.png)
 
 ## Authentication Sources
 

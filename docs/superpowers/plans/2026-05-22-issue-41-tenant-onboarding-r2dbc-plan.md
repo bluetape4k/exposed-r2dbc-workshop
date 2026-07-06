@@ -226,7 +226,7 @@ Use `runSuspendIO` for R2DBC IO and bluetape4k assertions for new tests.
   - CI/Nightly decision: Examples covers module; Nightly expansion deferred to
     #42.
 - Generate PNG diagram:
-  - `docs/assets/readme-diagrams/issue-41-tenant-onboarding-r2dbc-01.png`.
+  - `docs/images/readme-diagrams/issue-41-tenant-onboarding-r2dbc-01.png`.
   - README files reference PNG path, not Mermaid.
   - Source SVG may be kept beside PNG if needed.
 - Add English KDoc for public classes/value types introduced by the module.

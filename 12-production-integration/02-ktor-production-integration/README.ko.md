@@ -9,11 +9,11 @@ issue #48의 diagnostics/readiness slice를 추가합니다.
 
 ## 아키텍처
 
-![Chapter 12 production application architecture](../../docs/assets/readme-diagrams/issue-44-production-architecture-r2dbc-01.png)
+![Chapter 12 production application architecture](../../docs/images/readme-diagrams/issue-44-production-architecture-r2dbc-01.png)
 
 ## 인증과 세션
 
-![Chapter 12 authentication and session metadata](../../docs/assets/readme-diagrams/issue-45-auth-session-r2dbc-01.png)
+![Chapter 12 authentication and session metadata](../../docs/images/readme-diagrams/issue-45-auth-session-r2dbc-01.png)
 
 Ktor slice는 Basic authentication으로 database-backed session metadata를
 생성하고, signed `production_session` cookie에는 opaque token만 저장합니다.
@@ -28,7 +28,7 @@ default로 켜지지 않고 production hardening note로 둡니다.
 
 ## Realtime Outbox
 
-![Chapter 12 realtime outbox delivery](../../docs/assets/readme-diagrams/issue-46-outbox-realtime-r2dbc-01.png)
+![Chapter 12 realtime outbox delivery](../../docs/images/readme-diagrams/issue-46-outbox-realtime-r2dbc-01.png)
 
 Ktor realtime slice는 signed session cookie로 work, publish, outbox,
 WebSocket endpoint를 보호합니다. Work item 생성은 같은 R2DBC transaction에서
@@ -38,7 +38,7 @@ WebSocket endpoint를 보호합니다. Work item 생성은 같은 R2DBC transact
 
 ## HTTP Client Outbox
 
-![Chapter 12 HTTP client outbox and idempotency](../../docs/assets/readme-diagrams/issue-47-http-outbox-idempotency-r2dbc-01.png)
+![Chapter 12 HTTP client outbox and idempotency](../../docs/images/readme-diagrams/issue-47-http-outbox-idempotency-r2dbc-01.png)
 
 Ktor outbound slice는 signed admin session으로 `/production/outbound`와
 `/production/outbound/dispatch`를 보호합니다. 외부 호출 전에 target URL,
@@ -51,7 +51,7 @@ permanent failure 상태를 기록합니다.
 
 ## Observability And Readiness
 
-![Chapter 12 observability and readiness](../../docs/assets/readme-diagrams/issue-48-observability-readiness-r2dbc-01.png)
+![Chapter 12 observability and readiness](../../docs/images/readme-diagrams/issue-48-observability-readiness-r2dbc-01.png)
 
 Ktor는 `CallId`와 `CallLogging`을 설치해 안전한 `X-Request-ID` 값을 echo하고,
 invalid ID는 structured error rendering 전에 UUID로 교체합니다.
@@ -63,7 +63,7 @@ sticky degraded database state를 함께 반영합니다.
 
 ## 패키지 구성
 
-![Ktor production package layout](../../docs/assets/readme-diagrams/12-production-integration-02-ktor-package-layout-01.png)
+![Ktor production package layout](../../docs/images/readme-diagrams/12-production-integration-02-ktor-package-layout-01.png)
 
 ## Ktor vs Spring Boot 4
 
