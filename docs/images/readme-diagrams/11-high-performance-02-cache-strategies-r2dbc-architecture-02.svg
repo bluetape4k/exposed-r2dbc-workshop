@@ -94,16 +94,16 @@
   </g>
 
   <g id="lookup-connectors">
-    <path class="connector blue" data-connector="lookup" d="M306 300 L356 300"/>
-    <polyline class="head blue" points="356,300 344,293 344,307"/>
-    <path class="connector blue" data-connector="lookup" d="M586 300 L642 300"/>
-    <polyline class="head blue" points="642,300 630,293 630,307"/>
-    <path class="connector green" data-connector="lookup" d="M902 300 L958 300"/>
-    <polyline class="head green" points="958,300 946,293 946,307"/>
-    <path class="connector amber dash" data-connector="miss" d="M1178 300 L1230 300"/>
-    <polyline class="head amber" points="1230,300 1218,293 1218,307"/>
-    <path class="connector amber dash" data-connector="miss" d="M1440 300 L1482 300"/>
-    <polyline class="head amber" points="1482,300 1470,293 1470,307"/>
+    <path class="connector blue" data-connector="lookup" d="M306 300 L344 300"/>
+    <polyline class="head blue" points="344,293 356,300 344,307" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <path class="connector blue" data-connector="lookup" d="M586 300 L630 300"/>
+    <polyline class="head blue" points="630,293 642,300 630,307" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <path class="connector green" data-connector="lookup" d="M902 300 L946 300"/>
+    <polyline class="head green" points="946,293 958,300 946,307" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <path class="connector amber dash" data-connector="miss" d="M1178 300 L1218 300" stroke-linecap="butt"/>
+    <polyline class="head amber" points="1218,293 1230,300 1218,307" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <path class="connector amber dash" data-connector="miss" d="M1440 300 L1470 300" stroke-linecap="butt"/>
+    <polyline class="head amber" points="1470,293 1482,300 1470,307" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   </g>
 
   <g id="labels">
@@ -114,27 +114,52 @@
   </g>
 
   <g id="populate-corridor">
-    <path class="connector amber" data-connector="db-read" d="M1547 360 L1547 562"/>
-    <polyline class="head amber" points="1547,562 1540,550 1554,550"/>
-    <path class="connector green" data-connector="populate" d="M1547 562 L1335 562"/>
-    <polyline class="head green" points="1335,562 1347,555 1347,569"/>
-    <path class="connector green" data-connector="populate" d="M1335 562 L1068 562"/>
-    <polyline class="head green" points="1068,562 1080,555 1080,569"/>
-    <path class="connector teal" data-connector="return" d="M1068 620 L772 620"/>
-    <polyline class="head teal" points="772,620 784,613 784,627"/>
-    <path class="connector teal" data-connector="return" d="M772 620 L471 620"/>
-    <polyline class="head teal" points="471,620 483,613 483,627"/>
+    <g data-card="Return UserRecord" data-x="510" data-y="565" data-width="270" data-height="110">
+      <rect class="card" x="510" y="565" width="270" height="110" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+      <path class="header" d="M510,611 L510,579 Q510,565 524,565 L766,565 Q780,565 780,579 L780,611 Z" fill="#eef8f7"/>
+      <text class="stereo" x="645" y="589" text-anchor="middle">&lt;&lt;response&gt;&gt;</text>
+      <text class="cardTitle" x="645" y="612" text-anchor="middle">Return UserRecord</text>
+      <text class="detail" x="534" y="642">repository result</text>
+      <text class="small" x="534" y="664">suspend endpoint resumes</text>
+    </g>
 
-    <rect class="label" x="1418" y="526" width="198" height="32" rx="16" stroke="#c59a63"/>
-    <text class="labelText" x="1517" y="547" text-anchor="middle">select + map ResultRow</text>
-    <rect class="label" x="1156" y="526" width="178" height="32" rx="16" stroke="#8ebf83"/>
-    <text class="labelText" x="1245" y="547" text-anchor="middle">store Redis value</text>
-    <rect class="label" x="870" y="526" width="176" height="32" rx="16" stroke="#8ebf83"/>
-    <text class="labelText" x="958" y="547" text-anchor="middle">warm near cache</text>
-    <rect class="label" x="554" y="584" width="190" height="32" rx="16" stroke="#8ac7c2"/>
-    <text class="labelText" x="649" y="605" text-anchor="middle">return UserRecord</text>
+    <g data-card="Near Cache Warm" data-x="860" data-y="565" data-width="240" data-height="110">
+      <rect class="card" x="860" y="565" width="240" height="110" rx="14" fill="#ffffff" stroke="#6f8f52"/>
+      <path class="header" d="M860,611 L860,579 Q860,565 874,565 L1086,565 Q1100,565 1100,579 L1100,611 Z" fill="#f2f8ed"/>
+      <text class="stereo" x="980" y="589" text-anchor="middle">&lt;&lt;L1 populate&gt;&gt;</text>
+      <text class="cardTitle" x="980" y="612" text-anchor="middle">Warm Near Cache</text>
+      <text class="detail" x="884" y="642">Caffeine entry</text>
+      <text class="small" x="884" y="664">next read can skip Redis</text>
+    </g>
+
+    <g data-card="Redis Populate" data-x="1160" data-y="565" data-width="230" data-height="110">
+      <rect class="card" x="1160" y="565" width="230" height="110" rx="14" fill="#ffffff" stroke="#6f8f52"/>
+      <path class="header" d="M1160,611 L1160,579 Q1160,565 1174,565 L1376,565 Q1390,565 1390,579 L1390,611 Z" fill="#f2f8ed"/>
+      <text class="stereo" x="1275" y="589" text-anchor="middle">&lt;&lt;L2 populate&gt;&gt;</text>
+      <text class="cardTitle" x="1275" y="612" text-anchor="middle">Store Redis Value</text>
+      <text class="detail" x="1184" y="642">MapCache write</text>
+      <text class="small" x="1184" y="664">prefix exposed:coroutines:users</text>
+    </g>
+
+    <g data-card="DB Read" data-x="1462" data-y="565" data-width="170" data-height="110">
+      <rect class="card" x="1462" y="565" width="170" height="110" rx="14" fill="#ffffff" stroke="#a36f3e"/>
+      <path class="header" d="M1462,611 L1462,579 Q1462,565 1476,565 L1618,565 Q1632,565 1632,579 L1632,611 Z" fill="#fff5e8"/>
+      <text class="stereo" x="1547" y="589" text-anchor="middle">&lt;&lt;R2DBC&gt;&gt;</text>
+      <text class="cardTitle" x="1547" y="612" text-anchor="middle">DB Read</text>
+      <text class="detail" x="1484" y="642">select users</text>
+      <text class="small" x="1484" y="664">map ResultRow</text>
+    </g>
+
+    <path class="connector amber" data-connector="db-read" d="M1547 360 L1547 549"/>
+    <polyline class="head amber" points="1540,549 1547,565 1554,549" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <path class="connector green" data-connector="populate" d="M1462 620 L1406 620"/>
+    <polyline class="head green" points="1406,612 1390,620 1406,628" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <path class="connector green" data-connector="populate" d="M1160 620 L1116 620"/>
+    <polyline class="head green" points="1116,612 1100,620 1116,628" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <path class="connector teal" data-connector="return" d="M860 620 L796 620"/>
+    <polyline class="head teal" points="796,612 780,620 796,628" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   </g>
 
   <rect x="110" y="815" width="1480" height="34" rx="12" fill="#fbfdff" stroke="#d7e3ed" stroke-width="2"/>
-  <text class="foot" x="850" y="838" text-anchor="middle">Read-through miss fetches from DB, writes Redis MapCache, warms Caffeine Near Cache, then returns the UserRecord to the suspend endpoint.</text>
+  <text class="foot" x="850" y="838" text-anchor="middle">Solid lines show lookup/populate/return; dashed amber means cache miss fallback. DB read writes Redis MapCache, warms Caffeine, then returns UserRecord.</text>
 </svg>
