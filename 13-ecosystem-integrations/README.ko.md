@@ -18,6 +18,9 @@ engine, embedded analytics store를 포함합니다. 이 R2DBC workshop은 같�
 | [`04-starrocks-olap-local`](04-starrocks-olap-local/) | OLAP rollup row를 준비하고 StarRocks adapter boundary를 문서화 | H2 R2DBC local projection, StarRocks server 없음 |
 | [`09-duckdb-embedded-analytics`](09-duckdb-embedded-analytics/) | Embedded analytics lesson을 유지하면서 DuckDB JDBC boundary를 문서화 | H2 R2DBC local projection, DuckDB driver 없음 |
 
+각 예제 README는 별도의 ERD와 Sequence Diagram을 포함합니다. Source를 먼저 열지
+않아도 local schema/request model과 기본 실행 흐름을 확인할 수 있습니다.
+
 ## 아키텍처
 
 13장은 세 가지 경계를 분리합니다.

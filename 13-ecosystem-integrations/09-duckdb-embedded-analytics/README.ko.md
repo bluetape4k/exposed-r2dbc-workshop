@@ -13,6 +13,16 @@ projection을 사용합니다.
 - Grouped analytics SQL을 렌더링합니다.
 - 이 workshop에서 DuckDB를 JDBC 중심 embedded engine으로 보는 이유를 문서화합니다.
 
+## 다이어그램
+
+ERD는 local order event, DTO row, daily category sales, DuckDB boundary note를
+보여줍니다. Sequence Diagram은 H2 R2DBC projection을 보여주면서 DuckDB path를
+명시적인 non-default 경계로 유지합니다.
+
+![DuckDB embedded analytics ERD](../../docs/assets/readme-diagrams/issue-115-chapter13-09-duckdb-embedded-analytics-erd-01.png)
+
+![DuckDB embedded analytics sequence](../../docs/assets/readme-diagrams/issue-115-chapter13-09-duckdb-embedded-analytics-sequence-01.png)
+
 ## 검증
 
 ```bash
