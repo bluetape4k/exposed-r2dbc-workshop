@@ -1,46 +1,72 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 830" width="1280" height="830" role="img" aria-label="Spring Boot Spring Webflux Exposed Erd diagram">
-<defs><filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12" /></filter><style>.canvas{fill:#f6f9fc}.frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}.lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}.card{filter:url(#shadow)}.header{opacity:.96}.title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:30px;fill:#1e293b}.subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}.tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}.laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:15px;letter-spacing:.08em;fill:#8ca2b4}.cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:17px;fill:#1e293b}.connector{fill:none;stroke:#64748b;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}.use{fill:none;stroke-width:2;stroke-dasharray:7 6;stroke-linecap:round;stroke-linejoin:round}.rel{fill:none;stroke:#64748b;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.head{fill:white;stroke:#64748b;stroke-width:2.4;stroke-dasharray:none;style:stroke-dasharray:none}.labelPill{fill:#fff;stroke:#d7e2ec;stroke-width:1}.noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.2}</style></defs>
-<rect width="1280" height="830" class="canvas"/><rect x="22" y="22" width="1236" height="786" rx="18" class="frame"/>
-<text x="58" y="68" class="title" text-anchor="start">Spring Boot Spring Webflux Exposed Erd</text>
-<text x="58" y="96" class="subtitle" text-anchor="start">ERD relationship view: explicit 1/N cardinalities and non-overlapping relationship labels.</text>
-<rect x="48" y="126" width="1184" height="438" rx="16" class="lane"/><text x="72" y="156" class="laneTitle" text-anchor="start">RELATIONAL MODEL</text>
-<rect x="48" y="588" width="1184" height="118" rx="16" class="lane"/><text x="72" y="618" class="laneTitle" text-anchor="start">READER CONTRACT</text>
-<g data-card="ERD tables and relation…" data-x="105" data-y="250" data-width="270" data-height="118">
-<rect x="105" y="250" width="270" height="118" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card"/>
-<path class="header" d="M105,292 L105,264 Q105,250 119,250 L361,250 Q375,250 375,264 L375,292 Z" fill="#eef5fa"/>
-<text x="240.0" y="268" class="tiny" text-anchor="middle">&lt;&lt;table&gt;&gt;</text>
-<text x="240.0" y="287" class="cardTitle" text-anchor="middle">ERD tables and relation…</text>
-<text x="123" y="312" class="detail" text-anchor="start">id primary key</text>
-<text x="123" y="329" class="detail" text-anchor="start">domain columns</text>
-<text x="123" y="346" class="detail" text-anchor="start">relation endpoint</text>
-</g>
-<g data-card="Child table" data-x="505" data-y="250" data-width="270" data-height="118">
-<rect x="505" y="250" width="270" height="118" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card"/>
-<path class="header" d="M505,292 L505,264 Q505,250 519,250 L761,250 Q775,250 775,264 L775,292 Z" fill="#f1f6ec"/>
-<text x="640.0" y="268" class="tiny" text-anchor="middle">&lt;&lt;table&gt;&gt;</text>
-<text x="640.0" y="287" class="cardTitle" text-anchor="middle">Child table</text>
-<text x="523" y="312" class="detail" text-anchor="start">id primary key</text>
-<text x="523" y="329" class="detail" text-anchor="start">domain columns</text>
-<text x="523" y="346" class="detail" text-anchor="start">relation endpoint</text>
-</g>
-<g data-card="Lookup table" data-x="905" data-y="250" data-width="270" data-height="118">
-<rect x="905" y="250" width="270" height="118" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card"/>
-<path class="header" d="M905,292 L905,264 Q905,250 919,250 L1161,250 Q1175,250 1175,264 L1175,292 Z" fill="#f5eee4"/>
-<text x="1040.0" y="268" class="tiny" text-anchor="middle">&lt;&lt;table&gt;&gt;</text>
-<text x="1040.0" y="287" class="cardTitle" text-anchor="middle">Lookup table</text>
-<text x="923" y="312" class="detail" text-anchor="start">id primary key</text>
-<text x="923" y="329" class="detail" text-anchor="start">domain columns</text>
-<text x="923" y="346" class="detail" text-anchor="start">relation endpoint</text>
-</g>
-<path class="rel connector" data-connector="erd-relation" d="M 375 309 L 505 309" stroke="#a66a3f"/>
-<text x="397" y="297" class="cardTitle" text-anchor="middle">1</text>
-<text x="483" y="297" class="cardTitle" text-anchor="middle">N</text>
-<rect x="385" y="271" width="110" height="24" rx="9" class="labelPill"/>
-<text x="440" y="288" class="tiny" text-anchor="middle">fk / owner</text>
-<path class="rel connector" data-connector="erd-relation" d="M 775 309 L 905 309" stroke="#4f8f8b"/>
-<text x="797" y="297" class="cardTitle" text-anchor="middle">1</text>
-<text x="883" y="297" class="cardTitle" text-anchor="middle">N</text>
-<rect x="785" y="271" width="110" height="24" rx="9" class="labelPill"/>
-<text x="840" y="288" class="tiny" text-anchor="middle">fk / child</text>
-<rect x="86" y="646" width="1108" height="30" rx="10" class="noteBox"/><text x="640" y="666" class="note" text-anchor="middle">Card placement avoids grid ambiguity; each relation shows endpoint cardinality and a separate label pill.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 600" width="1280" height="600" role="img" aria-label="Spring WebFlux Exposed R2DBC movie actor ERD">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12"/></filter>
+    <style>
+      .canvas{fill:#f6f9fc}.frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}.lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}
+      .card{filter:url(#shadow)}.title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:32px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:16px;letter-spacing:.08em;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:20px;fill:#1e293b}
+      .stereo{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#6b7f92;font-weight:700}
+      .rel{fill:none;stroke:#64748b;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+      .cardinality{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#1e293b;font-weight:800}
+      .labelPill{fill:#fff;stroke:#d7e2ec;stroke-width:1.2}.noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.2}
+    </style>
+  </defs>
+  <rect class="canvas" width="1280" height="600"/>
+  <rect class="frame" x="22" y="22" width="1236" height="556" rx="18"/>
+  <text class="title" x="70" y="86">Spring WebFlux Movie Actor ERD</text>
+  <text class="subtitle" x="72" y="118">MovieSchema defines a many-to-many relationship through actors_in_movies with composite primary key FKs.</text>
+
+  <rect class="lane" x="54" y="162" width="1172" height="280" rx="18"/>
+  <text class="laneTitle" x="84" y="198">RELATIONAL MODEL</text>
+
+  <g class="card" data-node="movies">
+    <rect x="88" y="226" width="306" height="150" rx="14" fill="#eef6ff" stroke="#4f86c6" stroke-width="2"/>
+    <rect x="88" y="226" width="306" height="42" rx="14" fill="#e6f1fb" stroke="#4f86c6" stroke-width="0"/>
+    <text class="stereo" x="241" y="248" text-anchor="middle">&lt;&lt;LongIdTable&gt;&gt;</text>
+    <text class="cardTitle" x="241" y="270" text-anchor="middle">movies</text>
+    <text class="detail" x="118" y="300">id PK</text>
+    <text class="detail" x="118" y="322">name idx</text>
+    <text class="detail" x="118" y="344">producer_name idx</text>
+    <text class="detail" x="118" y="366">release_date</text>
+  </g>
+
+  <g class="card" data-node="actors_in_movies">
+    <rect x="488" y="226" width="306" height="150" rx="14" fill="#f1f8ed" stroke="#6f8f52" stroke-width="2"/>
+    <rect x="488" y="226" width="306" height="42" rx="14" fill="#e9f3e5" stroke="#6f8f52" stroke-width="0"/>
+    <text class="stereo" x="641" y="248" text-anchor="middle">&lt;&lt;Table&gt;&gt;</text>
+    <text class="cardTitle" x="641" y="270" text-anchor="middle">actors_in_movies</text>
+    <text class="detail" x="518" y="300">movie_id FK / PK</text>
+    <text class="detail" x="518" y="322">actor_id FK / PK</text>
+    <text class="detail" x="518" y="344">PK(movie_id, actor_id)</text>
+    <text class="detail" x="518" y="366">onDelete CASCADE</text>
+  </g>
+
+  <g class="card" data-node="actors">
+    <rect x="888" y="226" width="306" height="150" rx="14" fill="#fff7ed" stroke="#a66a3f" stroke-width="2"/>
+    <rect x="888" y="226" width="306" height="42" rx="14" fill="#f7eee4" stroke="#a66a3f" stroke-width="0"/>
+    <text class="stereo" x="1041" y="248" text-anchor="middle">&lt;&lt;LongIdTable&gt;&gt;</text>
+    <text class="cardTitle" x="1041" y="270" text-anchor="middle">actors</text>
+    <text class="detail" x="918" y="300">id PK</text>
+    <text class="detail" x="918" y="322">first_name idx</text>
+    <text class="detail" x="918" y="344">last_name idx</text>
+    <text class="detail" x="918" y="366">birthday nullable</text>
+  </g>
+
+  <path class="rel" d="M 394 300 H 488"/>
+  <rect class="labelPill" x="418" y="264" width="54" height="24" rx="9"/>
+  <text class="tiny" x="445" y="281" text-anchor="middle">movie_id</text>
+  <text class="cardinality" x="408" y="317" text-anchor="middle">1</text>
+  <text class="cardinality" x="476" y="317" text-anchor="middle">N</text>
+
+  <path class="rel" d="M 794 322 H 888"/>
+  <rect class="labelPill" x="818" y="286" width="54" height="24" rx="9"/>
+  <text class="tiny" x="845" y="303" text-anchor="middle">actor_id</text>
+  <text class="cardinality" x="808" y="339" text-anchor="middle">N</text>
+  <text class="cardinality" x="876" y="339" text-anchor="middle">1</text>
+
+  <rect x="96" y="498" width="1088" height="30" rx="10" class="noteBox"/>
+  <text x="640" y="518" class="note" text-anchor="middle">movies and actors are both 1:N to actors_in_movies; the join table owns both foreign keys and the composite primary key.</text>
 </svg>
