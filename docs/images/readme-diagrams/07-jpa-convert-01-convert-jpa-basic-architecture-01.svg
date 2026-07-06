@@ -9,6 +9,7 @@
       .subtitle,.note{font-family:'Comic Mono','Architects Daughter',monospace;font-size:16px;fill:#526173;font-weight:700;}
       .lane{fill:#F7FAFD;stroke:#d7e2ec;stroke-width:1.6;}
       .laneTitle{font-family:'Architects Daughter','Comic Mono',monospace;font-size:20px;letter-spacing:3px;fill:#9aaec0;}
+      .laneLabelBg{fill:#F7FAFD;}
       .card{fill:#FFFFFF;stroke-width:2.2;}
       .blue{stroke:#4f86c6;fill:#EEF6FF;}
       .green{stroke:#6f8f52;fill:#F1F8EC;}
@@ -178,6 +179,15 @@
 
   <rect class="label" x="666" y="622" width="274" height="28" rx="14"/>
   <text class="labelText" x="803" y="640" text-anchor="middle">relationship examples also feed the ERD</text>
+
+  <rect class="laneLabelBg" x="78" y="190" width="470" height="28" rx="8"/>
+  <text class="laneTitle" x="86" y="210">JPA PATTERNS BEING REPLACED</text>
+  <rect class="laneLabelBg" x="78" y="426" width="570" height="28" rx="8"/>
+  <text class="laneTitle" x="86" y="446">EXPOSED R2DBC TARGET PATTERNS</text>
+  <rect class="laneLabelBg" x="78" y="678" width="680" height="28" rx="8"/>
+  <text class="laneTitle" x="86" y="698">SOURCE EXAMPLES THAT PROVE THE MAPPING</text>
+  <rect class="laneLabelBg" x="78" y="922" width="270" height="28" rx="8"/>
+  <text class="laneTitle" x="86" y="942">READER CONTRACT</text>
 
   <rect class="noteBox" x="94" y="956" width="1418" height="32" rx="12"/>
   <text class="note" x="803" y="977" text-anchor="middle">The module is test-only: each mapping is exercised through withTables()/withDb(), R2DBC DSL calls, Flow collection, and source-defined schemas.</text>
