@@ -19,34 +19,20 @@
       .kind{font-family:'Comic Mono','Architects Daughter',monospace;font-size:14px;font-weight:800;fill:#64748b;}
       .cardTitle{font-family:'Architects Daughter','Comic Mono',monospace;font-size:25px;fill:#263241;}
       .detail{font-family:'Comic Mono','Architects Daughter',monospace;font-size:16px;font-weight:800;fill:#526173;}
-      .edge{fill:none;stroke:#5f7180;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#flowArrow);}
-      .edgeBlue{stroke:#3f86bd;marker-end:url(#arrowBlue);}
-      .edgeGreen{stroke:#6f8f52;marker-end:url(#arrowGreen);}
-      .edgeAmber{stroke:#a66a3f;marker-end:url(#arrowAmber);}
-      .edgeTeal{stroke:#4f9d96;marker-end:url(#arrowTeal);}
-      .edgeRose{stroke:#b05d83;marker-end:url(#arrowRose);}
+      .edge{fill:none;stroke:#5f7180;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;}
+      .edgeBlue{stroke:#3f86bd;}
+      .edgeGreen{stroke:#6f8f52;}
+      .edgeAmber{stroke:#a66a3f;}
+      .edgeTeal{stroke:#4f9d96;}
+      .edgeRose{stroke:#b05d83;}
+      .headBlue{fill:#3f86bd;stroke:#3f86bd;stroke-width:2;stroke-dasharray:none;style:stroke-dasharray:none!important;}
+      .headGreen{fill:#6f8f52;stroke:#6f8f52;stroke-width:2;stroke-dasharray:none;style:stroke-dasharray:none!important;}
+      .headAmber{fill:#a66a3f;stroke:#a66a3f;stroke-width:2;stroke-dasharray:none;style:stroke-dasharray:none!important;}
+      .headRose{fill:#b05d83;stroke:#b05d83;stroke-width:2;stroke-dasharray:none;style:stroke-dasharray:none!important;}
       .label{fill:#FFFFFF;stroke:#d7e2ec;stroke-width:1.4;}
       .labelText{font-family:'Comic Mono','Architects Daughter',monospace;font-size:13px;font-weight:800;fill:#536473;}
       .noteBox{fill:#ECFFF4;stroke:#65df93;stroke-width:1.6;}
     </style>
-    <marker id="flowArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
-      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#5f7180" stroke="#5f7180" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-    </marker>
-    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
-      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#3f86bd" stroke="#3f86bd" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-    </marker>
-    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
-      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f8f52" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-    </marker>
-    <marker id="arrowAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
-      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#a66a3f" stroke="#a66a3f" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-    </marker>
-    <marker id="arrowTeal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
-      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f9d96" stroke="#4f9d96" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-    </marker>
-    <marker id="arrowRose" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
-      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#b05d83" stroke="#b05d83" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-    </marker>
   </defs>
 
   <rect class="canvas" width="1600" height="1120"/>
@@ -66,7 +52,7 @@
     <rect class="cardBand" x="128" y="304" width="246" height="1"/>
     <text class="kind" x="251" y="274" text-anchor="middle">&lt;&lt;Table DSL&gt;&gt;</text>
     <text class="cardTitle" x="251" y="304" text-anchor="middle">Table / IdTable</text>
-    <text class="detail" x="151" y="336">IntIdTable, LongIdTable</text>
+    <text class="detail" x="151" y="336">IntIdTable, IdTable</text>
   </g>
   <g data-card="column-constraints" data-x="470" data-y="248" data-width="250" data-height="116">
     <rect class="card green" x="470" y="248" width="250" height="116" rx="12"/>
@@ -129,7 +115,7 @@
     <rect class="card green" x="470" y="808" width="250" height="106" rx="12"/>
     <text class="kind" x="595" y="834" text-anchor="middle">&lt;&lt;schema&gt;&gt;</text>
     <text class="cardTitle" x="595" y="864" text-anchor="middle">Columns + unique</text>
-    <text class="detail" x="495" y="896">nullable, defaults, checks</text>
+    <text class="detail" x="495" y="896">nullable, defaults</text>
   </g>
   <g data-card="indexes-effect" data-x="814" data-y="808" data-width="250" data-height="106">
     <rect class="card amber" x="814" y="808" width="250" height="106" rx="12"/>
@@ -144,18 +130,27 @@
     <text class="detail" x="1183" y="896">H2, Postgres, MySQL</text>
   </g>
 
-  <path class="edge edgeBlue" d="M 251 364 V 518"/>
-  <path class="edge edgeGreen" d="M 595 364 V 518"/>
-  <path class="edge edgeAmber" d="M 939 364 V 518"/>
-  <path class="edge edgeRose" d="M 1283 364 V 518"/>
-  <path class="edge edgeAmber" d="M 1064 586 H 1148"/>
+  <path class="edge edgeBlue" d="M 251 364 V 502"/>
+  <polygon class="headBlue" points="251,518 243,502 259,502" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="edge edgeGreen" d="M 595 364 V 502"/>
+  <polygon class="headGreen" points="595,518 587,502 603,502" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="edge edgeAmber" d="M 939 364 V 502"/>
+  <polygon class="headAmber" points="939,518 931,502 947,502" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="edge edgeRose" d="M 1283 364 V 502"/>
+  <polygon class="headRose" points="1283,518 1275,502 1291,502" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="edge edgeAmber" d="M 1064 586 H 1132"/>
+  <polygon class="headAmber" points="1148,586 1132,578 1132,594" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <rect class="label" x="1068" y="550" width="80" height="24" rx="12"/>
   <text class="labelText" x="1108" y="566" text-anchor="middle">batch</text>
 
-  <path class="edge edgeBlue" d="M 251 644 V 798"/>
-  <path class="edge edgeGreen" d="M 595 644 V 798"/>
-  <path class="edge edgeAmber" d="M 939 644 V 798"/>
-  <path class="edge edgeRose" d="M 1283 644 V 798"/>
+  <path class="edge edgeBlue" d="M 251 644 V 782"/>
+  <polygon class="headBlue" points="251,798 243,782 259,782" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="edge edgeGreen" d="M 595 644 V 782"/>
+  <polygon class="headGreen" points="595,798 587,782 603,782" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="edge edgeAmber" d="M 939 644 V 782"/>
+  <polygon class="headAmber" points="939,798 931,782 947,782" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="edge edgeRose" d="M 1283 644 V 782"/>
+  <polygon class="headRose" points="1283,798 1275,782 1291,782" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <rect class="noteBox" x="96" y="1010" width="1408" height="34" rx="12"/>
   <text class="note" x="800" y="1032" text-anchor="middle">Solid arrows show source-code responsibility handoffs from table declarations to R2DBC DDL APIs and persisted schema effects.</text>

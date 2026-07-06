@@ -34,7 +34,7 @@
   <rect class="canvas" width="1500" height="1120"/>
   <rect class="frame" x="28" y="28" width="1444" height="1064" rx="24"/>
   <text class="title" x="66" y="86">Exposed R2DBC DDL Class Relationships</text>
-  <text class="subtitle" x="68" y="124">Repository-backed UML view for table inheritance, schema object ownership, and DDL helper dependencies.</text>
+  <text class="subtitle" x="68" y="124">Source-backed UML view for Ex02-Ex10 table DSL inheritance, DDL helpers, migrations, indexes, enums, and sequences.</text>
 
   <rect class="lane" x="58" y="166" width="1384" height="368" rx="18"/>
   <text class="laneTitle" x="86" y="210">TABLE INHERITANCE AND MEMBERS</text>
@@ -48,7 +48,7 @@
     <rect class="band" x="120" y="306" width="246" height="1"/>
     <text class="kind" x="243" y="280" text-anchor="middle">&lt;&lt;schema member&gt;&gt;</text>
     <text class="name" x="243" y="309" text-anchor="middle">Column&lt;T&gt;</text>
-    <text class="member" x="146" y="338">varchar, integer, reference</text>
+    <text class="member" x="146" y="338">Ex04/05/07 columns</text>
   </g>
 
   <g data-card="table" data-x="610" data-y="226" data-width="280" data-height="106">
@@ -80,15 +80,15 @@
     <rect class="band" x="130" y="742" width="240" height="1"/>
     <text class="kind" x="250" y="716" text-anchor="middle">&lt;&lt;concrete&gt;&gt;</text>
     <text class="name" x="250" y="745" text-anchor="middle">IntIdTable</text>
-    <text class="member" x="156" y="774">Orders, Products</text>
+    <text class="member" x="156" y="774">Ex02/05/07/10 tables</text>
   </g>
 
-  <g data-card="longidtable" data-x="456" data-y="690" data-width="244" data-height="104">
+  <g data-card="idtable-string" data-x="456" data-y="690" data-width="244" data-height="104">
     <rect class="card teal" x="456" y="690" width="244" height="104" rx="12"/>
     <rect class="band" x="458" y="742" width="240" height="1"/>
     <text class="kind" x="578" y="716" text-anchor="middle">&lt;&lt;concrete&gt;&gt;</text>
-    <text class="name" x="578" y="745" text-anchor="middle">LongIdTable</text>
-    <text class="member" x="484" y="774">parent / child</text>
+    <text class="name" x="578" y="745" text-anchor="middle">IdTable&lt;String&gt;</text>
+    <text class="member" x="484" y="774">Ex02/03 custom id</text>
   </g>
 
   <g data-card="custom-table" data-x="784" data-y="690" data-width="244" data-height="104">
@@ -96,7 +96,7 @@
     <rect class="band" x="786" y="742" width="240" height="1"/>
     <text class="kind" x="906" y="716" text-anchor="middle">&lt;&lt;object : Table&gt;&gt;</text>
     <text class="name" x="906" y="745" text-anchor="middle">testerV1 / V2</text>
-    <text class="member" x="812" y="774">same table, new shape</text>
+    <text class="member" x="812" y="774">Ex03 same table, new shape</text>
   </g>
 
   <g data-card="sequence" data-x="1112" data-y="690" data-width="244" data-height="104">
@@ -104,7 +104,7 @@
     <rect class="band" x="1114" y="742" width="240" height="1"/>
     <text class="kind" x="1234" y="716" text-anchor="middle">&lt;&lt;database object&gt;&gt;</text>
     <text class="name" x="1234" y="745" text-anchor="middle">Sequence</text>
-    <text class="member" x="1140" y="774">nextIntVal(), cache</text>
+    <text class="member" x="1140" y="774">Ex06 create/nextVal</text>
   </g>
 
   <g data-card="schema-utils" data-x="292" data-y="840" data-width="276" data-height="104">
@@ -112,7 +112,7 @@
     <rect class="band" x="294" y="892" width="272" height="1"/>
     <text class="kind" x="430" y="866" text-anchor="middle">&lt;&lt;R2DBC helper&gt;&gt;</text>
     <text class="name" x="430" y="895" text-anchor="middle">SchemaUtils</text>
-    <text class="member" x="320" y="924">create, drop, createMissing</text>
+    <text class="member" x="320" y="924">Ex01/02/10 create/drop</text>
   </g>
 
   <g data-card="migration-utils" data-x="932" data-y="840" data-width="276" data-height="104">
@@ -120,7 +120,7 @@
     <rect class="band" x="934" y="892" width="272" height="1"/>
     <text class="kind" x="1070" y="866" text-anchor="middle">&lt;&lt;migration helper&gt;&gt;</text>
     <text class="name" x="1070" y="895" text-anchor="middle">MigrationUtils</text>
-    <text class="member" x="960" y="924">statementsRequired...</text>
+    <text class="member" x="960" y="924">Ex03 diff + execInBatch</text>
   </g>
 
   <path class="edge inherit" d="M 750 396 V 350"/>
