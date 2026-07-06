@@ -95,15 +95,15 @@
 
   <g id="lookup-connectors">
     <path class="connector blue" data-connector="lookup" d="M306 300 L344 300"/>
-    <polyline class="head blue" points="344,293 356,300 344,307" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <polygon points="356,300 344,293 344,307" fill="#4f86c6" stroke="#4f86c6" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
     <path class="connector blue" data-connector="lookup" d="M586 300 L630 300"/>
-    <polyline class="head blue" points="630,293 642,300 630,307" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <polygon points="642,300 630,293 630,307" fill="#4f86c6" stroke="#4f86c6" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
     <path class="connector green" data-connector="lookup" d="M902 300 L946 300"/>
-    <polyline class="head green" points="946,293 958,300 946,307" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <polygon points="958,300 946,293 946,307" fill="#6f8f52" stroke="#6f8f52" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
     <path class="connector amber dash" data-connector="miss" d="M1178 300 L1218 300" stroke-linecap="butt"/>
-    <polyline class="head amber" points="1218,293 1230,300 1218,307" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <polygon points="1230,300 1218,293 1218,307" fill="#a36f3e" stroke="#a36f3e" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
     <path class="connector amber dash" data-connector="miss" d="M1440 300 L1470 300" stroke-linecap="butt"/>
-    <polyline class="head amber" points="1470,293 1482,300 1470,307" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <polygon points="1482,300 1470,293 1470,307" fill="#a36f3e" stroke="#a36f3e" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   </g>
 
   <g id="labels">
@@ -151,13 +151,13 @@
     </g>
 
     <path class="connector amber" data-connector="db-read" d="M1547 360 L1547 549"/>
-    <polyline class="head amber" points="1540,549 1547,565 1554,549" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <polygon points="1547,565 1540,549 1554,549" fill="#a36f3e" stroke="#a36f3e" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
     <path class="connector green" data-connector="populate" d="M1462 620 L1406 620"/>
-    <polyline class="head green" points="1406,612 1390,620 1406,628" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <polygon points="1390,620 1406,612 1406,628" fill="#6f8f52" stroke="#6f8f52" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
     <path class="connector green" data-connector="populate" d="M1160 620 L1116 620"/>
-    <polyline class="head green" points="1116,612 1100,620 1116,628" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <polygon points="1100,620 1116,612 1116,628" fill="#6f8f52" stroke="#6f8f52" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
     <path class="connector teal" data-connector="return" d="M860 620 L796 620"/>
-    <polyline class="head teal" points="796,612 780,620 796,628" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <polygon points="780,620 796,612 796,628" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   </g>
 
   <rect x="110" y="815" width="1480" height="34" rx="12" fill="#fbfdff" stroke="#d7e3ed" stroke-width="2"/>

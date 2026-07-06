@@ -115,23 +115,23 @@
 
   <g id="inheritance">
     <path class="inherit" data-connector="inherit" d="M313 482 L313 418 Q313 392 339 392 L594 392 Q620 392 620 366 L620 352"/>
-    <polygon class="head" points="620,332 607,354 633,354"/>
+    <polygon class="head" points="620,336 611,354 629,354"/>
     <path class="inherit" data-connector="inherit" d="M799 482 L799 418 Q799 392 773 392 L724 392 Q705 392 705 366 L705 352"/>
-    <polygon class="head" points="705,332 692,354 718,354"/>
+    <polygon class="head" points="705,336 696,354 714,354"/>
     <path class="inherit" data-connector="inherit" d="M1285 482 L1285 418 Q1285 392 1259 392 L842 392 Q820 392 820 366 L820 352"/>
-    <polygon class="head" points="820,332 807,354 833,354"/>
+    <polygon class="head" points="820,336 811,354 829,354"/>
   </g>
 
   <g id="dependencies">
     <path class="use" data-connector="use" d="M313 838 L313 662" stroke="#4f86c6" stroke-linecap="butt"/>
-    <polyline class="openHead" points="304,662 313,648 322,662" stroke="#4f86c6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <polygon points="313,648 304,662 322,662" fill="#4f86c6" stroke="#4f86c6" stroke-width="2.7" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
     <path class="use" data-connector="use" d="M799 838 L799 662" stroke="#a85f7f" stroke-linecap="butt"/>
-    <polyline class="openHead" points="790,662 799,648 808,662" stroke="#a85f7f" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <polygon points="799,648 790,662 808,662" fill="#a85f7f" stroke="#a85f7f" stroke-width="2.7" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
     <path class="use" data-connector="use" d="M1285 838 L1285 662" stroke="#4f8f8b" stroke-linecap="butt"/>
-    <polyline class="openHead" points="1276,662 1285,648 1294,662" stroke="#4f8f8b" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <polygon points="1285,648 1276,662 1294,662" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="2.7" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   </g>
 
   <rect x="112" y="1038" width="1376" height="34" rx="12" fill="#fbfdff" stroke="#d7e3ed" stroke-width="2"/>
-  <text class="foot" x="800" y="1061" text-anchor="middle">Hollow triangles show inheritance from AbstractR2dbcRedissonRepository; dashed arrows show controller/repository dependencies with solid open heads.</text>
+  <text class="foot" x="800" y="1061" text-anchor="middle">Hollow triangles show inheritance from AbstractR2dbcRedissonRepository; dashed arrows show controller/repository dependencies with direct solid heads.</text>
 </svg>

@@ -96,11 +96,11 @@
   </g>
 
   <path class="connector blue" d="M400 610 H500" data-connector="routes-repository"/>
-  <polyline points="500,610 488,603 488,617" fill="none" stroke="#3f83b8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="500,610 488,603 488,617" fill="#3f83b8" stroke="#3f83b8" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <path class="connector amber" d="M890 610 H990" data-connector="repository-loader"/>
-  <polyline points="990,610 978,603 978,617" fill="none" stroke="#a36f3e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="990,610 978,603 978,617" fill="#a36f3e" stroke="#a36f3e" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <path class="connector rose" d="M1380 610 H1480" data-connector="loader-observation"/>
-  <polyline points="1480,610 1468,603 1468,617" fill="none" stroke="#a85f7f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="1480,610 1468,603 1468,617" fill="#a85f7f" stroke="#a85f7f" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <rect class="lane" x="60" y="835" width="1880" height="150" rx="18"/>
   <text class="laneTitle" x="86" y="870">OWNED RESOURCES</text>
@@ -117,9 +117,9 @@
   </g>
 
   <path class="connector teal" d="M680 715 V900" data-connector="repository-cache"/>
-  <polyline points="680,900 673,888 687,888" fill="none" stroke="#4f8f8b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="680,900 673,888 687,888" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <path class="connector brown" d="M1185 715 V900" data-connector="loader-db"/>
-  <polyline points="1185,900 1178,888 1192,888" fill="none" stroke="#8a6f55" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="1185,900 1178,888 1192,888" fill="#8a6f55" stroke="#8a6f55" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <rect class="note" x="120" y="1025" width="1760" height="34" rx="12"/>
   <text class="foot" x="1000" y="1048" text-anchor="middle">One producer owns DB fallback; waiters share the result or cancellation without stale in-flight entries.</text>

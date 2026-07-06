@@ -100,13 +100,13 @@
   </g>
 
   <path class="connector blue" d="M395 572 H470" data-connector="plugin-attribute"/>
-  <polyline points="470,572 458,565 458,579" fill="none" stroke="#3f83b8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="470,572 458,565 458,579" fill="#3f83b8" stroke="#3f83b8" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <path class="connector green" d="M770 572 H845" data-connector="attribute-routes"/>
-  <polyline points="845,572 833,565 833,579" fill="none" stroke="#6f8f52" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="845,572 833,565 833,579" fill="#6f8f52" stroke="#6f8f52" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <path class="connector amber" d="M1145 572 H1220" data-connector="routes-repository"/>
-  <polyline points="1220,572 1208,565 1208,579" fill="none" stroke="#a36f3e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="1220,572 1208,565 1208,579" fill="#a36f3e" stroke="#a36f3e" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <path class="connector rose" d="M1520 572 H1595" data-connector="repository-registry"/>
-  <polyline points="1595,572 1583,565 1583,579" fill="none" stroke="#a85f7f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="1595,572 1583,565 1583,579" fill="#a85f7f" stroke="#a85f7f" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <rect class="lane" x="60" y="725" width="1880" height="180" rx="18"/>
   <text class="laneTitle" x="86" y="760">OWNED R2DBC TARGETS</text>
@@ -120,7 +120,7 @@
   </g>
 
   <path class="connector teal" d="M1745 635 V780" data-connector="registry-h2"/>
-  <polyline points="1745,780 1738,768 1752,768" fill="none" stroke="#4f8f8b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="1745,780 1738,768 1752,768" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <rect class="note" x="120" y="958" width="1760" height="34" rx="12"/>
   <text class="foot" x="1000" y="981" text-anchor="middle">No Reactor Context or Spring transactions: each handler carries RoutingRequest into an explicit suspendTransaction database argument.</text>

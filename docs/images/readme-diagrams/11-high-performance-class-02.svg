@@ -74,12 +74,12 @@
     <text x="932" y="492" class="detail">put / putAll queue event writes</text>
   </g>
 
-  <path data-connector="user-repo-inherits" class="inherit connector" d="M247 400 L247 338 Q247 322 263 322 L548 322 Q564 322 564 306 L564 274"/>
-  <polygon points="564,274 554,292 574,292" fill="#ffffff" stroke="#64748b" stroke-width="2.5" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path data-connector="user-repo-inherits" class="inherit connector" d="M247 400 L247 338 Q247 322 263 322 L532 322 Q548 322 548 306 L548 274"/>
+  <polygon points="548,274 539,290 557,290" fill="#ffffff" stroke="#64748b" stroke-width="2.5" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <path data-connector="credentials-repo-inherits" class="inherit connector" d="M660 400 L660 338 Q660 322 644 322 L586 322 Q570 322 570 306 L570 274"/>
-  <polygon points="570,274 560,292 580,292" fill="#ffffff" stroke="#64748b" stroke-width="2.5" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-  <path data-connector="event-repo-inherits" class="inherit connector" d="M1073 400 L1073 338 Q1073 322 1057 322 L592 322 Q576 322 576 306 L576 274"/>
-  <polygon points="576,274 566,292 586,292" fill="#ffffff" stroke="#64748b" stroke-width="2.5" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="570,274 561,290 579,290" fill="#ffffff" stroke="#64748b" stroke-width="2.5" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path data-connector="event-repo-inherits" class="inherit connector" d="M1073 400 L1073 338 Q1073 322 1057 322 L608 322 Q592 322 592 306 L592 274"/>
+  <polygon points="592,274 583,290 601,290" fill="#ffffff" stroke="#64748b" stroke-width="2.5" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <g data-card="UserController" data-x="116" data-y="622" data-width="260" data-height="62">
     <rect x="116" y="622" width="260" height="62" rx="14" fill="#ffffff" stroke="#4f86c6" stroke-width="2.0" class="card"/>
@@ -98,9 +98,9 @@
   </g>
 
   <path data-connector="user-controller-uses" class="use connector" d="M246 622 L246 504" stroke="#4f86c6"/>
-  <polyline points="246,504 238,518 254,518" fill="none" stroke="#4f86c6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="246,504 238,518 254,518" fill="#4f86c6" stroke="#4f86c6" stroke-width="2.4" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <path data-connector="credentials-controller-uses" class="use connector" d="M660 622 L660 504" stroke="#4f8f8b"/>
-  <polyline points="660,504 652,518 668,518" fill="none" stroke="#4f8f8b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="660,504 652,518 668,518" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="2.4" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <path data-connector="event-controller-uses" class="use connector" d="M1074 622 L1074 504" stroke="#6f8f52"/>
-  <polyline points="1074,504 1066,518 1082,518" fill="none" stroke="#6f8f52" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <polygon points="1074,504 1066,518 1082,518" fill="#6f8f52" stroke="#6f8f52" stroke-width="2.4" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 </svg>
