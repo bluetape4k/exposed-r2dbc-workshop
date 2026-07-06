@@ -1,8 +1,97 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="860" viewBox="0 0 1420 860" role="img" aria-labelledby="title desc"><title id="title">Cockroach Inventory Schema</title><desc id="desc">Inventory rows own quantity/version state; ledger rows record successful reservations by SKU.</desc><defs><filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#203040" flood-opacity="0.10"/></filter><marker id="arrowRel" markerWidth="14" markerHeight="14" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#758297" stroke="#758297" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker><marker id="arrowCall" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#4F83BF" stroke="#4F83BF" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker><marker id="arrowState" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#6E8F4F" stroke="#6E8F4F" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker><marker id="arrowSlot" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#A2743D" stroke="#A2743D" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker><marker id="arrowReturn" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2E8F89" stroke="#2E8F89" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker><marker id="arrowSkip" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#B86868" stroke="#B86868" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker><style>
-  text{letter-spacing:0}.title{font-family:"Architects Daughter";font-size:39px;font-weight:400;fill:#263238}.subtitle,.small,.msg,.note,.footer,.role{font-family:"Comic Mono";fill:#36464f}.subtitle{font-size:16px}.entityTitle,.participant{font-family:"Architects Daughter";font-size:21px;font-weight:400;fill:#1f3138}.role,.small{font-size:13px;fill:#546a73}.attr{font-family:"Comic Mono";font-size:13px;fill:#36464f}.canvas{fill:#F6F9FC}.frame{fill:#fbfcf8;stroke:#41545d;stroke-width:3}.card,.header{fill:#fff;stroke:#546e7a;stroke-width:2;filter:url(#shadow)}.entity{stroke-width:2.2;filter:url(#shadow)}.divider{stroke-width:1.4}.rel{fill:none;stroke:#758297;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrowRel)}.relDash{fill:none;stroke:#758297;stroke-width:2.4;stroke-dasharray:8 7;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrowRel)}.relLabel{fill:#fff;stroke:#d7e0e4;stroke-width:1.4}.lifeline{stroke:#9aaab1;stroke-width:2;stroke-dasharray:7 8}.activation{fill:#f3ecdf;stroke:#8f784e;stroke-width:1.5}.call,.state,.slot,.skip{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.return,.ret{fill:none;stroke-width:2.5;stroke-dasharray:8 6;stroke-linecap:round;stroke-linejoin:round}.alt{fill:none;stroke:#78909c;stroke-width:3;stroke-dasharray:12 7}.branchDivider{stroke:#78909c;stroke-width:3;stroke-dasharray:12 8}.pill,.label{fill:#fff;stroke:#d7e0e4;stroke-width:1.5}.badgeText{font-family:"Comic Mono";font-size:12px;font-weight:700}.msg{font-size:14px}.callText{fill:#2f6f8e}.stateText{fill:#55783f}.slotText{fill:#855a29}.returnText{fill:#2d7772}.skipText{fill:#9d4f4f}.callLabel{stroke:#9cc2d1}.stateLabel{stroke:#b6c9a4}.slotLabel{stroke:#d0b078}.returnLabel{stroke:#8fc5bf}.skipLabel{stroke:#d9abab}.callBadge{fill:#eaf4f8;stroke:#4F83BF}.stateBadge{fill:#eef7f0;stroke:#6E8F4F}.slotBadge{fill:#fff4df;stroke:#A2743D}.returnBadge{fill:#eaf7f6;stroke:#2E8F89}.skipBadge{fill:#fff0f0;stroke:#B86868}
-</style></defs><rect class="canvas" width="1420" height="860"/><rect class="frame" x="28" y="26" width="1364" height="808" rx="26"/><text class="title" x="62" y="82">Cockroach Inventory Schema</text><text class="subtitle" x="66" y="114">Inventory rows own quantity/version state; ledger rows record successful reservations by SKU.</text><path class="rel" data-connector="erd-1" d="M 360 339.5 H 362 Q 380 339.5 380 339.5 Q 380 339.5 398 339.5 H 400"/>
-<path class="rel" data-connector="erd-2" d="M 360 357.5 H 527 Q 545 357.5 545 357.5 Q 545 357.5 563 357.5 H 730"/>
-<path class="relDash" data-connector="erd-3" d="M 1350 375.5 H 692 Q 710 375.5 710 375.5 Q 710 375.5 728 375.5 H 70"/><g id="entity-cockroach_inventory_items" transform="translate(70,245)"><rect class="entity" x="0" y="0" width="290" height="225" rx="8" fill="#EAF4F8" stroke="#4F83BF"/><line class="divider" x1="0" y1="72" x2="290" y2="72" stroke="#4F83BF"/><text class="entityTitle" x="145" y="44" text-anchor="middle">cockroach_inventory_items</text><text class="attr" x="20" y="87">sku varchar(64) PK</text><text class="attr" x="20" y="118">quantity_on_hand int</text><text class="attr" x="20" y="149">version long</text></g>
-<g id="entity-cockroach_inventory_ledger" transform="translate(400,245)"><rect class="entity" x="0" y="0" width="290" height="225" rx="8" fill="#EEF7F0" stroke="#6E8F4F"/><line class="divider" x1="0" y1="72" x2="290" y2="72" stroke="#6E8F4F"/><text class="entityTitle" x="145" y="44" text-anchor="middle">cockroach_inventory_ledger</text><text class="attr" x="20" y="87">sku varchar(64)</text><text class="attr" x="20" y="118">quantity int</text><text class="attr" x="20" y="149">reason varchar(64)</text></g>
-<g id="entity-InventorySnapshot" transform="translate(730,245)"><rect class="entity" x="0" y="0" width="290" height="225" rx="8" fill="#FFF4DF" stroke="#A2743D"/><line class="divider" x1="0" y1="72" x2="290" y2="72" stroke="#A2743D"/><text class="entityTitle" x="145" y="44" text-anchor="middle">InventorySnapshot</text><text class="attr" x="20" y="87">sku</text><text class="attr" x="20" y="118">quantityOnHand</text><text class="attr" x="20" y="149">version</text></g>
-<g id="entity-Retry Policy" transform="translate(1060,245)"><rect class="entity" x="0" y="0" width="290" height="225" rx="8" fill="#FFF0F0" stroke="#B86868"/><line class="divider" x1="0" y1="72" x2="290" y2="72" stroke="#B86868"/><text class="entityTitle" x="145" y="44" text-anchor="middle">Retry Policy</text><text class="attr" x="20" y="87">maxAttempts</text><text class="attr" x="20" y="118">retry SQLSTATE 40001</text><text class="attr" x="20" y="149">fail others</text></g><rect x="70" y="730" width="1280" height="68" rx="14" fill="#ffffff" stroke="#d7e0e4" stroke-width="1.8"/><text class="note" x="96" y="758">ERD scope: table columns and DTO/request objects used by this README example.</text><text class="note" x="96" y="782">Relationships: inventory item creates ledger rows, projects snapshots, and is protected by SQLSTATE 40001 retry policy.</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="650" viewBox="0 0 1500 650" role="img" aria-labelledby="title desc">
+  <title id="title">Cockroach Inventory Schema</title>
+  <desc id="desc">Inventory rows own quantity and version state; ledger rows record successful reservations by SKU; the retry policy protects the transaction boundary.</desc>
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#203040" flood-opacity="0.10"/>
+    </filter>
+    <style>
+      text{letter-spacing:0}
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fffefa;stroke:#d7e3ed;stroke-width:2}
+      .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:39px;font-weight:400;fill:#1f2a37}
+      .subtitle,.attr,.note,.cardinality,.relText{font-family:"Comic Mono","SFMono-Regular",ui-monospace,monospace;font-weight:700;fill:#405268}
+      .subtitle{font-size:16px}
+      .entityTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:23px;font-weight:400;fill:#1f2a37}
+      .attr{font-size:15px}
+      .note{font-size:15px}
+      .cardinality{font-size:13px;fill:#53697c}
+      .relText{font-size:12px;fill:#53697c}
+      .entity{filter:url(#shadow);stroke-width:2.5}
+      .header{opacity:.95}
+      .divider{stroke-width:1.5}
+      .rel{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .relDash{fill:none;stroke-width:2.6;stroke-dasharray:9 8;stroke-linecap:butt;stroke-linejoin:round}
+      .relBox{fill:#fffefa;stroke:#d7e3ed;stroke-width:1.4}
+      .foot{fill:#f7fffe;stroke:#9fd0cb;stroke-width:2}
+    </style>
+  </defs>
+
+  <rect class="canvas" width="1500" height="650"/>
+  <rect class="frame" x="28" y="26" width="1444" height="598" rx="24"/>
+  <text id="diagram-title" class="title" x="68" y="86">Cockroach Inventory Schema</text>
+  <text class="subtitle" x="72" y="122">Retryable SQLSTATE 40001 reruns the reservation transaction; successful attempts leave one ledger row.</text>
+
+  <g data-card="Inventory items" data-x="74" data-y="200" data-width="318" data-height="210">
+    <rect class="entity" x="74" y="200" width="318" height="210" rx="10" fill="#eef7fd" stroke="#4f83bf"/>
+    <rect class="header" x="74" y="200" width="318" height="70" rx="10" fill="#e3f1fb"/>
+    <line class="divider" x1="74" y1="270" x2="392" y2="270" stroke="#4f83bf"/>
+    <text class="entityTitle" x="233" y="246" text-anchor="middle">cockroach_inventory_items</text>
+    <text class="attr" x="104" y="302">sku varchar(64) PK</text>
+    <text class="attr" x="104" y="336">quantity_on_hand int</text>
+    <text class="attr" x="104" y="370">version long</text>
+  </g>
+
+  <g data-card="Reservation ledger" data-x="510" data-y="200" data-width="318" data-height="210">
+    <rect class="entity" x="510" y="200" width="318" height="210" rx="10" fill="#f1f8ef" stroke="#6e8f4f"/>
+    <rect class="header" x="510" y="200" width="318" height="70" rx="10" fill="#e8f3e4"/>
+    <line class="divider" x1="510" y1="270" x2="828" y2="270" stroke="#6e8f4f"/>
+    <text class="entityTitle" x="669" y="246" text-anchor="middle">cockroach_inventory_ledger</text>
+    <text class="attr" x="540" y="302">sku varchar(64) FK</text>
+    <text class="attr" x="540" y="336">quantity int</text>
+    <text class="attr" x="540" y="370">reason varchar(64)</text>
+  </g>
+
+  <g data-card="Inventory snapshot" data-x="946" data-y="200" data-width="292" data-height="210">
+    <rect class="entity" x="946" y="200" width="292" height="210" rx="10" fill="#fff5df" stroke="#a2743d"/>
+    <rect class="header" x="946" y="200" width="292" height="70" rx="10" fill="#f8ead2"/>
+    <line class="divider" x1="946" y1="270" x2="1238" y2="270" stroke="#a2743d"/>
+    <text class="entityTitle" x="1092" y="246" text-anchor="middle">InventorySnapshot</text>
+    <text class="attr" x="976" y="302">sku</text>
+    <text class="attr" x="976" y="336">quantityOnHand</text>
+    <text class="attr" x="976" y="370">version</text>
+  </g>
+
+  <g data-card="Retry policy" data-x="1290" data-y="200" data-width="148" data-height="210">
+    <rect class="entity" x="1290" y="200" width="148" height="210" rx="10" fill="#fff1f2" stroke="#b86868"/>
+    <rect class="header" x="1290" y="200" width="148" height="70" rx="10" fill="#f9e5e7"/>
+    <line class="divider" x1="1290" y1="270" x2="1438" y2="270" stroke="#b86868"/>
+    <text class="entityTitle" x="1364" y="246" text-anchor="middle">Retry</text>
+    <text class="attr" x="1314" y="302">max=3</text>
+    <text class="attr" x="1314" y="336">40001</text>
+    <text class="attr" x="1314" y="370">fail else</text>
+  </g>
+
+  <path class="rel" data-connector="inventory-to-ledger" d="M392 302 H510" stroke="#758297"/>
+  <polygon points="510,302 496,294 496,310" fill="#758297" stroke="#758297" stroke-width="2" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <rect class="relBox" x="410" y="266" width="42" height="24" rx="8"/>
+  <text class="cardinality" x="431" y="283" text-anchor="middle">1</text>
+  <rect class="relBox" x="462" y="266" width="42" height="24" rx="8"/>
+  <text class="cardinality" x="483" y="283" text-anchor="middle">N</text>
+
+  <path class="rel" data-connector="inventory-to-snapshot" d="M828 302 H946" stroke="#a2743d"/>
+  <polygon points="946,302 932,294 932,310" fill="#a2743d" stroke="#a2743d" stroke-width="2" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <rect class="relBox" x="846" y="266" width="42" height="24" rx="8"/>
+  <text class="cardinality" x="867" y="283" text-anchor="middle">1</text>
+  <rect class="relBox" x="900" y="266" width="42" height="24" rx="8"/>
+  <text class="cardinality" x="921" y="283" text-anchor="middle">N</text>
+
+  <path class="relDash" data-connector="retry-policy-protects" d="M1364 410 V450 H1092 V410" stroke="#b86868"/>
+  <polygon points="1092,410 1084,424 1100,424" fill="#b86868" stroke="#b86868" stroke-width="2" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <rect class="relBox" x="1192" y="436" width="78" height="24" rx="8"/>
+  <text class="relText" x="1231" y="453" text-anchor="middle">protects</text>
+
+  <rect class="foot" x="86" y="560" width="1328" height="50" rx="14"/>
+  <text class="note" x="112" y="582">ERD scope: inventory state, reservation ledger, snapshot projection, and SQLSTATE 40001 retry policy.</text>
+  <text class="note" x="112" y="604">Cardinality: one inventory SKU can create many successful ledger rows and many observed snapshots across attempts.</text>
+</svg>
