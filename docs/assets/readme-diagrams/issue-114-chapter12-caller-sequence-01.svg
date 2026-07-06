@@ -3,11 +3,11 @@
   <desc id="desc">A caller registers and authenticates, creates work, replays realtime outbox events, enqueues outbound HTTP, and dispatches persisted requests through Spring or Ktor runtime boundaries.</desc>
   <defs>
     <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
-    <marker id="seqArrowBlue" markerWidth="16" markerHeight="16" viewBox="0 0 10 10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f86c6" stroke="#4f86c6"/></marker>
-    <marker id="seqArrowGreen" markerWidth="16" markerHeight="16" viewBox="0 0 10 10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#4d9470" stroke="#4d9470"/></marker>
-    <marker id="seqArrowAmber" markerWidth="16" markerHeight="16" viewBox="0 0 10 10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#b7791f" stroke="#b7791f"/></marker>
-    <marker id="seqArrowTeal" markerWidth="16" markerHeight="16" viewBox="0 0 10 10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2f8f8c" stroke="#2f8f8c"/></marker>
-    <marker id="seqArrowRed" markerWidth="16" markerHeight="16" viewBox="0 0 10 10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#bf5b64" stroke="#bf5b64"/></marker>
+    <marker id="seqArrowBlue" markerWidth="16" markerHeight="16" viewBox="0 0 10 10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f86c6" stroke="#4f86c6" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker>
+    <marker id="seqArrowGreen" markerWidth="16" markerHeight="16" viewBox="0 0 10 10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#4d9470" stroke="#4d9470" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker>
+    <marker id="seqArrowAmber" markerWidth="16" markerHeight="16" viewBox="0 0 10 10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#b7791f" stroke="#b7791f" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker>
+    <marker id="seqArrowTeal" markerWidth="16" markerHeight="16" viewBox="0 0 10 10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#2f8f8c" stroke="#2f8f8c" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker>
+    <marker id="seqArrowRed" markerWidth="16" markerHeight="16" viewBox="0 0 10 10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#bf5b64" stroke="#bf5b64" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker>
     <style>
       .canvas { fill:#f7f9fc; }
       .frame { fill:#fffefb; stroke:#3f5360; stroke-width:2.2; }
