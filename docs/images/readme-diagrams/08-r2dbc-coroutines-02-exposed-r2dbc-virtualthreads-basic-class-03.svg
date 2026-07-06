@@ -141,14 +141,14 @@
     <text x="960" y="708" class="detail" text-anchor="start">thread-safe collection</text>
   </g>
 
-  <path class="use" data-connector="use-vt-transaction" d="M 312 688 L 372 688" stroke="#4f8f8b"/>
-  <polyline points="372,688 360,681 360,695" fill="none" stroke="#4f8f8b" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-  <path class="use" data-connector="use-vtester" d="M 487 650 L 487 548 L 482 548 L 482 486" stroke="#5f8848"/>
-  <polyline points="482,486 475,498 489,498" fill="none" stroke="#5f8848" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-  <path class="use" data-connector="use-vrecord" d="M 602 688 L 662 688" stroke="#a66a3f"/>
-  <polyline points="662,688 650,681 650,695" fill="none" stroke="#a66a3f" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-  <path class="use" data-connector="use-result-list" d="M 882 688 L 942 688" stroke="#a85f7f"/>
-  <polyline points="942,688 930,681 930,695" fill="none" stroke="#a85f7f" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="use" data-connector="use-vt-transaction" d="M 312 688 L 360 688" stroke="#4f8f8b"/>
+  <polyline points="360,681 372,688 360,695" fill="none" stroke="#4f8f8b" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="use" data-connector="use-vtester" d="M 482 650 L 482 500" stroke="#5f8848"/>
+  <polyline points="475,500 482,486 489,500" fill="none" stroke="#5f8848" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="use" data-connector="use-vrecord" d="M 602 688 L 650 688" stroke="#a66a3f"/>
+  <polyline points="650,681 662,688 650,695" fill="none" stroke="#a66a3f" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="use" data-connector="use-result-list" d="M 882 688 L 930 688" stroke="#a85f7f"/>
+  <polyline points="930,681 942,688 930,695" fill="none" stroke="#a85f7f" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <rect x="86" y="806" width="1108" height="30" rx="10" class="noteBox"/>
   <text x="640" y="826" class="note" text-anchor="middle">Hollow triangles show inheritance or implementation; dashed dependencies use direct solid heads to avoid dashed arrowhead rendering.</text>

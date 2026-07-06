@@ -3,9 +3,6 @@
     <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
       <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12"/>
     </filter>
-    <marker id="inherit-head" viewBox="0 0 18 16" refX="18" refY="8" markerWidth="18" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto">
-      <path d="M 18 8 L 0 0 L 0 16 Z" fill="#fff" stroke="#64748b" stroke-width="2.4" stroke-dasharray="none" style="stroke-dasharray:none"/>
-    </marker>
     <style>
       .canvas{fill:#f6f9fc}
       .frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}
@@ -96,8 +93,10 @@
     <text x="942" y="794" class="small">commands + keyCommands + ttlSeconds</text>
   </g>
 
-  <path class="inherit" data-connector="default-implements" d="M314 426 L314 334 Q314 318 330 318 L682 318 Q700 318 700 300 L700 292" marker-end="url(#inherit-head)"/>
-  <path class="inherit" data-connector="cached-implements" d="M1086 426 L1086 334 Q1086 318 1070 318 L718 318 Q700 318 700 300 L700 292" marker-end="url(#inherit-head)"/>
+  <path class="inherit" data-connector="default-implements" d="M314 426 L314 344 Q314 328 330 328 L660 328 Q680 328 680 308"/>
+  <polygon points="680,292 671,308 689,308" fill="#fff" stroke="#64748b" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="inherit" data-connector="cached-implements" d="M1086 426 L1086 344 Q1086 328 1070 328 L740 328 Q720 328 720 308"/>
+  <polygon points="720,292 711,308 729,308" fill="#fff" stroke="#64748b" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <path class="use" data-connector="delegate-use" d="M914 488 L500 488"/>
   <polyline class="head" points="500,481 486,488 500,495"/>
