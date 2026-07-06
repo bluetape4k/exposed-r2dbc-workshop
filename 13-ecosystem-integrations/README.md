@@ -21,6 +21,13 @@ targets but makes the default path local, deterministic, and credential-free.
 
 The chapter separates three concerns:
 
+![Chapter 13 R2DBC ecosystem boundary architecture](../docs/assets/readme-diagrams/issue-115-chapter13-ecosystem-architecture-01.png)
+
+Solid green arrows are the default local H2 R2DBC path executed by tests.
+Dashed amber arrows are opt-in external adapter handoff boundaries; they
+document request and driver contracts but do not call live vendor systems by
+default.
+
 | Boundary | Responsibility | Default test strategy |
 |---|---|---|
 | Typed adapter model | Capture the external system options that production code must pass deliberately | Data-class validation and header/request assertions |
