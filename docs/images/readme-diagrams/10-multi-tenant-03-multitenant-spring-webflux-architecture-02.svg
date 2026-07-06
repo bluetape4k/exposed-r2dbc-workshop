@@ -139,42 +139,42 @@
     <text x="1212" y="830" class="detail">actors, movies, join table</text>
   </g>
 
-  <path class="connector blue" data-connector="request-to-filter" d="M355 301 L440 301"/>
-  <polyline points="440,301 424,292 424,310" fill="none" stroke="#3c82b4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+  <path class="connector blue" data-connector="request-to-filter" d="M355 301 L424 301"/>
+  <polyline points="424,292 440,301 424,310" fill="none" stroke="#3c82b4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
-  <path class="connector green" data-connector="filter-to-context" d="M685 301 L770 301"/>
-  <polyline points="770,301 754,292 754,310" fill="none" stroke="#5f8848" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+  <path class="connector green" data-connector="filter-to-context" d="M685 301 L754 301"/>
+  <polyline points="754,292 770,301 754,310" fill="none" stroke="#5f8848" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
-  <path class="connector teal" data-connector="context-to-controller" d="M1015 301 L1100 301"/>
-  <polyline points="1100,301 1084,292 1084,310" fill="none" stroke="#4f8f8b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+  <path class="connector teal" data-connector="context-to-controller" d="M1015 301 L1084 301"/>
+  <polyline points="1084,292 1100,301 1084,310" fill="none" stroke="#4f8f8b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
-  <path class="connector red dash" data-connector="filter-error" d="M562 357 L562 366"/>
-  <polyline points="562,366 553,350 571,350" fill="none" stroke="#b76b6b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+  <path class="connector red" data-connector="filter-error" d="M562 357 L562 366"/>
+  <polyline points="553,350 562,366 571,350" fill="none" stroke="#b76b6b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
-  <path class="connector blue" data-connector="controller-to-tx" d="M1222 357 L1222 434 Q1222 450 1206 450 L381 450 Q365 450 365 466 L365 510"/>
-  <polyline points="365,510 356,494 374,494" fill="none" stroke="#3c82b4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+  <path class="connector blue" data-connector="controller-to-tx" d="M1222 357 L1222 434 Q1222 450 1206 450 L381 450 Q365 450 365 466 L365 494"/>
+  <polyline points="356,494 365,510 374,494" fill="none" stroke="#3c82b4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
-  <path class="connector green" data-connector="tx-to-current-tenant" d="M520 566 L645 566"/>
-  <polyline points="645,566 629,557 629,575" fill="none" stroke="#5f8848" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+  <path class="connector green" data-connector="tx-to-current-tenant" d="M520 566 L629 566"/>
+  <polyline points="629,557 645,566 629,575" fill="none" stroke="#5f8848" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
-  <path class="connector teal" data-connector="read-context" d="M800 510 L800 496 Q800 480 816 480 L1454 480 Q1470 480 1470 464 L1470 233 Q1470 217 1454 217 L908 217 Q892 217 892 233 L892 245"/>
-  <polyline points="892,245 883,229 901,229" fill="none" stroke="#4f8f8b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+  <path class="connector teal" data-connector="read-context" d="M800 510 L800 496 Q800 480 816 480 L1454 480 Q1470 480 1470 464 L1470 233 Q1470 217 1454 217 L908 217 Q892 217 892 233 L892 229"/>
+  <polyline points="883,229 892,245 901,229" fill="none" stroke="#4f8f8b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
-  <path class="connector teal dash" data-connector="tenant-return" d="M955 566 L1080 566"/>
-  <polyline points="1080,566 1064,557 1064,575" fill="none" stroke="#4f8f8b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+  <path class="connector teal dash" data-connector="tenant-return" d="M955 566 L1064 566"/>
+  <polyline points="1064,557 1080,566 1064,575" fill="none" stroke="#4f8f8b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
-  <path class="connector gold" data-connector="transaction-to-schema" d="M1235 622 L1235 656 Q1235 672 1219 672 L636 672 Q620 672 620 688 L620 760"/>
-  <polyline points="605,760 596,744 614,744" fill="none" stroke="#b78632" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+  <path class="connector gold" data-connector="transaction-to-schema" d="M1235 622 L1235 656 Q1235 672 1219 672 L636 672 Q620 672 620 688 L620 744"/>
+  <polyline points="611,744 620,760 629,744" fill="none" stroke="#b78632" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
-  <path class="connector gold" data-connector="schema-to-repo" d="M770 802 L830 802"/>
-  <polyline points="830,802 814,793 814,811" fill="none" stroke="#b78632" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+  <path class="connector gold" data-connector="schema-to-repo" d="M770 802 L814 802"/>
+  <polyline points="814,793 830,802 814,811" fill="none" stroke="#b78632" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
-  <path class="connector blue" data-connector="repo-to-db" d="M1130 802 L1190 802"/>
-  <polyline points="1190,802 1174,793 1174,811" fill="none" stroke="#3c82b4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+  <path class="connector blue" data-connector="repo-to-db" d="M1130 802 L1174 802"/>
+  <polyline points="1174,793 1190,802 1174,811" fill="none" stroke="#3c82b4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
-  <path class="connector slate dash" data-connector="initializer-to-schema" d="M410 802 L470 802"/>
-  <polyline points="470,802 454,793 454,811" fill="none" stroke="#607386" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+  <path class="connector slate dash" data-connector="initializer-to-schema" d="M410 802 L454 802"/>
+  <polyline points="454,793 470,802 454,811" fill="none" stroke="#607386" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <rect x="150" y="902" width="1300" height="42" rx="12" class="noteBox"/>
-  <text x="800" y="929" class="note" text-anchor="middle">TenantFilter writes tenant context; SchemaUtils switches schema before ordinary repository queries.</text>
+  <text x="800" y="929" class="note" text-anchor="middle">Solid arrows show runtime flow; dashed arrows show context handoff or startup seeding.</text>
 </svg>
