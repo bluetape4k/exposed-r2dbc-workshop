@@ -1,70 +1,159 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 880" width="1280" height="880" role="img" aria-label="Exposed R2DBC Basic Exposed R2DBC Sql Example Class diagram">
-<defs><filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12" /></filter><style>.canvas{fill:#f6f9fc}.frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}.lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}.card{filter:url(#shadow)}.header{opacity:.96}.title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:30px;fill:#1e293b}.subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}.tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}.laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:15px;letter-spacing:.08em;fill:#8ca2b4}.cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:17px;fill:#1e293b}.connector{fill:none;stroke:#64748b;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}.use{fill:none;stroke-width:2;stroke-dasharray:7 6;stroke-linecap:round;stroke-linejoin:round}.rel{fill:none;stroke:#64748b;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.head{fill:white;stroke:#64748b;stroke-width:2.4;stroke-dasharray:none;style:stroke-dasharray:none}.labelPill{fill:#fff;stroke:#d7e2ec;stroke-width:1}.noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.2}</style></defs>
-<rect width="1280" height="880" class="canvas"/><rect x="22" y="22" width="1236" height="836" rx="18" class="frame"/>
-<text x="58" y="68" class="title" text-anchor="start">Exposed R2DBC Basic Exposed R2DBC Sql Example Class</text>
-<text x="58" y="96" class="subtitle" text-anchor="start">Concrete UML class view with explicit inheritance and dependency corridors.</text>
-<rect x="48" y="126" width="1184" height="190" rx="16" class="lane"/><text x="72" y="156" class="laneTitle" text-anchor="start">ABSTRACTIONS / CONTRACTS</text>
-<rect x="48" y="340" width="1184" height="300" rx="16" class="lane"/><text x="72" y="370" class="laneTitle" text-anchor="start">IMPLEMENTATIONS / COLLABORATORS</text>
-<rect x="48" y="662" width="1184" height="126" rx="16" class="lane"/><text x="72" y="692" class="laneTitle" text-anchor="start">READER CONTRACT</text>
-<g data-card="UML classes from the or…" data-x="210" data-y="178" data-width="250" data-height="96">
-<rect x="210" y="178" width="250" height="96" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card"/>
-<path class="header" d="M210,220 L210,192 Q210,178 224,178 L446,178 Q460,178 460,192 L460,220 Z" fill="#eef5fa"/>
-<text x="335.0" y="196" class="tiny" text-anchor="middle">&lt;&lt;contract&gt;&gt;</text>
-<text x="335.0" y="215" class="cardTitle" text-anchor="middle">UML classes from the or…</text>
-<text x="228" y="240" class="detail" text-anchor="start">shared R2DBC boundary</text>
-</g>
-<g data-card="Table" data-x="820" data-y="178" data-width="250" data-height="96">
-<rect x="820" y="178" width="250" height="96" rx="14" fill="#fff" stroke="#64748b" stroke-width="2" class="card"/>
-<path class="header" d="M820,220 L820,192 Q820,178 834,178 L1056,178 Q1070,178 1070,192 L1070,220 Z" fill="#f8fafc"/>
-<text x="945.0" y="196" class="tiny" text-anchor="middle">&lt;&lt;base&gt;&gt;</text>
-<text x="945.0" y="215" class="cardTitle" text-anchor="middle">Table</text>
-<text x="838" y="240" class="detail" text-anchor="start">common coroutine support</text>
-</g>
-<g data-card="+selectAll" data-x="90" data-y="410" data-width="230" data-height="106">
-<rect x="90" y="410" width="230" height="106" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card"/>
-<path class="header" d="M90,452 L90,424 Q90,410 104,410 L306,410 Q320,410 320,424 L320,452 Z" fill="#f5eee4"/>
-<text x="205.0" y="428" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
-<text x="205.0" y="447" class="cardTitle" text-anchor="middle">+selectAll</text>
-<text x="108" y="472" class="detail" text-anchor="start">suspendTransaction</text>
-<text x="108" y="489" class="detail" text-anchor="start">Flow / DTO mapping</text>
-</g>
-<g data-card="+selectvararg columns" data-x="380" data-y="410" data-width="230" data-height="106">
-<rect x="380" y="410" width="230" height="106" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card"/>
-<path class="header" d="M380,452 L380,424 Q380,410 394,410 L596,410 Q610,410 610,424 L610,452 Z" fill="#eef7f6"/>
-<text x="495.0" y="428" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
-<text x="495.0" y="447" class="cardTitle" text-anchor="middle">+selectvararg columns</text>
-<text x="398" y="472" class="detail" text-anchor="start">suspendTransaction</text>
-<text x="398" y="489" class="detail" text-anchor="start">Flow / DTO mapping</text>
-</g>
-<g data-card="+insertbody: InsertStat…" data-x="670" data-y="410" data-width="230" data-height="106">
-<rect x="670" y="410" width="230" height="106" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2" class="card"/>
-<path class="header" d="M670,452 L670,424 Q670,410 684,410 L886,410 Q900,410 900,424 L900,452 Z" fill="#f5eef2"/>
-<text x="785.0" y="428" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
-<text x="785.0" y="447" class="cardTitle" text-anchor="middle">+insertbody: InsertStat…</text>
-<text x="688" y="472" class="detail" text-anchor="start">suspendTransaction</text>
-<text x="688" y="489" class="detail" text-anchor="start">Flow / DTO mapping</text>
-</g>
-<g data-card="+updatewhere, body: Upd…" data-x="960" data-y="410" data-width="230" data-height="106">
-<rect x="960" y="410" width="230" height="106" rx="14" fill="#fff" stroke="#8a6f55" stroke-width="2" class="card"/>
-<path class="header" d="M960,452 L960,424 Q960,410 974,410 L1176,410 Q1190,410 1190,424 L1190,452 Z" fill="#f3eee8"/>
-<text x="1075.0" y="428" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
-<text x="1075.0" y="447" class="cardTitle" text-anchor="middle">+updatewhere, body: Upd…</text>
-<text x="978" y="472" class="detail" text-anchor="start">suspendTransaction</text>
-<text x="978" y="489" class="detail" text-anchor="start">Flow / DTO mapping</text>
-</g>
-<path class="connector" data-connector="uml-inherit" d="M 205 410 L 205 332 Q 205 316 221 316 L 319 316 Q 335 316 335 300 L 335 274"/>
-<polygon class="head" points="335,274 326,290 344,290" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="connector" data-connector="uml-inherit" d="M 495 410 L 495 332 Q 495 316 479 316 L 351 316 Q 335 316 335 300 L 335 274"/>
-<polygon class="head" points="335,274 326,290 344,290" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="connector" data-connector="uml-inherit" d="M 785 410 L 785 332 Q 785 316 801 316 L 929 316 Q 945 316 945 300 L 945 274"/>
-<polygon class="head" points="945,274 936,290 954,290" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="connector" data-connector="uml-inherit" d="M 1075 410 L 1075 332 Q 1075 316 1059 316 L 961 316 Q 945 316 945 300 L 945 274"/>
-<polygon class="head" points="945,274 936,290 954,290" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="use connector" data-connector="uml-use" d="M 320 463 L 380 463" stroke="#6f8f52"/>
-<polyline points="380,463 368,456 368,470" fill="none" stroke="#6f8f52" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="use connector" data-connector="uml-use" d="M 610 463 L 670 463" stroke="#a66a3f"/>
-<polyline points="670,463 658,456 658,470" fill="none" stroke="#a66a3f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<path class="use connector" data-connector="uml-use" d="M 900 463 L 960 463" stroke="#4f8f8b"/>
-<polyline points="960,463 948,456 948,470" fill="none" stroke="#4f8f8b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
-<rect x="86" y="720" width="1108" height="30" rx="10" class="noteBox"/><text x="640" y="740" class="note" text-anchor="middle">Hollow triangles show generalization; dashed arrows show use/dependency. Lane labels stay left-aligned and unobstructed.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 940" width="1440" height="940" role="img" aria-label="Exposed R2DBC SQL DSL class and layer map">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="126%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .canvas{fill:#f6f9fc}.frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.6}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.3}.laneAlt{fill:#fbfdff;stroke:#d7e2ec;stroke-width:1.3}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:34px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:17px;letter-spacing:.08em;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:20px;fill:#1e293b}
+      .stereo{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#6b7f92;font-weight:700}
+      .card{filter:url(#shadow)}
+      .solid{fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+      .dep{fill:none;stroke-width:2.3;stroke-dasharray:8 7;stroke-linecap:butt;stroke-linejoin:round}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.3}
+      .labelBox{fill:#fff;stroke:#d7e2ec;stroke-width:1.1}
+    </style>
+  </defs>
+
+  <rect class="canvas" width="1440" height="940"/>
+  <rect class="frame" x="24" y="24" width="1392" height="892" rx="22"/>
+  <text class="title" x="72" y="86">Exposed R2DBC SQL DSL Layer Map</text>
+  <text class="subtitle" x="74" y="120">Source-backed class view: parameterized R2DBC tests seed city/user tables and exercise type-safe SQL DSL flows.</text>
+
+  <rect class="lane" x="54" y="150" width="1332" height="146" rx="18"/>
+  <text class="laneTitle" x="84" y="184">TEST CONTRACTS</text>
+  <rect class="laneAlt" x="54" y="318" width="1332" height="176" rx="18"/>
+  <text class="laneTitle" x="84" y="352">MODULE CLASSES</text>
+  <rect class="lane" x="54" y="516" width="1332" height="180" rx="18"/>
+  <text class="laneTitle" x="84" y="550">FIXTURES + SQL DSL PATTERNS</text>
+  <rect class="laneAlt" x="54" y="718" width="1332" height="116" rx="18"/>
+  <text class="laneTitle" x="84" y="752">R2DBC EXECUTION CONTRACT</text>
+
+  <g class="card" data-node="AbstractR2dbcExposedTest">
+    <rect x="105" y="206" width="310" height="72" rx="14" fill="#eef6ff" stroke="#4f86c6" stroke-width="2"/>
+    <text class="stereo" x="260" y="228" text-anchor="middle">&lt;&lt;base test&gt;&gt;</text>
+    <text class="cardTitle" x="260" y="252" text-anchor="middle">AbstractR2dbcExposedTest</text>
+    <text class="detail" x="260" y="270" text-anchor="middle">dialect matrix + shared lifecycle</text>
+  </g>
+  <g class="card" data-node="TestDB">
+    <rect x="485" y="206" width="240" height="72" rx="14" fill="#f1f8ed" stroke="#6f8f52" stroke-width="2"/>
+    <text class="stereo" x="605" y="228" text-anchor="middle">&lt;&lt;parameter&gt;&gt;</text>
+    <text class="cardTitle" x="605" y="252" text-anchor="middle">TestDB</text>
+    <text class="detail" x="605" y="270" text-anchor="middle">@MethodSource dialects</text>
+  </g>
+  <g class="card" data-node="runSuspendIO">
+    <rect x="785" y="206" width="240" height="72" rx="14" fill="#fff5e8" stroke="#b68432" stroke-width="2"/>
+    <text class="stereo" x="905" y="228" text-anchor="middle">&lt;&lt;coroutine&gt;&gt;</text>
+    <text class="cardTitle" x="905" y="252" text-anchor="middle">runSuspendIO</text>
+    <text class="detail" x="905" y="270" text-anchor="middle">suspend test entrypoint</text>
+  </g>
+  <g class="card" data-node="R2dbcTransaction">
+    <rect x="1085" y="206" width="240" height="72" rx="14" fill="#f5f7fb" stroke="#64748b" stroke-width="2"/>
+    <text class="stereo" x="1205" y="228" text-anchor="middle">&lt;&lt;receiver&gt;&gt;</text>
+    <text class="cardTitle" x="1205" y="252" text-anchor="middle">R2dbcTransaction</text>
+    <text class="detail" x="1205" y="270" text-anchor="middle">statement receiver scope</text>
+  </g>
+
+  <g class="card" data-node="R2dbcExposedSQLExample">
+    <rect x="95" y="386" width="330" height="86" rx="14" fill="#eef6ff" stroke="#4f86c6" stroke-width="2"/>
+    <text class="stereo" x="260" y="410" text-anchor="middle">&lt;&lt;ParameterizedTest&gt;&gt;</text>
+    <text class="cardTitle" x="260" y="435" text-anchor="middle">R2dbcExposedSQLExample</text>
+    <text class="detail" x="260" y="455" text-anchor="middle">update, delete, joins, groupBy</text>
+  </g>
+  <g class="card" data-node="Schema">
+    <rect x="500" y="376" width="240" height="72" rx="14" fill="#ffffff" stroke="#4f8f8b" stroke-width="2"/>
+    <text class="stereo" x="620" y="398" text-anchor="middle">&lt;&lt;object&gt;&gt;</text>
+    <text class="cardTitle" x="620" y="422" text-anchor="middle">Schema</text>
+    <text class="detail" x="620" y="440" text-anchor="middle">tables + fixture helpers</text>
+  </g>
+  <g class="card" data-node="CityTable">
+    <rect x="790" y="376" width="220" height="86" rx="14" fill="#fff7ed" stroke="#a66a3f" stroke-width="2"/>
+    <text class="stereo" x="900" y="400" text-anchor="middle">&lt;&lt;Table("cities")&gt;&gt;</text>
+    <text class="cardTitle" x="900" y="425" text-anchor="middle">CityTable</text>
+    <text class="detail" x="900" y="445" text-anchor="middle">id SERIAL, name</text>
+  </g>
+  <g class="card" data-node="UserTable">
+    <rect x="1110" y="376" width="220" height="86" rx="14" fill="#fdf2f8" stroke="#a85f7f" stroke-width="2"/>
+    <text class="stereo" x="1220" y="400" text-anchor="middle">&lt;&lt;Table("users")&gt;&gt;</text>
+    <text class="cardTitle" x="1220" y="425" text-anchor="middle">UserTable</text>
+    <text class="detail" x="1220" y="445" text-anchor="middle">id, name, city_id FK</text>
+  </g>
+
+  <g class="card" data-node="withCityUsers">
+    <rect x="105" y="586" width="270" height="78" rx="14" fill="#edf8f7" stroke="#4f8f8b" stroke-width="2"/>
+    <text class="stereo" x="240" y="610" text-anchor="middle">&lt;&lt;fixture&gt;&gt;</text>
+    <text class="cardTitle" x="240" y="634" text-anchor="middle">withCityUsers</text>
+    <text class="detail" x="240" y="652" text-anchor="middle">withTables + transaction block</text>
+  </g>
+  <g class="card" data-node="insertSampleData">
+    <rect x="430" y="586" width="270" height="78" rx="14" fill="#fff5e8" stroke="#b68432" stroke-width="2"/>
+    <text class="stereo" x="565" y="610" text-anchor="middle">&lt;&lt;seed&gt;&gt;</text>
+    <text class="cardTitle" x="565" y="634" text-anchor="middle">insertSampleData</text>
+    <text class="detail" x="565" y="652" text-anchor="middle">Seoul, Busan, Daegu, users</text>
+  </g>
+  <g class="card" data-node="QueryPatterns">
+    <rect x="755" y="586" width="270" height="78" rx="14" fill="#eef6ff" stroke="#4f86c6" stroke-width="2"/>
+    <text class="stereo" x="890" y="610" text-anchor="middle">&lt;&lt;SQL DSL&gt;&gt;</text>
+    <text class="cardTitle" x="890" y="634" text-anchor="middle">Query Patterns</text>
+    <text class="detail" x="890" y="652" text-anchor="middle">select, update, delete, joins</text>
+  </g>
+  <g class="card" data-node="FlowTerminals">
+    <rect x="1080" y="586" width="240" height="78" rx="14" fill="#f5f7fb" stroke="#64748b" stroke-width="2"/>
+    <text class="stereo" x="1200" y="610" text-anchor="middle">&lt;&lt;Flow&gt;&gt;</text>
+    <text class="cardTitle" x="1200" y="634" text-anchor="middle">Terminal Ops</text>
+    <text class="detail" x="1200" y="652" text-anchor="middle">collect, single, toList</text>
+  </g>
+
+  <g class="card" data-node="withTables">
+    <rect x="265" y="774" width="360" height="50" rx="14" fill="#ffffff" stroke="#4f8f8b" stroke-width="2"/>
+    <text class="cardTitle" x="445" y="805" text-anchor="middle">withTables(testDB, CityTable, UserTable)</text>
+  </g>
+  <g class="card" data-node="R2DBCFlow">
+    <rect x="795" y="774" width="360" height="50" rx="14" fill="#ffffff" stroke="#64748b" stroke-width="2"/>
+    <text class="cardTitle" x="975" y="805" text-anchor="middle">Async R2DBC query result Flow</text>
+  </g>
+
+  <path class="solid" d="M 260 386 V 292" stroke="#4f86c6"/>
+  <polygon points="260,278 250,294 270,294" fill="#ffffff" stroke="#4f86c6" stroke-width="2.2" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="dep" d="M 365 386 V 332 Q 365 310 387 310 H 583 Q 605 310 605 292" stroke="#6f8f52"/>
+  <polygon points="605,278 597,292 613,292" fill="#6f8f52" stroke="#6f8f52" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="dep" d="M 240 472 V 572" stroke="#4f8f8b"/>
+  <polygon points="240,586 232,572 248,572" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="dep" d="M 350 472 V 528 Q 350 550 372 550 H 868 Q 890 550 890 558 V 572" stroke="#4f86c6"/>
+  <polygon points="890,586 882,572 898,572" fill="#4f86c6" stroke="#4f86c6" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="solid" d="M 650 376 V 362 Q 650 348 664 348 H 886 Q 900 348 900 362" stroke="#a66a3f"/>
+  <polygon points="900,376 892,362 908,362" fill="#a66a3f" stroke="#a66a3f" stroke-width="1.6" stroke-linejoin="round"/>
+  <path class="solid" d="M 590 376 V 350 Q 590 336 604 336 H 1206 Q 1220 336 1220 362" stroke="#a85f7f"/>
+  <polygon points="1220,376 1212,362 1228,362" fill="#a85f7f" stroke="#a85f7f" stroke-width="1.6" stroke-linejoin="round"/>
+
+  <path class="dep" d="M 1110 428 H 1024" stroke="#a85f7f"/>
+  <polygon points="1010,428 1024,420 1024,436" fill="#a85f7f" stroke="#a85f7f" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <rect class="labelBox" x="1025" y="390" width="70" height="24" rx="8"/>
+  <text class="tiny" x="1060" y="407" text-anchor="middle">city_id FK</text>
+
+  <path class="solid" d="M 240 664 V 716 Q 240 738 262 738 H 423 Q 445 738 445 746 V 760" stroke="#4f8f8b"/>
+  <polygon points="445,774 437,760 453,760" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1.6" stroke-linejoin="round"/>
+  <path class="solid" d="M 375 625 H 416" stroke="#b68432"/>
+  <polygon points="430,625 416,617 416,633" fill="#b68432" stroke="#b68432" stroke-width="1.6" stroke-linejoin="round"/>
+  <path class="dep" d="M 565 586 V 528 Q 565 506 587 506 H 878 Q 900 506 900 476" stroke="#a66a3f"/>
+  <polygon points="900,462 892,476 908,476" fill="#a66a3f" stroke="#a66a3f" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="dep" d="M 640 586 V 542 Q 640 520 662 520 H 1198 Q 1220 520 1220 476" stroke="#a85f7f"/>
+  <polygon points="1220,462 1212,476 1228,476" fill="#a85f7f" stroke="#a85f7f" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="solid" d="M 700 625 H 741" stroke="#4f86c6"/>
+  <polygon points="755,625 741,617 741,633" fill="#4f86c6" stroke="#4f86c6" stroke-width="1.6" stroke-linejoin="round"/>
+  <path class="solid" d="M 975 664 V 760" stroke="#64748b"/>
+  <polygon points="975,774 967,760 983,760" fill="#64748b" stroke="#64748b" stroke-width="1.6" stroke-linejoin="round"/>
+  <path class="solid" d="M 1155 799 H 1190 Q 1200 799 1200 778 V 678" stroke="#64748b"/>
+  <polygon points="1200,664 1192,678 1208,678" fill="#64748b" stroke="#64748b" stroke-width="1.6" stroke-linejoin="round"/>
+
+  <rect x="116" y="866" width="1208" height="30" rx="10" class="noteBox"/>
+  <text class="note" x="720" y="886" text-anchor="middle">Solid arrows show setup/execution flow; dashed arrows show source dependencies. Direct arrowheads are fixed-size solid geometry for PNG safety.</text>
 </svg>
