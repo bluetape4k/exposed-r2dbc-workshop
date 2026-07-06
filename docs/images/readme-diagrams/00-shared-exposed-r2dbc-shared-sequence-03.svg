@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1220" viewBox="0 0 1600 1220" role="img" aria-label="Shared withTables schema lifecycle sequence">
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1280" viewBox="0 0 1600 1280" role="img" aria-label="Shared withTables schema lifecycle sequence">
   <defs>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&amp;display=swap');
@@ -21,12 +21,14 @@
       .sql{fill:none;stroke:#b68432;stroke-width:3;marker-end:url(#seqArrowAmber);}
       .return{fill:none;stroke:#2f9b95;stroke-width:3;stroke-dasharray:8 7;marker-end:url(#seqArrowTeal);}
       .work{fill:none;stroke:#805aa8;stroke-width:3;marker-end:url(#seqArrowPurple);}
+      .wait{fill:none;stroke:#c16a6a;stroke-width:3;marker-end:url(#seqArrowRed);}
       .pill{fill:#FFFFFF;stroke-width:1.8;}
       .pillBlue{stroke:#9ec5e8;}
       .pillGreen{stroke:#a9c58f;}
       .pillAmber{stroke:#d4b06d;}
       .pillTeal{stroke:#9cccca;}
       .pillPurple{stroke:#c5b0dd;}
+      .pillRed{stroke:#d9a0a0;}
       .badgeCircle{fill:#FFFDF9;stroke-width:1.8;}
       .badge{font-family:'Comic Mono','Architects Daughter',monospace;font-size:14px;font-weight:800;dominant-baseline:middle;text-anchor:middle;}
       .msg{font-family:'Comic Mono','Architects Daughter',monospace;font-size:15px;font-weight:800;dominant-baseline:middle;}
@@ -35,11 +37,13 @@
       .amberText{fill:#8a6128;stroke:none;}
       .tealText{fill:#277f7a;stroke:none;}
       .purpleText{fill:#694989;stroke:none;}
+      .redText{fill:#a95656;stroke:none;}
       .badgeCircle.blueText{fill:#FFFDF9;stroke:#9ec5e8;}
       .badgeCircle.greenText{fill:#FFFDF9;stroke:#a9c58f;}
       .badgeCircle.amberText{fill:#FFFDF9;stroke:#d4b06d;}
       .badgeCircle.tealText{fill:#FFFDF9;stroke:#9cccca;}
       .badgeCircle.purpleText{fill:#FFFDF9;stroke:#c5b0dd;}
+      .badgeCircle.redText{fill:#FFFDF9;stroke:#d9a0a0;}
       .branch{fill:none;stroke:#7892a0;stroke-width:2.8;stroke-dasharray:8 8;}
       .branchLabel{fill:#FFFDF9;stroke:#d4b06d;stroke-width:1.8;}
       .branchText{font-family:'Comic Mono','Architects Daughter',monospace;font-size:15px;fill:#7c5a2b;font-weight:800;dominant-baseline:middle;}
@@ -60,10 +64,13 @@
     <marker id="seqArrowPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto">
       <path d="M 0 0 L 10 5 L 0 10 Z" fill="#805aa8" stroke="#805aa8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
     </marker>
+    <marker id="seqArrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#c16a6a" stroke="#c16a6a" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
   </defs>
 
-  <rect class="canvas" x="0" y="0" width="1600" height="1220"/>
-  <rect class="frame" x="26" y="26" width="1548" height="1168" rx="26"/>
+  <rect class="canvas" x="0" y="0" width="1600" height="1280"/>
+  <rect class="frame" x="26" y="26" width="1548" height="1228" rx="26"/>
 
   <text class="title" x="70" y="88">Shared Test Schema Lifecycle Flow</text>
   <text class="subtitle" x="72" y="122">withTables wraps withDb, serializes each TestDB, creates tables, commits the test block, and drops tables in finally.</text>
@@ -189,11 +196,11 @@
   </g>
 
   <g>
-    <rect class="pill pillAmber" x="1012" y="982" width="318" height="32" rx="16"/>
-    <circle class="badgeCircle amberText" cx="1037" cy="998" r="13"/>
-    <text class="badge amberText" x="1037" y="998">10</text>
-    <text class="msg amberText" x="1076" y="998">drop tables in finally</text>
-    <path class="sql" d="M 1012 1034 H 1300"/>
+    <rect class="pill pillRed" x="1012" y="982" width="318" height="32" rx="16"/>
+    <circle class="badgeCircle redText" cx="1037" cy="998" r="13"/>
+    <text class="badge redText" x="1037" y="998">10</text>
+    <text class="msg redText" x="1076" y="998">drop tables in finally</text>
+    <path class="wait" d="M 1012 1034 H 1300"/>
   </g>
 
   <g>
