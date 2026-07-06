@@ -157,3 +157,24 @@ Notes:
 - ERDs now show explicit `1 : N`, `1 : 1`, `0..1 : N`, or an explicit independent/no-FK note so the reader can distinguish relationships from sample tables.
 - The repository-coroutines Movie/Actor bridge is centered as a two-leg 1:N relation instead of a confusing N:M table placement.
 - Class assets that carried old grid/card-through wiring were rebuilt as grouped class views; relationship-bearing schema details are shown in the paired ERD/sequence assets.
+
+## 2026-07-06 final one-by-one audit
+
+Scope: all final README diagram SVG/PNG assets under `docs/assets/readme-diagrams` and `docs/images/readme-diagrams`, using the corrected diagrams in this branch as the baseline for style, palette, arrowhead, connector, and layout consistency.
+
+| Gate | Evidence | Result |
+| --- | --- | --- |
+| File-by-file ledger | `docs/review/2026-07-06-diagram-one-by-one-ledger.tsv` | PASS, 114 diagrams, 0 failures |
+| XML parse | `xmllint --noout` per SVG | PASS, 114 SVGs |
+| Forbidden worklog/source notes | strict text scan for source/worklog/validation-note wording | PASS, 0 matches |
+| Dashed arrowheads | strict scan for dashed connector elements using marker arrowheads | PASS, 0 matches |
+| Connector audit | `diagram-connector-audit.py` per SVG and aggregated over all SVGs | PASS, 114 SVGs |
+| Geometry audit | `diagram-geometry-audit.py --fail-diagonal` per SVG and aggregated over all SVGs | PASS, `geometry_failures=0` |
+| Endpoint audit | `diagram-endpoint-audit.py` per SVG and aggregated over all SVGs | PASS, 114 SVGs |
+| Mixed-corner audit | `diagram-mixed-corner-audit.py` per SVG and aggregated over all SVGs | PASS, `paths=829 q_bends=192 failures=0` |
+| Sequence style audit | `diagram-sequence-style-audit.py` over every `*sequence*` / `*flow*` SVG | PASS, `sequence_files=23` |
+| Render | `~/.local/bin/cairosvg -s 2` per SVG | PASS, 114 PNGs regenerated |
+| Visual scan | Final contact sheets opened: root/assets, chapters 00-06, chapters 07-11 | PASS, no visible overlaps, card-through lines, dashed arrowhead drift, or sequence palette drift |
+| Diff hygiene | `git diff --check` | PASS |
+
+Chapter 13 is intentionally absent in this repository: the README learning path and module directories currently end at `12-production-integration`, and no `13-*` README diagram assets exist.

@@ -1,86 +1,153 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
-  <title id="title">Chapter 12 HTTP outbox idempotency flow</title>
-  <desc id="desc">Spring Boot 4 and Ktor persist outbound work before dispatch, claim retryable rows, call HTTP clients outside transactions, and persist the outcome.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1160" viewBox="0 0 1800 1160" role="img" aria-label="Chapter 12 HTTP outbox and idempotency">
   <defs>
-    <style>
-      .bg { fill: #f8fafc; }
-      .panel { fill: #ffffff; stroke: #1f2937; stroke-width: 2; rx: 8; }
-      .spring { fill: #ecfdf5; stroke: #047857; }
-      .ktor { fill: #eef2ff; stroke: #4338ca; }
-      .db { fill: #fff7ed; stroke: #c2410c; }
-      .external { fill: #fdf2f8; stroke: #be185d; }
-      .state { fill: #f1f5f9; stroke: #475569; }
-      .text { font-family: Arial, Helvetica, sans-serif; fill: #111827; }
-      .title { font-size: 34px; font-weight: 700; }
-      .subtitle { font-size: 18px; fill: #475569; }
-      .label { font-size: 20px; font-weight: 700; }
-      .small { font-size: 16px; fill: #334155; }
-      .tiny { font-size: 14px; fill: #475569; }
-      .arrow { stroke: #111827; stroke-width: 3; fill: none; marker-end: url(#arrowhead); }
-      .dash { stroke-dasharray: 8 7; }
-    </style>
-    <marker id="arrowhead" markerWidth="12" markerHeight="8" refX="11" refY="4" orient="auto">
-      <path d="M 0 0 L 12 4 L 0 8 z" fill="#111827"/>
+    <filter id="softShadow" x="-8%" y="-10%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#25384d" flood-opacity="0.12"/>
+    </filter>
+    <marker id="arrowBlue" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
     </marker>
+    <marker id="arrowGreen" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowAmber" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#a36f3e" stroke="#a36f3e" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fffefa;stroke:#d7e3ed;stroke-width:2}
+      .lane{stroke-width:1.8}
+      .laneSpring{fill:#f5f9ff;stroke:#bdd7ee}
+      .laneKtor{fill:#f7fbf2;stroke:#c9dfbb}
+      .laneData{fill:#fbf7f0;stroke:#dfc39d}
+      .card{filter:url(#softShadow);stroke-width:2.6}
+      .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:52px;fill:#192538;font-weight:400}
+      .subtitle,.laneTitle,.body,.foot{font-family:"Comic Mono","Comic Sans MS","Comic Sans",monospace;font-weight:700;fill:#556678}
+      .subtitle{font-size:20px}
+      .laneTitle{font-size:16px;letter-spacing:.07em;fill:#8aa0b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:26px;fill:#192538;font-weight:400}
+      .body{font-size:16px}
+      .small{font-size:14px}
+      .foot{font-size:15px}
+      .connector{fill:none;stroke-width:4.4;stroke-linecap:round;stroke-linejoin:round}
+      .blue{stroke:#4f86c6;marker-end:url(#arrowBlue)}
+      .green{stroke:#6f8f52;marker-end:url(#arrowGreen)}
+      .amber{stroke:#a36f3e;marker-end:url(#arrowAmber)}
+      .h2Icon path{fill:#09476B}
+    </style>
   </defs>
 
-  <rect class="bg" width="1400" height="760"/>
-  <text class="text title" x="70" y="72">HTTP Outbox Idempotency with Exposed R2DBC</text>
-  <text class="text subtitle" x="70" y="104">Persist first, dispatch outside the transaction, and record retry-safe outcomes.</text>
+  <rect class="canvas" width="1800" height="1160"/>
+  <rect class="frame" x="32" y="32" width="1736" height="1096" rx="26"/>
 
-  <rect class="panel spring" x="70" y="150" width="300" height="140" rx="8"/>
-  <text class="text label" x="96" y="190">Spring Boot 4</text>
-  <text class="text small" x="96" y="224">WebFlux controller</text>
-  <text class="text small" x="96" y="250">WebClient dispatch boundary</text>
+  <text class="title" x="86" y="112">HTTP Outbox And Idempotency</text>
+  <text class="subtitle" x="90" y="154">External calls are persisted before dispatch; the unique idempotency key is forwarded and stored as the duplicate boundary.</text>
 
-  <rect class="panel ktor" x="70" y="470" width="300" height="140" rx="8"/>
-  <text class="text label" x="96" y="510">Ktor 3</text>
-  <text class="text small" x="96" y="544">Routing DSL + Sessions</text>
-  <text class="text small" x="96" y="570">HttpClient / MockEngine boundary</text>
+  <rect class="lane laneSpring" x="70" y="205" width="795" height="575" rx="18"/>
+  <text class="laneTitle" x="96" y="239">SPRING WEBCLIENT OUTBOUND PATH</text>
 
-  <rect class="panel" x="450" y="190" width="280" height="110" rx="8"/>
-  <text class="text label" x="478" y="232">Inbound Request</text>
-  <text class="text small" x="478" y="264">idempotencyKey + payload</text>
+  <rect class="lane laneKtor" x="935" y="205" width="795" height="575" rx="18"/>
+  <text class="laneTitle" x="961" y="239">KTOR HTTP CLIENT OUTBOUND PATH</text>
 
-  <rect class="panel db" x="800" y="160" width="330" height="170" rx="8"/>
-  <text class="text label" x="828" y="202">OutboundRequests</text>
-  <text class="text small" x="828" y="236">unique idempotency key</text>
-  <text class="text small" x="828" y="262">status, attempts, lastStatusCode</text>
-  <text class="text small" x="828" y="288">sanitized lastError</text>
+  <rect class="lane laneData" x="70" y="810" width="1660" height="255" rx="18"/>
+  <text class="laneTitle" x="96" y="844">R2DBC IDEMPOTENCY AND RETRY CONTRACT</text>
 
-  <rect class="panel state" x="455" y="420" width="265" height="150" rx="8"/>
-  <text class="text label" x="483" y="462">Claim Batch</text>
-  <text class="text small" x="483" y="496">PENDING / RETRYABLE_FAILED</text>
-  <text class="text small" x="483" y="522">to IN_FLIGHT</text>
-  <text class="text tiny" x="483" y="548">short R2DBC transaction</text>
+  <g data-card="Spring enqueue outbound">
+    <rect class="card" x="115" y="285" width="320" height="120" rx="14" fill="#ffffff" stroke="#4f86c6"/>
+    <text class="cardTitle" x="275" y="326" text-anchor="middle">Outbound API</text>
+    <text class="body" x="275" y="357" text-anchor="middle">POST /production/outbound</text>
+    <text class="body small" x="275" y="381" text-anchor="middle">X-Api-Key requires outbound:create</text>
+  </g>
 
-  <rect class="panel external" x="815" y="440" width="305" height="150" rx="8"/>
-  <text class="text label" x="843" y="482">External HTTP API</text>
-  <text class="text small" x="843" y="516">2xx success</text>
-  <text class="text small" x="843" y="542">408 / 429 / 5xx retryable</text>
-  <text class="text small" x="843" y="568">ordinary 4xx permanent</text>
+  <g data-card="Spring persist outbound">
+    <rect class="card" x="115" y="500" width="320" height="130" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+    <text class="cardTitle" x="275" y="542" text-anchor="middle">Persist First</text>
+    <text class="body" x="275" y="573" text-anchor="middle">unique idempotency_key</text>
+    <text class="body small" x="275" y="599" text-anchor="middle">target_url, payload, PENDING, attempts=0</text>
+  </g>
 
-  <rect class="panel" x="1185" y="240" width="155" height="285" rx="8"/>
-  <text class="text label" x="1210" y="280">States</text>
-  <text class="text small" x="1210" y="320">PENDING</text>
-  <text class="text small" x="1210" y="360">IN_FLIGHT</text>
-  <text class="text small" x="1210" y="400">SUCCEEDED</text>
-  <text class="text small" x="1210" y="440">RETRYABLE_FAILED</text>
-  <text class="text small" x="1210" y="480">PERMANENT_FAILED</text>
+  <g data-card="Spring WebClient dispatcher">
+    <rect class="card" x="505" y="285" width="320" height="120" rx="14" fill="#ffffff" stroke="#4f86c6"/>
+    <text class="cardTitle" x="665" y="326" text-anchor="middle">WebClient Dispatcher</text>
+    <text class="body" x="665" y="357" text-anchor="middle">SpringOutboundDispatcher</text>
+    <text class="body small" x="665" y="381" text-anchor="middle">forwards Idempotency-Key header</text>
+  </g>
 
-  <path class="arrow" d="M 370 220 L 450 220"/>
-  <path class="arrow" d="M 730 245 L 800 245"/>
-  <path class="arrow" d="M 965 330 L 965 440"/>
-  <path class="arrow" d="M 720 495 L 815 495"/>
-  <path class="arrow" d="M 970 440 C 1040 390 1050 330 1130 300"/>
-  <path class="arrow dash" d="M 815 550 C 730 620 570 615 520 570"/>
-  <path class="arrow" d="M 370 540 C 420 540 430 495 455 495"/>
-  <path class="arrow" d="M 370 540 C 465 410 690 330 800 285"/>
+  <g data-card="Spring dispatch claim">
+    <rect class="card" x="505" y="500" width="320" height="130" rx="14" fill="#ffffff" stroke="#6f8f52"/>
+    <text class="cardTitle" x="665" y="542" text-anchor="middle">Claim And Dispatch</text>
+    <text class="body" x="665" y="573" text-anchor="middle">PENDING/RETRYABLE -> IN_FLIGHT</text>
+    <text class="body small" x="665" y="599" text-anchor="middle">network call runs outside transaction</text>
+  </g>
 
-  <text class="text tiny" x="385" y="208">POST /production/outbound</text>
-  <text class="text tiny" x="742" y="232">persist before dispatch</text>
-  <text class="text tiny" x="980" y="390">release transaction</text>
-  <text class="text tiny" x="741" y="486">HTTP call</text>
-  <text class="text tiny" x="1035" y="365">record outcome</text>
-  <text class="text tiny" x="585" y="638">retry until maxAttempts, then permanent</text>
+  <g data-card="Ktor enqueue outbound">
+    <rect class="card" x="980" y="285" width="320" height="120" rx="14" fill="#ffffff" stroke="#6f8f52"/>
+    <text class="cardTitle" x="1140" y="326" text-anchor="middle">Outbound Route</text>
+    <text class="body" x="1140" y="357" text-anchor="middle">POST /production/outbound</text>
+    <text class="body small" x="1140" y="381" text-anchor="middle">signed admin session required</text>
+  </g>
+
+  <g data-card="Ktor persist outbound">
+    <rect class="card" x="980" y="500" width="320" height="130" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+    <text class="cardTitle" x="1140" y="542" text-anchor="middle">Persist First</text>
+    <text class="body" x="1140" y="573" text-anchor="middle">same unique idempotency_key</text>
+    <text class="body small" x="1140" y="599" text-anchor="middle">duplicate key returns structured conflict</text>
+  </g>
+
+  <g data-card="Ktor HTTP client dispatcher">
+    <rect class="card" x="1370" y="285" width="320" height="120" rx="14" fill="#ffffff" stroke="#6f8f52"/>
+    <text class="cardTitle" x="1530" y="326" text-anchor="middle">Ktor HTTP Dispatcher</text>
+    <text class="body" x="1530" y="357" text-anchor="middle">KtorOutboundDispatcher</text>
+    <text class="body small" x="1530" y="381" text-anchor="middle">MockEngine covers client behavior</text>
+  </g>
+
+  <g data-card="Ktor dispatch claim">
+    <rect class="card" x="1370" y="500" width="320" height="130" rx="14" fill="#ffffff" stroke="#6f8f52"/>
+    <text class="cardTitle" x="1530" y="542" text-anchor="middle">Claim And Dispatch</text>
+    <text class="body" x="1530" y="573" text-anchor="middle">same status transition rules</text>
+    <text class="body small" x="1530" y="599" text-anchor="middle">client closed with application lifecycle</text>
+  </g>
+
+  <g data-card="Spring outbound table">
+    <rect class="card" x="145" y="885" width="510" height="125" rx="14" fill="#ffffff" stroke="#a36f3e"/>
+    <g class="h2Icon" data-bluetape4k-icon="database/h2.svg" transform="translate(181 917) scale(1.45)">
+      <path d="M17.17 13.27c.14-.015.28-.023.416-.023.7 0 1.228.159 1.599.469.37.314.555.756.555 1.334a2.861 2.861 0 0 1-.43 1.455c-.291.492-.775 1.066-1.46 1.727-.453.446-1.061.976-1.821 1.592a48.02 48.02 0 0 1-2.275 1.742v2.083h9.895V21.24H17.99c.219-.159.59-.435 1.11-.832.519-.4 1.033-.835 1.55-1.311.817-.76 1.425-1.5 1.822-2.215a4.624 4.624 0 0 0 .597-2.268c0-1.213-.416-2.154-1.247-2.815-.828-.662-2.033-.994-3.613-.994-.344 0-.692.015-1.036.049V6.04H13.86v4.701H8.965V6.04H5.65v12.846h3.315v-5.661h4.89v5.661h.039c.31-.242.623-.487.933-.74a28.564 28.564 0 0 0 1.826-1.588 14.854 14.854 0 0 0 .517-.529zM12.011 23.3A11.327 11.327 0 0 1 .7 11.99 11.305 11.305 0 0 1 12.011.699a11.286 11.286 0 0 1 11.29 11.29v.351H24v-.351A11.985 11.985 0 0 0 12.011 0 12.008 12.008 0 0 0 0 11.989 12.026 12.026 0 0 0 12.011 24h.352v-.7z"/>
+    </g>
+    <text class="cardTitle" x="430" y="925" text-anchor="middle">Spring Outbound Requests</text>
+    <text class="body small" x="430" y="955" text-anchor="middle">spring_prod_outbound_requests</text>
+    <text class="body small" x="430" y="979" text-anchor="middle">unique key, status, attempts, last result</text>
+  </g>
+
+  <g data-card="Outbound status rule">
+    <rect class="card" x="715" y="885" width="370" height="125" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+    <text class="cardTitle" x="900" y="925" text-anchor="middle">Retry State Rule</text>
+    <text class="body small" x="900" y="955" text-anchor="middle">2xx succeeds, 4xx is permanent</text>
+    <text class="body small" x="900" y="979" text-anchor="middle">408/425/429/5xx retry up to 3 attempts</text>
+  </g>
+
+  <g data-card="Ktor outbound table">
+    <rect class="card" x="1145" y="885" width="510" height="125" rx="14" fill="#ffffff" stroke="#a36f3e"/>
+    <g class="h2Icon" data-bluetape4k-icon="database/h2.svg" transform="translate(1181 917) scale(1.45)">
+      <path d="M17.17 13.27c.14-.015.28-.023.416-.023.7 0 1.228.159 1.599.469.37.314.555.756.555 1.334a2.861 2.861 0 0 1-.43 1.455c-.291.492-.775 1.066-1.46 1.727-.453.446-1.061.976-1.821 1.592a48.02 48.02 0 0 1-2.275 1.742v2.083h9.895V21.24H17.99c.219-.159.59-.435 1.11-.832.519-.4 1.033-.835 1.55-1.311.817-.76 1.425-1.5 1.822-2.215a4.624 4.624 0 0 0 .597-2.268c0-1.213-.416-2.154-1.247-2.815-.828-.662-2.033-.994-3.613-.994-.344 0-.692.015-1.036.049V6.04H13.86v4.701H8.965V6.04H5.65v12.846h3.315v-5.661h4.89v5.661h.039c.31-.242.623-.487.933-.74a28.564 28.564 0 0 0 1.826-1.588 14.854 14.854 0 0 0 .517-.529zM12.011 23.3A11.327 11.327 0 0 1 .7 11.99 11.305 11.305 0 0 1 12.011.699a11.286 11.286 0 0 1 11.29 11.29v.351H24v-.351A11.985 11.985 0 0 0 12.011 0 12.008 12.008 0 0 0 0 11.989 12.026 12.026 0 0 0 12.011 24h.352v-.7z"/>
+    </g>
+    <text class="cardTitle" x="1430" y="925" text-anchor="middle">Ktor Outbound Requests</text>
+    <text class="body small" x="1430" y="955" text-anchor="middle">ktor_prod_outbound_requests</text>
+    <text class="body small" x="1430" y="979" text-anchor="middle">same persisted idempotency and retry fields</text>
+  </g>
+
+  <path class="connector blue" data-connector="spring-api-persist" d="M 275 405 L 275 495"/>
+  <path class="connector amber" data-connector="spring-persist-table" d="M 275 630 L 275 880"/>
+  <path class="connector blue" data-connector="spring-persist-claim" d="M 435 565 L 500 565"/>
+  <path class="connector green" data-connector="spring-claim-webclient" d="M 665 500 L 665 410"/>
+  <path class="connector amber" data-connector="spring-claim-table" d="M 665 630 L 665 738 Q 665 754 649 754 L 416 754 Q 400 754 400 770 L 400 880"/>
+  <path class="connector blue" data-connector="spring-table-status" d="M 655 947 L 710 947"/>
+
+  <path class="connector green" data-connector="ktor-api-persist" d="M 1140 405 L 1140 495"/>
+  <path class="connector amber" data-connector="ktor-persist-table" d="M 1140 630 L 1140 738 Q 1140 754 1156 754 L 1400 754 Q 1416 754 1416 770 L 1416 880"/>
+  <path class="connector green" data-connector="ktor-persist-claim" d="M 1300 565 L 1365 565"/>
+  <path class="connector green" data-connector="ktor-claim-client" d="M 1530 500 L 1530 410"/>
+  <path class="connector amber" data-connector="ktor-claim-table" d="M 1530 630 L 1530 880"/>
+  <path class="connector blue" data-connector="ktor-table-status" d="M 1145 947 L 1090 947"/>
+
+  <rect x="180" y="1028" width="1440" height="38" rx="12" fill="#ecfdf5" stroke="#86cfa0" stroke-width="1.8"/>
+  <text class="foot" x="900" y="1053" text-anchor="middle">Dispatchers forward Idempotency-Key and store only status code plus sanitized error text after the external call returns.</text>
 </svg>

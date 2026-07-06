@@ -1,94 +1,158 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="2320" height="1161" viewBox="0 0 2320 1161" role="img" aria-label="Structure Diagram">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1460 980" width="1460" height="980" role="img" aria-label="Advanced 07 Exposed R2DBC Custom Entities class diagram">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.6}
+      .lane{stroke:#d7e2ec;stroke-width:1.3}
+      .laneA{fill:#f5f9ff}
+      .laneB{fill:#f8fbf4}
+      .laneC{fill:#fff8f1}
+      .card{filter:url(#shadow)}
+      .header{opacity:.98}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:32px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:16px;letter-spacing:.08em;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:18px;fill:#1e293b}
+      .connector{fill:none;stroke:#64748b;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+      .inherit{fill:none;stroke:#64748b;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+      .use{fill:none;stroke-width:2.2;stroke-dasharray:7 6;stroke-linecap:butt;stroke-linejoin:round}
+      .head{fill:white;stroke:#64748b;stroke-width:2.5;stroke-dasharray:none;style:stroke-dasharray:none!important}
+      .vhead{fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;style:stroke-dasharray:none!important}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.3}
+    </style>
+  </defs>
 
+  <rect width="1460" height="980" class="canvas"/>
+  <rect x="24" y="24" width="1412" height="932" rx="20" class="frame"/>
 
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none}
-  </style>
-</defs>
-<rect class="canvas" width="2320" height="1161"/>
-<rect class="frame" x="32" y="28" width="2256" height="1105" rx="28"/>
-<text class="title" x="66" y="82">Structure Diagram</text>
-<text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="inheritLine" d="M1160 686 L1160 626 L260 626 L260 566"/>
-<path class="inheritLine" d="M2060 412 L2060 352 L1160 352 L1160 292"/>
-<path class="inheritLine" d="M1610 412 L1610 352 L1160 352 L1160 292"/>
-<path class="inheritLine" d="M710 412 L710 352 L1160 352 L1160 292"/>
-<path class="inheritLine" d="M1160 412 L1160 352 L1160 352 L1160 292"/>
-<path class="inheritLine" d="M260 412 L260 352 L1160 352 L1160 292"/>
-<g transform="translate(970,686)">
-  <rect class="card" x="0" y="0" width="380" height="112" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#5B8DEF"/>
-  <text class="small" x="190" y="26" text-anchor="middle"></text>
-  <text class="label" x="190" y="61" text-anchor="middle">T1</text>
+  <text x="64" y="76" class="title" text-anchor="start">Custom Entity ID Strategy Class Map</text>
+  <text x="64" y="106" class="subtitle" text-anchor="start">Repository-backed UML view of R2DBC tests that package client-side ID generators into reusable table bases.</text>
 
-</g>
-<g transform="translate(970,412)">
-  <rect class="card" x="0" y="0" width="380" height="154" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#58A978"/>
-  <text class="small" x="190" y="26" text-anchor="middle">«abstract»</text>
-  <text class="label" x="190" y="61" text-anchor="middle">KsuidTable</text>
-  <text class="mono" x="18" y="108">+id: Column~EntityID~String~~</text>
-<text class="mono" x="18" y="129">clientDefault: KSUID-Base62 27chars</text>
-</g>
-<g transform="translate(70,412)">
-  <rect class="card" x="0" y="0" width="380" height="154" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#D6A441"/>
-  <text class="small" x="190" y="26" text-anchor="middle">«abstract»</text>
-  <text class="label" x="190" y="61" text-anchor="middle">SnowflakeIdTable</text>
-  <text class="mono" x="18" y="108">+id: Column~EntityID~Long~~</text>
-<text class="mono" x="18" y="129">clientDefault: SnowflakeId</text>
-</g>
-<g transform="translate(1420,412)">
-  <rect class="card" x="0" y="0" width="380" height="154" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#DC6B82"/>
-  <text class="small" x="190" y="26" text-anchor="middle">«abstract»</text>
-  <text class="label" x="190" y="61" text-anchor="middle">TimebasedUUIDTable</text>
-  <text class="mono" x="18" y="108">+id: Column~EntityID~UUID~~</text>
-<text class="mono" x="18" y="129">clientDefault: UUIDv1 RFC4122</text>
-</g>
-<g transform="translate(970,180)">
-  <rect class="card" x="0" y="0" width="380" height="112" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#45A7A1"/>
-  <text class="small" x="190" y="26" text-anchor="middle"></text>
-  <text class="label" x="190" y="61" text-anchor="middle">IdTable</text>
+  <rect x="56" y="136" width="1348" height="176" rx="16" class="lane laneA"/>
+  <text x="84" y="168" class="laneTitle" text-anchor="start">SHARED TEST CONTRACT</text>
 
-</g>
-<g transform="translate(1870,412)">
-  <rect class="card" x="0" y="0" width="380" height="154" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#8A72D6"/>
-  <text class="small" x="190" y="26" text-anchor="middle">«abstract»</text>
-  <text class="label" x="190" y="61" text-anchor="middle">TimebasedUUIDBase62Table</text>
-  <text class="mono" x="18" y="108">+id: Column~EntityID~String~~</text>
-<text class="mono" x="18" y="129">clientDefault: UUIDv1+Base62 22chars</text>
-</g>
-<g transform="translate(520,412)">
-  <rect class="card" x="0" y="0" width="380" height="154" rx="5" fill="#F7F1E7" stroke="#B88A44"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#B88A44"/>
-  <text class="small" x="190" y="26" text-anchor="middle">«abstract»</text>
-  <text class="label" x="190" y="61" text-anchor="middle">KsuidMillisTable</text>
-  <text class="mono" x="18" y="108">+id: Column~EntityID~String~~</text>
-<text class="mono" x="18" y="129">clientDefault: KSUID-Millis 27chars</text>
-</g>
-<g transform="translate(970,918)">
-  <rect class="card" x="0" y="0" width="380" height="133" rx="5" fill="#EEF6D9" stroke="#8BA84D"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#8BA84D"/>
-  <text class="small" x="190" y="26" text-anchor="middle">«abstract»</text>
-  <text class="label" x="190" y="61" text-anchor="middle">IdTableID</text>
-  <text class="mono" x="18" y="108">+id: Column~EntityID~ID~~</text>
-</g>
+  <g data-card="AbstractCustomIdTableTest" data-x="470" data-y="202" data-width="520" data-height="82">
+    <rect x="470" y="202" width="520" height="82" rx="14" fill="#fff" stroke="#64748b" stroke-width="2.1" class="card"/>
+    <path class="header" d="M470,244 L470,216 Q470,202 484,202 L976,202 Q990,202 990,216 L990,244 Z" fill="#f8fafc"/>
+    <text x="730" y="221" class="tiny" text-anchor="middle">&lt;&lt;base test&gt;&gt;</text>
+    <text x="730" y="240" class="cardTitle" text-anchor="middle">AbstractCustomIdTableTest</text>
+    <text x="560" y="266" class="detail" text-anchor="start">dialect matrix, MariaDB skip, coroutine base</text>
+  </g>
+
+  <rect x="56" y="336" width="1348" height="246" rx="16" class="lane laneB"/>
+  <text x="84" y="368" class="laneTitle" text-anchor="start">PARAMETERIZED R2DBC TEST FIXTURES</text>
+
+  <g data-card="Snowflake test" data-x="82" data-y="418" data-width="232" data-height="108">
+    <rect x="82" y="418" width="232" height="108" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.1" class="card"/>
+    <path class="header" d="M82,460 L82,432 Q82,418 96,418 L300,418 Q314,418 314,432 L314,460 Z" fill="#eef5fa"/>
+    <text x="198" y="437" class="tiny" text-anchor="middle">&lt;&lt;test class&gt;&gt;</text>
+    <text x="198" y="456" class="cardTitle" text-anchor="middle">Snowflake Test</text>
+    <text x="100" y="482" class="detail" text-anchor="start">insert, batchInsert</text>
+    <text x="100" y="502" class="detail" text-anchor="start">parallel chunks</text>
+  </g>
+  <g data-card="KSUID test" data-x="352" data-y="418" data-width="232" data-height="108">
+    <rect x="352" y="418" width="232" height="108" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.1" class="card"/>
+    <path class="header" d="M352,460 L352,432 Q352,418 366,418 L570,418 Q584,418 584,432 L584,460 Z" fill="#f1f6ec"/>
+    <text x="468" y="437" class="tiny" text-anchor="middle">&lt;&lt;test class&gt;&gt;</text>
+    <text x="468" y="456" class="cardTitle" text-anchor="middle">KSUID Test</text>
+    <text x="370" y="482" class="detail" text-anchor="start">second-sortable IDs</text>
+    <text x="370" y="502" class="detail" text-anchor="start">27-char strings</text>
+  </g>
+  <g data-card="KSUID millis test" data-x="622" data-y="418" data-width="232" data-height="108">
+    <rect x="622" y="418" width="232" height="108" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.1" class="card"/>
+    <path class="header" d="M622,460 L622,432 Q622,418 636,418 L840,418 Q854,418 854,432 L854,460 Z" fill="#eef7f6"/>
+    <text x="738" y="437" class="tiny" text-anchor="middle">&lt;&lt;test class&gt;&gt;</text>
+    <text x="738" y="456" class="cardTitle" text-anchor="middle">KSUID Millis Test</text>
+    <text x="640" y="482" class="detail" text-anchor="start">millisecond precision</text>
+    <text x="640" y="502" class="detail" text-anchor="start">high-frequency events</text>
+  </g>
+  <g data-card="UUID v1 test" data-x="892" data-y="418" data-width="232" data-height="108">
+    <rect x="892" y="418" width="232" height="108" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2.1" class="card"/>
+    <path class="header" d="M892,460 L892,432 Q892,418 906,418 L1110,418 Q1124,418 1124,432 L1124,460 Z" fill="#f5eee4"/>
+    <text x="1008" y="437" class="tiny" text-anchor="middle">&lt;&lt;test class&gt;&gt;</text>
+    <text x="1008" y="456" class="cardTitle" text-anchor="middle">UUID v1 Test</text>
+    <text x="910" y="482" class="detail" text-anchor="start">standard UUID column</text>
+    <text x="910" y="502" class="detail" text-anchor="start">100ns ordering</text>
+  </g>
+  <g data-card="UUID Base62 test" data-x="1162" data-y="418" data-width="232" data-height="108">
+    <rect x="1162" y="418" width="232" height="108" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2.1" class="card"/>
+    <path class="header" d="M1162,460 L1162,432 Q1162,418 1176,418 L1380,418 Q1394,418 1394,432 L1394,460 Z" fill="#f5eef2"/>
+    <text x="1278" y="437" class="tiny" text-anchor="middle">&lt;&lt;test class&gt;&gt;</text>
+    <text x="1278" y="456" class="cardTitle" text-anchor="middle">UUID Base62 Test</text>
+    <text x="1180" y="482" class="detail" text-anchor="start">insertIgnore flow</text>
+    <text x="1180" y="502" class="detail" text-anchor="start">22-char strings</text>
+  </g>
+
+  <path class="inherit" data-connector="snowflake-inherits"  d="M 198 418 L 198 342 Q 198 326 214 326 L 544 326 Q 560 326 560 310 L 560 300"/>
+  <polygon class="head"  points="560,284 551,300 569,300" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="inherit" data-connector="ksuid-inherits"  d="M 468 418 L 468 354 Q 468 338 484 338 L 629 338 Q 645 338 645 322 L 645 300"/>
+  <polygon class="head"  points="645,284 636,300 654,300" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="inherit" data-connector="ksuid-millis-inherits"  d="M 738 418 L 738 324 Q 738 308 730 308 L 730 300"/>
+  <polygon class="head"  points="730,284 721,300 739,300" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="inherit" data-connector="uuid-inherits"  d="M 1008 418 L 1008 354 Q 1008 338 992 338 L 831 338 Q 815 338 815 322 L 815 300"/>
+  <polygon class="head"  points="815,284 806,300 824,300" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="inherit" data-connector="base62-inherits"  d="M 1278 418 L 1278 342 Q 1278 326 1262 326 L 916 326 Q 900 326 900 310 L 900 300"/>
+  <polygon class="head"  points="900,284 891,300 909,300" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <rect x="56" y="608" width="1348" height="246" rx="16" class="lane laneC"/>
+  <text x="84" y="640" class="laneTitle" text-anchor="start">PRIVATE T1 TABLES AND ID BASE CLASSES</text>
+
+  <g data-card="T1 Snowflake" data-x="82" data-y="690" data-width="232" data-height="112">
+    <rect x="82" y="690" width="232" height="112" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.1" class="card"/>
+    <path class="header" d="M82,732 L82,704 Q82,690 96,690 L300,690 Q314,690 314,704 L314,732 Z" fill="#eef5fa"/>
+    <text x="198" y="709" class="tiny" text-anchor="middle">&lt;&lt;object T1&gt;&gt;</text>
+    <text x="198" y="728" class="cardTitle" text-anchor="middle">SnowflakeIdTable</text>
+    <text x="100" y="754" class="detail" text-anchor="start">id BIGINT primary key</text>
+    <text x="100" y="774" class="detail" text-anchor="start">name varchar, age int</text>
+  </g>
+  <g data-card="T1 KSUID" data-x="352" data-y="690" data-width="232" data-height="112">
+    <rect x="352" y="690" width="232" height="112" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.1" class="card"/>
+    <path class="header" d="M352,732 L352,704 Q352,690 366,690 L570,690 Q584,690 584,704 L584,732 Z" fill="#f1f6ec"/>
+    <text x="468" y="709" class="tiny" text-anchor="middle">&lt;&lt;object T1&gt;&gt;</text>
+    <text x="468" y="728" class="cardTitle" text-anchor="middle">KsuidTable</text>
+    <text x="370" y="754" class="detail" text-anchor="start">id VARCHAR(27)</text>
+    <text x="370" y="774" class="detail" text-anchor="start">seconds-sortable</text>
+  </g>
+  <g data-card="T1 KSUID millis" data-x="622" data-y="690" data-width="232" data-height="112">
+    <rect x="622" y="690" width="232" height="112" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.1" class="card"/>
+    <path class="header" d="M622,732 L622,704 Q622,690 636,690 L840,690 Q854,690 854,704 L854,732 Z" fill="#eef7f6"/>
+    <text x="738" y="709" class="tiny" text-anchor="middle">&lt;&lt;object T1&gt;&gt;</text>
+    <text x="738" y="728" class="cardTitle" text-anchor="middle">KsuidMillisTable</text>
+    <text x="640" y="754" class="detail" text-anchor="start">id VARCHAR(27)</text>
+    <text x="640" y="774" class="detail" text-anchor="start">millis-sortable</text>
+  </g>
+  <g data-card="T1 UUID" data-x="892" data-y="690" data-width="232" data-height="112">
+    <rect x="892" y="690" width="232" height="112" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2.1" class="card"/>
+    <path class="header" d="M892,732 L892,704 Q892,690 906,690 L1110,690 Q1124,690 1124,704 L1124,732 Z" fill="#f5eee4"/>
+    <text x="1008" y="709" class="tiny" text-anchor="middle">&lt;&lt;object T1&gt;&gt;</text>
+    <text x="1008" y="728" class="cardTitle" text-anchor="middle">TimebasedUUID</text>
+    <text x="910" y="754" class="detail" text-anchor="start">id UUID primary key</text>
+    <text x="910" y="774" class="detail" text-anchor="start">RFC 4122 format</text>
+  </g>
+  <g data-card="T1 UUID Base62" data-x="1162" data-y="690" data-width="232" data-height="112">
+    <rect x="1162" y="690" width="232" height="112" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2.1" class="card"/>
+    <path class="header" d="M1162,732 L1162,704 Q1162,690 1176,690 L1380,690 Q1394,690 1394,704 L1394,732 Z" fill="#f5eef2"/>
+    <text x="1278" y="709" class="tiny" text-anchor="middle">&lt;&lt;object T1&gt;&gt;</text>
+    <text x="1278" y="728" class="cardTitle" text-anchor="middle">UUID Base62 Table</text>
+    <text x="1180" y="754" class="detail" text-anchor="start">id VARCHAR(22)</text>
+    <text x="1180" y="774" class="detail" text-anchor="start">URL-safe Base62</text>
+  </g>
+
+  <path class="use" data-connector="snowflake-test-uses-table"  d="M 198 526 L 198 676" stroke="#4f86c6"/>
+  <polyline class="vhead"  points="191,676 198,690 205,676" stroke="#4f86c6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="use" data-connector="ksuid-test-uses-table"  d="M 468 526 L 468 676" stroke="#6f8f52"/>
+  <polyline class="vhead"  points="461,676 468,690 475,676" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="use" data-connector="ksuid-millis-test-uses-table"  d="M 738 526 L 738 676" stroke="#4f8f8b"/>
+  <polyline class="vhead"  points="731,676 738,690 745,676" stroke="#4f8f8b" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="use" data-connector="uuid-test-uses-table"  d="M 1008 526 L 1008 676" stroke="#a66a3f"/>
+  <polyline class="vhead"  points="1001,676 1008,690 1015,676" stroke="#a66a3f" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="use" data-connector="base62-test-uses-table"  d="M 1278 526 L 1278 676" stroke="#a85f7f"/>
+  <polyline class="vhead"  points="1271,676 1278,690 1285,676" stroke="#a85f7f" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <rect x="116" y="888" width="1228" height="36" rx="12" class="noteBox"/>
+  <text x="730" y="912" class="note" text-anchor="middle">Solid hollow triangles show test inheritance; dashed use arrows connect each parameterized test class to its private T1 strategy table.</text>
 </svg>

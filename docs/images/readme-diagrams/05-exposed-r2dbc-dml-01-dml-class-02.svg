@@ -1,109 +1,145 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1366" height="1517" viewBox="0 0 1366 1517" role="img" aria-label="DSL API Structure (Class Diagram)">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1366" height="1517"/>
-<rect class="frame" x="32" y="28" width="1302" height="1461" rx="28"/>
-<text class="title" x="66" y="82">DSL API Structure (Class Diagram)</text>
-<text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="line" d="M263 887 L263 1128 L6 1128 L6 92 L683 92 L683 418" data-connector="line"/>
-<path class="line" d="M263 544 L263 497 L683 497 L683 418" data-connector="line"/>
-<path class="line" d="M683 1167 L683 1112 L1340 1112 L1340 832 L1103 832 L1103 761" data-connector="line"/>
-<path class="line" d="M683 544 L683 418" data-connector="line"/>
-<path class="line" d="M1103 887 L1103 816 L1320 816 L1320 473 L683 473 L683 418" data-connector="line"/>
-<path class="line" d="M1103 544 L1103 465 L683 465 L683 418" data-connector="line"/>
-<path class="line" d="M683 887 L683 800 L66 800 L66 457 L683 457 L683 418" data-connector="line"/>
-<g transform="translate(508,180)">
-  <rect filter="url(#shadow)" x="0" y="0" width="350" height="238" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#5B8DEF"/>
-  <text class="small" x="175" y="26" text-anchor="middle">«DSL»</text>
-  <text class="label" x="175" y="61" text-anchor="middle">Query</text>
-  <text class="mono" x="18" y="108">+where(op: Op)</text>
-<text class="mono" x="18" y="129">+andWhere(op: Op)</text>
-<text class="mono" x="18" y="150">+orderBy(col, order)</text>
-<text class="mono" x="18" y="171">+limit(n)</text>
-<text class="mono" x="18" y="192">+offset(n)</text>
-<text class="mono" x="18" y="213">+groupBy(cols)</text>
-</g>
-<g transform="translate(88,544)">
-  <rect filter="url(#shadow)" x="0" y="0" width="350" height="196" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#58A978"/>
-  <text class="small" x="175" y="26" text-anchor="middle">«DSL»</text>
-  <text class="label" x="175" y="61" text-anchor="middle">SetOperationDSL</text>
-  <text class="mono" x="18" y="108">+union(other)</text>
-<text class="mono" x="18" y="129">+unionAll(other)</text>
-<text class="mono" x="18" y="150">+intersect(other)</text>
-<text class="mono" x="18" y="171">+except(other)</text>
-</g>
-<g transform="translate(508,544)">
-  <rect filter="url(#shadow)" x="0" y="0" width="350" height="196" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#D6A441"/>
-  <text class="small" x="175" y="26" text-anchor="middle">«DSL»</text>
-  <text class="label" x="175" y="61" text-anchor="middle">DeleteDSL</text>
-  <text class="mono" x="18" y="108">+deleteWhere(op)</text>
-<text class="mono" x="18" y="129">+deleteAll()</text>
-<text class="mono" x="18" y="150">+deleteIgnoreWhere(op)</text>
-<text class="mono" x="18" y="171">+deleteReturning(cols, op)</text>
-</g>
-<g transform="translate(928,544)">
-  <rect filter="url(#shadow)" x="0" y="0" width="350" height="217" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
-  <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#DC6B82"/>
-  <text class="small" x="175" y="26" text-anchor="middle">«DSL»</text>
-  <text class="label" x="175" y="61" text-anchor="middle">InsertDSL</text>
-  <text class="mono" x="18" y="108">+insert(body)</text>
-<text class="mono" x="18" y="129">+insertIgnore(body)</text>
-<text class="mono" x="18" y="150">+insertAndGetId(body)</text>
-<text class="mono" x="18" y="171">+batchInsert(data, body)</text>
-<text class="mono" x="18" y="192">+insertSelect(query)</text>
-</g>
-<g transform="translate(88,887)">
-  <rect filter="url(#shadow)" x="0" y="0" width="350" height="154" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
-  <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#45A7A1"/>
-  <text class="small" x="175" y="26" text-anchor="middle">«DSL»</text>
-  <text class="label" x="175" y="61" text-anchor="middle">CTEDSL</text>
-  <text class="mono" x="18" y="108">+withCte(name, query)</text>
-<text class="mono" x="18" y="129">+withRecursive(name, base, recursive)</text>
-</g>
-<g transform="translate(508,887)">
-  <rect filter="url(#shadow)" x="0" y="0" width="350" height="154" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
-  <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#8A72D6"/>
-  <text class="small" x="175" y="26" text-anchor="middle">«DSL»</text>
-  <text class="label" x="175" y="61" text-anchor="middle">SelectDSL</text>
-  <text class="mono" x="18" y="108">+selectAll()</text>
-<text class="mono" x="18" y="129">+select(cols)</text>
-</g>
-<g transform="translate(928,887)">
-  <rect filter="url(#shadow)" x="0" y="0" width="350" height="154" rx="5" fill="#F7F1E7" stroke="#B88A44"/>
-  <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#B88A44"/>
-  <text class="small" x="175" y="26" text-anchor="middle">«DSL»</text>
-  <text class="label" x="175" y="61" text-anchor="middle">UpdateDSL</text>
-  <text class="mono" x="18" y="108">+update(where, body)</text>
-<text class="mono" x="18" y="129">+updateReturning(cols, where, body)</text>
-</g>
-<g transform="translate(508,1167)">
-  <rect filter="url(#shadow)" x="0" y="0" width="350" height="154" rx="5" fill="#EEF6D9" stroke="#8BA84D"/>
-  <line class="compartment" x1="0" y1="78" x2="350" y2="78" stroke="#8BA84D"/>
-  <text class="small" x="175" y="26" text-anchor="middle">«DSL»</text>
-  <text class="label" x="175" y="61" text-anchor="middle">UpsertDSL</text>
-  <text class="mono" x="18" y="108">+upsert(body)</text>
-<text class="mono" x="18" y="129">+batchUpsert(data, onUpdate, body)</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 940" width="1440" height="940" role="img" aria-label="Exposed R2DBC DML class and DSL structure map">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fffdf9;stroke:#d7e2ec;stroke-width:1.6}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.3}
+      .card{filter:url(#shadow)}
+      .header{opacity:.96}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:34px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:15px;letter-spacing:.08em;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:20px;fill:#1e293b}
+      .connector{fill:none;stroke:#64748b;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#solidArrow)}
+      .labelPill{fill:#fffdf9;stroke:#d7e2ec;stroke-width:1.2}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.3}
+    </style>
+    <marker id="solidArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#64748b" stroke="#64748b" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+  </defs>
+
+  <rect width="1440" height="940" class="canvas"/>
+  <rect x="22" y="22" width="1396" height="896" rx="18" class="frame"/>
+
+  <text x="58" y="70" class="title" text-anchor="start">DML Test Class and DSL Structure</text>
+  <text x="58" y="100" class="subtitle" text-anchor="start">The 01-dml module groups test classes around shared fixtures, Exposed R2DBC DSL calls, and Flow collection patterns.</text>
+
+  <rect x="50" y="130" width="1340" height="240" rx="16" class="lane"/>
+  <text x="76" y="160" class="laneTitle" text-anchor="start">TEST CLASS GROUPS</text>
+
+  <rect x="50" y="400" width="1340" height="218" rx="16" class="lane"/>
+  <text x="76" y="430" class="laneTitle" text-anchor="start">SHARED FIXTURES AND LOCAL TABLES</text>
+
+  <rect x="50" y="648" width="1340" height="162" rx="16" class="lane"/>
+  <text x="76" y="678" class="laneTitle" text-anchor="start">EXPOSED R2DBC API SURFACE</text>
+
+  <g data-card="Basic CRUD" data-x="92" data-y="204" data-width="292" data-height="112">
+    <rect x="92" y="204" width="292" height="112" rx="14" fill="#ffffff" stroke="#4f86c6" stroke-width="2" class="card"/>
+    <path class="header" d="M92,246 L92,218 Q92,204 106,204 L370,204 Q384,204 384,218 L384,246 Z" fill="#eef5fa"/>
+    <text x="238" y="222" class="tiny" text-anchor="middle">&lt;&lt;base R2DBC test&gt;&gt;</text>
+    <text x="238" y="241" class="cardTitle" text-anchor="middle">Basic CRUD</text>
+    <text x="112" y="272" class="detail" text-anchor="start">Ex01 Select / Ex02 Insert</text>
+    <text x="112" y="290" class="detail" text-anchor="start">Ex03 Update / Ex04 Upsert</text>
+    <text x="112" y="308" class="detail" text-anchor="start">Ex05 Delete</text>
+  </g>
+
+  <g data-card="Query Shaping" data-x="416" data-y="204" data-width="292" data-height="112">
+    <rect x="416" y="204" width="292" height="112" rx="14" fill="#ffffff" stroke="#6f8f52" stroke-width="2" class="card"/>
+    <path class="header" d="M416,246 L416,218 Q416,204 430,204 L694,204 Q708,204 708,218 L708,246 Z" fill="#f1f6ec"/>
+    <text x="562" y="222" class="tiny" text-anchor="middle">&lt;&lt;filters + aggregates&gt;&gt;</text>
+    <text x="562" y="241" class="cardTitle" text-anchor="middle">Query Shaping</text>
+    <text x="436" y="272" class="detail" text-anchor="start">exists, count, groupBy</text>
+    <text x="436" y="290" class="detail" text-anchor="start">orderBy, adjustQuery</text>
+    <text x="436" y="308" class="detail" text-anchor="start">conditions + arithmetic</text>
+  </g>
+
+  <g data-card="Relational SQL" data-x="740" data-y="204" data-width="292" data-height="112">
+    <rect x="740" y="204" width="292" height="112" rx="14" fill="#ffffff" stroke="#a66a3f" stroke-width="2" class="card"/>
+    <path class="header" d="M740,246 L740,218 Q740,204 754,204 L1018,204 Q1032,204 1032,218 L1032,246 Z" fill="#f5eee4"/>
+    <text x="886" y="222" class="tiny" text-anchor="middle">&lt;&lt;joins + sets + CTE&gt;&gt;</text>
+    <text x="886" y="241" class="cardTitle" text-anchor="middle">Relational SQL</text>
+    <text x="760" y="272" class="detail" text-anchor="start">joins, insert-select</text>
+    <text x="760" y="290" class="detail" text-anchor="start">union / intersect</text>
+    <text x="760" y="308" class="detail" text-anchor="start">except / lateral join / CTE</text>
+  </g>
+
+  <g data-card="Dialect Features" data-x="1064" data-y="204" data-width="292" data-height="112">
+    <rect x="1064" y="204" width="292" height="112" rx="14" fill="#ffffff" stroke="#a85f7f" stroke-width="2" class="card"/>
+    <path class="header" d="M1064,246 L1064,218 Q1064,204 1078,204 L1342,204 Q1356,204 1356,218 L1356,246 Z" fill="#f5eef2"/>
+    <text x="1210" y="222" class="tiny" text-anchor="middle">&lt;&lt;dialect-specific DML&gt;&gt;</text>
+    <text x="1210" y="241" class="cardTitle" text-anchor="middle">Dialect Features</text>
+    <text x="1084" y="272" class="detail" text-anchor="start">replace / merge</text>
+    <text x="1084" y="290" class="detail" text-anchor="start">explain / analyze</text>
+    <text x="1084" y="308" class="detail" text-anchor="start">returning / dual select</text>
+  </g>
+
+  <g data-card="DMLTestData" data-x="116" data-y="474" data-width="340" data-height="102">
+    <rect x="116" y="474" width="340" height="102" rx="14" fill="#ffffff" stroke="#4f86c6" stroke-width="2" class="card"/>
+    <path class="header" d="M116,516 L116,488 Q116,474 130,474 L442,474 Q456,474 456,488 L456,516 Z" fill="#eef5fa"/>
+    <text x="286" y="492" class="tiny" text-anchor="middle">&lt;&lt;shared object&gt;&gt;</text>
+    <text x="286" y="511" class="cardTitle" text-anchor="middle">DMLTestData</text>
+    <text x="136" y="542" class="detail" text-anchor="start">Cities, Users, UserData</text>
+    <text x="136" y="560" class="detail" text-anchor="start">Sales, SomeAmounts</text>
+  </g>
+
+  <g data-card="Fixture Builders" data-x="550" data-y="474" data-width="340" data-height="120">
+    <rect x="550" y="474" width="340" height="120" rx="14" fill="#ffffff" stroke="#6f8f52" stroke-width="2" class="card"/>
+    <path class="header" d="M550,516 L550,488 Q550,474 564,474 L876,474 Q890,474 890,488 L890,516 Z" fill="#f1f6ec"/>
+    <text x="720" y="492" class="tiny" text-anchor="middle">&lt;&lt;suspend helpers&gt;&gt;</text>
+    <text x="720" y="511" class="cardTitle" text-anchor="middle">Fixture Builders</text>
+    <text x="570" y="542" class="detail" text-anchor="start">withCitiesAndUsers()</text>
+    <text x="570" y="560" class="detail" text-anchor="start">withSalesAnd</text>
+    <text x="570" y="578" class="detail" text-anchor="start">SomeAmounts()</text>
+  </g>
+
+  <g data-card="Local Tables" data-x="984" data-y="474" data-width="340" data-height="120">
+    <rect x="984" y="474" width="340" height="120" rx="14" fill="#ffffff" stroke="#a66a3f" stroke-width="2" class="card"/>
+    <path class="header" d="M984,516 L984,488 Q984,474 998,474 L1310,474 Q1324,474 1324,488 L1324,516 Z" fill="#f5eee4"/>
+    <text x="1154" y="492" class="tiny" text-anchor="middle">&lt;&lt;per-test tables&gt;&gt;</text>
+    <text x="1154" y="511" class="cardTitle" text-anchor="middle">Local Tables</text>
+    <text x="1004" y="542" class="detail" text-anchor="start">AutoIncTable, Words</text>
+    <text x="1004" y="560" class="detail" text-anchor="start">tester / UUID tables</text>
+    <text x="1004" y="578" class="detail" text-anchor="start">generated columns</text>
+  </g>
+
+  <g data-card="R2DBC DSL" data-x="166" data-y="712" data-width="310" data-height="88">
+    <rect x="166" y="712" width="310" height="88" rx="14" fill="#ffffff" stroke="#4f8f8b" stroke-width="2" class="card"/>
+    <path class="header" d="M166,746 L166,726 Q166,712 180,712 L462,712 Q476,712 476,726 L476,746 Z" fill="#eef7f6"/>
+    <text x="321" y="736" class="cardTitle" text-anchor="middle">Exposed R2DBC DSL</text>
+    <text x="186" y="766" class="detail" text-anchor="start">selectAll / insert / update</text>
+    <text x="186" y="784" class="detail" text-anchor="start">delete / upsert</text>
+  </g>
+
+  <g data-card="Predicate DSL" data-x="565" data-y="712" data-width="310" data-height="88">
+    <rect x="565" y="712" width="310" height="88" rx="14" fill="#ffffff" stroke="#a85f7f" stroke-width="2" class="card"/>
+    <path class="header" d="M565,746 L565,726 Q565,712 579,712 L861,712 Q875,712 875,726 L875,746 Z" fill="#f5eef2"/>
+    <text x="720" y="736" class="cardTitle" text-anchor="middle">Predicate DSL</text>
+    <text x="585" y="766" class="detail" text-anchor="start">eq / inList / compoundAnd</text>
+    <text x="585" y="784" class="detail" text-anchor="start">case / coalesce</text>
+  </g>
+
+  <g data-card="Flow Collectors" data-x="964" data-y="712" data-width="310" data-height="88">
+    <rect x="964" y="712" width="310" height="88" rx="14" fill="#ffffff" stroke="#8a6f55" stroke-width="2" class="card"/>
+    <path class="header" d="M964,746 L964,726 Q964,712 978,712 L1260,712 Q1274,712 1274,726 L1274,746 Z" fill="#f3eee8"/>
+    <text x="1119" y="736" class="cardTitle" text-anchor="middle">Flow Collectors</text>
+    <text x="984" y="766" class="detail" text-anchor="start">toList / single / first</text>
+    <text x="984" y="784" class="detail" text-anchor="start">count / mapNotNull</text>
+  </g>
+
+  <path class="connector" data-connector="crud-fixtures" d="M 238 316 L 238 382 Q 238 392 248 392 L 420 392 Q 430 392 430 402 L 430 474"/>
+  <path class="connector" data-connector="query-fixtures" d="M 562 316 L 562 474"/>
+  <path class="connector" data-connector="relational-fixtures" d="M 850 316 L 850 474"/>
+  <path class="connector" data-connector="dialect-local" d="M 1210 316 L 1210 474"/>
+
+  <path class="connector" data-connector="fixture-dsl" d="M 286 576 L 286 622 Q 286 632 296 632 L 430 632 Q 440 632 440 642 L 440 712"/>
+  <path class="connector" data-connector="builder-predicate" d="M 720 594 L 720 712"/>
+  <path class="connector" data-connector="local-flow" d="M 1154 594 L 1154 712"/>
+
+  <rect x="92" y="844" width="1256" height="30" rx="10" class="noteBox"/>
+  <text x="720" y="864" class="note" text-anchor="middle">Cards use source class names from 01-dml and shared DMLTestData; arrows show reader flow from test class groups to fixtures and R2DBC DSL operations.</text>
 </svg>

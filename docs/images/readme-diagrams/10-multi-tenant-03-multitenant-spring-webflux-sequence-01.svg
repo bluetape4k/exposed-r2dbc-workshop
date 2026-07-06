@@ -1,76 +1,88 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1470" height="1236" viewBox="0 0 1470 1236" role="img" aria-label="Multi-tenancy Request Flow">
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1080" viewBox="0 0 1500 1080" role="img" aria-label="Spring WebFlux multi tenant request sequence">
 <defs>
-<filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
-<marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-<style>.canvas{fill:#F7F9FC}.frame{fill:#fff;stroke:#D8E0EA;stroke-width:1.5}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:39px;font-weight:400;fill:#102033}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;font-weight:400;fill:#536273}.smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:22px;font-weight:400;fill:#102033}.strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}.card{stroke-width:2;filter:url(#shadow)}.line{stroke:#5D6B7A;stroke-width:2.2;fill:none;marker-end:url(#openArrow)}.dashed{stroke:#5D6B7A;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}.lifeline{stroke:#B7C2D1;stroke-width:1.8;stroke-dasharray:8 9}.note{fill:#fff;opacity:.97}</style>
+<filter id="shadow" x="-8%" y="-8%" width="116%" height="122%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
+<marker id="arrow-blue" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#3c82b4" stroke="#3c82b4" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker>
+<marker id="arrow-green" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5f8848" stroke="#5f8848" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker>
+<marker id="arrow-amber" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#b78632" stroke="#b78632" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker>
+<marker id="arrow-return" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/></marker>
+<style>
+.canvas{fill:#f6f9fc}
+.frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}
+.title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:34px;fill:#1e293b}
+.subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}
+.participantText{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:19px;fill:#1e293b}
+.participantHint,.labelText,.num{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#344256;font-weight:700}
+.card{filter:url(#shadow)}
+.lifeline{stroke:#9fb0bf;stroke-width:2;stroke-dasharray:8 10}
+.activation{fill:#ecfdf5;stroke:#7aa083;stroke-width:2}
+.call{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none}
+.return{fill:none;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:8 7}
+.label{fill:#fff;stroke-width:1.4}
+.labelBlue{stroke:#b8d9eb}
+.labelGreen{stroke:#c5d9b6}
+.labelAmber{stroke:#dfc396}
+.labelReturn{stroke:#bdd9d3}
+.numCircle{fill:#fff}
+.noteBox{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}
+</style>
 </defs>
-<rect class="canvas" width="1470" height="1236"/>
-<rect class="frame" x="24" y="24" width="1422" height="1180" rx="22"/>
-<text class="title" x="58" y="76">Multi-tenancy Request Flow</text>
-<text class="subtitle" x="62" y="106">Compact sequence flow with reduced outer and inner whitespace</text>
-<rect class="card" x="50.0" y="156" width="220" height="66" rx="16" fill="#E8F3FF" stroke="#5B8DEF"/>
-<text class="smallLabel participant" x="160.0" y="196" text-anchor="middle">HTTP Client</text>
-<line class="lifeline" x1="160.0" y1="250" x2="160.0" y2="1174"/>
-<rect class="card" x="280.0" y="156" width="220" height="66" rx="16" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel participant" x="390.0" y="196" text-anchor="middle">TenantWebFilter</text>
-<line class="lifeline" x1="390.0" y1="250" x2="390.0" y2="1174"/>
-<rect class="card" x="510.0" y="156" width="220" height="66" rx="16" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel participant" x="620.0" y="196" text-anchor="middle">ReactorContext</text>
-<line class="lifeline" x1="620.0" y1="250" x2="620.0" y2="1174"/>
-<rect class="card" x="740.0" y="156" width="220" height="66" rx="16" fill="#FDECEF" stroke="#DC6B82"/>
-<text class="smallLabel participant" x="850.0" y="196" text-anchor="middle">ActorController</text>
-<line class="lifeline" x1="850.0" y1="250" x2="850.0" y2="1174"/>
-<rect class="card" x="970.0" y="156" width="220" height="66" rx="16" fill="#F1ECFF" stroke="#8A72D6"/>
-<text class="smallLabel participant" x="1080.0" y="196" text-anchor="middle">ActorRepository</text>
-<line class="lifeline" x1="1080.0" y1="250" x2="1080.0" y2="1174"/>
-<rect class="card" x="1200.0" y="156" width="220" height="66" rx="16" fill="#E9F7F6" stroke="#45A7A1"/>
-<text class="smallLabel participant" x="1310.0" y="196" text-anchor="middle">R2dbcDatabase</text>
-<line class="lifeline" x1="1310.0" y1="250" x2="1310.0" y2="1174"/>
-<path class="line" d="M160.0 292.0 L390.0 292.0" data-connector="line"/>
-<rect class="note label" x="147.3" y="260.0" width="255.4" height="28" rx="9"/>
-<text class="strong labelText" x="275.0" y="280.0" text-anchor="middle">1. HTTP request (X-TENANT-ID: korean)</text>
-<path class="line" d="M390.0 366.0 L620.0 366.0" data-connector="line"/>
-<rect class="note label" x="389.7" y="334.0" width="230.6" height="28" rx="9"/>
-<text class="strong labelText" x="505.0" y="354.0" text-anchor="middle">2. contextWrite(TenantId(korean))</text>
-<path class="line" d="M390.0 440.0 L850.0 440.0" data-connector="line"/>
-<rect class="note label" x="540.0" y="408.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="620.0" y="428.0" text-anchor="middle">3. forward request</text>
-<path class="line" d="M850.0 514.0 C912.0 514.0 912.0 544.0 850.0 544.0" data-connector="line"/>
-<rect class="note label" x="920.0" y="504.0" width="286.4" height="28" rx="9"/>
-<text class="strong labelText" x="920.0" y="524.0" text-anchor="start">4. suspendTransactionWithCurrentTenant { }</text>
-<path class="line" d="M850.0 588.0 L620.0 588.0" data-connector="line"/>
-<rect class="note label" x="622.8" y="556.0" width="224.4" height="28" rx="9"/>
-<text class="strong labelText" x="735.0" y="576.0" text-anchor="middle">5. currentReactorTenant() lookup</text>
-<path class="dashed" d="M620.0 662.0 L850.0 662.0" data-connector="dashed"/>
-<rect class="note label" x="655.0" y="630.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="735.0" y="650.0" text-anchor="middle">6. Tenant(korean)</text>
-<path class="line" d="M850.0 736.0 L1310.0 736.0" data-connector="line"/>
-<rect class="note label" x="967.8" y="704.0" width="224.4" height="28" rx="9"/>
-<text class="strong labelText" x="1080.0" y="724.0" text-anchor="middle">7. SchemaUtils.setSchema(korean)</text>
-<path class="line" d="M850.0 810.0 L1080.0 810.0" data-connector="line"/>
-<rect class="note label" x="865.2" y="778.0" width="199.6" height="28" rx="9"/>
-<text class="strong labelText" x="965.0" y="798.0" text-anchor="middle">8. actorRepository.findAll()</text>
-<path class="line" d="M1080.0 884.0 L1310.0 884.0" data-connector="line"/>
-<rect class="note label" x="1089.0" y="852.0" width="212.0" height="28" rx="9"/>
-<text class="strong labelText" x="1195.0" y="872.0" text-anchor="middle">9. SELECT * FROM korean.actors</text>
-<path class="dashed" d="M1310.0 958.0 L1080.0 958.0" data-connector="dashed"/>
-<rect class="note label" x="1115.0" y="926.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="1195.0" y="946.0" text-anchor="middle">10. Korean actor data</text>
-<path class="dashed" d="M1080.0 1032.0 L850.0 1032.0" data-connector="dashed"/>
-<rect class="note label" x="885.0" y="1000.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="965.0" y="1020.0" text-anchor="middle">11. List~ActorRecord~</text>
-<path class="dashed" d="M850.0 1106.0 L160.0 1106.0" data-connector="dashed"/>
-<rect class="note label" x="395.9" y="1074.0" width="218.2" height="28" rx="9"/>
-<text class="strong labelText" x="505.0" y="1094.0" text-anchor="middle">12. JSON response (Korean data)</text>
-<rect class="activation" x="154.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="384.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="614.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
+<rect class="canvas" width="1500" height="1080"/>
+<rect class="frame" x="28" y="26" width="1444" height="1028" rx="22"/>
+<text x="64" y="76" class="title">Spring WebFlux Tenant Schema Request Sequence</text>
+<text x="66" y="106" class="subtitle">TenantFilter stores a validated tenant in ReactorContext; Exposed switches schema inside the request transaction.</text>
 
-<!-- audit badge labels: visible sequence numbering and message pill samples -->
-<g aria-label="sequence message labels">
-<rect x="58" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="76" y="140" class="num" text-anchor="middle">1</text>
-<rect x="102" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="120" y="140" class="num" text-anchor="middle">2</text>
-</g>
+<g data-card="HTTP Client" data-x="40" data-y="146" data-width="180" data-height="72"><rect class="card participant" x="40" y="146" width="180" height="72" rx="14" fill="#ffffff" stroke="#546e7a" stroke-width="2"/><text x="130" y="182" class="participantText participant" text-anchor="middle">HTTP Client</text><text x="130" y="202" class="participantHint" text-anchor="middle">X-TENANT-ID</text></g><line class="lifeline" x1="130" y1="248" x2="130" y2="988"/>
+<g data-card="TenantFilter" data-x="245" data-y="146" data-width="180" data-height="72"><rect class="card participant" x="245" y="146" width="180" height="72" rx="14" fill="#ffffff" stroke="#546e7a" stroke-width="2"/><text x="335" y="182" class="participantText participant" text-anchor="middle">TenantFilter</text><text x="335" y="202" class="participantHint" text-anchor="middle">WebFilter</text></g><line class="lifeline" x1="335" y1="248" x2="335" y2="988"/>
+<g data-card="ReactorContext" data-x="450" data-y="146" data-width="180" data-height="72"><rect class="card participant" x="450" y="146" width="180" height="72" rx="14" fill="#ffffff" stroke="#546e7a" stroke-width="2"/><text x="540" y="182" class="participantText participant" text-anchor="middle">ReactorContext</text><text x="540" y="202" class="participantHint" text-anchor="middle">TenantId</text></g><line class="lifeline" x1="540" y1="248" x2="540" y2="988"/>
+<g data-card="ActorController" data-x="655" data-y="146" data-width="180" data-height="72"><rect class="card participant" x="655" y="146" width="180" height="72" rx="14" fill="#ffffff" stroke="#546e7a" stroke-width="2"/><text x="745" y="182" class="participantText participant" text-anchor="middle">ActorController</text><text x="745" y="202" class="participantHint" text-anchor="middle">/actors</text></g><line class="lifeline" x1="745" y1="248" x2="745" y2="988"/>
+<g data-card="Exposed Tx" data-x="860" data-y="146" data-width="180" data-height="72"><rect class="card participant" x="860" y="146" width="180" height="72" rx="14" fill="#ffffff" stroke="#546e7a" stroke-width="2"/><text x="950" y="182" class="participantText participant" text-anchor="middle">Exposed Tx</text><text x="950" y="202" class="participantHint" text-anchor="middle">schema switch</text></g><line class="lifeline" x1="950" y1="248" x2="950" y2="988"/>
+<g data-card="ActorRepo" data-x="1065" data-y="146" data-width="180" data-height="72"><rect class="card participant" x="1065" y="146" width="180" height="72" rx="14" fill="#ffffff" stroke="#546e7a" stroke-width="2"/><text x="1155" y="182" class="participantText participant" text-anchor="middle">ActorRepo</text><text x="1155" y="202" class="participantHint" text-anchor="middle">R2dbcRepository</text></g><line class="lifeline" x1="1155" y1="248" x2="1155" y2="988"/>
+<g data-card="R2DBC DB" data-x="1270" data-y="146" data-width="180" data-height="72"><rect class="card participant" x="1270" y="146" width="180" height="72" rx="14" fill="#ffffff" stroke="#546e7a" stroke-width="2"/><text x="1360" y="182" class="participantText participant" text-anchor="middle">R2DBC DB</text><text x="1360" y="202" class="participantHint" text-anchor="middle">tenant schema</text></g><line class="lifeline" x1="1360" y1="248" x2="1360" y2="988"/>
+
+<rect class="activation" x="124" y="278" width="12" height="654" rx="4"/>
+<rect class="activation" x="329" y="292" width="12" height="142" rx="4"/>
+<rect class="activation" x="534" y="346" width="12" height="260" rx="4"/>
+<rect class="activation" x="739" y="400" width="12" height="506" rx="4"/>
+<rect class="activation" x="944" y="454" width="12" height="344" rx="4"/>
+<rect class="activation" x="1149" y="670" width="12" height="128" rx="4"/>
+<rect class="activation" x="1354" y="616" width="12" height="236" rx="4"/>
+
+<path class="call" data-connector="seq-01" d="M 130 300 L 335 300" stroke="#3c82b4" marker-end="url(#arrow-blue)"/>
+<rect class="label labelBlue" x="108" y="264" width="248" height="28" rx="14" stroke="#b8d9eb"/><circle class="numCircle" cx="126" cy="278" r="13" stroke="#3c82b4" stroke-width="1.7"/><text class="num" x="126" y="282" text-anchor="middle">1</text><text class="labelText" x="148" y="282">GET /actors + X-TENANT-ID</text>
+
+<path class="call" data-connector="seq-02" d="M 335 354 L 540 354" stroke="#5f8848" marker-end="url(#arrow-green)"/>
+<rect class="label labelGreen" x="317" y="318" width="246" height="28" rx="14" stroke="#c5d9b6"/><circle class="numCircle" cx="335" cy="332" r="13" stroke="#5f8848" stroke-width="1.7"/><text class="num" x="335" y="336" text-anchor="middle">2</text><text class="labelText" x="357" y="336">contextWrite TenantId</text>
+
+<path class="call" data-connector="seq-03" d="M 335 408 L 745 408" stroke="#3c82b4" marker-end="url(#arrow-blue)"/>
+<rect class="label labelBlue" x="432" y="372" width="216" height="28" rx="14" stroke="#b8d9eb"/><circle class="numCircle" cx="450" cy="386" r="13" stroke="#3c82b4" stroke-width="1.7"/><text class="num" x="450" y="390" text-anchor="middle">3</text><text class="labelText" x="472" y="390">chain.filter(exchange)</text>
+
+<path class="call" data-connector="seq-04" d="M 745 462 L 950 462" stroke="#5f8848" marker-end="url(#arrow-green)"/>
+<rect class="label labelGreen" x="744" y="426" width="208" height="28" rx="14" stroke="#c5d9b6"/><circle class="numCircle" cx="762" cy="440" r="13" stroke="#5f8848" stroke-width="1.7"/><text class="num" x="762" y="444" text-anchor="middle">4</text><text class="labelText" x="784" y="444">suspendTransaction</text>
+
+<path class="call" data-connector="seq-05" d="M 950 516 L 540 516" stroke="#5f8848" marker-end="url(#arrow-green)"/>
+<rect class="label labelGreen" x="616" y="480" width="258" height="28" rx="14" stroke="#c5d9b6"/><circle class="numCircle" cx="634" cy="494" r="13" stroke="#5f8848" stroke-width="1.7"/><text class="num" x="634" y="498" text-anchor="middle">5</text><text class="labelText" x="656" y="498">currentReactorTenant()</text>
+
+<path class="return" data-connector="seq-06" d="M 540 570 L 950 570" stroke="#4f8f8b" marker-end="url(#arrow-return)"/>
+<rect class="label labelReturn" x="665" y="534" width="160" height="28" rx="14" stroke="#bdd9d3"/><circle class="numCircle" cx="683" cy="548" r="13" stroke="#4f8f8b" stroke-width="1.7"/><text class="num" x="683" y="552" text-anchor="middle">6</text><text class="labelText" x="705" y="552">Tenant(korean)</text>
+
+<path class="call" data-connector="seq-07" d="M 950 624 L 1360 624" stroke="#b78632" marker-end="url(#arrow-amber)"/>
+<rect class="label labelAmber" x="1042" y="588" width="226" height="28" rx="14" stroke="#dfc396"/><circle class="numCircle" cx="1060" cy="602" r="13" stroke="#b78632" stroke-width="1.7"/><text class="num" x="1060" y="606" text-anchor="middle">7</text><text class="labelText" x="1082" y="606">SchemaUtils.setSchema</text>
+
+<path class="call" data-connector="seq-08" d="M 950 678 L 1155 678" stroke="#3c82b4" marker-end="url(#arrow-blue)"/>
+<rect class="label labelBlue" x="929" y="642" width="246" height="28" rx="14" stroke="#b8d9eb"/><circle class="numCircle" cx="947" cy="656" r="13" stroke="#3c82b4" stroke-width="1.7"/><text class="num" x="947" y="660" text-anchor="middle">8</text><text class="labelText" x="969" y="660">actorRepository.findAll</text>
+
+<path class="call" data-connector="seq-09" d="M 1155 732 L 1360 732" stroke="#b78632" marker-end="url(#arrow-amber)"/>
+<rect class="label labelAmber" x="1150" y="696" width="216" height="28" rx="14" stroke="#dfc396"/><circle class="numCircle" cx="1168" cy="710" r="13" stroke="#b78632" stroke-width="1.7"/><text class="num" x="1168" y="714" text-anchor="middle">9</text><text class="labelText" x="1190" y="714">SELECT korean.actors</text>
+
+<path class="return" data-connector="seq-10" d="M 1360 786 L 1155 786" stroke="#4f8f8b" marker-end="url(#arrow-return)"/>
+<rect class="label labelReturn" x="1178" y="750" width="160" height="28" rx="14" stroke="#bdd9d3"/><circle class="numCircle" cx="1196" cy="764" r="13" stroke="#4f8f8b" stroke-width="1.7"/><text class="num" x="1196" y="768" text-anchor="middle">10</text><text class="labelText" x="1222" y="768">ResultRows</text>
+
+<path class="return" data-connector="seq-11" d="M 1155 840 L 745 840" stroke="#4f8f8b" marker-end="url(#arrow-return)"/>
+<rect class="label labelReturn" x="842" y="804" width="216" height="28" rx="14" stroke="#bdd9d3"/><circle class="numCircle" cx="860" cy="818" r="13" stroke="#4f8f8b" stroke-width="1.7"/><text class="num" x="860" y="822" text-anchor="middle">11</text><text class="labelText" x="886" y="822">List&lt;ActorRecord&gt;</text>
+
+<path class="return" data-connector="seq-12" d="M 745 900 L 130 900" stroke="#4f8f8b" marker-end="url(#arrow-return)"/>
+<rect class="label labelReturn" x="325" y="864" width="226" height="28" rx="14" stroke="#bdd9d3"/><circle class="numCircle" cx="343" cy="878" r="13" stroke="#4f8f8b" stroke-width="1.7"/><text class="num" x="343" y="882" text-anchor="middle">12</text><text class="labelText" x="369" y="882">JSON in tenant language</text>
+
+<rect x="84" y="1012" width="1332" height="34" rx="10" class="noteBox"/>
+<text x="750" y="1034" class="note" text-anchor="middle">Missing, blank, or unknown tenants fail in TenantFilter before any database transaction or schema switch runs.</text>
 </svg>

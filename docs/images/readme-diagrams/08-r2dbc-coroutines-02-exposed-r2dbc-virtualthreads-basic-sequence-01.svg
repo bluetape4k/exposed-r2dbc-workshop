@@ -1,64 +1,157 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="1014" viewBox="0 0 1240 1014" role="img" aria-label="Execution Flow">
-<defs>
-<filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
-<marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-<style>.canvas{fill:#F7F9FC}.frame{fill:#fff;stroke:#D8E0EA;stroke-width:1.5}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:39px;font-weight:400;fill:#102033}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;font-weight:400;fill:#536273}.smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:22px;font-weight:400;fill:#102033}.strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}.card{stroke-width:2;filter:url(#shadow)}.line{stroke:#5D6B7A;stroke-width:2.2;fill:none;marker-end:url(#openArrow)}.dashed{stroke:#5D6B7A;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}.lifeline{stroke:#B7C2D1;stroke-width:1.8;stroke-dasharray:8 9}.note{fill:#fff;opacity:.97}</style>
-</defs>
-<rect class="canvas" width="1240" height="1014"/>
-<rect class="frame" x="24" y="24" width="1192" height="958" rx="22"/>
-<text class="title" x="58" y="76">Execution Flow</text>
-<text class="subtitle" x="62" y="106">Compact sequence flow with reduced outer and inner whitespace</text>
-<rect class="card" x="50.0" y="156" width="220" height="66" rx="16" fill="#E8F3FF" stroke="#5B8DEF"/>
-<text class="smallLabel participant" x="160.0" y="196" text-anchor="middle">Caller (Coroutine)</text>
-<line class="lifeline" x1="160.0" y1="250" x2="160.0" y2="952"/>
-<rect class="card" x="280.0" y="156" width="220" height="66" rx="16" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel participant" x="390.0" y="196" text-anchor="middle">Virtual Thread</text>
-<line class="lifeline" x1="390.0" y1="250" x2="390.0" y2="952"/>
-<rect class="card" x="510.0" y="156" width="220" height="66" rx="16" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel participant" x="620.0" y="196" text-anchor="middle">Dispatcher</text>
-<line class="lifeline" x1="620.0" y1="250" x2="620.0" y2="952"/>
-<rect class="card" x="740.0" y="156" width="220" height="66" rx="16" fill="#FDECEF" stroke="#DC6B82"/>
-<text class="smallLabel participant" x="850.0" y="196" text-anchor="middle">suspendTransaction</text>
-<line class="lifeline" x1="850.0" y1="250" x2="850.0" y2="952"/>
-<rect class="card" x="970.0" y="156" width="220" height="66" rx="16" fill="#F1ECFF" stroke="#8A72D6"/>
-<text class="smallLabel participant" x="1080.0" y="196" text-anchor="middle">R2DBC Database</text>
-<line class="lifeline" x1="1080.0" y1="250" x2="1080.0" y2="952"/>
-<path class="line" d="M160.0 292.0 L390.0 292.0" data-connector="line"/>
-<rect class="note label" x="195.0" y="260.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="275.0" y="280.0" text-anchor="middle">1. runSuspendVT { }</text>
-<path class="line" d="M390.0 366.0 C452.0 366.0 452.0 396.0 390.0 396.0" data-connector="line"/>
-<rect class="note label" x="460.0" y="356.0" width="181.0" height="28" rx="9"/>
-<text class="strong labelText" x="460.0" y="376.0" text-anchor="start">2. Allocate VirtualThread</text>
-<path class="line" d="M390.0 440.0 L850.0 440.0" data-connector="line"/>
-<rect class="note label" x="510.9" y="408.0" width="218.2" height="28" rx="9"/>
-<text class="strong labelText" x="620.0" y="428.0" text-anchor="middle">3. virtualThreadTransaction { }</text>
-<path class="line" d="M850.0 514.0 L1080.0 514.0" data-connector="line"/>
-<rect class="note label" x="865.2" y="482.0" width="199.6" height="28" rx="9"/>
-<text class="strong labelText" x="965.0" y="502.0" text-anchor="middle">4. BEGIN (on Virtual Thread)</text>
-<path class="line" d="M850.0 588.0 L1080.0 588.0" data-connector="line"/>
-<rect class="note label" x="885.0" y="556.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="965.0" y="576.0" text-anchor="middle">5. Execute SQL</text>
-<path class="dashed" d="M1080.0 662.0 L850.0 662.0" data-connector="dashed"/>
-<rect class="note label" x="885.0" y="630.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="965.0" y="650.0" text-anchor="middle">6. Result</text>
-<path class="line" d="M850.0 736.0 L1080.0 736.0" data-connector="line"/>
-<rect class="note label" x="885.0" y="704.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="965.0" y="724.0" text-anchor="middle">7. COMMIT</text>
-<path class="dashed" d="M850.0 810.0 L390.0 810.0" data-connector="dashed"/>
-<rect class="note label" x="540.0" y="778.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="620.0" y="798.0" text-anchor="middle">8. return result</text>
-<path class="dashed" d="M390.0 884.0 L160.0 884.0" data-connector="dashed"/>
-<rect class="note label" x="195.0" y="852.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="275.0" y="872.0" text-anchor="middle">9. return result</text>
-<rect class="activation" x="154.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="384.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="614.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="980" viewBox="0 0 1320 980" role="img" aria-label="Virtual thread R2DBC execution sequence">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="122%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/>
+    </filter>
+    <marker id="arrow-blue" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#3c82b4" stroke="#3c82b4" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrow-green" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#5f8848" stroke="#5f8848" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrow-amber" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#b78632" stroke="#b78632" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrow-return" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:34px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}
+      .participantText{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:20px;fill:#1e293b}
+      .participantHint,.labelText,.num{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#344256;font-weight:700}
+      .card{filter:url(#shadow)}
+      .lifeline{stroke:#9fb0bf;stroke-width:2;stroke-dasharray:8 10}
+      .activation{fill:#ecfdf5;stroke:#7aa083;stroke-width:2}
+      .call{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none}
+      .return{fill:none;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:8 7}
+      .label{fill:#fff;stroke:#d7e2ec;stroke-width:1.4}
+      .labelBlue{stroke:#b8d9eb}
+      .labelGreen{stroke:#c5d9b6}
+      .labelAmber{stroke:#dfc396}
+      .labelReturn{stroke:#bdd9d3}
+      .numCircle{fill:#fff}
+      .noteBox{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}
+    </style>
+  </defs>
 
-<!-- audit badge labels: visible sequence numbering and message pill samples -->
-<g aria-label="sequence message labels">
-<rect x="58" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="76" y="140" class="num" text-anchor="middle">1</text>
-<rect x="102" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="120" y="140" class="num" text-anchor="middle">2</text>
-</g>
+  <rect class="canvas" width="1320" height="980"/>
+  <rect class="frame" x="28" y="26" width="1264" height="928" rx="22"/>
+  <text class="title" x="64" y="76">Virtual Thread R2DBC Execution Flow</text>
+  <text class="subtitle" x="66" y="106">Concrete sequence from Ex01_VirtualThreads: virtualThreadTransaction plus Dispatchers.newVT fan-out.</text>
+
+  <g data-card="Test Scope" data-x="56" data-y="146" data-width="208" data-height="72">
+    <rect class="card" x="56" y="146" width="208" height="72" rx="14" fill="#e8f3ff" stroke="#5b8def" stroke-width="2"/>
+    <text class="participantText participant" x="160" y="182" text-anchor="middle">Test Scope</text>
+    <text class="participantHint" x="160" y="202" text-anchor="middle">runSuspendVT</text>
+  </g>
+  <g data-card="withTables" data-x="296" data-y="146" data-width="208" data-height="72">
+    <rect class="card" x="296" y="146" width="208" height="72" rx="14" fill="#eaf7ef" stroke="#58a978" stroke-width="2"/>
+    <text class="participantText participant" x="400" y="182" text-anchor="middle">withTables</text>
+    <text class="participantHint" x="400" y="202" text-anchor="middle">testDB + VTester</text>
+  </g>
+  <g data-card="VT Scope" data-x="546" data-y="146" data-width="208" data-height="72">
+    <rect class="card" x="546" y="146" width="208" height="72" rx="14" fill="#fff3d9" stroke="#d6a441" stroke-width="2"/>
+    <text class="participantText participant" x="650" y="182" text-anchor="middle">VT Scope</text>
+    <text class="participantHint" x="650" y="202" text-anchor="middle">Dispatchers.newVT()</text>
+  </g>
+  <g data-card="VT Transaction" data-x="786" data-y="146" data-width="208" data-height="72">
+    <rect class="card" x="786" y="146" width="208" height="72" rx="14" fill="#eef7f6" stroke="#4f8f8b" stroke-width="2"/>
+    <text class="participantText participant" x="890" y="182" text-anchor="middle">VT Transaction</text>
+    <text class="participantHint" x="890" y="202" text-anchor="middle">virtual / top-level</text>
+  </g>
+  <g data-card="R2DBC DB" data-x="1036" data-y="146" data-width="208" data-height="72">
+    <rect class="card" x="1036" y="146" width="208" height="72" rx="14" fill="#fdecef" stroke="#dc6b82" stroke-width="2"/>
+    <text class="participantText participant" x="1140" y="182" text-anchor="middle">R2DBC DB</text>
+    <text class="participantHint" x="1140" y="202" text-anchor="middle">H2 / server DBs</text>
+  </g>
+
+  <line class="lifeline" x1="160" y1="248" x2="160" y2="878"/>
+  <line class="lifeline" x1="400" y1="248" x2="400" y2="878"/>
+  <line class="lifeline" x1="650" y1="248" x2="650" y2="878"/>
+  <line class="lifeline" x1="890" y1="248" x2="890" y2="878"/>
+  <line class="lifeline" x1="1140" y1="248" x2="1140" y2="878"/>
+
+  <rect class="activation" x="154" y="278" width="12" height="516" rx="4"/>
+  <rect class="activation" x="394" y="298" width="12" height="590" rx="4"/>
+  <rect class="activation" x="644" y="608" width="12" height="230" rx="4"/>
+  <rect class="activation" x="884" y="450" width="12" height="354" rx="4"/>
+  <rect class="activation" x="1134" y="342" width="12" height="530" rx="4"/>
+
+  <path class="call" data-connector="seq-01" d="M 160 300 L 400 300" stroke="#3c82b4" marker-end="url(#arrow-blue)"/>
+  <rect class="label labelBlue" x="188" y="268" width="184" height="28" rx="14"/>
+  <circle class="numCircle" cx="206" cy="282" r="13" stroke="#3c82b4" stroke-width="1.7"/>
+  <text class="num" x="206" y="286" text-anchor="middle">1</text>
+  <text class="labelText" x="228" y="286" text-anchor="start">withTables(testDB)</text>
+
+  <path class="call" data-connector="seq-02" d="M 400 354 L 1140 354" stroke="#5f8848" marker-end="url(#arrow-green)"/>
+  <rect class="label labelGreen" x="642" y="322" width="260" height="28" rx="14"/>
+  <circle class="numCircle" cx="660" cy="336" r="13" stroke="#5f8848" stroke-width="1.7"/>
+  <text class="num" x="660" y="340" text-anchor="middle">2</text>
+  <text class="labelText" x="682" y="340" text-anchor="start">SchemaUtils.create(VTester)</text>
+
+  <path class="call" data-connector="seq-03" d="M 400 408 L 1140 408" stroke="#b78632" marker-end="url(#arrow-amber)"/>
+  <rect class="label labelAmber" x="655" y="376" width="230" height="28" rx="14"/>
+  <circle class="numCircle" cx="673" cy="390" r="13" stroke="#b78632" stroke-width="1.7"/>
+  <text class="num" x="673" y="394" text-anchor="middle">3</text>
+  <text class="labelText" x="695" y="394" text-anchor="start">VTester.insertAndGetId</text>
+
+  <path class="call" data-connector="seq-04" d="M 400 462 L 890 462" stroke="#3c82b4" marker-end="url(#arrow-blue)"/>
+  <rect class="label labelBlue" x="548" y="430" width="286" height="28" rx="14"/>
+  <circle class="numCircle" cx="566" cy="444" r="13" stroke="#3c82b4" stroke-width="1.7"/>
+  <text class="num" x="566" y="448" text-anchor="middle">4</text>
+  <text class="labelText" x="588" y="448" text-anchor="start">getTesterById(id)</text>
+
+  <path class="call" data-connector="seq-05" d="M 890 516 L 1140 516" stroke="#b78632" marker-end="url(#arrow-amber)"/>
+  <rect class="label labelAmber" x="910" y="484" width="214" height="28" rx="14"/>
+  <circle class="numCircle" cx="928" cy="498" r="13" stroke="#b78632" stroke-width="1.7"/>
+  <text class="num" x="928" y="502" text-anchor="middle">5</text>
+  <text class="labelText" x="950" y="502" text-anchor="start">SELECT id via VT tx</text>
+
+  <path class="return" data-connector="seq-06" d="M 1140 570 L 890 570" stroke="#4f8f8b" marker-end="url(#arrow-return)"/>
+  <rect class="label labelReturn" x="928" y="538" width="174" height="28" rx="14"/>
+  <circle class="numCircle" cx="946" cy="552" r="13" stroke="#4f8f8b" stroke-width="1.7"/>
+  <text class="num" x="946" y="556" text-anchor="middle">6</text>
+  <text class="labelText" x="968" y="556" text-anchor="start">ResultRow</text>
+
+  <path class="call" data-connector="seq-07" d="M 400 624 L 650 624" stroke="#b78632" marker-end="url(#arrow-amber)"/>
+  <rect class="label labelAmber" x="430" y="592" width="190" height="28" rx="14"/>
+  <circle class="numCircle" cx="448" cy="606" r="13" stroke="#b78632" stroke-width="1.7"/>
+  <text class="num" x="448" y="610" text-anchor="middle">7</text>
+  <text class="labelText" x="470" y="610" text-anchor="start">newVT scope</text>
+
+  <path class="call" data-connector="seq-08" d="M 650 678 L 890 678" stroke="#3c82b4" marker-end="url(#arrow-blue)"/>
+  <rect class="label labelBlue" x="668" y="646" width="196" height="28" rx="14"/>
+  <circle class="numCircle" cx="686" cy="660" r="13" stroke="#3c82b4" stroke-width="1.7"/>
+  <text class="num" x="686" y="664" text-anchor="middle">8</text>
+  <text class="labelText" x="708" y="664" text-anchor="start">launch top-level tx</text>
+
+  <path class="call" data-connector="seq-09" d="M 890 732 L 1140 732" stroke="#b78632" marker-end="url(#arrow-amber)"/>
+  <rect class="label labelAmber" x="908" y="700" width="220" height="28" rx="14"/>
+  <circle class="numCircle" cx="926" cy="714" r="13" stroke="#b78632" stroke-width="1.7"/>
+  <text class="num" x="926" y="718" text-anchor="middle">9</text>
+  <text class="labelText" x="948" y="718" text-anchor="start">INSERT maxAttempts=5</text>
+
+  <path class="return" data-connector="seq-10" d="M 890 786 L 650 786" stroke="#4f8f8b" marker-end="url(#arrow-return)"/>
+  <rect class="label labelReturn" x="684" y="754" width="170" height="28" rx="14"/>
+  <circle class="numCircle" cx="702" cy="768" r="13" stroke="#4f8f8b" stroke-width="1.7"/>
+  <text class="num" x="702" y="772" text-anchor="middle">10</text>
+  <text class="labelText" x="728" y="772" text-anchor="start">results.add</text>
+
+  <path class="return" data-connector="seq-11" d="M 650 822 L 400 822" stroke="#4f8f8b" marker-end="url(#arrow-return)"/>
+  <rect class="label labelReturn" x="454" y="790" width="146" height="28" rx="14"/>
+  <circle class="numCircle" cx="472" cy="804" r="13" stroke="#4f8f8b" stroke-width="1.7"/>
+  <text class="num" x="472" y="808" text-anchor="middle">11</text>
+  <text class="labelText" x="498" y="808" text-anchor="start">joinAll()</text>
+
+  <path class="call" data-connector="seq-12" d="M 400 858 L 1140 858" stroke="#5f8848" marker-end="url(#arrow-green)"/>
+  <rect class="label labelGreen" x="648" y="826" width="244" height="28" rx="14"/>
+  <circle class="numCircle" cx="666" cy="840" r="13" stroke="#5f8848" stroke-width="1.7"/>
+  <text class="num" x="666" y="844" text-anchor="middle">12</text>
+  <text class="labelText" x="692" y="844" text-anchor="start">count + SchemaUtils.drop</text>
+
+  <rect x="82" y="902" width="1156" height="34" rx="10" class="noteBox"/>
+  <text x="660" y="924" class="note" text-anchor="middle">Virtual-thread tests combine sequential virtualThreadTransaction with independent top-level launch jobs before final count assertions.</text>
 </svg>

@@ -1,93 +1,173 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1378" height="692" viewBox="0 0 1378 692" role="img" aria-label="Cache-Aside Pattern Flow">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1378" height="692"/>
-<rect class="frame" x="32" y="28" width="1314" height="636" rx="28"/>
-<text class="title" x="66" y="82">Cache-Aside Pattern Flow</text>
-<text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M338 552 C338 552 372 552 372 552" data-connector="line"/>
-<path class="line" d="M1040 386 C1040 469 338 469 338 552" data-connector="line"/>
-<path class="line" d="M672 386 C672 386 706 386 706 386" data-connector="line"/>
-<path class="line" d="M338 386 C338 386 372 386 372 386" data-connector="line"/>
-<path class="line" d="M1006 220 C1006 386 1040 386 1040 552" data-connector="line"/>
-<path class="line" d="M856 280 C856 386 856 386 856 492" data-connector="line"/>
-<path class="line" d="M672 220 C672 220 706 220 706 220" data-connector="line"/>
-<path class="line" d="M338 220 C338 220 372 220 372 220" data-connector="line"/>
-<g transform="translate(48,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Request:</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">findByCode(code)</text>
-</g>
-<g transform="translate(382,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">Redis GET</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">caches:country:code:</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">{code}</text>
-</g>
-<g transform="translate(716,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Cache HIT?</text>
-</g>
-<g transform="translate(1050,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Return cached result</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">immediate response</text>
-</g>
-<g transform="translate(48,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">DB query</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">suspendTransaction</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">SELECT</text>
-</g>
-<g transform="translate(382,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Redis SET (TTL 60s)</text>
-</g>
-<g transform="translate(716,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Return DB result</text>
-</g>
-<g transform="translate(1050,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Request:</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">update(record)</text>
-</g>
-<g transform="translate(48,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Redis DEL cache</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">invalidation</text>
-</g>
-<g transform="translate(382,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">DB update</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">suspendTransaction</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">UPDATE</text>
-</g>
-<g transform="translate(716,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">HIT</text>
-</g>
-<g transform="translate(1050,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">MISS</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1380 860" width="1380" height="860" role="img" aria-label="Spring suspended cache cache-aside architecture">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12"/>
+    </filter>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f86c6" stroke="#4f86c6" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f8f52" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#a66a3f" stroke="#a66a3f" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.3}
+      .card{filter:url(#shadow)}
+      .header{opacity:.96}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:32px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#536476;font-weight:700}
+      .small{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#64748b;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:16px;letter-spacing:.08em;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:18px;fill:#1e293b}
+      .connector{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .labelPill{fill:#fff;stroke:#d7e2ec;stroke-width:1.2}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.4}
+    </style>
+  </defs>
+
+  <rect width="1380" height="860" class="canvas"/>
+  <rect x="24" y="24" width="1332" height="812" rx="18" class="frame"/>
+
+  <text x="62" y="72" class="title">Spring Suspended Cache Cache-Aside Architecture</text>
+  <text x="62" y="101" class="subtitle">CachedCountryR2dbcRepository decorates the default Exposed R2DBC repository with Lettuce coroutine cache operations.</text>
+
+  <rect x="52" y="130" width="1276" height="320" rx="16" class="lane"/>
+  <text x="78" y="160" class="laneTitle">CACHED READ / EVICT PATH</text>
+
+  <rect x="52" y="466" width="1276" height="196" rx="16" class="lane"/>
+  <text x="78" y="496" class="laneTitle">DB FALLBACK PATH</text>
+
+  <rect x="52" y="692" width="1276" height="100" rx="16" class="lane"/>
+  <text x="78" y="722" class="laneTitle">READER CONTRACT</text>
+
+  <g data-card="CachedCountryController" data-x="84" data-y="220" data-width="246" data-height="112">
+    <rect x="84" y="220" width="246" height="112" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card"/>
+    <path class="header" d="M84,263 L84,234 Q84,220 98,220 L316,220 Q330,220 330,234 L330,263 Z" fill="#eef5fa"/>
+    <text x="207" y="239" class="tiny" text-anchor="middle">&lt;&lt;RestController&gt;&gt;</text>
+    <text x="207" y="259" class="cardTitle" text-anchor="middle">CachedCountryController</text>
+    <text x="108" y="287" class="detail">/cached/countries/{code}</text>
+    <text x="108" y="309" class="small">@Qualifier cached repository</text>
+  </g>
+
+  <g data-card="CachedCountryR2dbcRepository" data-x="388" data-y="206" data-width="286" data-height="140">
+    <rect x="388" y="206" width="286" height="140" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card"/>
+    <path class="header" d="M388,250 L388,220 Q388,206 402,206 L660,206 Q674,206 674,220 L674,250 Z" fill="#f1f6ec"/>
+    <text x="531" y="225" class="tiny" text-anchor="middle">&lt;&lt;decorator&gt;&gt;</text>
+    <text x="531" y="245" class="cardTitle" text-anchor="middle">CachedCountryR2dbcRepository</text>
+    <text x="412" y="275" class="detail">findByCode: cache first</text>
+    <text x="412" y="297" class="detail">update: evict before DB</text>
+    <text x="412" y="319" class="small">CACHE_NAME = caches:country:code</text>
+  </g>
+
+  <g data-card="LettuceSuspendedCache" data-x="738" data-y="206" data-width="274" data-height="140">
+    <rect x="738" y="206" width="274" height="140" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card"/>
+    <path class="header" d="M738,250 L738,220 Q738,206 752,206 L998,206 Q1012,206 1012,220 L1012,250 Z" fill="#eef7f6"/>
+    <text x="875" y="225" class="tiny" text-anchor="middle">&lt;&lt;suspend cache&gt;&gt;</text>
+    <text x="875" y="245" class="cardTitle" text-anchor="middle">LettuceSuspendedCache</text>
+    <text x="762" y="275" class="detail">get / put / evict / clear</text>
+    <text x="762" y="297" class="detail">SETEX when ttlSeconds=60</text>
+    <text x="762" y="319" class="small">key index: name:__keys</text>
+  </g>
+
+  <g data-card="Redis" data-x="1076" data-y="206" data-width="216" data-height="140">
+    <rect x="1076" y="206" width="216" height="140" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2" class="card"/>
+    <path class="header" d="M1076,250 L1076,220 Q1076,206 1090,206 L1278,206 Q1292,206 1292,220 L1292,250 Z" fill="#f5eef2"/>
+    <g data-bluetape4k-icon="redis/redis-icon.svg" transform="translate(1098 259) scale(1.45)">
+      <g transform="matrix(.848327 0 0 .848327 -7.883573 -9.449691)">
+        <path d="M45.536 38.764c-2.013 1.05-12.44 5.337-14.66 6.494s-3.453 1.146-5.207.308-12.85-5.32-14.85-6.276c-1-.478-1.524-.88-1.524-1.26v-3.813s14.447-3.145 16.78-3.982 3.14-.867 5.126-.14 13.853 2.868 15.814 3.587v3.76c0 .377-.452.8-1.477 1.324z" fill="#a41e11"/>
+        <path d="M45.536 34.95c-2.013 1.05-12.44 5.337-14.66 6.494s-3.453 1.146-5.207.308-12.85-5.32-14.85-6.276-2.04-1.613-.077-2.382l15.332-5.936c2.332-.836 3.14-.867 5.126-.14S43.55 31.87 45.51 32.6s2.037 1.31.024 2.36z" fill="#d82c20"/>
+        <path d="M45.536 32.546c-2.013 1.05-12.44 5.337-14.66 6.494s-3.453 1.146-5.207.308-12.85-5.32-14.85-6.276c-1-.478-1.524-.88-1.524-1.26V28s14.447-3.145 16.78-3.982 3.14-.867 5.126-.14 13.853 2.868 15.814 3.587v3.76c0 .377-.452.8-1.477 1.324z" fill="#a41e11"/>
+        <path d="M45.536 28.733c-2.013 1.05-12.44 5.337-14.66 6.494s-3.453 1.146-5.207.308-12.85-5.32-14.85-6.276-2.04-1.613-.077-2.382l15.332-5.935c2.332-.837 3.14-.867 5.126-.14s12.35 4.853 14.312 5.57 2.037 1.31.024 2.36z" fill="#d82c20"/>
+        <path d="M45.536 26.098c-2.013 1.05-12.44 5.337-14.66 6.495s-3.453 1.146-5.207.308-12.85-5.32-14.85-6.276c-1-.478-1.524-.88-1.524-1.26V21.55s14.447-3.145 16.78-3.982 3.14-.867 5.126-.14 13.853 2.868 15.814 3.587v3.76c0 .377-.452.8-1.477 1.324z" fill="#a41e11"/>
+        <path d="M45.536 21.138c-2.013 1.05-12.44 5.337-14.66 6.494s-3.453 1.146-5.207.308-12.85-5.32-14.85-6.276-2.04-1.613-.077-2.382l15.332-5.935c2.332-.837 3.14-.867 5.126-.14s12.35 4.853 14.312 5.57 2.037 1.31.024 2.36z" fill="#d82c20"/>
+        <g fill="#fff">
+          <path d="M29.096 20.712l-1.182-1.965-3.774-.34 2.816-1.016-.845-1.56 2.636 1.03 2.486-.814-.672 1.612 2.534.95-3.268.34zM22.8 24.624l8.74-1.342-2.64 3.872z"/>
+          <ellipse cx="20.444" cy="21.402" rx="4.672" ry="1.811"/>
+        </g>
+        <path d="M42.132 21.138l-5.17 2.042-.004-4.087z" fill="#7a0c00"/>
+        <path d="M36.963 23.18l-.56.22-5.166-2.042 5.723-2.264z" fill="#ad2115"/>
+      </g>
+    </g>
+    <text x="1198" y="241" class="cardTitle" text-anchor="middle">Redis</text>
+    <text x="1148" y="285" class="detail">GET / SETEX</text>
+    <text x="1148" y="307" class="detail">DEL / SMEMBERS</text>
+    <text x="1148" y="329" class="small">UNLINK chunks of 100</text>
+  </g>
+
+  <g data-card="DefaultCountryR2dbcRepository" data-x="388" data-y="520" data-width="286" data-height="124">
+    <rect x="388" y="520" width="286" height="124" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card"/>
+    <path class="header" d="M388,564 L388,534 Q388,520 402,520 L660,520 Q674,520 674,534 L674,564 Z" fill="#f5eee4"/>
+    <text x="531" y="539" class="tiny" text-anchor="middle">&lt;&lt;delegate repository&gt;&gt;</text>
+    <text x="531" y="559" class="cardTitle" text-anchor="middle">DefaultCountryR2dbcRepository</text>
+    <text x="412" y="589" class="detail">select by CountryTable.code</text>
+    <text x="412" y="611" class="detail">update by CountryRecord.code</text>
+  </g>
+
+  <g data-card="suspendTransaction" data-x="738" data-y="520" data-width="274" data-height="124">
+    <rect x="738" y="520" width="274" height="124" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card"/>
+    <path class="header" d="M738,564 L738,534 Q738,520 752,520 L998,520 Q1012,520 1012,534 L1012,564 Z" fill="#eef7f6"/>
+    <text x="875" y="539" class="tiny" text-anchor="middle">&lt;&lt;Exposed R2DBC&gt;&gt;</text>
+    <text x="875" y="559" class="cardTitle" text-anchor="middle">suspendTransaction</text>
+    <text x="762" y="589" class="detail">non-blocking DSL execution</text>
+    <text x="762" y="611" class="detail">Flow.singleOrNull mapping</text>
+  </g>
+
+  <g data-card="CountryTable" data-x="1076" data-y="520" data-width="216" data-height="124">
+    <rect x="1076" y="520" width="216" height="124" rx="14" fill="#fff" stroke="#8a6f55" stroke-width="2" class="card"/>
+    <path class="header" d="M1076,564 L1076,534 Q1076,520 1090,520 L1278,520 Q1292,520 1292,534 L1292,564 Z" fill="#f3eee8"/>
+    <g data-bluetape4k-icon="generic/database-server.svg" transform="translate(1100 577) scale(.34)">
+      <rect x="10" y="8" width="108" height="112" rx="18" fill="#fffaf2" stroke="#28485a" stroke-width="6"/>
+      <ellipse cx="64" cy="36" rx="34" ry="13" fill="#fff0d8" stroke="#8c6f33" stroke-width="6"/>
+      <path d="M30 36v44c0 8 15 14 34 14s34-6 34-14V36" fill="#fff0d8" stroke="#8c6f33" stroke-width="6" stroke-linejoin="round"/>
+      <ellipse cx="64" cy="36" rx="34" ry="13" fill="none" stroke="#8c6f33" stroke-width="5"/>
+      <path d="M30 58c0 8 15 14 34 14s34-6 34-14" fill="none" stroke="#8c6f33" stroke-width="5" stroke-linecap="round"/>
+      <path d="M30 80c0 8 15 14 34 14s34-6 34-14" fill="none" stroke="#8c6f33" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <text x="1212" y="559" class="cardTitle" text-anchor="middle">CountryTable</text>
+    <text x="1150" y="594" class="detail">countries</text>
+    <text x="1150" y="616" class="small">code unique index</text>
+  </g>
+
+  <path class="connector" data-connector="request" d="M330 276 L388 276" stroke="#4f86c6" marker-end="url(#arrow-blue)"/>
+  <rect x="341" y="244" width="50" height="24" rx="12" class="labelPill"/>
+  <text x="366" y="261" class="tiny" text-anchor="middle">suspend</text>
+
+  <path class="connector" data-connector="cache-call" d="M674 276 L738 276" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+  <rect x="684" y="244" width="48" height="24" rx="12" class="labelPill"/>
+  <text x="708" y="261" class="tiny" text-anchor="middle">get</text>
+
+  <path class="connector" data-connector="redis-commands" d="M1012 276 L1076 276" stroke="#4f8f8b" marker-end="url(#arrow-teal)"/>
+  <rect x="1024" y="244" width="40" height="24" rx="12" class="labelPill"/>
+  <text x="1044" y="261" class="tiny" text-anchor="middle">I/O</text>
+
+  <path class="connector" data-connector="miss-delegate" d="M531 346 L531 520" stroke="#a66a3f" marker-end="url(#arrow-amber)"/>
+  <rect x="470" y="408" width="122" height="24" rx="12" class="labelPill"/>
+  <text x="531" y="425" class="tiny" text-anchor="middle">cache miss delegate</text>
+
+  <path class="connector" data-connector="db-transaction" d="M674 582 L738 582" stroke="#4f8f8b" marker-end="url(#arrow-teal)"/>
+  <rect x="686" y="550" width="40" height="24" rx="12" class="labelPill"/>
+  <text x="706" y="567" class="tiny" text-anchor="middle">DSL</text>
+
+  <path class="connector" data-connector="table-access" d="M1012 582 L1076 582" stroke="#a66a3f" marker-end="url(#arrow-amber)"/>
+  <rect x="1026" y="550" width="36" height="24" rx="12" class="labelPill"/>
+  <text x="1044" y="567" class="tiny" text-anchor="middle">SQL</text>
+
+  <path class="connector" data-connector="store-after-miss" d="M600 520 L600 468 Q600 452 616 452 L886 452 Q902 452 902 436 L902 346" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+  <rect x="662" y="408" width="152" height="24" rx="12" class="labelPill"/>
+  <text x="738" y="425" class="tiny" text-anchor="middle">put CountryRecord</text>
+
+  <path class="connector" data-connector="update-evict" d="M555 346 L555 386 Q555 402 571 402 L834 402 Q850 402 850 386 L850 346" stroke="#4f86c6" marker-end="url(#arrow-blue)"/>
+  <rect x="598" y="390" width="136" height="24" rx="12" class="labelPill"/>
+  <text x="666" y="407" class="tiny" text-anchor="middle">update evicts first</text>
+
+  <rect x="92" y="740" width="1184" height="30" rx="10" class="noteBox"/>
+  <text x="684" y="760" class="note" text-anchor="middle">Legend: blue = WebFlux suspend entry, green = cache hit/store, amber = DB miss/update fallback, teal = Exposed or Redis I/O.</text>
 </svg>

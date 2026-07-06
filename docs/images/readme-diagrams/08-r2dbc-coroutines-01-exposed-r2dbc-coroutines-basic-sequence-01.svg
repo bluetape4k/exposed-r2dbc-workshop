@@ -1,64 +1,157 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1085" height="1088" viewBox="0 0 1085 1088" role="img" aria-label="Coroutine + R2DBC Transaction">
-<defs>
-<filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
-<marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-<style>.canvas{fill:#F7F9FC}.frame{fill:#fff;stroke:#D8E0EA;stroke-width:1.5}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:39px;font-weight:400;fill:#102033}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;font-weight:400;fill:#536273}.smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:22px;font-weight:400;fill:#102033}.strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}.card{stroke-width:2;filter:url(#shadow)}.line{stroke:#5D6B7A;stroke-width:2.2;fill:none;marker-end:url(#openArrow)}.dashed{stroke:#5D6B7A;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}.lifeline{stroke:#B7C2D1;stroke-width:1.8;stroke-dasharray:8 9}.note{fill:#fff;opacity:.97}</style>
-</defs>
-<rect class="canvas" width="1085" height="1088"/>
-<rect class="frame" x="24" y="24" width="1037" height="1032" rx="22"/>
-<text class="title" x="58" y="76">Coroutine + R2DBC Transaction</text>
-<text class="subtitle" x="62" y="106">Compact sequence flow with reduced outer and inner whitespace</text>
-<rect class="card" x="50.0" y="156" width="220" height="66" rx="16" fill="#E8F3FF" stroke="#5B8DEF"/>
-<text class="smallLabel participant" x="160.0" y="196" text-anchor="middle">runTest / TestScope</text>
-<line class="lifeline" x1="160.0" y1="250" x2="160.0" y2="1026"/>
-<rect class="card" x="305.0" y="156" width="220" height="66" rx="16" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel participant" x="415.0" y="196" text-anchor="middle">withTables / withDb</text>
-<line class="lifeline" x1="415.0" y1="250" x2="415.0" y2="1026"/>
-<rect class="card" x="560.0" y="156" width="220" height="66" rx="16" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel participant" x="670.0" y="196" text-anchor="middle">suspendTransaction</text>
-<line class="lifeline" x1="670.0" y1="250" x2="670.0" y2="1026"/>
-<rect class="card" x="815.0" y="156" width="220" height="66" rx="16" fill="#FDECEF" stroke="#DC6B82"/>
-<text class="smallLabel participant" x="925.0" y="196" text-anchor="middle">R2DBC DB</text>
-<line class="lifeline" x1="925.0" y1="250" x2="925.0" y2="1026"/>
-<path class="line" d="M160.0 292.0 L415.0 292.0" data-connector="line"/>
-<rect class="note label" x="181.5" y="260.0" width="212.0" height="28" rx="9"/>
-<text class="strong labelText" x="287.5" y="280.0" text-anchor="middle">1. withTables(testDB, *tables)</text>
-<path class="line" d="M415.0 366.0 L925.0 366.0" data-connector="line"/>
-<rect class="note label" x="564.0" y="334.0" width="212.0" height="28" rx="9"/>
-<text class="strong labelText" x="670.0" y="354.0" text-anchor="middle">2. SchemaUtils.create(*tables)</text>
-<path class="line" d="M415.0 440.0 L670.0 440.0" data-connector="line"/>
-<rect class="note label" x="439.6" y="408.0" width="205.8" height="28" rx="9"/>
-<text class="strong labelText" x="542.5" y="428.0" text-anchor="middle">3. suspendTransaction { ... }</text>
-<path class="line" d="M670.0 514.0 L925.0 514.0" data-connector="line"/>
-<rect class="note label" x="717.5" y="482.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="797.5" y="502.0" text-anchor="middle">4. BEGIN</text>
-<path class="line" d="M670.0 588.0 L925.0 588.0" data-connector="line"/>
-<rect class="note label" x="717.5" y="556.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="797.5" y="576.0" text-anchor="middle">5. Execute DML</text>
-<path class="dashed" d="M925.0 662.0 L670.0 662.0" data-connector="dashed"/>
-<rect class="note label" x="717.5" y="630.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="797.5" y="650.0" text-anchor="middle">6. Flow / Result</text>
-<path class="line" d="M670.0 736.0 L925.0 736.0" data-connector="line"/>
-<rect class="note label" x="717.5" y="704.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="797.5" y="724.0" text-anchor="middle">7. COMMIT</text>
-<path class="dashed" d="M670.0 810.0 L415.0 810.0" data-connector="dashed"/>
-<rect class="note label" x="462.5" y="778.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="542.5" y="798.0" text-anchor="middle">8. result</text>
-<path class="line" d="M415.0 884.0 L925.0 884.0" data-connector="line"/>
-<rect class="note label" x="570.2" y="852.0" width="199.6" height="28" rx="9"/>
-<text class="strong labelText" x="670.0" y="872.0" text-anchor="middle">9. SchemaUtils.drop(*tables)</text>
-<path class="dashed" d="M415.0 958.0 L160.0 958.0" data-connector="dashed"/>
-<rect class="note label" x="207.5" y="926.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="287.5" y="946.0" text-anchor="middle">10. done</text>
-<rect class="activation" x="154.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="409.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="664.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="980" viewBox="0 0 1320 980" role="img" aria-label="Coroutine and R2DBC transaction sequence">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="122%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/>
+    </filter>
+    <marker id="arrow-blue" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#3c82b4" stroke="#3c82b4" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrow-green" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#5f8848" stroke="#5f8848" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrow-amber" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#b78632" stroke="#b78632" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrow-return" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:34px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}
+      .participantText{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:20px;fill:#1e293b}
+      .participantHint,.labelText,.num{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#344256;font-weight:700}
+      .card{filter:url(#shadow)}
+      .lifeline{stroke:#9fb0bf;stroke-width:2;stroke-dasharray:8 10}
+      .activation{fill:#ecfdf5;stroke:#7aa083;stroke-width:2}
+      .call{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none}
+      .return{fill:none;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:8 7}
+      .label{fill:#fff;stroke:#d7e2ec;stroke-width:1.4}
+      .labelBlue{stroke:#b8d9eb}
+      .labelGreen{stroke:#c5d9b6}
+      .labelAmber{stroke:#dfc396}
+      .labelReturn{stroke:#bdd9d3}
+      .numCircle{fill:#fff}
+      .noteBox{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}
+    </style>
+  </defs>
 
-<!-- audit badge labels: visible sequence numbering and message pill samples -->
-<g aria-label="sequence message labels">
-<rect x="58" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="76" y="140" class="num" text-anchor="middle">1</text>
-<rect x="102" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="120" y="140" class="num" text-anchor="middle">2</text>
-</g>
+  <rect class="canvas" width="1320" height="980"/>
+  <rect class="frame" x="28" y="26" width="1264" height="928" rx="22"/>
+  <text class="title" x="64" y="76">Coroutine + R2DBC Transaction</text>
+  <text class="subtitle" x="66" y="106">Concrete sequence from Ex01_Coroutines: table setup, suspend transaction, dispatcher switch, and cleanup.</text>
+
+  <g data-card="Test Scope" data-x="56" data-y="146" data-width="208" data-height="72">
+    <rect class="card" x="56" y="146" width="208" height="72" rx="14" fill="#e8f3ff" stroke="#5b8def" stroke-width="2"/>
+    <text class="participantText participant" x="160" y="182" text-anchor="middle">Test Scope</text>
+    <text class="participantHint" x="160" y="202" text-anchor="middle">runSuspendIO</text>
+  </g>
+  <g data-card="withTables" data-x="296" data-y="146" data-width="208" data-height="72">
+    <rect class="card" x="296" y="146" width="208" height="72" rx="14" fill="#eaf7ef" stroke="#58a978" stroke-width="2"/>
+    <text class="participantText participant" x="400" y="182" text-anchor="middle">withTables</text>
+    <text class="participantHint" x="400" y="202" text-anchor="middle">testDB + tables</text>
+  </g>
+  <g data-card="Dispatcher" data-x="546" data-y="146" data-width="208" data-height="72">
+    <rect class="card" x="546" y="146" width="208" height="72" rx="14" fill="#fff3d9" stroke="#d6a441" stroke-width="2"/>
+    <text class="participantText participant" x="650" y="182" text-anchor="middle">Dispatcher</text>
+    <text class="participantHint" x="650" y="202" text-anchor="middle">single / IO / Default</text>
+  </g>
+  <g data-card="suspendTransaction" data-x="786" data-y="146" data-width="208" data-height="72">
+    <rect class="card" x="786" y="146" width="208" height="72" rx="14" fill="#eef7f6" stroke="#4f8f8b" stroke-width="2"/>
+    <text class="participantText participant" x="890" y="182" text-anchor="middle">suspend tx</text>
+    <text class="participantHint" x="890" y="202" text-anchor="middle">Exposed R2DBC</text>
+  </g>
+  <g data-card="R2DBC DB" data-x="1036" data-y="146" data-width="208" data-height="72">
+    <rect class="card" x="1036" y="146" width="208" height="72" rx="14" fill="#fdecef" stroke="#dc6b82" stroke-width="2"/>
+    <text class="participantText participant" x="1140" y="182" text-anchor="middle">R2DBC DB</text>
+    <text class="participantHint" x="1140" y="202" text-anchor="middle">H2 / server DBs</text>
+  </g>
+
+  <line class="lifeline" x1="160" y1="248" x2="160" y2="878"/>
+  <line class="lifeline" x1="400" y1="248" x2="400" y2="878"/>
+  <line class="lifeline" x1="650" y1="248" x2="650" y2="878"/>
+  <line class="lifeline" x1="890" y1="248" x2="890" y2="878"/>
+  <line class="lifeline" x1="1140" y1="248" x2="1140" y2="878"/>
+
+  <rect class="activation" x="154" y="278" width="12" height="526" rx="4"/>
+  <rect class="activation" x="394" y="298" width="12" height="508" rx="4"/>
+  <rect class="activation" x="644" y="682" width="12" height="94" rx="4"/>
+  <rect class="activation" x="884" y="396" width="12" height="446" rx="4"/>
+  <rect class="activation" x="1134" y="342" width="12" height="496" rx="4"/>
+
+  <path class="call" data-connector="seq-01" d="M 160 300 L 400 300" stroke="#3c82b4" marker-end="url(#arrow-blue)"/>
+  <rect class="label labelBlue" x="181" y="268" width="198" height="28" rx="14"/>
+  <circle class="numCircle" cx="199" cy="282" r="13" stroke="#3c82b4" stroke-width="1.7"/>
+  <text class="num" x="199" y="286" text-anchor="middle">1</text>
+  <text class="labelText" x="221" y="286" text-anchor="start">withTables(testDB, Tester)</text>
+
+  <path class="call" data-connector="seq-02" d="M 400 354 L 1140 354" stroke="#5f8848" marker-end="url(#arrow-green)"/>
+  <rect class="label labelGreen" x="642" y="322" width="256" height="28" rx="14"/>
+  <circle class="numCircle" cx="660" cy="336" r="13" stroke="#5f8848" stroke-width="1.7"/>
+  <text class="num" x="660" y="340" text-anchor="middle">2</text>
+  <text class="labelText" x="682" y="340" text-anchor="start">SchemaUtils.create(Tester)</text>
+
+  <path class="call" data-connector="seq-03" d="M 400 408 L 890 408" stroke="#3c82b4" marker-end="url(#arrow-blue)"/>
+  <rect class="label labelBlue" x="540" y="376" width="316" height="28" rx="14"/>
+  <circle class="numCircle" cx="558" cy="390" r="13" stroke="#3c82b4" stroke-width="1.7"/>
+  <text class="num" x="558" y="394" text-anchor="middle">3</text>
+  <text class="labelText" x="580" y="394" text-anchor="start">suspendTransaction { insertAndGetId }</text>
+
+  <path class="call" data-connector="seq-04" d="M 890 462 L 1140 462" stroke="#b78632" marker-end="url(#arrow-amber)"/>
+  <rect class="label labelAmber" x="930" y="430" width="170" height="28" rx="14"/>
+  <circle class="numCircle" cx="948" cy="444" r="13" stroke="#b78632" stroke-width="1.7"/>
+  <text class="num" x="948" y="448" text-anchor="middle">4</text>
+  <text class="labelText" x="970" y="448" text-anchor="start">INSERT default</text>
+
+  <path class="call" data-connector="seq-05" d="M 400 516 L 890 516" stroke="#3c82b4" marker-end="url(#arrow-blue)"/>
+  <rect class="label labelBlue" x="555" y="484" width="286" height="28" rx="14"/>
+  <circle class="numCircle" cx="573" cy="498" r="13" stroke="#3c82b4" stroke-width="1.7"/>
+  <text class="num" x="573" y="502" text-anchor="middle">5</text>
+  <text class="labelText" x="595" y="502" text-anchor="start">getTesterById(inserted id)</text>
+
+  <path class="call" data-connector="seq-06" d="M 890 570 L 1140 570" stroke="#b78632" marker-end="url(#arrow-amber)"/>
+  <rect class="label labelAmber" x="928" y="538" width="174" height="28" rx="14"/>
+  <circle class="numCircle" cx="946" cy="552" r="13" stroke="#b78632" stroke-width="1.7"/>
+  <text class="num" x="946" y="556" text-anchor="middle">6</text>
+  <text class="labelText" x="968" y="556" text-anchor="start">SELECT id = ?</text>
+
+  <path class="return" data-connector="seq-07" d="M 1140 624 L 890 624" stroke="#4f8f8b" marker-end="url(#arrow-return)"/>
+  <rect class="label labelReturn" x="928" y="592" width="174" height="28" rx="14"/>
+  <circle class="numCircle" cx="946" cy="606" r="13" stroke="#4f8f8b" stroke-width="1.7"/>
+  <text class="num" x="946" y="610" text-anchor="middle">7</text>
+  <text class="labelText" x="968" y="610" text-anchor="start">ResultRow</text>
+
+  <path class="return" data-connector="seq-08" d="M 890 672 L 400 672" stroke="#4f8f8b" marker-end="url(#arrow-return)"/>
+  <rect class="label labelReturn" x="535" y="640" width="318" height="28" rx="14"/>
+  <circle class="numCircle" cx="553" cy="654" r="13" stroke="#4f8f8b" stroke-width="1.7"/>
+  <text class="num" x="553" y="658" text-anchor="middle">8</text>
+  <text class="labelText" x="575" y="658" text-anchor="start">assert id.value == inserted id</text>
+
+  <path class="call" data-connector="seq-09" d="M 400 720 L 650 720" stroke="#b78632" marker-end="url(#arrow-amber)"/>
+  <rect class="label labelAmber" x="430" y="688" width="190" height="28" rx="14"/>
+  <circle class="numCircle" cx="448" cy="702" r="13" stroke="#b78632" stroke-width="1.7"/>
+  <text class="num" x="448" y="706" text-anchor="middle">9</text>
+  <text class="labelText" x="470" y="706" text-anchor="start">withContext(single)</text>
+
+  <path class="call" data-connector="seq-10" d="M 650 768 L 890 768" stroke="#3c82b4" marker-end="url(#arrow-blue)"/>
+  <rect class="label labelBlue" x="680" y="736" width="180" height="28" rx="14"/>
+  <circle class="numCircle" cx="698" cy="750" r="13" stroke="#3c82b4" stroke-width="1.7"/>
+  <text class="num" x="698" y="754" text-anchor="middle">10</text>
+  <text class="labelText" x="724" y="754" text-anchor="start">nested suspend tx</text>
+
+  <path class="call" data-connector="seq-11" d="M 890 822 L 1140 822" stroke="#b78632" marker-end="url(#arrow-amber)"/>
+  <rect class="label labelAmber" x="928" y="790" width="184" height="28" rx="14"/>
+  <circle class="numCircle" cx="946" cy="804" r="13" stroke="#b78632" stroke-width="1.7"/>
+  <text class="num" x="946" y="808" text-anchor="middle">11</text>
+  <text class="labelText" x="972" y="808" text-anchor="start">SELECT id = 1</text>
+
+  <path class="call" data-connector="seq-12" d="M 400 858 L 1140 858" stroke="#5f8848" marker-end="url(#arrow-green)"/>
+  <rect class="label labelGreen" x="655" y="826" width="230" height="28" rx="14"/>
+  <circle class="numCircle" cx="673" cy="840" r="13" stroke="#5f8848" stroke-width="1.7"/>
+  <text class="num" x="673" y="844" text-anchor="middle">12</text>
+  <text class="labelText" x="699" y="844" text-anchor="start">SchemaUtils.drop(Tester)</text>
+
+  <rect x="82" y="902" width="1156" height="34" rx="10" class="noteBox"/>
+  <text x="660" y="924" class="note" text-anchor="middle">suspendTransaction is used only inside coroutine-controlled scope; dispatcher changes do not leave the Exposed R2DBC path.</text>
 </svg>

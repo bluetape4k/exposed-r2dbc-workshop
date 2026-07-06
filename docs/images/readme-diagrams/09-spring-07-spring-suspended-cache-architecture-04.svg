@@ -1,49 +1,154 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="610" viewBox="0 0 1120 610" role="img" aria-label="Cache Decorator Layering">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:24px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:20px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12.5px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12.5px;font-weight:400;fill:#536273}
-    .card{stroke-width:2.1;filter:url(#shadow)}.soft{stroke-width:1.7}
-    .line{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#arrow)}
-    .plain{stroke:#758297;stroke-width:2.0;fill:none}.dash{stroke:#758297;stroke-width:2.0;stroke-dasharray:7 6;fill:none;marker-end:url(#arrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1120" height="610"/>
-<rect class="frame" x="32" y="28" width="1056" height="554" rx="28"/>
-<text class="title" x="66" y="82">Cache Decorator Layering</text>
-<text class="subtitle" x="70" y="118">Repository decorator applies Redis cache without changing the default R2DBC repository</text>
-<g transform="translate(82,255)">
-  <rect class="card" x="0" y="0" width="230" height="92" rx="8" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="115" y="40.5" text-anchor="middle">Controller</text>
-<text class="smallLabel" x="115" y="65.5" text-anchor="middle">suspend handler</text>
-</g><g transform="translate(390,220)">
-  <rect class="card" x="0" y="0" width="300" height="124" rx="8" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="150" y="44" text-anchor="middle">CachedCountryRepository</text>
-<text class="smallLabel" x="150" y="69" text-anchor="middle">cache-aside decorator</text>
-<text class="smallLabel" x="150" y="94" text-anchor="middle">wraps default repository</text>
-</g><g transform="translate(790,170)">
-  <rect class="card" x="0" y="0" width="240" height="96" rx="8" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="120" y="42.5" text-anchor="middle">Redis Cache</text>
-<text class="smallLabel" x="120" y="67.5" text-anchor="middle">GET / SETEX / DEL</text>
-</g><g transform="translate(790,368)">
-  <rect class="card" x="0" y="0" width="240" height="96" rx="8" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="120" y="42.5" text-anchor="middle">R2DBC Database</text>
-<text class="smallLabel" x="120" y="67.5" text-anchor="middle">source of truth</text>
-</g><g transform="translate(410,420)">
-  <rect class="card" x="0" y="0" width="260" height="92" rx="8" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="130" y="40.5" text-anchor="middle">DefaultCountryRepository</text>
-<text class="smallLabel" x="130" y="65.5" text-anchor="middle">Exposed R2DBC</text>
-</g><path class="line" d="M312 301 L390 282" data-connector="line"/>
-<text class="small" x="351" y="283.5" text-anchor="middle">request</text><path class="line" d="M690 262 L790 218" data-connector="line"/>
-<text class="small" x="740" y="232" text-anchor="middle">cache hit</text><path class="line" d="M540 344 L540 420" data-connector="line"/>
-<text class="small" x="540" y="374" text-anchor="middle">cache miss</text><path class="line" d="M670 466 L790 416" data-connector="line"/>
-<text class="small" x="730" y="433" text-anchor="middle">SQL</text><path class="line" d="M540 420 L540 344" data-connector="line"/>
-<text class="small" x="540" y="374" text-anchor="middle">result</text><path class="line" d="M790 218 L690 262" data-connector="line"/>
-<text class="small" x="740" y="232" text-anchor="middle">cached result</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1380 900" width="1380" height="900" role="img" aria-label="Spring suspended cache decorator layering architecture">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12"/>
+    </filter>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f86c6" stroke="#4f86c6" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f8f52" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#a66a3f" stroke="#a66a3f" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="14" markerHeight="14" markerUnits="userSpaceOnUse" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.3}
+      .card{filter:url(#shadow)}
+      .header{opacity:.96}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:32px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#536476;font-weight:700}
+      .small{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#64748b;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:16px;letter-spacing:.08em;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:18px;fill:#1e293b}
+      .connector{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .labelPill{fill:#fff;stroke:#d7e2ec;stroke-width:1.2}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.4}
+    </style>
+  </defs>
+
+  <rect width="1380" height="900" class="canvas"/>
+  <rect x="24" y="24" width="1332" height="852" rx="18" class="frame"/>
+
+  <text x="62" y="72" class="title">Spring Suspended Cache Decorator Layering</text>
+  <text x="62" y="101" class="subtitle">R2dbcRepositoryConfig exposes direct and cached repository beans; controllers select one with @Qualifier.</text>
+
+  <rect x="52" y="130" width="1276" height="136" rx="16" class="lane"/>
+  <text x="78" y="160" class="laneTitle">WEBFLUX CONTROLLERS</text>
+
+  <rect x="52" y="294" width="1276" height="136" rx="16" class="lane"/>
+  <text x="78" y="324" class="laneTitle">SPRING BEAN NAMES</text>
+
+  <rect x="52" y="458" width="1276" height="172" rx="16" class="lane"/>
+  <text x="78" y="488" class="laneTitle">COUNTRYR2DBCREPOSITORY IMPLEMENTATIONS</text>
+
+  <rect x="52" y="658" width="1276" height="118" rx="16" class="lane"/>
+  <text x="78" y="688" class="laneTitle">COLLABORATORS</text>
+
+  <rect x="52" y="804" width="1276" height="48" rx="16" class="lane"/>
+
+  <g data-card="DefaultCountryController" data-x="190" data-y="174" data-width="300" data-height="82">
+    <rect x="190" y="174" width="300" height="82" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card"/>
+    <path class="header" d="M190,216 L190,188 Q190,174 204,174 L476,174 Q490,174 490,188 L490,216 Z" fill="#eef5fa"/>
+    <text x="340" y="193" class="tiny" text-anchor="middle">&lt;&lt;RestController&gt;&gt;</text>
+    <text x="340" y="212" class="cardTitle" text-anchor="middle">DefaultCountryController</text>
+    <text x="214" y="239" class="detail">/default/countries/{code}</text>
+  </g>
+
+  <g data-card="CachedCountryController" data-x="820" data-y="174" data-width="300" data-height="82">
+    <rect x="820" y="174" width="300" height="82" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card"/>
+    <path class="header" d="M820,216 L820,188 Q820,174 834,174 L1106,174 Q1120,174 1120,188 L1120,216 Z" fill="#eef5fa"/>
+    <text x="970" y="193" class="tiny" text-anchor="middle">&lt;&lt;RestController&gt;&gt;</text>
+    <text x="970" y="212" class="cardTitle" text-anchor="middle">CachedCountryController</text>
+    <text x="844" y="239" class="detail">/cached/countries/{code}</text>
+  </g>
+
+  <g data-card="default repository bean" data-x="190" data-y="338" data-width="300" data-height="82">
+    <rect x="190" y="338" width="300" height="82" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card"/>
+    <path class="header" d="M190,380 L190,352 Q190,338 204,338 L476,338 Q490,338 490,352 L490,380 Z" fill="#eef7f6"/>
+    <text x="340" y="357" class="tiny" text-anchor="middle">&lt;&lt;@Bean&gt;&gt;</text>
+    <text x="340" y="376" class="cardTitle" text-anchor="middle">countryR2dbcRepository</text>
+    <text x="214" y="403" class="small">alias: defaultCountryR2dbcRepository</text>
+  </g>
+
+  <g data-card="cached repository bean" data-x="820" data-y="338" data-width="300" data-height="82">
+    <rect x="820" y="338" width="300" height="82" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card"/>
+    <path class="header" d="M820,380 L820,352 Q820,338 834,338 L1106,338 Q1120,338 1120,352 L1120,380 Z" fill="#eef7f6"/>
+    <text x="970" y="357" class="tiny" text-anchor="middle">&lt;&lt;@Bean&gt;&gt;</text>
+    <text x="970" y="376" class="cardTitle" text-anchor="middle">cachedCountryR2dbcRepository</text>
+    <text x="844" y="403" class="small">wraps the default repository bean</text>
+  </g>
+
+  <g data-card="DefaultCountryR2dbcRepository" data-x="190" data-y="514" data-width="300" data-height="102">
+    <rect x="190" y="514" width="300" height="102" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card"/>
+    <path class="header" d="M190,558 L190,528 Q190,514 204,514 L476,514 Q490,514 490,528 L490,558 Z" fill="#f5eee4"/>
+    <text x="340" y="533" class="tiny" text-anchor="middle">&lt;&lt;implementation&gt;&gt;</text>
+    <text x="340" y="553" class="cardTitle" text-anchor="middle">DefaultCountryR2dbcRepository</text>
+    <text x="214" y="584" class="detail">direct Exposed R2DBC DSL</text>
+    <text x="214" y="606" class="small">no cache state in this implementation</text>
+  </g>
+
+  <g data-card="CachedCountryR2dbcRepository" data-x="820" data-y="514" data-width="300" data-height="102">
+    <rect x="820" y="514" width="300" height="102" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card"/>
+    <path class="header" d="M820,558 L820,528 Q820,514 834,514 L1106,514 Q1120,514 1120,528 L1120,558 Z" fill="#f1f6ec"/>
+    <text x="970" y="533" class="tiny" text-anchor="middle">&lt;&lt;decorator&gt;&gt;</text>
+    <text x="970" y="553" class="cardTitle" text-anchor="middle">CachedCountryR2dbcRepository</text>
+    <text x="844" y="584" class="detail">cache.get ?: delegate.findByCode</text>
+    <text x="844" y="606" class="small">update evicts before delegating</text>
+  </g>
+
+  <g data-card="suspendTransaction" data-x="190" data-y="702" data-width="300" data-height="64">
+    <rect x="190" y="702" width="300" height="64" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card"/>
+    <path class="header" d="M190,736 L190,716 Q190,702 204,702 L476,702 Q490,702 490,716 L490,736 Z" fill="#eef7f6"/>
+    <text x="340" y="731" class="cardTitle" text-anchor="middle">suspendTransaction</text>
+    <text x="214" y="755" class="small">select/update CountryTable</text>
+  </g>
+
+  <g data-card="LettuceSuspendedCacheManager" data-x="650" data-y="702" data-width="300" data-height="64">
+    <rect x="650" y="702" width="300" height="64" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card"/>
+    <path class="header" d="M650,736 L650,716 Q650,702 664,702 L936,702 Q950,702 950,716 L950,736 Z" fill="#f1f6ec"/>
+    <text x="800" y="731" class="cardTitle" text-anchor="middle">LettuceSuspendedCacheManager</text>
+    <text x="674" y="755" class="small">getOrCreate(name, ttlSeconds)</text>
+  </g>
+
+  <g data-card="LettuceSuspendedCache" data-x="1000" data-y="702" data-width="270" data-height="64">
+    <rect x="1000" y="702" width="270" height="64" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card"/>
+    <path class="header" d="M1000,736 L1000,716 Q1000,702 1014,702 L1256,702 Q1270,702 1270,716 L1270,736 Z" fill="#f1f6ec"/>
+    <text x="1135" y="731" class="cardTitle" text-anchor="middle">LettuceSuspendedCache</text>
+    <text x="1024" y="755" class="small">get / put / evict / clear</text>
+  </g>
+
+  <path class="connector" data-connector="default-qualifier" d="M340 256 L340 338" stroke="#4f86c6" marker-end="url(#arrow-blue)"/>
+  <rect x="264" y="283" width="152" height="24" rx="12" class="labelPill"/>
+  <text x="340" y="300" class="tiny" text-anchor="middle">@Qualifier default</text>
+
+  <path class="connector" data-connector="cached-qualifier" d="M970 256 L970 338" stroke="#4f86c6" marker-end="url(#arrow-blue)"/>
+  <rect x="894" y="283" width="152" height="24" rx="12" class="labelPill"/>
+  <text x="970" y="300" class="tiny" text-anchor="middle">@Qualifier cached</text>
+
+  <path class="connector" data-connector="default-bean-target" d="M340 420 L340 514" stroke="#4f8f8b" marker-end="url(#arrow-teal)"/>
+  <path class="connector" data-connector="cached-bean-target" d="M970 420 L970 514" stroke="#4f8f8b" marker-end="url(#arrow-teal)"/>
+
+  <path class="connector" data-connector="decorator-delegate" d="M820 565 L490 565" stroke="#a66a3f" marker-end="url(#arrow-amber)"/>
+  <rect x="588" y="533" width="132" height="24" rx="12" class="labelPill"/>
+  <text x="654" y="550" class="tiny" text-anchor="middle">delegate calls</text>
+
+  <path class="connector" data-connector="default-db" d="M340 616 L340 702" stroke="#4f8f8b" marker-end="url(#arrow-teal)"/>
+  <rect x="298" y="647" width="84" height="24" rx="12" class="labelPill"/>
+  <text x="340" y="664" class="tiny" text-anchor="middle">DB access</text>
+
+  <path class="connector" data-connector="cache-manager" d="M970 616 L970 642 Q970 658 954 658 L816 658 Q800 658 800 674 L800 702" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+  <rect x="808" y="646" width="124" height="24" rx="12" class="labelPill"/>
+  <text x="870" y="663" class="tiny" text-anchor="middle">cacheManager</text>
+
+  <path class="connector" data-connector="cache-create" d="M950 734 L1000 734" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+
+  <rect x="106" y="813" width="1168" height="28" rx="10" class="noteBox"/>
+  <text x="690" y="832" class="note" text-anchor="middle">Legend: blue = controller qualifier selection, teal = bean target or Exposed access, amber = decorator delegate, green = cache collaborator.</text>
+</svg>

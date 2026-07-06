@@ -1,56 +1,109 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="842" height="776" viewBox="0 0 842 776" role="img" aria-label="Table Structure with Money (ER Diagram)">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 940" width="1600" height="940" role="img" aria-label="Exposed R2DBC Money table structure ERD">
+  <defs>
+    <filter id="softShadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="#1f2937" flood-opacity="0.11"/>
+    </filter>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:2}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.6}
+      .table{fill:#fff;stroke-width:2.4;filter:url(#softShadow)}
+      .header{opacity:.96}
+      .row{stroke:#e5edf4;stroke-width:1.4}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:42px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:17px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:22px;letter-spacing:0;fill:#8ca2b4}
+      .tableTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:26px;fill:#1e293b}
+      .key{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:16px;fill:#334155;font-weight:800}
+      .col{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:16px;fill:#536476;font-weight:700}
+      .pill{fill:#fffefb;stroke:#d7e2ec;stroke-width:1.5}
+      .foot{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}
+    </style>
+  </defs>
 
+  <rect width="1600" height="940" class="canvas"/>
+  <rect x="28" y="28" width="1544" height="884" rx="20" class="frame"/>
+  <text x="72" y="88" class="title">Money Table Structure ERD</text>
+  <text x="72" y="122" class="subtitle">Concrete table view: compositeMoney maps one Kotlin value to paired amount and currency columns; no table relationship is declared.</text>
 
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none}
-  </style>
-</defs>
-<rect class="canvas" width="842" height="776"/>
-<rect class="frame" x="32" y="28" width="778" height="720" rx="28"/>
-<text class="title" x="66" y="82">Table Structure with Money</text>
-<text class="subtitle" x="70" y="118">ERD tables and relationships from the original Mermaid source</text>
-<g transform="translate(60,170)">
-  <rect class="card" x="0" y="0" width="320" height="193" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#5B8DEF"/>
-  <text class="label" x="160" y="44" text-anchor="middle">accounts</text>
-  <text class="mono" x="18" y="104">int id PK Auto-increment primary.</text>
-<text class="mono" x="18" y="131">decimal composite_money Amount (D.</text>
-<text class="mono" x="18" y="158">varchar composite_money_C Currenc.</text>
-</g>
-<g transform="translate(462,170)">
-  <rect class="card" x="0" y="0" width="320" height="247" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#58A978"/>
-  <text class="label" x="160" y="32" text-anchor="middle">accounts_with_defa</text>
-<text class="label" x="160" y="56" text-anchor="middle">ult</text>
-  <text class="mono" x="18" y="104">int id PK Auto-increment primary.</text>
-<text class="mono" x="18" y="131">decimal default_money Amount colu.</text>
-<text class="mono" x="18" y="158">varchar default_money_C Currency.</text>
-<text class="mono" x="18" y="185">decimal client_money clientDefaul.</text>
-<text class="mono" x="18" y="212">varchar client_money_C clientDefa.</text>
-</g>
-<g transform="translate(261,493)">
-  <rect class="card" x="0" y="0" width="320" height="193" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#D6A441"/>
-  <text class="label" x="160" y="44" text-anchor="middle">manual_accounts</text>
-  <text class="mono" x="18" y="104">int id PK Auto-increment primary.</text>
-<text class="mono" x="18" y="131">decimal amount Manually defined a.</text>
-<text class="mono" x="18" y="158">varchar currency Manually defined.</text>
-</g>
+  <rect x="64" y="160" width="1472" height="610" rx="18" class="lane"/>
+  <text x="92" y="195" class="laneTitle">RELATIONAL TABLES AND COMPOSITE COLUMN PAIRS</text>
 
-<text x="421" y="752" class="mono" text-anchor="middle">No FK relationship: tables are independent examples for this module.</text>
+  <g data-card="Accounts" data-x="104" data-y="244" data-width="420" data-height="358">
+    <rect x="104" y="244" width="420" height="358" rx="14" class="table" fill="#fff" stroke="#3f7fb5"/>
+    <path class="header" d="M104,298 L104,258 Q104,244 118,244 L510,244 Q524,244 524,258 L524,298 Z" fill="#eef5fa"/>
+    <text x="314" y="268" class="tiny" text-anchor="middle">IntIdTable("Accounts")</text>
+    <text x="314" y="294" class="tableTitle" text-anchor="middle">Accounts</text>
+    <line class="row" x1="104" y1="326" x2="524" y2="326"/>
+    <text x="128" y="350" class="key">PK</text>
+    <text x="178" y="350" class="col">id</text>
+    <line class="row" x1="104" y1="374" x2="524" y2="374"/>
+    <text x="128" y="398" class="key">AMT</text>
+    <text x="178" y="398" class="col">composite_money DECIMAL(8,5) NULL</text>
+    <line class="row" x1="104" y1="422" x2="524" y2="422"/>
+    <text x="128" y="446" class="key">CUR</text>
+    <text x="178" y="446" class="col">composite_money_C VARCHAR(3) NULL</text>
+    <line class="row" x1="104" y1="470" x2="524" y2="470"/>
+    <text x="128" y="494" class="key">IDX</text>
+    <text x="178" y="494" class="col">ix_money_amount on amount</text>
+    <rect x="128" y="530" width="360" height="40" rx="12" class="pill"/>
+    <text x="308" y="556" class="note" text-anchor="middle">composite_money + composite_money_C</text>
+  </g>
+
+  <g data-card="TableWithDBDefault" data-x="590" data-y="218" data-width="450" data-height="410">
+    <rect x="590" y="218" width="450" height="410" rx="14" class="table" fill="#fff" stroke="#6f8f52"/>
+    <path class="header" d="M590,272 L590,232 Q590,218 604,218 L1026,218 Q1040,218 1040,232 L1040,272 Z" fill="#f1f6ec"/>
+    <text x="815" y="242" class="tiny" text-anchor="middle">IntIdTable("TableWithDBDefault")</text>
+    <text x="815" y="268" class="tableTitle" text-anchor="middle">TableWithDBDefault</text>
+    <line class="row" x1="590" y1="300" x2="1040" y2="300"/>
+    <text x="614" y="324" class="key">PK</text>
+    <text x="664" y="324" class="col">id</text>
+    <line class="row" x1="590" y1="348" x2="1040" y2="348"/>
+    <text x="614" y="372" class="key">COL</text>
+    <text x="664" y="372" class="col">field VARCHAR(100) NOT NULL</text>
+    <line class="row" x1="590" y1="396" x2="1040" y2="396"/>
+    <text x="614" y="420" class="key">AMT</text>
+    <text x="664" y="420" class="col">t1 DECIMAL(10,0) DEFAULT 1</text>
+    <line class="row" x1="590" y1="444" x2="1040" y2="444"/>
+    <text x="614" y="468" class="key">CUR</text>
+    <text x="664" y="468" class="col">t1_C VARCHAR(3) DEFAULT USD</text>
+    <line class="row" x1="590" y1="492" x2="1040" y2="492"/>
+    <text x="614" y="516" class="key">AMT</text>
+    <text x="664" y="516" class="col">t2 DECIMAL(10,0) NULL</text>
+    <line class="row" x1="590" y1="540" x2="1040" y2="540"/>
+    <text x="614" y="564" class="key">CUR</text>
+    <text x="664" y="564" class="col">t2_C VARCHAR(3) NULL</text>
+    <line class="row" x1="590" y1="588" x2="1040" y2="588"/>
+    <text x="614" y="612" class="key">COL</text>
+    <text x="664" y="612" class="col">clientDefault INT NOT NULL</text>
+  </g>
+
+  <g data-card="tester" data-x="1106" data-y="244" data-width="390" data-height="358">
+    <rect x="1106" y="244" width="390" height="358" rx="14" class="table" fill="#fff" stroke="#a66a3f"/>
+    <path class="header" d="M1106,298 L1106,258 Q1106,244 1120,244 L1482,244 Q1496,244 1496,258 L1496,298 Z" fill="#f5eee4"/>
+    <text x="1301" y="268" class="tiny" text-anchor="middle">inline Table("tester")</text>
+    <text x="1301" y="294" class="tableTitle" text-anchor="middle">tester</text>
+    <line class="row" x1="1106" y1="326" x2="1496" y2="326"/>
+    <text x="1130" y="350" class="key">AMT</text>
+    <text x="1180" y="350" class="col">amount DECIMAL(8,5) NOT NULL</text>
+    <line class="row" x1="1106" y1="374" x2="1496" y2="374"/>
+    <text x="1130" y="398" class="key">CUR</text>
+    <text x="1180" y="398" class="col">currency VARCHAR(3) NOT NULL</text>
+    <line class="row" x1="1106" y1="422" x2="1496" y2="422"/>
+    <text x="1130" y="446" class="key">AMT</text>
+    <text x="1180" y="446" class="col">nullable_amount DECIMAL NULL</text>
+    <line class="row" x1="1106" y1="470" x2="1496" y2="470"/>
+    <text x="1130" y="494" class="key">CUR</text>
+    <text x="1180" y="494" class="col">nullable_currency VARCHAR NULL</text>
+    <rect x="1130" y="530" width="330" height="40" rx="12" class="pill"/>
+    <text x="1295" y="556" class="note" text-anchor="middle">manual compositeMoney pairs</text>
+  </g>
+
+  <rect x="104" y="664" width="1392" height="62" rx="14" class="foot"/>
+  <text x="800" y="690" class="note" text-anchor="middle">No table relationship is declared in source, so the ERD focuses on column-level composite value mapping.</text>
+  <text x="800" y="716" class="note" text-anchor="middle">Money is restored only when amount and currency columns are written consistently as a pair.</text>
+
+  <rect x="108" y="804" width="1385" height="36" rx="11" class="foot"/>
+  <text x="800.5" y="828" class="note" text-anchor="middle">Reader contract: compositeMoney creates or wraps paired amount/currency columns; suffix _C is used by the generated currency column.</text>
 </svg>

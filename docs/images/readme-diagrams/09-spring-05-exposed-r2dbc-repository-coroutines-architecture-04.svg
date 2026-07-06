@@ -1,45 +1,137 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="650" viewBox="0 0 1120 650" role="img" aria-label="Spring DI + Exposed R2DBC">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 860" width="1320" height="860" role="img" aria-label="Spring WebFlux Exposed R2DBC repository architecture">
 <defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
   <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:24px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:20px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12.5px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12.5px;font-weight:400;fill:#536273}
-    .card{stroke-width:2.1;filter:url(#shadow)}.soft{stroke-width:1.7}
-    .line{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#arrow)}
-    .plain{stroke:#758297;stroke-width:2.0;fill:none}.dash{stroke:#758297;stroke-width:2.0;stroke-dasharray:7 6;fill:none;marker-end:url(#arrow)}
+    .canvas{fill:#f6f9fc} .frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.6}
+    .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.3}
+    text{font-family:"Comic Mono","SFMono-Regular",monospace;fill:#536476;font-weight:700}
+    .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:34px;fill:#1e293b;font-weight:400}
+    .subtitle{font-size:14px;fill:#536476} .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:16px;letter-spacing:.09em;fill:#91a6b7}
+    .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:19px;fill:#1e293b;font-weight:400}
+    .detail{font-size:13px} .tiny{font-size:11px;fill:#64748b}
+    .connector{fill:none;stroke-width:4.4;stroke-linecap:round;stroke-linejoin:round}
+    .labelPill{fill:#ffffff;stroke-width:1.4} .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.3}
   </style>
+<marker id="arrow-4f86c6" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none"/></marker>
+<marker id="arrow-6f8f52" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none"/></marker>
+<marker id="arrow-a66a3f" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#a66a3f" stroke="#a66a3f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none"/></marker>
+<marker id="arrow-4f8f8b" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none"/></marker>
+<marker id="arrow-a85f7f" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#a85f7f" stroke="#a85f7f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none"/></marker>
+<marker id="arrow-64748b" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#64748b" stroke="#64748b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none"/></marker>
 </defs>
-<rect class="canvas" width="1120" height="650"/>
-<rect class="frame" x="32" y="28" width="1056" height="594" rx="28"/>
-<text class="title" x="66" y="82">Spring DI + Exposed R2DBC</text>
-<text class="subtitle" x="70" y="118">Bean graph from Spring container to suspend repository transactions</text>
-<g transform="translate(410,160)">
-  <rect class="card" x="0" y="0" width="300" height="86" rx="8" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="150" y="50" text-anchor="middle">Spring Container</text>
-</g><g transform="translate(90,300)">
-  <rect class="card" x="0" y="0" width="270" height="104" rx="8" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="135" y="34" text-anchor="middle">R2dbcDatabase</text>
-<text class="smallLabel" x="135" y="59" text-anchor="middle">ExposedR2dbcConfig</text>
-<text class="smallLabel" x="135" y="84" text-anchor="middle">pool + dispatcher</text>
-</g><g transform="translate(425,300)">
-  <rect class="card" x="0" y="0" width="270" height="104" rx="8" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="135" y="34" text-anchor="middle">R2dbcRepository</text>
-<text class="smallLabel" x="135" y="59" text-anchor="middle">Movie / Actor beans</text>
-<text class="smallLabel" x="135" y="84" text-anchor="middle">@Repository</text>
-</g><g transform="translate(760,300)">
-  <rect class="card" x="0" y="0" width="270" height="104" rx="8" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="135" y="34" text-anchor="middle">Web Controllers</text>
-<text class="smallLabel" x="135" y="59" text-anchor="middle">Movie / Actor APIs</text>
-<text class="smallLabel" x="135" y="84" text-anchor="middle">suspend handlers</text>
-</g><g transform="translate(425,480)">
-  <rect class="card" x="0" y="0" width="270" height="86" rx="8" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="135" y="37.5" text-anchor="middle">suspendTransaction</text>
-<text class="smallLabel" x="135" y="62.5" text-anchor="middle">repository.xxx()</text>
-</g><path class="line" d="M560 246 L225 300" data-connector="line"/><path class="line" d="M560 246 L560 300" data-connector="line"/><path class="line" d="M560 246 L895 300" data-connector="line"/><path class="line" d="M895 404 L560 480" data-connector="line"/><path class="line" d="M560 404 L560 480" data-connector="line"/><path class="line" d="M425 523 L360 352" data-connector="line"/>
-<text class="small" x="392.5" y="429.5" text-anchor="middle">uses</text></svg>
+<rect width="1320" height="860" class="canvas"/><rect x="24" y="24" width="1272" height="812" rx="20" class="frame"/>
+<text x="64" y="76" class="title" text-anchor="start">Spring WebFlux + Exposed R2DBC Repository</text>
+<text x="64" y="104" class="subtitle" text-anchor="start">REST controllers keep coroutine DB access inside suspendTransaction; repositories map Exposed Flow rows to DTO responses.</text>
+<rect x="56" y="132" width="1208" height="202" rx="18" class="lane"/>
+<text x="80" y="164" class="laneTitle" text-anchor="start">HTTP / COROUTINE REQUEST BOUNDARY</text>
+<rect x="56" y="360" width="1208" height="214" rx="18" class="lane"/>
+<text x="80" y="392" class="laneTitle" text-anchor="start">REPOSITORY AND QUERY OWNERSHIP</text>
+<rect x="56" y="598" width="1208" height="138" rx="18" class="lane"/>
+<text x="80" y="630" class="laneTitle" text-anchor="start">R2DBC CONFIGURATION AND STARTUP</text>
+<g data-card="MovieController" data-x="92" data-y="190" data-width="210" data-height="118">
+<rect data-card="MovieController" data-x="92" data-y="190" data-width="210" data-height="118" class="card" x="92" y="190" width="210" height="118" rx="12" fill="#fff" stroke="#4f86c6" stroke-width="2.4"/>
+<path d="M92,236 L92,202 Q92,190 104,190 L290,190 Q302,190 302,202 L302,236 Z" fill="#eef5fa"/>
+<text x="197.0" y="209" class="tiny" text-anchor="middle">&lt;&lt;REST&gt;&gt;</text>
+<text x="197.0" y="230" class="cardTitle" text-anchor="middle">MovieController</text>
+<text x="110" y="258" class="detail" text-anchor="start">suspend CRUD endpoints</text>
+<text x="110" y="278" class="detail" text-anchor="start">Flow collected toList()</text>
+</g>
+<g data-card="suspendTransaction" data-x="352" data-y="190" data-width="230" data-height="118">
+<rect data-card="suspendTransaction" data-x="352" data-y="190" data-width="230" data-height="118" class="card" x="352" y="190" width="230" height="118" rx="12" fill="#fff" stroke="#4f8f8b" stroke-width="2.4"/>
+<path d="M352,236 L352,202 Q352,190 364,190 L570,190 Q582,190 582,202 L582,236 Z" fill="#eef7f6"/>
+<text x="467.0" y="209" class="tiny" text-anchor="middle">&lt;&lt;boundary&gt;&gt;</text>
+<text x="467.0" y="230" class="cardTitle" text-anchor="middle">suspendTransaction</text>
+<text x="370" y="258" class="detail" text-anchor="start">all DB work scoped</text>
+<text x="370" y="278" class="detail" text-anchor="start">per request coroutine</text>
+</g>
+<g data-card="ActorController" data-x="632" data-y="190" data-width="250" data-height="118">
+<rect data-card="ActorController" data-x="632" data-y="190" data-width="250" data-height="118" class="card" x="632" y="190" width="250" height="118" rx="12" fill="#fff" stroke="#4f86c6" stroke-width="2.4"/>
+<path d="M632,236 L632,202 Q632,190 644,190 L870,190 Q882,190 882,202 L882,236 Z" fill="#eef5fa"/>
+<text x="757.0" y="209" class="tiny" text-anchor="middle">&lt;&lt;REST&gt;&gt;</text>
+<text x="757.0" y="230" class="cardTitle" text-anchor="middle">ActorController</text>
+<text x="650" y="258" class="detail" text-anchor="start">searchActors / save</text>
+<text x="650" y="278" class="detail" text-anchor="start">DTO response mapping</text>
+</g>
+<g data-card="MovieActorsController" data-x="932" data-y="190" data-width="270" data-height="118">
+<rect data-card="MovieActorsController" data-x="932" data-y="190" data-width="270" data-height="118" class="card" x="932" y="190" width="270" height="118" rx="12" fill="#fff" stroke="#4f86c6" stroke-width="2.4"/>
+<path d="M932,236 L932,202 Q932,190 944,190 L1190,190 Q1202,190 1202,202 L1202,236 Z" fill="#eef5fa"/>
+<text x="1067.0" y="209" class="tiny" text-anchor="middle">&lt;&lt;REST&gt;&gt;</text>
+<text x="1067.0" y="230" class="cardTitle" text-anchor="middle">MovieActorsController</text>
+<text x="950" y="258" class="detail" text-anchor="start">movie + actor joins</text>
+<text x="950" y="278" class="detail" text-anchor="start">aggregated responses</text>
+</g>
+<g data-card="R2dbcRepository" data-x="92" data-y="426" data-width="246" data-height="112">
+<rect data-card="R2dbcRepository" data-x="92" data-y="426" data-width="246" data-height="112" class="card" x="92" y="426" width="246" height="112" rx="12" fill="#fff" stroke="#64748b" stroke-width="2.4"/>
+<path d="M92,472 L92,438 Q92,426 104,426 L326,426 Q338,426 338,438 L338,472 Z" fill="#f8fafc"/>
+<text x="215.0" y="445" class="tiny" text-anchor="middle">&lt;&lt;contract&gt;&gt;</text>
+<text x="215.0" y="466" class="cardTitle" text-anchor="middle">R2dbcRepository</text>
+<text x="110" y="494" class="detail" text-anchor="start">base CRUD for Long ids</text>
+<text x="110" y="514" class="detail" text-anchor="start">table + extractId</text>
+</g>
+<g data-card="MovieR2dbcRepository" data-x="390" data-y="426" data-width="248" data-height="112">
+<rect data-card="MovieR2dbcRepository" data-x="390" data-y="426" data-width="248" data-height="112" class="card" x="390" y="426" width="248" height="112" rx="12" fill="#fff" stroke="#6f8f52" stroke-width="2.4"/>
+<path d="M390,472 L390,438 Q390,426 402,426 L626,426 Q638,426 638,438 L638,472 Z" fill="#f1f6ec"/>
+<text x="514.0" y="445" class="tiny" text-anchor="middle">&lt;&lt;repository&gt;&gt;</text>
+<text x="514.0" y="466" class="cardTitle" text-anchor="middle">MovieR2dbcRepository</text>
+<text x="408" y="494" class="detail" text-anchor="start">MovieActorJoin queries</text>
+<text x="408" y="514" class="detail" text-anchor="start">bufferUntilChanged Flow</text>
+</g>
+<g data-card="ActorR2dbcRepository" data-x="690" data-y="426" data-width="248" data-height="112">
+<rect data-card="ActorR2dbcRepository" data-x="690" data-y="426" data-width="248" data-height="112" class="card" x="690" y="426" width="248" height="112" rx="12" fill="#fff" stroke="#6f8f52" stroke-width="2.4"/>
+<path d="M690,472 L690,438 Q690,426 702,426 L926,426 Q938,426 938,438 L938,472 Z" fill="#f1f6ec"/>
+<text x="814.0" y="445" class="tiny" text-anchor="middle">&lt;&lt;repository&gt;&gt;</text>
+<text x="814.0" y="466" class="cardTitle" text-anchor="middle">ActorR2dbcRepository</text>
+<text x="708" y="494" class="detail" text-anchor="start">ActorTable persistence</text>
+<text x="708" y="514" class="detail" text-anchor="start">searchActors / save</text>
+</g>
+<g data-card="ResultRow Mappers" data-x="990" data-y="426" data-width="220" data-height="112">
+<rect data-card="ResultRow Mappers" data-x="990" data-y="426" data-width="220" data-height="112" class="card" x="990" y="426" width="220" height="112" rx="12" fill="#fff" stroke="#a66a3f" stroke-width="2.4"/>
+<path d="M990,472 L990,438 Q990,426 1002,426 L1198,426 Q1210,426 1210,438 L1210,472 Z" fill="#f5eee4"/>
+<text x="1100.0" y="445" class="tiny" text-anchor="middle">&lt;&lt;mapping&gt;&gt;</text>
+<text x="1100.0" y="466" class="cardTitle" text-anchor="middle">ResultRow Mappers</text>
+<text x="1008" y="494" class="detail" text-anchor="start">toEntity records</text>
+<text x="1008" y="514" class="detail" text-anchor="start">DTO converters</text>
+</g>
+<g data-card="ExposedR2dbcConfig" data-x="92" data-y="646" data-width="250" data-height="76">
+<rect data-card="ExposedR2dbcConfig" data-x="92" data-y="646" data-width="250" data-height="76" class="card" x="92" y="646" width="250" height="76" rx="12" fill="#fff" stroke="#a85f7f" stroke-width="2.4"/>
+<path d="M92,692 L92,658 Q92,646 104,646 L330,646 Q342,646 342,658 L342,692 Z" fill="#f5eef2"/>
+<text x="217.0" y="665" class="tiny" text-anchor="middle">&lt;&lt;configuration&gt;&gt;</text>
+<text x="217.0" y="686" class="cardTitle" text-anchor="middle">ExposedR2dbcConfig</text>
+<text x="110" y="714" class="detail" text-anchor="start">profile options + IO dispatcher</text>
+</g>
+<g data-card="ConnectionPool" data-x="420" data-y="646" data-width="230" data-height="76">
+<rect data-card="ConnectionPool" data-x="420" data-y="646" data-width="230" data-height="76" class="card" x="420" y="646" width="230" height="76" rx="12" fill="#fff" stroke="#4f8f8b" stroke-width="2.4"/>
+<path d="M420,692 L420,658 Q420,646 432,646 L638,646 Q650,646 650,658 L650,692 Z" fill="#eef7f6"/>
+<text x="535.0" y="665" class="tiny" text-anchor="middle">&lt;&lt;bean&gt;&gt;</text>
+<text x="535.0" y="686" class="cardTitle" text-anchor="middle">ConnectionPool</text>
+<text x="438" y="714" class="detail" text-anchor="start">H2 / MySQL / PostgreSQL</text>
+</g>
+<g data-card="R2dbcDatabase" data-x="724" data-y="646" data-width="230" data-height="76">
+<rect data-card="R2dbcDatabase" data-x="724" data-y="646" data-width="230" data-height="76" class="card" x="724" y="646" width="230" height="76" rx="12" fill="#fff" stroke="#4f8f8b" stroke-width="2.4"/>
+<path d="M724,692 L724,658 Q724,646 736,646 L942,646 Q954,646 954,658 L954,692 Z" fill="#eef7f6"/>
+<text x="839.0" y="665" class="tiny" text-anchor="middle">&lt;&lt;bean&gt;&gt;</text>
+<text x="839.0" y="686" class="cardTitle" text-anchor="middle">R2dbcDatabase</text>
+<text x="742" y="714" class="detail" text-anchor="start">connect(pool, config)</text>
+</g>
+<g data-card="DataInitializer" data-x="1024" data-y="646" data-width="190" data-height="76">
+<rect data-card="DataInitializer" data-x="1024" data-y="646" data-width="190" data-height="76" class="card" x="1024" y="646" width="190" height="76" rx="12" fill="#fff" stroke="#a66a3f" stroke-width="2.4"/>
+<path d="M1024,692 L1024,658 Q1024,646 1036,646 L1202,646 Q1214,646 1214,658 L1214,692 Z" fill="#f5eee4"/>
+<text x="1119.0" y="665" class="tiny" text-anchor="middle">&lt;&lt;startup&gt;&gt;</text>
+<text x="1119.0" y="686" class="cardTitle" text-anchor="middle">DataInitializer</text>
+<text x="1042" y="714" class="detail" text-anchor="start">SchemaUtils + seed data</text>
+</g>
+<path data-connector="controller-tx" class="connector" d="M 302 249 L 338 249" stroke="#4f86c6" marker-end="url(#arrow-4f86c6)"/>
+<path data-connector="tx-actor" class="connector" d="M 582 249 L 618 249" stroke="#4f86c6" marker-end="url(#arrow-4f86c6)"/>
+<path data-connector="actor-joins" class="connector" d="M 882 249 L 918 249" stroke="#4f86c6" marker-end="url(#arrow-4f86c6)"/>
+<path data-connector="tx-movie" class="connector" d="M 467 308 L 467 414" stroke="#6f8f52" marker-end="url(#arrow-6f8f52)"/>
+<path data-connector="tx-actor" class="connector" d="M 814 308 L 814 414" stroke="#6f8f52" marker-end="url(#arrow-6f8f52)"/>
+<path data-connector="tx-mapper" class="connector" d="M 1100 308 L 1100 414" stroke="#6f8f52" marker-end="url(#arrow-6f8f52)"/>
+<path data-connector="contract-movie" class="connector" d="M 338 482 L 376 482" stroke="#64748b" marker-end="url(#arrow-64748b)"/>
+<path data-connector="movie-actor" class="connector" d="M 638 482 L 676 482" stroke="#64748b" marker-end="url(#arrow-64748b)"/>
+<path data-connector="actor-map" class="connector" d="M 938 482 L 976 482" stroke="#a66a3f" marker-end="url(#arrow-a66a3f)"/>
+<path data-connector="config-pool" class="connector" d="M 342 684 L 406 684" stroke="#4f8f8b" marker-end="url(#arrow-4f8f8b)"/>
+<path data-connector="pool-db" class="connector" d="M 650 684 L 710 684" stroke="#4f8f8b" marker-end="url(#arrow-4f8f8b)"/>
+<path data-connector="db-init" class="connector" d="M 954 684 L 1010 684" stroke="#a66a3f" marker-end="url(#arrow-a66a3f)"/>
+<path data-connector="database-repositories" class="connector" d="M 839 646 L 839 592 Q 839 568 815 568 L 506 568 Q 486 568 486 548 L 486 538" stroke="#4f8f8b" marker-end="url(#arrow-4f8f8b)"/>
+<rect x="90" y="772" width="1140" height="34" rx="12" class="noteBox"/>
+<text x="660" y="794" class="detail" text-anchor="middle">Legend: blue=request, olive=query, teal=R2DBC beans, amber=startup; DB access stays inside coroutine transactions.</text>
+</svg>

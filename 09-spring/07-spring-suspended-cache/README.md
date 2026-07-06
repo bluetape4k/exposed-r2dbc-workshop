@@ -138,30 +138,36 @@ Uses Lettuce's `RedisCoroutinesCommands` to operate Redis cache with `suspend` f
 class LettuceSuspendedCache<K: Any, V: Any>(
     val name: String,
     val commands: RedisCoroutinesCommands<String, V>,
+    private val keyCommands: RedisCoroutinesCommands<String, String>,
     private val ttlSeconds: Long? = null,
 ) {
+    private val indexKey: String = "$name:__keys"
+
     suspend fun get(key: K): V? = commands.get(keyStr(key))
 
     suspend fun put(key: K, value: V) {
-        if (ttlSeconds != null) commands.setex(keyStr(key), ttlSeconds, value)
-        else commands.set(keyStr(key), value)
+        val redisKey = keyStr(key)
+        if (ttlSeconds != null) commands.setex(redisKey, ttlSeconds, value)
+        else commands.set(redisKey, value)
+        keyCommands.sadd(indexKey, redisKey)
     }
 
     suspend fun evict(key: K) {
-        commands.del(keyStr(key))
+        val redisKey = keyStr(key)
+        commands.del(redisKey)
+        keyCommands.srem(indexKey, redisKey)
     }
 
     suspend fun clear() {
-        val scanArgs = KeyScanArgs.Builder.matches("$name:*").limit(100)
-        var cursor: ScanCursor = ScanCursor.INITIAL
-        do {
-            val result = if (cursor == ScanCursor.INITIAL) commands.scan(scanArgs)
-                         else commands.scan(cursor, scanArgs) ?: break
-            result.keys.chunked(100).forEach { keys ->
-                if (keys.isNotEmpty()) commands.unlink(*keys.toTypedArray())
+        val keys = keyCommands.smembers(indexKey)
+            .filterNotNull()
+            .toList()
+        keys.chunked(100).forEach { chunk ->
+            if (chunk.isNotEmpty()) {
+                keyCommands.unlink(*chunk.toTypedArray())
             }
-            cursor = result
-        } while (!cursor.isFinished)
+        }
+        keyCommands.unlink(indexKey)
     }
 }
 ```
@@ -195,7 +201,7 @@ Implements the Cache-Aside pattern:
 
 - **Read**: Check cache → if miss, query DB and store in cache
 - **Update**: Invalidate cache then update DB
-- **Evict All**: Delete all keys matching the cache name pattern
+- **Evict All**: Delete keys tracked by the cache namespace index
 
 ```kotlin
 class CachedCountryR2dbcRepository(
@@ -270,12 +276,12 @@ Tests use `@RepeatedTest` to verify performance differences between the first (c
 
 ![Execution Flow diagram](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-sequence-01.png)
 
-### SCAN-Based Full Cache Eviction
+### Indexed Full Cache Eviction
 
-Redis's `KEYS` command scans all keys at once and can temporarily block the Redis server on large datasets.
-`LettuceSuspendedCache.clear()` solves this with a cursor-based `SCAN` + `UNLINK` pattern (using `KeyScanArgs`):
+Redis's `KEYS` or broad keyspace scans can temporarily block or stress a Redis server on large datasets.
+`LettuceSuspendedCache.clear()` avoids scanning the full Redis keyspace by reading the namespace-owned `indexKey` with `SMEMBERS`, deleting cached entries in chunks with `UNLINK`, and then deleting the index key itself:
 
-![SCAN-Based Cache Eviction diagram](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-architecture-05.png)
+![Indexed Cache Eviction diagram](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-architecture-05.png)
 
 Unlike `DEL`, `UNLINK` releases memory in the background and does not block the Redis event loop.
 

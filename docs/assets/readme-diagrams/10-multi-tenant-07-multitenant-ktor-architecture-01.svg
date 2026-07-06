@@ -1,72 +1,157 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760">
-  <defs>
-    <style>
-      .bg { fill: #f7fafc; }
-      .title { font: 700 34px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #132238; }
-      .subtitle { font: 500 18px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #53627a; }
-      .box { fill: #ffffff; stroke: #b8c4d6; stroke-width: 2; rx: 8; }
-      .box-blue { fill: #eaf4ff; stroke: #4c83c3; }
-      .box-green { fill: #edf8f1; stroke: #4a9b68; }
-      .box-yellow { fill: #fff7e6; stroke: #c58a2b; }
-      .box-red { fill: #fff0f0; stroke: #c45d5d; }
-      .label { font: 700 20px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #152033; }
-      .text { font: 500 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #334155; }
-      .small { font: 500 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #53627a; }
-      .arrow { stroke: #53627a; stroke-width: 3; marker-end: url(#arrow); fill: none; }
-      .reject { stroke: #b44b4b; }
-    </style>
-    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,4.5 L1,8 Z" fill="#5D6B7A"/></marker>
-  </defs>
-  <rect class="bg" x="0" y="0" width="1400" height="760"/>
-  <text class="title" x="70" y="70">Ktor R2DBC Schema-Per-Tenant Request Flow</text>
-  <text class="subtitle" x="70" y="102">Validated tenant enum crosses the plugin boundary; schema is reset inside each Exposed R2DBC transaction.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1020" width="1500" height="1020" role="img" aria-label="Ktor R2DBC multi-tenant architecture">
+<defs>
+  <filter id="shadow" x="-8%" y="-8%" width="116%" height="124%"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12"/></filter>
+  <style>
+    .canvas{fill:#f6f9fc}.frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}.lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.3}.card{filter:url(#shadow)}.header{opacity:.98}
+    .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:36px;fill:#1e293b}.subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#536476;font-weight:700}
+    .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#64748b;font-weight:700}.laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:18px;letter-spacing:.08em;fill:#91a4b6}
+    .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:21px;fill:#1f2937}.cardTitleSmall{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:18px;fill:#1f2937}
+    .connector{fill:none;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}.legend{fill:#fff;stroke:#d7e2ec;stroke-width:1.1}.noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.3}
+  </style>
+  <g id="h2Icon"><image data-bluetape4k-icon="database/h2.svg" href="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDk0NzZCIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+SDIgRGF0YWJhc2U8L3RpdGxlPjxwYXRoIGQ9Ik0xNy4xNyAxMy4yN2MuMTQtLjAxNS4yOC0uMDIzLjQxNi0uMDIzLjcgMCAxLjIyOC4xNTkgMS41OTkuNDY5LjM3LjMxNC41NTUuNzU2LjU1NSAxLjMzNGEyLjg2MSAyLjg2MSAwIDAgMS0uNDMgMS40NTVjLS4yOTEuNDkyLS43NzUgMS4wNjYtMS40NiAxLjcyNy0uNDUzLjQ0Ni0xLjA2MS45NzYtMS44MjEgMS41OTJhNDguMDIgNDguMDIgMCAwIDEtMi4yNzUgMS43NDJ2Mi4wODNoOS44OTVWMjEuMjRIMTcuOTljLjIxOS0uMTU5LjU5LS40MzUgMS4xMS0uODMyLjUxOS0uNCAxLjAzMy0uODM1IDEuNTUtMS4zMTEuODE3LS43NiAxLjQyNS0xLjUgMS44MjItMi4yMTVhNC42MjQgNC42MjQgMCAwIDAgLjU5Ny0yLjI2OGMwLTEuMjEzLS40MTYtMi4xNTQtMS4yNDctMi44MTUtLjgyOC0uNjYyLTIuMDMzLS45OTQtMy42MTMtLjk5NC0uMzQ0IDAtLjY5Mi4wMTUtMS4wMzYuMDQ5VjYuMDRIMTMuODZ2NC43MDFIOC45NjVWNi4wNEg1LjY1djEyLjg0NmgzLjMxNXYtNS42NjFoNC44OXY1LjY2MWguMDM5Yy4zMS0uMjQyLjYyMy0uNDg3LjkzMy0uNzRhMjguNTY0IDI4LjU2NCAwIDAgMCAxLjgyNi0xLjU4OCAxNC44NTQgMTQuODU0IDAgMCAwIC41MTctLjUyOXpNMTIuMDExIDIzLjNBMTEuMzI3IDExLjMyNyAwIDAgMSAuNyAxMS45OSAxMS4zMDUgMTEuMzA1IDAgMCAxIDEyLjAxMS42OTlhMTEuMjg2IDExLjI4NiAwIDAgMSAxMS4yOSAxMS4yOXYuMzUxSDI0di0uMzUxQTExLjk4NSAxMS45ODUgMCAwIDAgMTIuMDExIDAgMTIuMDA4IDEyLjAwOCAwIDAgMCAwIDExLjk4OSAxMi4wMjYgMTIuMDI2IDAgMCAwIDEyLjAxMSAyNGguMzUydi0uN3oiLz48L3N2Zz4=" width="40" height="40"/></g>
+</defs>
+<rect width="1500" height="1020" class="canvas"/>
+<rect x="28" y="28" width="1444" height="964" rx="22" class="frame"/>
+<text x="70" y="82" class="title">Ktor R2DBC Schema-Per-Tenant</text>
+<text x="70" y="113" class="subtitle">The tenant lives in Ktor call attributes; each Exposed transaction switches to the validated tenant schema.</text>
 
-  <rect class="box box-blue" x="70" y="165" width="260" height="135"/>
-  <text class="label" x="95" y="205">HTTP Request</text>
-  <text class="text" x="95" y="238">GET /actors/2</text>
-  <text class="text" x="95" y="265">X-TENANT-ID: korean</text>
+<rect x="56" y="145" width="1388" height="250" rx="18" class="lane"/><text x="86" y="177" class="laneTitle">KTOR REQUEST CONTEXT</text>
+<rect x="56" y="428" width="1388" height="230" rx="18" class="lane"/><text x="86" y="460" class="laneTitle">TRANSACTION AND REPOSITORY PATH</text>
+<rect x="56" y="690" width="1388" height="210" rx="18" class="lane"/><text x="86" y="722" class="laneTitle">SINGLE POOL, TENANT SCHEMAS</text>
+<rect x="56" y="922" width="1388" height="54" rx="18" class="lane"/><text x="86" y="954" class="laneTitle">READER CONTRACT</text>
 
-  <rect class="box box-yellow" x="410" y="145" width="300" height="175"/>
-  <text class="label" x="435" y="185">TenantPlugin</text>
-  <text class="text" x="435" y="220">1. read all X-TENANT-ID values</text>
-  <text class="text" x="435" y="247">2. trim + reject conflicts</text>
-  <text class="text" x="435" y="274">3. resolve Tenants.Tenant enum</text>
-  <text class="small" x="435" y="302">raw header never reaches SET SCHEMA</text>
+<g data-card="HTTP request" data-x="82" data-y="218" data-width="220" data-height="102">
+  <rect x="82" y="218" width="220" height="102" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.2" class="card"/>
+  <path class="header" d="M82,260 L82,232 Q82,218 96,218 L288,218 Q302,218 302,232 L302,260 Z" fill="#eef5fa"/>
+  <text x="192" y="238" class="tiny" text-anchor="middle">&lt;&lt;Ktor call&gt;&gt;</text>
+  <text x="192" y="259" class="cardTitle" text-anchor="middle">HTTP request</text>
+  <text x="104" y="286" class="detail">GET /actors</text>
+  <text x="104" y="306" class="detail">X-TENANT-ID header</text>
+</g>
+<g data-card="TenantPlugin" data-x="352" data-y="218" data-width="250" data-height="102">
+  <rect x="352" y="218" width="250" height="102" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.2" class="card"/>
+  <path class="header" d="M352,260 L352,232 Q352,218 366,218 L588,218 Q602,218 602,232 L602,260 Z" fill="#f1f6ec"/>
+  <text x="477" y="238" class="tiny" text-anchor="middle">&lt;&lt;ApplicationPlugin&gt;&gt;</text>
+  <text x="477" y="259" class="cardTitle" text-anchor="middle">TenantPlugin</text>
+  <text x="374" y="286" class="detail">normalize duplicate headers</text>
+  <text x="374" y="306" class="detail">resolve korean | english</text>
+</g>
+<g data-card="ApplicationCall.attributes" data-x="652" data-y="218" data-width="270" data-height="102">
+  <rect x="652" y="218" width="270" height="102" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.2" class="card"/>
+  <path class="header" d="M652,260 L652,232 Q652,218 666,218 L908,218 Q922,218 922,232 L922,260 Z" fill="#eef7f6"/>
+  <text x="787" y="238" class="tiny" text-anchor="middle">&lt;&lt;call scoped&gt;&gt;</text>
+  <text x="787" y="259" class="cardTitleSmall" text-anchor="middle">ApplicationCall.attributes</text>
+  <text x="674" y="286" class="detail">TenantAttributeKey</text>
+  <text x="674" y="306" class="detail">no ThreadLocal / ReactorContext</text>
+</g>
+<g data-card="actorRoutes" data-x="972" data-y="218" data-width="250" data-height="102">
+  <rect x="972" y="218" width="250" height="102" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2.2" class="card"/>
+  <path class="header" d="M972,260 L972,232 Q972,218 986,218 L1208,218 Q1222,218 1222,232 L1222,260 Z" fill="#f5eee4"/>
+  <text x="1097" y="238" class="tiny" text-anchor="middle">&lt;&lt;routing&gt;&gt;</text>
+  <text x="1097" y="259" class="cardTitle" text-anchor="middle">actorRoutes</text>
+  <text x="994" y="286" class="detail">call.currentTenant()</text>
+  <text x="994" y="306" class="detail">GET/POST /actors</text>
+</g>
+<g data-card="Invalid tenant response" data-x="352" data-y="338" data-width="250" data-height="42">
+  <rect x="352" y="338" width="250" height="42" rx="14" fill="#fff7f7" stroke="#b85f64" stroke-width="2" class="card"/>
+  <text x="477" y="365" class="detail" text-anchor="middle">400 INVALID_TENANT</text>
+</g>
 
-  <rect class="box box-red" x="455" y="380" width="250" height="110"/>
-  <text class="label" x="480" y="420">Invalid Tenant</text>
-  <text class="text" x="480" y="452">400 INVALID_TENANT</text>
+<g data-card="suspendTransactionWithTenant" data-x="142" data-y="518" data-width="306" data-height="102">
+  <rect x="142" y="518" width="306" height="102" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.2" class="card"/>
+  <path class="header" d="M142,560 L142,532 Q142,518 156,518 L434,518 Q448,518 448,532 L448,560 Z" fill="#eef5fa"/>
+  <text x="295" y="538" class="tiny" text-anchor="middle">&lt;&lt;transaction helper&gt;&gt;</text>
+  <text x="295" y="559" class="cardTitleSmall" text-anchor="middle">Tenant tx helper</text>
+  <text x="164" y="586" class="detail">suspendTransactionWithTenant()</text>
+  <text x="164" y="606" class="detail">receives validated tenant enum</text>
+</g>
+<g data-card="SchemaUtils.setSchema" data-x="508" data-y="518" data-width="260" data-height="102">
+  <rect x="508" y="518" width="260" height="102" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.2" class="card"/>
+  <path class="header" d="M508,560 L508,532 Q508,518 522,518 L754,518 Q768,518 768,532 L768,560 Z" fill="#f1f6ec"/>
+  <text x="638" y="538" class="tiny" text-anchor="middle">&lt;&lt;schema switch&gt;&gt;</text>
+  <text x="638" y="559" class="cardTitleSmall" text-anchor="middle">SchemaUtils.setSchema</text>
+  <text x="530" y="586" class="detail">Schema(tenant.id)</text>
+  <text x="530" y="606" class="detail">per transaction cost</text>
+</g>
+<g data-card="ActorR2dbcRepository" data-x="828" data-y="518" data-width="260" data-height="102">
+  <rect x="828" y="518" width="260" height="102" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.2" class="card"/>
+  <path class="header" d="M828,560 L828,532 Q828,518 842,518 L1074,518 Q1088,518 1088,532 L1088,560 Z" fill="#eef7f6"/>
+  <text x="958" y="538" class="tiny" text-anchor="middle">&lt;&lt;repository&gt;&gt;</text>
+  <text x="958" y="559" class="cardTitleSmall" text-anchor="middle">ActorR2dbcRepository</text>
+  <text x="850" y="586" class="detail">findAll / findOne / save</text>
+  <text x="850" y="606" class="detail">reads active schema</text>
+</g>
+<g data-card="Ktor response" data-x="1148" data-y="518" data-width="220" data-height="102">
+  <rect x="1148" y="518" width="220" height="102" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2.2" class="card"/>
+  <path class="header" d="M1148,560 L1148,532 Q1148,518 1162,518 L1354,518 Q1368,518 1368,532 L1368,560 Z" fill="#f5eee4"/>
+  <text x="1258" y="538" class="tiny" text-anchor="middle">&lt;&lt;JSON&gt;&gt;</text>
+  <text x="1258" y="559" class="cardTitle" text-anchor="middle">Ktor response</text>
+  <text x="1170" y="586" class="detail">tenant-specific actors</text>
+  <text x="1170" y="606" class="detail">201 for POST</text>
+</g>
 
-  <rect class="box" x="800" y="165" width="260" height="135"/>
-  <text class="label" x="825" y="205">ActorRoutes</text>
-  <text class="text" x="825" y="238">call.currentTenant()</text>
-  <text class="text" x="825" y="265">no fallback tenant</text>
+<g data-card="KtorMultitenantDatabase" data-x="92" data-y="764" data-width="286" data-height="98">
+  <rect x="92" y="764" width="286" height="98" rx="14" fill="#fff" stroke="#8a6f55" stroke-width="2.2" class="card"/>
+  <path class="header" d="M92,806 L92,778 Q92,764 106,764 L364,764 Q378,764 378,778 L378,806 Z" fill="#f3eee8"/>
+  <text x="235" y="784" class="tiny" text-anchor="middle">&lt;&lt;pool owner&gt;&gt;</text>
+  <text x="235" y="805" class="cardTitleSmall" text-anchor="middle">Ktor DB owner</text>
+  <text x="114" y="832" class="detail">KtorMultitenantDatabase</text>
+  <text x="114" y="852" class="detail">databaseName=ktor_multitenant</text>
+</g>
+<g data-card="Shared H2 R2DBC pool" data-x="438" data-y="764" data-width="286" data-height="98">
+  <rect x="438" y="764" width="286" height="98" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.2" class="card"/>
+  <path class="header" d="M438,806 L438,778 Q438,764 452,764 L710,764 Q724,764 724,778 L724,806 Z" fill="#eef5fa"/>
+  <use href="#h2Icon" x="462" y="775"/>
+  <text x="598" y="784" class="tiny" text-anchor="middle">&lt;&lt;ConnectionPool&gt;&gt;</text>
+  <text x="598" y="805" class="cardTitleSmall" text-anchor="middle">Shared H2 pool</text>
+  <text x="472" y="832" class="detail">R2DBC ConnectionPool</text>
+  <text x="472" y="852" class="detail">schema switched per tx</text>
+</g>
+<g data-card="Korean schema" data-x="790" data-y="726" data-width="260" data-height="82">
+  <rect x="790" y="726" width="260" height="82" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.2" class="card"/>
+  <path class="header" d="M790,764 L790,740 Q790,726 804,726 L1036,726 Q1050,726 1050,740 L1050,764 Z" fill="#f1f6ec"/>
+  <text x="920" y="745" class="tiny" text-anchor="middle">&lt;&lt;Schema("korean")&gt;&gt;</text>
+  <text x="920" y="765" class="cardTitleSmall" text-anchor="middle">Korean schema</text>
+  <text x="812" y="790" class="detail">localized fixture rows</text>
+</g>
+<g data-card="English schema" data-x="790" data-y="832" data-width="260" data-height="82">
+  <rect x="790" y="832" width="260" height="82" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.2" class="card"/>
+  <path class="header" d="M790,870 L790,846 Q790,832 804,832 L1036,832 Q1050,832 1050,846 L1050,870 Z" fill="#eef7f6"/>
+  <text x="920" y="851" class="tiny" text-anchor="middle">&lt;&lt;Schema("english")&gt;&gt;</text>
+  <text x="920" y="871" class="cardTitleSmall" text-anchor="middle">English schema</text>
+  <text x="812" y="896" class="detail">English fixture rows</text>
+</g>
+<g data-card="DataInitializer" data-x="1120" data-y="764" data-width="260" data-height="98">
+  <rect x="1120" y="764" width="260" height="98" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2.2" class="card"/>
+  <path class="header" d="M1120,806 L1120,778 Q1120,764 1134,764 L1366,764 Q1380,764 1380,778 L1380,806 Z" fill="#f5eef2"/>
+  <text x="1250" y="784" class="tiny" text-anchor="middle">&lt;&lt;startup&gt;&gt;</text>
+  <text x="1250" y="805" class="cardTitle" text-anchor="middle">DataInitializer</text>
+  <text x="1142" y="832" class="detail">create schemas + tables</text>
+  <text x="1142" y="852" class="detail">seed deterministic rows</text>
+</g>
 
-  <rect class="box box-green" x="1120" y="145" width="230" height="175"/>
-  <text class="label" x="1145" y="185">Transaction</text>
-  <text class="text" x="1145" y="220">suspendTransaction</text>
-  <text class="text" x="1145" y="247">SchemaUtils.setSchema</text>
-  <text class="text" x="1145" y="274">Repository query</text>
+<path class="connector" data-connector="request-plugin" d="M302 269 L352 269" stroke="#4f86c6"/><polygon points="352,269 338,262 338,276" fill="#4f86c6"/>
+<path class="connector" data-connector="plugin-attributes" d="M602 269 L652 269" stroke="#6f8f52"/><polygon points="652,269 638,262 638,276" fill="#6f8f52"/>
+<path class="connector" data-connector="attributes-routes" d="M922 269 L972 269" stroke="#4f8f8b"/><polygon points="972,269 958,262 958,276" fill="#4f8f8b"/>
+<path class="connector" data-connector="plugin-invalid" d="M477 320 L477 338" stroke="#b85f64"/><polygon points="477,338 470,324 484,324" fill="#b85f64"/>
+<path class="connector" data-connector="routes-transaction" d="M1097 320 L1097 412 Q1097 428 1081 428 L311 428 Q295 428 295 444 L295 518" stroke="#4f86c6"/><polygon points="295,518 288,504 302,504" fill="#4f86c6"/>
+<path class="connector" data-connector="transaction-schema" d="M448 569 L508 569" stroke="#6f8f52"/><polygon points="508,569 494,562 494,576" fill="#6f8f52"/>
+<path class="connector" data-connector="schema-repository" d="M768 569 L828 569" stroke="#4f8f8b"/><polygon points="828,569 814,562 814,576" fill="#4f8f8b"/>
+<path class="connector" data-connector="repository-response" d="M1088 569 L1148 569" stroke="#a66a3f"/><polygon points="1148,569 1134,562 1134,576" fill="#a66a3f"/>
+<path class="connector" data-connector="database-pool" d="M378 813 L438 813" stroke="#8a6f55"/><polygon points="438,813 424,806 424,820" fill="#8a6f55"/>
+<path class="connector" data-connector="pool-korean-schema" d="M724 795 L790 795" stroke="#6f8f52"/><polygon points="790,795 776,788 776,802" fill="#6f8f52"/>
+<path class="connector" data-connector="pool-english-schema" d="M724 852 L790 852" stroke="#4f8f8b"/><polygon points="790,852 776,845 776,859" fill="#4f8f8b"/>
+<path class="connector" data-connector="initializer-schemas" d="M1120 852 L1050 852" stroke="#a85f7f"/><polygon points="1050,852 1064,845 1064,859" fill="#a85f7f"/>
 
-  <rect class="box" x="800" y="420" width="235" height="135"/>
-  <text class="label" x="825" y="460">Schema korean</text>
-  <text class="text" x="825" y="493">actors, movies</text>
-  <text class="text" x="825" y="520">Korean seed data</text>
-
-  <rect class="box" x="1115" y="420" width="235" height="135"/>
-  <text class="label" x="1140" y="460">Schema english</text>
-  <text class="text" x="1140" y="493">actors, movies</text>
-  <text class="text" x="1140" y="520">English seed data</text>
-
-  <rect class="box box-blue" x="70" y="585" width="1280" height="95"/>
-  <text class="label" x="95" y="625">Test Evidence</text>
-  <text class="text" x="95" y="655">success reads, structured 400 errors, duplicate headers, write isolation, pool size 1 tenant alternation, overlapping Ktor requests</text>
-
-  <path class="arrow" d="M330 232 L410 232"/>
-  <path class="arrow" d="M710 232 L800 232"/>
-  <path class="arrow" d="M1060 232 L1120 232"/>
-  <path class="arrow" d="M1235 320 L1235 420"/>
-  <path class="arrow reject" d="M560 320 L560 380"/>
-  <path class="arrow" d="M930 300 L900 420"/>
-  <path class="arrow" d="M930 300 L1195 420"/>
+<g>
+  <rect x="1200" y="158" width="218" height="70" rx="12" class="legend"/>
+  <line x1="1218" y1="178" x2="1260" y2="178" stroke="#4f86c6" stroke-width="3.2" stroke-linecap="round"/><polygon points="1260,178 1246,171 1246,185" fill="#4f86c6"/>
+  <text x="1272" y="183" class="tiny">request / route</text>
+  <line x1="1218" y1="198" x2="1260" y2="198" stroke="#6f8f52" stroke-width="3.2" stroke-linecap="round"/><polygon points="1260,198 1246,191 1246,205" fill="#6f8f52"/>
+  <text x="1272" y="203" class="tiny">schema selection</text>
+  <line x1="1218" y1="218" x2="1260" y2="218" stroke="#b85f64" stroke-width="3.2" stroke-linecap="round"/><polygon points="1260,218 1246,211 1246,225" fill="#b85f64"/>
+  <text x="1272" y="223" class="tiny">invalid tenant</text>
+</g>
+<rect x="360" y="940" width="880" height="28" rx="10" class="noteBox"/>
+<text x="800" y="960" class="note" text-anchor="middle">Ktor uses call-scoped attributes for tenant routing; no ThreadLocal or ReactorContext participates.</text>
 </svg>

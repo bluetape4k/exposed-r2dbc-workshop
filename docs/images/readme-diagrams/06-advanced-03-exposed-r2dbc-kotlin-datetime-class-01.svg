@@ -1,90 +1,110 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1754" height="1128" viewBox="0 0 1754 1128" role="img" aria-label="Structure Diagram">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 900" width="1320" height="900" role="img" aria-label="Kotlinx DateTime class and table structure">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12"/>
+    </filter>
+    <marker id="inherit-grey" markerWidth="18" markerHeight="16" viewBox="0 0 18 16" refX="17" refY="8" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M 1 1 L 17 8 L 1 15 Z" fill="#fff" stroke="#64748b" stroke-width="2.2" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.6}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.4}
+      .card{filter:url(#shadow)}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:38px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:15px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:19px;letter-spacing:.08em;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:21px;fill:#1e293b}
+      .inherit{fill:none;stroke:#64748b;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .use{fill:none;stroke-width:2.7;stroke-dasharray:7 7;stroke-linecap:butt;stroke-linejoin:round}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.4}
+    </style>
+  </defs>
+  <rect width="1320" height="900" class="canvas"/>
+  <rect x="22" y="22" width="1276" height="856" rx="18" class="frame"/>
+  <text x="58" y="74" class="title">Kotlinx DateTime Class Structure</text>
+  <text x="58" y="104" class="subtitle">Concrete test class, helper, and table map for the advanced Kotlinx DateTime chapter.</text>
 
+  <rect x="54" y="136" width="1212" height="176" rx="16" class="lane"/>
+  <text x="78" y="166" class="laneTitle">SHARED CONTRACTS / SUPPORT</text>
+  <rect x="54" y="344" width="1212" height="184" rx="16" class="lane"/>
+  <text x="78" y="374" class="laneTitle">TEST CLASSES</text>
+  <rect x="54" y="560" width="1212" height="190" rx="16" class="lane"/>
+  <text x="78" y="590" class="laneTitle">TABLES AND ASSERTIONS</text>
+  <rect x="54" y="780" width="1212" height="66" rx="16" class="lane"/>
+  <text x="78" y="810" class="laneTitle">READER CONTRACT</text>
 
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none}
-  </style>
-</defs>
-<rect class="canvas" width="1754" height="1128"/>
-<rect class="frame" x="32" y="28" width="1690" height="1072" rx="28"/>
-<text class="title" x="66" y="82">Structure Diagram</text>
-<text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="inheritLine" d="M672 442 L672 351 L877 351 L877 292"/>
-<path class="inheritLine" d="M1082 738 L1082 691 L877 691 L877 292"/>
-<path class="inheritLine" d="M1082 442 L1082 375 L877 375 L877 292"/>
-<path class="inheritLine" d="M1492 442 L1492 367 L877 367 L877 292"/>
-<path class="inheritLine" d="M672 738 L672 667 L877 667 L877 292"/>
-<path class="inheritLine" d="M262 442 L262 351 L877 351 L877 292"/>
-<g transform="translate(707,180)">
-  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#5B8DEF"/>
-  <text class="small" x="170" y="26" text-anchor="middle">«exposed-kotlin-dateti.»</text>
-  <text class="label" x="170" y="61" text-anchor="middle">KotlinDateTimeColumn</text>
+  <g data-card="KotlinDateTimeSupports" data-x="80" data-y="192" data-width="300" data-height="92">
+    <rect x="80" y="192" width="300" height="92" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.2" class="card"/>
+    <path d="M80,236 L80,206 Q80,192 94,192 L366,192 Q380,192 380,206 L380,236 Z" fill="#eef7f6"/>
+    <text x="230" y="214" class="tiny" text-anchor="middle">&lt;&lt;support file&gt;&gt;</text>
+    <text x="230" y="235" class="cardTitle" text-anchor="middle">KotlinDateTimeSupports</text>
+    <text x="100" y="261" class="detail">now(), dbTimestampNow</text>
+  </g>
+  <g data-card="AbstractR2dbcExposedTest" data-x="460" data-y="192" data-width="400" data-height="92">
+    <rect x="460" y="192" width="400" height="92" rx="14" fill="#fff" stroke="#64748b" stroke-width="2.2" class="card"/>
+    <path d="M460,236 L460,206 Q460,192 474,192 L846,192 Q860,192 860,206 L860,236 Z" fill="#f8fafc"/>
+    <text x="660" y="214" class="tiny" text-anchor="middle">&lt;&lt;shared test base&gt;&gt;</text>
+    <text x="660" y="235" class="cardTitle" text-anchor="middle">AbstractR2dbcExposedTest</text>
+    <text x="480" y="261" class="detail">enableDialects(), withTables lifecycle</text>
+  </g>
+  <g data-card="Exposed Datetime API" data-x="940" data-y="192" data-width="300" data-height="92">
+    <rect x="940" y="192" width="300" height="92" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2.2" class="card"/>
+    <path d="M940,236 L940,206 Q940,192 954,192 L1226,192 Q1240,192 1240,206 L1240,236 Z" fill="#f5eee4"/>
+    <text x="1090" y="214" class="tiny" text-anchor="middle">&lt;&lt;column API&gt;&gt;</text>
+    <text x="1090" y="235" class="cardTitle" text-anchor="middle">Exposed Datetime API</text>
+    <text x="960" y="261" class="detail">date, datetime, timestamp</text>
+  </g>
 
-</g>
-<g transform="translate(92,442)">
-  <rect class="card" x="0" y="0" width="340" height="154" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#58A978"/>
-  <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="61" text-anchor="middle">KotlinLocalDateColumn</text>
-  <text class="mono" x="18" y="108">+date(name)</text>
-<text class="mono" x="18" y="129">Column~kotlinx.datetime.LocalDate~</text>
-</g>
-<g transform="translate(502,442)">
-  <rect class="card" x="0" y="0" width="340" height="154" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#D6A441"/>
-  <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="61" text-anchor="middle">KotlinDurationColumn</text>
-  <text class="mono" x="18" y="108">+duration(name)</text>
-<text class="mono" x="18" y="129">Column~kotlin.time.Duration~</text>
-</g>
-<g transform="translate(912,442)">
-  <rect class="card" x="0" y="0" width="340" height="154" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#DC6B82"/>
-  <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="61" text-anchor="middle">KotlinInstantColumn</text>
-  <text class="mono" x="18" y="108">+timestamp(name)</text>
-<text class="mono" x="18" y="129">Column~kotlin.time.Instant~</text>
-</g>
-<g transform="translate(1322,442)">
-  <rect class="card" x="0" y="0" width="340" height="170" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
-  <line class="compartment" x1="0" y1="94" x2="340" y2="94" stroke="#45A7A1"/>
-  <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="56.5" text-anchor="middle">Kotlin Local Date Time</text>
-<text class="label" x="170" y="81.5" text-anchor="middle">Column</text>
-  <text class="mono" x="18" y="124">+datetime(name)</text>
-<text class="mono" x="18" y="145">Column~kotlinx.datetime.LocalDateTime~</text>
-</g>
-<g transform="translate(502,738)">
-  <rect class="card" x="0" y="0" width="340" height="154" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#8A72D6"/>
-  <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="61" text-anchor="middle">KotlinLocalTimeColumn</text>
-  <text class="mono" x="18" y="108">+time(name)</text>
-<text class="mono" x="18" y="129">Column~kotlinx.datetime.LocalTime~</text>
-</g>
-<g transform="translate(912,738)">
-  <rect class="card" x="0" y="0" width="340" height="170" rx="5" fill="#F7F1E7" stroke="#B88A44"/>
-  <line class="compartment" x1="0" y1="94" x2="340" y2="94" stroke="#B88A44"/>
-  <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="56.5" text-anchor="middle">Kotlin Timestamp With</text>
-<text class="label" x="170" y="81.5" text-anchor="middle">Time Zone Column</text>
-  <text class="mono" x="18" y="124">+timestampWithTimeZone(name)</text>
-<text class="mono" x="18" y="145">Column~OffsetDateTime~</text>
-</g>
+  <g data-card="Ex01_KotlinDateTime" data-x="80" data-y="408" data-width="300" data-height="96">
+    <rect x="80" y="408" width="300" height="96" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.2" class="card"/>
+    <path d="M80,452 L80,422 Q80,408 94,408 L366,408 Q380,408 380,422 L380,452 Z" fill="#eef5fa"/>
+    <text x="230" y="430" class="tiny" text-anchor="middle">&lt;&lt;extends base&gt;&gt;</text>
+    <text x="230" y="451" class="cardTitle" text-anchor="middle">Ex01_KotlinDateTime</text>
+    <text x="100" y="477" class="detail">CRUD, comparisons, precision</text>
+  </g>
+  <g data-card="Ex02_Defaults" data-x="510" data-y="408" data-width="300" data-height="96">
+    <rect x="510" y="408" width="300" height="96" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.2" class="card"/>
+    <path d="M510,452 L510,422 Q510,408 524,408 L796,408 Q810,408 810,422 L810,452 Z" fill="#f1f6ec"/>
+    <text x="660" y="430" class="tiny" text-anchor="middle">&lt;&lt;extends base&gt;&gt;</text>
+    <text x="660" y="451" class="cardTitle" text-anchor="middle">Ex02_Defaults</text>
+    <text x="530" y="477" class="detail">DB defaults, client defaults</text>
+  </g>
+  <g data-card="Ex03_DateTimeLiteral" data-x="940" data-y="408" data-width="300" data-height="96">
+    <rect x="940" y="408" width="300" height="96" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2.2" class="card"/>
+    <path d="M940,452 L940,422 Q940,408 954,408 L1226,408 Q1240,408 1240,422 L1240,452 Z" fill="#f5eee4"/>
+    <text x="1090" y="430" class="tiny" text-anchor="middle">&lt;&lt;extends base&gt;&gt;</text>
+    <text x="1090" y="451" class="cardTitle" text-anchor="middle">Ex03_DateTimeLiteral</text>
+    <text x="960" y="477" class="detail">date/datetime/timestamp literals</text>
+  </g>
+
+  <g data-card="CitiesTime" data-x="80" data-y="626" data-width="300" data-height="92">
+    <rect x="80" y="626" width="300" height="92" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.2" class="card"/>
+    <path d="M80,670 L80,640 Q80,626 94,626 L366,626 Q380,626 380,640 L380,670 Z" fill="#eef5fa"/>
+    <text x="230" y="648" class="tiny" text-anchor="middle">&lt;&lt;IntIdTable&gt;&gt;</text>
+    <text x="230" y="669" class="cardTitle" text-anchor="middle">CitiesTime</text>
+    <text x="100" y="695" class="detail">name, local_time datetime</text>
+  </g>
+  <g data-card="Default Tables" data-x="510" data-y="626" data-width="300" data-height="92">
+    <rect x="510" y="626" width="300" height="92" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.2" class="card"/>
+    <path d="M510,670 L510,640 Q510,626 524,626 L796,626 Q810,626 810,640 L810,670 Z" fill="#f1f6ec"/>
+    <text x="660" y="648" class="tiny" text-anchor="middle">&lt;&lt;TableWithDBDefault&gt;&gt;</text>
+    <text x="660" y="669" class="cardTitle" text-anchor="middle">Default Tables</text>
+    <text x="530" y="695" class="detail">CurrentDateTime, CurrentDate</text>
+  </g>
+  <g data-card="Literal Tables" data-x="940" data-y="626" data-width="300" data-height="92">
+    <rect x="940" y="626" width="300" height="92" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2.2" class="card"/>
+    <path d="M940,670 L940,640 Q940,626 954,626 L1226,626 Q1240,626 1240,640 L1240,670 Z" fill="#f5eee4"/>
+    <text x="1090" y="648" class="tiny" text-anchor="middle">&lt;&lt;date/datetime/timestamp&gt;&gt;</text>
+    <text x="1090" y="669" class="cardTitle" text-anchor="middle">Literal Tables</text>
+    <text x="960" y="695" class="detail">TableWithDate, DateTime, TS</text>
+  </g>
+
+  <path class="inherit" data-connector="ex01-inherits" d="M260 408 L260 356 Q260 340 276 340 L544 340 Q560 340 560 324 L560 284" marker-end="url(#inherit-grey)"/>
+  <path class="inherit" data-connector="ex02-inherits" d="M660 408 L660 284" marker-end="url(#inherit-grey)"/>
+  <path class="inherit" data-connector="ex03-inherits" d="M1060 408 L1060 356 Q1060 340 1044 340 L776 340 Q760 340 760 324 L760 284" marker-end="url(#inherit-grey)"/>
+
+  <rect x="120" y="814" width="1080" height="30" rx="10" class="noteBox"/>
+  <text x="660" y="835" class="note" text-anchor="middle">Hollow triangles show inheritance; each lower card aligns with the test class that owns those repository-backed tables.</text>
 </svg>

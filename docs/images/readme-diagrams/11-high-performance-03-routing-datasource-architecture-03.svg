@@ -1,114 +1,148 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1378" height="858" viewBox="0 0 1378 858" role="img" aria-label="Routing Key Determination Flow (flowchart)">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1378" height="858"/>
-<rect class="frame" x="32" y="28" width="1314" height="802" rx="28"/>
-<text class="title" x="66" y="82">Routing Key Determination Flow (flowchart)</text>
-<text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M1040 552 C1040 635 1006 635 1006 718" data-connector="line"/>
-<path class="line" d="M1040 552 C1040 635 672 635 672 718" data-connector="line"/>
-<path class="line" d="M1006 552 C1006 552 1040 552 1040 552" data-connector="line"/>
-<path class="line" d="M672 552 C672 552 1040 552 1040 552" data-connector="line"/>
-<path class="line" d="M338 552 C338 552 706 552 706 552" data-connector="line"/>
-<path class="line" d="M706 386 C706 469 672 469 672 552" data-connector="line"/>
-<path class="line" d="M1040 386 C1040 469 338 469 338 552" data-connector="line"/>
-<path class="line" d="M1040 386 C1040 386 1006 386 1006 386" data-connector="line"/>
-<path class="line" d="M672 386 C672 386 1040 386 1040 386" data-connector="line"/>
-<path class="line" d="M672 386 C672 386 706 386 706 386" data-connector="line"/>
-<path class="line" d="M338 386 C338 386 372 386 372 386" data-connector="line"/>
-<path class="line" d="M1040 220 C1040 303 338 303 338 386" data-connector="line"/>
-<path class="line" d="M706 220 C706 303 338 303 338 386" data-connector="line"/>
-<path class="line" d="M672 220 C672 220 1040 220 1040 220" data-connector="line"/>
-<path class="line" d="M672 220 C672 220 706 220 706 220" data-connector="line"/>
-<path class="line" d="M338 220 C338 220 372 220 372 220" data-connector="line"/>
-<g transform="translate(48,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">HTTP Request</text>
-</g>
-<g transform="translate(382,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">X-Tenant-Id header</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">present?</text>
-</g>
-<g transform="translate(716,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">tenant = header</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">value</text>
-</g>
-<g transform="translate(1050,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">tenant =</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">defaultTenant</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">(application.yml)</text>
-</g>
-<g transform="translate(48,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Read-only</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">determination</text>
-</g>
-<g transform="translate(382,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">X-Read-Only: true</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">header?</text>
-</g>
-<g transform="translate(716,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">READ_ONLY = true</text>
-</g>
-<g transform="translate(1050,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Path contains</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">/readonly?</text>
-</g>
-<g transform="translate(48,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">READ_ONLY = false</text>
-</g>
-<g transform="translate(382,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">Routing key</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">tenant:ro example:</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">acme:ro</text>
-</g>
-<g transform="translate(716,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">Routing key</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">tenant:rw example:</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">acme:rw</text>
-</g>
-<g transform="translate(1050,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Connection Factory</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">Registry</text>
-</g>
-<g transform="translate(382,668)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Return</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">ConnectionFactory</text>
-</g>
-<g transform="translate(716,668)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">Illegal State</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">Exception No</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">ConnectionFactory</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="1980" height="980" viewBox="0 0 1980 980" role="img" aria-label="Routing key determination flow for tenant and read-only R2DBC routing">
+  <defs>
+    <filter id="softShadow" x="-8%" y="-10%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#25384d" flood-opacity="0.10"/>
+    </filter>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fffefa;stroke:#d7e3ed;stroke-width:2}
+      .lane{fill:#f8fbfd;stroke:#dce8f2;stroke-width:2}
+      .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:42px;fill:#192538;font-weight:400}
+      .subtitle,.detail,.foot{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:17px;font-weight:700;fill:#556678}
+      .laneTitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:17px;font-weight:700;letter-spacing:.08em;fill:#91a5b7}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:24px;fill:#192538;font-weight:400}
+      .smallTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:19px;fill:#192538;font-weight:400}
+      .mono{font-family:"Comic Mono","SFMono-Regular",ui-monospace,monospace;font-size:15px;font-weight:700;fill:#506176}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",ui-monospace,monospace;font-size:13px;font-weight:700;fill:#627287}
+      .card{filter:url(#softShadow);stroke-width:2.4}
+      .header{opacity:.96}
+      .connector{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .blue{stroke:#3f83b8}
+      .green{stroke:#6f8f52}
+      .amber{stroke:#a36f3e}
+      .teal{stroke:#4f8f8b}
+      .rose{stroke:#a85f7f}
+      .note{fill:#f7fffe;stroke:#9fd0cb;stroke-width:2}
+    </style>
+  </defs>
+
+  <rect class="canvas" width="1980" height="980"/>
+  <rect class="frame" x="30" y="30" width="1920" height="920" rx="24"/>
+  <text class="title" x="72" y="92">Routing Key Determination Flow</text>
+  <text class="subtitle" x="76" y="126">TenantRoutingWebFilter writes request hints into Reactor Context; ContextAwareRoutingKeyResolver computes the key consumed by DynamicRoutingConnectionFactory.</text>
+
+  <rect class="lane" x="60" y="150" width="1860" height="170" rx="18"/>
+  <text class="laneTitle" x="86" y="184">HTTP SIGNALS READ BY TENANTROUTINGWEBFILTER</text>
+
+  <g data-card="HTTP request" data-x="90" data-y="212" data-width="220" data-height="72">
+    <rect class="card" x="90" y="212" width="220" height="72" rx="12" fill="#ffffff" stroke="#5d7486"/>
+    <text class="smallTitle" x="200" y="242" text-anchor="middle">HTTP request</text>
+    <text class="tiny" x="200" y="265" text-anchor="middle">ServerWebExchange</text>
+  </g>
+  <g data-card="Tenant header" data-x="350" data-y="212" data-width="230" data-height="72">
+    <rect class="card" x="350" y="212" width="230" height="72" rx="12" fill="#f7fcff" stroke="#3f83b8"/>
+    <text class="smallTitle" x="465" y="242" text-anchor="middle">X-Tenant-Id</text>
+    <text class="tiny" x="465" y="265" text-anchor="middle">blank -> default</text>
+  </g>
+  <g data-card="Read-only header" data-x="620" data-y="212" data-width="250" data-height="72">
+    <rect class="card" x="620" y="212" width="250" height="72" rx="12" fill="#f8fcf7" stroke="#6f8f52"/>
+    <text class="smallTitle" x="745" y="242" text-anchor="middle">X-Read-Only</text>
+    <text class="tiny" x="745" y="265" text-anchor="middle">toBooleanStrictOrNull()</text>
+  </g>
+  <g data-card="Read-only path" data-x="910" data-y="212" data-width="250" data-height="72">
+    <rect class="card" x="910" y="212" width="250" height="72" rx="12" fill="#fff9ef" stroke="#a36f3e"/>
+    <text class="smallTitle" x="1035" y="242" text-anchor="middle">/readonly path</text>
+    <text class="tiny" x="1035" y="265" text-anchor="middle">fallback readOnly rule</text>
+  </g>
+  <g data-card="Default tenant" data-x="1200" data-y="212" data-width="250" data-height="72">
+    <rect class="card" x="1200" y="212" width="250" height="72" rx="12" fill="#fff7f7" stroke="#a85f7f"/>
+    <text class="smallTitle" x="1325" y="242" text-anchor="middle">default tenant</text>
+    <text class="tiny" x="1325" y="265" text-anchor="middle">routing.r2dbc.default-tenant</text>
+  </g>
+  <g data-card="Routing table shape" data-x="1490" data-y="212" data-width="350" data-height="72">
+    <rect class="card" x="1490" y="212" width="350" height="72" rx="12" fill="#f7fffe" stroke="#4f8f8b"/>
+    <text class="smallTitle" x="1665" y="242" text-anchor="middle">&lt;tenant&gt;:&lt;rw|ro&gt;</text>
+    <text class="tiny" x="1665" y="265" text-anchor="middle">keys registered during configuration</text>
+  </g>
+
+  <rect class="lane" x="60" y="350" width="1860" height="310" rx="18"/>
+  <text class="laneTitle" x="86" y="384">REQUEST CONTEXT TO CONNECTION FACTORY LOOKUP</text>
+
+  <g data-card="TenantRoutingWebFilter" data-x="80" data-y="430" data-width="340" data-height="140">
+    <rect class="card" x="80" y="430" width="340" height="140" rx="16" fill="#ffffff" stroke="#3f83b8"/>
+    <path class="header" d="M80,482 L80,446 Q80,430 96,430 L404,430 Q420,430 420,446 L420,482 Z" fill="#eef5fa"/>
+    <text class="cardTitle" x="250" y="464" text-anchor="middle">TenantRoutingWebFilter</text>
+    <text class="mono" x="108" y="512">tenant = header ?: default</text>
+    <text class="mono" x="108" y="538">readOnly = header ?: path rule</text>
+  </g>
+
+  <g data-card="Reactor Context" data-x="470" data-y="430" data-width="330" data-height="140">
+    <rect class="card" x="470" y="430" width="330" height="140" rx="16" fill="#f8fcf7" stroke="#6f8f52"/>
+    <path class="header" d="M470,482 L470,446 Q470,430 486,430 L784,430 Q800,430 800,446 L800,482 Z" fill="#f1f6ec"/>
+    <text class="cardTitle" x="635" y="464" text-anchor="middle">Reactor Context</text>
+    <text class="mono" x="502" y="512">TENANT = tenant</text>
+    <text class="mono" x="502" y="538">READ_ONLY = readOnly</text>
+  </g>
+
+  <g data-card="ContextAwareRoutingKeyResolver" data-x="850" data-y="430" data-width="350" data-height="140">
+    <rect class="card" x="850" y="430" width="350" height="140" rx="16" fill="#fff9ef" stroke="#a36f3e"/>
+    <path class="header" d="M850,482 L850,446 Q850,430 866,430 L1184,430 Q1200,430 1200,446 L1200,482 Z" fill="#f5eee4"/>
+    <text class="cardTitle" x="1025" y="464" text-anchor="middle">ContextAware Resolver</text>
+    <text class="mono" x="882" y="512">mode = readOnly ? ro : rw</text>
+    <text class="mono" x="882" y="538">key = "$tenant:$mode"</text>
+  </g>
+
+  <g data-card="DynamicRoutingConnectionFactory" data-x="1250" data-y="430" data-width="350" data-height="140">
+    <rect class="card" x="1250" y="430" width="350" height="140" rx="16" fill="#fff7f7" stroke="#a85f7f"/>
+    <path class="header" d="M1250,482 L1250,446 Q1250,430 1266,430 L1584,430 Q1600,430 1600,446 L1600,482 Z" fill="#f5eef2"/>
+    <text class="cardTitle" x="1425" y="464" text-anchor="middle">DynamicRouting CF</text>
+    <text class="mono" x="1282" y="512">Mono.deferContextual</text>
+    <text class="mono" x="1282" y="538">registry.get(key)</text>
+  </g>
+
+  <g data-card="Target ConnectionFactory" data-x="1650" data-y="430" data-width="230" data-height="140">
+    <rect class="card" x="1650" y="430" width="230" height="140" rx="16" fill="#f7fffe" stroke="#4f8f8b"/>
+    <path class="header" d="M1650,482 L1650,446 Q1650,430 1666,430 L1864,430 Q1880,430 1880,446 L1880,482 Z" fill="#eef7f6"/>
+    <text class="cardTitle" x="1765" y="464" text-anchor="middle">Target CF</text>
+    <text class="mono" x="1680" y="512">target.create()</text>
+    <text class="mono" x="1680" y="538">actual DB connection</text>
+  </g>
+
+  <path class="connector blue" d="M420 500 H470" data-connector="flow"/>
+  <polyline points="470,500 458,493 458,507" fill="none" stroke="#3f83b8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector green" d="M800 500 H850" data-connector="flow"/>
+  <polyline points="850,500 838,493 838,507" fill="none" stroke="#6f8f52" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector amber" d="M1200 500 H1250" data-connector="flow"/>
+  <polyline points="1250,500 1238,493 1238,507" fill="none" stroke="#a36f3e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector rose" d="M1600 500 H1650" data-connector="flow"/>
+  <polyline points="1650,500 1638,493 1638,507" fill="none" stroke="#a85f7f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="connector blue" d="M200 284 V430" data-connector="signal"/>
+  <polyline points="200,430 193,418 207,418" fill="none" stroke="#3f83b8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <rect class="lane" x="60" y="690" width="1860" height="170" rx="18"/>
+  <text class="laneTitle" x="86" y="724">ROUTING KEY OUTCOMES</text>
+  <g data-card="default rw" data-x="120" data-y="760" data-width="300" data-height="58">
+    <rect class="card" x="120" y="760" width="300" height="58" rx="14" fill="#ffffff" stroke="#5d7486"/>
+    <text class="mono" x="270" y="795" text-anchor="middle">no hints -> default:rw</text>
+  </g>
+  <g data-card="acme rw" data-x="470" data-y="760" data-width="300" data-height="58">
+    <rect class="card" x="470" y="760" width="300" height="58" rx="14" fill="#f7fcff" stroke="#3f83b8"/>
+    <text class="mono" x="620" y="795" text-anchor="middle">X-Tenant-Id=acme -> acme:rw</text>
+  </g>
+  <g data-card="acme ro" data-x="820" data-y="760" data-width="330" data-height="58">
+    <rect class="card" x="820" y="760" width="330" height="58" rx="14" fill="#f8fcf7" stroke="#6f8f52"/>
+    <text class="mono" x="985" y="795" text-anchor="middle">acme + readOnly -> acme:ro</text>
+  </g>
+  <g data-card="ro reuse" data-x="1200" data-y="760" data-width="330" data-height="58">
+    <rect class="card" x="1200" y="760" width="330" height="58" rx="14" fill="#fff9ef" stroke="#a36f3e"/>
+    <text class="mono" x="1365" y="795" text-anchor="middle">missing ro URL -> reuse rw URL</text>
+  </g>
+  <g data-card="registered key" data-x="1580" data-y="760" data-width="260" data-height="58">
+    <rect class="card" x="1580" y="760" width="260" height="58" rx="14" fill="#f7fffe" stroke="#4f8f8b"/>
+    <text class="mono" x="1710" y="795" text-anchor="middle">registry keys are exact</text>
+  </g>
+
+  <rect class="note" x="120" y="890" width="1740" height="34" rx="12"/>
+  <text class="foot" x="990" y="913" text-anchor="middle">Header and path signals become a routing key before the dynamic ConnectionFactory selects the target pool.</text>
 </svg>

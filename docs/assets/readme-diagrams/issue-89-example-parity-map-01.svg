@@ -1,125 +1,87 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="920" viewBox="0 0 1500 920" role="img" aria-labelledby="title desc">
-  <title id="title">Example parity map for exposed-r2dbc-workshop issue 89</title>
-  <desc id="desc">A concept-level parity map between exposed-r2dbc-workshop and exposed-workshop examples and GitHub issue topics.</desc>
-  <defs>
-    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
-      <feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#203040" flood-opacity="0.12"/>
-    </filter>
-    <marker id="arrow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="strokeWidth">
-      <path d="M 1 1 L 10 5 L 1 9" fill="none" stroke="#63758A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </marker>
-    <style>
-      .canvas{fill:#F6F9FC}
-      .frame{fill:#FFFFFF;stroke:#D7E2EC;stroke-width:2}
-      .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:40px;fill:#203040;font-weight:400}
-      .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:17px;fill:#536476;font-weight:400}
-      .head{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:27px;fill:#203040;font-weight:400}
-      .label{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:16px;fill:#2F4053;font-weight:400}
-      .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;fill:#5F6F82;font-weight:400}
-      .tiny{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;fill:#647386;font-weight:400}
-      .card{filter:url(#shadow);stroke-width:2}
-      .line{stroke:#63758A;stroke-width:2;fill:none;marker-end:url(#arrow)}
-      .mutedLine{stroke:#AAB6C4;stroke-width:2;stroke-dasharray:7 6;fill:none;marker-end:url(#arrow)}
-    </style>
-  </defs>
-
-  <rect class="canvas" width="1500" height="920"/>
-  <rect class="frame" x="34" y="30" width="1432" height="858" rx="24"/>
-  <text class="title" x="72" y="84">Example parity map</text>
-  <text class="subtitle" x="76" y="116">Issue #89 compares concepts, not exact module names, so platform-specific R2DBC/JDBC examples stay distinct.</text>
-
-  <g transform="translate(78,150)">
-    <rect class="card" x="0" y="0" width="405" height="646" rx="16" fill="#E8F3FF" stroke="#75A9E8"/>
-    <text class="head" x="202" y="44" text-anchor="middle">exposed-r2dbc-workshop</text>
-    <text class="small" x="202" y="72" text-anchor="middle">Reactive R2DBC, Flow, WebFlux, Ktor</text>
-
-    <rect x="30" y="104" width="345" height="70" rx="10" fill="#FFFFFF" stroke="#D7E2EC"/>
-    <text class="label" x="54" y="132">10 / 07 Ktor multi-tenant</text>
-    <text class="tiny" x="54" y="156">closed #33, implemented module</text>
-
-    <rect x="30" y="196" width="345" height="86" rx="10" fill="#FFFFFF" stroke="#D7E2EC"/>
-    <text class="label" x="54" y="224">11 / 04-06 Ktor cache and routing</text>
-    <text class="tiny" x="54" y="248">closed #34, #35, #69</text>
-    <text class="tiny" x="54" y="268">R2DBC cache, single-flight, routing datasource</text>
-
-    <rect x="30" y="304" width="345" height="86" rx="10" fill="#FFFFFF" stroke="#D7E2EC"/>
-    <text class="label" x="54" y="332">10 WebFlux tenant strategies</text>
-    <text class="tiny" x="54" y="356">closed #37-#42</text>
-    <text class="tiny" x="54" y="376">schema, connection factory, auth, onboarding</text>
-
-    <rect x="30" y="412" width="345" height="86" rx="10" fill="#FFFFFF" stroke="#D7E2EC"/>
-    <text class="label" x="54" y="440">12 production integration</text>
-    <text class="tiny" x="54" y="464">closed #43-#49</text>
-    <text class="tiny" x="54" y="484">Spring Boot 4 and Ktor service boundary</text>
-
-    <rect x="30" y="520" width="345" height="78" rx="10" fill="#FDF7E7" stroke="#D9AA4D"/>
-    <text class="label" x="54" y="548">R2DBC-only architecture</text>
-    <text class="tiny" x="54" y="572">connection-factory-per-tenant, Flow collection</text>
-  </g>
-
-  <g transform="translate(1038,150)">
-    <rect class="card" x="0" y="0" width="405" height="646" rx="16" fill="#EAF7EF" stroke="#69B888"/>
-    <text class="head" x="202" y="44" text-anchor="middle">exposed-workshop</text>
-    <text class="small" x="202" y="72" text-anchor="middle">Blocking JDBC, DAO, Spring MVC/WebFlux, Ktor</text>
-
-    <rect x="30" y="104" width="345" height="70" rx="10" fill="#FFFFFF" stroke="#D7E2EC"/>
-    <text class="label" x="54" y="132">Ktor multi-tenant</text>
-    <text class="tiny" x="54" y="156">open #45, #46</text>
-
-    <rect x="30" y="196" width="345" height="86" rx="10" fill="#FFFFFF" stroke="#D7E2EC"/>
-    <text class="label" x="54" y="224">Ktor cache and routing</text>
-    <text class="tiny" x="54" y="248">open #47, #48, #49, #50</text>
-    <text class="tiny" x="54" y="268">JDBC cache, coroutine cache, routing datasource</text>
-
-    <rect x="30" y="304" width="345" height="86" rx="10" fill="#FFFFFF" stroke="#D7E2EC"/>
-    <text class="label" x="54" y="332">Spring Boot tenant strategies</text>
-    <text class="tiny" x="54" y="356">open #51, #55, #56; closed #52-#54</text>
-    <text class="tiny" x="54" y="376">schema, database, auth, onboarding</text>
-
-    <rect x="30" y="412" width="345" height="86" rx="10" fill="#FFFFFF" stroke="#D7E2EC"/>
-    <text class="label" x="54" y="440">12 production integration</text>
-    <text class="tiny" x="54" y="464">open epic #57; closed #58-#63</text>
-    <text class="tiny" x="54" y="484">granular Spring and Ktor modules</text>
-
-    <rect x="30" y="520" width="345" height="78" rx="10" fill="#FDECEF" stroke="#DB7890"/>
-    <text class="label" x="54" y="548">JDBC-only architecture</text>
-    <text class="tiny" x="54" y="572">DAO/entities, transaction template, benchmark</text>
-  </g>
-
-  <g transform="translate(555,178)">
-    <rect class="card" x="0" y="0" width="390" height="574" rx="16" fill="#FFFFFF" stroke="#D7E2EC"/>
-    <text class="head" x="195" y="42" text-anchor="middle">Parity decision</text>
-    <text class="small" x="195" y="70" text-anchor="middle">Create new issues only for portable gaps.</text>
-
-    <rect x="38" y="104" width="314" height="72" rx="10" fill="#E9F7F6" stroke="#55B5AF"/>
-    <text class="label" x="195" y="132" text-anchor="middle">Counterpart exists</text>
-    <text class="tiny" x="195" y="156" text-anchor="middle">Ktor, tenant, chapter 12 topics map both ways</text>
-
-    <rect x="38" y="212" width="314" height="84" rx="10" fill="#FFF3D9" stroke="#D9AA4D"/>
-    <text class="label" x="195" y="240" text-anchor="middle">Platform-specific</text>
-    <text class="tiny" x="195" y="264" text-anchor="middle">R2DBC connection factory and Flow</text>
-    <text class="tiny" x="195" y="284" text-anchor="middle">JDBC DAO/entities and blocking transactions</text>
-
-    <rect x="38" y="332" width="314" height="84" rx="10" fill="#F1ECFF" stroke="#A58BE3"/>
-    <text class="label" x="195" y="360" text-anchor="middle">README requirement</text>
-    <text class="tiny" x="195" y="384" text-anchor="middle">Architecture diagrams must be PNG in README</text>
-    <text class="tiny" x="195" y="404" text-anchor="middle">SVG sources stay beside rendered PNG files</text>
-
-    <rect x="38" y="452" width="314" height="76" rx="10" fill="#EAF7EF" stroke="#69B888"/>
-    <text class="label" x="195" y="480" text-anchor="middle">Current stop condition</text>
-    <text class="tiny" x="195" y="504" text-anchor="middle">No duplicate implementation issue from #89</text>
-  </g>
-
-  <path class="line" d="M483 139 C520 139 520 230 555 230"/>
-  <path class="line" d="M945 230 C980 230 980 139 1038 139"/>
-  <path class="line" d="M483 240 C520 240 520 272 555 272"/>
-  <path class="line" d="M945 272 C980 272 980 240 1038 240"/>
-  <path class="line" d="M483 348 C520 348 520 374 555 374"/>
-  <path class="line" d="M945 374 C980 374 980 348 1038 348"/>
-  <path class="line" d="M483 456 C520 456 520 492 555 492"/>
-  <path class="line" d="M945 492 C980 492 980 456 1038 456"/>
-  <path class="mutedLine" d="M483 560 C520 560 520 254 555 254"/>
-  <path class="mutedLine" d="M945 254 C980 254 980 560 1038 560"/>
-
-  <text class="tiny" x="750" y="842" text-anchor="middle">Evidence date: 2026-05-24. Issue states can change; this README captures the parity decision for issue #89.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 800" width="1320" height="800" role="img" aria-label="Issue 89 Example Parity Map diagram">
+<defs><filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12" /></filter><style>.canvas{fill:#f6f9fc}.frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}.lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}.card{filter:url(#shadow)}.header{opacity:.96}.title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:30px;fill:#1e293b}.subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}.tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}.laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:15px;letter-spacing:.08em;fill:#8ca2b4}.cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:17px;fill:#1e293b}.connector{fill:none;stroke:#64748b;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}.use{fill:none;stroke-width:2;stroke-dasharray:7 6;stroke-linecap:round;stroke-linejoin:round}.rel{fill:none;stroke:#64748b;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.head{fill:white;stroke:#64748b;stroke-width:2.4;stroke-dasharray:none;style:stroke-dasharray:none}.labelPill{fill:#fff;stroke:#d7e2ec;stroke-width:1}.noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.2}</style></defs>
+<rect width="1320" height="800" class="canvas"/><rect x="22" y="22" width="1276" height="756" rx="18" class="frame"/>
+<text x="58" y="68" class="title" text-anchor="start">Issue 89 Example Parity Map</text>
+<text x="58" y="96" class="subtitle" text-anchor="start">R2DBC workshop responsibility map for modules, runtime boundaries, and persistence contracts.</text>
+<rect x="48" y="128" width="1224" height="240" rx="16" class="lane"/><text x="72" y="158" class="laneTitle" text-anchor="start">REQUEST / COMMAND PATH</text>
+<rect x="48" y="392" width="1224" height="170" rx="16" class="lane"/><text x="72" y="422" class="laneTitle" text-anchor="start">DATA / INFRASTRUCTURE</text>
+<rect x="48" y="586" width="1224" height="104" rx="16" class="lane"/><text x="72" y="616" class="laneTitle" text-anchor="start">READER CONTRACT</text>
+<g data-card="Example parity map" data-x="82" data-y="210" data-width="200" data-height="104">
+<rect x="82" y="210" width="200" height="104" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card"/>
+<path class="header" d="M82,252 L82,224 Q82,210 96,210 L268,210 Q282,210 282,224 L282,252 Z" fill="#eef5fa"/>
+<text x="182.0" y="228" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+<text x="182.0" y="247" class="cardTitle" text-anchor="middle">Example parity map</text>
+<text x="100" y="272" class="detail" text-anchor="start">reactive boundary</text>
+</g>
+<g data-card="Issue #89 compares conc…" data-x="322" data-y="210" data-width="200" data-height="104">
+<rect x="322" y="210" width="200" height="104" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card"/>
+<path class="header" d="M322,252 L322,224 Q322,210 336,210 L508,210 Q522,210 522,224 L522,252 Z" fill="#f1f6ec"/>
+<text x="422.0" y="228" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+<text x="422.0" y="247" class="cardTitle" text-anchor="middle">Issue #89 compares conc…</text>
+<text x="340" y="272" class="detail" text-anchor="start">reactive boundary</text>
+</g>
+<g data-card="exposed-r2dbc-workshop" data-x="562" data-y="210" data-width="200" data-height="104">
+<rect x="562" y="210" width="200" height="104" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card"/>
+<path class="header" d="M562,252 L562,224 Q562,210 576,210 L748,210 Q762,210 762,224 L762,252 Z" fill="#f5eee4"/>
+<text x="662.0" y="228" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+<text x="662.0" y="247" class="cardTitle" text-anchor="middle">exposed-r2dbc-workshop</text>
+<text x="580" y="272" class="detail" text-anchor="start">R2DBC responsibility</text>
+</g>
+<g data-card="Reactive R2DBC, Flow, W…" data-x="802" data-y="210" data-width="200" data-height="104">
+<rect x="802" y="210" width="200" height="104" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card"/>
+<path class="header" d="M802,252 L802,224 Q802,210 816,210 L988,210 Q1002,210 1002,224 L1002,252 Z" fill="#eef7f6"/>
+<text x="902.0" y="228" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+<text x="902.0" y="247" class="cardTitle" text-anchor="middle">Reactive R2DBC, Flow, W…</text>
+<text x="820" y="272" class="detail" text-anchor="start">R2DBC responsibility</text>
+</g>
+<g data-card="10 / 07 Ktor multi-tena…" data-x="1042" data-y="210" data-width="200" data-height="104">
+<rect x="1042" y="210" width="200" height="104" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2" class="card"/>
+<path class="header" d="M1042,252 L1042,224 Q1042,210 1056,210 L1228,210 Q1242,210 1242,224 L1242,252 Z" fill="#f5eef2"/>
+<text x="1142.0" y="228" class="tiny" text-anchor="middle">&lt;&lt;component&gt;&gt;</text>
+<text x="1142.0" y="247" class="cardTitle" text-anchor="middle">10 / 07 Ktor multi-tena…</text>
+<text x="1060" y="272" class="detail" text-anchor="start">R2DBC responsibility</text>
+</g>
+<path class="connector" data-connector="flow" d="M 282 262 L 322 262" stroke="#6f8f52"/>
+<polyline points="322,262 310,255 310,269" fill="none" stroke="#6f8f52" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="flow" d="M 522 262 L 562 262" stroke="#a66a3f"/>
+<polyline points="562,262 550,255 550,269" fill="none" stroke="#a66a3f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="flow" d="M 762 262 L 802 262" stroke="#4f8f8b"/>
+<polyline points="802,262 790,255 790,269" fill="none" stroke="#4f8f8b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="connector" data-connector="flow" d="M 1002 262 L 1042 262" stroke="#a85f7f"/>
+<polyline points="1042,262 1030,255 1030,269" fill="none" stroke="#a85f7f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<g data-card="ConnectionFactory" data-x="180" data-y="432" data-width="210" data-height="88">
+<rect x="180" y="432" width="210" height="88" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card"/>
+<path class="header" d="M180,474 L180,446 Q180,432 194,432 L376,432 Q390,432 390,446 L390,474 Z" fill="#f5eee4"/>
+<text x="285.0" y="450" class="tiny" text-anchor="middle">&lt;&lt;runtime&gt;&gt;</text>
+<text x="285.0" y="469" class="cardTitle" text-anchor="middle">ConnectionFactory</text>
+<text x="198" y="494" class="detail" text-anchor="start">owned by the example</text>
+</g>
+<g data-card="suspendTransaction" data-x="460" data-y="432" data-width="210" data-height="88">
+<rect x="460" y="432" width="210" height="88" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card"/>
+<path class="header" d="M460,474 L460,446 Q460,432 474,432 L656,432 Q670,432 670,446 L670,474 Z" fill="#eef7f6"/>
+<text x="565.0" y="450" class="tiny" text-anchor="middle">&lt;&lt;runtime&gt;&gt;</text>
+<text x="565.0" y="469" class="cardTitle" text-anchor="middle">suspendTransaction</text>
+<text x="478" y="494" class="detail" text-anchor="start">owned by the example</text>
+</g>
+<g data-card="Flow / Result" data-x="740" data-y="432" data-width="210" data-height="88">
+<rect x="740" y="432" width="210" height="88" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2" class="card"/>
+<path class="header" d="M740,474 L740,446 Q740,432 754,432 L936,432 Q950,432 950,446 L950,474 Z" fill="#f5eef2"/>
+<text x="845.0" y="450" class="tiny" text-anchor="middle">&lt;&lt;runtime&gt;&gt;</text>
+<text x="845.0" y="469" class="cardTitle" text-anchor="middle">Flow / Result</text>
+<text x="758" y="494" class="detail" text-anchor="start">owned by the example</text>
+</g>
+<g data-card="Database" data-x="1020" data-y="432" data-width="210" data-height="88">
+<rect x="1020" y="432" width="210" height="88" rx="14" fill="#fff" stroke="#8a6f55" stroke-width="2" class="card"/>
+<path class="header" d="M1020,474 L1020,446 Q1020,432 1034,432 L1216,432 Q1230,432 1230,446 L1230,474 Z" fill="#f3eee8"/>
+<text x="1125.0" y="450" class="tiny" text-anchor="middle">&lt;&lt;runtime&gt;&gt;</text>
+<text x="1125.0" y="469" class="cardTitle" text-anchor="middle">Database</text>
+<text x="1038" y="494" class="detail" text-anchor="start">owned by the example</text>
+</g>
+<path class="use connector" data-connector="runtime-use" d="M 422 432 L 422 390 Q 422 374 438 374 L 549 374 Q 565 374 565 390 L 565 432" stroke="#64748b"/>
+<polyline points="565,432 558,420 572,420" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="use connector" data-connector="runtime-use" d="M 662 432 L 662 390 Q 662 374 678 374 L 829 374 Q 845 374 845 390 L 845 432" stroke="#64748b"/>
+<polyline points="845,432 838,420 852,420" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path class="use connector" data-connector="runtime-use" d="M 902 432 L 902 390 Q 902 374 918 374 L 1109 374 Q 1125 374 1125 390 L 1125 432" stroke="#64748b"/>
+<polyline points="1125,432 1118,420 1132,420" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<rect x="86" y="634" width="1148" height="30" rx="10" class="noteBox"/><text x="660" y="654" class="note" text-anchor="middle">Static ownership view: components are arranged by responsibility, and arrows show concrete handoff direction.</text>
 </svg>

@@ -1,89 +1,192 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1754" height="1233" viewBox="0 0 1754 1233" role="img" aria-label="03 routing datasource Class Structure">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1754" height="1233"/>
-<rect class="frame" x="32" y="28" width="1690" height="1177" rx="28"/>
-<text class="title" x="66" y="82">03 routing datasource Class Structure</text>
-<text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="line" d="M1492 180 L1492 102 L672 102 L672 371" data-connector="line"/>
-<path class="line" d="M877 518 L877 463 L672 463 L672 371" data-connector="line"/>
-<path class="implLine" d="M877 822 L877 747 L1082 747 L1082 350"/>
-<path class="line" d="M672 180 L672 132 L1082 132 L1082 350" data-connector="line"/>
-<path class="line" d="M672 180 L672 439 L262 439 L262 350" data-connector="line"/>
-<g transform="translate(92,180)">
-  <rect class="card" x="0" y="0" width="340" height="170" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="94" x2="340" y2="94" stroke="#5B8DEF"/>
-  <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="56.5" text-anchor="middle">Context Aware Routing</text>
-<text class="label" x="170" y="81.5" text-anchor="middle">Key Resolver</text>
-  <text class="mono" x="18" y="124">+currentLookupKey(context) String</text>
-<text class="mono" x="18" y="145">-defaultTenant String</text>
-</g>
-<g transform="translate(502,180)">
-  <rect class="card" x="0" y="0" width="340" height="191" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="94" x2="340" y2="94" stroke="#58A978"/>
-  <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="56.5" text-anchor="middle">Dynamic Routing</text>
-<text class="label" x="170" y="81.5" text-anchor="middle">Connection Factory</text>
-  <text class="mono" x="18" y="124">+create() Publisher~Connection~</text>
-<text class="mono" x="18" y="145">-keyResolver RoutingKeyResolver</text>
-<text class="mono" x="18" y="166">-registry ConnectionFactoryRegistry</text>
-</g>
-<g transform="translate(912,180)">
-  <rect class="card" x="0" y="0" width="340" height="170" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="94" x2="340" y2="94" stroke="#D6A441"/>
-  <text class="small" x="170" y="26" text-anchor="middle">«interface»</text>
-  <text class="label" x="170" y="56.5" text-anchor="middle">Connection Factory</text>
-<text class="label" x="170" y="81.5" text-anchor="middle">Registry</text>
-  <text class="mono" x="18" y="124">+get(key) ConnectionFactory</text>
-<text class="mono" x="18" y="145">+keys() Set~String~</text>
-</g>
-<g transform="translate(1322,180)">
-  <rect class="card" x="0" y="0" width="340" height="212" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
-  <line class="compartment" x1="0" y1="94" x2="340" y2="94" stroke="#DC6B82"/>
-  <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="56.5" text-anchor="middle">Routing Transactional</text>
-<text class="label" x="170" y="81.5" text-anchor="middle">Executor</text>
-  <text class="mono" x="18" y="124">+readWrite(block) T</text>
-<text class="mono" x="18" y="145">+readOnly(block) T</text>
-<text class="mono" x="18" y="166">-readWriteOperator TransactionalOperator</text>
-<text class="mono" x="18" y="187">-readOnlyOperator TransactionalOperator</text>
-</g>
-<g transform="translate(707,518)">
-  <rect class="card" x="0" y="0" width="340" height="154" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#45A7A1"/>
-  <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="61" text-anchor="middle">TenantRoutingWebFilter</text>
-  <text class="mono" x="18" y="108">+filter(exchange, chain) Mono~Void~</text>
-<text class="mono" x="18" y="129">-defaultTenant String</text>
-</g>
-<g transform="translate(707,822)">
-  <rect class="card" x="0" y="0" width="340" height="191" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
-  <line class="compartment" x1="0" y1="94" x2="340" y2="94" stroke="#8A72D6"/>
-  <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="56.5" text-anchor="middle">In Memory Connection</text>
-<text class="label" x="170" y="81.5" text-anchor="middle">Factory Registry</text>
-  <text class="mono" x="18" y="124">-factories Map~String, ConnectionFactory~</text>
-<text class="mono" x="18" y="145">+register(key, factory)</text>
-<text class="mono" x="18" y="166">+get(key) ConnectionFactory</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="1100" viewBox="0 0 1700 1100" role="img" aria-label="Routing datasource class diagram">
+  <defs>
+    <filter id="softShadow" x="-8%" y="-10%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#25384d" flood-opacity="0.10"/>
+    </filter>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fffefa;stroke:#d7e3ed;stroke-width:2}
+      .lane{fill:#f9fbfd;stroke:#dbe7f0;stroke-width:1.8}
+      .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:40px;fill:#192538;font-weight:400}
+      .subtitle,.detail,.foot{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:700;fill:#556678}
+      .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:700;fill:#66788c}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:18px;letter-spacing:0.08em;fill:#8ba4b8;font-weight:400}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;fill:#192538;font-weight:400}
+      .stereo{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:700;fill:#66788c}
+      .card{filter:url(#softShadow);stroke-width:2.4}
+      .header{opacity:.96}
+      .connector{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .use{stroke-dasharray:8 7;stroke-linecap:butt}
+      .head{fill:none;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none}
+      .hollow{fill:#fffefa;stroke-width:2.8;stroke-linejoin:round;stroke-dasharray:none}
+      .blue{stroke:#4f86c6}
+      .green{stroke:#6f8f52}
+      .amber{stroke:#a36f3e}
+      .teal{stroke:#4f8f8b}
+      .rose{stroke:#a85f7f}
+      .slate{stroke:#64748b}
+    </style>
+  </defs>
+
+  <rect class="canvas" width="1700" height="1100"/>
+  <rect class="frame" x="30" y="30" width="1640" height="1040" rx="24"/>
+  <text class="title" x="72" y="94">Routing DataSource Class Structure</text>
+  <text class="subtitle" x="76" y="128">WebFlux context hints feed resolver and registry contracts; the primary ConnectionFactory delegates to a tenant/read-write target.</text>
+
+  <rect class="lane" x="60" y="160" width="1580" height="220" rx="18"/>
+  <text class="laneTitle" x="92" y="194">SPRING WEBFLUX ENTRYPOINTS AND BEANS</text>
+  <rect class="lane" x="60" y="410" width="1580" height="230" rx="18"/>
+  <text class="laneTitle" x="92" y="444">CONTRACTS / EXTERNAL TYPES</text>
+  <rect class="lane" x="60" y="670" width="1580" height="250" rx="18"/>
+  <text class="laneTitle" x="92" y="704">IMPLEMENTATIONS / DOMAIN ACCESS</text>
+
+  <g data-card="TenantRoutingWebFilter" data-x="80" data-y="230" data-width="260" data-height="118">
+    <rect class="card" x="80" y="230" width="260" height="118" rx="14" fill="#ffffff" stroke="#6f8f52"/>
+    <path class="header" d="M80,276 L80,244 Q80,230 94,230 L326,230 Q340,230 340,244 L340,276 Z" fill="#f2f8ed"/>
+    <text class="stereo" x="210" y="254" text-anchor="middle">&lt;&lt;WebFilter&gt;&gt;</text>
+    <text class="cardTitle" x="210" y="278" text-anchor="middle">TenantRoutingWebFilter</text>
+    <text class="detail" x="104" y="310">extracts tenant + readOnly</text>
+    <text class="small" x="104" y="332">writes Reactor Context</text>
+  </g>
+
+  <g data-card="RoutingMarkerController" data-x="400" data-y="230" data-width="260" data-height="118">
+    <rect class="card" x="400" y="230" width="260" height="118" rx="14" fill="#ffffff" stroke="#4f86c6"/>
+    <path class="header" d="M400,292 L400,244 Q400,230 414,230 L646,230 Q660,230 660,244 L660,292 Z" fill="#eef6fc"/>
+    <text class="stereo" x="530" y="254" text-anchor="middle">&lt;&lt;RestController&gt;&gt;</text>
+    <text class="cardTitle" x="530" y="278" text-anchor="middle">RoutingMarker</text>
+    <text class="cardTitle" x="530" y="300" text-anchor="middle">Controller</text>
+    <text class="detail" x="424" y="324">GET / PATCH marker</text>
+  </g>
+
+  <g data-card="RoutingTransactionalExecutor" data-x="720" data-y="230" data-width="260" data-height="118">
+    <rect class="card" x="720" y="230" width="260" height="118" rx="14" fill="#ffffff" stroke="#6f8f52"/>
+    <path class="header" d="M720,292 L720,244 Q720,230 734,230 L966,230 Q980,230 980,244 L980,292 Z" fill="#f2f8ed"/>
+    <text class="stereo" x="850" y="254" text-anchor="middle">&lt;&lt;Component&gt;&gt;</text>
+    <text class="cardTitle" x="850" y="278" text-anchor="middle">RoutingTransactional</text>
+    <text class="cardTitle" x="850" y="300" text-anchor="middle">Executor</text>
+    <text class="detail" x="744" y="324">readWrite / readOnly</text>
+  </g>
+
+  <g data-card="RoutingMarkerRepository" data-x="1040" data-y="230" data-width="260" data-height="118">
+    <rect class="card" x="1040" y="230" width="260" height="118" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+    <path class="header" d="M1040,292 L1040,244 Q1040,230 1054,230 L1286,230 Q1300,230 1300,244 L1300,292 Z" fill="#eef8f7"/>
+    <text class="stereo" x="1170" y="254" text-anchor="middle">&lt;&lt;Repository&gt;&gt;</text>
+    <text class="cardTitle" x="1170" y="278" text-anchor="middle">RoutingMarker</text>
+    <text class="cardTitle" x="1170" y="300" text-anchor="middle">Repository</text>
+    <text class="detail" x="1064" y="324">suspendTransaction(db)</text>
+  </g>
+
+  <g data-card="RoutingR2dbcConfig" data-x="1360" data-y="230" data-width="260" data-height="118">
+    <rect class="card" x="1360" y="230" width="260" height="118" rx="14" fill="#ffffff" stroke="#a36f3e"/>
+    <path class="header" d="M1360,276 L1360,244 Q1360,230 1374,230 L1606,230 Q1620,230 1620,244 L1620,276 Z" fill="#fff5e8"/>
+    <text class="stereo" x="1490" y="254" text-anchor="middle">&lt;&lt;Configuration&gt;&gt;</text>
+    <text class="cardTitle" x="1490" y="278" text-anchor="middle">RoutingR2dbcConfig</text>
+    <text class="detail" x="1384" y="310">registers tenant factories</text>
+    <text class="small" x="1384" y="332">@Primary routing factory</text>
+  </g>
+
+  <g data-card="RoutingContextKeys" data-x="80" data-y="470" data-width="260" data-height="118">
+    <rect class="card" x="80" y="470" width="260" height="118" rx="14" fill="#ffffff" stroke="#a85f7f"/>
+    <path class="header" d="M80,516 L80,484 Q80,470 94,470 L326,470 Q340,470 340,484 L340,516 Z" fill="#f8eef4"/>
+    <text class="stereo" x="210" y="494" text-anchor="middle">&lt;&lt;context keys&gt;&gt;</text>
+    <text class="cardTitle" x="210" y="518" text-anchor="middle">RoutingContextKeys</text>
+    <text class="detail" x="104" y="550">TENANT</text>
+    <text class="small" x="104" y="572">READ_ONLY</text>
+  </g>
+
+  <g data-card="RoutingKeyResolver" data-x="400" data-y="470" data-width="260" data-height="118">
+    <rect class="card" x="400" y="470" width="260" height="118" rx="14" fill="#ffffff" stroke="#64748b"/>
+    <path class="header" d="M400,516 L400,484 Q400,470 414,470 L646,470 Q660,470 660,484 L660,516 Z" fill="#f8fafc"/>
+    <text class="stereo" x="530" y="494" text-anchor="middle">&lt;&lt;fun interface&gt;&gt;</text>
+    <text class="cardTitle" x="530" y="518" text-anchor="middle">RoutingKeyResolver</text>
+    <text class="detail" x="424" y="550">currentLookupKey(context)</text>
+    <text class="small" x="424" y="572">returns tenant:rw|ro</text>
+  </g>
+
+  <g data-card="ConnectionFactoryRegistry" data-x="720" data-y="470" data-width="260" data-height="118">
+    <rect class="card" x="720" y="470" width="260" height="118" rx="14" fill="#ffffff" stroke="#64748b"/>
+    <path class="header" d="M720,536 L720,484 Q720,470 734,470 L966,470 Q980,470 980,484 L980,536 Z" fill="#f8fafc"/>
+    <text class="stereo" x="850" y="494" text-anchor="middle">&lt;&lt;interface&gt;&gt;</text>
+    <text class="cardTitle" x="850" y="518" text-anchor="middle">ConnectionFactory</text>
+    <text class="cardTitle" x="850" y="540" text-anchor="middle">Registry</text>
+    <text class="detail" x="744" y="562">register / get / keys</text>
+    <text class="small" x="744" y="580">key -> ConnectionFactory</text>
+  </g>
+
+  <g data-card="R2dbcDatabase" data-x="1040" data-y="470" data-width="260" data-height="118">
+    <rect class="card" x="1040" y="470" width="260" height="118" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+    <path class="header" d="M1040,516 L1040,484 Q1040,470 1054,470 L1286,470 Q1300,470 1300,484 L1300,516 Z" fill="#eef8f7"/>
+    <text class="stereo" x="1170" y="494" text-anchor="middle">&lt;&lt;Exposed R2DBC&gt;&gt;</text>
+    <text class="cardTitle" x="1170" y="518" text-anchor="middle">R2dbcDatabase</text>
+    <text class="detail" x="1064" y="550">uses routing factory</text>
+    <text class="small" x="1064" y="572">dispatcher = Dispatchers.IO</text>
+  </g>
+
+  <g data-card="ConnectionFactory" data-x="1360" data-y="470" data-width="260" data-height="118">
+    <rect class="card" x="1360" y="470" width="260" height="118" rx="14" fill="#ffffff" stroke="#64748b"/>
+    <path class="header" d="M1360,516 L1360,484 Q1360,470 1374,470 L1606,470 Q1620,470 1620,484 L1620,516 Z" fill="#f8fafc"/>
+    <text class="stereo" x="1490" y="494" text-anchor="middle">&lt;&lt;R2DBC SPI&gt;&gt;</text>
+    <text class="cardTitle" x="1490" y="518" text-anchor="middle">ConnectionFactory</text>
+    <text class="detail" x="1384" y="550">create()</text>
+    <text class="small" x="1384" y="572">getMetadata()</text>
+  </g>
+
+  <g data-card="ContextAwareRoutingKeyResolver" data-x="400" data-y="750" data-width="260" data-height="128">
+    <rect class="card" x="400" y="750" width="260" height="128" rx="14" fill="#ffffff" stroke="#a85f7f"/>
+    <path class="header" d="M400,812 L400,764 Q400,750 414,750 L646,750 Q660,750 660,764 L660,812 Z" fill="#f8eef4"/>
+    <text class="stereo" x="530" y="774" text-anchor="middle">&lt;&lt;resolver impl&gt;&gt;</text>
+    <text class="cardTitle" x="530" y="798" text-anchor="middle">ContextAwareRouting</text>
+    <text class="cardTitle" x="530" y="820" text-anchor="middle">KeyResolver</text>
+    <text class="detail" x="424" y="850">reads TENANT / READ_ONLY</text>
+    <text class="small" x="424" y="872">defaultTenant fallback</text>
+  </g>
+
+  <g data-card="InMemoryConnectionFactoryRegistry" data-x="720" data-y="750" data-width="260" data-height="128">
+    <rect class="card" x="720" y="750" width="260" height="128" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+    <path class="header" d="M720,812 L720,764 Q720,750 734,750 L966,750 Q980,750 980,764 L980,812 Z" fill="#eef8f7"/>
+    <text class="stereo" x="850" y="774" text-anchor="middle">&lt;&lt;registry impl&gt;&gt;</text>
+    <text class="cardTitle" x="850" y="798" text-anchor="middle">InMemoryConnection</text>
+    <text class="cardTitle" x="850" y="820" text-anchor="middle">FactoryRegistry</text>
+    <text class="detail" x="744" y="850">ConcurrentHashMap</text>
+    <text class="small" x="744" y="872">thread-safe key store</text>
+  </g>
+
+  <g data-card="DynamicRoutingConnectionFactory" data-x="1360" data-y="750" data-width="260" data-height="128">
+    <rect class="card" x="1360" y="750" width="260" height="128" rx="14" fill="#ffffff" stroke="#a36f3e"/>
+    <path class="header" d="M1360,812 L1360,764 Q1360,750 1374,750 L1606,750 Q1620,750 1620,764 L1620,812 Z" fill="#fff5e8"/>
+    <text class="stereo" x="1490" y="774" text-anchor="middle">&lt;&lt;primary router&gt;&gt;</text>
+    <text class="cardTitle" x="1490" y="798" text-anchor="middle">DynamicRouting</text>
+    <text class="cardTitle" x="1490" y="820" text-anchor="middle">ConnectionFactory</text>
+    <text class="detail" x="1384" y="850">keyResolver + registry</text>
+    <text class="small" x="1384" y="872">registry.get(key).create()</text>
+  </g>
+
+  <g id="connectors">
+    <path class="connector green use" data-connector="filter-context" d="M210 348 L210 458"/>
+    <polyline class="head green" points="203,458 210,470 217,458" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+    <path class="connector blue use" data-connector="controller-tx" d="M660 289 L708 289"/>
+    <polyline class="head blue" points="708,282 720,289 708,296" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <path class="connector teal use" data-connector="tx-repository" d="M980 289 L1028 289"/>
+    <polyline class="head teal" points="1028,282 1040,289 1028,296" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+    <path class="connector teal use" data-connector="repository-database" d="M1170 348 L1170 458"/>
+    <polyline class="head teal" points="1163,458 1170,470 1177,458" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+    <path class="connector amber use" data-connector="config-dynamic" d="M1620 289 L1640 289 Q1660 289 1660 309 L1660 814 Q1660 834 1640 834 L1632 834"/>
+    <polyline class="head amber" points="1632,827 1620,834 1632,841" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+    <path class="connector slate" data-connector="resolver-generalization" d="M530 750 L530 588"/>
+    <polygon class="hollow slate" points="530,588 520,606 540,606"/>
+    <path class="connector slate" data-connector="registry-generalization" d="M850 750 L850 588"/>
+    <polygon class="hollow slate" points="850,588 840,606 860,606"/>
+    <path class="connector slate" data-connector="factory-generalization" d="M1490 750 L1490 588"/>
+    <polygon class="hollow slate" points="1490,588 1480,606 1500,606"/>
+
+    <path class="connector rose use" data-connector="resolver-reads-context" d="M400 814 L330 814 Q310 814 310 794 L310 620 Q310 600 290 600 L222 600"/>
+    <polyline class="head rose" points="215,600 222,588 229,600" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  </g>
+
+  <rect x="110" y="1008" width="1480" height="38" rx="12" fill="#fbfdff" stroke="#d7e3ed" stroke-width="2"/>
+  <text class="foot" x="850" y="1033" text-anchor="middle">Hollow triangles show interface implementation; dashed arrows show use/create dependencies. Dynamic router fields name resolver and registry dependencies.</text>
 </svg>

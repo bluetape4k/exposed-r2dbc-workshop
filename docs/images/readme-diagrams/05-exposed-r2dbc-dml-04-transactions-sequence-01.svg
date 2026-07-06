@@ -1,52 +1,196 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="920" height="866" viewBox="0 0 920 866" role="img" aria-label="R2DBC suspendTransaction Flow">
-<defs>
-<filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
-<marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-<style>.canvas{fill:#F7F9FC}.frame{fill:#fff;stroke:#D8E0EA;stroke-width:1.5}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:39px;font-weight:400;fill:#102033}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;font-weight:400;fill:#536273}.smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:22px;font-weight:400;fill:#102033}.strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}.card{stroke-width:2;filter:url(#shadow)}.line{stroke:#5D6B7A;stroke-width:2.2;fill:none;marker-end:url(#openArrow)}.dashed{stroke:#5D6B7A;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}.lifeline{stroke:#B7C2D1;stroke-width:1.8;stroke-dasharray:8 9}.note{fill:#fff;opacity:.97}</style>
-</defs>
-<rect class="canvas" width="920" height="866"/>
-<rect class="frame" x="24" y="24" width="872" height="810" rx="22"/>
-<text class="title" x="58" y="76">R2DBC suspendTransaction Flow</text>
-<text class="subtitle" x="62" y="106">Compact sequence flow with reduced outer and inner whitespace</text>
-<rect class="card" x="95.0" y="156" width="220" height="66" rx="16" fill="#E8F3FF" stroke="#5B8DEF"/>
-<text class="smallLabel participant" x="205.0" y="196" text-anchor="middle">Coroutine (Caller)</text>
-<line class="lifeline" x1="205.0" y1="250" x2="205.0" y2="804"/>
-<rect class="card" x="350.0" y="156" width="220" height="66" rx="16" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel participant" x="460.0" y="196" text-anchor="middle">suspendTransaction</text>
-<line class="lifeline" x1="460.0" y1="250" x2="460.0" y2="804"/>
-<rect class="card" x="605.0" y="156" width="220" height="66" rx="16" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel participant" x="715.0" y="196" text-anchor="middle">R2DBC Database</text>
-<line class="lifeline" x1="715.0" y1="250" x2="715.0" y2="804"/>
-<path class="line" d="M205.0 292.0 L460.0 292.0" data-connector="line"/>
-<rect class="note label" x="242.0" y="260.0" width="181.0" height="28" rx="9"/>
-<text class="strong labelText" x="332.5" y="280.0" text-anchor="middle">1. suspendTransaction(db)</text>
-<path class="line" d="M460.0 366.0 L715.0 366.0" data-connector="line"/>
-<rect class="note label" x="507.5" y="334.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="587.5" y="354.0" text-anchor="middle">2. BEGIN</text>
-<path class="line" d="M460.0 440.0 L715.0 440.0" data-connector="line"/>
-<rect class="note label" x="472.2" y="408.0" width="230.6" height="28" rx="9"/>
-<text class="strong labelText" x="587.5" y="428.0" text-anchor="middle">3. Execute SQL (INSERT/SELECT...)</text>
-<path class="line" d="M460.0 514.0 L715.0 514.0" data-connector="line"/>
-<rect class="note label" x="507.5" y="482.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="587.5" y="502.0" text-anchor="middle">5. COMMIT</text>
-<path class="dashed" d="M460.0 588.0 L205.0 588.0" data-connector="dashed"/>
-<rect class="note label" x="252.5" y="556.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="332.5" y="576.0" text-anchor="middle">6. Return result</text>
-<path class="line" d="M460.0 662.0 L715.0 662.0" data-connector="line"/>
-<rect class="note label" x="507.5" y="630.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="587.5" y="650.0" text-anchor="middle">8. ROLLBACK</text>
-<path class="dashed" d="M460.0 736.0 L205.0 736.0" data-connector="dashed"/>
-<rect class="note label" x="251.3" y="704.0" width="162.4" height="28" rx="9"/>
-<text class="strong labelText" x="332.5" y="724.0" text-anchor="middle">9. Propagate exception</text>
-<rect class="activation" x="199.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="454.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="709.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1320" viewBox="0 0 1800 1320" role="img" aria-label="R2DBC suspendTransaction Flow sequence diagram">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.10" />
+    </filter>
+    <marker id="seqArrowBlue" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" viewBox="0 0 10 10">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="seqArrowGreen" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" viewBox="0 0 10 10">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="seqArrowAmber" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" viewBox="0 0 10 10">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#b9852b" stroke="#b9852b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="seqArrowTeal" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" viewBox="0 0 10 10">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#2f9e9a" stroke="#2f9e9a" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="seqArrowBrown" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" viewBox="0 0 10 10">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#a66a3f" stroke="#a66a3f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="seqArrowRed" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" viewBox="0 0 10 10">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#a85f7f" stroke="#a85f7f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <style>
+      .canvas{fill:#f8faf7}
+      .frame{fill:#fffdf8;stroke:#425563;stroke-width:3}
+      .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:44px;font-weight:400;fill:#1e293b}
+      .subtitle,.role,.labelText,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;font-weight:700;fill:#536476}
+      .participant{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:24px;font-weight:400;fill:#1e293b}
+      .participantBox{fill:#fff;stroke:#607584;stroke-width:2.2;filter:url(#shadow)}
+      .lifeline{stroke:#9fb2c1;stroke-width:2;stroke-dasharray:8 10}
+      .activation{stroke-width:2;filter:url(#shadow)}
+      .call,.return,.error,.state,.callBlue,.callGreen,.callAmber,.callRed{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .return{stroke-dasharray:8 7}
+      .label{fill:#fff;stroke:#d7e2ec;stroke-width:1.4}
+      .num{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:16px;font-weight:800}
+      .alt{fill:none;stroke:#7f98a8;stroke-width:2.2;stroke-dasharray:8 8}
+      .branchDivider{stroke:#9fb2c1;stroke-width:1.8;stroke-dasharray:8 8}
+      .branchTag{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;font-weight:800;fill:#536476}
+      .tagBox{fill:#fffdf8;stroke:#cbd8e2;stroke-width:1.4}
+      .footer{fill:#fff;stroke:#d7e2ec;stroke-width:1.4}
+    </style>
+  </defs>
 
-<!-- audit badge labels: visible sequence numbering and message pill samples -->
-<g aria-label="sequence message labels">
-<rect x="58" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="76" y="140" class="num" text-anchor="middle">1</text>
-<rect x="102" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="120" y="140" class="num" text-anchor="middle">2</text>
-</g>
+  <rect class="canvas" width="1800" height="1320" />
+  <rect class="frame" x="30" y="30" width="1740" height="1260" rx="28" />
+  <text class="title" x="74" y="88">R2DBC suspendTransaction Flow</text>
+  <text class="subtitle" x="78" y="126">Transaction tests enter coroutine scopes, bind R2DBC transactions, execute SQL, and assert commit, rollback, timeout, or savepoint behavior.</text>
+
+  <g data-participant="JUnit Test">
+    <rect class="participantBox card" x="76" y="178" width="220" height="86" rx="12" />
+    <text class="participant" x="186" y="218" text-anchor="middle">JUnit Test</text>
+    <text class="role" x="186" y="246" text-anchor="middle">runTest cases</text>
+    <line class="lifeline" x1="186" y1="264" x2="186" y2="1238" />
+  </g>
+  <g data-participant="Test Scope">
+    <rect class="participantBox card" x="350" y="178" width="232" height="86" rx="12" />
+    <text class="participant" x="466" y="218" text-anchor="middle">Test Scope</text>
+    <text class="role" x="466" y="246" text-anchor="middle">withDb / withTables</text>
+    <line class="lifeline" x1="466" y1="264" x2="466" y2="1238" />
+  </g>
+  <g data-participant="Transaction API">
+    <rect class="participantBox card" x="650" y="178" width="244" height="86" rx="12" />
+    <text class="participant" x="772" y="218" text-anchor="middle">Transaction API</text>
+    <text class="role" x="772" y="246" text-anchor="middle">suspendTransaction</text>
+    <line class="lifeline" x1="772" y1="264" x2="772" y2="1238" />
+  </g>
+  <g data-participant="R2DBC Connection">
+    <rect class="participantBox card" x="974" y="178" width="264" height="86" rx="12" />
+    <text class="participant" x="1106" y="218" text-anchor="middle">R2DBC Connection</text>
+    <text class="role" x="1106" y="246" text-anchor="middle">tx.connection()</text>
+    <line class="lifeline" x1="1106" y1="264" x2="1106" y2="1238" />
+  </g>
+  <g data-participant="Database">
+    <rect class="participantBox card" x="1322" y="178" width="210" height="86" rx="12" />
+    <text class="participant" x="1427" y="218" text-anchor="middle">Database</text>
+    <text class="role" x="1427" y="246" text-anchor="middle">H2 / PG / MySQL</text>
+    <line class="lifeline" x1="1427" y1="264" x2="1427" y2="1238" />
+  </g>
+  <g data-participant="Assertions">
+    <rect class="participantBox card" x="1574" y="178" width="164" height="86" rx="12" />
+    <text class="participant" x="1656" y="218" text-anchor="middle">Assertions</text>
+    <text class="role" x="1656" y="246" text-anchor="middle">rows + errors</text>
+    <line class="lifeline" x1="1656" y1="264" x2="1656" y2="1238" />
+  </g>
+
+  <rect class="activation" x="180" y="322" width="12" height="814" rx="4" fill="#eaf4fb" stroke="#b8d3e8" opacity="0.88" />
+  <rect class="activation" x="460" y="338" width="12" height="748" rx="4" fill="#e8f7f6" stroke="#a9d6d3" opacity="0.88" />
+  <rect class="activation" x="766" y="420" width="12" height="616" rx="4" fill="#eef7e8" stroke="#bad7a4" opacity="0.88" />
+  <rect class="activation" x="1100" y="500" width="12" height="464" rx="4" fill="#f8ecd9" stroke="#d7b889" opacity="0.88" />
+  <rect class="activation" x="1421" y="584" width="12" height="344" rx="4" fill="#fff1c9" stroke="#d9b451" opacity="0.88" />
+  <rect class="activation" x="1650" y="1032" width="12" height="88" rx="4" fill="#e8f7f6" stroke="#a9d6d3" opacity="0.88" />
+
+  <path class="call callBlue" data-connector="m1" d="M186 350 L466 350" stroke="#4f86c6" marker-end="url(#seqArrowBlue)" />
+  <g>
+    <rect class="label" x="118" y="312" width="340" height="30" rx="15" />
+    <circle cx="142" cy="327" r="14" fill="#fff" stroke="#4f86c6" stroke-width="2" />
+    <text class="num" x="142" y="333" text-anchor="middle" fill="#276b9d">1</text>
+    <text class="labelText" x="170" y="332">runTest enters withDb / withTables</text>
+  </g>
+
+  <path class="call callBlue" data-connector="m2" d="M466 432 L772 432" stroke="#4f86c6" marker-end="url(#seqArrowBlue)" />
+  <g>
+    <rect class="label" x="526" y="394" width="342" height="30" rx="15" />
+    <circle cx="550" cy="409" r="14" fill="#fff" stroke="#4f86c6" stroke-width="2" />
+    <text class="num" x="550" y="415" text-anchor="middle" fill="#276b9d">2</text>
+    <text class="labelText" x="578" y="414">suspendTransaction(db, isolation)</text>
+  </g>
+
+  <path class="call callGreen" data-connector="m3" d="M772 514 L1106 514" stroke="#6f8f52" marker-end="url(#seqArrowGreen)" />
+  <g>
+    <rect class="label" x="824" y="476" width="372" height="30" rx="15" />
+    <circle cx="848" cy="491" r="14" fill="#fff" stroke="#6f8f52" stroke-width="2" />
+    <text class="num" x="848" y="497" text-anchor="middle" fill="#55713f">3</text>
+    <text class="labelText" x="876" y="496">open R2DBC tx and apply options</text>
+  </g>
+
+  <path class="call callAmber" data-connector="m4" d="M1106 596 L1427 596" stroke="#b9852b" marker-end="url(#seqArrowAmber)" />
+  <g>
+    <rect class="label" x="1150" y="558" width="332" height="30" rx="15" />
+    <circle cx="1174" cy="573" r="14" fill="#fff" stroke="#b9852b" stroke-width="2" />
+    <text class="num" x="1174" y="579" text-anchor="middle" fill="#8c611e">4</text>
+    <text class="labelText" x="1202" y="578">BEGIN / set isolation / timeout</text>
+  </g>
+
+  <path class="call callAmber" data-connector="m5" d="M772 678 L1427 678" stroke="#b9852b" marker-end="url(#seqArrowAmber)" />
+  <g>
+    <rect class="label" x="856" y="640" width="472" height="30" rx="15" />
+    <circle cx="880" cy="655" r="14" fill="#fff" stroke="#b9852b" stroke-width="2" />
+    <text class="num" x="880" y="661" text-anchor="middle" fill="#8c611e">5</text>
+    <text class="labelText" x="908" y="660">exec(stmt, ColumnType/value args)</text>
+  </g>
+
+  <path class="return seqReturn" data-connector="m6" d="M1427 760 L772 760" stroke="#2f9e9a" marker-end="url(#seqArrowTeal)" />
+  <g>
+    <rect class="label" x="926" y="722" width="346" height="30" rx="15" />
+    <circle cx="950" cy="737" r="14" fill="#fff" stroke="#2f9e9a" stroke-width="2" />
+    <text class="num" x="950" y="743" text-anchor="middle" fill="#1f817e">6</text>
+    <text class="labelText" x="978" y="742">Flow rows or affected count</text>
+  </g>
+
+  <rect class="alt" x="710" y="808" width="792" height="236" rx="16" />
+  <rect class="tagBox" x="742" y="788" width="232" height="32" rx="16" />
+  <text class="branchTag" x="758" y="809">alt transaction outcome</text>
+  <line class="branchDivider" x1="710" y1="884" x2="1502" y2="884" />
+  <line class="branchDivider" x1="710" y1="964" x2="1502" y2="964" />
+  <rect class="tagBox" x="728" y="830" width="112" height="28" rx="14" />
+  <text class="branchTag" x="746" y="849">success</text>
+  <rect class="tagBox" x="728" y="910" width="150" height="28" rx="14" />
+  <text class="branchTag" x="746" y="929">timeout/error</text>
+  <rect class="tagBox" x="728" y="990" width="166" height="28" rx="14" />
+  <text class="branchTag" x="746" y="1009">nested savepoint</text>
+
+  <path class="call callGreen" data-connector="m7" d="M772 862 L1427 862" stroke="#6f8f52" marker-end="url(#seqArrowGreen)" />
+  <g>
+    <rect class="label" x="1010" y="824" width="178" height="30" rx="15" />
+    <circle cx="1034" cy="839" r="14" fill="#fff" stroke="#6f8f52" stroke-width="2" />
+    <text class="num" x="1034" y="845" text-anchor="middle" fill="#55713f">7</text>
+    <text class="labelText" x="1062" y="844">COMMIT</text>
+  </g>
+
+  <path class="error callRed" data-connector="m8" d="M772 940 L1427 940" stroke="#a85f7f" marker-end="url(#seqArrowRed)" />
+  <g>
+    <rect class="label" x="968" y="902" width="278" height="30" rx="15" />
+    <circle cx="992" cy="917" r="14" fill="#fff" stroke="#a85f7f" stroke-width="2" />
+    <text class="num" x="992" y="923" text-anchor="middle" fill="#8b486a">8</text>
+    <text class="labelText" x="1020" y="922">ROLLBACK on exception</text>
+  </g>
+
+  <path class="state callAmber" data-connector="m9" d="M1106 1020 L1427 1020" stroke="#a66a3f" marker-end="url(#seqArrowBrown)" />
+  <g>
+    <rect class="label" x="1144" y="982" width="344" height="30" rx="15" />
+    <circle cx="1168" cy="997" r="14" fill="#fff" stroke="#a66a3f" stroke-width="2" />
+    <text class="num" x="1168" y="1003" text-anchor="middle" fill="#86522e">9</text>
+    <text class="labelText" x="1196" y="1002">savepoint rollback / release</text>
+  </g>
+
+  <path class="call callGreen" data-connector="m10" d="M772 1102 L1656 1102" stroke="#6f8f52" marker-end="url(#seqArrowGreen)" />
+  <g>
+    <rect class="label" x="1120" y="1064" width="406" height="30" rx="15" />
+    <circle cx="1144" cy="1079" r="14" fill="#fff" stroke="#6f8f52" stroke-width="2" />
+    <text class="num" x="1144" y="1085" text-anchor="middle" fill="#55713f">10</text>
+    <text class="labelText" x="1176" y="1084">assert rows, isolation, errors</text>
+  </g>
+
+  <path class="return seqReturn" data-connector="m11" d="M1656 1184 L186 1184" stroke="#4f86c6" marker-end="url(#seqArrowBlue)" />
+  <g>
+    <rect class="label" x="558" y="1146" width="292" height="30" rx="15" />
+    <circle cx="582" cy="1161" r="14" fill="#fff" stroke="#4f86c6" stroke-width="2" />
+    <text class="num" x="582" y="1167" text-anchor="middle" fill="#276b9d">11</text>
+    <text class="labelText" x="610" y="1166">test completes</text>
+  </g>
+
+  <rect class="footer" x="90" y="1248" width="1620" height="34" rx="12" />
+  <text class="note" x="900" y="1270" text-anchor="middle">Sequence combines Ex01-Ex05 transaction tests: coroutine transaction setup, raw exec binding, timeout rollback, savepoint rollback, and assertions.</text>
 </svg>

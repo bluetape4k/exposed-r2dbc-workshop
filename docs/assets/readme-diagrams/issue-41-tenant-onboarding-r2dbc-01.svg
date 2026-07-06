@@ -1,89 +1,190 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820" role="img" aria-labelledby="title desc">
-  <title id="title">Tenant onboarding R2DBC flow</title>
-  <desc id="desc">Spring WebFlux tenant onboarding reserves metadata, provisions an R2DBC pool, creates Exposed schema, registers runtime resources, and routes actor requests to the active tenant database.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1480 900" width="1480" height="900" role="img" aria-label="Tenant onboarding R2DBC flow">
   <defs>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.16"/>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="#1f2937" flood-opacity="0.11"/>
     </filter>
-    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M1,1 L8,4.5 L1,8 Z" fill="#5D6B7A"/></marker>
     <style>
-      .bg { fill: #f8fafc; }
-      .title { font-family: Arial, Helvetica, sans-serif; font-size: 36px; font-weight: 700; fill: #0f172a; }
-      .subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 18px; fill: #475569; }
-      .card { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; filter: url(#shadow); }
-      .card-blue { fill: #eff6ff; stroke: #60a5fa; }
-      .card-green { fill: #ecfdf5; stroke: #34d399; }
-      .card-amber { fill: #fffbeb; stroke: #f59e0b; }
-      .card-red { fill: #fff1f2; stroke: #fb7185; }
-      .label { font-family: Arial, Helvetica, sans-serif; font-size: 22px; font-weight: 700; fill: #0f172a; }
-      .body { font-family: Arial, Helvetica, sans-serif; font-size: 16px; fill: #334155; }
-      .small { font-family: Arial, Helvetica, sans-serif; font-size: 14px; fill: #475569; }
-      .arrow { stroke: #334155; stroke-width: 3; fill: none; marker-end: url(#arrow); }
-      .dash { stroke-dasharray: 8 8; }
+      .canvas{fill:#f5f8fb}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.7}
+      .lane{fill:#f8fbfd;stroke:#d9e5ee;stroke-width:1.4}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:16px;letter-spacing:.08em;fill:#8ba1b4}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:34px;fill:#1f2a37}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#526477;font-weight:700}
+      .small{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#65768a;font-weight:700}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:18px;fill:#1f2a37}
+      .card{filter:url(#shadow)}
+      .header{opacity:.96}
+      .flow{fill:none;stroke-width:3.0;stroke-linecap:round;stroke-linejoin:round}
+      .route{fill:none;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round}
+      .label{fill:#fff;stroke-width:1.4}
+      .foot{fill:#ecfdf5;stroke:#86efac;stroke-width:1.4}
     </style>
   </defs>
+  <rect width="1480" height="900" class="canvas"/>
+  <rect x="24" y="24" width="1432" height="852" rx="20" class="frame"/>
 
-  <rect class="bg" width="1400" height="820"/>
-  <text class="title" x="70" y="72">Tenant Onboarding with Exposed R2DBC</text>
-  <text class="subtitle" x="70" y="106">Runtime tenant creation: reserve metadata, provision isolated resources, seed schema, then route requests by X-TENANT-ID.</text>
+  <text x="64" y="73" class="title">Tenant Onboarding R2DBC Flow</text>
+  <text x="64" y="104" class="subtitle">Admin-created tenants reserve metadata, provision H2 R2DBC resources, seed Exposed tables, and become routable at runtime.</text>
 
-  <rect class="card card-blue" x="70" y="160" width="260" height="132" rx="10"/>
-  <text class="label" x="100" y="205">Admin API</text>
-  <text class="body" x="100" y="238">POST /api/tenants</text>
-  <text class="small" x="100" y="264">X-ADMIN-TOKEN guard</text>
+  <rect x="54" y="132" width="1372" height="176" rx="18" class="lane"/>
+  <text x="78" y="162" class="laneTitle">ADMIN API AND VALIDATION</text>
+  <rect x="54" y="332" width="1372" height="256" rx="18" class="lane"/>
+  <text x="78" y="362" class="laneTitle">PROVISIONING AND FAILURE CLEANUP</text>
+  <rect x="54" y="600" width="1372" height="174" rx="18" class="lane"/>
+  <text x="78" y="630" class="laneTitle">POST-ONBOARDING REQUEST ROUTING</text>
+  <rect x="54" y="802" width="1372" height="50" rx="14" class="foot"/>
+  <text x="740" y="832" class="note" text-anchor="middle">Runtime registry resources are disposable; H2 in-memory ACTIVE rows are recovered as FAILED on restart and must be re-onboarded.</text>
 
-  <rect class="card" x="405" y="160" width="260" height="132" rx="10"/>
-  <text class="label" x="435" y="205">Registry</text>
-  <text class="body" x="435" y="238">reserve PROVISIONING</text>
-  <text class="small" x="435" y="264">metadata + duplicate gate</text>
+  <g data-card="Admin request" data-x="82" data-y="190" data-width="215" data-height="88">
+    <rect x="82" y="190" width="215" height="88" rx="14" fill="#ffffff" stroke="#4f86c6" stroke-width="2.2" class="card"/>
+    <path class="header" d="M82,232 L82,204 Q82,190 96,190 L283,190 Q297,190 297,204 L297,232 Z" fill="#eef5fa"/>
+    <text x="189.5" y="210" class="small" text-anchor="middle">HTTP command</text>
+    <text x="189.5" y="230" class="cardTitle" text-anchor="middle">POST /api/tenants</text>
+    <text x="100" y="257" class="detail">X-ADMIN-TOKEN + body</text>
+  </g>
+  <g data-card="TenantOnboardingController" data-x="352" data-y="190" data-width="240" data-height="88">
+    <rect x="352" y="190" width="240" height="88" rx="14" fill="#ffffff" stroke="#4f8f8b" stroke-width="2.2" class="card"/>
+    <path class="header" d="M352,232 L352,204 Q352,190 366,190 L578,190 Q592,190 592,204 L592,232 Z" fill="#eef7f6"/>
+    <text x="472" y="210" class="small" text-anchor="middle">Spring WebFlux</text>
+    <text x="472" y="230" class="cardTitle" text-anchor="middle">Onboarding Controller</text>
+    <text x="372" y="257" class="detail">constant-time token check</text>
+  </g>
+  <g data-card="TenantProvisioner" data-x="650" data-y="190" data-width="245" data-height="88">
+    <rect x="650" y="190" width="245" height="88" rx="14" fill="#ffffff" stroke="#6f8f52" stroke-width="2.2" class="card"/>
+    <path class="header" d="M650,232 L650,204 Q650,190 664,190 L881,190 Q895,190 895,204 L895,232 Z" fill="#f1f6ec"/>
+    <text x="772.5" y="210" class="small" text-anchor="middle">service orchestrator</text>
+    <text x="772.5" y="230" class="cardTitle" text-anchor="middle">TenantProvisioner</text>
+    <text x="670" y="257" class="detail">global + per-tenant mutex</text>
+  </g>
+  <g data-card="Stable API errors" data-x="1084" data-y="178" data-width="300" data-height="112">
+    <rect x="1084" y="178" width="300" height="112" rx="14" fill="#fff8f8" stroke="#b45f63" stroke-width="2.2" class="card"/>
+    <path class="header" d="M1084,220 L1084,192 Q1084,178 1098,178 L1370,178 Q1384,178 1384,192 L1384,220 Z" fill="#f8eeee"/>
+    <text x="1234" y="198" class="small" text-anchor="middle">TenantApiExceptionHandler</text>
+    <text x="1234" y="218" class="cardTitle" text-anchor="middle">stable JSON errors</text>
+    <text x="1106" y="247" class="detail">401 / 400 / 409 / 429 / 500</text>
+    <text x="1106" y="269" class="detail">duplicate, cap, unknown, failed</text>
+  </g>
 
-  <rect class="card card-green" x="740" y="160" width="260" height="132" rx="10"/>
-  <text class="label" x="770" y="205">Provisioner</text>
-  <text class="body" x="770" y="238">create pool + database</text>
-  <text class="small" x="770" y="264">timeout + mutex controlled</text>
+  <path data-connector="api-to-controller" class="flow" d="M297 234 L352 234" stroke="#4f86c6"/>
+  <polygon points="352,234 338,226 338,242" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path data-connector="controller-to-provisioner" class="flow" d="M592 234 L650 234" stroke="#4f8f8b"/>
+  <polygon points="650,234 636,226 636,242" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path data-connector="api-errors" class="route" d="M895 218 L1084 218" stroke="#b45f63"/>
+  <polygon points="1084,218 1070,210 1070,226" fill="#b45f63" stroke="#b45f63" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <rect x="925" y="194" width="128" height="26" rx="10" class="label" stroke="#e5b3b6"/>
+  <text x="989" y="212" class="small" text-anchor="middle" fill="#8f454a">reject fast</text>
 
-  <rect class="card card-amber" x="1075" y="160" width="260" height="132" rx="10"/>
-  <text class="label" x="1105" y="205">Tenant DB</text>
-  <text class="body" x="1105" y="238">SchemaUtils.create</text>
-  <text class="small" x="1105" y="264">seed actor/movie rows</text>
+  <g data-card="TenantRegistryRepository" data-x="82" data-y="404" data-width="230" data-height="106">
+    <rect x="82" y="404" width="230" height="106" rx="14" fill="#ffffff" stroke="#a66a3f" stroke-width="2.2" class="card"/>
+    <path class="header" d="M82,448 L82,418 Q82,404 96,404 L298,404 Q312,404 312,418 L312,448 Z" fill="#f5eee4"/>
+    <text x="197" y="424" class="small" text-anchor="middle">registry database</text>
+    <text x="197" y="445" class="cardTitle" text-anchor="middle">Reserve metadata</text>
+    <text x="102" y="474" class="detail">PROVISIONING row</text>
+    <text x="102" y="496" class="detail">reuse FAILED only</text>
+  </g>
+  <g data-card="Tenant H2 R2DBC pool" data-x="364" data-y="404" data-width="230" data-height="106">
+    <rect x="364" y="404" width="230" height="106" rx="14" fill="#ffffff" stroke="#4f86c6" stroke-width="2.2" class="card"/>
+    <path class="header" d="M364,448 L364,418 Q364,404 378,404 L580,404 Q594,404 594,418 L594,448 Z" fill="#eef5fa"/>
+    <image data-bluetape4k-icon="database/h2.svg" href="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDk0NzZCIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+SDIgRGF0YWJhc2U8L3RpdGxlPjxwYXRoIGQ9Ik0xNy4xNyAxMy4yN2MuMTQtLjAxNS4yOC0uMDIzLjQxNi0uMDIzLjcgMCAxLjIyOC4xNTkgMS41OTkuNDY5LjM3LjMxNC41NTUuNzU2LjU1NSAxLjMzNGEyLjg2MSAyLjg2MSAwIDAgMS0uNDMgMS40NTVjLS4yOTEuNDkyLS43NzUgMS4wNjYtMS40NiAxLjcyNy0uNDUzLjQ0Ni0xLjA2MS45NzYtMS44MjEgMS41OTJhNDguMDIgNDguMDIgMCAwIDEtMi4yNzUgMS43NDJ2Mi4wODNoOS44OTVWMjEuMjRIMTcuOTljLjIxOS0uMTU5LjU5LS40MzUgMS4xMS0uODMyLjUxOS0uNCAxLjAzMy0uODM1IDEuNTUtMS4zMTEuODE3LS43NiAxLjQyNS0xLjUgMS44MjItMi4yMTVhNC42MjQgNC42MjQgMCAwIDAgLjU5Ny0yLjI2OGMwLTEuMjEzLS40MTYtMi4xNTQtMS4yNDgtMi44MTUtLjgyNy0uNjYyLTIuMDMyLS45OTQtMy42MTItLjk5NC0uMzQ0IDAtLjY5Mi4wMTUtMS4wMzYuMDQ5VjYuMDRIMTMuODZ2NC43MDFIOC45NjVWNi4wNEg1LjY1djEyLjg0NmgzLjMxNXYtNS42NjFoNC44OXY1LjY2MWguMDM5Yy4zMS0uMjQyLjYyMy0uNDg3LjkzMy0uNzRhMjguNTY0IDI4LjU2NCAwIDAgMCAxLjgyNi0xLjU4OCAxNC44NTQgMTQuODU0IDAgMCAwIC41MTctLjUyOXpNMTIuMDExIDIzLjNBMTEuMzI3IDExLjMyNyAwIDAgMSAuNyAxMS45OSAxMS4zMDUgMTEuMzA1IDAgMCAxIDEyLjAxMS42OTlhMTEuMjg2IDExLjI4NiAwIDAgMSAxMS4yOSAxMS4yOXYuMzUxSDI0di0uMzUxQTExLjk4NSAxMS45ODUgMCAwIDAgMTIuMDExIDAgMTIuMDA4IDEyLjAwOCAwIDAgMCAwIDExLjk4OSAxMi4wMjYgMTIuMDI2IDAgMCAwIDEyLjAxMSAyNGguMzUydi0uN3oiLz48L3N2Zz4=" x="386" y="423" width="34" height="34"/>
+    <text x="497" y="431" class="small" text-anchor="middle">ConnectionPool</text>
+    <text x="497" y="452" class="cardTitle" text-anchor="middle">Warm H2 pool</text>
+    <text x="386" y="478" class="detail">tenant_onboarding_*</text>
+    <text x="386" y="500" class="detail">pool timeout guarded</text>
+  </g>
+  <g data-card="Exposed schema seed" data-x="646" data-y="404" data-width="250" data-height="106">
+    <rect x="646" y="404" width="250" height="106" rx="14" fill="#ffffff" stroke="#6f8f52" stroke-width="2.2" class="card"/>
+    <path class="header" d="M646,448 L646,418 Q646,404 660,404 L882,404 Q896,404 896,418 L896,448 Z" fill="#f1f6ec"/>
+    <text x="771" y="424" class="small" text-anchor="middle">suspendTransaction</text>
+    <text x="771" y="445" class="cardTitle" text-anchor="middle">Create tables + seed</text>
+    <text x="666" y="474" class="detail">Actor / Movie / join</text>
+    <text x="666" y="496" class="detail">tenant-specific fixture rows</text>
+  </g>
+  <g data-card="TenantConnectionFactoryRegistry" data-x="948" data-y="404" data-width="240" data-height="106">
+    <rect x="948" y="404" width="240" height="106" rx="14" fill="#ffffff" stroke="#4f8f8b" stroke-width="2.2" class="card"/>
+    <path class="header" d="M948,448 L948,418 Q948,404 962,404 L1174,404 Q1188,404 1188,418 L1188,448 Z" fill="#eef7f6"/>
+    <text x="1068" y="424" class="small" text-anchor="middle">runtime map</text>
+    <text x="1068" y="445" class="cardTitle" text-anchor="middle">Register resources</text>
+    <text x="968" y="474" class="detail">tenantId -&gt; pool + DB</text>
+    <text x="968" y="496" class="detail">disposes pools on shutdown</text>
+  </g>
+  <g data-card="ACTIVE metadata" data-x="1240" data-y="404" data-width="160" data-height="106">
+    <rect x="1240" y="404" width="160" height="106" rx="14" fill="#ffffff" stroke="#6f8f52" stroke-width="2.2" class="card"/>
+    <path class="header" d="M1240,448 L1240,418 Q1240,404 1254,404 L1386,404 Q1400,404 1400,418 L1400,448 Z" fill="#f1f6ec"/>
+    <text x="1320" y="424" class="small" text-anchor="middle">status update</text>
+    <text x="1320" y="445" class="cardTitle" text-anchor="middle">ACTIVE</text>
+    <text x="1260" y="474" class="detail">201 Created</text>
+    <text x="1260" y="496" class="detail">routable now</text>
+  </g>
+  <g data-card="Failure cleanup" data-x="710" data-y="342" data-width="430" data-height="40">
+    <rect x="710" y="342" width="430" height="40" rx="12" fill="#fff8f8" stroke="#b45f63" stroke-width="1.8"/>
+    <text x="925" y="367" class="detail" text-anchor="middle">failure: unregister, drop schema, dispose pool, delete metadata row</text>
+  </g>
 
-  <path class="arrow" d="M330 226 H392"/>
-  <path class="arrow" d="M665 226 H727"/>
-  <path class="arrow" d="M1000 226 H1062"/>
+  <path data-connector="provisioner-to-reserve" class="route" d="M735 278 L735 318 Q735 334 719 334 L213 334 Q197 334 197 350 L197 404" stroke="#a66a3f"/>
+  <polygon points="197,404 189,390 205,390" fill="#a66a3f" stroke="#a66a3f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <rect x="488" y="318" width="156" height="26" rx="10" class="label" stroke="#ddb991"/>
+  <text x="566" y="336" class="small" text-anchor="middle" fill="#8a5934">reserve row</text>
 
-  <rect class="card card-green" x="405" y="390" width="260" height="132" rx="10"/>
-  <text class="label" x="435" y="435">Runtime Registry</text>
-  <text class="body" x="435" y="468">register tenant pool</text>
-  <text class="small" x="435" y="494">dispose on cleanup/shutdown</text>
+  <path data-connector="reserve-to-pool" class="flow" d="M312 457 L364 457" stroke="#4f86c6"/>
+  <polygon points="364,457 350,449 350,465" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path data-connector="pool-to-schema" class="flow" d="M594 457 L646 457" stroke="#6f8f52"/>
+  <polygon points="646,457 632,449 632,465" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path data-connector="schema-to-registry" class="flow" d="M896 457 L948 457" stroke="#4f8f8b"/>
+  <polygon points="948,457 934,449 934,465" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path data-connector="registry-to-active" class="flow" d="M1188 457 L1240 457" stroke="#6f8f52"/>
+  <polygon points="1240,457 1226,449 1226,465" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
-  <rect class="card" x="740" y="390" width="260" height="132" rx="10"/>
-  <text class="label" x="770" y="435">Active Tenant</text>
-  <text class="body" x="770" y="468">mark ACTIVE</text>
-  <text class="small" x="770" y="494">ready for routed requests</text>
+  <path data-connector="provisioner-to-cleanup" class="route" d="M835 278 L835 342" stroke="#b45f63"/>
+  <polygon points="835,342 827,328 843,328" fill="#b45f63" stroke="#b45f63" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <rect x="850" y="303" width="128" height="26" rx="10" class="label" stroke="#e5b3b6"/>
+  <text x="914" y="321" class="small" text-anchor="middle" fill="#8f454a">exception</text>
 
-  <rect class="card card-blue" x="70" y="610" width="260" height="132" rx="10"/>
-  <text class="label" x="100" y="655">Actor API</text>
-  <text class="body" x="100" y="688">GET /actors</text>
-  <text class="small" x="100" y="714">X-TENANT-ID required</text>
+  <g data-card="Actor API" data-x="82" data-y="666" data-width="220" data-height="82">
+    <rect x="82" y="666" width="220" height="82" rx="14" fill="#ffffff" stroke="#4f86c6" stroke-width="2.2" class="card"/>
+    <path class="header" d="M82,706 L82,680 Q82,666 96,666 L288,666 Q302,666 302,680 L302,706 Z" fill="#eef5fa"/>
+    <text x="192" y="686" class="small" text-anchor="middle">GET /actors</text>
+    <text x="192" y="705" class="cardTitle" text-anchor="middle">ActorController</text>
+    <text x="100" y="731" class="detail">X-TENANT-ID: alpha</text>
+  </g>
+  <g data-card="TenantTransactionExecutor" data-x="362" data-y="666" data-width="250" data-height="82">
+    <rect x="362" y="666" width="250" height="82" rx="14" fill="#ffffff" stroke="#4f8f8b" stroke-width="2.2" class="card"/>
+    <path class="header" d="M362,706 L362,680 Q362,666 376,666 L598,666 Q612,666 612,680 L612,706 Z" fill="#eef7f6"/>
+    <text x="487" y="686" class="small" text-anchor="middle">Exposed boundary</text>
+    <text x="487" y="705" class="cardTitle" text-anchor="middle">TenantTransactionExecutor</text>
+    <text x="382" y="731" class="detail">explicit tenant database</text>
+  </g>
+  <g data-card="TenantRoutingConnectionFactory" data-x="672" data-y="666" data-width="260" data-height="82">
+    <rect x="672" y="666" width="260" height="82" rx="14" fill="#ffffff" stroke="#a66a3f" stroke-width="2.2" class="card"/>
+    <path class="header" d="M672,706 L672,680 Q672,666 686,666 L918,666 Q932,666 932,680 L932,706 Z" fill="#f5eee4"/>
+    <text x="802" y="686" class="small" text-anchor="middle">request-time lookup</text>
+    <text x="802" y="705" class="cardTitle" text-anchor="middle">RoutingConnectionFactory</text>
+    <text x="692" y="731" class="detail">Reactor context tenant id</text>
+  </g>
+  <g data-card="Active tenant resources" data-x="994" data-y="650" data-width="290" data-height="112">
+    <rect x="994" y="650" width="290" height="112" rx="14" fill="#ffffff" stroke="#6f8f52" stroke-width="2.2" class="card"/>
+    <path class="header" d="M994,694 L994,664 Q994,650 1008,650 L1270,650 Q1284,650 1284,664 L1284,694 Z" fill="#f1f6ec"/>
+    <image data-bluetape4k-icon="database/h2.svg" href="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDk0NzZCIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+SDIgRGF0YWJhc2U8L3RpdGxlPjxwYXRoIGQ9Ik0xNy4xNyAxMy4yN2MuMTQtLjAxNS4yOC0uMDIzLjQxNi0uMDIzLjcgMCAxLjIyOC4xNTkgMS41OTkuNDY5LjM3LjMxNC41NTUuNzU2LjU1NSAxLjMzNGEyLjg2MSAyLjg2MSAwIDAgMS0uNDMgMS40NTVjLS4yOTEuNDkyLS43NzUgMS4wNjYtMS40NiAxLjcyNy0uNDUzLjQ0Ni0xLjA2MS45NzYtMS44MjEgMS41OTJhNDguMDIgNDguMDIgMCAwIDEtMi4yNzUgMS43NDJ2Mi4wODNoOS44OTVWMjEuMjRIMTcuOTljLjIxOS0uMTU5LjU5LS40MzUgMS4xMS0uODMyLjUxOS0uNCAxLjAzMy0uODM1IDEuNTUtMS4zMTEuODE3LS43NiAxLjQyNS0xLjUgMS44MjItMi4yMTVhNC42MjQgNC42MjQgMCAwIDAgLjU5Ny0yLjI2OGMwLTEuMjEzLS40MTYtMi4xNTQtMS4yNDgtMi44MTUtLjgyNy0uNjYyLTIuMDMyLS45OTQtMy42MTItLjk5NC0uMzQ0IDAtLjY5Mi4wMTUtMS4wMzYuMDQ5VjYuMDRIMTMuODZ2NC43MDFIOC45NjVWNi4wNEg1LjY1djEyLjg0NmgzLjMxNXYtNS42NjFoNC44OXY1LjY2MWguMDM5Yy4zMS0uMjQyLjYyMy0uNDg3LjkzMy0uNzRhMjguNTY0IDI4LjU2NCAwIDAgMCAxLjgyNi0xLjU4OCAxNC44NTQgMTQuODU0IDAgMCAwIC41MTctLjUyOXpNMTIuMDExIDIzLjNBMTEuMzI3IDExLjMyNyAwIDAgMSAuNyAxMS45OSAxMS4zMDUgMTEuMzA1IDAgMCAxIDEyLjAxMS42OTlhMTEuMjg2IDExLjI4NiAwIDAgMSAxMS4yOSAxMS4yOXYuMzUxSDI0di0uMzUxQTExLjk4NSAxMS45ODUgMCAwIDAgMTIuMDExIDAgMTIuMDA4IDEyLjAwOCAwIDAgMCAwIDExLjk4OSAxMi4wMjYgMTIuMDI2IDAgMCAwIDEyLjAxMSAyNGguMzUydi0uN3oiLz48L3N2Zz4=" x="1018" y="670" width="34" height="34"/>
+    <text x="1162" y="677" class="small" text-anchor="middle">TenantConnectionFactoryRegistry</text>
+    <text x="1162" y="698" class="cardTitle" text-anchor="middle">pool + R2dbcDatabase</text>
+    <text x="1018" y="729" class="detail">Unknown tenant throws 400</text>
+    <text x="1018" y="751" class="detail">active count gauge exposed</text>
+  </g>
 
-  <rect class="card" x="405" y="610" width="260" height="132" rx="10"/>
-  <text class="label" x="435" y="655">Routing Factory</text>
-  <text class="body" x="435" y="688">resolve Reactor context</text>
-  <text class="small" x="435" y="714">select tenant pool</text>
+  <path data-connector="actor-to-executor" class="flow" d="M302 707 L362 707" stroke="#4f86c6"/>
+  <polygon points="362,707 348,699 348,715" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path data-connector="executor-to-routing" class="flow" d="M612 707 L672 707" stroke="#4f8f8b"/>
+  <polygon points="672,707 658,699 658,715" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path data-connector="routing-to-resources" class="flow" d="M932 707 L994 707" stroke="#a66a3f"/>
+  <polygon points="994,707 980,699 980,715" fill="#a66a3f" stroke="#a66a3f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
-  <rect class="card card-red" x="1075" y="390" width="260" height="132" rx="10"/>
-  <text class="label" x="1105" y="435">Failure Cleanup</text>
-  <text class="body" x="1105" y="468">drop schema + close pool</text>
-  <text class="small" x="1105" y="494">remove registry row</text>
-
-  <path class="arrow" d="M1205 292 V338 H535 V376"/>
-  <path class="arrow" d="M665 456 H727"/>
-  <path class="arrow" d="M330 676 H392"/>
-  <path class="arrow" d="M535 610 V536"/>
-  <path class="arrow" d="M665 676 C800 676 820 522 740 486"/>
-  <path class="arrow dash" d="M870 292 V338 C870 374 1000 382 1062 420"/>
-  <path class="arrow dash" d="M1205 292 V376"/>
-
-  <text class="small" x="725" y="576">Routed reads use only ACTIVE runtime resources.</text>
-  <text class="small" x="1088" y="560">Any provisioning exception removes partial state.</text>
+  <g data-card="Legend" data-x="1300" data-y="642" data-width="100" data-height="120">
+    <rect x="1300" y="642" width="100" height="120" rx="12" fill="#ffffff" stroke="#d7e2ec" stroke-width="1.4"/>
+    <text x="1350" y="664" class="small" text-anchor="middle">Legend</text>
+    <path d="M1318 686 L1374 686" class="flow" stroke="#6f8f52"/>
+    <polygon points="1374,686 1360,678 1360,694" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <text x="1350" y="706" class="small" text-anchor="middle">success</text>
+    <path d="M1318 728 L1374 728" class="route" stroke="#b45f63"/>
+    <polygon points="1374,728 1360,720 1360,736" fill="#b45f63" stroke="#b45f63" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <text x="1350" y="748" class="small" text-anchor="middle">reject/cleanup</text>
+  </g>
 </svg>

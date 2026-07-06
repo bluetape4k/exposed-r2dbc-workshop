@@ -1,129 +1,184 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1378" height="1024" viewBox="0 0 1378 1024" role="img" aria-label="Module Selection Guide">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1378" height="1024"/>
-<rect class="frame" x="32" y="28" width="1314" height="968" rx="28"/>
-<text class="title" x="66" y="82">Module Selection Guide</text>
-<text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M522 280 C522 552 856 552 856 824" data-connector="line"/>
-<path class="line" d="M706 718 C706 801 672 801 672 884" data-connector="line"/>
-<path class="line" d="M1006 718 C1006 718 1040 718 1040 718" data-connector="line"/>
-<path class="line" d="M856 612 C856 635 856 635 856 658" data-connector="line"/>
-<path class="line" d="M1040 552 C1040 635 672 635 672 718" data-connector="line"/>
-<path class="line" d="M1040 552 C1040 635 338 635 338 718" data-connector="line"/>
-<path class="line" d="M1006 552 C1006 552 1040 552 1040 552" data-connector="line"/>
-<path class="line" d="M672 220 C672 386 706 386 706 552" data-connector="line"/>
-<path class="line" d="M522 446 C522 469 522 469 522 492" data-connector="line"/>
-<path class="line" d="M372 386 C372 469 338 469 338 552" data-connector="line"/>
-<path class="line" d="M672 386 C672 386 1040 386 1040 386" data-connector="line"/>
-<path class="line" d="M672 386 C672 386 706 386 706 386" data-connector="line"/>
-<path class="line" d="M522 280 C522 303 522 303 522 326" data-connector="line"/>
-<path class="line" d="M706 220 C706 303 338 303 338 386" data-connector="line"/>
-<path class="line" d="M1006 220 C1006 220 1040 220 1040 220" data-connector="line"/>
-<path class="line" d="M672 220 C672 220 706 220 706 220" data-connector="line"/>
-<path class="line" d="M338 220 C338 220 372 220 372 220" data-connector="line"/>
-<g transform="translate(48,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">[Select Advanced</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">Feature]</text>
-</g>
-<g transform="translate(382,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Data type?</text>
-</g>
-<g transform="translate(716,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Runtime?</text>
-</g>
-<g transform="translate(1050,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">02-javatime</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">java.time API</text>
-</g>
-<g transform="translate(48,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">03-kotlin-datetime</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">kotlinx.datetime</text>
-</g>
-<g transform="translate(382,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Serialization?</text>
-</g>
-<g transform="translate(716,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">04-json Requires</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">@Serializable</text>
-</g>
-<g transform="translate(1050,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">08-jackson Flexible</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">ObjectMapper</text>
-</g>
-<g transform="translate(48,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">09-fastjson2 2-3x</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">faster</text>
-</g>
-<g transform="translate(382,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">11-jackson3 Virtual</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">Thread stable</text>
-</g>
-<g transform="translate(716,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">WHERE search needed?</text>
-</g>
-<g transform="translate(1050,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Library?</text>
-</g>
-<g transform="translate(48,668)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">01-crypt</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">Non-deterministic</text>
-</g>
-<g transform="translate(382,668)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">12-tink AEAD High</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">security</text>
-</g>
-<g transform="translate(716,668)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Library?</text>
-</g>
-<g transform="translate(1050,668)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">10-jasypt</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">Deterministic</text>
-</g>
-<g transform="translate(382,834)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">12-tink DAEAD</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">Deterministic+search</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">able</text>
-</g>
-<g transform="translate(716,834)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">05-money JavaMoney</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">JSR-354</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 980" width="1600" height="980" role="img" aria-label="Advanced module selection guide for Exposed R2DBC workshop">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12" />
+    </filter>
+    <marker id="arrow-blue" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-green" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-brown" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#a66a3f" stroke="#a66a3f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-teal" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-rose" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#a85f7f" stroke="#a85f7f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}
+      .card{filter:url(#shadow)}
+      .header{opacity:.96}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:32px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:15px;letter-spacing:.08em;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:18px;fill:#1e293b}
+      .connector{fill:none;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.2}
+    </style>
+  </defs>
+  <rect width="1600" height="980" class="canvas" />
+  <rect x="24" y="24" width="1552" height="932" rx="18" class="frame" />
+  <text x="60" y="70" class="title" text-anchor="start">Advanced Module Selection Guide</text>
+  <text x="60" y="100" class="subtitle" text-anchor="start">Choose the advanced module by production concern: encryption, temporal columns, JSON serialization, or custom domain types.</text>
+
+  <rect x="54" y="132" width="350" height="704" rx="16" class="lane" />
+  <text x="78" y="162" class="laneTitle" text-anchor="start">ENCRYPTED COLUMNS</text>
+  <rect x="432" y="132" width="350" height="704" rx="16" class="lane" />
+  <text x="456" y="162" class="laneTitle" text-anchor="start">TEMPORAL TYPES</text>
+  <rect x="810" y="132" width="350" height="704" rx="16" class="lane" />
+  <text x="834" y="162" class="laneTitle" text-anchor="start">JSON PAYLOADS</text>
+  <rect x="1188" y="132" width="350" height="704" rx="16" class="lane" />
+  <text x="1212" y="162" class="laneTitle" text-anchor="start">DOMAIN AND CUSTOM STORAGE</text>
+
+  <g data-card="Need Privacy" data-x="86" data-y="190" data-width="286" data-height="94">
+    <rect x="86" y="190" width="286" height="94" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card" />
+    <path class="header" d="M86,232 L86,204 Q86,190 100,190 L358,190 Q372,190 372,204 L372,232 Z" fill="#eef5fa" />
+    <text x="229" y="208" class="tiny" text-anchor="middle">&lt;&lt;decision&gt;&gt;</text>
+    <text x="229" y="227" class="cardTitle" text-anchor="middle">Need Privacy</text>
+    <text x="106" y="253" class="detail" text-anchor="start">transparent encrypted columns</text>
+    <text x="106" y="272" class="detail" text-anchor="start">or searchable ciphertext</text>
+  </g>
+  <g data-card="01 Crypt" data-x="86" data-y="340" data-width="286" data-height="92">
+    <rect x="86" y="340" width="286" height="92" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card" />
+    <path class="header" d="M86,382 L86,354 Q86,340 100,340 L358,340 Q372,340 372,354 L372,382 Z" fill="#eef5fa" />
+    <text x="229" y="358" class="tiny" text-anchor="middle">&lt;&lt;module 01&gt;&gt;</text>
+    <text x="229" y="377" class="cardTitle" text-anchor="middle">Crypt Extension</text>
+    <text x="106" y="403" class="detail" text-anchor="start">AES / Blowfish / 3DES</text>
+    <text x="106" y="422" class="detail" text-anchor="start">non-search encrypted text</text>
+  </g>
+  <g data-card="12 Tink" data-x="86" data-y="480" data-width="286" data-height="92">
+    <rect x="86" y="480" width="286" height="92" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card" />
+    <path class="header" d="M86,522 L86,494 Q86,480 100,480 L358,480 Q372,480 372,494 L372,522 Z" fill="#f5eee4" />
+    <text x="229" y="498" class="tiny" text-anchor="middle">&lt;&lt;module 12&gt;&gt;</text>
+    <text x="229" y="517" class="cardTitle" text-anchor="middle">Tink Encryption</text>
+    <text x="106" y="543" class="detail" text-anchor="start">DAEAD searchable mode</text>
+    <text x="106" y="562" class="detail" text-anchor="start">AEAD high-security mode</text>
+  </g>
+
+  <g data-card="Need Date Time" data-x="464" data-y="190" data-width="286" data-height="94">
+    <rect x="464" y="190" width="286" height="94" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card" />
+    <path class="header" d="M464,232 L464,204 Q464,190 478,190 L736,190 Q750,190 750,204 L750,232 Z" fill="#f1f6ec" />
+    <text x="607" y="208" class="tiny" text-anchor="middle">&lt;&lt;decision&gt;&gt;</text>
+    <text x="607" y="227" class="cardTitle" text-anchor="middle">Need Date Time</text>
+    <text x="484" y="253" class="detail" text-anchor="start">JSR-310 or multiplatform</text>
+    <text x="484" y="272" class="detail" text-anchor="start">temporal column mapping</text>
+  </g>
+  <g data-card="02 JavaTime" data-x="464" data-y="340" data-width="286" data-height="92">
+    <rect x="464" y="340" width="286" height="92" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card" />
+    <path class="header" d="M464,382 L464,354 Q464,340 478,340 L736,340 Q750,340 750,354 L750,382 Z" fill="#f1f6ec" />
+    <text x="607" y="358" class="tiny" text-anchor="middle">&lt;&lt;module 02&gt;&gt;</text>
+    <text x="607" y="377" class="cardTitle" text-anchor="middle">JavaTime</text>
+    <text x="484" y="403" class="detail" text-anchor="start">LocalDate / Instant</text>
+    <text x="484" y="422" class="detail" text-anchor="start">duration and literals</text>
+  </g>
+  <g data-card="03 Kotlin DateTime" data-x="464" data-y="480" data-width="286" data-height="92">
+    <rect x="464" y="480" width="286" height="92" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card" />
+    <path class="header" d="M464,522 L464,494 Q464,480 478,480 L736,480 Q750,480 750,494 L750,522 Z" fill="#eef7f6" />
+    <text x="607" y="498" class="tiny" text-anchor="middle">&lt;&lt;module 03&gt;&gt;</text>
+    <text x="607" y="517" class="cardTitle" text-anchor="middle">Kotlinx DateTime</text>
+    <text x="484" y="543" class="detail" text-anchor="start">Instant / LocalDate</text>
+    <text x="484" y="562" class="detail" text-anchor="start">KMP-friendly mapping</text>
+  </g>
+
+  <g data-card="Need JSON" data-x="842" data-y="190" data-width="286" data-height="94">
+    <rect x="842" y="190" width="286" height="94" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card" />
+    <path class="header" d="M842,232 L842,204 Q842,190 856,190 L1114,190 Q1128,190 1128,204 L1128,232 Z" fill="#eef7f6" />
+    <text x="985" y="208" class="tiny" text-anchor="middle">&lt;&lt;decision&gt;&gt;</text>
+    <text x="985" y="227" class="cardTitle" text-anchor="middle">Need JSON Columns</text>
+    <text x="862" y="253" class="detail" text-anchor="start">JSON/JSONB with chosen</text>
+    <text x="862" y="272" class="detail" text-anchor="start">serialization library</text>
+  </g>
+  <g data-card="04 kotlinx JSON" data-x="842" data-y="316" data-width="286" data-height="82">
+    <rect x="842" y="316" width="286" height="82" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card" />
+    <path class="header" d="M842,356 L842,330 Q842,316 856,316 L1114,316 Q1128,316 1128,330 L1128,356 Z" fill="#eef7f6" />
+    <text x="985" y="334" class="tiny" text-anchor="middle">&lt;&lt;module 04&gt;&gt;</text>
+    <text x="985" y="353" class="cardTitle" text-anchor="middle">Kotlinx JSON</text>
+    <text x="862" y="378" class="detail" text-anchor="start">@Serializable model</text>
+  </g>
+  <g data-card="08 Jackson 2" data-x="842" data-y="426" data-width="286" data-height="82">
+    <rect x="842" y="426" width="286" height="82" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card" />
+    <path class="header" d="M842,466 L842,440 Q842,426 856,426 L1114,426 Q1128,426 1128,440 L1128,466 Z" fill="#eef5fa" />
+    <text x="985" y="444" class="tiny" text-anchor="middle">&lt;&lt;module 08&gt;&gt;</text>
+    <text x="985" y="463" class="cardTitle" text-anchor="middle">Jackson 2</text>
+    <text x="862" y="488" class="detail" text-anchor="start">ObjectMapper ecosystem</text>
+  </g>
+  <g data-card="09 Fastjson2" data-x="842" data-y="536" data-width="286" data-height="82">
+    <rect x="842" y="536" width="286" height="82" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card" />
+    <path class="header" d="M842,576 L842,550 Q842,536 856,536 L1114,536 Q1128,536 1128,550 L1128,576 Z" fill="#f5eee4" />
+    <text x="985" y="554" class="tiny" text-anchor="middle">&lt;&lt;module 09&gt;&gt;</text>
+    <text x="985" y="573" class="cardTitle" text-anchor="middle">Fastjson2</text>
+    <text x="862" y="598" class="detail" text-anchor="start">throughput-focused JSON</text>
+  </g>
+  <g data-card="11 Jackson 3" data-x="842" data-y="646" data-width="286" data-height="82">
+    <rect x="842" y="646" width="286" height="82" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2" class="card" />
+    <path class="header" d="M842,686 L842,660 Q842,646 856,646 L1114,646 Q1128,646 1128,660 L1128,686 Z" fill="#f5eef2" />
+    <text x="985" y="664" class="tiny" text-anchor="middle">&lt;&lt;module 11&gt;&gt;</text>
+    <text x="985" y="683" class="cardTitle" text-anchor="middle">Jackson 3</text>
+    <text x="862" y="708" class="detail" text-anchor="start">Jakarta/modern runtime</text>
+  </g>
+
+  <g data-card="Need Custom Domain" data-x="1220" data-y="190" data-width="286" data-height="94">
+    <rect x="1220" y="190" width="286" height="94" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2" class="card" />
+    <path class="header" d="M1220,232 L1220,204 Q1220,190 1234,190 L1492,190 Q1506,190 1506,204 L1506,232 Z" fill="#f5eef2" />
+    <text x="1363" y="208" class="tiny" text-anchor="middle">&lt;&lt;decision&gt;&gt;</text>
+    <text x="1363" y="227" class="cardTitle" text-anchor="middle">Need Domain Types</text>
+    <text x="1240" y="253" class="detail" text-anchor="start">money, IDs, compression,</text>
+    <text x="1240" y="272" class="detail" text-anchor="start">or binary serialization</text>
+  </g>
+  <g data-card="05 Money" data-x="1220" data-y="340" data-width="286" data-height="92">
+    <rect x="1220" y="340" width="286" height="92" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card" />
+    <path class="header" d="M1220,382 L1220,354 Q1220,340 1234,340 L1492,340 Q1506,340 1506,354 L1506,382 Z" fill="#f1f6ec" />
+    <text x="1363" y="358" class="tiny" text-anchor="middle">&lt;&lt;module 05&gt;&gt;</text>
+    <text x="1363" y="377" class="cardTitle" text-anchor="middle">Money</text>
+    <text x="1240" y="403" class="detail" text-anchor="start">amount + currency pair</text>
+    <text x="1240" y="422" class="detail" text-anchor="start">JavaMoney API</text>
+  </g>
+  <g data-card="06 Custom Columns" data-x="1220" data-y="480" data-width="286" data-height="92">
+    <rect x="1220" y="480" width="286" height="92" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card" />
+    <path class="header" d="M1220,522 L1220,494 Q1220,480 1234,480 L1492,480 Q1506,480 1506,494 L1506,522 Z" fill="#f5eee4" />
+    <text x="1363" y="498" class="tiny" text-anchor="middle">&lt;&lt;module 06&gt;&gt;</text>
+    <text x="1363" y="517" class="cardTitle" text-anchor="middle">Custom Columns</text>
+    <text x="1240" y="543" class="detail" text-anchor="start">compression + AES +</text>
+    <text x="1240" y="562" class="detail" text-anchor="start">binary serialization</text>
+  </g>
+  <g data-card="07 Custom Entities" data-x="1220" data-y="620" data-width="286" data-height="92">
+    <rect x="1220" y="620" width="286" height="92" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card" />
+    <path class="header" d="M1220,662 L1220,634 Q1220,620 1234,620 L1492,620 Q1506,620 1506,634 L1506,662 Z" fill="#eef5fa" />
+    <text x="1363" y="638" class="tiny" text-anchor="middle">&lt;&lt;module 07&gt;&gt;</text>
+    <text x="1363" y="657" class="cardTitle" text-anchor="middle">Custom Entities</text>
+    <text x="1240" y="683" class="detail" text-anchor="start">Snowflake / KSUID /</text>
+    <text x="1240" y="702" class="detail" text-anchor="start">time-based UUID ids</text>
+  </g>
+
+  <path class="connector" data-connector="privacy-crypt" d="M229 284 L229 340" stroke="#4f86c6" marker-end="url(#arrow-blue)" />
+  <path class="connector" data-connector="crypt-tink" d="M229 432 L229 480" stroke="#a66a3f" marker-end="url(#arrow-brown)" />
+  <path class="connector" data-connector="time-java" d="M607 284 L607 340" stroke="#6f8f52" marker-end="url(#arrow-green)" />
+  <path class="connector" data-connector="java-kotlin" d="M607 432 L607 480" stroke="#4f8f8b" marker-end="url(#arrow-teal)" />
+  <path class="connector" data-connector="json-kotlinx" d="M985 284 L985 316" stroke="#4f8f8b" marker-end="url(#arrow-teal)" />
+  <path class="connector" data-connector="kotlinx-jackson" d="M985 398 L985 426" stroke="#4f86c6" marker-end="url(#arrow-blue)" />
+  <path class="connector" data-connector="jackson-fastjson" d="M985 508 L985 536" stroke="#a66a3f" marker-end="url(#arrow-brown)" />
+  <path class="connector" data-connector="fastjson-jackson3" d="M985 618 L985 646" stroke="#a85f7f" marker-end="url(#arrow-rose)" />
+  <path class="connector" data-connector="domain-money" d="M1363 284 L1363 340" stroke="#6f8f52" marker-end="url(#arrow-green)" />
+  <path class="connector" data-connector="money-columns" d="M1363 432 L1363 480" stroke="#a66a3f" marker-end="url(#arrow-brown)" />
+  <path class="connector" data-connector="columns-entities" d="M1363 572 L1363 620" stroke="#4f86c6" marker-end="url(#arrow-blue)" />
+
+  <rect x="86" y="880" width="1428" height="34" rx="10" class="noteBox" />
+  <text x="800" y="902" class="note" text-anchor="middle">Root chapter map shows repository-backed advanced modules present in this repository: 01-09, 11, and 12.</text>
 </svg>

@@ -1,78 +1,169 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1378" height="692" viewBox="0 0 1378 692" role="img" aria-label="JSON Library Comparison">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1378" height="692"/>
-<rect class="frame" x="32" y="28" width="1314" height="636" rx="28"/>
-<text class="title" x="66" y="82">JSON Library Comparison</text>
-<text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M522 280 C522 386 522 386 522 492" data-connector="line"/>
-<path class="line" d="M672 220 C672 303 706 303 706 386" data-connector="line"/>
-<path class="line" d="M372 220 C372 303 338 303 338 386" data-connector="line"/>
-<path class="line" d="M672 220 C672 220 706 220 706 220" data-connector="line"/>
-<path class="line" d="M338 220 C338 220 372 220 372 220" data-connector="line"/>
-<g transform="translate(48,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Choose JSON Library</text>
-</g>
-<g transform="translate(382,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Project Context</text>
-</g>
-<g transform="translate(716,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Already using</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">Jackson 2.x</text>
-</g>
-<g transform="translate(1050,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">08-jackson module</text>
-</g>
-<g transform="translate(48,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Need Jackson 3.x</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">latest features</text>
-</g>
-<g transform="translate(382,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">11-jackson3 module</text>
-</g>
-<g transform="translate(716,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Need maximum</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">performance</text>
-</g>
-<g transform="translate(1050,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">09-fastjson2 module</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">this module</text>
-</g>
-<g transform="translate(382,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">Prefer</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">kotlinx.serializatio</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">n</text>
-</g>
-<g transform="translate(716,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">exposed-json module</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1360" viewBox="0 0 2200 1360" role="img" aria-label="Advanced 09 Exposed R2DBC Fastjson2 architecture diagram">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.11"/>
+    </filter>
+    <style>
+      .canvas{fill:#f4f7fa}
+      .frame{fill:#fffefb;stroke:#b8ccdf;stroke-width:5}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:3}
+      .laneWarm{fill:#fffaf0;stroke:#dccb9e;stroke-width:3}
+      .laneGreen{fill:#f2f8f2;stroke:#c5dab6;stroke-width:3}
+      .laneTeal{fill:#eef7f6;stroke:#bdd9d6;stroke-width:3}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:64px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:24px;fill:#536476;font-weight:700}
+      .laneTitle{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:24px;letter-spacing:.06em;fill:#8ca2b4;font-weight:800}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:32px;fill:#1e293b}
+      .cardSub{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:22px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:19px;fill:#64748b;font-weight:800}
+      .card{filter:url(#shadow)}
+      .cardWhite{fill:#ffffff}
+      .blue{stroke:#4f86c6}
+      .green{stroke:#6f8f52}
+      .amber{stroke:#b8891f}
+      .teal{stroke:#4f8f8b}
+      .red{stroke:#ad5f82}
+      .brown{stroke:#8a6f55}
+      .blueFill{fill:#eef5fa}
+      .greenFill{fill:#f1f6ec}
+      .amberFill{fill:#fff8e6}
+      .tealFill{fill:#eef7f6}
+      .redFill{fill:#f8edf3}
+      .brownFill{fill:#f3eee8}
+      .connector{fill:none;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round}
+      .head{stroke-dasharray:none;style:stroke-dasharray:none!important}
+      .footer{fill:#ffffff;stroke:#d9e3ec;stroke-width:2.4}
+    </style>
+  </defs>
+
+  <rect class="canvas" width="2200" height="1360"/>
+  <rect class="frame" x="36" y="34" width="2128" height="1292" rx="38"/>
+  <text class="title" x="1100" y="126" text-anchor="middle">Fastjson2 JSON Column Responsibility Map</text>
+  <text class="subtitle" x="1100" y="176" text-anchor="middle">Fastjson2 swaps the serializer engine while keeping the Exposed JSON/JSONB column and query contract familiar.</text>
+
+  <rect class="lane" x="92" y="238" width="466" height="790" rx="30"/>
+  <text class="laneTitle" x="132" y="286">EXPOSED COLUMN API</text>
+  <rect class="laneWarm" x="612" y="238" width="466" height="790" rx="30"/>
+  <text class="laneTitle" x="652" y="286">FASTJSON2 ENGINE</text>
+  <rect class="laneGreen" x="1132" y="238" width="466" height="790" rx="30"/>
+  <text class="laneTitle" x="1172" y="286">PERSISTENCE SURFACE</text>
+  <rect class="laneTeal" x="1652" y="238" width="456" height="790" rx="30"/>
+  <text class="laneTitle" x="1692" y="286">QUERY CONTRACT</text>
+
+  <g data-card="fastjson JSON Column" data-x="136" data-y="334" data-width="378" data-height="126">
+    <rect class="card cardWhite blue" x="136" y="334" width="378" height="126" rx="22" stroke-width="4"/>
+    <text class="tiny" x="325" y="366" text-anchor="middle">&lt;&lt;column extension&gt;&gt;</text>
+    <text class="cardTitle" x="325" y="408" text-anchor="middle">fastjson&lt;T&gt;(name)</text>
+    <text class="cardSub" x="325" y="442" text-anchor="middle">standard JSON text column</text>
+  </g>
+  <g data-card="Kotlin Data Classes" data-x="136" data-y="550" data-width="378" data-height="126">
+    <rect class="card cardWhite green" x="136" y="550" width="378" height="126" rx="22" stroke-width="4"/>
+    <text class="tiny" x="325" y="582" text-anchor="middle">&lt;&lt;domain value&gt;&gt;</text>
+    <text class="cardTitle" x="325" y="624" text-anchor="middle">DataHolder / User</text>
+    <text class="cardSub" x="325" y="658" text-anchor="middle">no special annotations required</text>
+  </g>
+  <g data-card="fastjsonb JSONB Column" data-x="136" data-y="766" data-width="378" data-height="126">
+    <rect class="card cardWhite teal" x="136" y="766" width="378" height="126" rx="22" stroke-width="4"/>
+    <text class="tiny" x="325" y="798" text-anchor="middle">&lt;&lt;column extension&gt;&gt;</text>
+    <text class="cardTitle" x="325" y="840" text-anchor="middle">fastjsonb&lt;T&gt;(name)</text>
+    <text class="cardSub" x="325" y="874" text-anchor="middle">optimized JSONB storage</text>
+  </g>
+
+  <g data-card="Fastjson Serializer" data-x="656" data-y="334" data-width="378" data-height="126">
+    <rect class="card cardWhite blue" x="656" y="334" width="378" height="126" rx="22" stroke-width="4"/>
+    <text class="tiny" x="845" y="366" text-anchor="middle">&lt;&lt;serialization engine&gt;&gt;</text>
+    <text class="cardTitle" x="845" y="408" text-anchor="middle">FastjsonSerializer</text>
+    <text class="cardSub" x="845" y="442" text-anchor="middle">writeValue / readValue boundary</text>
+  </g>
+  <g data-card="Reflection Mapping" data-x="656" data-y="550" data-width="378" data-height="126">
+    <rect class="card cardWhite green" x="656" y="550" width="378" height="126" rx="22" stroke-width="4"/>
+    <text class="tiny" x="845" y="582" text-anchor="middle">&lt;&lt;codec behavior&gt;&gt;</text>
+    <text class="cardTitle" x="845" y="624" text-anchor="middle">Reflection Mapping</text>
+    <text class="cardSub" x="845" y="658" text-anchor="middle">Kotlin POJO friendly JSON</text>
+  </g>
+  <g data-card="Array Value Codec" data-x="656" data-y="766" data-width="378" data-height="126">
+    <rect class="card cardWhite teal" x="656" y="766" width="378" height="126" rx="22" stroke-width="4"/>
+    <text class="tiny" x="845" y="798" text-anchor="middle">&lt;&lt;collection support&gt;&gt;</text>
+    <text class="cardTitle" x="845" y="840" text-anchor="middle">Array Value Codec</text>
+    <text class="cardSub" x="845" y="874" text-anchor="middle">UserGroup, IntArray, lists</text>
+  </g>
+
+  <g data-card="fastjson_table" data-x="1176" data-y="334" data-width="378" data-height="126">
+    <rect class="card cardWhite blue" x="1176" y="334" width="378" height="126" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1365" y="366" text-anchor="middle">&lt;&lt;IntIdTable&gt;&gt;</text>
+    <text class="cardTitle" x="1365" y="408" text-anchor="middle">fastjson_table</text>
+    <text class="cardSub" x="1365" y="442" text-anchor="middle">fastjson_column JSON</text>
+  </g>
+  <g data-card="fastjson_b_table" data-x="1176" data-y="550" data-width="378" data-height="126">
+    <rect class="card cardWhite teal" x="1176" y="550" width="378" height="126" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1365" y="582" text-anchor="middle">&lt;&lt;IntIdTable&gt;&gt;</text>
+    <text class="cardTitle" x="1365" y="624" text-anchor="middle">fastjson_b_table</text>
+    <text class="cardSub" x="1365" y="658" text-anchor="middle">fastjson_b_column JSONB</text>
+  </g>
+  <g data-card="array table pair" data-x="1176" data-y="766" data-width="378" data-height="126">
+    <rect class="card cardWhite green" x="1176" y="766" width="378" height="126" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1365" y="798" text-anchor="middle">&lt;&lt;array fixtures&gt;&gt;</text>
+    <text class="cardTitle" x="1365" y="840" text-anchor="middle">array table pair</text>
+    <text class="cardSub" x="1365" y="874" text-anchor="middle">groups + numbers documents</text>
+  </g>
+
+  <g data-card="extract Query" data-x="1694" data-y="334" data-width="370" data-height="126">
+    <rect class="card cardWhite blue" x="1694" y="334" width="370" height="126" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1879" y="366" text-anchor="middle">&lt;&lt;JSON query&gt;&gt;</text>
+    <text class="cardTitle" x="1879" y="408" text-anchor="middle">extract&lt;T&gt;(path)</text>
+    <text class="cardSub" x="1879" y="442" text-anchor="middle">active, user, user.name</text>
+  </g>
+  <g data-card="contains Query" data-x="1694" data-y="550" data-width="370" data-height="138">
+    <rect class="card cardWhite amber" x="1694" y="550" width="370" height="138" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1879" y="582" text-anchor="middle">&lt;&lt;JSON query&gt;&gt;</text>
+    <text class="cardTitle" x="1879" y="624" text-anchor="middle">contains(value)</text>
+    <text class="cardSub" x="1879" y="654" text-anchor="middle">Postgres @&gt;</text>
+    <text class="cardSub" x="1879" y="680" text-anchor="middle">MySQL JSON_CONTAINS</text>
+  </g>
+  <g data-card="exists Query" data-x="1694" data-y="766" data-width="370" data-height="138">
+    <rect class="card cardWhite brown" x="1694" y="766" width="370" height="138" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1879" y="798" text-anchor="middle">&lt;&lt;JSON query&gt;&gt;</text>
+    <text class="cardTitle" x="1879" y="840" text-anchor="middle">exists(path)</text>
+    <text class="cardSub" x="1879" y="870" text-anchor="middle">JSONPath key</text>
+    <text class="cardSub" x="1879" y="896" text-anchor="middle">and filter checks</text>
+  </g>
+
+  <path class="connector blue" data-connector="json-column-to-serializer"  d="M 514 397 L 642 397"/>
+  <polygon class="head"  points="656,397 642,390 642,404" fill="#4f86c6" stroke="#4f86c6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector blue" data-connector="serializer-to-json-table"  d="M 1034 397 L 1162 397"/>
+  <polygon class="head"  points="1176,397 1162,390 1162,404" fill="#4f86c6" stroke="#4f86c6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector blue" data-connector="json-table-to-extract"  d="M 1554 397 L 1680 397"/>
+  <polygon class="head"  points="1694,397 1680,390 1680,404" fill="#4f86c6" stroke="#4f86c6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="connector green" data-connector="data-class-to-reflection"  d="M 514 613 L 642 613"/>
+  <polygon class="head"  points="656,613 642,606 642,620" fill="#6f8f52" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector teal" data-connector="reflection-to-jsonb-table"  d="M 1034 613 L 1162 613"/>
+  <polygon class="head"  points="1176,613 1162,606 1162,620" fill="#4f8f8b" stroke="#4f8f8b" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector amber" data-connector="jsonb-table-to-contains"  d="M 1554 613 L 1680 613"/>
+  <polygon class="head"  points="1694,613 1680,606 1680,620" fill="#b8891f" stroke="#b8891f" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="connector teal" data-connector="jsonb-column-to-array-codec"  d="M 514 829 L 642 829"/>
+  <polygon class="head"  points="656,829 642,822 642,836" fill="#4f8f8b" stroke="#4f8f8b" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector green" data-connector="array-codec-to-array-table"  d="M 1034 829 L 1162 829"/>
+  <polygon class="head"  points="1176,829 1162,822 1162,836" fill="#6f8f52" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector brown" data-connector="array-table-to-exists"  d="M 1554 829 L 1680 829"/>
+  <polygon class="head"  points="1694,829 1680,822 1680,836" fill="#8a6f55" stroke="#8a6f55" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <rect class="lane" x="156" y="1082" width="1888" height="148" rx="30"/>
+  <text class="laneTitle" x="196" y="1130">JSON LIBRARY COMPARISON</text>
+  <g data-card="exposed-json" data-x="302" data-y="1152" data-width="430" data-height="56">
+    <rect class="cardWhite green" x="302" y="1152" width="430" height="56" rx="18" stroke-width="3"/>
+    <text class="cardSub" x="517" y="1189" text-anchor="middle">exposed-json: kotlinx.serialization</text>
+  </g>
+  <g data-card="exposed-jackson" data-x="885" data-y="1152" data-width="430" data-height="56">
+    <rect class="cardWhite blue" x="885" y="1152" width="430" height="56" rx="18" stroke-width="3"/>
+    <text class="cardSub" x="1100" y="1189" text-anchor="middle">exposed-jackson: ObjectMapper</text>
+  </g>
+  <g data-card="exposed-fastjson2" data-x="1468" data-y="1152" data-width="430" data-height="56">
+    <rect class="cardWhite amber" x="1468" y="1152" width="430" height="56" rx="18" stroke-width="3"/>
+    <text class="cardSub" x="1683" y="1189" text-anchor="middle">exposed-fastjson2: speed focused</text>
+  </g>
+
+  <rect class="footer" x="216" y="1258" width="1768" height="48" rx="18"/>
+  <text class="note" x="1100" y="1290" text-anchor="middle">Reader contract: choose JSON or JSONB storage, keep standard Kotlin data classes, and reuse the same Exposed JSON query functions.</text>
 </svg>

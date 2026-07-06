@@ -1,74 +1,121 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
-  <title id="title">Ktor R2DBC cache strategy flow</title>
-  <desc id="desc">A Ktor route reads a Redisson cache, falls back to Exposed R2DBC, refreshes cache on writes, and exposes local counters.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1060" viewBox="0 0 1900 1060" role="img" aria-label="Ktor R2DBC cache strategy architecture">
   <defs>
+    <filter id="softShadow" x="-8%" y="-10%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#25384d" flood-opacity="0.10"/>
+    </filter>
     <style>
-      .bg { fill: #f7f8fb; }
-      .band { fill: #ffffff; stroke: #c8d0dc; stroke-width: 2; }
-      .head { fill: #123047; font: 700 30px Arial, sans-serif; }
-      .sub { fill: #425466; font: 18px Arial, sans-serif; }
-      .label { fill: #12263a; font: 700 21px Arial, sans-serif; }
-      .text { fill: #35495e; font: 16px Arial, sans-serif; }
-      .small { fill: #52677a; font: 14px Arial, sans-serif; }
-      .box1 { fill: #e8f4ff; stroke: #3d8ed6; stroke-width: 2; }
-      .box2 { fill: #eaf8ef; stroke: #3aa76d; stroke-width: 2; }
-      .box3 { fill: #fff4dd; stroke: #d99b24; stroke-width: 2; }
-      .box4 { fill: #f2ecff; stroke: #7d5bd8; stroke-width: 2; }
-      .arrow { stroke: #52677a; stroke-width: 3; fill: none; marker-end: url(#arrow); }
-      .dash { stroke: #52677a; stroke-width: 3; fill: none; stroke-dasharray: 10 8; marker-end: url(#arrow); }
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fffefa;stroke:#d7e3ed;stroke-width:2}
+      .lane{fill:#f8fbfd;stroke:#dce8f2;stroke-width:2}
+      .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:42px;fill:#192538;font-weight:400}
+      .subtitle,.detail,.foot{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:17px;font-weight:700;fill:#556678}
+      .laneTitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:17px;font-weight:700;letter-spacing:.08em;fill:#91a5b7}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:24px;fill:#192538;font-weight:400}
+      .smallTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:20px;fill:#192538;font-weight:400}
+      .mono{font-family:"Comic Mono","SFMono-Regular",ui-monospace,monospace;font-size:15px;font-weight:700;fill:#506176}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",ui-monospace,monospace;font-size:13px;font-weight:700;fill:#627287}
+      .card{filter:url(#softShadow);stroke-width:2.4}
+      .header{opacity:.96}
+      .connector{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .blue{stroke:#3f83b8}
+      .green{stroke:#6f8f52}
+      .amber{stroke:#a36f3e}
+      .teal{stroke:#4f8f8b}
+      .rose{stroke:#a85f7f}
+      .brown{stroke:#8a6f55}
+      .note{fill:#f7fffe;stroke:#9fd0cb;stroke-width:2}
     </style>
-    <marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
   </defs>
-  <rect class="bg" width="1400" height="760"/>
-  <text x="70" y="70" class="head">Ktor R2DBC Cache Strategies</text>
-  <text x="70" y="105" class="sub">Read-through, write refresh, explicit invalidation, and DB fallback without Spring request infrastructure</text>
 
-  <rect x="70" y="150" width="1260" height="500" rx="8" class="band"/>
+  <rect class="canvas" width="1900" height="1060"/>
+  <rect class="frame" x="30" y="30" width="1840" height="1000" rx="24"/>
+  <text class="title" x="72" y="92">Ktor R2DBC Cache Strategy</text>
+  <text class="subtitle" x="76" y="126">Ktor routes expose cache-aside reads, write-refresh, explicit invalidation, and local stats over Exposed R2DBC plus Redisson RMap.</text>
 
-  <rect x="110" y="220" width="230" height="150" rx="8" class="box1"/>
-  <text x="135" y="265" class="label">Ktor Routes</text>
-  <text x="135" y="300" class="text">GET /users/{id}</text>
-  <text x="135" y="325" class="text">POST /users</text>
-  <text x="135" y="350" class="text">DELETE /users/cache</text>
+  <rect class="lane" x="60" y="155" width="1780" height="220" rx="18"/>
+  <text class="laneTitle" x="86" y="190">HTTP CONTRACTS</text>
 
-  <rect x="420" y="200" width="250" height="190" rx="8" class="box4"/>
-  <text x="445" y="245" class="label">Cache Repository</text>
-  <text x="445" y="280" class="text">CacheReadResult</text>
-  <text x="445" y="305" class="text">HIT / MISS / NOT_FOUND</text>
-  <text x="445" y="330" class="text">WRITTEN on create/update</text>
-  <text x="445" y="355" class="small">single cache read before DB fallback</text>
+  <g data-card="Read routes" data-x="100" data-y="230" data-width="490" data-height="100">
+    <rect class="card" x="100" y="230" width="490" height="100" rx="15" fill="#ffffff" stroke="#5d7486"/>
+    <text class="smallTitle" x="345" y="264" text-anchor="middle">Read routes</text>
+    <text class="mono" x="132" y="294">GET /users -> DB-direct list</text>
+    <text class="mono" x="132" y="318">GET /users/{id} -> HIT / MISS / NOT_FOUND</text>
+  </g>
 
-  <rect x="760" y="180" width="230" height="150" rx="8" class="box2"/>
-  <text x="785" y="225" class="label">Redisson RMap</text>
-  <text x="785" y="260" class="text">cache name per app/test</text>
-  <text x="785" y="285" class="text">no TTL</text>
-  <text x="785" y="310" class="text">explicit invalidation</text>
+  <g data-card="Write routes" data-x="705" data-y="230" data-width="450" data-height="100">
+    <rect class="card" x="705" y="230" width="450" height="100" rx="15" fill="#f8fcf7" stroke="#6f8f52"/>
+    <text class="smallTitle" x="930" y="264" text-anchor="middle">Write routes</text>
+    <text class="mono" x="737" y="294">POST /users -> create + cache refresh</text>
+    <text class="mono" x="737" y="318">PUT /users/{id} -> update + cache refresh</text>
+  </g>
 
-  <rect x="760" y="410" width="230" height="150" rx="8" class="box3"/>
-  <text x="785" y="455" class="label">Exposed R2DBC</text>
-  <text x="785" y="490" class="text">H2 R2DBC pool</text>
-  <text x="785" y="515" class="text">users table</text>
-  <text x="785" y="540" class="text">transactional fallback</text>
+  <g data-card="Invalidation and stats" data-x="1270" data-y="230" data-width="480" data-height="100">
+    <rect class="card" x="1270" y="230" width="480" height="100" rx="15" fill="#fff9ef" stroke="#a36f3e"/>
+    <text class="smallTitle" x="1510" y="264" text-anchor="middle">Invalidation and stats</text>
+    <text class="mono" x="1302" y="294">DELETE key/all -> cache only</text>
+    <text class="mono" x="1302" y="318">GET /cache/stats -> local counters</text>
+  </g>
 
-  <rect x="1080" y="260" width="210" height="170" rx="8" class="box1"/>
-  <text x="1105" y="305" class="label">Local Stats</text>
-  <text x="1105" y="340" class="text">hits / misses</text>
-  <text x="1105" y="365" class="text">writes</text>
-  <text x="1105" y="390" class="text">invalidations</text>
-  <text x="1105" y="415" class="small">not stored in Redis</text>
+  <rect class="lane" x="60" y="405" width="1780" height="360" rx="18"/>
+  <text class="laneTitle" x="86" y="440">KTOR MODULE AND CACHE-ASIDE REPOSITORY</text>
 
-  <path d="M340 295 H420" class="arrow" data-connector="arrow"/>
-  <path d="M670 255 H760" class="arrow" data-connector="arrow"/>
-  <path d="M875 330 V410" class="dash"/>
-  <path d="M760 490 H670" class="dash"/>
-  <path d="M990 345 H1080" class="arrow" data-connector="arrow"/>
-  <path d="M545 390 V470 Q545 488 527 488 H243 Q225 488 225 470 V370" class="arrow" data-connector="arrow"/>
+  <g data-card="Ktor module" data-x="100" data-y="505" data-width="300" data-height="150">
+    <rect class="card" x="100" y="505" width="300" height="150" rx="16" fill="#f7fcff" stroke="#3f83b8"/>
+    <path class="header" d="M100,557 L100,521 Q100,505 116,505 L384,505 Q400,505 400,521 L400,557 Z" fill="#eef5fa"/>
+    <text class="cardTitle" x="250" y="539" text-anchor="middle">Ktor module</text>
+    <text class="mono" x="132" y="594">install JSON + errors</text>
+    <text class="mono" x="132" y="622">seed startup data</text>
+  </g>
 
-  <text x="360" y="280" class="small">route call</text>
-  <text x="690" y="240" class="small">read/write key</text>
-  <text x="895" y="375" class="small">miss fallback</text>
-  <text x="555" y="600" class="small">structured JSON response</text>
+  <g data-card="UserRoutes" data-x="500" data-y="505" data-width="300" data-height="150">
+    <rect class="card" x="500" y="505" width="300" height="150" rx="16" fill="#ffffff" stroke="#5d7486"/>
+    <path class="header" d="M500,557 L500,521 Q500,505 516,505 L784,505 Q800,505 800,521 L800,557 Z" fill="#f4f8fb"/>
+    <text class="cardTitle" x="650" y="539" text-anchor="middle">UserRoutes</text>
+    <text class="mono" x="532" y="594">call repository</text>
+    <text class="mono" x="532" y="622">shape HTTP response</text>
+  </g>
 
-  <rect x="70" y="690" width="1260" height="1" fill="#c8d0dc"/>
-  <text x="70" y="720" class="small">#69 owns cancellation-aware population, single-flight loading, and concurrent suspend-call cache behavior.</text>
+  <g data-card="UserCacheRepository" data-x="900" data-y="505" data-width="360" data-height="190">
+    <rect class="card" x="900" y="505" width="360" height="190" rx="16" fill="#fff9ef" stroke="#a36f3e"/>
+    <path class="header" d="M900,557 L900,521 Q900,505 916,505 L1244,505 Q1260,505 1260,521 L1260,557 Z" fill="#f5eee4"/>
+    <text class="cardTitle" x="1080" y="539" text-anchor="middle">UserCacheRepository</text>
+    <text class="mono" x="932" y="594">findCached(): cache -> DB -> cache</text>
+    <text class="mono" x="932" y="622">create/update(): DB -> cache</text>
+    <text class="mono" x="932" y="650">invalidate/clear(): cache only</text>
+  </g>
+
+  <g data-card="CacheObservation" data-x="1380" data-y="520" data-width="340" data-height="140">
+    <rect class="card" x="1380" y="520" width="340" height="140" rx="16" fill="#fff7f7" stroke="#a85f7f"/>
+    <path class="header" d="M1380,572 L1380,536 Q1380,520 1396,520 L1704,520 Q1720,520 1720,536 L1720,572 Z" fill="#f5eef2"/>
+    <text class="cardTitle" x="1550" y="554" text-anchor="middle">CacheObservation</text>
+    <text class="mono" x="1412" y="610">hit / miss / notFound</text>
+    <text class="mono" x="1412" y="638">written / invalidated</text>
+  </g>
+
+  <path class="connector blue" d="M400 580 H500" data-connector="module-routes"/>
+  <polyline points="500,580 488,573 488,587" fill="none" stroke="#3f83b8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector amber" d="M800 580 H900" data-connector="route-repository"/>
+  <polyline points="900,580 888,573 888,587" fill="none" stroke="#a36f3e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector rose" d="M1260 590 H1380" data-connector="repository-observation"/>
+  <polyline points="1380,590 1368,583 1368,597" fill="none" stroke="#a85f7f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <rect class="lane" x="60" y="795" width="1780" height="150" rx="18"/>
+  <text class="laneTitle" x="86" y="830">OWNED RESOURCES</text>
+
+  <g data-card="Redisson RMap" data-x="620" data-y="860" data-width="390" data-height="58">
+    <rect class="card" x="620" y="860" width="390" height="58" rx="14" fill="#f7fffe" stroke="#4f8f8b"/>
+    <text class="mono" x="815" y="895" text-anchor="middle">Redisson RMap exposed:ktor:r2dbc:users</text>
+  </g>
+  <g data-card="Exposed R2DBC H2" data-x="1120" data-y="860" data-width="390" data-height="58">
+    <rect class="card" x="1120" y="860" width="390" height="58" rx="14" fill="#ffffff" stroke="#5d7486"/>
+    <text class="mono" x="1315" y="895" text-anchor="middle">Exposed R2DBC H2 pool UserTable</text>
+  </g>
+
+  <path class="connector teal" d="M1000 695 V860" data-connector="repository-cache"/>
+  <polyline points="1000,860 993,848 1007,848" fill="none" stroke="#4f8f8b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector brown" d="M1160 695 V860" data-connector="repository-db"/>
+  <polyline points="1160,860 1153,848 1167,848" fill="none" stroke="#8a6f55" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <rect class="note" x="120" y="990" width="1660" height="34" rx="12"/>
+  <text class="foot" x="950" y="1013" text-anchor="middle">Ktor keeps cache-aside behavior explicit: reads may use Redis, writes refresh cache, and invalidation is caller-visible.</text>
 </svg>

@@ -1,75 +1,137 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="998" height="1127" viewBox="0 0 998 1127" role="img" aria-label="Structure Diagram">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1120" viewBox="0 0 1600 1120" role="img" aria-label="High performance R2DBC cache strategy class diagram">
+  <defs>
+    <filter id="softShadow" x="-8%" y="-10%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#25384d" flood-opacity="0.10"/>
+    </filter>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fffefa;stroke:#d7e3ed;stroke-width:2}
+      .lane{fill:#f9fbfd;stroke:#dbe7f0;stroke-width:1.8}
+      .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:40px;fill:#192538;font-weight:400}
+      .subtitle,.detail,.foot{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:700;fill:#556678}
+      .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:700;fill:#66788c}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:18px;letter-spacing:0.08em;fill:#8ba4b8;font-weight:400}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:24px;fill:#192538;font-weight:400}
+      .stereo{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:700;fill:#66788c}
+      .card{filter:url(#softShadow);stroke-width:2.4}
+      .header{opacity:.96}
+      .inherit{fill:none;stroke:#617386;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .use{fill:none;stroke-width:2.4;stroke-dasharray:8 7;stroke-linecap:round;stroke-linejoin:round}
+      .head{fill:#fffefa;stroke:#617386;stroke-width:3;stroke-dasharray:none}
+      .openHead{fill:none;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none}
+      .label{fill:#fffefa;stroke:#d7e3ed;stroke-width:1.7}
+    </style>
+  </defs>
 
+  <rect class="canvas" width="1600" height="1120"/>
+  <rect class="frame" x="30" y="30" width="1540" height="1060" rx="24"/>
+  <text class="title" x="72" y="94">High Performance R2DBC Cache Strategy Classes</text>
+  <text class="subtitle" x="76" y="128">Spring WebFlux controllers delegate to three Redisson-backed repositories, each selecting a concrete RedissonCacheConfig strategy.</text>
 
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none}
-  </style>
-</defs>
-<rect class="canvas" width="998" height="1127"/>
-<rect class="frame" x="32" y="28" width="934" height="1071" rx="28"/>
-<text class="title" x="66" y="82">Structure Diagram</text>
-<text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="inheritLine" d="M499 756 L499 363 L274 363 L274 308"/>
-<path class="inheritLine" d="M274 434 L274 308"/>
-<path class="inheritLine" d="M724 434 L724 347 L274 347 L274 308"/>
-<g transform="translate(84,180)">
-  <rect class="card" x="0" y="0" width="380" height="128" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="94" x2="380" y2="94" stroke="#5B8DEF"/>
-  <text class="small" x="190" y="26" text-anchor="middle"></text>
-  <text class="label" x="190" y="56.5" text-anchor="middle">Abstract R2dbc Redisson</text>
-<text class="label" x="190" y="81.5" text-anchor="middle">Repository</text>
+  <rect class="lane" x="62" y="160" width="1476" height="210" rx="18"/>
+  <text class="laneTitle" x="92" y="194">SHARED BASE / CONFIGURATION</text>
+  <rect class="lane" x="62" y="398" width="1476" height="330" rx="18"/>
+  <text class="laneTitle" x="92" y="432">CACHE REPOSITORIES</text>
+  <rect class="lane" x="62" y="756" width="1476" height="260" rx="18"/>
+  <text class="laneTitle" x="92" y="790">WEBFLUX API SURFACE</text>
 
-</g>
-<g transform="translate(534,180)">
-  <rect class="card" x="0" y="0" width="380" height="128" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="94" x2="380" y2="94" stroke="#58A978"/>
-  <text class="small" x="190" y="26" text-anchor="middle"></text>
-  <text class="label" x="190" y="56.5" text-anchor="middle">Abstract R2dbc Redisson</text>
-<text class="label" x="190" y="81.5" text-anchor="middle">Repository K</text>
+  <g data-card="AbstractR2dbcRedissonRepository" data-x="470" data-y="220" data-width="470" data-height="112">
+    <rect class="card" x="470" y="220" width="470" height="112" rx="14" fill="#ffffff" stroke="#617386"/>
+    <path class="header" d="M470,267 L470,234 Q470,220 484,220 L926,220 Q940,220 940,234 L940,267 Z" fill="#f2f6fa"/>
+    <text class="stereo" x="705" y="244" text-anchor="middle">&lt;&lt;base&gt;&gt;</text>
+    <text class="cardTitle" x="705" y="266" text-anchor="middle">AbstractR2dbcRedissonRepository&lt;K,E&gt;</text>
+    <text class="detail" x="492" y="292">suspend get / put / getAll / invalidate</text>
+    <text class="detail" x="492" y="314">Exposed R2DBC table mapping + Redisson MapCache</text>
+  </g>
 
-</g>
-<g transform="translate(84,434)">
-  <rect class="card" x="0" y="0" width="380" height="191" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="94" x2="380" y2="94" stroke="#D6A441"/>
-  <text class="small" x="190" y="26" text-anchor="middle"></text>
-  <text class="label" x="190" y="56.5" text-anchor="middle">User Credentials Cache</text>
-<text class="label" x="190" y="81.5" text-anchor="middle">Repository</text>
-  <text class="mono" x="18" y="124">+strategy: READ_ONLY</text>
-<text class="mono" x="18" y="145">+get(id: Long) UserCredentialsRecord?</text>
-<text class="mono" x="18" y="166">+evict(id: Long) void</text>
-</g>
-<g transform="translate(534,434)">
-  <rect class="card" x="0" y="0" width="380" height="196" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#DC6B82"/>
-  <text class="small" x="190" y="26" text-anchor="middle"></text>
-  <text class="label" x="190" y="61" text-anchor="middle">UserCacheRepository</text>
-  <text class="mono" x="18" y="108">+strategy: READ_WRITE_THROUGH_WITH_NEAR_CACHE</text>
-<text class="mono" x="18" y="129">+get(id: Long) UserRecord?</text>
-<text class="mono" x="18" y="150">+put(id: Long, user: UserRecord) void</text>
-<text class="mono" x="18" y="171">+evict(id: Long) void</text>
-</g>
-<g transform="translate(309,756)">
-  <rect class="card" x="0" y="0" width="380" height="175" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#45A7A1"/>
-  <text class="small" x="190" y="26" text-anchor="middle"></text>
-  <text class="label" x="190" y="61" text-anchor="middle">UserEventCacheRepository</text>
-  <text class="mono" x="18" y="108">+strategy: WRITE_BEHIND</text>
-<text class="mono" x="18" y="129">+put(id: Long, event: UserEventRecord) void</text>
-<text class="mono" x="18" y="150">+flush() void</text>
-</g>
+  <g data-card="RedissonConfig" data-x="1080" data-y="220" data-width="300" data-height="112">
+    <rect class="card" x="1080" y="220" width="300" height="112" rx="14" fill="#ffffff" stroke="#a36f3e"/>
+    <path class="header" d="M1080,267 L1080,234 Q1080,220 1094,220 L1366,220 Q1380,220 1380,234 L1380,267 Z" fill="#fff5e8"/>
+    <text class="stereo" x="1230" y="244" text-anchor="middle">&lt;&lt;configuration&gt;&gt;</text>
+    <text class="cardTitle" x="1230" y="266" text-anchor="middle">RedissonConfig</text>
+    <text class="detail" x="1102" y="292">Redis Testcontainers launcher</text>
+    <text class="detail" x="1102" y="314">RedissonClient bean</text>
+  </g>
+
+  <g data-card="UserCacheRepository" data-x="118" data-y="482" data-width="390" data-height="166">
+    <rect class="card" x="118" y="482" width="390" height="166" rx="14" fill="#ffffff" stroke="#4f86c6"/>
+    <path class="header" d="M118,529 L118,496 Q118,482 132,482 L494,482 Q508,482 508,496 L508,529 Z" fill="#eef6fc"/>
+    <text class="stereo" x="313" y="506" text-anchor="middle">&lt;&lt;repository&gt;&gt;</text>
+    <text class="cardTitle" x="313" y="528" text-anchor="middle">UserCacheRepository</text>
+    <text class="detail" x="142" y="558">K: Long, E: UserRecord</text>
+    <text class="detail" x="142" y="582">READ_WRITE_THROUGH_WITH_NEAR_CACHE</text>
+    <text class="detail" x="142" y="606">deleteFromDBOnInvalidate = false</text>
+    <text class="small" x="142" y="630">overrides table, extractId, toEntity, insert/update</text>
+  </g>
+
+  <g data-card="UserCredentialsCacheRepository" data-x="604" data-y="482" data-width="390" data-height="166">
+    <rect class="card" x="604" y="482" width="390" height="166" rx="14" fill="#ffffff" stroke="#a85f7f"/>
+    <path class="header" d="M604,529 L604,496 Q604,482 618,482 L980,482 Q994,482 994,496 L994,529 Z" fill="#f8eef4"/>
+    <text class="stereo" x="799" y="506" text-anchor="middle">&lt;&lt;repository&gt;&gt;</text>
+    <text class="cardTitle" x="799" y="528" text-anchor="middle">UserCredentialsCacheRepository</text>
+    <text class="detail" x="628" y="558">K: String, E: UserCredentialsRecord</text>
+    <text class="detail" x="628" y="582">READ_ONLY_WITH_NEAR_CACHE</text>
+    <text class="detail" x="628" y="606">insertEntity / updateEntity are no-op</text>
+    <text class="small" x="628" y="630">read-only credential and code-table style cache</text>
+  </g>
+
+  <g data-card="UserEventCacheRepository" data-x="1090" data-y="482" data-width="390" data-height="166">
+    <rect class="card" x="1090" y="482" width="390" height="166" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+    <path class="header" d="M1090,529 L1090,496 Q1090,482 1104,482 L1466,482 Q1480,482 1480,496 L1480,529 Z" fill="#eef8f7"/>
+    <text class="stereo" x="1285" y="506" text-anchor="middle">&lt;&lt;repository&gt;&gt;</text>
+    <text class="cardTitle" x="1285" y="528" text-anchor="middle">UserEventCacheRepository</text>
+    <text class="detail" x="1114" y="558">K: Long, E: UserEventRecord</text>
+    <text class="detail" x="1114" y="582">WRITE_BEHIND_WITH_NEAR_CACHE</text>
+    <text class="detail" x="1114" y="606">put / putAll buffer event writes</text>
+    <text class="small" x="1114" y="630">batch insert/update maps UserEventTable columns</text>
+  </g>
+
+  <g data-card="UserController" data-x="158" data-y="838" data-width="310" data-height="118">
+    <rect class="card" x="158" y="838" width="310" height="118" rx="14" fill="#ffffff" stroke="#4f86c6"/>
+    <path class="header" d="M158,884 L158,852 Q158,838 172,838 L454,838 Q468,838 468,852 L468,884 Z" fill="#eef6fc"/>
+    <text class="stereo" x="313" y="862" text-anchor="middle">&lt;&lt;rest controller&gt;&gt;</text>
+    <text class="cardTitle" x="313" y="884" text-anchor="middle">UserController</text>
+    <text class="detail" x="180" y="914">/users</text>
+    <text class="small" x="180" y="936">get, getAll, put, invalidate</text>
+  </g>
+
+  <g data-card="UserCredentialsController" data-x="644" data-y="838" data-width="310" data-height="118">
+    <rect class="card" x="644" y="838" width="310" height="118" rx="14" fill="#ffffff" stroke="#a85f7f"/>
+    <path class="header" d="M644,884 L644,852 Q644,838 658,838 L940,838 Q954,838 954,852 L954,884 Z" fill="#f8eef4"/>
+    <text class="stereo" x="799" y="862" text-anchor="middle">&lt;&lt;rest controller&gt;&gt;</text>
+    <text class="cardTitle" x="799" y="884" text-anchor="middle">UserCredentialsController</text>
+    <text class="detail" x="666" y="914">/user-credentials</text>
+    <text class="small" x="666" y="936">read-only get, getAll, invalidate</text>
+  </g>
+
+  <g data-card="UserEventController" data-x="1130" data-y="838" data-width="310" data-height="118">
+    <rect class="card" x="1130" y="838" width="310" height="118" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+    <path class="header" d="M1130,884 L1130,852 Q1130,838 1144,838 L1426,838 Q1440,838 1440,852 L1440,884 Z" fill="#eef8f7"/>
+    <text class="stereo" x="1285" y="862" text-anchor="middle">&lt;&lt;rest controller&gt;&gt;</text>
+    <text class="cardTitle" x="1285" y="884" text-anchor="middle">UserEventController</text>
+    <text class="detail" x="1152" y="914">/user-events</text>
+    <text class="small" x="1152" y="936">insert and bulk putAll event records</text>
+  </g>
+
+  <g id="inheritance">
+    <path class="inherit" data-connector="inherit" d="M313 482 L313 418 Q313 392 339 392 L594 392 Q620 392 620 366 L620 352"/>
+    <polygon class="head" points="620,332 607,354 633,354"/>
+    <path class="inherit" data-connector="inherit" d="M799 482 L799 418 Q799 392 773 392 L724 392 Q705 392 705 366 L705 352"/>
+    <polygon class="head" points="705,332 692,354 718,354"/>
+    <path class="inherit" data-connector="inherit" d="M1285 482 L1285 418 Q1285 392 1259 392 L842 392 Q820 392 820 366 L820 352"/>
+    <polygon class="head" points="820,332 807,354 833,354"/>
+  </g>
+
+  <g id="dependencies">
+    <path class="use" data-connector="use" d="M313 838 L313 648" stroke="#4f86c6"/>
+    <polyline class="openHead" points="313,648 304,662 322,662" stroke="#4f86c6"/>
+    <path class="use" data-connector="use" d="M799 838 L799 648" stroke="#a85f7f"/>
+    <polyline class="openHead" points="799,648 790,662 808,662" stroke="#a85f7f"/>
+    <path class="use" data-connector="use" d="M1285 838 L1285 648" stroke="#4f8f8b"/>
+    <polyline class="openHead" points="1285,648 1276,662 1294,662" stroke="#4f8f8b"/>
+
+  </g>
+
+  <rect x="112" y="1038" width="1376" height="34" rx="12" fill="#fbfdff" stroke="#d7e3ed" stroke-width="2"/>
+  <text class="foot" x="800" y="1061" text-anchor="middle">Hollow triangles show inheritance from AbstractR2dbcRedissonRepository; dashed arrows show controller/repository dependencies with solid open heads.</text>
 </svg>

@@ -1,79 +1,201 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1085" height="1458" viewBox="0 0 1085 1458" role="img" aria-label="Cache Hit/Miss Processing Flow">
-<defs>
-<filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
-<marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-<style>.canvas{fill:#F7F9FC}.frame{fill:#fff;stroke:#D8E0EA;stroke-width:1.5}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:39px;font-weight:400;fill:#102033}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;font-weight:400;fill:#536273}.smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:22px;font-weight:400;fill:#102033}.strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}.card{stroke-width:2;filter:url(#shadow)}.line{stroke:#5D6B7A;stroke-width:2.2;fill:none;marker-end:url(#openArrow)}.dashed{stroke:#5D6B7A;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}.lifeline{stroke:#B7C2D1;stroke-width:1.8;stroke-dasharray:8 9}.note{fill:#fff;opacity:.97}</style>
-</defs>
-<rect class="canvas" width="1085" height="1458"/>
-<rect class="frame" x="24" y="24" width="1037" height="1402" rx="22"/>
-<text class="title" x="58" y="76">Cache Hit/Miss Processing Flow</text>
-<text class="subtitle" x="62" y="106">Compact sequence flow with reduced outer and inner whitespace</text>
-<rect class="card" x="50.0" y="156" width="220" height="66" rx="16" fill="#E8F3FF" stroke="#5B8DEF"/>
-<text class="smallLabel participant" x="160.0" y="196" text-anchor="middle">Application</text>
-<line class="lifeline" x1="160.0" y1="250" x2="160.0" y2="1396"/>
-<rect class="card" x="305.0" y="156" width="220" height="66" rx="16" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel participant" x="415.0" y="196" text-anchor="middle">L1 Cache (Caffeine)</text>
-<line class="lifeline" x1="415.0" y1="250" x2="415.0" y2="1396"/>
-<rect class="card" x="560.0" y="156" width="220" height="66" rx="16" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel participant" x="670.0" y="196" text-anchor="middle">L2 Cache (Redis)</text>
-<line class="lifeline" x1="670.0" y1="250" x2="670.0" y2="1396"/>
-<rect class="card" x="815.0" y="156" width="220" height="66" rx="16" fill="#FDECEF" stroke="#DC6B82"/>
-<text class="smallLabel participant" x="925.0" y="196" text-anchor="middle">Primary DB (R2DBC)</text>
-<line class="lifeline" x1="925.0" y1="250" x2="925.0" y2="1396"/>
-<path class="line" d="M160.0 292.0 L415.0 292.0" data-connector="line"/>
-<rect class="note label" x="207.5" y="260.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="287.5" y="280.0" text-anchor="middle">1. get(key)</text>
-<path class="dashed" d="M415.0 366.0 L160.0 366.0" data-connector="dashed"/>
-<rect class="note label" x="169.1" y="334.0" width="236.8" height="28" rx="9"/>
-<text class="strong labelText" x="287.5" y="354.0" text-anchor="middle">3. Return cached value (immediate)</text>
-<path class="dashed" d="M415.0 440.0 L160.0 440.0" data-connector="dashed"/>
-<rect class="note label" x="207.5" y="408.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="287.5" y="428.0" text-anchor="middle">5. null</text>
-<path class="line" d="M160.0 514.0 L670.0 514.0" data-connector="line"/>
-<rect class="note label" x="335.0" y="482.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="415.0" y="502.0" text-anchor="middle">6. get(key)</text>
-<path class="dashed" d="M670.0 588.0 L160.0 588.0" data-connector="dashed"/>
-<rect class="note label" x="333.8" y="556.0" width="162.4" height="28" rx="9"/>
-<text class="strong labelText" x="415.0" y="576.0" text-anchor="middle">8. Return cached value</text>
-<path class="line" d="M160.0 662.0 L415.0 662.0" data-connector="line"/>
-<rect class="note label" x="207.5" y="630.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="287.5" y="650.0" text-anchor="middle">9. put(key, value)</text>
-<path class="dashed" d="M670.0 736.0 L160.0 736.0" data-connector="dashed"/>
-<rect class="note label" x="335.0" y="704.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="415.0" y="724.0" text-anchor="middle">11. null</text>
-<path class="line" d="M160.0 810.0 L925.0 810.0" data-connector="line"/>
-<rect class="note label" x="414.8" y="778.0" width="255.4" height="28" rx="9"/>
-<text class="strong labelText" x="542.5" y="798.0" text-anchor="middle">12. SELECT (R2DBC suspendTransaction)</text>
-<path class="dashed" d="M925.0 884.0 L160.0 884.0" data-connector="dashed"/>
-<rect class="note label" x="462.5" y="852.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="542.5" y="872.0" text-anchor="middle">13. Query result</text>
-<path class="line" d="M160.0 958.0 L670.0 958.0" data-connector="line"/>
-<rect class="note label" x="327.6" y="926.0" width="174.8" height="28" rx="9"/>
-<text class="strong labelText" x="415.0" y="946.0" text-anchor="middle">14. put(key, value, ttl)</text>
-<path class="line" d="M160.0 1032.0 L415.0 1032.0" data-connector="line"/>
-<rect class="note label" x="207.5" y="1000.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="287.5" y="1020.0" text-anchor="middle">15. put(key, value)</text>
-<path class="line" d="M160.0 1106.0 L925.0 1106.0" data-connector="line"/>
-<rect class="note label" x="442.7" y="1074.0" width="199.6" height="28" rx="9"/>
-<text class="strong labelText" x="542.5" y="1094.0" text-anchor="middle">16. INSERT / UPDATE / DELETE</text>
-<path class="dashed" d="M925.0 1180.0 L160.0 1180.0" data-connector="dashed"/>
-<rect class="note label" x="462.5" y="1148.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="542.5" y="1168.0" text-anchor="middle">17. Done</text>
-<path class="line" d="M160.0 1254.0 L670.0 1254.0" data-connector="line"/>
-<rect class="note label" x="335.0" y="1222.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="415.0" y="1242.0" text-anchor="middle">18. evict(key)</text>
-<path class="line" d="M160.0 1328.0 L415.0 1328.0" data-connector="line"/>
-<rect class="note label" x="207.5" y="1296.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="287.5" y="1316.0" text-anchor="middle">19. evict(key)</text>
-<rect class="activation" x="154.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="409.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="664.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1840" height="1300" viewBox="0 0 1840 1300" role="img" aria-label="Read-through cache hit and miss sequence for the high-performance R2DBC workshop">
+  <defs>
+    <filter id="softShadow" x="-8%" y="-10%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#25384d" flood-opacity="0.10"/>
+    </filter>
 
-<!-- audit badge labels: visible sequence numbering and message pill samples -->
-<g aria-label="sequence message labels">
-<rect x="58" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="76" y="140" class="num" text-anchor="middle">1</text>
-<rect x="102" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="120" y="140" class="num" text-anchor="middle">2</text>
-</g>
+    <marker id="arrowBlue" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#3f83b8" stroke="#3f83b8" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowGreen" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowAmber" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#a36f3e" stroke="#a36f3e" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+    <marker id="arrowTeal" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    </marker>
+
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fffefa;stroke:#d7e3ed;stroke-width:2}
+      .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:44px;fill:#192538;font-weight:400}
+      .subtitle,.foot{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:17px;font-weight:700;fill:#556678}
+      .participantTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;fill:#192538;font-weight:400}
+      .participantRole,.role{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;font-weight:700;fill:#556678}
+      .labelText{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:700;fill:#40566e}
+      .num{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:16px;font-weight:700}
+      .altTitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:700;fill:#6f7d89}
+      .card{stroke-width:2.4;filter:url(#softShadow)}
+      .lifeline{stroke:#9fb1c2;stroke-width:2.1;stroke-dasharray:8 10}
+      .activation{fill:#f9fffb;stroke:#7ca985;stroke-width:2.2}
+      .connector{fill:none;stroke-width:3.1;stroke-linecap:round;stroke-linejoin:round}
+      .blue{stroke:#3f83b8;marker-end:url(#arrowBlue)}
+      .green{stroke:#6f8f52;marker-end:url(#arrowGreen)}
+      .amber{stroke:#a36f3e;marker-end:url(#arrowAmber)}
+      .teal{stroke:#4f8f8b;marker-end:url(#arrowTeal)}
+      .return{stroke-dasharray:10 8}
+      .label{fill:#fffefa;stroke-width:2}
+      .labelBlue{stroke:#abd0e9}
+      .labelGreen{stroke:#b9d5aa}
+      .labelAmber{stroke:#d7b37e}
+      .labelTeal{stroke:#a7d0cc}
+      .pillBlue{fill:#f9fcff;stroke:#74afd7}
+      .pillGreen{fill:#fbfff7;stroke:#91b576}
+      .pillAmber{fill:#fff9ee;stroke:#bd8b50}
+      .pillTeal{fill:#f7fffe;stroke:#79b8b3}
+      .altFrame{fill:none;stroke:#86a2b4;stroke-width:3.2;stroke-dasharray:11 10}
+      .altSplit{stroke:#a9bbc9;stroke-width:2;stroke-dasharray:8 8}
+    </style>
+  </defs>
+
+  <rect class="canvas" width="1840" height="1300"/>
+  <rect class="frame" x="32" y="32" width="1776" height="1236" rx="24"/>
+
+  <text class="title" x="82" y="96">Read-Through Cache Hit / Miss Sequence</text>
+  <text class="subtitle" x="86" y="132">Spring WebFlux suspend endpoint delegates to AbstractR2dbcRedissonRepository; Near Cache and Redis are populated only after a miss.</text>
+
+  <g id="participants">
+    <rect class="card" x="70" y="180" width="220" height="88" rx="13" fill="#ffffff" stroke="#5d7486"/>
+    <text class="participantTitle participant" x="180" y="222" text-anchor="middle">HTTP Client</text>
+    <text class="participantRole role" x="180" y="248" text-anchor="middle">GET /users/{id}</text>
+    <line class="lifeline" x1="180" y1="306" x2="180" y2="1192"/>
+
+    <rect class="card" x="340" y="180" width="235" height="88" rx="13" fill="#f7fcff" stroke="#5d7486"/>
+    <text class="participantTitle participant" x="457.5" y="222" text-anchor="middle">UserController</text>
+    <text class="participantRole role" x="457.5" y="248" text-anchor="middle">suspend handler</text>
+    <line class="lifeline" x1="457.5" y1="306" x2="457.5" y2="1192"/>
+
+    <rect class="card" x="635" y="180" width="255" height="88" rx="13" fill="#f8fcf7" stroke="#5d7486"/>
+    <text class="participantTitle participant" x="762.5" y="222" text-anchor="middle">UserCacheRepository</text>
+    <text class="participantRole role" x="762.5" y="248" text-anchor="middle">read / write through</text>
+    <line class="lifeline" x1="762.5" y1="306" x2="762.5" y2="1192"/>
+
+    <rect class="card" x="955" y="180" width="220" height="88" rx="13" fill="#f8fff2" stroke="#5d7486"/>
+    <text class="participantTitle participant" x="1065" y="222" text-anchor="middle">Near Cache</text>
+    <text class="participantRole role" x="1065" y="248" text-anchor="middle">Caffeine</text>
+    <line class="lifeline" x1="1065" y1="306" x2="1065" y2="1192"/>
+
+    <rect class="card" x="1245" y="180" width="235" height="88" rx="13" fill="#fff9ef" stroke="#5d7486"/>
+    <text class="participantTitle participant" x="1362.5" y="222" text-anchor="middle">Redis MapCache</text>
+    <text class="participantRole role" x="1362.5" y="248" text-anchor="middle">Redisson</text>
+    <line class="lifeline" x1="1362.5" y1="306" x2="1362.5" y2="1192"/>
+
+    <rect class="card" x="1540" y="180" width="220" height="88" rx="13" fill="#fff7f7" stroke="#5d7486"/>
+    <text class="participantTitle participant" x="1650" y="222" text-anchor="middle">H2 R2DBC DB</text>
+    <text class="participantRole role" x="1650" y="248" text-anchor="middle">UserTable</text>
+    <line class="lifeline" x1="1650" y1="306" x2="1650" y2="1192"/>
+  </g>
+
+  <g id="activations">
+    <rect class="activation" x="174" y="345" width="12" height="830" rx="5"/>
+    <rect class="activation" x="451.5" y="345" width="12" height="830" rx="5"/>
+    <rect class="activation" x="756.5" y="420" width="12" height="690" rx="5"/>
+    <rect class="activation" x="1059" y="495" width="12" height="570" rx="5"/>
+    <rect class="activation" x="1356.5" y="755" width="12" height="280" rx="5"/>
+    <rect class="activation" x="1644" y="875" width="12" height="80" rx="5"/>
+  </g>
+
+  <g id="messages">
+    <path class="connector blue" d="M188 350 L449.5 350" data-connector="call"/>
+    <rect class="label labelBlue" x="122" y="308" width="280" height="34" rx="17"/>
+    <circle class="pillBlue" cx="150" cy="325" r="17" stroke-width="2"/>
+    <text class="num" x="150" y="331" text-anchor="middle" fill="#3f83b8">1</text>
+    <text class="labelText" x="278" y="331" text-anchor="middle">GET /users/{id}</text>
+
+    <path class="connector blue" d="M465.5 425 L754.5 425" data-connector="call"/>
+    <rect class="label labelBlue" x="503" y="383" width="260" height="34" rx="17"/>
+    <circle class="pillBlue" cx="531" cy="400" r="17" stroke-width="2"/>
+    <text class="num" x="531" y="406" text-anchor="middle" fill="#3f83b8">2</text>
+    <text class="labelText" x="639" y="406" text-anchor="middle">repository.get(id)</text>
+
+    <path class="connector green" d="M770.5 500 L1057 500" data-connector="call"/>
+    <rect class="label labelGreen" x="817" y="458" width="242" height="34" rx="17"/>
+    <circle class="pillGreen" cx="845" cy="475" r="17" stroke-width="2"/>
+    <text class="num" x="845" y="481" text-anchor="middle" fill="#6f8f52">3</text>
+    <text class="labelText" x="946" y="481" text-anchor="middle">check local key</text>
+  </g>
+
+  <g id="alt-cache-hit-miss">
+    <rect class="altFrame alt" x="94" y="535" width="1652" height="555" rx="20"/>
+    <text class="altTitle" x="128" y="566">alt near cache result</text>
+    <line class="altSplit branchDivider" x1="116" y1="700" x2="1722" y2="700"/>
+    <rect class="label labelGreen" x="220" y="587" width="150" height="30" rx="15"/>
+    <text class="labelText" x="295" y="608" text-anchor="middle">cache hit</text>
+
+    <path class="connector green return" d="M1057 620 L770.5 620" data-connector="return"/>
+    <rect class="label labelGreen" x="812" y="578" width="244" height="34" rx="17"/>
+    <circle class="pillGreen" cx="840" cy="595" r="17" stroke-width="2"/>
+    <text class="num" x="840" y="601" text-anchor="middle" fill="#6f8f52">4</text>
+    <text class="labelText" x="944" y="601" text-anchor="middle">UserRecord in memory</text>
+
+    <path class="connector teal return" d="M754.5 675 L465.5 675" data-connector="return"/>
+    <rect class="label labelTeal" x="527" y="633" width="196" height="34" rx="17"/>
+    <circle class="pillTeal" cx="555" cy="650" r="17" stroke-width="2"/>
+    <text class="num" x="555" y="656" text-anchor="middle" fill="#4f8f8b">5</text>
+    <text class="labelText" x="635" y="656" text-anchor="middle">return record</text>
+
+    <rect class="label labelAmber" x="220" y="720" width="150" height="30" rx="15"/>
+    <text class="labelText" x="295" y="741" text-anchor="middle">cache miss</text>
+
+    <path class="connector green return" d="M1057 755 L770.5 755" data-connector="return"/>
+    <rect class="label labelGreen" x="902" y="713" width="130" height="34" rx="17"/>
+    <circle class="pillGreen" cx="930" cy="730" r="17" stroke-width="2"/>
+    <text class="num" x="930" y="736" text-anchor="middle" fill="#6f8f52">6</text>
+    <text class="labelText" x="985" y="736" text-anchor="middle">null</text>
+
+    <path class="connector amber" d="M770.5 815 L1354.5 815" data-connector="call"/>
+    <rect class="label labelAmber" x="958" y="773" width="270" height="34" rx="17"/>
+    <circle class="pillAmber" cx="986" cy="790" r="17" stroke-width="2"/>
+    <text class="num" x="986" y="796" text-anchor="middle" fill="#a36f3e">7</text>
+    <text class="labelText" x="1093" y="796" text-anchor="middle">get exposed:...:users:id</text>
+
+    <path class="connector amber return" d="M1354.5 870 L770.5 870" data-connector="return"/>
+    <rect class="label labelAmber" x="1088" y="828" width="130" height="34" rx="17"/>
+    <circle class="pillAmber" cx="1116" cy="845" r="17" stroke-width="2"/>
+    <text class="num" x="1116" y="851" text-anchor="middle" fill="#a36f3e">8</text>
+    <text class="labelText" x="1170" y="851" text-anchor="middle">miss</text>
+
+    <path class="connector amber" d="M770.5 925 L1642 925" data-connector="call"/>
+    <rect class="label labelAmber" x="1137" y="883" width="245" height="34" rx="17"/>
+    <circle class="pillAmber" cx="1165" cy="900" r="17" stroke-width="2"/>
+    <text class="num" x="1165" y="906" text-anchor="middle" fill="#a36f3e">9</text>
+    <text class="labelText" x="1265" y="906" text-anchor="middle">SELECT UserTable row</text>
+
+    <path class="connector teal return" d="M1642 970 L770.5 970" data-connector="return"/>
+    <rect class="label labelTeal" x="1132" y="928" width="250" height="34" rx="17"/>
+    <circle class="pillTeal" cx="1160" cy="945" r="17" stroke-width="2"/>
+    <text class="num" x="1160" y="951" text-anchor="middle" fill="#4f8f8b">10</text>
+    <text class="labelText" x="1268" y="951" text-anchor="middle">ResultRow to UserRecord</text>
+
+    <path class="connector green" d="M770.5 1015 L1354.5 1015" data-connector="call"/>
+    <rect class="label labelGreen" x="957" y="973" width="270" height="34" rx="17"/>
+    <circle class="pillGreen" cx="985" cy="990" r="17" stroke-width="2"/>
+    <text class="num" x="985" y="996" text-anchor="middle" fill="#6f8f52">11</text>
+    <text class="labelText" x="1095" y="996" text-anchor="middle">store Redis MapCache</text>
+
+    <path class="connector green" d="M770.5 1060 L1057 1060" data-connector="call"/>
+    <rect class="label labelGreen" x="808" y="1018" width="226" height="34" rx="17"/>
+    <circle class="pillGreen" cx="836" cy="1035" r="17" stroke-width="2"/>
+    <text class="num" x="836" y="1041" text-anchor="middle" fill="#6f8f52">12</text>
+    <text class="labelText" x="933" y="1041" text-anchor="middle">warm Near Cache</text>
+  </g>
+
+  <g id="final-return">
+    <path class="connector teal return" d="M754.5 1130 L465.5 1130" data-connector="return"/>
+    <rect class="label labelTeal" x="520" y="1088" width="206" height="34" rx="17"/>
+    <circle class="pillTeal" cx="548" cy="1105" r="17" stroke-width="2"/>
+    <text class="num" x="548" y="1111" text-anchor="middle" fill="#4f8f8b">13</text>
+    <text class="labelText" x="636" y="1111" text-anchor="middle">return record</text>
+
+    <path class="connector teal return" d="M449.5 1175 L188 1175" data-connector="return"/>
+    <rect class="label labelTeal" x="231" y="1133" width="196" height="34" rx="17"/>
+    <circle class="pillTeal" cx="259" cy="1150" r="17" stroke-width="2"/>
+    <text class="num" x="259" y="1156" text-anchor="middle" fill="#4f8f8b">14</text>
+    <text class="labelText" x="338" y="1156" text-anchor="middle">HTTP 200 body</text>
+  </g>
+
+  <rect x="96" y="1220" width="1648" height="34" rx="12" fill="#fbfdff" stroke="#d7e3ed" stroke-width="2"/>
+  <text class="foot" x="920" y="1243" text-anchor="middle">First miss populates Near Cache and Redis from H2; later hits return before database fallback.</text>
 </svg>

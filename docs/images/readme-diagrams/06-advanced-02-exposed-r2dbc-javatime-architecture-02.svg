@@ -1,110 +1,135 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1378" height="858" viewBox="0 0 1378 858" role="img" aria-label="Java Time Type to DB Mapping Decision Flow">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1378" height="858"/>
-<rect class="frame" x="32" y="28" width="1314" height="802" rx="28"/>
-<text class="title" x="66" y="82">Java Time Type to DB Mapping Decision Flow</text>
-<text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M1040 552 C1040 635 839 635 839 718" data-connector="line"/>
-<path class="line" d="M706 552 C706 635 839 635 839 718" data-connector="line"/>
-<path class="line" d="M672 552 C672 635 539 635 539 718" data-connector="line"/>
-<path class="line" d="M1040 386 C1040 552 839 552 839 718" data-connector="line"/>
-<path class="line" d="M856 446 C856 552 689 552 689 658" data-connector="line"/>
-<path class="line" d="M522 446 C522 552 689 552 689 658" data-connector="line"/>
-<path class="line" d="M338 386 C338 552 539 552 539 718" data-connector="line"/>
-<path class="line" d="M338 552 C338 552 1040 552 1040 552" data-connector="line"/>
-<path class="line" d="M338 552 C338 552 706 552 706 552" data-connector="line"/>
-<path class="line" d="M1040 220 C1040 386 672 386 672 552" data-connector="line"/>
-<path class="line" d="M1040 220 C1040 386 338 386 338 552" data-connector="line"/>
-<path class="line" d="M1190 280 C1190 303 1190 303 1190 326" data-connector="line"/>
-<path class="line" d="M1040 220 C1040 303 1006 303 1006 386" data-connector="line"/>
-<path class="line" d="M706 220 C706 303 672 303 672 386" data-connector="line"/>
-<path class="line" d="M706 220 C706 303 338 303 338 386" data-connector="line"/>
-<path class="line" d="M672 220 C672 220 1040 220 1040 220" data-connector="line"/>
-<path class="line" d="M672 220 C672 220 706 220 706 220" data-connector="line"/>
-<path class="line" d="M338 220 C338 220 372 220 372 220" data-connector="line"/>
-<g transform="translate(48,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Decide data</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">representation</text>
-</g>
-<g transform="translate(382,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Is timezone</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">information needed?</text>
-</g>
-<g transform="translate(716,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">Does DB support</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">timestamp With Time</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">Zone?</text>
-</g>
-<g transform="translate(1050,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">What kind of date?</text>
-</g>
-<g transform="translate(48,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">timestamp With Time</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">Zone OffsetDateTime</text>
-</g>
-<g transform="translate(382,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">Store ZoneId</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">separately in</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">VARCHAR timestamp -</text>
-</g>
-<g transform="translate(716,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">date LocalDate</text>
-</g>
-<g transform="translate(1050,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">time LocalTime</text>
-</g>
-<g transform="translate(48,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Nanosecond precision</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">needed?</text>
-</g>
-<g transform="translate(382,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">timestamp Instant</text>
-</g>
-<g transform="translate(716,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">datetime</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">LocalDateTime</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">H2-only high</text>
-</g>
-<g transform="translate(1050,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">datetime</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">LocalDateTime Watch</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">for microsecond</text>
-</g>
-<g transform="translate(549,668)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">DB column definition</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">complete</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 880" width="1320" height="880" role="img" aria-label="Java Time type to R2DBC database mapping decision flow">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12" />
+    </filter>
+    <marker id="arrow-blue" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-green" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-brown" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#a66a3f" stroke="#a66a3f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-teal" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-rose" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#a85f7f" stroke="#a85f7f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}
+      .card{filter:url(#shadow)}
+      .header{opacity:.96}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:32px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:15px;letter-spacing:.08em;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:17px;fill:#1e293b}
+      .connector{fill:none;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.2}
+    </style>
+  </defs>
+  <rect width="1320" height="880" class="canvas" />
+  <rect x="22" y="22" width="1276" height="836" rx="18" class="frame" />
+  <text x="58" y="70" class="title" text-anchor="start">Java Time Type to R2DBC Mapping Decision Flow</text>
+  <text x="58" y="100" class="subtitle" text-anchor="start">Choose a column by value semantics, then apply defaults, literals, timezone, and precision checks from the JavaTime tests.</text>
+
+  <rect x="48" y="132" width="1224" height="226" rx="16" class="lane" />
+  <text x="72" y="162" class="laneTitle" text-anchor="start">COLUMN TYPE SELECTION</text>
+  <rect x="48" y="382" width="1224" height="184" rx="16" class="lane" />
+  <text x="72" y="412" class="laneTitle" text-anchor="start">QUERY AND DEFAULT EXPRESSIONS</text>
+  <rect x="48" y="590" width="1224" height="178" rx="16" class="lane" />
+  <text x="72" y="620" class="laneTitle" text-anchor="start">DIALECT CONTRACTS</text>
+
+  <g data-card="Need Shape" data-x="82" data-y="198" data-width="220" data-height="106">
+    <rect x="82" y="198" width="220" height="106" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card" />
+    <path class="header" d="M82,240 L82,212 Q82,198 96,198 L288,198 Q302,198 302,212 L302,240 Z" fill="#eef5fa" />
+    <text x="192" y="216" class="tiny" text-anchor="middle">&lt;&lt;decision&gt;&gt;</text>
+    <text x="192" y="235" class="cardTitle" text-anchor="middle">Value Shape</text>
+    <text x="102" y="260" class="detail" text-anchor="start">What does the domain store?</text>
+    <text x="102" y="279" class="detail" text-anchor="start">calendar, instant, interval</text>
+  </g>
+  <g data-card="Calendar Values" data-x="362" data-y="198" data-width="230" data-height="106">
+    <rect x="362" y="198" width="230" height="106" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card" />
+    <path class="header" d="M362,240 L362,212 Q362,198 376,198 L578,198 Q592,198 592,212 L592,240 Z" fill="#f1f6ec" />
+    <text x="477" y="216" class="tiny" text-anchor="middle">&lt;&lt;columns&gt;&gt;</text>
+    <text x="477" y="235" class="cardTitle" text-anchor="middle">Calendar Values</text>
+    <text x="382" y="260" class="detail" text-anchor="start">LocalDate -> date()</text>
+    <text x="382" y="279" class="detail" text-anchor="start">LocalTime -> time()</text>
+    <text x="382" y="298" class="detail" text-anchor="start">LocalDateTime -> datetime()</text>
+  </g>
+  <g data-card="Timeline Values" data-x="652" data-y="198" data-width="230" data-height="106">
+    <rect x="652" y="198" width="230" height="106" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card" />
+    <path class="header" d="M652,240 L652,212 Q652,198 666,198 L868,198 Q882,198 882,212 L882,240 Z" fill="#f5eee4" />
+    <text x="767" y="216" class="tiny" text-anchor="middle">&lt;&lt;columns&gt;&gt;</text>
+    <text x="767" y="235" class="cardTitle" text-anchor="middle">Timeline Values</text>
+    <text x="672" y="260" class="detail" text-anchor="start">Instant -> timestamp()</text>
+    <text x="672" y="279" class="detail" text-anchor="start">OffsetDateTime -> tz column</text>
+  </g>
+  <g data-card="Elapsed Values" data-x="942" data-y="198" data-width="230" data-height="106">
+    <rect x="942" y="198" width="230" height="106" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card" />
+    <path class="header" d="M942,240 L942,212 Q942,198 956,198 L1158,198 Q1172,198 1172,212 L1172,240 Z" fill="#eef7f6" />
+    <text x="1057" y="216" class="tiny" text-anchor="middle">&lt;&lt;columns&gt;&gt;</text>
+    <text x="1057" y="235" class="cardTitle" text-anchor="middle">Elapsed Values</text>
+    <text x="962" y="260" class="detail" text-anchor="start">Duration -> duration()</text>
+    <text x="962" y="279" class="detail" text-anchor="start">stored as interval-compatible</text>
+  </g>
+  <path class="connector" data-connector="shape-calendar" d="M302 251 L362 251" stroke="#6f8f52" marker-end="url(#arrow-green)" />
+  <path class="connector" data-connector="calendar-timeline" d="M592 251 L652 251" stroke="#a66a3f" marker-end="url(#arrow-brown)" />
+  <path class="connector" data-connector="timeline-elapsed" d="M882 251 L942 251" stroke="#4f8f8b" marker-end="url(#arrow-teal)" />
+
+  <g data-card="Defaults" data-x="112" data-y="448" data-width="270" data-height="86">
+    <rect x="112" y="448" width="270" height="86" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card" />
+    <path class="header" d="M112,490 L112,462 Q112,448 126,448 L368,448 Q382,448 382,462 L382,490 Z" fill="#eef5fa" />
+    <text x="247" y="466" class="tiny" text-anchor="middle">&lt;&lt;Ex02_Defaults&gt;&gt;</text>
+    <text x="247" y="485" class="cardTitle" text-anchor="middle">Defaults</text>
+    <text x="132" y="510" class="detail" text-anchor="start">clientDefault / defaultExpression</text>
+  </g>
+  <g data-card="Literals" data-x="502" data-y="448" data-width="270" data-height="86">
+    <rect x="502" y="448" width="270" height="86" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card" />
+    <path class="header" d="M502,490 L502,462 Q502,448 516,448 L758,448 Q772,448 772,462 L772,490 Z" fill="#f5eee4" />
+    <text x="637" y="466" class="tiny" text-anchor="middle">&lt;&lt;Ex03_DateTimeLiteral&gt;&gt;</text>
+    <text x="637" y="485" class="cardTitle" text-anchor="middle">Typed Literals</text>
+    <text x="522" y="510" class="detail" text-anchor="start">dateLiteral / timestampLiteral</text>
+  </g>
+  <g data-card="R2DBC CRUD" data-x="892" data-y="448" data-width="270" data-height="86">
+    <rect x="892" y="448" width="270" height="86" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card" />
+    <path class="header" d="M892,490 L892,462 Q892,448 906,448 L1148,448 Q1162,448 1162,462 L1162,490 Z" fill="#f1f6ec" />
+    <text x="1027" y="466" class="tiny" text-anchor="middle">&lt;&lt;Ex01 / Ex04&gt;&gt;</text>
+    <text x="1027" y="485" class="cardTitle" text-anchor="middle">R2DBC CRUD</text>
+    <text x="912" y="510" class="detail" text-anchor="start">insert, update, select, functions</text>
+  </g>
+  <path class="connector" data-connector="defaults-literals" d="M382 491 L502 491" stroke="#a66a3f" marker-end="url(#arrow-brown)" />
+  <path class="connector" data-connector="literals-crud" d="M772 491 L892 491" stroke="#6f8f52" marker-end="url(#arrow-green)" />
+
+  <g data-card="Timezone Rules" data-x="112" data-y="654" data-width="290" data-height="82">
+    <rect x="112" y="654" width="290" height="82" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card" />
+    <path class="header" d="M112,694 L112,668 Q112,654 126,654 L388,654 Q402,654 402,668 L402,694 Z" fill="#f5eee4" />
+    <text x="257" y="672" class="tiny" text-anchor="middle">&lt;&lt;timestampWithTimeZone&gt;&gt;</text>
+    <text x="257" y="691" class="cardTitle" text-anchor="middle">Timezone Rules</text>
+    <text x="132" y="716" class="detail" text-anchor="start">PG/MySQL normalize; H2 preserves</text>
+  </g>
+  <g data-card="Precision Rules" data-x="515" data-y="654" data-width="290" data-height="82">
+    <rect x="515" y="654" width="290" height="82" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card" />
+    <path class="header" d="M515,694 L515,668 Q515,654 529,654 L791,654 Q805,654 805,668 L805,694 Z" fill="#eef7f6" />
+    <text x="660" y="672" class="tiny" text-anchor="middle">&lt;&lt;shouldTemporalEqualTo&gt;&gt;</text>
+    <text x="660" y="691" class="cardTitle" text-anchor="middle">Precision Rules</text>
+    <text x="535" y="716" class="detail" text-anchor="start">nano, micro, ms, 100ns by DB</text>
+  </g>
+  <g data-card="Unsupported Cases" data-x="918" data-y="654" data-width="290" data-height="82">
+    <rect x="918" y="654" width="290" height="82" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2" class="card" />
+    <path class="header" d="M918,694 L918,668 Q918,654 932,654 L1194,654 Q1208,654 1208,668 L1208,694 Z" fill="#f5eef2" />
+    <text x="1063" y="672" class="tiny" text-anchor="middle">&lt;&lt;expectException&gt;&gt;</text>
+    <text x="1063" y="691" class="cardTitle" text-anchor="middle">Unsupported Cases</text>
+    <text x="938" y="716" class="detail" text-anchor="start">MariaDB / MySQL V5 tz limits</text>
+  </g>
+  <path class="connector" data-connector="timezone-precision" d="M402 695 L515 695" stroke="#4f8f8b" marker-end="url(#arrow-teal)" />
+  <path class="connector" data-connector="precision-unsupported" d="M805 695 L918 695" stroke="#a85f7f" marker-end="url(#arrow-rose)" />
+
+  <rect x="86" y="802" width="1148" height="30" rx="10" class="noteBox" />
+  <text x="660" y="822" class="note" text-anchor="middle">Source basis: Ex01 JavaTime functions, Ex02 defaults, Ex03 typed literals, and Ex04 broad nullable/non-nullable temporal CRUD coverage.</text>
 </svg>

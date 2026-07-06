@@ -1,114 +1,158 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1378" height="1024" viewBox="0 0 1378 1024" role="img" aria-label="Column Type Selection Flow">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1378" height="1024"/>
-<rect class="frame" x="32" y="28" width="1314" height="968" rx="28"/>
-<text class="title" x="66" y="82">Column Type Selection Flow</text>
-<text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M672 884 C672 884 706 884 706 884" data-connector="line"/>
-<path class="line" d="M522 778 C522 801 522 801 522 824" data-connector="line"/>
-<path class="line" d="M522 280 C522 469 856 469 856 658" data-connector="line"/>
-<path class="line" d="M1040 386 C1040 552 338 552 338 718" data-connector="line"/>
-<path class="line" d="M1040 386 C1040 469 1006 469 1006 552" data-connector="line"/>
-<path class="line" d="M1040 386 C1040 469 338 469 338 552" data-connector="line"/>
-<path class="line" d="M672 220 C672 303 706 303 706 386" data-connector="line"/>
-<path class="line" d="M372 220 C372 303 338 303 338 386" data-connector="line"/>
-<path class="line" d="M672 220 C672 220 706 220 706 220" data-connector="line"/>
-<path class="line" d="M338 220 C338 220 372 220 372 220" data-connector="line"/>
-<g transform="translate(48,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">Need to store</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">date/time data</text>
-</g>
-<g transform="translate(382,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">What information is</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">needed?</text>
-</g>
-<g transform="translate(716,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Date only</text>
-</g>
-<g transform="translate(1050,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">date → LocalDate</text>
-</g>
-<g transform="translate(48,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Time only</text>
-</g>
-<g transform="translate(382,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">time → LocalTime</text>
-</g>
-<g transform="translate(716,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Date + time</text>
-</g>
-<g transform="translate(1050,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Timezone needed?</text>
-</g>
-<g transform="translate(48,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">No</text>
-</g>
-<g transform="translate(382,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">datetime →</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">LocalDateTime</text>
-</g>
-<g transform="translate(716,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Yes, UTC-based</text>
-</g>
-<g transform="translate(1050,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">timestamp → Instant</text>
-</g>
-<g transform="translate(48,668)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Yes, preserve offset</text>
-</g>
-<g transform="translate(382,668)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">timestamp With Time</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">Zone →</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">OffsetDateTime</text>
-</g>
-<g transform="translate(716,668)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Elapsed time</text>
-</g>
-<g transform="translate(1050,668)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">duration → Duration</text>
-</g>
-<g transform="translate(382,834)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">DB choice</text>
-</g>
-<g transform="translate(716,834)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">H2: offset preserved</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 820" width="1320" height="820" role="img" aria-label="Kotlinx DateTime R2DBC mapping architecture">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12"/>
+    </filter>
+    <marker id="arrow-blue" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <marker id="arrow-brown" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#a66a3f" stroke="#a66a3f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <marker id="arrow-teal" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <marker id="arrow-rose" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#a85f7f" stroke="#a85f7f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.6}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.4}
+      .card{filter:url(#shadow)}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:38px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:15px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:12px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:19px;letter-spacing:.08em;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:21px;fill:#1e293b}
+      .connector{fill:none;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.4}
+    </style>
+  </defs>
+  <rect width="1320" height="820" class="canvas"/>
+  <rect x="22" y="22" width="1276" height="776" rx="18" class="frame"/>
+  <text x="58" y="74" class="title">Kotlinx DateTime R2DBC Mapping</text>
+  <text x="58" y="104" class="subtitle">Repository-backed map from Kotlin domain time types to Exposed column APIs and workshop tests.</text>
+
+  <rect x="54" y="136" width="1212" height="172" rx="16" class="lane"/>
+  <text x="78" y="166" class="laneTitle">KOTLIN DOMAIN TYPES</text>
+  <rect x="54" y="332" width="1212" height="172" rx="16" class="lane"/>
+  <text x="78" y="362" class="laneTitle">EXPOSED DATETIME API</text>
+  <rect x="54" y="528" width="1212" height="172" rx="16" class="lane"/>
+  <text x="78" y="558" class="laneTitle">TEST CONTRACT</text>
+
+  <g data-card="Multiplatform Domain" data-x="88" data-y="194" data-width="240" data-height="88">
+    <rect x="88" y="194" width="240" height="88" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.2" class="card"/>
+    <path d="M88,238 L88,208 Q88,194 102,194 L314,194 Q328,194 328,208 L328,238 Z" fill="#eef5fa"/>
+    <text x="208" y="216" class="tiny" text-anchor="middle">&lt;&lt;kotlinx.datetime&gt;&gt;</text>
+    <text x="208" y="237" class="cardTitle" text-anchor="middle">Multiplatform Domain</text>
+    <text x="106" y="263" class="detail">shared JVM / KMP model</text>
+  </g>
+  <g data-card="Local Date/Time" data-x="376" data-y="194" data-width="240" data-height="88">
+    <rect x="376" y="194" width="240" height="88" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.2" class="card"/>
+    <path d="M376,238 L376,208 Q376,194 390,194 L602,194 Q616,194 616,208 L616,238 Z" fill="#f1f6ec"/>
+    <text x="496" y="216" class="tiny" text-anchor="middle">&lt;&lt;calendar values&gt;&gt;</text>
+    <text x="496" y="237" class="cardTitle" text-anchor="middle">Local Date / Time</text>
+    <text x="394" y="263" class="detail">LocalDate, Time, DateTime</text>
+  </g>
+  <g data-card="Instant / Duration" data-x="664" data-y="194" data-width="240" data-height="88">
+    <rect x="664" y="194" width="240" height="88" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2.2" class="card"/>
+    <path d="M664,238 L664,208 Q664,194 678,194 L890,194 Q904,194 904,208 L904,238 Z" fill="#f5eee4"/>
+    <text x="784" y="216" class="tiny" text-anchor="middle">&lt;&lt;timeline values&gt;&gt;</text>
+    <text x="784" y="237" class="cardTitle" text-anchor="middle">Instant / Duration</text>
+    <text x="682" y="263" class="detail">@OptIn ExperimentalTime</text>
+  </g>
+  <g data-card="Offset Gap" data-x="952" data-y="194" data-width="240" data-height="88">
+    <rect x="952" y="194" width="240" height="88" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2.2" class="card"/>
+    <path d="M952,238 L952,208 Q952,194 966,194 L1178,194 Q1192,194 1192,208 L1192,238 Z" fill="#f5eef2"/>
+    <text x="1072" y="216" class="tiny" text-anchor="middle">&lt;&lt;timezone boundary&gt;&gt;</text>
+    <text x="1072" y="237" class="cardTitle" text-anchor="middle">Offset Gap</text>
+    <text x="970" y="263" class="detail">uses java OffsetDateTime</text>
+  </g>
+
+  <g data-card="date time datetime" data-x="88" data-y="390" data-width="240" data-height="88">
+    <rect x="88" y="390" width="240" height="88" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.2" class="card"/>
+    <path d="M88,434 L88,404 Q88,390 102,390 L314,390 Q328,390 328,404 L328,434 Z" fill="#eef5fa"/>
+    <text x="208" y="412" class="tiny" text-anchor="middle">&lt;&lt;column builders&gt;&gt;</text>
+    <text x="208" y="433" class="cardTitle" text-anchor="middle">date / time / datetime</text>
+    <text x="106" y="459" class="detail">LocalDate, LocalTime, LDT</text>
+  </g>
+  <g data-card="timestamp duration" data-x="376" data-y="390" data-width="240" data-height="88">
+    <rect x="376" y="390" width="240" height="88" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.2" class="card"/>
+    <path d="M376,434 L376,404 Q376,390 390,390 L602,390 Q616,390 616,404 L616,434 Z" fill="#f1f6ec"/>
+    <text x="496" y="412" class="tiny" text-anchor="middle">&lt;&lt;column builders&gt;&gt;</text>
+    <text x="496" y="433" class="cardTitle" text-anchor="middle">timestamp / duration</text>
+    <text x="394" y="459" class="detail">Instant and Duration columns</text>
+  </g>
+  <g data-card="timestampWithTimeZone" data-x="664" data-y="390" data-width="240" data-height="88">
+    <rect x="664" y="390" width="240" height="88" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2.2" class="card"/>
+    <path d="M664,434 L664,404 Q664,390 678,390 L890,390 Q904,390 904,404 L904,434 Z" fill="#f5eee4"/>
+    <text x="784" y="412" class="tiny" text-anchor="middle">&lt;&lt;offset API&gt;&gt;</text>
+    <text x="784" y="433" class="cardTitle" text-anchor="middle">timestampWith TZ</text>
+    <text x="682" y="459" class="detail">OffsetDateTime column</text>
+  </g>
+  <g data-card="defaults and literals" data-x="952" data-y="390" data-width="240" data-height="88">
+    <rect x="952" y="390" width="240" height="88" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.2" class="card"/>
+    <path d="M952,434 L952,404 Q952,390 966,390 L1178,390 Q1192,390 1192,404 L1192,434 Z" fill="#eef7f6"/>
+    <text x="1072" y="412" class="tiny" text-anchor="middle">&lt;&lt;expressions&gt;&gt;</text>
+    <text x="1072" y="433" class="cardTitle" text-anchor="middle">defaults and literals</text>
+    <text x="970" y="459" class="detail">CurrentDateTime, literals</text>
+  </g>
+
+  <g data-card="Ex01 CRUD Functions" data-x="88" data-y="586" data-width="240" data-height="88">
+    <rect x="88" y="586" width="240" height="88" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.2" class="card"/>
+    <path d="M88,630 L88,600 Q88,586 102,586 L314,586 Q328,586 328,600 L328,630 Z" fill="#eef5fa"/>
+    <text x="208" y="608" class="tiny" text-anchor="middle">&lt;&lt;Ex01_KotlinDateTime&gt;&gt;</text>
+    <text x="208" y="629" class="cardTitle" text-anchor="middle">CRUD + Functions</text>
+    <text x="106" y="655" class="detail">insert, select, date parts</text>
+  </g>
+  <g data-card="Ex02 Defaults" data-x="376" data-y="586" data-width="240" data-height="88">
+    <rect x="376" y="586" width="240" height="88" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.2" class="card"/>
+    <path d="M376,630 L376,600 Q376,586 390,586 L602,586 Q616,586 616,600 L616,630 Z" fill="#f1f6ec"/>
+    <text x="496" y="608" class="tiny" text-anchor="middle">&lt;&lt;Ex02_Defaults&gt;&gt;</text>
+    <text x="496" y="629" class="cardTitle" text-anchor="middle">DB + Client Defaults</text>
+    <text x="394" y="655" class="detail">CurrentDateTime, clientDefault</text>
+  </g>
+  <g data-card="Ex03 Literals" data-x="664" data-y="586" data-width="240" data-height="88">
+    <rect x="664" y="586" width="240" height="88" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2.2" class="card"/>
+    <path d="M664,630 L664,600 Q664,586 678,586 L890,586 Q904,586 904,600 L904,630 Z" fill="#f5eee4"/>
+    <text x="784" y="608" class="tiny" text-anchor="middle">&lt;&lt;Ex03_DateTimeLiteral&gt;&gt;</text>
+    <text x="784" y="629" class="cardTitle" text-anchor="middle">Typed Literals</text>
+    <text x="682" y="655" class="detail">date, datetime, timestamp</text>
+  </g>
+  <g data-card="Dialect Caveats" data-x="952" data-y="586" data-width="240" data-height="88">
+    <rect x="952" y="586" width="240" height="88" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2.2" class="card"/>
+    <path d="M952,630 L952,600 Q952,586 966,586 L1178,586 Q1192,586 1192,600 L1192,630 Z" fill="#f5eef2"/>
+    <text x="1072" y="608" class="tiny" text-anchor="middle">&lt;&lt;multi DB tests&gt;&gt;</text>
+    <text x="1072" y="629" class="cardTitle" text-anchor="middle">Dialect Caveats</text>
+    <text x="970" y="655" class="detail">offset support, precision rules</text>
+  </g>
+
+  <path class="connector" data-connector="domain-to-local" d="M328 238 L376 238" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+  <path class="connector" data-connector="local-to-instant" d="M616 238 L664 238" stroke="#a66a3f" marker-end="url(#arrow-brown)"/>
+  <path class="connector" data-connector="instant-to-offset" d="M904 238 L952 238" stroke="#a85f7f" marker-end="url(#arrow-rose)"/>
+
+  <path class="connector" data-connector="date-to-timestamp" d="M328 434 L376 434" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+  <path class="connector" data-connector="timestamp-to-zone" d="M616 434 L664 434" stroke="#a66a3f" marker-end="url(#arrow-brown)"/>
+  <path class="connector" data-connector="zone-to-expressions" d="M904 434 L952 434" stroke="#4f8f8b" marker-end="url(#arrow-teal)"/>
+
+  <path class="connector" data-connector="crud-to-defaults" d="M328 630 L376 630" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+  <path class="connector" data-connector="defaults-to-literals" d="M616 630 L664 630" stroke="#a66a3f" marker-end="url(#arrow-brown)"/>
+  <path class="connector" data-connector="literals-to-caveats" d="M904 630 L952 630" stroke="#a85f7f" marker-end="url(#arrow-rose)"/>
+
+  <path class="connector" data-connector="domain-map" d="M208 282 L208 390" stroke="#4f86c6" marker-end="url(#arrow-blue)"/>
+  <path class="connector" data-connector="local-map" d="M496 282 L496 390" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+  <path class="connector" data-connector="instant-map" d="M784 282 L784 390" stroke="#a66a3f" marker-end="url(#arrow-brown)"/>
+  <path class="connector" data-connector="offset-map" d="M1072 282 L1072 390" stroke="#a85f7f" marker-end="url(#arrow-rose)"/>
+
+  <path class="connector" data-connector="date-test" d="M208 478 L208 586" stroke="#4f86c6" marker-end="url(#arrow-blue)"/>
+  <path class="connector" data-connector="timestamp-test" d="M496 478 L496 586" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+  <path class="connector" data-connector="zone-test" d="M784 478 L784 586" stroke="#a66a3f" marker-end="url(#arrow-brown)"/>
+  <path class="connector" data-connector="expression-test" d="M1072 478 L1072 586" stroke="#4f8f8b" marker-end="url(#arrow-teal)"/>
+
+  <rect x="94" y="724" width="1132" height="34" rx="11" class="noteBox"/>
+  <text x="660" y="747" class="note" text-anchor="middle">Reader contract: Kotlinx values stay in the domain model; only offset-aware columns cross into java.time.OffsetDateTime.</text>
 </svg>

@@ -1,64 +1,187 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="1014" viewBox="0 0 1240 1014" role="img" aria-label="Execution Flow">
-<defs>
-<filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.10"/></filter>
-<marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-<style>.canvas{fill:#F7F9FC}.frame{fill:#fff;stroke:#D8E0EA;stroke-width:1.5}.title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:39px;font-weight:400;fill:#102033}.subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:14px;font-weight:400;fill:#536273}.smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:22px;font-weight:400;fill:#102033}.strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}.card{stroke-width:2;filter:url(#shadow)}.line{stroke:#5D6B7A;stroke-width:2.2;fill:none;marker-end:url(#openArrow)}.dashed{stroke:#5D6B7A;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}.lifeline{stroke:#B7C2D1;stroke-width:1.8;stroke-dasharray:8 9}.note{fill:#fff;opacity:.97}</style>
-</defs>
-<rect class="canvas" width="1240" height="1014"/>
-<rect class="frame" x="24" y="24" width="1192" height="958" rx="22"/>
-<text class="title" x="58" y="76">Execution Flow</text>
-<text class="subtitle" x="62" y="106">Compact sequence flow with reduced outer and inner whitespace</text>
-<rect class="card" x="50.0" y="156" width="220" height="66" rx="16" fill="#E8F3FF" stroke="#5B8DEF"/>
-<text class="smallLabel participant" x="160.0" y="196" text-anchor="middle">Application</text>
-<line class="lifeline" x1="160.0" y1="250" x2="160.0" y2="952"/>
-<rect class="card" x="280.0" y="156" width="220" height="66" rx="16" fill="#EAF7EF" stroke="#58A978"/>
-<text class="smallLabel participant" x="390.0" y="196" text-anchor="middle">EncryptedColumn</text>
-<line class="lifeline" x1="390.0" y1="250" x2="390.0" y2="952"/>
-<rect class="card" x="510.0" y="156" width="220" height="66" rx="16" fill="#FFF3D9" stroke="#D6A441"/>
-<text class="smallLabel participant" x="620.0" y="196" text-anchor="middle">Encryptor</text>
-<line class="lifeline" x1="620.0" y1="250" x2="620.0" y2="952"/>
-<rect class="card" x="740.0" y="156" width="220" height="66" rx="16" fill="#FDECEF" stroke="#DC6B82"/>
-<text class="smallLabel participant" x="850.0" y="196" text-anchor="middle">(AES/Blowfish/Tripl</text>
-<line class="lifeline" x1="850.0" y1="250" x2="850.0" y2="952"/>
-<rect class="card" x="970.0" y="156" width="220" height="66" rx="16" fill="#F1ECFF" stroke="#8A72D6"/>
-<text class="smallLabel participant" x="1080.0" y="196" text-anchor="middle">Database</text>
-<line class="lifeline" x1="1080.0" y1="250" x2="1080.0" y2="952"/>
-<path class="line" d="M160.0 292.0 L390.0 292.0" data-connector="line"/>
-<rect class="note label" x="153.5" y="260.0" width="243.0" height="28" rx="9"/>
-<text class="strong labelText" x="275.0" y="280.0" text-anchor="middle">1. insert { it[name] = plain text }</text>
-<path class="line" d="M390.0 366.0 L620.0 366.0" data-connector="line"/>
-<rect class="note label" x="423.8" y="334.0" width="162.4" height="28" rx="9"/>
-<text class="strong labelText" x="505.0" y="354.0" text-anchor="middle">2. encrypt(plain text)</text>
-<path class="dashed" d="M620.0 440.0 L390.0 440.0" data-connector="dashed"/>
-<rect class="note label" x="425.0" y="408.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="505.0" y="428.0" text-anchor="middle">3. Base64(ciphertext)</text>
-<path class="line" d="M390.0 514.0 L1080.0 514.0" data-connector="line"/>
-<rect class="note label" x="635.2" y="482.0" width="199.6" height="28" rx="9"/>
-<text class="strong labelText" x="735.0" y="502.0" text-anchor="middle">4. INSERT Base64(ciphertext)</text>
-<path class="dashed" d="M1080.0 588.0 L390.0 588.0" data-connector="dashed"/>
-<rect class="note label" x="655.0" y="556.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="735.0" y="576.0" text-anchor="middle">5. Base64(ciphertext)</text>
-<path class="line" d="M390.0 662.0 L620.0 662.0" data-connector="line"/>
-<rect class="note label" x="399.0" y="630.0" width="212.0" height="28" rx="9"/>
-<text class="strong labelText" x="505.0" y="650.0" text-anchor="middle">6. decrypt(Base64(ciphertext))</text>
-<path class="dashed" d="M620.0 736.0 L390.0 736.0" data-connector="dashed"/>
-<rect class="note label" x="425.0" y="704.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="505.0" y="724.0" text-anchor="middle">7. plain text</text>
-<path class="dashed" d="M390.0 810.0 L160.0 810.0" data-connector="dashed"/>
-<rect class="note label" x="195.0" y="778.0" width="160.0" height="28" rx="9"/>
-<text class="strong labelText" x="275.0" y="798.0" text-anchor="middle">8. plain text</text>
-<path class="line" d="M160.0 884.0 L390.0 884.0" data-connector="line"/>
-<rect class="note label" x="138.0" y="852.0" width="274.0" height="28" rx="9"/>
-<text class="strong labelText" x="275.0" y="872.0" text-anchor="middle">9. where { name eq encrypt(plain text) }</text>
-<rect class="activation" x="154.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="384.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
-<rect class="activation" x="614.0" y="274.0" width="12" height="88" rx="4" fill="#E0F2FE" stroke="#bdd4e8" opacity="0.72"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1700 1160" width="1700" height="1160" role="img" aria-label="Exposed R2DBC crypt encrypted column sequence diagram">
+  <defs>
+    <filter id="softShadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.10" />
+    </filter>
+    <marker id="arrow-blue" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" viewBox="0 0 10 10">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-teal" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" viewBox="0 0 10 10">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#2f9a95" stroke="#2f9a95" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-green" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" viewBox="0 0 10 10">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-amber" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" viewBox="0 0 10 10">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#b58122" stroke="#b58122" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-rose" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="9" refY="5" orient="auto" viewBox="0 0 10 10">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#a85f7f" stroke="#a85f7f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <style>
+      .canvas{fill:#f7f9f4}
+      .frame{fill:#fffefb;stroke:#3d515c;stroke-width:3}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:48px;fill:#1e293b}
+      .subtitle,.role,.labelText,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:16px;fill:#536476;font-weight:700}
+      .participant{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:22px;fill:#1e293b}
+      .num{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:17px;fill:#334155;font-weight:800}
+      .card{fill:#fffefb;stroke:#60747f;stroke-width:2.4;filter:url(#softShadow)}
+      .lifeline{stroke:#9fb1bc;stroke-width:2;stroke-dasharray:8 9}
+      .activation{fill:#e6f7f5;stroke:#a7d9d3;stroke-width:2;opacity:.78}
+      .activationAmber{fill:#fff2d8;stroke:#e3c483;stroke-width:2;opacity:.78}
+      .label{fill:#fffefb;stroke:#d7e2ec;stroke-width:2}
+      .call{fill:none;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+      .return{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:8 7}
+      .callBlue{stroke:#4f86c6;marker-end:url(#arrow-blue)}
+      .callTeal{stroke:#2f9a95;marker-end:url(#arrow-teal)}
+      .callGreen{stroke:#6f8f52;marker-end:url(#arrow-green)}
+      .callAmber{stroke:#b58122;marker-end:url(#arrow-amber)}
+      .callRose{stroke:#a85f7f;marker-end:url(#arrow-rose)}
+      .retBlue{stroke:#4f86c6;marker-end:url(#arrow-blue)}
+      .retTeal{stroke:#2f9a95;marker-end:url(#arrow-teal)}
+      .retAmber{stroke:#b58122;marker-end:url(#arrow-amber)}
+      .branch{fill:none;stroke:#8aa0ad;stroke-width:2.4;stroke-dasharray:9 8}
+      .branchLabel{fill:#fffefb;stroke:#d7e2ec;stroke-width:2}
+      .footer{fill:#fffefb;stroke:#d7e2ec;stroke-width:2}
+    </style>
+  </defs>
 
-<!-- audit badge labels: visible sequence numbering and message pill samples -->
-<g aria-label="sequence message labels">
-<rect x="58" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="76" y="140" class="num" text-anchor="middle">1</text>
-<rect x="102" y="124" width="36" height="22" rx="8" class="label" fill="#fff" stroke="#bfdbfe"/>
-<text x="120" y="140" class="num" text-anchor="middle">2</text>
-</g>
+  <rect class="canvas" width="1700" height="1160" />
+  <rect class="frame" x="28" y="28" width="1644" height="1104" rx="28" />
+  <text class="title" x="76" y="92">Encrypted Column Insert, Read, and Search Limit</text>
+  <text class="subtitle" x="82" y="128">Ex01_EncryptedColumn encrypts plaintext before SQL, decrypts on read, and proves equality search is not reliable.</text>
+
+  <g data-participant="Workshop Test">
+    <rect class="card participant" x="70" y="184" width="190" height="78" rx="16" />
+    <text class="participant" x="165" y="225" text-anchor="middle">Workshop Test</text>
+    <text class="role" x="165" y="248" text-anchor="middle">runTest</text>
+    <line class="lifeline" x1="165" y1="262" x2="165" y2="1070" />
+  </g>
+  <g data-participant="StringTable DSL">
+    <rect class="card participant" x="318" y="184" width="214" height="78" rx="16" />
+    <text class="participant" x="425" y="225" text-anchor="middle">StringTable DSL</text>
+    <text class="role" x="425" y="248" text-anchor="middle">withTables</text>
+    <line class="lifeline" x1="425" y1="262" x2="425" y2="1070" />
+  </g>
+  <g data-participant="Encrypted Columns">
+    <rect class="card participant" x="592" y="184" width="226" height="78" rx="16" />
+    <text class="participant" x="705" y="225" text-anchor="middle">Encrypted Columns</text>
+    <text class="role" x="705" y="248" text-anchor="middle">varchar / binary</text>
+    <line class="lifeline" x1="705" y1="262" x2="705" y2="1070" />
+  </g>
+  <g data-participant="Encryptor">
+    <rect class="card participant" x="880" y="184" width="220" height="78" rx="16" />
+    <text class="participant" x="990" y="225" text-anchor="middle">Encryptor</text>
+    <text class="role" x="990" y="248" text-anchor="middle">AES / Blowfish / 3DES</text>
+    <line class="lifeline" x1="990" y1="262" x2="990" y2="1070" />
+  </g>
+  <g data-participant="R2DBC Database">
+    <rect class="card participant" x="1158" y="184" width="224" height="78" rx="16" />
+    <text class="participant" x="1270" y="225" text-anchor="middle">R2DBC Database</text>
+    <text class="role" x="1270" y="248" text-anchor="middle">StringTable</text>
+    <line class="lifeline" x1="1270" y1="262" x2="1270" y2="1070" />
+  </g>
+  <g data-participant="Assertions">
+    <rect class="card participant" x="1450" y="184" width="180" height="78" rx="16" />
+    <text class="participant" x="1540" y="225" text-anchor="middle">Assertions</text>
+    <text class="role" x="1540" y="248" text-anchor="middle">rows + logs</text>
+    <line class="lifeline" x1="1540" y1="262" x2="1540" y2="1070" />
+  </g>
+
+  <rect class="activation" x="419" y="318" width="14" height="570" rx="5" />
+  <rect class="activation" x="699" y="398" width="14" height="412" rx="5" />
+  <rect class="activationAmber" x="984" y="452" width="14" height="184" rx="5" />
+  <rect class="activationAmber" x="1264" y="570" width="14" height="150" rx="5" />
+  <rect class="activation" x="1534" y="800" width="14" height="112" rx="5" />
+
+  <g data-message="1">
+    <rect class="label pill" x="118" y="286" width="350" height="36" rx="18" />
+    <circle cx="145" cy="304" r="19" fill="#eef5fa" stroke="#4f86c6" stroke-width="2" />
+    <text class="num" x="145" y="310" text-anchor="middle">1</text>
+    <text class="labelText" x="294" y="310" text-anchor="middle">withTables(testDB, stringTable)</text>
+    <path class="call callBlue" data-connector="with-tables" d="M165 334 L425 334" />
+  </g>
+
+  <g data-message="2">
+    <rect class="label pill" x="188" y="366" width="474" height="36" rx="18" />
+    <circle cx="215" cy="384" r="19" fill="#eef5fa" stroke="#4f86c6" stroke-width="2" />
+    <text class="num" x="215" y="390" text-anchor="middle">2</text>
+    <text class="labelText" x="425" y="390" text-anchor="middle">insertAndGetId { plaintext values }</text>
+    <path class="call callBlue" data-connector="insert-plaintext" d="M165 414 L425 414" />
+  </g>
+
+  <g data-message="3">
+    <rect class="label pill" x="466" y="440" width="478" height="36" rx="18" />
+    <circle cx="493" cy="458" r="19" fill="#eef7f6" stroke="#2f9a95" stroke-width="2" />
+    <text class="num" x="493" y="464" text-anchor="middle">3</text>
+    <text class="labelText" x="705" y="464" text-anchor="middle">encryptedVarchar / encryptedBinary</text>
+    <path class="call callTeal" data-connector="bind-columns" d="M425 488 L705 488" />
+  </g>
+
+  <g data-message="4">
+    <rect class="label pill" x="745" y="514" width="490" height="36" rx="18" />
+    <circle cx="772" cy="532" r="19" fill="#fff2d8" stroke="#b58122" stroke-width="2" />
+    <text class="num" x="772" y="538" text-anchor="middle">4</text>
+    <text class="labelText" x="990" y="538" text-anchor="middle">encrypt plaintext to ciphertext</text>
+    <path class="call callAmber" data-connector="encrypt" d="M705 562 L990 562" />
+  </g>
+
+  <g data-message="5">
+    <rect class="label pill" x="764" y="590" width="452" height="36" rx="18" />
+    <circle cx="791" cy="608" r="19" fill="#fff2d8" stroke="#b58122" stroke-width="2" />
+    <text class="num" x="791" y="614" text-anchor="middle">5</text>
+    <text class="labelText" x="990" y="614" text-anchor="middle">Base64 / bytes ciphertext</text>
+    <path class="return retAmber" data-connector="ciphertext-return" d="M990 638 L705 638" />
+  </g>
+
+  <g data-message="6">
+    <rect class="label pill" x="736" y="666" width="452" height="36" rx="18" />
+    <circle cx="763" cy="684" r="19" fill="#f1f6ec" stroke="#6f8f52" stroke-width="2" />
+    <text class="num" x="763" y="690" text-anchor="middle">6</text>
+    <text class="labelText" x="962" y="690" text-anchor="middle">INSERT stores ciphertext only</text>
+    <path class="call callGreen" data-connector="insert-sql" d="M425 714 L1270 714" />
+  </g>
+
+  <g data-message="7">
+    <rect class="label pill" x="760" y="742" width="446" height="36" rx="18" />
+    <circle cx="787" cy="760" r="19" fill="#f1f6ec" stroke="#6f8f52" stroke-width="2" />
+    <text class="num" x="787" y="766" text-anchor="middle">7</text>
+    <text class="labelText" x="983" y="766" text-anchor="middle">selectAll returns stored row</text>
+    <path class="return retTeal" data-connector="row-return" d="M1270 790 L425 790" />
+  </g>
+
+  <g data-message="8">
+    <rect class="label pill" x="746" y="818" width="488" height="36" rx="18" />
+    <circle cx="773" cy="836" r="19" fill="#fff2d8" stroke="#b58122" stroke-width="2" />
+    <text class="num" x="773" y="842" text-anchor="middle">8</text>
+    <text class="labelText" x="990" y="842" text-anchor="middle">decrypt on row value access</text>
+    <path class="call callAmber" data-connector="decrypt" d="M705 866 L990 866" />
+  </g>
+
+  <g data-message="9">
+    <rect class="label pill" x="1112" y="884" width="514" height="36" rx="18" />
+    <circle cx="1139" cy="902" r="19" fill="#eef7f6" stroke="#2f9a95" stroke-width="2" />
+    <text class="num" x="1139" y="908" text-anchor="middle">9</text>
+    <text class="labelText" x="1380" y="908" text-anchor="middle">assert plaintext rows and no secret SQL</text>
+    <path class="call callTeal" data-connector="assert-plain-and-logs" d="M425 932 L1540 932" />
+  </g>
+
+  <g data-message="10">
+    <rect class="branch" x="95" y="966" width="1510" height="116" rx="18" />
+    <rect class="branchLabel" x="610" y="946" width="480" height="34" rx="17" />
+    <text class="labelText" x="850" y="969" text-anchor="middle">non-deterministic equality search check</text>
+    <rect class="label pill" x="196" y="994" width="458" height="36" rx="18" />
+    <circle cx="223" cy="1012" r="19" fill="#f5eef2" stroke="#a85f7f" stroke-width="2" />
+    <text class="num" x="223" y="1018" text-anchor="middle">10</text>
+    <text class="labelText" x="425" y="1018" text-anchor="middle">where name eq encrypted value</text>
+    <path class="call callRose" data-connector="search-fails" d="M165 1042 L425 1042" />
+    <rect class="label pill" x="1054" y="994" width="480" height="36" rx="18" />
+    <circle cx="1081" cy="1012" r="19" fill="#f5eef2" stroke="#a85f7f" stroke-width="2" />
+    <text class="num" x="1081" y="1018" text-anchor="middle">11</text>
+    <text class="labelText" x="1300" y="1018" text-anchor="middle">assertFailsWith&lt;AssertionError&gt;</text>
+    <path class="return callRose" data-connector="assertion-error" d="M425 1062 L1540 1062" />
+  </g>
+
+  <rect class="footer" x="118" y="1096" width="1464" height="34" rx="12" />
+  <text class="note" x="850" y="1119" text-anchor="middle">Logs assert INSERT/UPDATE statements contain no plaintext; encrypted columns decrypt transparently but cannot be searched by equality.</text>
 </svg>

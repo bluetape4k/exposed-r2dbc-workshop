@@ -1,88 +1,85 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="1097" viewBox="0 0 1420 1097" role="img" aria-label="Repository Class Structure">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1420" height="1097"/>
-<rect class="frame" x="32" y="28" width="1356" height="1041" rx="28"/>
-<text class="title" x="66" y="82">Repository Class Structure</text>
-<text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="line" d="M970 499.5 L710 499.5 L710 520.5 L450 520.5" data-connector="line"/>
-<path class="line" d="M710 791 L710 731 L710 731 L710 671" data-connector="line"/>
-<path class="implLine" d="M260 412 L260 352 L260 352 L260 292"/>
-<path class="implLine" d="M710 412 L710 352 L260 352 L260 292"/>
-<g transform="translate(70,412)">
-  <rect class="card" x="0" y="0" width="380" height="217" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#5B8DEF"/>
-  <text class="small" x="190" y="26" text-anchor="middle"></text>
-  <text class="label" x="190" y="61" text-anchor="middle">ActorR2dbcRepository</text>
-  <text class="mono" x="18" y="108">+table ActorTable</text>
-<text class="mono" x="18" y="129">+extractId(entity) Long</text>
-<text class="mono" x="18" y="150">+toEntity(row) ActorRecord</text>
-<text class="mono" x="18" y="171">+save(actor) ActorRecord</text>
-<text class="mono" x="18" y="192">+searchActors(params) Flow~ActorRecord~</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 860" width="1280" height="860" role="img" aria-label="Spring repository coroutine class diagram">
+<defs><style>.canvas{fill:#f6f9fc} .frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5} .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2} text{font-family:"Comic Mono","SFMono-Regular",monospace;fill:#536476;font-weight:700} .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:32px;fill:#1e293b;font-weight:400} .subtitle{font-size:14px} .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:16px;letter-spacing:.09em;fill:#91a6b7} .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:18px;fill:#1e293b;font-weight:400} .detail{font-size:12.5px} .tiny{font-size:11px;fill:#64748b} .connector{fill:none;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round} .use{stroke-dasharray:8 7;stroke-linecap:butt} .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.2}</style></defs>
+<rect width="1280" height="860" class="canvas"/><rect x="24" y="24" width="1232" height="812" rx="20" class="frame"/>
+<text x="60" y="74" class="title" text-anchor="start">Repository Coroutine Class Map</text>
+<text x="60" y="102" class="subtitle" text-anchor="start">REST controllers depend on coroutine repositories; repositories implement R2dbcRepository and map Exposed tables to DTO records.</text>
+<rect x="54" y="130" width="1172" height="172" rx="18" class="lane"/>
+<text x="78" y="162" class="laneTitle" text-anchor="start">CONTRACT</text>
+<rect x="54" y="326" width="1172" height="236" rx="18" class="lane"/>
+<text x="78" y="358" class="laneTitle" text-anchor="start">CONTROLLER AND REPOSITORY CLASSES</text>
+<rect x="54" y="586" width="1172" height="176" rx="18" class="lane"/>
+<text x="78" y="618" class="laneTitle" text-anchor="start">SCHEMA AND DTO MODEL</text>
+<g data-card="R2dbcRepository&lt;Long, T&gt;" data-x="492" data-y="172" data-width="330" data-height="92">
+<rect class="card" x="492" y="172" width="330" height="92" rx="12" fill="#fff" stroke="#64748b" stroke-width="2.2"/>
+<path d="M492,216 L492,184 Q492,172 504,172 L810,172 Q822,172 822,184 L822,216 Z" fill="#f8fafc"/>
+<text x="657.0" y="190" class="tiny" text-anchor="middle">&lt;&lt;interface&gt;&gt;</text>
+<text x="657.0" y="211" class="cardTitle" text-anchor="middle">R2dbcRepository&lt;Long, T&gt;</text>
+<text x="510" y="238" class="detail" text-anchor="start">base CRUD contract</text>
+<text x="510" y="256" class="detail" text-anchor="start">table + extractId + toEntity</text>
 </g>
-<g transform="translate(970,180)">
-  <rect class="card" x="0" y="0" width="380" height="112" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#58A978"/>
-  <text class="small" x="190" y="26" text-anchor="middle"></text>
-  <text class="label" x="190" y="61" text-anchor="middle">R2dbcRepositoryID</text>
-
+<g data-card="REST Controllers" data-x="90" data-y="390" data-width="300" data-height="132">
+<rect class="card" x="90" y="390" width="300" height="132" rx="12" fill="#fff" stroke="#4f86c6" stroke-width="2.2"/>
+<path d="M90,434 L90,402 Q90,390 102,390 L378,390 Q390,390 390,402 L390,434 Z" fill="#eef5fa"/>
+<text x="240.0" y="408" class="tiny" text-anchor="middle">&lt;&lt;Spring WebFlux&gt;&gt;</text>
+<text x="240.0" y="429" class="cardTitle" text-anchor="middle">REST Controllers</text>
+<text x="108" y="456" class="detail" text-anchor="start">MovieController / ActorController</text>
+<text x="108" y="474" class="detail" text-anchor="start">MovieActorsController</text>
+<text x="108" y="492" class="detail" text-anchor="start">uses Movie/Actor repositories</text>
 </g>
-<g transform="translate(70,180)">
-  <rect class="card" x="0" y="0" width="380" height="112" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#D6A441"/>
-  <text class="small" x="190" y="26" text-anchor="middle"></text>
-  <text class="label" x="190" y="61" text-anchor="middle">R2dbcRepository</text>
-
+<g data-card="MovieR2dbcRepository" data-x="500" data-y="370" data-width="302" data-height="128">
+<rect class="card" x="500" y="370" width="302" height="128" rx="12" fill="#fff" stroke="#6f8f52" stroke-width="2.2"/>
+<path d="M500,414 L500,382 Q500,370 512,370 L790,370 Q802,370 802,382 L802,414 Z" fill="#f1f6ec"/>
+<text x="651.0" y="388" class="tiny" text-anchor="middle">&lt;&lt;repository&gt;&gt;</text>
+<text x="651.0" y="409" class="cardTitle" text-anchor="middle">MovieR2dbcRepository</text>
+<text x="518" y="436" class="detail" text-anchor="start">implements R2dbcRepository</text>
+<text x="518" y="454" class="detail" text-anchor="start">MovieActorJoin + Flow grouping</text>
+<text x="518" y="472" class="detail" text-anchor="start">search/save/count queries</text>
 </g>
-<g transform="translate(970,412)">
-  <rect class="card" x="0" y="0" width="380" height="175" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#DC6B82"/>
-  <text class="small" x="190" y="26" text-anchor="middle"></text>
-  <text class="label" x="190" y="61" text-anchor="middle">ActorController</text>
-  <text class="mono" x="18" y="108">+getAllActors() List~ActorRecord~</text>
-<text class="mono" x="18" y="129">+getActorById(id) ActorRecord?</text>
-<text class="mono" x="18" y="150">+createActor(actor) ActorRecord</text>
+<g data-card="ActorR2dbcRepository" data-x="870" data-y="370" data-width="302" data-height="128">
+<rect class="card" x="870" y="370" width="302" height="128" rx="12" fill="#fff" stroke="#6f8f52" stroke-width="2.2"/>
+<path d="M870,414 L870,382 Q870,370 882,370 L1160,370 Q1172,370 1172,382 L1172,414 Z" fill="#f1f6ec"/>
+<text x="1021.0" y="388" class="tiny" text-anchor="middle">&lt;&lt;repository&gt;&gt;</text>
+<text x="1021.0" y="409" class="cardTitle" text-anchor="middle">ActorR2dbcRepository</text>
+<text x="888" y="436" class="detail" text-anchor="start">implements R2dbcRepository</text>
+<text x="888" y="454" class="detail" text-anchor="start">ActorTable CRUD + search</text>
+<text x="888" y="472" class="detail" text-anchor="start">insertAndGetId save</text>
 </g>
-<g transform="translate(520,412)">
-  <rect class="card" x="0" y="0" width="380" height="259" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#45A7A1"/>
-  <text class="small" x="190" y="26" text-anchor="middle"></text>
-  <text class="label" x="190" y="61" text-anchor="middle">MovieR2dbcRepository</text>
-  <text class="mono" x="18" y="108">+table MovieTable</text>
-<text class="mono" x="18" y="129">+extractId(entity) Long</text>
-<text class="mono" x="18" y="150">+toEntity(row) MovieRecord</text>
-<text class="mono" x="18" y="171">+save(movie) MovieRecord</text>
-<text class="mono" x="18" y="192">+searchMovies(params) Flow~MovieRecord~</text>
-<text class="mono" x="18" y="213">+getAllMoviesWithActors()</text>
-<text class="mono" x="18" y="234">Flow~MovieWithActorRecord~</text>
+<g data-card="MovieSchema Tables" data-x="228" data-y="636" data-width="302" data-height="108">
+<rect class="card" x="228" y="636" width="302" height="108" rx="12" fill="#fff" stroke="#4f8f8b" stroke-width="2.2"/>
+<path d="M228,680 L228,648 Q228,636 240,636 L518,636 Q530,636 530,648 L530,680 Z" fill="#eef7f6"/>
+<text x="379.0" y="654" class="tiny" text-anchor="middle">&lt;&lt;object&gt;&gt;</text>
+<text x="379.0" y="675" class="cardTitle" text-anchor="middle">MovieSchema Tables</text>
+<text x="246" y="702" class="detail" text-anchor="start">MovieTable, ActorTable</text>
+<text x="246" y="720" class="detail" text-anchor="start">ActorInMovieTable PK/FK</text>
 </g>
-<g transform="translate(520,791)">
-  <rect class="card" x="0" y="0" width="380" height="196" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#8A72D6"/>
-  <text class="small" x="190" y="26" text-anchor="middle"></text>
-  <text class="label" x="190" y="61" text-anchor="middle">MovieController</text>
-  <text class="mono" x="18" y="108">+getMovieWithActors(id) MovieWithActorRecord?</text>
-<text class="mono" x="18" y="129">+searchMovies(params) List~MovieRecord~</text>
-<text class="mono" x="18" y="150">+createMovie(movie) MovieRecord</text>
-<text class="mono" x="18" y="171">+deleteMovie(id) Int</text>
+<g data-card="DTO Records" data-x="628" data-y="636" data-width="302" data-height="108">
+<rect class="card" x="628" y="636" width="302" height="108" rx="12" fill="#fff" stroke="#a66a3f" stroke-width="2.2"/>
+<path d="M628,680 L628,648 Q628,636 640,636 L918,636 Q930,636 930,648 L930,680 Z" fill="#f5eee4"/>
+<text x="779.0" y="654" class="tiny" text-anchor="middle">&lt;&lt;Serializable&gt;&gt;</text>
+<text x="779.0" y="675" class="cardTitle" text-anchor="middle">DTO Records</text>
+<text x="646" y="702" class="detail" text-anchor="start">MovieRecord / ActorRecord</text>
+<text x="646" y="720" class="detail" text-anchor="start">MovieWithActorRecord</text>
 </g>
+<g data-card="ResultRow Mappers" data-x="988" data-y="636" data-width="210" data-height="108">
+<rect class="card" x="988" y="636" width="210" height="108" rx="12" fill="#fff" stroke="#a66a3f" stroke-width="2.2"/>
+<path d="M988,680 L988,648 Q988,636 1000,636 L1186,636 Q1198,636 1198,648 L1198,680 Z" fill="#f5eee4"/>
+<text x="1093.0" y="654" class="tiny" text-anchor="middle">&lt;&lt;extensions&gt;&gt;</text>
+<text x="1093.0" y="675" class="cardTitle" text-anchor="middle">ResultRow Mappers</text>
+<text x="1006" y="702" class="detail" text-anchor="start">toMovieRecord</text>
+<text x="1006" y="720" class="detail" text-anchor="start">toActorRecord</text>
+</g>
+<path data-connector="movie-repo-implements" class="connector use" d="M 650 370 L 650 280" stroke="#6f8f52"/>
+<polygon points="650,264 641,280 659,280" fill="#fff" stroke="#6f8f52" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path data-connector="actor-repo-implements" class="connector use" d="M 1021 370 L 1021 304 Q 1021 286 1003 286 L 840 286" stroke="#6f8f52"/>
+<polygon points="822,270 813,286 831,286" fill="#fff" stroke="#6f8f52" stroke-width="2.6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path data-connector="controllers-use-movie" class="connector use" d="M 390 432 L 488 432" stroke="#4f86c6"/>
+<polyline points="488,425 500,432 488,439" fill="none" stroke="#4f86c6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path data-connector="movie-repo-schema" class="connector use" d="M 590 498 L 590 556 Q 590 574 572 574 L 397 574 Q 379 574 379 592 L 379 624" stroke="#4f8f8b"/>
+<polyline points="372,624 379,636 386,624" fill="none" stroke="#4f8f8b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path data-connector="movie-repo-dto" class="connector use" d="M 706 498 L 706 624" stroke="#a66a3f"/>
+<polyline points="699,624 706,636 713,624" fill="none" stroke="#a66a3f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<path data-connector="actor-repo-mapper" class="connector use" d="M 1034 498 L 1034 624" stroke="#a66a3f"/>
+<polyline points="1027,624 1034,636 1041,624" fill="none" stroke="#a66a3f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<rect x="86" y="770" width="1108" height="34" rx="12" class="noteBox"/>
+<text x="640" y="792" class="detail" text-anchor="middle">Hollow triangles show R2dbcRepository implementation; dashed open arrows show constructor/use dependencies.</text>
 </svg>

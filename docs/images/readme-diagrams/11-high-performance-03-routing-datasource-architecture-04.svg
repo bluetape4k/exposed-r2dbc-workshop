@@ -1,50 +1,161 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="820" viewBox="0 0 1180 820" role="img" aria-label="Routing DataSource Architecture">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:24px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:20px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12.5px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12.5px;font-weight:400;fill:#536273}
-    .card{stroke-width:2.1;filter:url(#shadow)}.soft{stroke-width:1.7}
-    .line{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#arrow)}
-    .plain{stroke:#758297;stroke-width:2.0;fill:none}.dash{stroke:#758297;stroke-width:2.0;stroke-dasharray:7 6;fill:none;marker-end:url(#arrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1180" height="820"/>
-<rect class="frame" x="32" y="28" width="1116" height="764" rx="28"/>
-<text class="title" x="66" y="82">Routing DataSource Architecture</text>
-<text class="subtitle" x="70" y="118">Tenant and read-only hints flow from WebFlux request context to the selected R2DBC database</text>
-<g transform="translate(390,150)">
-  <rect class="card" x="0" y="0" width="400" height="76" rx="8" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="200" y="33" text-anchor="middle">HTTP Request</text>
-<text class="smallLabel" x="200" y="57" text-anchor="middle">X-Tenant-Id + /readonly</text>
-</g><g transform="translate(390,245)">
-  <rect class="card" x="0" y="0" width="400" height="76" rx="8" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="200" y="33" text-anchor="middle">TenantRoutingWebFilter</text>
-<text class="smallLabel" x="200" y="57" text-anchor="middle">contextWrite(TENANT, READ_ONLY)</text>
-</g><path class="line" d="M590 226 L590 245" data-connector="line"/><g transform="translate(390,340)">
-  <rect class="card" x="0" y="0" width="400" height="76" rx="8" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="200" y="33" text-anchor="middle">RoutingMarkerController</text>
-<text class="smallLabel" x="200" y="57" text-anchor="middle">suspend handler</text>
-</g><path class="line" d="M590 321 L590 340" data-connector="line"/><g transform="translate(390,435)">
-  <rect class="card" x="0" y="0" width="400" height="76" rx="8" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="200" y="33" text-anchor="middle">RoutingTransactionalExecutor</text>
-<text class="smallLabel" x="200" y="57" text-anchor="middle">TransactionalOperator + READ_ONLY</text>
-</g><path class="line" d="M590 416 L590 435" data-connector="line"/><g transform="translate(390,530)">
-  <rect class="card" x="0" y="0" width="400" height="76" rx="8" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="200" y="33" text-anchor="middle">DynamicRoutingConnectionFactory</text>
-<text class="smallLabel" x="200" y="57" text-anchor="middle">Mono.deferContextual lookup</text>
-</g><path class="line" d="M590 511 L590 530" data-connector="line"/><g transform="translate(390,625)">
-  <rect class="card" x="0" y="0" width="400" height="76" rx="8" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="200" y="33" text-anchor="middle">ConnectionFactoryRegistry</text>
-<text class="smallLabel" x="200" y="57" text-anchor="middle">key -&gt; ConnectionFactory</text>
-</g><path class="line" d="M590 606 L590 625" data-connector="line"/><g transform="translate(390,720)">
-  <rect class="card" x="0" y="0" width="400" height="76" rx="8" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="200" y="33" text-anchor="middle">Actual DB</text>
-<text class="smallLabel" x="200" y="57" text-anchor="middle">H2 / PostgreSQL</text>
-</g><path class="line" d="M590 701 L590 720" data-connector="line"/><text class="small" x="830" y="566">key examples: acme:ro, default:rw</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="1100" viewBox="0 0 1700 1100" role="img" aria-label="Routing datasource architecture for Exposed R2DBC Spring WebFlux">
+  <defs>
+    <filter id="softShadow" x="-8%" y="-10%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#25384d" flood-opacity="0.10"/>
+    </filter>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fffefa;stroke:#d7e3ed;stroke-width:2}
+      .lane{fill:#f9fbfd;stroke:#dbe7f0;stroke-width:1.8}
+      .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:40px;fill:#192538;font-weight:400}
+      .subtitle,.detail,.foot{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:700;fill:#556678}
+      .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:700;fill:#66788c}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:18px;letter-spacing:0.08em;fill:#8ba4b8;font-weight:400}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:22px;fill:#192538;font-weight:400}
+      .stereo{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:700;fill:#66788c}
+      .card{filter:url(#softShadow);stroke-width:2.4}
+      .header{opacity:.96}
+      .connector{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .dash{stroke-dasharray:8 7}
+      .head{fill:none;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none}
+      .blue{stroke:#4f86c6}
+      .green{stroke:#6f8f52}
+      .amber{stroke:#a36f3e}
+      .teal{stroke:#4f8f8b}
+      .rose{stroke:#a85f7f}
+    </style>
+  </defs>
+
+  <rect class="canvas" width="1700" height="1100"/>
+  <rect class="frame" x="30" y="30" width="1640" height="1040" rx="24"/>
+  <text class="title" x="72" y="94">Routing DataSource Architecture</text>
+  <text class="subtitle" x="76" y="128">TenantRoutingWebFilter writes tenant/read-only hints to Reactor Context; DynamicRoutingConnectionFactory resolves a key and delegates to the registered R2DBC ConnectionFactory.</text>
+
+  <rect class="lane" x="60" y="160" width="1580" height="230" rx="18"/>
+  <text class="laneTitle" x="92" y="194">REQUEST CONTEXT</text>
+  <rect class="lane" x="60" y="420" width="1580" height="275" rx="18"/>
+  <text class="laneTitle" x="92" y="454">EXPOSED R2DBC ROUTING PATH</text>
+  <rect class="lane" x="60" y="728" width="1580" height="230" rx="18"/>
+  <text class="laneTitle" x="92" y="762">REGISTRY / TARGET CONNECTIONS</text>
+
+  <g data-card="HTTP Request" data-x="100" data-y="235" data-width="245" data-height="116">
+    <rect class="card" x="100" y="235" width="245" height="116" rx="14" fill="#ffffff" stroke="#4f86c6"/>
+    <path class="header" d="M100,280 L100,249 Q100,235 114,235 L331,235 Q345,235 345,249 L345,280 Z" fill="#eef6fc"/>
+    <text class="stereo" x="222.5" y="258" text-anchor="middle">&lt;&lt;web request&gt;&gt;</text>
+    <text class="cardTitle" x="222.5" y="281" text-anchor="middle">HTTP Request</text>
+    <text class="detail" x="124" y="310">X-Tenant-Id header</text>
+    <text class="small" x="124" y="334">X-Read-Only or /readonly path</text>
+  </g>
+
+  <g data-card="TenantRoutingWebFilter" data-x="415" data-y="235" data-width="280" data-height="116">
+    <rect class="card" x="415" y="235" width="280" height="116" rx="14" fill="#ffffff" stroke="#6f8f52"/>
+    <path class="header" d="M415,280 L415,249 Q415,235 429,235 L681,235 Q695,235 695,249 L695,280 Z" fill="#f2f8ed"/>
+    <text class="stereo" x="555" y="258" text-anchor="middle">&lt;&lt;WebFilter&gt;&gt;</text>
+    <text class="cardTitle" x="555" y="281" text-anchor="middle">TenantRoutingWebFilter</text>
+    <text class="detail" x="439" y="310">default tenant fallback</text>
+    <text class="small" x="439" y="334">parses tenant + readOnly hint</text>
+  </g>
+
+  <g data-card="Reactor Context" data-x="765" data-y="235" data-width="260" data-height="116">
+    <rect class="card" x="765" y="235" width="260" height="116" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+    <path class="header" d="M765,280 L765,249 Q765,235 779,235 L1011,235 Q1025,235 1025,249 L1025,280 Z" fill="#eef8f7"/>
+    <text class="stereo" x="895" y="258" text-anchor="middle">&lt;&lt;ContextView&gt;&gt;</text>
+    <text class="cardTitle" x="895" y="281" text-anchor="middle">Reactor Context</text>
+    <text class="detail" x="789" y="310">TENANT = default | acme</text>
+    <text class="small" x="789" y="334">READ_ONLY = true | false</text>
+  </g>
+
+  <g data-card="RoutingMarkerController" data-x="100" data-y="500" data-width="265" data-height="126">
+    <rect class="card" x="100" y="500" width="265" height="126" rx="14" fill="#ffffff" stroke="#4f86c6"/>
+    <path class="header" d="M100,564 L100,514 Q100,500 114,500 L351,500 Q365,500 365,514 L365,564 Z" fill="#eef6fc"/>
+    <text class="stereo" x="232.5" y="524" text-anchor="middle">&lt;&lt;controller&gt;&gt;</text>
+    <text class="cardTitle" x="232.5" y="547" text-anchor="middle">RoutingMarker</text>
+    <text class="cardTitle" x="232.5" y="569" text-anchor="middle">Controller</text>
+    <text class="detail" x="124" y="594">/routing/marker</text>
+    <text class="small" x="124" y="616">GET / PATCH endpoints</text>
+  </g>
+
+  <g data-card="RoutingTransactionalExecutor" data-x="430" data-y="500" data-width="300" data-height="126">
+    <rect class="card" x="430" y="500" width="300" height="126" rx="14" fill="#ffffff" stroke="#6f8f52"/>
+    <path class="header" d="M430,564 L430,514 Q430,500 444,500 L716,500 Q730,500 730,514 L730,564 Z" fill="#f2f8ed"/>
+    <text class="stereo" x="580" y="524" text-anchor="middle">&lt;&lt;transaction&gt;&gt;</text>
+    <text class="cardTitle" x="580" y="547" text-anchor="middle">RoutingTransactional</text>
+    <text class="cardTitle" x="580" y="569" text-anchor="middle">Executor</text>
+    <text class="detail" x="454" y="594">readWrite { } / readOnly { }</text>
+    <text class="small" x="454" y="616">adds READ_ONLY context inside tx</text>
+  </g>
+
+  <g data-card="Exposed R2dbcDatabase" data-x="790" data-y="500" data-width="275" data-height="126">
+    <rect class="card" x="790" y="500" width="275" height="126" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+    <path class="header" d="M790,546 L790,514 Q790,500 804,500 L1051,500 Q1065,500 1065,514 L1065,546 Z" fill="#eef8f7"/>
+    <text class="stereo" x="927.5" y="524" text-anchor="middle">&lt;&lt;Exposed R2DBC&gt;&gt;</text>
+    <text class="cardTitle" x="927.5" y="547" text-anchor="middle">R2dbcDatabase</text>
+    <text class="detail" x="814" y="578">@Primary ConnectionFactory</text>
+    <text class="small" x="814" y="602">connected with routing factory</text>
+  </g>
+
+  <g data-card="DynamicRoutingConnectionFactory" data-x="1130" data-y="500" data-width="335" data-height="126">
+    <rect class="card" x="1130" y="500" width="335" height="126" rx="14" fill="#ffffff" stroke="#a36f3e"/>
+    <path class="header" d="M1130,564 L1130,514 Q1130,500 1144,500 L1451,500 Q1465,500 1465,514 L1465,564 Z" fill="#fff5e8"/>
+    <text class="stereo" x="1297.5" y="524" text-anchor="middle">&lt;&lt;ConnectionFactory&gt;&gt;</text>
+    <text class="cardTitle" x="1297.5" y="547" text-anchor="middle">DynamicRouting</text>
+    <text class="cardTitle" x="1297.5" y="569" text-anchor="middle">ConnectionFactory</text>
+    <text class="detail" x="1154" y="594">Mono.deferContextual</text>
+    <text class="small" x="1154" y="616">delegates target.create()</text>
+  </g>
+
+  <g data-card="ContextAwareRoutingKeyResolver" data-x="1130" data-y="792" data-width="335" data-height="118">
+    <rect class="card" x="1130" y="792" width="335" height="118" rx="14" fill="#ffffff" stroke="#a85f7f"/>
+    <path class="header" d="M1130,856 L1130,806 Q1130,792 1144,792 L1451,792 Q1465,792 1465,806 L1465,856 Z" fill="#f8eef4"/>
+    <text class="stereo" x="1297.5" y="815" text-anchor="middle">&lt;&lt;resolver&gt;&gt;</text>
+    <text class="cardTitle" x="1297.5" y="838" text-anchor="middle">ContextAwareRouting</text>
+    <text class="cardTitle" x="1297.5" y="860" text-anchor="middle">KeyResolver</text>
+    <text class="detail" x="1154" y="884">key = &lt;tenant&gt;:&lt;rw|ro&gt;</text>
+    <text class="small" x="1154" y="904">default:rw, acme:rw, acme:ro</text>
+  </g>
+
+  <g data-card="ConnectionFactoryRegistry" data-x="665" data-y="792" data-width="335" data-height="118">
+    <rect class="card" x="665" y="792" width="335" height="118" rx="14" fill="#ffffff" stroke="#4f8f8b"/>
+    <path class="header" d="M665,837 L665,806 Q665,792 679,792 L986,792 Q1000,792 1000,806 L1000,837 Z" fill="#eef8f7"/>
+    <text class="stereo" x="832.5" y="815" text-anchor="middle">&lt;&lt;registry&gt;&gt;</text>
+    <text class="cardTitle" x="832.5" y="838" text-anchor="middle">ConnectionFactoryRegistry</text>
+    <text class="detail" x="689" y="868">register/get by routing key</text>
+    <text class="small" x="689" y="892">InMemory map of tenant rw/ro factories</text>
+  </g>
+
+  <g data-card="Tenant R2DBC Targets" data-x="160" data-y="792" data-width="380" data-height="118">
+    <rect class="card" x="160" y="792" width="380" height="118" rx="14" fill="#ffffff" stroke="#8a6f55"/>
+    <path class="header" d="M160,837 L160,806 Q160,792 174,792 L526,792 Q540,792 540,806 L540,837 Z" fill="#f3eee8"/>
+    <text class="stereo" x="350" y="815" text-anchor="middle">&lt;&lt;configured targets&gt;&gt;</text>
+    <text class="cardTitle" x="350" y="838" text-anchor="middle">Tenant R2DBC Targets</text>
+    <text class="detail" x="184" y="868">default:rw / default:ro, acme:rw / acme:ro</text>
+    <text class="small" x="184" y="892">ro URL falls back to rw when omitted</text>
+  </g>
+
+  <g id="connectors">
+    <path class="connector blue" data-connector="request" d="M345 293 L415 293"/>
+    <polyline class="head blue" points="415,293 403,286 403,300"/>
+    <path class="connector green" data-connector="context" d="M695 293 L765 293"/>
+    <polyline class="head green" points="765,293 753,286 753,300"/>
+
+    <path class="connector blue" data-connector="controller" d="M365 563 L430 563"/>
+    <polyline class="head blue" points="430,563 418,556 418,570"/>
+    <path class="connector green" data-connector="transaction" d="M730 563 L790 563"/>
+    <polyline class="head green" points="790,563 778,556 778,570"/>
+    <path class="connector teal" data-connector="database" d="M1065 563 L1130 563"/>
+    <polyline class="head teal" points="1130,563 1118,556 1118,570"/>
+
+    <path class="connector rose dash" data-connector="context-use" d="M895 351 L895 430 Q895 450 915 450 L1277.5 450 Q1297.5 450 1297.5 470 L1297.5 488" stroke-linecap="butt"/>
+    <polyline class="head rose" points="1290.5,488 1297.5,500 1304.5,488" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+    <path class="connector amber" data-connector="resolve" d="M1297.5 626 L1297.5 792"/>
+    <polyline class="head amber" points="1297.5,792 1290.5,780 1304.5,780"/>
+    <path class="connector rose" data-connector="registry-key" d="M1130 851 L1000 851"/>
+    <polyline class="head rose" points="1000,851 1012,844 1012,858"/>
+    <path class="connector teal" data-connector="target" d="M665 851 L540 851"/>
+    <polyline class="head teal" points="540,851 552,844 552,858"/>
+  </g>
+
+  <rect x="110" y="1010" width="1480" height="34" rx="12" fill="#fbfdff" stroke="#d7e3ed" stroke-width="2"/>
+  <text class="foot" x="850" y="1033" text-anchor="middle">Routing key examples: no header -> default:rw; X-Tenant-Id acme -> acme:rw; acme + readonly header/path -> acme:ro.</text>
+</svg>

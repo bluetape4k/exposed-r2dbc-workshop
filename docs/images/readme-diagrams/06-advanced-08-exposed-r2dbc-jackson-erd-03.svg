@@ -1,54 +1,101 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="842" height="722" viewBox="0 0 842 722" role="img" aria-label="Table Structure (ER Diagram)">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="842" height="722"/>
-<rect class="frame" x="32" y="28" width="778" height="666" rx="28"/>
-<text class="title" x="66" y="82">Table Structure</text>
-<text class="subtitle" x="70" y="118">ERD tables and relationships from the original Mermaid source</text>
-<path class="line" d="M622 336 L622 122 L220 122 L220 170" data-connector="line"/>
-<path class="line" d="M421 466 L421 670 L220 670 L220 390" data-connector="line"/>
-<g transform="translate(60,170)">
-  <rect filter="url(#shadow)" x="0" y="0" width="320" height="220" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#5B8DEF"/>
-  <text class="label" x="160" y="44" text-anchor="middle">data_holder</text>
-  <text class="mono" x="18" y="104">String name</text>
-<text class="mono" x="18" y="131">String team_nullable</text>
-<text class="mono" x="18" y="158">INT logins</text>
-<text class="mono" x="18" y="185">BOOLEAN active</text>
-</g>
-<g transform="translate(462,170)">
-  <rect filter="url(#shadow)" x="0" y="0" width="320" height="166" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#58A978"/>
-  <text class="label" x="160" y="44" text-anchor="middle">jackson_b_table</text>
-  <text class="mono" x="18" y="104">INT id PK</text>
-<text class="mono" x="18" y="131">JSONB jackson_b_column DataHolder.</text>
-</g>
-<g transform="translate(261,466)">
-  <rect filter="url(#shadow)" x="0" y="0" width="320" height="166" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#D6A441"/>
-  <text class="label" x="160" y="44" text-anchor="middle">jackson_table</text>
-  <text class="mono" x="18" y="104">INT id PK</text>
-<text class="mono" x="18" y="131">JSON jackson_column DataHolder JS.</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1280" viewBox="0 0 2200 1280" role="img" aria-label="Advanced 08 Exposed R2DBC Jackson table structure ERD">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.11"/>
+    </filter>
+    <style>
+      .canvas{fill:#f4f7fa}
+      .frame{fill:#fffefb;stroke:#b8ccdf;stroke-width:5}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:3}
+      .laneWarm{fill:#fffaf0;stroke:#dccb9e;stroke-width:3}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:64px;fill:#1e293b}
+      .subtitle,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:24px;fill:#536476;font-weight:700}
+      .laneTitle{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:24px;letter-spacing:.06em;fill:#8ca2b4;font-weight:800}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:34px;fill:#1e293b}
+      .cardSub{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:22px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:19px;fill:#64748b;font-weight:800}
+      .card{filter:url(#shadow)}
+      .cardWhite{fill:#ffffff}
+      .blue{stroke:#4f86c6}
+      .green{stroke:#6f8f52}
+      .amber{stroke:#b8891f}
+      .red{stroke:#ad5f82}
+      .teal{stroke:#4f8f8b}
+      .brown{stroke:#8a6f55}
+      .blueFill{fill:#eef5fa}
+      .greenFill{fill:#f1f6ec}
+      .amberFill{fill:#fff8e6}
+      .redFill{fill:#f8edf3}
+      .tealFill{fill:#eef7f6}
+      .brownFill{fill:#f3eee8}
+      .footer{fill:#ffffff;stroke:#d9e3ec;stroke-width:2.4}
+    </style>
+  </defs>
 
-<text x="421" y="698" class="mono" text-anchor="middle">No FK relationship: tables are independent examples for this module.</text>
+  <rect class="canvas" width="2200" height="1280"/>
+  <rect class="frame" x="36" y="34" width="2128" height="1212" rx="38"/>
+  <text class="title" x="1100" y="126" text-anchor="middle">Jackson JSON Column Table Structure</text>
+  <text class="subtitle" x="1100" y="176" text-anchor="middle">JacksonSchema declares four independent IntIdTable objects; JSON payload nesting is document structure, not relational FK.</text>
+
+  <rect class="lane" x="92" y="234" width="2016" height="590" rx="30"/>
+  <text class="laneTitle" x="132" y="282">TABLES FROM JACKSONSCHEMA.KT</text>
+  <rect class="laneWarm" x="92" y="866" width="2016" height="230" rx="30"/>
+  <text class="laneTitle" x="132" y="914">JSON DOCUMENT SHAPES</text>
+
+  <g data-card="jackson_table" data-x="158" data-y="358" data-width="450" data-height="326">
+    <rect class="card cardWhite blue" x="158" y="358" width="450" height="326" rx="24" stroke-width="4"/>
+    <path class="blueFill" d="M158,432 L158,382 Q158,358 182,358 L584,358 Q608,358 608,382 L608,432 Z"/>
+    <text class="tiny" x="383" y="394" text-anchor="middle">&lt;&lt;IntIdTable&gt;&gt;</text>
+    <text class="cardTitle" x="383" y="422" text-anchor="middle">jackson_table</text>
+    <text class="cardSub" x="196" y="480">id : EntityID&lt;Int&gt;</text>
+    <text class="tiny" x="196" y="512">PK, generated integer id</text>
+    <text class="cardSub" x="196" y="568">jackson_column : JSON</text>
+    <text class="tiny" x="196" y="600">DataHolder serialized by jackson()</text>
+    <text class="tiny" x="196" y="646">No foreign keys declared</text>
+  </g>
+
+  <g data-card="jackson_b_table" data-x="636" data-y="358" data-width="450" data-height="326">
+    <rect class="card cardWhite red" x="636" y="358" width="450" height="326" rx="24" stroke-width="4"/>
+    <path class="redFill" d="M636,432 L636,382 Q636,358 660,358 L1062,358 Q1086,358 1086,382 L1086,432 Z"/>
+    <text class="tiny" x="861" y="394" text-anchor="middle">&lt;&lt;IntIdTable&gt;&gt;</text>
+    <text class="cardTitle" x="861" y="422" text-anchor="middle">jackson_b_table</text>
+    <text class="cardSub" x="674" y="480">id : EntityID&lt;Int&gt;</text>
+    <text class="tiny" x="674" y="512">PK, generated integer id</text>
+    <text class="cardSub" x="674" y="568">jackson_b_column : JSONB</text>
+    <text class="tiny" x="674" y="600">DataHolder serialized by jacksonb()</text>
+    <text class="tiny" x="674" y="646">No foreign keys declared</text>
+  </g>
+
+  <g data-card="jackson_arrays" data-x="1114" data-y="358" data-width="450" data-height="326">
+    <rect class="card cardWhite green" x="1114" y="358" width="450" height="326" rx="24" stroke-width="4"/>
+    <path class="greenFill" d="M1114,432 L1114,382 Q1114,358 1138,358 L1540,358 Q1564,358 1564,382 L1564,432 Z"/>
+    <text class="tiny" x="1339" y="394" text-anchor="middle">&lt;&lt;IntIdTable&gt;&gt;</text>
+    <text class="cardTitle" x="1339" y="422" text-anchor="middle">jackson_arrays</text>
+    <text class="cardSub" x="1152" y="480">id : EntityID&lt;Int&gt;</text>
+    <text class="tiny" x="1152" y="512">PK, generated integer id</text>
+    <text class="cardSub" x="1152" y="568">groups : JSON UserGroup</text>
+    <text class="cardSub" x="1152" y="604">numbers : JSON IntArray</text>
+    <text class="tiny" x="1152" y="646">No foreign keys declared</text>
+  </g>
+
+  <g data-card="jackson_b_arrays" data-x="1592" data-y="358" data-width="450" data-height="326">
+    <rect class="card cardWhite teal" x="1592" y="358" width="450" height="326" rx="24" stroke-width="4"/>
+    <path class="tealFill" d="M1592,432 L1592,382 Q1592,358 1616,358 L2018,358 Q2042,358 2042,382 L2042,432 Z"/>
+    <text class="tiny" x="1817" y="394" text-anchor="middle">&lt;&lt;IntIdTable&gt;&gt;</text>
+    <text class="cardTitle" x="1817" y="422" text-anchor="middle">jackson_b_arrays</text>
+    <text class="cardSub" x="1630" y="480">id : EntityID&lt;Int&gt;</text>
+    <text class="tiny" x="1630" y="512">PK, generated integer id</text>
+    <text class="cardSub" x="1630" y="568">groups : JSONB UserGroup</text>
+    <text class="cardSub" x="1630" y="604">numbers : JSONB IntArray</text>
+    <text class="tiny" x="1630" y="646">No foreign keys declared</text>
+  </g>
+
+  <g data-card="Payload models" data-x="288" data-y="964" data-width="1624" data-height="82">
+    <rect class="cardWhite amber" x="288" y="964" width="1624" height="82" rx="22" stroke-width="4"/>
+    <text class="cardTitle" x="1100" y="1006" text-anchor="middle">DataHolder(user: User, logins, active, team) / User(name, team) / UserGroup(users)</text>
+    <text class="cardSub" x="1100" y="1036" text-anchor="middle">Nested values live inside the JSON document; they do not create ERD relationships.</text>
+  </g>
+
+  <rect class="footer" x="236" y="1160" width="1728" height="48" rx="18"/>
+  <text class="note" x="1100" y="1192" text-anchor="middle">Reader contract: no 1:N markers are shown because JacksonSchema.kt declares no FK columns between these tables.</text>
 </svg>

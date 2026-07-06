@@ -1,85 +1,180 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1044" height="692" viewBox="0 0 1044 692" role="img" aria-label="Tenant Context Propagation Flow">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1044" height="692"/>
-<rect class="frame" x="32" y="28" width="980" height="636" rx="28"/>
-<text class="title" x="66" y="82">Tenant Context Propagation Flow</text>
-<text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M672 552 C672 552 706 552 706 552" data-connector="line"/>
-<path class="line" d="M338 552 C338 552 372 552 372 552" data-connector="line"/>
-<path class="line" d="M706 386 C706 469 338 469 338 552" data-connector="line"/>
-<path class="line" d="M672 386 C672 386 706 386 706 386" data-connector="line"/>
-<path class="line" d="M338 386 C338 386 372 386 372 386" data-connector="line"/>
-<path class="line" d="M706 220 C706 303 338 303 338 386" data-connector="line"/>
-<path class="line" d="M672 220 C672 220 706 220 706 220" data-connector="line"/>
-<path class="line" d="M338 220 C338 220 372 220 372 220" data-connector="line"/>
-<g transform="translate(48,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">HTTP Request Header:</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">X-TENANT-ID: korean</text>
-</g>
-<g transform="translate(382,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">TenantFilter</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">(WebFilter) Extract</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">X-TENANT-ID header</text>
-</g>
-<g transform="translate(716,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">ReactorContext Store</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">TenantId(korean)</text>
-</g>
-<g transform="translate(48,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">ActorController</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">suspend fun</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">getAllActors()</text>
-</g>
-<g transform="translate(382,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">suspend Transaction</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">With Current Tenant</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">current Reactor</text>
-</g>
-<g transform="translate(716,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">Schema Utils.set</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">Schema(korean)</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">Switch schema</text>
-</g>
-<g transform="translate(48,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">ActorR2dbcRepository</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">findAll()</text>
-</g>
-<g transform="translate(382,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="21" text-anchor="middle">R2DBC Database</text>
-<text class="smallLabel" x="140" y="47" text-anchor="middle">SELECT * FROM</text>
-<text class="smallLabel" x="140" y="73" text-anchor="middle">korean.actors</text>
-</g>
-<g transform="translate(716,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">JSON Response Korean</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">actor data</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img" aria-label="Spring WebFlux tenant context propagation architecture diagram">
+  <defs>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .canvas{fill:#f5f8fb}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:2}
+      .lane{fill:#f8fafc;stroke:#dbe6ef;stroke-width:1.6}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:22px;letter-spacing:.08em;fill:#91a6b7}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:48px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:18px;fill:#526276;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:15px;fill:#64748b;font-weight:700}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:25px;fill:#1e293b}
+      .card{filter:url(#softShadow)}
+      .header{opacity:.97}
+      .connector{fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+      .dash{stroke-dasharray:12 10}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:2}
+      .failBox{fill:#fff7ed;stroke:#d39b58;stroke-width:3}
+      .blue{stroke:#3c82b4}.green{stroke:#5f8848}.gold{stroke:#b78632}.teal{stroke:#4f8f8b}.red{stroke:#b76b6b}.slate{stroke:#607386}
+      .blueFill{fill:#eef5fa}.greenFill{fill:#f1f6ec}.goldFill{fill:#f7f0e2}.tealFill{fill:#eef7f6}.redFill{fill:#f8eeee}.slateFill{fill:#eef2f6}
+    </style>
+  </defs>
+
+  <rect width="1600" height="1000" class="canvas"/>
+  <rect x="28" y="28" width="1544" height="944" rx="24" class="frame"/>
+
+  <text x="78" y="94" class="title">Spring WebFlux Tenant Context Propagation</text>
+  <text x="78" y="132" class="subtitle">TenantFilter validates X-TENANT-ID, writes TenantId into ReactorContext, and Exposed switches schema inside the transaction.</text>
+
+  <rect x="58" y="170" width="1484" height="230" rx="20" class="lane"/>
+  <text x="86" y="210" class="laneTitle">REQUEST GATE</text>
+
+  <rect x="58" y="430" width="1484" height="230" rx="20" class="lane"/>
+  <text x="86" y="470" class="laneTitle">COROUTINE TRANSACTION</text>
+
+  <rect x="58" y="690" width="1484" height="182" rx="20" class="lane"/>
+  <text x="86" y="730" class="laneTitle">SCHEMA AND DATA</text>
+
+  <g data-card="HTTP Request" data-x="110" data-y="245" data-width="245" data-height="112">
+    <rect x="110" y="245" width="245" height="112" rx="14" fill="#fff" stroke="#3c82b4" stroke-width="3" class="card"/>
+    <path class="header blueFill" d="M110,290 L110,259 Q110,245 124,245 L341,245 Q355,245 355,259 L355,290 Z"/>
+    <text x="232.5" y="267" class="tiny" text-anchor="middle">&lt;&lt;client&gt;&gt;</text>
+    <text x="232.5" y="289" class="cardTitle" text-anchor="middle">HTTP Request</text>
+    <text x="130" y="319" class="detail">GET /actors</text>
+    <text x="130" y="343" class="detail">X-TENANT-ID: korean</text>
+  </g>
+
+  <g data-card="TenantFilter" data-x="440" data-y="245" data-width="245" data-height="112">
+    <rect x="440" y="245" width="245" height="112" rx="14" fill="#fff" stroke="#5f8848" stroke-width="3" class="card"/>
+    <path class="header greenFill" d="M440,290 L440,259 Q440,245 454,245 L671,245 Q685,245 685,259 L685,290 Z"/>
+    <text x="562.5" y="267" class="tiny" text-anchor="middle">&lt;&lt;WebFilter&gt;&gt;</text>
+    <text x="562.5" y="289" class="cardTitle" text-anchor="middle">TenantFilter</text>
+    <text x="460" y="319" class="detail">missing/blank/unknown</text>
+    <text x="460" y="343" class="detail">tenant fails closed</text>
+  </g>
+
+  <g data-card="ReactorContext" data-x="770" data-y="245" data-width="245" data-height="112">
+    <rect x="770" y="245" width="245" height="112" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="3" class="card"/>
+    <path class="header tealFill" d="M770,290 L770,259 Q770,245 784,245 L1001,245 Q1015,245 1015,259 L1015,290 Z"/>
+    <text x="892.5" y="267" class="tiny" text-anchor="middle">&lt;&lt;reactor&gt;&gt;</text>
+    <text x="892.5" y="289" class="cardTitle" text-anchor="middle">ReactorContext</text>
+    <text x="790" y="319" class="detail">TenantId key</text>
+    <text x="790" y="343" class="detail">Tenant(KOREAN)</text>
+  </g>
+
+  <g data-card="ActorController" data-x="1100" data-y="245" data-width="245" data-height="112">
+    <rect x="1100" y="245" width="245" height="112" rx="14" fill="#fff" stroke="#3c82b4" stroke-width="3" class="card"/>
+    <path class="header blueFill" d="M1100,290 L1100,259 Q1100,245 1114,245 L1331,245 Q1345,245 1345,259 L1345,290 Z"/>
+    <text x="1222.5" y="267" class="tiny" text-anchor="middle">&lt;&lt;REST&gt;&gt;</text>
+    <text x="1222.5" y="289" class="cardTitle" text-anchor="middle">ActorController</text>
+    <text x="1120" y="319" class="detail">suspend handlers</text>
+    <text x="1120" y="343" class="detail">/actors, /actors/{id}</text>
+  </g>
+
+  <g data-card="Bad Request" data-x="440" data-y="366" data-width="245" data-height="64">
+    <rect x="440" y="366" width="245" height="64" rx="14" class="failBox"/>
+    <text x="562.5" y="392" class="cardTitle" text-anchor="middle">400 Bad Request</text>
+    <text x="562.5" y="416" class="tiny" text-anchor="middle">before database work</text>
+  </g>
+
+  <g data-card="suspendTransactionWithCurrentTenant" data-x="210" data-y="510" data-width="310" data-height="112">
+    <rect x="210" y="510" width="310" height="112" rx="14" fill="#fff" stroke="#5f8848" stroke-width="3" class="card"/>
+    <path class="header greenFill" d="M210,555 L210,524 Q210,510 224,510 L506,510 Q520,510 520,524 L520,555 Z"/>
+    <text x="365" y="532" class="tiny" text-anchor="middle">&lt;&lt;tenant transaction&gt;&gt;</text>
+    <text x="365" y="554" class="cardTitle" text-anchor="middle">suspendTransaction</text>
+    <text x="232" y="584" class="detail">current tenant wrapper</text>
+    <text x="232" y="608" class="detail">readOnly/isolation optional</text>
+  </g>
+
+  <g data-card="currentReactorTenant" data-x="645" data-y="510" data-width="310" data-height="112">
+    <rect x="645" y="510" width="310" height="112" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="3" class="card"/>
+    <path class="header tealFill" d="M645,555 L645,524 Q645,510 659,510 L941,510 Q955,510 955,524 L955,555 Z"/>
+    <text x="800" y="532" class="tiny" text-anchor="middle">&lt;&lt;coroutine&gt;&gt;</text>
+    <text x="800" y="554" class="cardTitle" text-anchor="middle">currentReactorTenant()</text>
+    <text x="667" y="584" class="detail">reads coroutine ReactorContext</text>
+    <text x="667" y="608" class="detail">fallback only for direct calls</text>
+  </g>
+
+  <g data-card="suspendTransactionWithTenant" data-x="1080" data-y="510" data-width="310" data-height="112">
+    <rect x="1080" y="510" width="310" height="112" rx="14" fill="#fff" stroke="#b78632" stroke-width="3" class="card"/>
+    <path class="header goldFill" d="M1080,555 L1080,524 Q1080,510 1094,510 L1376,510 Q1390,510 1390,524 L1390,555 Z"/>
+    <text x="1235" y="532" class="tiny" text-anchor="middle">&lt;&lt;Exposed R2DBC&gt;&gt;</text>
+    <text x="1235" y="554" class="cardTitle" text-anchor="middle">tenant transaction</text>
+    <text x="1102" y="584" class="detail">opens suspendTransaction</text>
+    <text x="1102" y="608" class="detail">then applies schema</text>
+  </g>
+
+  <g data-card="TenantInitializer" data-x="110" data-y="760" data-width="300" data-height="84">
+    <rect x="110" y="760" width="300" height="84" rx="14" fill="#fff" stroke="#607386" stroke-width="3" class="card"/>
+    <path class="header slateFill" d="M110,800 L110,774 Q110,760 124,760 L396,760 Q410,760 410,774 L410,800 Z"/>
+    <text x="260" y="783" class="tiny" text-anchor="middle">&lt;&lt;startup&gt;&gt;</text>
+    <text x="260" y="805" class="cardTitle" text-anchor="middle">TenantInitializer</text>
+    <text x="132" y="830" class="detail">seed each tenant</text>
+  </g>
+
+  <g data-card="SchemaUtils.setSchema" data-x="470" data-y="760" data-width="300" data-height="84">
+    <rect x="470" y="760" width="300" height="84" rx="14" fill="#fff" stroke="#b78632" stroke-width="3" class="card"/>
+    <path class="header goldFill" d="M470,800 L470,774 Q470,760 484,760 L756,760 Q770,760 770,774 L770,800 Z"/>
+    <text x="620" y="783" class="tiny" text-anchor="middle">&lt;&lt;schema switch&gt;&gt;</text>
+    <text x="620" y="805" class="cardTitle" text-anchor="middle">SchemaUtils.setSchema</text>
+    <text x="492" y="830" class="detail">korean / english</text>
+  </g>
+
+  <g data-card="ActorR2dbcRepository" data-x="830" data-y="760" data-width="300" data-height="84">
+    <rect x="830" y="760" width="300" height="84" rx="14" fill="#fff" stroke="#3c82b4" stroke-width="3" class="card"/>
+    <path class="header blueFill" d="M830,800 L830,774 Q830,760 844,760 L1116,760 Q1130,760 1130,774 L1130,800 Z"/>
+    <text x="980" y="783" class="tiny" text-anchor="middle">&lt;&lt;repository&gt;&gt;</text>
+    <text x="980" y="805" class="cardTitle" text-anchor="middle">ActorR2dbcRepository</text>
+    <text x="852" y="830" class="detail">Flow from ActorTable</text>
+  </g>
+
+  <g data-card="Tenant Schema" data-x="1190" data-y="760" data-width="300" data-height="84">
+    <rect x="1190" y="760" width="300" height="84" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="3" class="card"/>
+    <path class="header tealFill" d="M1190,800 L1190,774 Q1190,760 1204,760 L1476,760 Q1490,760 1490,774 L1490,800 Z"/>
+    <text x="1340" y="783" class="tiny" text-anchor="middle">&lt;&lt;database&gt;&gt;</text>
+    <text x="1340" y="805" class="cardTitle" text-anchor="middle">tenant schema tables</text>
+    <text x="1212" y="830" class="detail">actors, movies, join table</text>
+  </g>
+
+  <path class="connector blue" data-connector="request-to-filter" d="M355 301 L440 301"/>
+  <polyline points="440,301 424,292 424,310" fill="none" stroke="#3c82b4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+
+  <path class="connector green" data-connector="filter-to-context" d="M685 301 L770 301"/>
+  <polyline points="770,301 754,292 754,310" fill="none" stroke="#5f8848" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+
+  <path class="connector teal" data-connector="context-to-controller" d="M1015 301 L1100 301"/>
+  <polyline points="1100,301 1084,292 1084,310" fill="none" stroke="#4f8f8b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+
+  <path class="connector red dash" data-connector="filter-error" d="M562 357 L562 366"/>
+  <polyline points="562,366 553,350 571,350" fill="none" stroke="#b76b6b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+
+  <path class="connector blue" data-connector="controller-to-tx" d="M1222 357 L1222 434 Q1222 450 1206 450 L381 450 Q365 450 365 466 L365 510"/>
+  <polyline points="365,510 356,494 374,494" fill="none" stroke="#3c82b4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+
+  <path class="connector green" data-connector="tx-to-current-tenant" d="M520 566 L645 566"/>
+  <polyline points="645,566 629,557 629,575" fill="none" stroke="#5f8848" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+
+  <path class="connector teal" data-connector="read-context" d="M800 510 L800 496 Q800 480 816 480 L1454 480 Q1470 480 1470 464 L1470 233 Q1470 217 1454 217 L908 217 Q892 217 892 233 L892 245"/>
+  <polyline points="892,245 883,229 901,229" fill="none" stroke="#4f8f8b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+
+  <path class="connector teal dash" data-connector="tenant-return" d="M955 566 L1080 566"/>
+  <polyline points="1080,566 1064,557 1064,575" fill="none" stroke="#4f8f8b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+
+  <path class="connector gold" data-connector="transaction-to-schema" d="M1235 622 L1235 656 Q1235 672 1219 672 L636 672 Q620 672 620 688 L620 760"/>
+  <polyline points="605,760 596,744 614,744" fill="none" stroke="#b78632" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+
+  <path class="connector gold" data-connector="schema-to-repo" d="M770 802 L830 802"/>
+  <polyline points="830,802 814,793 814,811" fill="none" stroke="#b78632" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+
+  <path class="connector blue" data-connector="repo-to-db" d="M1130 802 L1190 802"/>
+  <polyline points="1190,802 1174,793 1174,811" fill="none" stroke="#3c82b4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+
+  <path class="connector slate dash" data-connector="initializer-to-schema" d="M410 802 L470 802"/>
+  <polyline points="470,802 454,793 454,811" fill="none" stroke="#607386" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+
+  <rect x="150" y="902" width="1300" height="42" rx="12" class="noteBox"/>
+  <text x="800" y="929" class="note" text-anchor="middle">TenantFilter writes tenant context; SchemaUtils switches schema before ordinary repository queries.</text>
 </svg>

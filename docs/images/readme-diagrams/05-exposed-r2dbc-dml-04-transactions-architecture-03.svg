@@ -1,68 +1,154 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1044" height="692" viewBox="0 0 1044 692" role="img" aria-label="Transaction State Diagram">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1044" height="692"/>
-<rect class="frame" x="32" y="28" width="980" height="636" rx="28"/>
-<text class="title" x="66" y="82">Transaction State Diagram</text>
-<text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M672 552 C672 469 706 469 706 386" data-connector="line"/>
-<path class="line" d="M522 280 C522 386 522 386 522 492" data-connector="line"/>
-<path class="line" d="M706 386 C706 303 338 303 338 220" data-connector="line"/>
-<path class="line" d="M372 386 C372 303 338 303 338 220" data-connector="line"/>
-<path class="line" d="M672 220 C672 303 706 303 706 386" data-connector="line"/>
-<path class="line" d="M522 280 C522 303 522 303 522 326" data-connector="line"/>
-<path class="line" d="M338 386 C338 303 372 303 372 220" data-connector="line"/>
-<path class="line" d="M338 386 C338 303 372 303 372 220" data-connector="line"/>
-<path class="line" d="M338 386 C338 386 38 386 38 386" data-connector="line"/>
-<path class="line" d="M372 220 C372 303 338 303 338 386" data-connector="line"/>
-<path class="line" d="M672 220 C672 220 372 220 372 220" data-connector="line"/>
-<path class="line" d="M338 220 C338 220 372 220 372 220" data-connector="line"/>
-<g transform="translate(48,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">IDLE</text>
-</g>
-<g transform="translate(382,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">ACTIVE</text>
-</g>
-<g transform="translate(716,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="33" text-anchor="middle">SELECT/INSERT/UPDATE</text>
-<text class="smallLabel" x="140" y="59" text-anchor="middle">/DELETE</text>
-</g>
-<g transform="translate(48,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">SAVEPOINT</text>
-</g>
-<g transform="translate(382,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">COMMITTED</text>
-</g>
-<g transform="translate(716,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">ROLLEDBACK</text>
-</g>
-<g transform="translate(382,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">TIMEOUT</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 860" width="1320" height="860" role="img" aria-label="Transaction state diagram for Exposed R2DBC DML transaction tests">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12" />
+    </filter>
+    <marker id="arrow-blue" markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path d="M 0 1 L 14 7 L 0 13 Z" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-green" markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path d="M 0 1 L 14 7 L 0 13 Z" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-brown" markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path d="M 0 1 L 14 7 L 0 13 Z" fill="#a66a3f" stroke="#a66a3f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-teal" markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path d="M 0 1 L 14 7 L 0 13 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-rose" markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path d="M 0 1 L 14 7 L 0 13 Z" fill="#a85f7f" stroke="#a85f7f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}
+      .card{filter:url(#shadow)}
+      .header{opacity:.96}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:30px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:15px;letter-spacing:.08em;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:17px;fill:#1e293b}
+      .connector{fill:none;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.2}
+    </style>
+  </defs>
+  <rect width="1320" height="860" class="canvas" />
+  <rect x="22" y="22" width="1276" height="816" rx="18" class="frame" />
+  <text x="58" y="68" class="title" text-anchor="start">Transaction State Diagram</text>
+  <text x="58" y="96" class="subtitle" text-anchor="start">Concrete state map for isolation, exec, timeout, savepoint rollback, and final assertions.</text>
+
+  <rect x="48" y="128" width="1224" height="154" rx="16" class="lane" />
+  <text x="72" y="158" class="laneTitle" text-anchor="start">TRANSACTION ENTRY</text>
+  <rect x="48" y="306" width="1224" height="242" rx="16" class="lane" />
+  <text x="72" y="336" class="laneTitle" text-anchor="start">ACTIVE STATES</text>
+  <rect x="48" y="572" width="1224" height="172" rx="16" class="lane" />
+  <text x="72" y="602" class="laneTitle" text-anchor="start">TERMINAL OUTCOMES</text>
+
+  <g data-card="Test Scope" data-x="94" data-y="180" data-width="250" data-height="82">
+    <rect x="94" y="180" width="250" height="82" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card" />
+    <path class="header" d="M94,220 L94,194 Q94,180 108,180 L330,180 Q344,180 344,194 L344,220 Z" fill="#eef5fa" />
+    <text x="219" y="198" class="tiny" text-anchor="middle">&lt;&lt;entry&gt;&gt;</text>
+    <text x="219" y="217" class="cardTitle" text-anchor="middle">Test Scope</text>
+    <text x="112" y="242" class="detail" text-anchor="start">withDb / withTables</text>
+  </g>
+  <g data-card="Transaction Config" data-x="404" data-y="180" data-width="250" data-height="82">
+    <rect x="404" y="180" width="250" height="82" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card" />
+    <path class="header" d="M404,220 L404,194 Q404,180 418,180 L640,180 Q654,180 654,194 L654,220 Z" fill="#f1f6ec" />
+    <text x="529" y="198" class="tiny" text-anchor="middle">&lt;&lt;config&gt;&gt;</text>
+    <text x="529" y="217" class="cardTitle" text-anchor="middle">Transaction Config</text>
+    <text x="422" y="242" class="detail" text-anchor="start">isolation / timeout</text>
+  </g>
+  <g data-card="Coroutine Transaction" data-x="714" data-y="180" data-width="250" data-height="82">
+    <rect x="714" y="180" width="250" height="82" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card" />
+    <path class="header" d="M714,220 L714,194 Q714,180 728,180 L950,180 Q964,180 964,194 L964,220 Z" fill="#eef7f6" />
+    <text x="839" y="198" class="tiny" text-anchor="middle">&lt;&lt;boundary&gt;&gt;</text>
+    <text x="839" y="217" class="cardTitle" text-anchor="middle">Coroutine Transaction</text>
+    <text x="732" y="242" class="detail" text-anchor="start">suspendTransaction</text>
+  </g>
+  <g data-card="Top-Level Override" data-x="1004" data-y="180" data-width="220" data-height="82">
+    <rect x="1004" y="180" width="220" height="82" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card" />
+    <path class="header" d="M1004,220 L1004,194 Q1004,180 1018,180 L1210,180 Q1224,180 1224,194 L1224,220 Z" fill="#f5eee4" />
+    <text x="1114" y="198" class="tiny" text-anchor="middle">&lt;&lt;variant&gt;&gt;</text>
+    <text x="1114" y="217" class="cardTitle" text-anchor="middle">Top-Level Override</text>
+    <text x="1022" y="242" class="detail" text-anchor="start">inTopLevelSuspendTx</text>
+  </g>
+
+  <g data-card="Active Transaction" data-x="94" data-y="374" data-width="230" data-height="96">
+    <rect x="94" y="374" width="230" height="96" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card" />
+    <path class="header" d="M94,416 L94,388 Q94,374 108,374 L310,374 Q324,374 324,388 L324,416 Z" fill="#eef7f6" />
+    <text x="209" y="392" class="tiny" text-anchor="middle">&lt;&lt;state&gt;&gt;</text>
+    <text x="209" y="411" class="cardTitle" text-anchor="middle">Active Transaction</text>
+    <text x="112" y="436" class="detail" text-anchor="start">maxAttempts / db</text>
+    <text x="112" y="455" class="detail" text-anchor="start">current transaction</text>
+  </g>
+  <g data-card="Exec Statement" data-x="384" data-y="374" data-width="230" data-height="96">
+    <rect x="384" y="374" width="230" height="96" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card" />
+    <path class="header" d="M384,416 L384,388 Q384,374 398,374 L600,374 Q614,374 614,388 L614,416 Z" fill="#eef5fa" />
+    <text x="499" y="392" class="tiny" text-anchor="middle">&lt;&lt;operation&gt;&gt;</text>
+    <text x="499" y="411" class="cardTitle" text-anchor="middle">Exec Statement</text>
+    <text x="402" y="436" class="detail" text-anchor="start">exec(stmt, args)</text>
+    <text x="402" y="455" class="detail" text-anchor="start">StatementType</text>
+  </g>
+  <g data-card="Parameter Binding" data-x="674" data-y="374" data-width="230" data-height="96">
+    <rect x="674" y="374" width="230" height="96" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card" />
+    <path class="header" d="M674,416 L674,388 Q674,374 688,374 L890,374 Q904,374 904,388 L904,416 Z" fill="#f5eee4" />
+    <text x="789" y="392" class="tiny" text-anchor="middle">&lt;&lt;binding&gt;&gt;</text>
+    <text x="789" y="411" class="cardTitle" text-anchor="middle">Parameter Binding</text>
+    <text x="692" y="436" class="detail" text-anchor="start">ColumnType + value</text>
+    <text x="692" y="455" class="detail" text-anchor="start">safe placeholders</text>
+  </g>
+  <g data-card="Savepoint State" data-x="964" data-y="374" data-width="230" data-height="96">
+    <rect x="964" y="374" width="230" height="96" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2" class="card" />
+    <path class="header" d="M964,416 L964,388 Q964,374 978,374 L1180,374 Q1194,374 1194,388 L1194,416 Z" fill="#f5eef2" />
+    <text x="1079" y="392" class="tiny" text-anchor="middle">&lt;&lt;state&gt;&gt;</text>
+    <text x="1079" y="411" class="cardTitle" text-anchor="middle">Savepoint State</text>
+    <text x="982" y="436" class="detail" text-anchor="start">set / rollback</text>
+    <text x="982" y="455" class="detail" text-anchor="start">releaseSavepoint</text>
+  </g>
+
+  <g data-card="Commit Path" data-x="94" data-y="632" data-width="230" data-height="86">
+    <rect x="94" y="632" width="230" height="86" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card" />
+    <path class="header" d="M94,672 L94,646 Q94,632 108,632 L310,632 Q324,632 324,646 L324,672 Z" fill="#f1f6ec" />
+    <text x="209" y="650" class="tiny" text-anchor="middle">&lt;&lt;outcome&gt;&gt;</text>
+    <text x="209" y="669" class="cardTitle" text-anchor="middle">Commit Path</text>
+    <text x="112" y="694" class="detail" text-anchor="start">changes persist</text>
+  </g>
+  <g data-card="Timeout Error" data-x="384" data-y="632" data-width="230" data-height="86">
+    <rect x="384" y="632" width="230" height="86" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2" class="card" />
+    <path class="header" d="M384,672 L384,646 Q384,632 398,632 L600,632 Q614,632 614,646 L614,672 Z" fill="#f5eef2" />
+    <text x="499" y="650" class="tiny" text-anchor="middle">&lt;&lt;error&gt;&gt;</text>
+    <text x="499" y="669" class="cardTitle" text-anchor="middle">Timeout Error</text>
+    <text x="402" y="694" class="detail" text-anchor="start">ExposedR2dbcException</text>
+  </g>
+  <g data-card="Inner Rollback" data-x="674" data-y="632" data-width="230" data-height="86">
+    <rect x="674" y="632" width="230" height="86" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card" />
+    <path class="header" d="M674,672 L674,646 Q674,632 688,632 L890,632 Q904,632 904,646 L904,672 Z" fill="#f5eee4" />
+    <text x="789" y="650" class="tiny" text-anchor="middle">&lt;&lt;outcome&gt;&gt;</text>
+    <text x="789" y="669" class="cardTitle" text-anchor="middle">Inner Rollback</text>
+    <text x="692" y="694" class="detail" text-anchor="start">outer tx survives</text>
+  </g>
+  <g data-card="Assertion Result" data-x="964" data-y="632" data-width="230" data-height="86">
+    <rect x="964" y="632" width="230" height="86" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card" />
+    <path class="header" d="M964,672 L964,646 Q964,632 978,632 L1180,632 Q1194,632 1194,646 L1194,672 Z" fill="#eef5fa" />
+    <text x="1079" y="650" class="tiny" text-anchor="middle">&lt;&lt;assert&gt;&gt;</text>
+    <text x="1079" y="669" class="cardTitle" text-anchor="middle">Assertion Result</text>
+    <text x="982" y="694" class="detail" text-anchor="start">city1 / counts / null</text>
+  </g>
+
+  <path class="connector" data-connector="entry-config" d="M344 221 L404 221" stroke="#6f8f52" marker-end="url(#arrow-green)" />
+  <path class="connector" data-connector="config-transaction" d="M654 221 L714 221" stroke="#4f8f8b" marker-end="url(#arrow-teal)" />
+  <path class="connector" data-connector="transaction-top-level" d="M964 221 L1004 221" stroke="#a66a3f" marker-end="url(#arrow-brown)" />
+  <path class="connector" data-connector="transaction-active" d="M839 262 L839 284 Q839 300 823 300 L225 300 Q209 300 209 316 L209 374" stroke="#4f8f8b" marker-end="url(#arrow-teal)" />
+  <path class="connector" data-connector="active-exec" d="M324 422 L384 422" stroke="#4f86c6" marker-end="url(#arrow-blue)" />
+  <path class="connector" data-connector="exec-bind" d="M614 422 L674 422" stroke="#a66a3f" marker-end="url(#arrow-brown)" />
+  <path class="connector" data-connector="bind-savepoint" d="M904 422 L964 422" stroke="#a85f7f" marker-end="url(#arrow-rose)" />
+  <path class="connector" data-connector="active-commit" d="M209 470 L209 632" stroke="#6f8f52" marker-end="url(#arrow-green)" />
+  <path class="connector" data-connector="exec-timeout" d="M499 470 L499 632" stroke="#a85f7f" marker-end="url(#arrow-rose)" />
+  <path class="connector" data-connector="savepoint-rollback" d="M1079 470 L1079 538 Q1079 554 1063 554 L805 554 Q789 554 789 570 L789 632" stroke="#a66a3f" marker-end="url(#arrow-brown)" />
+  <path class="connector" data-connector="rollback-assert" d="M904 675 L964 675" stroke="#4f86c6" marker-end="url(#arrow-blue)" />
+  <path class="connector" data-connector="commit-assert" d="M209 718 L209 738 Q209 754 225 754 L1063 754 Q1079 754 1079 738 L1079 718" stroke="#4f86c6" marker-end="url(#arrow-blue)" />
+
+  <rect x="86" y="776" width="1148" height="30" rx="10" class="noteBox" />
+  <text x="660" y="796" class="note" text-anchor="middle">State transitions are sourced from the six transaction tests: isolation overrides, exec binding, timeout errors, savepoint rollback, and final assertions.</text>
 </svg>

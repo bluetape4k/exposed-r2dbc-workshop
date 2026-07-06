@@ -1,83 +1,137 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="2770" height="676" viewBox="0 0 2770 676" role="img" aria-label="Structure Diagram">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 900" width="1320" height="900" role="img" aria-label="JavaTime test class and table structure">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12" />
+    </filter>
+    <marker id="arrow-blue" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#4f86c6" stroke="#4f86c6" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-green" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#6f8f52" stroke="#6f8f52" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-brown" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#a66a3f" stroke="#a66a3f" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <marker id="arrow-teal" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto" markerUnits="userSpaceOnUse" viewBox="0 0 14 14">
+      <path  d="M 0 0 L 14 7 L 0 14 Z" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1" stroke-dasharray="none" style="stroke-dasharray:none" />
+    </marker>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}
+      .card{filter:url(#shadow)}
+      .header{opacity:.96}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:32px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:15px;letter-spacing:.08em;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:17px;fill:#1e293b}
+      .connector{fill:none;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.2}
+    </style>
+  </defs>
+  <rect width="1320" height="900" class="canvas" />
+  <rect x="22" y="22" width="1276" height="856" rx="18" class="frame" />
+  <text x="58" y="70" class="title" text-anchor="start">JavaTime Test Class and Table Structure</text>
+  <text x="58" y="100" class="subtitle" text-anchor="start">Concrete class view: four test classes share the R2DBC test base and exercise concrete JavaTime table shapes.</text>
 
+  <rect x="48" y="132" width="1224" height="126" rx="16" class="lane" />
+  <text x="72" y="162" class="laneTitle" text-anchor="start">SHARED TEST CONTRACT</text>
+  <rect x="48" y="282" width="1224" height="214" rx="16" class="lane" />
+  <text x="72" y="312" class="laneTitle" text-anchor="start">TEST CLASSES</text>
+  <rect x="48" y="520" width="1224" height="184" rx="16" class="lane" />
+  <text x="72" y="550" class="laneTitle" text-anchor="start">TABLES AND COLUMN GROUPS</text>
+  <rect x="48" y="728" width="1224" height="92" rx="16" class="lane" />
+  <text x="72" y="758" class="laneTitle" text-anchor="start">ASSERTION CONTRACT</text>
 
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none}
-  </style>
-</defs>
-<rect class="canvas" width="2770" height="676"/>
-<rect class="frame" x="32" y="28" width="2706" height="620" rx="28"/>
-<text class="title" x="66" y="82">Structure Diagram</text>
-<text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="inheritLine" d="M2060 412 L2060 352 L1385 352 L1385 292"/>
-<path class="inheritLine" d="M1160 412 L1160 352 L1385 352 L1385 292"/>
-<path class="inheritLine" d="M260 412 L260 352 L1385 352 L1385 292"/>
-<path class="inheritLine" d="M1610 412 L1610 352 L1385 352 L1385 292"/>
-<path class="inheritLine" d="M2510 412 L2510 352 L1385 352 L1385 292"/>
-<path class="inheritLine" d="M710 412 L710 352 L1385 352 L1385 292"/>
-<g transform="translate(70,412)">
-  <rect class="card" x="0" y="0" width="380" height="133" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#5B8DEF"/>
-  <text class="small" x="190" y="26" text-anchor="middle"></text>
-  <text class="label" x="190" y="61" text-anchor="middle">TimestampColumn</text>
-  <text class="mono" x="18" y="108">+timestamp(name) Column~Instant~</text>
-</g>
-<g transform="translate(1870,412)">
-  <rect class="card" x="0" y="0" width="380" height="133" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#58A978"/>
-  <text class="small" x="190" y="26" text-anchor="middle"></text>
-  <text class="label" x="190" y="61" text-anchor="middle">DurationColumn</text>
-  <text class="mono" x="18" y="108">+duration(name) Column~Duration~</text>
-</g>
-<g transform="translate(520,412)">
-  <rect class="card" x="0" y="0" width="380" height="133" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#D6A441"/>
-  <text class="small" x="190" y="26" text-anchor="middle"></text>
-  <text class="label" x="190" y="61" text-anchor="middle">DateColumn</text>
-  <text class="mono" x="18" y="108">+date(name) Column~LocalDate~</text>
-</g>
-<g transform="translate(1195,180)">
-  <rect class="card" x="0" y="0" width="380" height="112" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#DC6B82"/>
-  <text class="small" x="190" y="26" text-anchor="middle">«exposed-java-time ext.»</text>
-  <text class="label" x="190" y="61" text-anchor="middle">JavaTimeColumn</text>
+  <g data-card="AbstractR2dbcExposedTest" data-x="410" data-y="176" data-width="500" data-height="62">
+    <rect x="410" y="176" width="500" height="62" rx="14" fill="#fff" stroke="#64748b" stroke-width="2" class="card" />
+    <path class="header" d="M410,214 L410,190 Q410,176 424,176 L896,176 Q910,176 910,190 L910,214 Z" fill="#f8fafc" />
+    <text x="660" y="194" class="tiny" text-anchor="middle">&lt;&lt;base test&gt;&gt;</text>
+    <text x="660" y="213" class="cardTitle" text-anchor="middle">AbstractR2dbcExposedTest</text>
+    <text x="430" y="232" class="detail" text-anchor="start">ENABLE_DIALECTS_METHOD, UTC setup, withDb / withTables helpers</text>
+  </g>
 
-</g>
-<g transform="translate(970,412)">
-  <rect class="card" x="0" y="0" width="380" height="154" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#45A7A1"/>
-  <text class="small" x="190" y="26" text-anchor="middle"></text>
-  <text class="label" x="190" y="61" text-anchor="middle">TimestampWithTimeZoneColumn</text>
-  <text class="mono" x="18" y="108">+timestampWithTimeZone(name)</text>
-<text class="mono" x="18" y="129">Column~OffsetDateTime~</text>
-</g>
-<g transform="translate(2320,412)">
-  <rect class="card" x="0" y="0" width="380" height="133" rx="5" fill="#F1ECFF" stroke="#8A72D6"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#8A72D6"/>
-  <text class="small" x="190" y="26" text-anchor="middle"></text>
-  <text class="label" x="190" y="61" text-anchor="middle">TimeColumn</text>
-  <text class="mono" x="18" y="108">+time(name) Column~LocalTime~</text>
-</g>
-<g transform="translate(1420,412)">
-  <rect class="card" x="0" y="0" width="380" height="133" rx="5" fill="#F7F1E7" stroke="#B88A44"/>
-  <line class="compartment" x1="0" y1="78" x2="380" y2="78" stroke="#B88A44"/>
-  <text class="small" x="190" y="26" text-anchor="middle"></text>
-  <text class="label" x="190" y="61" text-anchor="middle">DateTimeColumn</text>
-  <text class="mono" x="18" y="108">+datetime(name) Column~LocalDateTime~</text>
-</g>
+  <g data-card="Ex01 JavaTime" data-x="86" data-y="350" data-width="270" data-height="104">
+    <rect x="86" y="350" width="270" height="104" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card" />
+    <path class="header" d="M86,392 L86,364 Q86,350 100,350 L342,350 Q356,350 356,364 L356,392 Z" fill="#eef5fa" />
+    <text x="221" y="368" class="tiny" text-anchor="middle">&lt;&lt;extends base&gt;&gt;</text>
+    <text x="221" y="387" class="cardTitle" text-anchor="middle">Ex01_JavaTime</text>
+    <text x="106" y="412" class="detail" text-anchor="start">date parts, Instant, timezone</text>
+    <text x="106" y="431" class="detail" text-anchor="start">precision assertions</text>
+  </g>
+  <g data-card="Ex02 Defaults" data-x="386" data-y="350" data-width="270" data-height="104">
+    <rect x="386" y="350" width="270" height="104" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card" />
+    <path class="header" d="M386,392 L386,364 Q386,350 400,350 L642,350 Q656,350 656,364 L656,392 Z" fill="#f1f6ec" />
+    <text x="521" y="368" class="tiny" text-anchor="middle">&lt;&lt;extends base&gt;&gt;</text>
+    <text x="521" y="387" class="cardTitle" text-anchor="middle">Ex02_Defaults</text>
+    <text x="406" y="412" class="detail" text-anchor="start">clientDefault / defaultExpression</text>
+    <text x="406" y="431" class="detail" text-anchor="start">CurrentDate*, batch defaults</text>
+  </g>
+  <g data-card="Ex03 DateTimeLiteral" data-x="686" data-y="350" data-width="270" data-height="104">
+    <rect x="686" y="350" width="270" height="104" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card" />
+    <path class="header" d="M686,392 L686,364 Q686,350 700,350 L942,350 Q956,350 956,364 L956,392 Z" fill="#f5eee4" />
+    <text x="821" y="368" class="tiny" text-anchor="middle">&lt;&lt;extends base&gt;&gt;</text>
+    <text x="821" y="387" class="cardTitle" text-anchor="middle">Ex03_DateTimeLiteral</text>
+    <text x="706" y="412" class="detail" text-anchor="start">dateLiteral / dateTimeLiteral</text>
+    <text x="706" y="431" class="detail" text-anchor="start">timestampLiteral comparisons</text>
+  </g>
+  <g data-card="Ex04 MiscTable" data-x="986" data-y="350" data-width="270" data-height="104">
+    <rect x="986" y="350" width="270" height="104" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card" />
+    <path class="header" d="M986,392 L986,364 Q986,350 1000,350 L1242,350 Q1256,350 1256,364 L1256,392 Z" fill="#eef7f6" />
+    <text x="1121" y="368" class="tiny" text-anchor="middle">&lt;&lt;extends base&gt;&gt;</text>
+    <text x="1121" y="387" class="cardTitle" text-anchor="middle">Ex04_MiscTable</text>
+    <text x="1006" y="412" class="detail" text-anchor="start">broad nullable/non-null pairs</text>
+    <text x="1006" y="431" class="detail" text-anchor="start">insert, update, select checks</text>
+  </g>
+
+  <g data-card="CitiesTime" data-x="86" data-y="574" data-width="270" data-height="86">
+    <rect x="86" y="574" width="270" height="86" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card" />
+    <path class="header" d="M86,616 L86,588 Q86,574 100,574 L342,574 Q356,574 356,588 L356,616 Z" fill="#eef5fa" />
+    <text x="221" y="592" class="tiny" text-anchor="middle">&lt;&lt;IntIdTable&gt;&gt;</text>
+    <text x="221" y="611" class="cardTitle" text-anchor="middle">CitiesTime</text>
+    <text x="106" y="636" class="detail" text-anchor="start">name, local_time: LocalDateTime?</text>
+  </g>
+  <g data-card="TableWithDBDefault" data-x="386" data-y="574" data-width="270" data-height="86">
+    <rect x="386" y="574" width="270" height="86" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2" class="card" />
+    <path class="header" d="M386,616 L386,588 Q386,574 400,574 L642,574 Q656,574 656,588 L656,616 Z" fill="#f1f6ec" />
+    <text x="521" y="592" class="tiny" text-anchor="middle">&lt;&lt;IntIdTable&gt;&gt;</text>
+    <text x="521" y="611" class="cardTitle" text-anchor="middle">TableWithDBDefault</text>
+    <text x="406" y="636" class="detail" text-anchor="start">datetime, date, timestamp, tz</text>
+  </g>
+  <g data-card="Literal Tables" data-x="686" data-y="574" data-width="270" data-height="86">
+    <rect x="686" y="574" width="270" height="86" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2" class="card" />
+    <path class="header" d="M686,616 L686,588 Q686,574 700,574 L942,574 Q956,574 956,588 L956,616 Z" fill="#f5eee4" />
+    <text x="821" y="592" class="tiny" text-anchor="middle">&lt;&lt;IntIdTable trio&gt;&gt;</text>
+    <text x="821" y="611" class="cardTitle" text-anchor="middle">Literal Tables</text>
+    <text x="706" y="636" class="detail" text-anchor="start">Date, DateTime, Timestamp</text>
+  </g>
+  <g data-card="Misc" data-x="986" data-y="574" data-width="270" data-height="86">
+    <rect x="986" y="574" width="270" height="86" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2" class="card" />
+    <path class="header" d="M986,616 L986,588 Q986,574 1000,574 L1242,574 Q1256,574 1256,588 L1256,616 Z" fill="#eef7f6" />
+    <text x="1121" y="592" class="tiny" text-anchor="middle">&lt;&lt;MiscTable subclass&gt;&gt;</text>
+    <text x="1121" y="611" class="cardTitle" text-anchor="middle">Misc</text>
+    <text x="1006" y="636" class="detail" text-anchor="start">d/dn, t/tn, dt/dtn, ts/tsn, dr/drn</text>
+  </g>
+
+  <path class="connector" data-connector="ex01-table" d="M221 454 L221 574" stroke="#4f86c6" marker-end="url(#arrow-blue)" />
+  <path class="connector" data-connector="ex02-table" d="M521 454 L521 574" stroke="#6f8f52" marker-end="url(#arrow-green)" />
+  <path class="connector" data-connector="ex03-table" d="M821 454 L821 574" stroke="#a66a3f" marker-end="url(#arrow-brown)" />
+  <path class="connector" data-connector="ex04-table" d="M1121 454 L1121 574" stroke="#4f8f8b" marker-end="url(#arrow-teal)" />
+
+  <g data-card="Temporal Assertions" data-x="108" data-y="770" data-width="330" data-height="34">
+    <rect x="108" y="770" width="330" height="34" rx="10" fill="#fff" stroke="#4f86c6" stroke-width="1.5" />
+    <text x="273" y="792" class="note" text-anchor="middle">shouldTemporalEqualTo normalizes precision</text>
+  </g>
+  <g data-card="Shared CRUD" data-x="500" data-y="770" data-width="320" data-height="34">
+    <rect x="500" y="770" width="320" height="34" rx="10" fill="#fff" stroke="#6f8f52" stroke-width="1.5" />
+    <text x="660" y="792" class="note" text-anchor="middle">withTables drives CRUD flows</text>
+  </g>
+  <g data-card="Dialect Gates" data-x="882" data-y="770" data-width="330" data-height="34">
+    <rect x="882" y="770" width="330" height="34" rx="10" fill="#fff" stroke="#a85f7f" stroke-width="1.5" />
+    <text x="1047" y="792" class="note" text-anchor="middle">expectException covers unsupported tz DBs</text>
+  </g>
+
+  <rect x="86" y="842" width="1148" height="30" rx="10" class="noteBox" />
+  <text x="660" y="862" class="note" text-anchor="middle">Each card maps to the JavaTime source set: Ex01 basics, Ex02 defaults, Ex03 literals, and Ex04 Misc table coverage.</text>
 </svg>

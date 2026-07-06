@@ -1,61 +1,112 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1250" height="660" viewBox="0 0 1250 660" role="img" aria-label="Multi-Tenancy Isolation Options">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 920" width="1600" height="920" role="img" aria-label="Multi-tenancy isolation level options">
+  <defs>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .canvas{fill:#f5f8fb}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:2}
+      .lane{fill:#f8fafc;stroke:#dbe6ef;stroke-width:1.6}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:21px;letter-spacing:.08em;fill:#91a6b7}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:46px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:17px;fill:#526276;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#64748b;font-weight:700}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:26px;fill:#1e293b}
+      .card{filter:url(#softShadow)}
+      .header{opacity:.97}
+      .connector{fill:none;stroke-width:3.8;stroke-linecap:round;stroke-linejoin:round}
+      .dash{stroke-dasharray:11 9}
+      .blue{stroke:#3c82b4}.green{stroke:#5f8848}.gold{stroke:#b78632}.teal{stroke:#4f8f8b}.red{stroke:#b76b6b}.slate{stroke:#607386}
+      .blueFill{fill:#eef5fa}.greenFill{fill:#f1f6ec}.goldFill{fill:#f7f0e2}.tealFill{fill:#eef7f6}.redFill{fill:#f8eeee}.slateFill{fill:#eef2f6}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:2}
+      .warnBox{fill:#fff7ed;stroke:#d39b58;stroke-width:2.6}
+    </style>
+  </defs>
 
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:24px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:20px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12.5px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12.5px;font-weight:400;fill:#536273}
-    .card{stroke-width:2.1;filter:url(#shadow)}.soft{stroke-width:1.7}
-    .line{stroke:#758297;stroke-width:2.2;fill:none}
-    .plain{stroke:#758297;stroke-width:2.0;fill:none}.dash{stroke:#758297;stroke-width:2.0;stroke-dasharray:7 6;fill:none}
-  </style>
-</defs>
-<rect class="canvas" width="1250" height="660"/>
-<rect class="frame" x="32" y="28" width="1186" height="604" rx="28"/>
-<text class="title" x="66" y="82">Multi-Tenancy Isolation Options</text>
-<text class="subtitle" x="70" y="118">Schema, row, and database isolation trade separate operational boundaries</text>
-<g transform="translate(70,170)">
-  <rect class="card" x="0" y="0" width="330" height="380" rx="8" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="label" x="165" y="38" text-anchor="middle">Schema-based</text>
-  <line class="plain" x1="16" y1="54" x2="314" y2="54" stroke="#5B8DEF"/>
-  <text class="mono" x="22" y="82">PostgreSQL instance</text>
-  <text class="mono" x="22" y="104">  schema: korean</text>
-  <text class="mono" x="22" y="126">    movies</text>
-  <text class="mono" x="22" y="148">    actors</text>
-  <text class="mono" x="22" y="170">    actors_in_movies</text>
-  <text class="mono" x="22" y="192">  schema: english</text>
-  <text class="mono" x="22" y="214">    movies</text>
-  <text class="mono" x="22" y="236">    actors</text>
-  <text class="mono" x="22" y="258">    actors_in_movies</text>
-  <text class="mono" x="22" y="280">Best: strong isolation, one DB</text>
-</g><g transform="translate(460,170)">
-  <rect class="card" x="0" y="0" width="330" height="380" rx="8" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="label" x="165" y="38" text-anchor="middle">Row-based</text>
-  <line class="plain" x1="16" y1="54" x2="314" y2="54" stroke="#58A978"/>
-  <text class="mono" x="22" y="82">schema: public</text>
-  <text class="mono" x="22" y="104">  actors</text>
-  <text class="mono" x="22" y="126">    tenant_id</text>
-  <text class="mono" x="22" y="148">    id</text>
-  <text class="mono" x="22" y="170">    first_name</text>
-  <text class="mono" x="22" y="192">    last_name</text>
-  <text class="mono" x="22" y="214"></text>
-  <text class="mono" x="22" y="236">Every query filters tenant_id</text>
-  <text class="mono" x="22" y="258">Best: many small tenants</text>
-</g><g transform="translate(850,170)">
-  <rect class="card" x="0" y="0" width="330" height="380" rx="8" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="label" x="165" y="38" text-anchor="middle">Database-based</text>
-  <line class="plain" x1="16" y1="54" x2="314" y2="54" stroke="#D6A441"/>
-  <text class="mono" x="22" y="82">ConnectionFactory registry</text>
-  <text class="mono" x="22" y="104">  korean -&gt; korean_db</text>
-  <text class="mono" x="22" y="126">  english -&gt; english_db</text>
-  <text class="mono" x="22" y="148"></text>
-  <text class="mono" x="22" y="170">One DB per tenant</text>
-  <text class="mono" x="22" y="192">Routing layer required</text>
-  <text class="mono" x="22" y="214"></text>
-  <text class="mono" x="22" y="236">Best: strict resource split</text>
-</g></svg>
+  <rect width="1600" height="920" class="canvas"/>
+  <rect x="28" y="28" width="1544" height="864" rx="24" class="frame"/>
+
+  <text x="78" y="94" class="title">Multi-Tenancy Isolation Options</text>
+  <text x="78" y="132" class="subtitle">The module implements schema-per-tenant with ReactorContext tenant lookup; row and database isolation are documented reference options.</text>
+
+  <rect x="58" y="168" width="1484" height="470" rx="20" class="lane"/>
+  <text x="86" y="208" class="laneTitle">OPTIONS FROM README</text>
+
+  <g data-card="Schema-based implemented" data-x="105" data-y="250" data-width="430" data-height="310">
+    <rect x="105" y="250" width="430" height="310" rx="16" fill="#fff" stroke="#5f8848" stroke-width="4" class="card"/>
+    <path class="header greenFill" d="M105,305 L105,266 Q105,250 121,250 L519,250 Q535,250 535,266 L535,305 Z"/>
+    <text x="320" y="275" class="tiny" text-anchor="middle">&lt;&lt;implemented in this module&gt;&gt;</text>
+    <text x="320" y="304" class="cardTitle" text-anchor="middle">Schema-based</text>
+    <text x="135" y="344" class="detail">Shared DB instance</text>
+    <text x="135" y="373" class="detail">Separate schema per tenant</text>
+    <text x="135" y="402" class="detail">TenantFilter -> ReactorContext</text>
+    <text x="135" y="431" class="detail">SchemaUtils.setSchema(...) in tx</text>
+    <text x="135" y="478" class="tiny">Pros: simple ops, strong data separation</text>
+    <text x="135" y="506" class="tiny">Cons: schema-count and pool-management limits</text>
+  </g>
+
+  <g data-card="Row-based reference" data-x="585" data-y="250" data-width="430" data-height="310">
+    <rect x="585" y="250" width="430" height="310" rx="16" fill="#fff" stroke="#607386" stroke-width="3" class="card"/>
+    <path class="header slateFill" d="M585,305 L585,266 Q585,250 601,250 L999,250 Q1015,250 1015,266 L1015,305 Z"/>
+    <text x="800" y="275" class="tiny" text-anchor="middle">&lt;&lt;reference only&gt;&gt;</text>
+    <text x="800" y="304" class="cardTitle" text-anchor="middle">Row-based</text>
+    <text x="615" y="344" class="detail">One schema for every tenant</text>
+    <text x="615" y="373" class="detail">tenant_id column on each table</text>
+    <text x="615" y="402" class="detail">Every query needs tenant predicate</text>
+    <text x="615" y="431" class="detail">Not implemented in source tree</text>
+    <text x="615" y="478" class="tiny">Pros: simple schema growth</text>
+    <text x="615" y="506" class="tiny">Cons: missed WHERE risks data leakage</text>
+  </g>
+
+  <g data-card="Database-based reference" data-x="1065" data-y="250" data-width="430" data-height="310">
+    <rect x="1065" y="250" width="430" height="310" rx="16" fill="#fff" stroke="#607386" stroke-width="3" class="card"/>
+    <path class="header slateFill" d="M1065,305 L1065,266 Q1065,250 1081,250 L1479,250 Q1495,250 1495,266 L1495,305 Z"/>
+    <text x="1280" y="275" class="tiny" text-anchor="middle">&lt;&lt;reference only&gt;&gt;</text>
+    <text x="1280" y="304" class="cardTitle" text-anchor="middle">Database-based</text>
+    <text x="1095" y="344" class="detail">Separate DB instance per tenant</text>
+    <text x="1095" y="373" class="detail">Routing ConnectionFactory needed</text>
+    <text x="1095" y="402" class="detail">Strong resource isolation</text>
+    <text x="1095" y="431" class="detail">Not this WebFlux module</text>
+    <text x="1095" y="478" class="tiny">Pros: maximum isolation</text>
+    <text x="1095" y="506" class="tiny">Cons: operational cost grows per tenant</text>
+  </g>
+
+  <rect x="58" y="668" width="1484" height="150" rx="20" class="lane"/>
+  <text x="86" y="708" class="laneTitle">IMPLEMENTED REQUEST PATH</text>
+
+  <g data-card="Request tenant header" data-x="160" data-y="730" data-width="250" data-height="66">
+    <rect x="160" y="730" width="250" height="66" rx="14" fill="#fff" stroke="#3c82b4" stroke-width="3" class="card"/>
+    <text x="285" y="758" class="tiny" text-anchor="middle">&lt;&lt;request&gt;&gt;</text>
+    <text x="285" y="784" class="cardTitle" text-anchor="middle">X-TENANT-ID</text>
+  </g>
+
+  <g data-card="ReactorContext TenantId" data-x="515" data-y="730" data-width="250" data-height="66">
+    <rect x="515" y="730" width="250" height="66" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="3" class="card"/>
+    <text x="640" y="758" class="tiny" text-anchor="middle">&lt;&lt;context&gt;&gt;</text>
+    <text x="640" y="784" class="cardTitle" text-anchor="middle">TenantId</text>
+  </g>
+
+  <g data-card="Schema switch" data-x="870" data-y="730" data-width="270" data-height="66">
+    <rect x="870" y="730" width="270" height="66" rx="14" fill="#fff" stroke="#b78632" stroke-width="3" class="card"/>
+    <text x="1005" y="758" class="tiny" text-anchor="middle">&lt;&lt;transaction&gt;&gt;</text>
+    <text x="1005" y="784" class="cardTitle" text-anchor="middle">setSchema</text>
+  </g>
+
+  <g data-card="Tenant schemas" data-x="1245" data-y="730" data-width="250" data-height="66">
+    <rect x="1245" y="730" width="250" height="66" rx="14" fill="#fff" stroke="#5f8848" stroke-width="3" class="card"/>
+    <text x="1370" y="758" class="tiny" text-anchor="middle">&lt;&lt;database&gt;&gt;</text>
+    <text x="1370" y="784" class="cardTitle" text-anchor="middle">korean / english</text>
+  </g>
+
+  <path class="connector blue" data-connector="request-to-context" d="M410 763 L515 763"/>
+  <polyline points="515,763 499,754 499,772" fill="none" stroke="#3c82b4" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+
+  <path class="connector teal" data-connector="context-to-schema-switch" d="M765 763 L870 763"/>
+  <polyline points="870,763 854,754 854,772" fill="none" stroke="#4f8f8b" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+
+  <path class="connector gold" data-connector="schema-switch-to-schema" d="M1140 763 L1245 763"/>
+  <polyline points="1245,763 1229,754 1229,772" fill="none" stroke="#b78632" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none"/>
+
+  <rect x="260" y="842" width="1080" height="34" rx="11" class="noteBox"/>
+  <text x="800" y="866" class="note" text-anchor="middle">MySQL is excluded in this module because schema creation is not supported reliably in the R2DBC workshop path.</text>
+</svg>

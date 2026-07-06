@@ -1,51 +1,127 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760">
-  <rect width="1400" height="760" fill="#f7fafc"/>
-  <text x="80" y="76" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#1f2937">Ktor R2DBC Routing Datasource</text>
-  <text x="80" y="112" font-family="Arial, sans-serif" font-size="18" fill="#4b5563">Call-scoped routing state selects one physical R2DBC target explicitly.</text>
-  <g font-family="Arial, sans-serif" font-size="18" fill="#111827">
-    <rect x="80" y="170" width="260" height="96" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
-    <text x="110" y="212" font-weight="700">HTTP Request</text>
-    <text x="110" y="240" fill="#374151">X-Tenant-Id, X-Read-Only</text>
-    <rect x="420" y="170" width="300" height="96" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
-    <text x="450" y="212" font-weight="700">RoutingRequestPlugin</text>
-    <text x="450" y="240" fill="#374151">validates and stores attributes</text>
-    <rect x="800" y="170" width="300" height="96" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
-    <text x="830" y="212" font-weight="700">RoutingMarkerRoutes</text>
-    <text x="830" y="240" fill="#374151">passes RoutingRequest value</text>
-    <rect x="420" y="350" width="300" height="96" rx="8" fill="#fce7f3" stroke="#db2777" stroke-width="2"/>
-    <text x="450" y="392" font-weight="700">RoutingMarkerRepository</text>
-    <text x="450" y="420" fill="#374151">selects registry.database(route)</text>
-    <rect x="800" y="350" width="300" height="96" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
-    <text x="830" y="392" font-weight="700">RoutingDatabaseRegistry</text>
-    <text x="830" y="420" fill="#374151">key to R2dbcDatabase</text>
-  </g>
-  <g stroke="#4b5563" stroke-width="3" fill="none" marker-end="url(#arrow)">
-    <path d="M340 218 L420 218"/>
-    <path d="M720 218 L800 218"/>
-    <path d="M950 266 L950 350"/>
-    <path d="M800 398 L720 398"/>
-  </g>
-  <g font-family="Arial, sans-serif" font-size="16" fill="#111827">
-    <rect x="160" y="560" width="230" height="74" rx="8" fill="#ffffff" stroke="#94a3b8"/>
-    <text x="190" y="594" font-weight="700">default:rw</text>
-    <text x="190" y="620" fill="#475569">marker default-rw</text>
-    <rect x="430" y="560" width="230" height="74" rx="8" fill="#ffffff" stroke="#94a3b8"/>
-    <text x="460" y="594" font-weight="700">default:ro</text>
-    <text x="460" y="620" fill="#475569">marker default-ro</text>
-    <rect x="700" y="560" width="230" height="74" rx="8" fill="#ffffff" stroke="#94a3b8"/>
-    <text x="730" y="594" font-weight="700">acme:rw</text>
-    <text x="730" y="620" fill="#475569">marker acme-rw</text>
-    <rect x="970" y="560" width="230" height="74" rx="8" fill="#ffffff" stroke="#94a3b8"/>
-    <text x="1000" y="594" font-weight="700">acme:ro</text>
-    <text x="1000" y="620" fill="#475569">marker acme-ro</text>
-  </g>
-  <path d="M950 446 V492 Q950 510 932 510 H293 Q275 510 275 528 V560" stroke="#4b5563" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
-  <path d="M950 510 H563 Q545 510 545 528 V560" stroke="#4b5563" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
-  <path d="M950 510 H833 Q815 510 815 528 V560" stroke="#4b5563" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
-  <path d="M950 510 H1067 Q1085 510 1085 528 V560" stroke="#4b5563" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="2000" height="1050" viewBox="0 0 2000 1050" role="img" aria-label="Ktor R2DBC routing datasource architecture">
   <defs>
-<marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-
-
+    <filter id="softShadow" x="-8%" y="-10%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#25384d" flood-opacity="0.10"/>
+    </filter>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fffefa;stroke:#d7e3ed;stroke-width:2}
+      .lane{fill:#f8fbfd;stroke:#dce8f2;stroke-width:2}
+      .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:42px;fill:#192538;font-weight:400}
+      .subtitle,.detail,.foot{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:17px;font-weight:700;fill:#556678}
+      .laneTitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:17px;font-weight:700;letter-spacing:.08em;fill:#91a5b7}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:24px;fill:#192538;font-weight:400}
+      .smallTitle{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:20px;fill:#192538;font-weight:400}
+      .mono{font-family:"Comic Mono","SFMono-Regular",ui-monospace,monospace;font-size:15px;font-weight:700;fill:#506176}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",ui-monospace,monospace;font-size:13px;font-weight:700;fill:#627287}
+      .card{filter:url(#softShadow);stroke-width:2.4}
+      .header{opacity:.96}
+      .connector{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+      .blue{stroke:#3f83b8}
+      .green{stroke:#6f8f52}
+      .amber{stroke:#a36f3e}
+      .teal{stroke:#4f8f8b}
+      .rose{stroke:#a85f7f}
+      .brown{stroke:#8a6f55}
+      .note{fill:#f7fffe;stroke:#9fd0cb;stroke-width:2}
+    </style>
   </defs>
+
+  <rect class="canvas" width="2000" height="1050"/>
+  <rect class="frame" x="30" y="30" width="1940" height="990" rx="24"/>
+  <text class="title" x="72" y="92">Ktor R2DBC Routing Datasource</text>
+  <text class="subtitle" x="76" y="126">Ktor validates routing input once, stores a call attribute, and passes RoutingRequest explicitly to the selected R2DBC target.</text>
+
+  <rect class="lane" x="60" y="155" width="1880" height="220" rx="18"/>
+  <text class="laneTitle" x="86" y="190">HTTP CONTRACTS AND VALIDATION</text>
+
+  <g data-card="Input contract" data-x="100" data-y="230" data-width="540" data-height="105">
+    <rect class="card" x="100" y="230" width="540" height="105" rx="15" fill="#ffffff" stroke="#5d7486"/>
+    <text class="smallTitle" x="370" y="264" text-anchor="middle">GET /routing/marker</text>
+    <text class="mono" x="132" y="296">X-Tenant-Id -> default or acme</text>
+    <text class="mono" x="132" y="320">X-Read-Only or /readonly -> ro target</text>
+  </g>
+
+  <g data-card="Guardrails" data-x="730" data-y="230" data-width="540" data-height="105">
+    <rect class="card" x="730" y="230" width="540" height="105" rx="15" fill="#fff9ef" stroke="#a36f3e"/>
+    <text class="smallTitle" x="1000" y="264" text-anchor="middle">400 INVALID_ROUTING_REQUEST</text>
+    <text class="mono" x="762" y="296">unknown tenant or non-boolean read-only</text>
+    <text class="mono" x="762" y="320">PATCH rejects read-only routing</text>
+  </g>
+
+  <g data-card="Target proof" data-x="1360" data-y="230" data-width="460" data-height="105">
+    <rect class="card" x="1360" y="230" width="460" height="105" rx="15" fill="#f8fcf7" stroke="#6f8f52"/>
+    <text class="smallTitle" x="1590" y="264" text-anchor="middle">Per-target marker rows</text>
+    <text class="mono" x="1392" y="296">default-rw, default-ro</text>
+    <text class="mono" x="1392" y="320">acme-rw, acme-ro</text>
+  </g>
+
+  <rect class="lane" x="60" y="410" width="1880" height="275" rx="18"/>
+  <text class="laneTitle" x="86" y="445">CALL-SCOPED ROUTING CORE</text>
+
+  <g data-card="RoutingRequestPlugin" data-x="95" data-y="510" data-width="300" data-height="125">
+    <rect class="card" x="95" y="510" width="300" height="125" rx="16" fill="#f7fcff" stroke="#3f83b8"/>
+    <path class="header" d="M95,562 L95,526 Q95,510 111,510 L379,510 Q395,510 395,526 L395,562 Z" fill="#eef5fa"/>
+    <text class="cardTitle" x="245" y="546" text-anchor="middle">RoutingRequestPlugin</text>
+    <text class="mono" x="124" y="594">onCall resolves headers</text>
+    <text class="mono" x="124" y="620">path suffix forces readonly</text>
+  </g>
+
+  <g data-card="RoutingRequest attribute" data-x="470" data-y="510" data-width="300" data-height="125">
+    <rect class="card" x="470" y="510" width="300" height="125" rx="16" fill="#f8fcf7" stroke="#6f8f52"/>
+    <path class="header" d="M470,562 L470,526 Q470,510 486,510 L754,510 Q770,510 770,526 L770,562 Z" fill="#f1f6ec"/>
+    <text class="cardTitle" x="620" y="546" text-anchor="middle">RoutingRequest</text>
+    <text class="mono" x="498" y="594">tenant + readOnly</text>
+    <text class="mono" x="498" y="620">key = tenant:rw|ro</text>
+  </g>
+
+  <g data-card="RoutingMarkerRoutes" data-x="845" data-y="510" data-width="300" data-height="125">
+    <rect class="card" x="845" y="510" width="300" height="125" rx="16" fill="#fff9ef" stroke="#a36f3e"/>
+    <path class="header" d="M845,562 L845,526 Q845,510 861,510 L1129,510 Q1145,510 1145,526 L1145,562 Z" fill="#f5eee4"/>
+    <text class="cardTitle" x="995" y="546" text-anchor="middle">RoutingMarkerRoutes</text>
+    <text class="mono" x="874" y="594">GET passes route as-is</text>
+    <text class="mono" x="874" y="620">PATCH calls asReadWrite()</text>
+  </g>
+
+  <g data-card="RoutingMarkerRepository" data-x="1220" data-y="510" data-width="300" data-height="125">
+    <rect class="card" x="1220" y="510" width="300" height="125" rx="16" fill="#fff7f7" stroke="#a85f7f"/>
+    <path class="header" d="M1220,562 L1220,526 Q1220,510 1236,510 L1504,510 Q1520,510 1520,526 L1520,562 Z" fill="#f5eef2"/>
+    <text class="cardTitle" x="1370" y="546" text-anchor="middle">MarkerRepository</text>
+    <text class="mono" x="1248" y="594">awaitReady before work</text>
+    <text class="mono" x="1248" y="620">suspendTransaction(db)</text>
+  </g>
+
+  <g data-card="RoutingDatabaseRegistry" data-x="1595" data-y="510" data-width="300" data-height="125">
+    <rect class="card" x="1595" y="510" width="300" height="125" rx="16" fill="#f7fffe" stroke="#4f8f8b"/>
+    <path class="header" d="M1595,562 L1595,526 Q1595,510 1611,510 L1879,510 Q1895,510 1895,526 L1895,562 Z" fill="#eef7f6"/>
+    <text class="cardTitle" x="1745" y="546" text-anchor="middle">DatabaseRegistry</text>
+    <text class="mono" x="1624" y="594">Map key -> R2dbcDatabase</text>
+    <text class="mono" x="1624" y="620">missing key is fatal</text>
+  </g>
+
+  <path class="connector blue" d="M395 572 H470" data-connector="plugin-attribute"/>
+  <polyline points="470,572 458,565 458,579" fill="none" stroke="#3f83b8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector green" d="M770 572 H845" data-connector="attribute-routes"/>
+  <polyline points="845,572 833,565 833,579" fill="none" stroke="#6f8f52" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector amber" d="M1145 572 H1220" data-connector="routes-repository"/>
+  <polyline points="1220,572 1208,565 1208,579" fill="none" stroke="#a36f3e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="connector rose" d="M1520 572 H1595" data-connector="repository-registry"/>
+  <polyline points="1595,572 1583,565 1583,579" fill="none" stroke="#a85f7f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <rect class="lane" x="60" y="725" width="1880" height="180" rx="18"/>
+  <text class="laneTitle" x="86" y="760">OWNED R2DBC TARGETS</text>
+
+  <g data-card="H2 R2DBC pools" data-x="1430" data-y="780" data-width="460" data-height="100">
+    <rect class="card" x="1430" y="780" width="460" height="100" rx="15" fill="#ffffff" stroke="#5d7486"/>
+    <image data-bluetape4k-icon="database/h2.svg" href="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMDk0NzZCIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+SDIgRGF0YWJhc2U8L3RpdGxlPjxwYXRoIGQ9Ik0xNy4xNyAxMy4yN2MuMTQtLjAxNS4yOC0uMDIzLjQxNi0uMDIzLjcgMCAxLjIyOC4xNTkgMS41OTkuNDY5LjM3LjMxNC41NTUuNzU2LjU1NSAxLjMzNGEyLjg2MSAyLjg2MSAwIDAgMS0uNDMgMS40NTVjLS4yOTEuNDkyLS43NzUgMS4wNjYtMS40NiAxLjcyNy0uNDUzLjQ0Ni0xLjA2MS45NzYtMS44MjEgMS41OTJhNDguMDIgNDguMDIgMCAwIDEtMi4yNzUgMS43NDJ2Mi4wODNoOS44OTVWMjEuMjRIMTcuOTljLjIxOS0uMTU5LjU5LS40MzUgMS4xMS0uODMyLjUxOS0uNCAxLjAzMy0uODM1IDEuNTUtMS4zMTEuODE3LS43NiAxLjQyNS0xLjUgMS44MjItMi4yMTVhNC42MjQgNC42MjQgMCAwIDAgLjU5Ny0yLjI2OGMwLTEuMjEzLS40MTYtMi4xNTQtMS4yNDctMi44MTUtLjgyOC0uNjYyLTIuMDMzLS45OTQtMy42MTMtLjk5NC0uMzQ0IDAtLjY5Mi4wMTUtMS4wMzYuMDQ5VjYuMDRIMTMuODZ2NC43MDFIOC45NjVWNi4wNEg1LjY1djEyLjg0NmgzLjMxNXYtNS42NjFoNC44OXY1LjY2MWguMDM5Yy4zMS0uMjQyLjYyMy0uNDg3LjkzMy0uNzRhMjguNTY0IDI4LjU2NCAwIDAgMCAxLjgyNi0xLjU4OCAxNC44NTQgMTQuODU0IDAgMCAwIC41MTctLjUyOXpNMTIuMDExIDIzLjNBMTEuMzI3IDExLjMyNyAwIDAgMSAuNyAxMS45OSAxMS4zMDUgMTEuMzA1IDAgMCAxIDEyLjAxMS42OTlhMTEuMjg2IDExLjI4NiAwIDAgMSAxMS4yOSAxMS4yOXYuMzUxSDI0di0uMzUxQTExLjk4NSAxMS45ODUgMCAwIDAgMTIuMDExIDAgMTIuMDA4IDEyLjAwOCAwIDAgMCAwIDExLjk4OSAxMi4wMjYgMTIuMDI2IDAgMCAwIDEyLjAxMSAyNGguMzUydi0uN3oiLz48L3N2Zz4=" x="1462" y="812" width="38" height="38"/>
+    <text class="smallTitle" x="1680" y="815" text-anchor="middle">Four H2 R2DBC pools</text>
+    <text class="mono" x="1530" y="842">default:rw/default:ro</text>
+    <text class="mono" x="1530" y="864">acme:rw/acme:ro, maxPoolSize=4</text>
+  </g>
+
+  <path class="connector teal" d="M1745 635 V780" data-connector="registry-h2"/>
+  <polyline points="1745,780 1738,768 1752,768" fill="none" stroke="#4f8f8b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <rect class="note" x="120" y="958" width="1760" height="34" rx="12"/>
+  <text class="foot" x="1000" y="981" text-anchor="middle">No Reactor Context or Spring transactions: each handler carries RoutingRequest into an explicit suspendTransaction database argument.</text>
 </svg>

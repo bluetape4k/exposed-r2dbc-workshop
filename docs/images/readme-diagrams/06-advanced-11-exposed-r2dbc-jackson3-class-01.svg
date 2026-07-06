@@ -1,66 +1,129 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1754" height="816" viewBox="0 0 1754 816" role="img" aria-label="Structure Diagram">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1754" height="816"/>
-<rect class="frame" x="32" y="28" width="1690" height="760" rx="28"/>
-<text class="title" x="66" y="82">Structure Diagram</text>
-<text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<path class="line" d="M672 292 L672 132 L1082 132 L1082 180" data-connector="line"/>
-<path class="inheritLine" d="M877 484 L877 393 L672 393 L672 292"/>
-<g transform="translate(92,180)">
-  <rect class="card" x="0" y="0" width="340" height="133" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#5B8DEF"/>
-  <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="61" text-anchor="middle">Jackson3BColumnT</text>
-  <text class="mono" x="18" y="108">+jacksonb(name) Column~T~</text>
-</g>
-<g transform="translate(502,180)">
-  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#58A978"/>
-  <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="61" text-anchor="middle">Jackson3Column</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1480" viewBox="0 0 2200 1480" role="img" aria-label="Advanced 11 Exposed R2DBC Jackson3 class diagram">
+  <defs>
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#203040" flood-opacity="0.11"/>
+    </filter>
+    <style>
+      .canvas{fill:#f4f7fa}
+      .frame{fill:#fffefb;stroke:#b8ccdf;stroke-width:5}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:3}
+      .laneWarm{fill:#fffaf0;stroke:#dccb9e;stroke-width:3}
+      .laneGreen{fill:#f2f8f2;stroke:#c5dab6;stroke-width:3}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:64px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:24px;fill:#536476;font-weight:700}
+      .laneTitle{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:24px;letter-spacing:.06em;fill:#8ca2b4;font-weight:800}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:34px;fill:#1e293b}
+      .cardSub{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:22px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:19px;fill:#64748b;font-weight:800}
+      .card{filter:url(#shadow)}
+      .cardWhite{fill:#ffffff}
+      .blue{stroke:#4f86c6}
+      .green{stroke:#6f8f52}
+      .amber{stroke:#b8891f}
+      .teal{stroke:#4f8f8b}
+      .red{stroke:#ad5f82}
+      .brown{stroke:#8a6f55}
+      .connector{fill:none}
+      .inherit{fill:none;stroke:#64748b;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round}
+      .use{fill:none;stroke-width:4.2;stroke-dasharray:12 10;stroke-linecap:butt;stroke-linejoin:round}
+      .head{stroke-dasharray:none;stroke-linecap:round;stroke-linejoin:round}
+      .footer{fill:#ffffff;stroke:#d9e3ec;stroke-width:2.4}
+    </style>
+  </defs>
 
-</g>
-<g transform="translate(912,180)">
-  <rect class="card" x="0" y="0" width="340" height="154" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#D6A441"/>
-  <text class="small" x="170" y="26" text-anchor="middle">«Jackson 3 (tools.jack.»</text>
-  <text class="label" x="170" y="61" text-anchor="middle">JsonMapper</text>
-  <text class="mono" x="18" y="108">+writeValueAsString(value): String</text>
-<text class="mono" x="18" y="129">+readValue(json, klass): T</text>
-</g>
-<g transform="translate(1322,180)">
-  <rect class="card" x="0" y="0" width="340" height="154" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#DC6B82"/>
-  <text class="small" x="170" y="26" text-anchor="middle">«bluetape4k-exposed»</text>
-  <text class="label" x="170" y="61" text-anchor="middle">Jackson3ColumnT</text>
-  <text class="mono" x="18" y="108">+jackson(name) Column~T~</text>
-<text class="mono" x="18" y="129">-mapper: JsonMapper</text>
-</g>
-<g transform="translate(707,484)">
-  <rect class="card" x="0" y="0" width="340" height="112" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#45A7A1"/>
-  <text class="small" x="170" y="26" text-anchor="middle"></text>
-  <text class="label" x="170" y="61" text-anchor="middle">Jackson3BColumn</text>
+  <rect class="canvas" width="2200" height="1480"/>
+  <rect class="frame" x="36" y="34" width="2128" height="1412" rx="38"/>
+  <text class="title" x="1100" y="126" text-anchor="middle">Jackson 3 JSON Column Class Map</text>
+  <text class="subtitle" x="1100" y="176" text-anchor="middle">JacksonSchema preserves the JSON/JSONB test contract while switching to jackson3 extensions, JsonMapper, and KotlinModule3.</text>
 
-</g>
+  <rect class="lane" x="92" y="234" width="2016" height="254" rx="30"/>
+  <text class="laneTitle" x="132" y="282">BASE CONTRACTS AND JACKSON 3 API</text>
+  <rect class="laneWarm" x="92" y="530" width="2016" height="430" rx="30"/>
+  <text class="laneTitle" x="132" y="578">JACKSON 3 SCHEMA FIXTURE</text>
+  <rect class="laneGreen" x="92" y="1002" width="2016" height="260" rx="30"/>
+  <text class="laneTitle" x="132" y="1050">TEST SUITES</text>
+
+  <g data-card="AbstractR2dbcExposedTest" data-x="142" data-y="304" data-width="430" data-height="142">
+    <rect class="card cardWhite blue" x="142" y="304" width="430" height="142" rx="22" stroke-width="4"/>
+    <text class="tiny" x="357" y="338" text-anchor="middle">&lt;&lt;base test&gt;&gt;</text>
+    <text class="cardTitle" x="357" y="378" text-anchor="middle">AbstractR2dbc</text>
+    <text class="cardTitle" x="357" y="412" text-anchor="middle">ExposedTest</text>
+    <text class="cardSub" x="357" y="438" text-anchor="middle">enabled dialects + R2DBC setup</text>
+  </g>
+  <g data-card="IntIdTable" data-x="652" data-y="322" data-width="400" data-height="112">
+    <rect class="card cardWhite green" x="652" y="322" width="400" height="112" rx="22" stroke-width="4"/>
+    <text class="tiny" x="852" y="354" text-anchor="middle">&lt;&lt;Exposed base&gt;&gt;</text>
+    <text class="cardTitle" x="852" y="396" text-anchor="middle">IntIdTable</text>
+    <text class="cardSub" x="852" y="424" text-anchor="middle">SERIAL id primary key</text>
+  </g>
+  <g data-card="jackson3 extensions" data-x="1132" data-y="322" data-width="430" data-height="112">
+    <rect class="card cardWhite amber" x="1132" y="322" width="430" height="112" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1347" y="354" text-anchor="middle">&lt;&lt;extension package&gt;&gt;</text>
+    <text class="cardTitle" x="1347" y="396" text-anchor="middle">jackson() / jacksonb()</text>
+    <text class="cardSub" x="1347" y="424" text-anchor="middle">core.jackson3.* package</text>
+  </g>
+  <g data-card="JsonMapper KotlinModule3" data-x="1642" data-y="322" data-width="430" data-height="112">
+    <rect class="card cardWhite red" x="1642" y="322" width="430" height="112" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1857" y="354" text-anchor="middle">&lt;&lt;Jackson 3 runtime&gt;&gt;</text>
+    <text class="cardTitle" x="1857" y="396" text-anchor="middle">JsonMapper</text>
+    <text class="cardSub" x="1857" y="424" text-anchor="middle">KotlinModule3 data binding</text>
+  </g>
+
+  <g data-card="JacksonSchema" data-x="188" data-y="642" data-width="412" data-height="148">
+    <rect class="card cardWhite brown" x="188" y="642" width="412" height="148" rx="22" stroke-width="4"/>
+    <text class="tiny" x="394" y="676" text-anchor="middle">&lt;&lt;object&gt;&gt;</text>
+    <text class="cardTitle" x="394" y="720" text-anchor="middle">JacksonSchema</text>
+    <text class="cardSub" x="394" y="752" text-anchor="middle">tables, data classes, helpers</text>
+  </g>
+  <g data-card="Kotlin Data Classes" data-x="686" data-y="642" data-width="412" data-height="148">
+    <rect class="card cardWhite teal" x="686" y="642" width="412" height="148" rx="22" stroke-width="4"/>
+    <text class="tiny" x="892" y="676" text-anchor="middle">&lt;&lt;payload model&gt;&gt;</text>
+    <text class="cardTitle" x="892" y="720" text-anchor="middle">DataHolder / User</text>
+    <text class="cardSub" x="892" y="752" text-anchor="middle">UserGroup wraps List&lt;User&gt;</text>
+  </g>
+  <g data-card="JSON Table Objects" data-x="1184" data-y="642" data-width="412" data-height="148">
+    <rect class="card cardWhite green" x="1184" y="642" width="412" height="148" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1390" y="676" text-anchor="middle">&lt;&lt;IntIdTable objects&gt;&gt;</text>
+    <text class="cardTitle" x="1390" y="720" text-anchor="middle">JSON Tables</text>
+    <text class="cardSub" x="1390" y="752" text-anchor="middle">jackson_table / arrays</text>
+  </g>
+  <g data-card="JSONB Table Objects" data-x="1682" data-y="642" data-width="412" data-height="148">
+    <rect class="card cardWhite red" x="1682" y="642" width="412" height="148" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1888" y="676" text-anchor="middle">&lt;&lt;IntIdTable objects&gt;&gt;</text>
+    <text class="cardTitle" x="1888" y="720" text-anchor="middle">JSONB Tables</text>
+    <text class="cardSub" x="1888" y="752" text-anchor="middle">jackson_b_table / b_arrays</text>
+  </g>
+  <g data-card="Fixture Helper Functions" data-x="528" data-y="820" data-width="1144" data-height="126">
+    <rect class="cardWhite amber" x="528" y="820" width="1144" height="126" rx="22" stroke-width="4"/>
+    <text class="cardTitle" x="1100" y="860" text-anchor="middle">withJacksonTable() / withJacksonBTable()</text>
+    <text class="cardTitle" x="1100" y="894" text-anchor="middle">withJacksonArrays() / withJacksonBArrays()</text>
+    <text class="cardSub" x="1100" y="926" text-anchor="middle">create tables, seed rows, pass typed tester into each block</text>
+  </g>
+
+  <g data-card="JacksonColumnTest" data-x="322" data-y="1094" data-width="500" data-height="112">
+    <rect class="card cardWhite blue" x="322" y="1094" width="500" height="112" rx="22" stroke-width="4"/>
+    <text class="tiny" x="572" y="1126" text-anchor="middle">&lt;&lt;JSON text tests&gt;&gt;</text>
+    <text class="cardTitle" x="572" y="1168" text-anchor="middle">JacksonColumnTest</text>
+    <text class="cardSub" x="572" y="1196" text-anchor="middle">jacksonColumn extract/contains/exists</text>
+  </g>
+  <g data-card="JacksonBColumnTest" data-x="1378" data-y="1094" data-width="500" data-height="112">
+    <rect class="card cardWhite red" x="1378" y="1094" width="500" height="112" rx="22" stroke-width="4"/>
+    <text class="tiny" x="1628" y="1126" text-anchor="middle">&lt;&lt;JSONB tests&gt;&gt;</text>
+    <text class="cardTitle" x="1628" y="1168" text-anchor="middle">JacksonBColumnTest</text>
+    <text class="cardSub" x="1628" y="1196" text-anchor="middle">jacksonBColumn native JSONB path</text>
+  </g>
+
+  <path class="use connector brown" data-connector="schema-to-model"  d="M 600 716 L 672 716"/>
+  <polyline class="head"  points="672,709 686,716 672,723" fill="none" stroke="#8a6f55" stroke-width="4.2" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="use connector green" data-connector="model-to-json-tables"  d="M 1098 716 L 1170 716"/>
+  <polyline class="head"  points="1170,709 1184,716 1170,723" fill="none" stroke="#6f8f52" stroke-width="4.2" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="use connector red" data-connector="json-to-jsonb-tables"  d="M 1596 716 L 1668 716"/>
+  <polyline class="head"  points="1668,709 1682,716 1668,723" fill="none" stroke="#ad5f82" stroke-width="4.2" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="use connector blue" data-connector="json-tests-use-helpers"  d="M 572 1094 L 572 960"/>
+  <polyline class="head"  points="565,960 572,946 579,960" fill="none" stroke="#4f86c6" stroke-width="4.2" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+  <path class="use connector red" data-connector="jsonb-tests-use-helpers"  d="M 1628 1094 L 1628 960"/>
+  <polyline class="head"  points="1621,960 1628,946 1635,960" fill="none" stroke="#ad5f82" stroke-width="4.2" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <rect class="footer" x="216" y="1322" width="1768" height="48" rx="18"/>
+  <text class="note" x="1100" y="1354" text-anchor="middle">Reader contract: Jackson 3 keeps the JSON/JSONB DSL shape; the package and mapper stack move to jackson3 and JsonMapper.</text>
 </svg>

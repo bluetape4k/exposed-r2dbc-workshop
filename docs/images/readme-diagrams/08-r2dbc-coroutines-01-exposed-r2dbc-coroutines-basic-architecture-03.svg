@@ -1,70 +1,147 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1044" height="692" viewBox="0 0 1044 692" role="img" aria-label="Coroutine State Diagram">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
-  <marker id="openArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#5D6B7A"/></marker>
-  <marker id="inheritArrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffffff"/></marker>
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none;marker-end:url(#openArrow)}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none;marker-end:url(#openArrow)}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none;marker-end:url(#inheritArrow)}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none;marker-end:url(#inheritArrow)}
-  </style>
-</defs>
-<rect class="canvas" width="1044" height="692"/>
-<rect class="frame" x="32" y="28" width="980" height="636" rx="28"/>
-<text class="title" x="66" y="82">Coroutine State Diagram</text>
-<text class="subtitle" x="70" y="118">Architecture nodes and edges from the original Mermaid source</text>
-<path class="line" d="M706 552 C706 552 672 552 672 552" data-connector="line"/>
-<path class="line" d="M672 552 C672 552 706 552 706 552" data-connector="line"/>
-<path class="line" d="M372 220 C372 386 338 386 338 552" data-connector="line"/>
-<path class="line" d="M672 220 C672 303 706 303 706 386" data-connector="line"/>
-<path class="line" d="M338 386 C338 303 372 303 372 220" data-connector="line"/>
-<path class="line" d="M372 220 C372 303 338 303 338 386" data-connector="line"/>
-<path class="line" d="M338 220 C338 220 372 220 372 220" data-connector="line"/>
-<g transform="translate(48,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Created</text>
-</g>
-<g transform="translate(382,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EAF7EF" stroke="#58A978"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Running</text>
-</g>
-<g transform="translate(716,170)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FFF3D9" stroke="#D6A441"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">waiting for DB, IO</text>
-</g>
-<g transform="translate(48,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#FDECEF" stroke="#DC6B82"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Suspended</text>
-</g>
-<g transform="translate(382,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E9F7F6" stroke="#45A7A1"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">result received</text>
-</g>
-<g transform="translate(716,336)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F1ECFF" stroke="#8A72D6"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Completed</text>
-</g>
-<g transform="translate(48,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#F7F1E7" stroke="#B88A44"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Cancelled</text>
-</g>
-<g transform="translate(382,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#EEF6D9" stroke="#8BA84D"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">Executing</text>
-</g>
-<g transform="translate(716,502)">
-  <rect class="card" x="0" y="0" width="280" height="100" rx="14" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <text class="smallLabel" x="140" y="45" text-anchor="middle">SuspendTransaction</text>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1040" width="1600" height="1040" role="img" aria-label="Coroutine transaction state map for Exposed R2DBC">
+  <defs>
+    <filter id="softShadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="#334155" flood-opacity="0.12"/>
+    </filter>
+    <marker id="arrow-blue" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#4f86c6" stroke="#4f86c6" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <marker id="arrow-green" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" viewBox="0 0 10 10" refX="9" refY="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#6f8f52" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none"/>
+    </marker>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:2}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.7}
+      .laneA{fill:#f5f9fd}
+      .laneB{fill:#f7fbf5}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:43px;fill:#1e293b}
+      .subtitle,.detail,.note,.legendText{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:18px;fill:#536476;font-weight:700}
+      .small{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:15px;fill:#64748b;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:21px;letter-spacing:.08em;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:24px;fill:#1e293b}
+      .card{filter:url(#softShadow)}
+      .header{opacity:.96}
+      .flow{fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.6}
+    </style>
+  </defs>
+
+  <rect width="1600" height="1040" class="canvas"/>
+  <rect x="28" y="28" width="1544" height="984" rx="22" class="frame"/>
+
+  <text x="72" y="86" class="title">Coroutine Transaction State Map</text>
+  <text x="72" y="121" class="subtitle">Repository-backed state view from Ex01_Coroutines: dispatcher switch, suspend transaction, DB suspension, resume, and independent top-level jobs.</text>
+
+  <rect x="60" y="150" width="1480" height="292" rx="18" class="lane laneA"/>
+  <text x="88" y="188" class="laneTitle">SUSPEND TRANSACTION STATE PATH</text>
+
+  <rect x="60" y="475" width="1480" height="286" rx="18" class="lane laneB"/>
+  <text x="88" y="513" class="laneTitle">INDEPENDENT ASYNC TOP-LEVEL PATH</text>
+
+  <rect x="60" y="792" width="1480" height="112" rx="18" class="lane"/>
+  <text x="88" y="832" class="laneTitle">READER CONTRACT</text>
+
+  <g data-card="coroutine entered" data-x="92" data-y="242" data-width="220" data-height="120">
+    <rect x="92" y="242" width="220" height="120" rx="16" fill="#fff" stroke="#4f86c6" stroke-width="2.4" class="card"/>
+    <path class="header" d="M92,290 L92,256 Q92,242 106,242 L298,242 Q312,242 312,256 L312,290 Z" fill="#eef5fa"/>
+    <text x="202" y="266" class="tiny" text-anchor="middle">&lt;&lt;start&gt;&gt;</text>
+    <text x="202" y="296" class="cardTitle" text-anchor="middle">runSuspendIO</text>
+    <text x="116" y="328" class="small">test coroutine starts</text>
+    <text x="116" y="352" class="small">withTables scope</text>
+  </g>
+
+  <g data-card="dispatcher switched" data-x="360" data-y="242" data-width="220" data-height="120">
+    <rect x="360" y="242" width="220" height="120" rx="16" fill="#fff" stroke="#6f8f52" stroke-width="2.4" class="card"/>
+    <path class="header" d="M360,290 L360,256 Q360,242 374,242 L566,242 Q580,242 580,256 L580,290 Z" fill="#eef6e9"/>
+    <text x="470" y="266" class="tiny" text-anchor="middle">&lt;&lt;context&gt;&gt;</text>
+    <text x="470" y="296" class="cardTitle" text-anchor="middle">withContext</text>
+    <text x="384" y="328" class="small">Dispatchers.IO</text>
+    <text x="384" y="352" class="small">or single thread</text>
+  </g>
+
+  <g data-card="transaction active" data-x="628" data-y="242" data-width="220" data-height="120">
+    <rect x="628" y="242" width="220" height="120" rx="16" fill="#fff" stroke="#a66a3f" stroke-width="2.4" class="card"/>
+    <path class="header" d="M628,290 L628,256 Q628,242 642,242 L834,242 Q848,242 848,256 L848,290 Z" fill="#f5eee4"/>
+    <text x="738" y="266" class="tiny" text-anchor="middle">&lt;&lt;transaction&gt;&gt;</text>
+    <text x="738" y="296" class="cardTitle" text-anchor="middle">suspend tx</text>
+    <text x="652" y="328" class="small">connection in context</text>
+    <text x="652" y="352" class="small">isolation may be set</text>
+  </g>
+
+  <g data-card="r2dbc suspended" data-x="896" data-y="242" data-width="220" data-height="120">
+    <rect x="896" y="242" width="220" height="120" rx="16" fill="#fff" stroke="#4f8f8b" stroke-width="2.4" class="card"/>
+    <path class="header" d="M896,290 L896,256 Q896,242 910,242 L1102,242 Q1116,242 1116,256 L1116,290 Z" fill="#eef7f6"/>
+    <text x="1006" y="266" class="tiny" text-anchor="middle">&lt;&lt;non-blocking&gt;&gt;</text>
+    <text x="1006" y="296" class="cardTitle" text-anchor="middle">DB await</text>
+    <text x="920" y="328" class="small">insert/select/update</text>
+    <text x="920" y="352" class="small">thread can be released</text>
+  </g>
+
+  <g data-card="resumed and mapped" data-x="1164" data-y="242" data-width="250" data-height="120">
+    <rect x="1164" y="242" width="250" height="120" rx="16" fill="#fff" stroke="#a85f7f" stroke-width="2.4" class="card"/>
+    <path class="header" d="M1164,290 L1164,256 Q1164,242 1178,242 L1400,242 Q1414,242 1414,256 L1414,290 Z" fill="#f5eef2"/>
+    <text x="1289" y="266" class="tiny" text-anchor="middle">&lt;&lt;resume&gt;&gt;</text>
+    <text x="1289" y="296" class="cardTitle" text-anchor="middle">resume + assert</text>
+    <text x="1188" y="328" class="small">ResultRow / count</text>
+    <text x="1188" y="352" class="small">commit by scope exit</text>
+  </g>
+
+  <path class="flow" data-connector="state-start-to-context" d="M 312 302 L 360 302" stroke="#4f86c6" marker-end="url(#arrow-blue)"/>
+  <path class="flow" data-connector="state-context-to-tx" d="M 580 302 L 628 302" stroke="#4f86c6" marker-end="url(#arrow-blue)"/>
+  <path class="flow" data-connector="state-tx-to-await" d="M 848 302 L 896 302" stroke="#4f86c6" marker-end="url(#arrow-blue)"/>
+  <path class="flow" data-connector="state-await-to-resume" d="M 1116 302 L 1164 302" stroke="#4f86c6" marker-end="url(#arrow-blue)"/>
+
+  <g data-card="async fanout" data-x="220" data-y="560" data-width="250" data-height="120">
+    <rect x="220" y="560" width="250" height="120" rx="16" fill="#fff" stroke="#4f86c6" stroke-width="2.4" class="card"/>
+    <path class="header" d="M220,608 L220,574 Q220,560 234,560 L456,560 Q470,560 470,574 L470,608 Z" fill="#eef5fa"/>
+    <text x="345" y="584" class="tiny" text-anchor="middle">&lt;&lt;fan-out&gt;&gt;</text>
+    <text x="345" y="614" class="cardTitle" text-anchor="middle">CoroutineScope(IO)</text>
+    <text x="244" y="646" class="small">List(recordCount) async</text>
+    <text x="244" y="670" class="small">one job per insert/select</text>
+  </g>
+
+  <g data-card="top level tx state" data-x="548" data-y="560" data-width="250" data-height="120">
+    <rect x="548" y="560" width="250" height="120" rx="16" fill="#fff" stroke="#6f8f52" stroke-width="2.4" class="card"/>
+    <path class="header" d="M548,608 L548,574 Q548,560 562,560 L784,560 Q798,560 798,574 L798,608 Z" fill="#eef6e9"/>
+    <text x="673" y="584" class="tiny" text-anchor="middle">&lt;&lt;new tx&gt;&gt;</text>
+    <text x="673" y="614" class="cardTitle" text-anchor="middle">top-level tx</text>
+    <text x="572" y="646" class="small">db + default isolation</text>
+    <text x="572" y="670" class="small">independent connection</text>
+  </g>
+
+  <g data-card="retry state" data-x="876" data-y="560" data-width="250" data-height="120">
+    <rect x="876" y="560" width="250" height="120" rx="16" fill="#fff" stroke="#a66a3f" stroke-width="2.4" class="card"/>
+    <path class="header" d="M876,608 L876,574 Q876,560 890,560 L1112,560 Q1126,560 1126,574 L1126,608 Z" fill="#f5eee4"/>
+    <text x="1001" y="584" class="tiny" text-anchor="middle">&lt;&lt;retry&gt;&gt;</text>
+    <text x="1001" y="614" class="cardTitle" text-anchor="middle">maxAttempts</text>
+    <text x="900" y="646" class="small">5 or 20 in tests</text>
+    <text x="900" y="670" class="small">unique conflict recovery</text>
+  </g>
+
+  <g data-card="await all state" data-x="1204" data-y="560" data-width="250" data-height="120">
+    <rect x="1204" y="560" width="250" height="120" rx="16" fill="#fff" stroke="#4f8f8b" stroke-width="2.4" class="card"/>
+    <path class="header" d="M1204,608 L1204,574 Q1204,560 1218,560 L1440,560 Q1454,560 1454,574 L1454,608 Z" fill="#eef7f6"/>
+    <text x="1329" y="584" class="tiny" text-anchor="middle">&lt;&lt;join&gt;&gt;</text>
+    <text x="1329" y="614" class="cardTitle" text-anchor="middle">awaitAll()</text>
+    <text x="1228" y="646" class="small">results / rows flattened</text>
+    <text x="1228" y="670" class="small">assert record count</text>
+  </g>
+
+  <path class="flow" data-connector="async-to-top-level" d="M 470 620 L 548 620" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+  <path class="flow" data-connector="top-level-to-retry" d="M 798 620 L 876 620" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+  <path class="flow" data-connector="retry-to-await-all" d="M 1126 620 L 1204 620" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+
+  <g data-card="reader contract" data-x="105" data-y="848" data-width="1390" data-height="38">
+    <rect x="105" y="848" width="1390" height="38" rx="12" class="noteBox"/>
+    <text x="800" y="873" class="note" text-anchor="middle">Nested suspendTransaction reuses coroutine transaction context; inTopLevelSuspendTransaction creates independent work for async fan-out.</text>
+  </g>
+
+  <g transform="translate(120 930)">
+    <path class="flow" d="M 0 14 L 58 14" stroke="#4f86c6" marker-end="url(#arrow-blue)"/>
+    <text x="78" y="20" class="legendText">single coroutine transaction state path</text>
+    <path class="flow" d="M 520 14 L 578 14" stroke="#6f8f52" marker-end="url(#arrow-green)"/>
+    <text x="598" y="20" class="legendText">independent async top-level transaction path</text>
+  </g>
 </svg>

@@ -1,60 +1,198 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="924" height="848" viewBox="0 0 924 848" role="img" aria-label="JPA Entity vs Exposed Table Comparison">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1120" width="1600" height="1120" role="img" aria-label="JPA to Exposed R2DBC class mapping diagram">
+  <defs>
+    <filter id="softShadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="#334155" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:2}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.7}
+      .laneBase{fill:#f5f9fd}
+      .laneRead{fill:#fbfcfd}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:44px;fill:#1e293b}
+      .subtitle,.detail,.legendText{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:18px;fill:#536476;font-weight:700}
+      .small{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:15px;fill:#64748b;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:21px;letter-spacing:.08em;fill:#8ca2b4}
+      .cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:25px;fill:#1e293b}
+      .card{filter:url(#softShadow)}
+      .header{opacity:.96}
+      .inherit{fill:none;stroke:#64748b;stroke-width:3.1;stroke-linecap:round;stroke-linejoin:round}
+      .use{fill:none;stroke-width:2.7;stroke-dasharray:8 7;stroke-linecap:butt;stroke-linejoin:round}
+      .tri{fill:#fff;stroke:#64748b;stroke-width:3.1;stroke-linejoin:round;stroke-dasharray:none;style:stroke-dasharray:none!important}
+      .openHead{fill:none;stroke-width:2.9;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;style:stroke-dasharray:none!important}
+      .noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.6}
+    </style>
+  </defs>
 
+  <rect width="1600" height="1120" class="canvas"/>
+  <rect x="28" y="28" width="1544" height="1064" rx="22" class="frame"/>
 
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none}
-  </style>
-</defs>
-<rect class="canvas" width="924" height="848"/>
-<rect class="frame" x="32" y="28" width="860" height="792" rx="28"/>
-<text class="title" x="66" y="82">JPA Entity vs Exposed Table Co.</text>
-<text class="subtitle" x="70" y="118">UML classes from the original Mermaid source</text>
-<g transform="translate(514,170)">
-  <rect class="card" x="0" y="0" width="340" height="175" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#5B8DEF"/>
-  <text class="small" x="170" y="26" text-anchor="middle">«Exposed DAO»</text>
-  <text class="label" x="170" y="61" text-anchor="middle">ExposedEntity</text>
-  <text class="mono" x="18" y="108">+EntityID~Long~ id</text>
-<text class="mono" x="18" y="129">+String name</text>
-<text class="mono" x="18" y="150">+String description</text>
-</g>
-<g transform="translate(70,170)">
-  <rect class="card" x="0" y="0" width="340" height="238" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#58A978"/>
-  <text class="small" x="170" y="26" text-anchor="middle">«Exposed DSL»</text>
-  <text class="label" x="170" y="61" text-anchor="middle">ExposedTable</text>
-  <text class="mono" x="18" y="108">+Column~Long~ id</text>
-<text class="mono" x="18" y="129">+Column~String~ name</text>
-<text class="mono" x="18" y="150">+Column~String~ description</text>
-<text class="mono" x="18" y="171">+insert()</text>
-<text class="mono" x="18" y="192">+selectAll()</text>
-<text class="mono" x="18" y="213">+update()</text>
-</g>
-<g transform="translate(440,540)">
-  <rect class="card" x="0" y="0" width="340" height="238" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="78" x2="340" y2="78" stroke="#D6A441"/>
-  <text class="small" x="170" y="26" text-anchor="middle">«JPA Entity»</text>
-  <text class="label" x="170" y="61" text-anchor="middle">JpaEntity</text>
-  <text class="mono" x="18" y="108">+Long id</text>
-<text class="mono" x="18" y="129">+String name</text>
-<text class="mono" x="18" y="150">+String description</text>
-<text class="mono" x="18" y="171">+persist()</text>
-<text class="mono" x="18" y="192">+find()</text>
-<text class="mono" x="18" y="213">+merge()</text>
-</g>
+  <text x="72" y="87" class="title">JPA Entity to Exposed R2DBC Class Map</text>
+  <text x="72" y="122" class="subtitle">Repository-backed comparison of JPA concepts with the test-only Exposed tables, DAO entities, DTOs, and custom column types.</text>
+
+  <rect x="60" y="146" width="1480" height="214" rx="18" class="lane laneBase"/>
+  <text x="88" y="183" class="laneTitle">EXPOSED BASE CONTRACTS</text>
+
+  <rect x="60" y="392" width="1480" height="454" rx="18" class="lane"/>
+  <text x="88" y="429" class="laneTitle">SOURCE IMPLEMENTATIONS IN 01-CONVERT-JPA-BASIC</text>
+
+  <rect x="60" y="878" width="1480" height="150" rx="18" class="lane laneRead"/>
+  <text x="88" y="915" class="laneTitle">READER CONTRACT</text>
+
+  <g data-card="LongIdTable" data-x="100" data-y="218" data-width="240" data-height="106">
+    <rect x="100" y="218" width="240" height="106" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.3" class="card"/>
+    <path class="header" d="M100,262 L100,232 Q100,218 114,218 L326,218 Q340,218 340,232 L340,262 Z" fill="#eef5fa"/>
+    <text x="220" y="242" class="tiny" text-anchor="middle">&lt;&lt;base table&gt;&gt;</text>
+    <text x="220" y="270" class="cardTitle" text-anchor="middle">LongIdTable</text>
+    <text x="122" y="300" class="detail">auto Long id</text>
+  </g>
+
+  <g data-card="IdTableEmail" data-x="390" data-y="218" data-width="240" data-height="106">
+    <rect x="390" y="218" width="240" height="106" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.3" class="card"/>
+    <path class="header" d="M390,262 L390,232 Q390,218 404,218 L616,218 Q630,218 630,232 L630,262 Z" fill="#eef7f6"/>
+    <text x="510" y="242" class="tiny" text-anchor="middle">&lt;&lt;base table&gt;&gt;</text>
+    <text x="510" y="270" class="cardTitle" text-anchor="middle">IdTable&lt;Email&gt;</text>
+    <text x="412" y="300" class="detail">custom primary key</text>
+  </g>
+
+  <g data-card="LongEntity" data-x="680" data-y="218" data-width="240" data-height="106">
+    <rect x="680" y="218" width="240" height="106" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2.3" class="card"/>
+    <path class="header" d="M680,262 L680,232 Q680,218 694,218 L906,218 Q920,218 920,232 L920,262 Z" fill="#f5eee4"/>
+    <text x="800" y="242" class="tiny" text-anchor="middle">&lt;&lt;DAO base&gt;&gt;</text>
+    <text x="800" y="270" class="cardTitle" text-anchor="middle">LongEntity</text>
+    <text x="702" y="300" class="detail">column delegates</text>
+  </g>
+
+  <g data-card="LongEntityClass" data-x="970" data-y="218" data-width="250" data-height="106">
+    <rect x="970" y="218" width="250" height="106" rx="14" fill="#fff" stroke="#8a6f55" stroke-width="2.3" class="card"/>
+    <path class="header" d="M970,262 L970,232 Q970,218 984,218 L1206,218 Q1220,218 1220,232 L1220,262 Z" fill="#f3eee8"/>
+    <text x="1095" y="242" class="tiny" text-anchor="middle">&lt;&lt;DAO factory&gt;&gt;</text>
+    <text x="1095" y="270" class="cardTitle" text-anchor="middle">LongEntityClass</text>
+    <text x="992" y="300" class="detail">new/find helpers</text>
+  </g>
+
+  <g data-card="ColumnWithTransform" data-x="1280" data-y="218" data-width="250" data-height="106">
+    <rect x="1280" y="218" width="250" height="106" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2.3" class="card"/>
+    <path class="header" d="M1280,262 L1280,232 Q1280,218 1294,218 L1516,218 Q1530,218 1530,232 L1530,262 Z" fill="#f5eef2"/>
+    <text x="1405" y="242" class="tiny" text-anchor="middle">&lt;&lt;converter&gt;&gt;</text>
+    <text x="1405" y="268" class="cardTitle" text-anchor="middle">ColumnWith</text>
+    <text x="1405" y="294" class="cardTitle" text-anchor="middle">Transform</text>
+    <text x="1302" y="318" class="detail">DB value to type</text>
+  </g>
+
+  <g data-card="LongIdTableTables" data-x="85" data-y="488" data-width="270" data-height="142">
+    <rect x="85" y="488" width="270" height="142" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.3" class="card"/>
+    <path class="header" d="M85,536 L85,502 Q85,488 99,488 L341,488 Q355,488 355,502 L355,536 Z" fill="#eef5fa"/>
+    <text x="220" y="512" class="tiny" text-anchor="middle">&lt;&lt;tables&gt;&gt;</text>
+    <text x="220" y="542" class="cardTitle" text-anchor="middle">LongIdTable tables</text>
+    <text x="108" y="573" class="small">SimpleTable, TaskTable</text>
+    <text x="108" y="597" class="small">Post, Comment, Tag</text>
+    <text x="108" y="621" class="small">Address, Person</text>
+  </g>
+
+  <g data-card="CustomIdTable" data-x="385" data-y="488" data-width="250" data-height="142">
+    <rect x="385" y="488" width="250" height="142" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.3" class="card"/>
+    <path class="header" d="M385,536 L385,502 Q385,488 399,488 L621,488 Q635,488 635,502 L635,536 Z" fill="#eef7f6"/>
+    <text x="510" y="512" class="tiny" text-anchor="middle">&lt;&lt;custom id&gt;&gt;</text>
+    <text x="510" y="542" class="cardTitle" text-anchor="middle">CustomIdTable</text>
+    <text x="408" y="573" class="small">IdTable&lt;Email&gt;("emails")</text>
+    <text x="408" y="597" class="small">email_id.entityId()</text>
+    <text x="408" y="621" class="small">ssn(...).uniqueIndex()</text>
+  </g>
+
+  <g data-card="DaoEntities" data-x="665" data-y="488" data-width="270" data-height="142">
+    <rect x="665" y="488" width="270" height="142" rx="14" fill="#fff" stroke="#a66a3f" stroke-width="2.3" class="card"/>
+    <path class="header" d="M665,536 L665,502 Q665,488 679,488 L921,488 Q935,488 935,502 L935,536 Z" fill="#f5eee4"/>
+    <text x="800" y="512" class="tiny" text-anchor="middle">&lt;&lt;DAO entities&gt;&gt;</text>
+    <text x="800" y="542" class="cardTitle" text-anchor="middle">Entity classes</text>
+    <text x="688" y="573" class="small">SimpleEntity, Post</text>
+    <text x="688" y="597" class="small">PostDetail, Comment, Tag</text>
+    <text x="688" y="621" class="small">Address, Person</text>
+  </g>
+
+  <g data-card="EntityFactories" data-x="970" data-y="488" data-width="250" data-height="142">
+    <rect x="970" y="488" width="250" height="142" rx="14" fill="#fff" stroke="#8a6f55" stroke-width="2.3" class="card"/>
+    <path class="header" d="M970,536 L970,502 Q970,488 984,488 L1206,488 Q1220,488 1220,502 L1220,536 Z" fill="#f3eee8"/>
+    <text x="1095" y="512" class="tiny" text-anchor="middle">&lt;&lt;companions&gt;&gt;</text>
+    <text x="1095" y="542" class="cardTitle" text-anchor="middle">EntityClass helpers</text>
+    <text x="992" y="573" class="small">companion object</text>
+    <text x="992" y="597" class="small">LongEntityClass&lt;T&gt;</text>
+    <text x="992" y="621" class="small">new / findById</text>
+  </g>
+
+  <g data-card="EmailSsnTypes" data-x="1280" data-y="488" data-width="250" data-height="142">
+    <rect x="1280" y="488" width="250" height="142" rx="14" fill="#fff" stroke="#a85f7f" stroke-width="2.3" class="card"/>
+    <path class="header" d="M1280,536 L1280,502 Q1280,488 1294,488 L1516,488 Q1530,488 1530,502 L1530,536 Z" fill="#f5eef2"/>
+    <text x="1405" y="512" class="tiny" text-anchor="middle">&lt;&lt;column types&gt;&gt;</text>
+    <text x="1405" y="542" class="cardTitle" text-anchor="middle">Email / Ssn types</text>
+    <text x="1302" y="573" class="small">value class wrappers</text>
+    <text x="1302" y="597" class="small">email(), ssn()</text>
+    <text x="1302" y="621" class="small">String transformers</text>
+  </g>
+
+  <g data-card="RelationshipDelegates" data-x="170" data-y="684" data-width="380" data-height="118">
+    <rect x="170" y="684" width="380" height="118" rx="14" fill="#fff" stroke="#6f8f52" stroke-width="2.3" class="card"/>
+    <path class="header" d="M170,730 L170,698 Q170,684 184,684 L536,684 Q550,684 550,698 L550,730 Z" fill="#eef6e9"/>
+    <text x="360" y="708" class="tiny" text-anchor="middle">&lt;&lt;relationships&gt;&gt;</text>
+    <text x="360" y="738" class="cardTitle" text-anchor="middle">DAO relationship delegates</text>
+    <text x="194" y="769" class="small">backReferencedOn, referrersOn, via</text>
+    <text x="194" y="793" class="small">1:1, 1:N, N:M over reference()</text>
+  </g>
+
+  <g data-card="DslDmlTests" data-x="610" data-y="684" data-width="340" data-height="118">
+    <rect x="610" y="684" width="340" height="118" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2.3" class="card"/>
+    <path class="header" d="M610,730 L610,698 Q610,684 624,684 L936,684 Q950,684 950,698 L950,730 Z" fill="#eef5fa"/>
+    <text x="780" y="708" class="tiny" text-anchor="middle">&lt;&lt;R2DBC DSL tests&gt;&gt;</text>
+    <text x="780" y="738" class="cardTitle" text-anchor="middle">CRUD and query DSL</text>
+    <text x="634" y="769" class="small">batchInsert, selectAll, deleteWhere</text>
+    <text x="634" y="793" class="small">insert(select(...)) id + 100 pattern</text>
+  </g>
+
+  <g data-card="DtoRecords" data-x="1010" data-y="684" data-width="350" data-height="118">
+    <rect x="1010" y="684" width="350" height="118" rx="14" fill="#fff" stroke="#4f8f8b" stroke-width="2.3" class="card"/>
+    <path class="header" d="M1010,730 L1010,698 Q1010,684 1024,684 L1346,684 Q1360,684 1360,698 L1360,730 Z" fill="#eef7f6"/>
+    <text x="1185" y="708" class="tiny" text-anchor="middle">&lt;&lt;DTO / projection&gt;&gt;</text>
+    <text x="1185" y="738" class="cardTitle" text-anchor="middle">Records and projections</text>
+    <text x="1034" y="769" class="small">SimpleRecord, PersonRecord</text>
+    <text x="1034" y="793" class="small">ResultRow mapper + Flow collection</text>
+  </g>
+
+  <path class="inherit" data-connector="inherit-long-id-table" d="M 220 488 L 220 324"/>
+  <polygon class="tri" points="220,324 211,340 229,340" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="inherit" data-connector="inherit-id-table-email" d="M 510 488 L 510 324"/>
+  <polygon class="tri" points="510,324 501,340 519,340" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="inherit" data-connector="inherit-long-entity" d="M 800 488 L 800 324"/>
+  <polygon class="tri" points="800,324 791,340 809,340" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="inherit" data-connector="inherit-entity-class" d="M 1095 488 L 1095 324"/>
+  <polygon class="tri" points="1095,324 1086,340 1104,340" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="inherit" data-connector="inherit-column-transform" d="M 1405 488 L 1405 324"/>
+  <polygon class="tri" points="1405,324 1396,340 1414,340" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="use" data-connector="dao-uses-tables" d="M 800 630 L 800 660 Q 800 674 786 674 L 334 674 Q 320 674 320 660 L 320 630" stroke="#6f8f52"/>
+  <polyline class="openHead" points="313,644 320,630 327,644" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="use" data-connector="factory-creates-dao" d="M 970 590 L 935 590" stroke="#8a6f55"/>
+  <polyline class="openHead" points="949,583 935,590 949,597" stroke="#8a6f55" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <path class="use" data-connector="records-read-result-row" d="M 1010 744 L 950 744" stroke="#4f8f8b"/>
+  <polyline class="openHead" points="964,737 950,744 964,751" stroke="#4f8f8b" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+
+  <g data-card="JpaMapping" data-x="102" data-y="943" data-width="1396" data-height="48">
+    <rect x="102" y="943" width="1396" height="48" rx="13" class="noteBox"/>
+    <text x="800" y="974" class="legendText" text-anchor="middle">JPA @Entity maps to Table + DAO or DTO; @Enumerated maps to enumerationByName; @Convert maps to ColumnWithTransform.</text>
+  </g>
+
+  <g transform="translate(108 1000)">
+    <path class="inherit" d="M 0 16 L 56 16"/>
+    <polygon class="tri" points="58,16 40,8 40,24" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <text x="74" y="22" class="legendText">solid hollow triangle = Exposed inheritance/generalization</text>
+    <path class="use" d="M 650 16 L 706 16" stroke="#6f8f52"/>
+    <polyline class="openHead" points="692,9 706,16 692,23" stroke="#6f8f52" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <text x="724" y="22" class="legendText">dashed open arrow = source-level use/dependency</text>
+  </g>
 </svg>

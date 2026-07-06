@@ -139,30 +139,36 @@ Lettuce의 `RedisCoroutinesCommands`를 사용하여 `suspend` 함수로 Redis �
 class LettuceSuspendedCache<K: Any, V: Any>(
     val name: String,
     val commands: RedisCoroutinesCommands<String, V>,
+    private val keyCommands: RedisCoroutinesCommands<String, String>,
     private val ttlSeconds: Long? = null,
 ) {
+    private val indexKey: String = "$name:__keys"
+
     suspend fun get(key: K): V? = commands.get(keyStr(key))
 
     suspend fun put(key: K, value: V) {
-        if (ttlSeconds != null) commands.setex(keyStr(key), ttlSeconds, value)
-        else commands.set(keyStr(key), value)
+        val redisKey = keyStr(key)
+        if (ttlSeconds != null) commands.setex(redisKey, ttlSeconds, value)
+        else commands.set(redisKey, value)
+        keyCommands.sadd(indexKey, redisKey)
     }
 
     suspend fun evict(key: K) {
-        commands.del(keyStr(key))
+        val redisKey = keyStr(key)
+        commands.del(redisKey)
+        keyCommands.srem(indexKey, redisKey)
     }
 
     suspend fun clear() {
-        val scanArgs = KeyScanArgs.Builder.matches("$name:*").limit(100)
-        var cursor: ScanCursor = ScanCursor.INITIAL
-        do {
-            val result = if (cursor == ScanCursor.INITIAL) commands.scan(scanArgs)
-                         else commands.scan(cursor, scanArgs) ?: break
-            result.keys.chunked(100).forEach { keys ->
-                if (keys.isNotEmpty()) commands.unlink(*keys.toTypedArray())
+        val keys = keyCommands.smembers(indexKey)
+            .filterNotNull()
+            .toList()
+        keys.chunked(100).forEach { chunk ->
+            if (chunk.isNotEmpty()) {
+                keyCommands.unlink(*chunk.toTypedArray())
             }
-            cursor = result
-        } while (!cursor.isFinished)
+        }
+        keyCommands.unlink(indexKey)
     }
 }
 ```
@@ -196,7 +202,7 @@ Cache-Aside 패턴을 구현합니다:
 
 - **Read**: 캐시 조회 -> miss 시 DB 조회 후 캐시 저장
 - **Update**: 캐시 무효화 후 DB 업데이트
-- **Evict All**: 해당 캐시 이름 패턴의 모든 키 삭제
+- **Evict All**: 캐시 namespace index에 기록된 키를 배치 삭제
 
 ```kotlin
 class CachedCountryR2dbcRepository(
@@ -271,12 +277,12 @@ Redis는 Testcontainers를 통해 자동으로 실행됩니다.
 
 ![Execution Flow diagram](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-sequence-01.png)
 
-### SCAN 기반 전체 캐시 삭제
+### Index 기반 전체 캐시 삭제
 
-Redis의 `KEYS` 명령은 모든 키를 한 번에 스캔하므로 대규모 데이터셋에서 Redis 서버를 일시적으로 블로킹할 수 있습니다.
-`LettuceSuspendedCache.clear()`는 커서 기반 `SCAN` + `UNLINK` 패턴(`KeyScanArgs` 사용)으로 이 문제를 해결합니다:
+Redis의 `KEYS` 또는 광범위한 keyspace scan은 대규모 데이터셋에서 Redis 서버에 부담을 줄 수 있습니다.
+`LettuceSuspendedCache.clear()`는 전체 Redis keyspace를 훑지 않고, namespace가 직접 관리하는 `indexKey`를 `SMEMBERS`로 읽은 뒤 캐시 엔트리를 `UNLINK`로 배치 삭제하고 마지막에 index key를 삭제합니다:
 
-![SCAN-Based Cache Eviction diagram](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-architecture-05.png)
+![Indexed Cache Eviction diagram](../../docs/images/readme-diagrams/09-spring-07-spring-suspended-cache-architecture-05.png)
 
 `UNLINK`는 `DEL`과 달리 백그라운드에서 메모리를 해제하므로 Redis 이벤트 루프를 차단하지 않습니다.
 

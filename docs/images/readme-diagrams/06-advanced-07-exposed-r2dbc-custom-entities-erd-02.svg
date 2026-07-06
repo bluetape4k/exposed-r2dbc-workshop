@@ -1,70 +1,127 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1308" height="730" viewBox="0 0 1308 730" role="img" aria-label="Structure Diagram">
-<defs>
-  <filter id="shadow" x="-8%" y="-8%" width="116%" height="116%"><feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#1f2937" flood-opacity="0.10"/></filter>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 980" width="1600" height="980" role="img" aria-label="Advanced 07 Exposed R2DBC Custom Entities ERD">
+  <defs>
+    <filter id="softShadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="#1f2937" flood-opacity="0.11"/>
+    </filter>
+    <style>
+      .canvas{fill:#f6f9fc}
+      .frame{fill:#fff;stroke:#d7e2ec;stroke-width:2}
+      .lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.6}
+      .card{filter:url(#softShadow)}
+      .table{fill:#fff;stroke-width:2.4}
+      .header{opacity:.96}
+      .row{stroke:#e5edf4;stroke-width:1.4}
+      .title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:42px;fill:#1e293b}
+      .subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:17px;fill:#536476;font-weight:700}
+      .tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:14px;fill:#64748b;font-weight:700}
+      .laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:22px;letter-spacing:0;fill:#8ca2b4}
+      .tableTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:25px;fill:#1e293b}
+      .key{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:16px;fill:#334155;font-weight:800}
+      .col{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:16px;fill:#536476;font-weight:700}
+      .pill{fill:#fffefb;stroke:#d7e2ec;stroke-width:1.5}
+      .foot{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}
+    </style>
+  </defs>
 
+  <rect width="1600" height="980" class="canvas"/>
+  <rect x="28" y="28" width="1544" height="924" rx="20" class="frame"/>
+  <text x="72" y="88" class="title">Custom Entity Strategy ERD</text>
+  <text x="72" y="122" class="subtitle">Each test fixture creates an independent T1 table; the schema shape is shared while the primary-key generator changes.</text>
 
-  <style>
-    .canvas{fill:#f7f9fc}.frame{fill:#fff;stroke:#d8e0ea;stroke-width:1.5}
-    .title{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:43px;font-weight:400;fill:#102033}
-    .subtitle{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:15px;font-weight:400;fill:#536273}
-    .label{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:25px;font-weight:400;fill:#102033}
-    .smallLabel{font-family:"Architects Daughter","Comic Sans MS","Comic Sans",cursive;font-size:21px;font-weight:400;fill:#102033}
-    .mono{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#102033}
-    .small{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:12px;font-weight:400;fill:#536273}
-    .strong{font-family:"Comic Sans MS","Comic Sans","Comic Neue",Arial,sans-serif;font-size:13px;font-weight:400;fill:#102033}
-    .card{stroke-width:2.1;filter:url(#shadow)}.compartment{stroke-width:1.5;fill:none}
-    .line{stroke:#758297;stroke-width:2.1;fill:none}
-    .plainLine{stroke:#758297;stroke-width:2.1;fill:none}
-    .dashed{stroke:#758297;stroke-width:2.1;stroke-dasharray:7 6;fill:none}
-    .inheritLine{stroke:#758297;stroke-width:2.2;fill:none}
-    .implLine{stroke:#758297;stroke-width:2.2;stroke-dasharray:8 7;fill:none}
-  </style>
-</defs>
-<rect class="canvas" width="1308" height="730"/>
-<rect class="frame" x="32" y="28" width="1244" height="674" rx="28"/>
-<text class="title" x="66" y="82">Structure Diagram</text>
-<text class="subtitle" x="70" y="118">ERD tables and relationships from the original Mermaid source</text>
-<g transform="translate(70,170)">
-  <rect class="card" x="0" y="0" width="320" height="193" rx="5" fill="#E8F3FF" stroke="#5B8DEF"/>
-  <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#5B8DEF"/>
-  <text class="label" x="160" y="44" text-anchor="middle">t_ksuid</text>
-  <text class="mono" x="18" y="104">VARCHAR id PK KSUID Base62 (27 ch.</text>
-<text class="mono" x="18" y="131">VARCHAR name 255</text>
-<text class="mono" x="18" y="158">INT age</text>
-</g>
-<g transform="translate(494,170)">
-  <rect class="card" x="0" y="0" width="320" height="193" rx="5" fill="#EAF7EF" stroke="#58A978"/>
-  <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#58A978"/>
-  <text class="label" x="160" y="44" text-anchor="middle">t_ksuid_millis</text>
-  <text class="mono" x="18" y="104">VARCHAR id PK KSUID Millis (27 ch.</text>
-<text class="mono" x="18" y="131">VARCHAR name 255</text>
-<text class="mono" x="18" y="158">INT age</text>
-</g>
-<g transform="translate(918,170)">
-  <rect class="card" x="0" y="0" width="320" height="193" rx="5" fill="#FFF3D9" stroke="#D6A441"/>
-  <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#D6A441"/>
-  <text class="label" x="160" y="44" text-anchor="middle">t_snowflake</text>
-  <text class="mono" x="18" y="104">BIGINT id PK Snowflake ID (auto-g.</text>
-<text class="mono" x="18" y="131">VARCHAR name 255</text>
-<text class="mono" x="18" y="158">INT age</text>
-</g>
-<g transform="translate(494,467)">
-  <rect class="card" x="0" y="0" width="320" height="193" rx="5" fill="#FDECEF" stroke="#DC6B82"/>
-  <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#DC6B82"/>
-  <text class="label" x="160" y="44" text-anchor="middle">t_timebased_uuid</text>
-  <text class="mono" x="18" y="104">UUID id PK UUIDv1 (RFC 4122)</text>
-<text class="mono" x="18" y="131">VARCHAR name 255</text>
-<text class="mono" x="18" y="158">INT age</text>
-</g>
-<g transform="translate(918,467)">
-  <rect class="card" x="0" y="0" width="320" height="193" rx="5" fill="#E9F7F6" stroke="#45A7A1"/>
-  <line class="compartment" x1="0" y1="74" x2="320" y2="74" stroke="#45A7A1"/>
-  <text class="label" x="160" y="32" text-anchor="middle">t_timebased_uuid_b</text>
-<text class="label" x="160" y="56" text-anchor="middle">ase62</text>
-  <text class="mono" x="18" y="104">VARCHAR id PK UUIDv1+Base62 (22 c.</text>
-<text class="mono" x="18" y="131">VARCHAR name 255</text>
-<text class="mono" x="18" y="158">INT age</text>
-</g>
+  <rect x="64" y="160" width="1472" height="666" rx="18" class="lane"/>
+  <text x="92" y="195" class="laneTitle">INDEPENDENT TABLES WITH DIFFERENT GENERATED PRIMARY KEYS</text>
 
-<text x="654" y="706" class="mono" text-anchor="middle">No FK relationship: tables are independent examples for this module.</text>
+  <g data-card="t_snowflake" data-x="104" data-y="236" data-width="430" data-height="250">
+    <rect x="104" y="236" width="430" height="250" rx="14" class="table card" fill="#fff" stroke="#3f7fb5"/>
+    <path class="header" d="M104,292 L104,250 Q104,236 118,236 L520,236 Q534,236 534,250 L534,292 Z" fill="#eef5fa"/>
+    <text x="319" y="262" class="tiny" text-anchor="middle">object T1 : SnowflakeIdTable</text>
+    <text x="319" y="288" class="tableTitle" text-anchor="middle">t_snowflake</text>
+    <line class="row" x1="104" y1="320" x2="534" y2="320"/>
+    <text x="128" y="344" class="key">PK</text>
+    <text x="178" y="344" class="col">id BIGINT PRIMARY KEY</text>
+    <line class="row" x1="104" y1="368" x2="534" y2="368"/>
+    <text x="128" y="392" class="key">COL</text>
+    <text x="178" y="392" class="col">name VARCHAR(255) NOT NULL</text>
+    <line class="row" x1="104" y1="416" x2="534" y2="416"/>
+    <text x="128" y="440" class="key">COL</text>
+    <text x="178" y="440" class="col">age INT NOT NULL</text>
+    <rect x="128" y="458" width="360" height="34" rx="11" class="pill"/>
+    <text x="308" y="481" class="note" text-anchor="middle">Snowflake algorithm, millis ordered</text>
+  </g>
+
+  <g data-card="t_ksuid" data-x="585" data-y="236" data-width="430" data-height="250">
+    <rect x="585" y="236" width="430" height="250" rx="14" class="table card" fill="#fff" stroke="#6f8f52"/>
+    <path class="header" d="M585,292 L585,250 Q585,236 599,236 L1001,236 Q1015,236 1015,250 L1015,292 Z" fill="#f1f6ec"/>
+    <text x="800" y="262" class="tiny" text-anchor="middle">object T1 : KsuidTable</text>
+    <text x="800" y="288" class="tableTitle" text-anchor="middle">t_ksuid</text>
+    <line class="row" x1="585" y1="320" x2="1015" y2="320"/>
+    <text x="609" y="344" class="key">PK</text>
+    <text x="659" y="344" class="col">id VARCHAR(27) PRIMARY KEY</text>
+    <line class="row" x1="585" y1="368" x2="1015" y2="368"/>
+    <text x="609" y="392" class="key">COL</text>
+    <text x="659" y="392" class="col">name VARCHAR(255) NOT NULL</text>
+    <line class="row" x1="585" y1="416" x2="1015" y2="416"/>
+    <text x="609" y="440" class="key">COL</text>
+    <text x="659" y="440" class="col">age INT NOT NULL</text>
+    <rect x="609" y="458" width="360" height="34" rx="11" class="pill"/>
+    <text x="789" y="481" class="note" text-anchor="middle">KSUID Base62, seconds ordered</text>
+  </g>
+
+  <g data-card="t_ksuid_millis" data-x="1066" data-y="236" data-width="430" data-height="250">
+    <rect x="1066" y="236" width="430" height="250" rx="14" class="table card" fill="#fff" stroke="#4f8f8b"/>
+    <path class="header" d="M1066,292 L1066,250 Q1066,236 1080,236 L1482,236 Q1496,236 1496,250 L1496,292 Z" fill="#eef7f6"/>
+    <text x="1281" y="262" class="tiny" text-anchor="middle">object T1 : KsuidMillisTable</text>
+    <text x="1281" y="288" class="tableTitle" text-anchor="middle">t_ksuid_millis</text>
+    <line class="row" x1="1066" y1="320" x2="1496" y2="320"/>
+    <text x="1090" y="344" class="key">PK</text>
+    <text x="1140" y="344" class="col">id VARCHAR(27) PRIMARY KEY</text>
+    <line class="row" x1="1066" y1="368" x2="1496" y2="368"/>
+    <text x="1090" y="392" class="key">COL</text>
+    <text x="1140" y="392" class="col">name VARCHAR(255) NOT NULL</text>
+    <line class="row" x1="1066" y1="416" x2="1496" y2="416"/>
+    <text x="1090" y="440" class="key">COL</text>
+    <text x="1140" y="440" class="col">age INT NOT NULL</text>
+    <rect x="1090" y="458" width="360" height="34" rx="11" class="pill"/>
+    <text x="1270" y="481" class="note" text-anchor="middle">KSUID millis, finer ordering</text>
+  </g>
+
+  <g data-card="t_timebased_uuid" data-x="344" data-y="538" data-width="430" data-height="250">
+    <rect x="344" y="538" width="430" height="250" rx="14" class="table card" fill="#fff" stroke="#a66a3f"/>
+    <path class="header" d="M344,594 L344,552 Q344,538 358,538 L760,538 Q774,538 774,552 L774,594 Z" fill="#f5eee4"/>
+    <text x="559" y="564" class="tiny" text-anchor="middle">object T1 : TimebasedUUIDTable</text>
+    <text x="559" y="590" class="tableTitle" text-anchor="middle">t_timebased_uuid</text>
+    <line class="row" x1="344" y1="622" x2="774" y2="622"/>
+    <text x="368" y="646" class="key">PK</text>
+    <text x="418" y="646" class="col">id UUID PRIMARY KEY</text>
+    <line class="row" x1="344" y1="670" x2="774" y2="670"/>
+    <text x="368" y="694" class="key">COL</text>
+    <text x="418" y="694" class="col">name VARCHAR(255) NOT NULL</text>
+    <line class="row" x1="344" y1="718" x2="774" y2="718"/>
+    <text x="368" y="742" class="key">COL</text>
+    <text x="418" y="742" class="col">age INT NOT NULL</text>
+    <rect x="368" y="760" width="360" height="34" rx="11" class="pill"/>
+    <text x="548" y="783" class="note" text-anchor="middle">UUID v1, RFC 4122 format</text>
+  </g>
+
+  <g data-card="t_timebased_uuid_base62" data-x="826" data-y="538" data-width="430" data-height="250">
+    <rect x="826" y="538" width="430" height="250" rx="14" class="table card" fill="#fff" stroke="#a85f7f"/>
+    <path class="header" d="M826,594 L826,552 Q826,538 840,538 L1242,538 Q1256,538 1256,552 L1256,594 Z" fill="#f5eef2"/>
+    <text x="1041" y="564" class="tiny" text-anchor="middle">object T1 : TimebasedUUIDBase62Table</text>
+    <text x="1041" y="590" class="tableTitle" text-anchor="middle">t_uuid_base62</text>
+    <line class="row" x1="826" y1="622" x2="1256" y2="622"/>
+    <text x="850" y="646" class="key">PK</text>
+    <text x="900" y="646" class="col">id VARCHAR(22) PRIMARY KEY</text>
+    <line class="row" x1="826" y1="670" x2="1256" y2="670"/>
+    <text x="850" y="694" class="key">COL</text>
+    <text x="900" y="694" class="col">name VARCHAR(255) NOT NULL</text>
+    <line class="row" x1="826" y1="718" x2="1256" y2="718"/>
+    <text x="850" y="742" class="key">COL</text>
+    <text x="900" y="742" class="col">age INT NOT NULL</text>
+    <rect x="850" y="760" width="360" height="34" rx="11" class="pill"/>
+    <text x="1030" y="783" class="note" text-anchor="middle">Base62 UUID, insertIgnore flow</text>
+  </g>
+
+  <rect x="104" y="852" width="1392" height="62" rx="14" class="foot"/>
+  <text x="800" y="878" class="note" text-anchor="middle">No foreign key is declared in the source tests, so this ERD intentionally has no relationship connector or 1:N marker.</text>
+  <text x="800" y="904" class="note" text-anchor="middle">Reader contract: choose a reusable table base by primary-key storage, sort precision, and URL-safety needs.</text>
 </svg>
