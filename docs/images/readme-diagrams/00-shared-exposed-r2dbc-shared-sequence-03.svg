@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1280" viewBox="0 0 1600 1280" role="img" aria-label="Shared withTables schema lifecycle sequence">
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1360" viewBox="0 0 1600 1360" role="img" aria-label="Shared withTables schema lifecycle sequence">
   <defs>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&amp;display=swap');
@@ -69,8 +69,8 @@
     </marker>
   </defs>
 
-  <rect class="canvas" x="0" y="0" width="1600" height="1280"/>
-  <rect class="frame" x="26" y="26" width="1548" height="1228" rx="26"/>
+  <rect class="canvas" x="0" y="0" width="1600" height="1360"/>
+  <rect class="frame" x="26" y="26" width="1548" height="1308" rx="26"/>
 
   <text class="title" x="70" y="88">Shared Test Schema Lifecycle Flow</text>
   <text class="subtitle" x="72" y="122">withTables wraps withDb, serializes each TestDB, creates tables, commits the test block, and drops tables in finally.</text>
@@ -219,6 +219,6 @@
     <path class="return" d="M 458 1148 H 189"/>
   </g>
 
-  <rect class="noteBox" x="84" y="1158" width="1432" height="30" rx="10"/>
-  <text class="note" x="800" y="1178" text-anchor="middle">Cleanup failures are suppressed or recovered according to statement cancellation rules before withDb releases the TestDB semaphore.</text>
+  <rect class="noteBox" x="84" y="1230" width="1432" height="30" rx="10"/>
+  <text class="note" x="800" y="1250" text-anchor="middle">Cleanup failures are suppressed or recovered according to statement cancellation rules before withDb releases the TestDB semaphore.</text>
 </svg>
