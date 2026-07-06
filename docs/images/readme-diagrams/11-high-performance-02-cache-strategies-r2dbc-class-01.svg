@@ -123,12 +123,12 @@
   </g>
 
   <g id="dependencies">
-    <path class="use" data-connector="use" d="M313 838 L313 648" stroke="#4f86c6"/>
-    <polyline class="openHead" points="313,648 304,662 322,662" stroke="#4f86c6"/>
-    <path class="use" data-connector="use" d="M799 838 L799 648" stroke="#a85f7f"/>
-    <polyline class="openHead" points="799,648 790,662 808,662" stroke="#a85f7f"/>
-    <path class="use" data-connector="use" d="M1285 838 L1285 648" stroke="#4f8f8b"/>
-    <polyline class="openHead" points="1285,648 1276,662 1294,662" stroke="#4f8f8b"/>
+    <path class="use" data-connector="use" d="M313 838 L313 662" stroke="#4f86c6" stroke-linecap="butt"/>
+    <polyline class="openHead" points="304,662 313,648 322,662" stroke="#4f86c6" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <path class="use" data-connector="use" d="M799 838 L799 662" stroke="#a85f7f" stroke-linecap="butt"/>
+    <polyline class="openHead" points="790,662 799,648 808,662" stroke="#a85f7f" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+    <path class="use" data-connector="use" d="M1285 838 L1285 662" stroke="#4f8f8b" stroke-linecap="butt"/>
+    <polyline class="openHead" points="1276,662 1285,648 1294,662" stroke="#4f8f8b" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   </g>
 
