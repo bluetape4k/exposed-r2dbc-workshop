@@ -99,23 +99,23 @@
   <polygon points="720,292 711,308 729,308" fill="#fff" stroke="#64748b" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <path class="use" data-connector="delegate-use" d="M914 488 L500 488"/>
-  <polyline class="head" points="500,481 486,488 500,495"/>
+  <polygon points="486,488 500,481 500,495" fill="#64748b" stroke="#64748b" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <rect x="616" y="456" width="168" height="24" rx="12" class="labelPill"/>
   <text x="700" y="473" class="tiny" text-anchor="middle">delegate.findByCode</text>
 
   <path class="use" data-connector="manager-use" d="M1086 550 L1086 636 Q1086 652 1070 652 L716 652 Q700 652 700 668 L700 688"/>
-  <polyline class="head" points="693,688 700,702 707,688"/>
+  <polygon points="700,702 693,688 707,688" fill="#64748b" stroke="#64748b" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <rect x="842" y="620" width="96" height="24" rx="12" class="labelPill"/>
   <text x="890" y="637" class="tiny" text-anchor="middle">manager</text>
 
   <path class="use" data-connector="manager-creates-cache" d="M856 756 L900 756"/>
-  <polyline class="head" points="900,749 914,756 900,763"/>
+  <polygon points="914,756 900,749 900,763" fill="#64748b" stroke="#64748b" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 
   <path class="use" data-connector="default-table-use" d="M314 550 L314 698"/>
-  <polyline class="head" points="307,698 314,712 321,698"/>
+  <polygon points="314,712 307,698 321,698" fill="#64748b" stroke="#64748b" stroke-width="2.8" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
   <rect x="256" y="614" width="116" height="24" rx="12" class="labelPill"/>
   <text x="314" y="631" class="tiny" text-anchor="middle">Exposed DSL</text>
 
   <rect x="110" y="854" width="1180" height="28" rx="10" class="noteBox"/>
-  <text x="700" y="873" class="note" text-anchor="middle">Solid hollow triangles show interface implementation; dashed open arrows show use/dependency with direct solid arrowheads.</text>
+  <text x="700" y="873" class="note" text-anchor="middle">Hollow triangles show interface implementation; dashed dependencies use direct solid arrowheads.</text>
 </svg>
