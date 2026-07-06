@@ -61,10 +61,10 @@
 <path class="connector" data-connector="uml-inherit" d="M 1075 410 L 1075 332 Q 1075 316 1059 316 L 961 316 Q 945 316 945 300 L 945 274"/>
 <polygon class="head" points="945,274 936,290 954,290" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 <path class="use connector" data-connector="uml-use" d="M 320 463 L 368 463" stroke="#6f8f52" stroke-linecap="butt"/>
-<polyline points="380,463 368,456 368,470" fill="none" stroke="#6f8f52" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<polygon points="380,463 368,456 368,470" fill="#6f8f52" stroke="#6f8f52" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 <path class="use connector" data-connector="uml-use" d="M 610 463 L 658 463" stroke="#a66a3f" stroke-linecap="butt"/>
-<polyline points="670,463 658,456 658,470" fill="none" stroke="#a66a3f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<polygon points="670,463 658,456 658,470" fill="#a66a3f" stroke="#a66a3f" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 <path class="use connector" data-connector="uml-use" d="M 900 463 L 948 463" stroke="#4f8f8b" stroke-linecap="butt"/>
-<polyline points="960,463 948,456 948,470" fill="none" stroke="#4f8f8b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
+<polygon points="960,463 948,456 948,470" fill="#4f8f8b" stroke="#4f8f8b" stroke-width="1.6" stroke-linejoin="round" stroke-dasharray="none" style="stroke-dasharray:none!important"/>
 <rect x="86" y="720" width="1108" height="30" rx="10" class="noteBox"/><text x="640" y="740" class="note" text-anchor="middle">Hollow triangles show generalization; dashed arrows show use/dependency. Lane labels stay left-aligned and unobstructed.</text>
 </svg>

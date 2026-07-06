@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 830" width="1280" height="830" role="img" aria-label="Shared Exposed R2DBC Shared ERD diagram">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 680" width="1280" height="680" role="img" aria-label="Shared Exposed R2DBC Shared ERD diagram">
 <defs><filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="2" dy="4" stdDeviation="5" flood-color="#1f2937" flood-opacity="0.12" /></filter><style>.canvas{fill:#f6f9fc}.frame{fill:#fff;stroke:#d7e2ec;stroke-width:1.5}.lane{fill:#f8fafc;stroke:#d7e2ec;stroke-width:1.2}.card{filter:url(#shadow)}.header{opacity:.96}.title{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:30px;fill:#1e293b}.subtitle,.detail,.note{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:13px;fill:#536476;font-weight:700}.tiny{font-family:"Comic Mono","SFMono-Regular",monospace;font-size:11px;fill:#64748b;font-weight:700}.laneTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:15px;letter-spacing:.08em;fill:#8ca2b4}.cardTitle{font-family:"Architects Daughter","Comic Sans MS",cursive;font-size:17px;fill:#1e293b}.connector{fill:none;stroke:#64748b;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}.use{fill:none;stroke-width:2;stroke-dasharray:7 6;stroke-linecap:round;stroke-linejoin:round}.rel{fill:none;stroke:#64748b;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.head{fill:white;stroke:#64748b;stroke-width:2.4;stroke-dasharray:none}.labelPill{fill:#fff;stroke:#d7e2ec;stroke-width:1}.noteBox{fill:#ecfdf5;stroke:#86efac;stroke-width:1.2}</style></defs>
-<rect width="1280" height="830" class="canvas"/><rect x="22" y="22" width="1236" height="786" rx="18" class="frame"/>
+<rect width="1280" height="680" class="canvas"/><rect x="22" y="22" width="1236" height="636" rx="18" class="frame"/>
 <text x="58" y="68" class="title" text-anchor="start">Shared Exposed R2DBC Shared ERD</text>
 <text x="58" y="96" class="subtitle" text-anchor="start">ERD relationship view: explicit 1/N cardinalities and non-overlapping relationship labels.</text>
-<rect x="48" y="126" width="1184" height="438" rx="16" class="lane"/><text x="72" y="156" class="laneTitle" text-anchor="start">RELATIONAL MODEL</text>
-<rect x="48" y="588" width="1184" height="118" rx="16" class="lane"/><text x="72" y="618" class="laneTitle" text-anchor="start">READER CONTRACT</text>
+<rect x="48" y="126" width="1184" height="300" rx="16" class="lane"/><text x="72" y="156" class="laneTitle" text-anchor="start">RELATIONAL MODEL</text>
+<rect x="48" y="450" width="1184" height="118" rx="16" class="lane"/><text x="72" y="480" class="laneTitle" text-anchor="start">READER CONTRACT</text>
 <g data-card="cities" data-x="105" data-y="250" data-width="270" data-height="118">
 <rect x="105" y="250" width="270" height="118" rx="14" fill="#fff" stroke="#4f86c6" stroke-width="2" class="card"/>
 <path class="header" d="M105,292 L105,264 Q105,250 119,250 L361,250 Q375,250 375,264 L375,292 Z" fill="#eef5fa"/>
@@ -42,5 +42,5 @@
 <text x="883" y="334" class="detail" text-anchor="middle">N</text>
 <rect x="793" y="272" width="94" height="22" rx="8" class="labelPill"/>
 <text x="840" y="287" class="tiny" text-anchor="middle">userdata.user_id</text>
-<rect x="86" y="646" width="1108" height="30" rx="10" class="noteBox"/><text x="640" y="666" class="note" text-anchor="middle">Card placement avoids grid ambiguity; each relation shows endpoint cardinality and a separate label pill.</text>
+<rect x="86" y="508" width="1108" height="30" rx="10" class="noteBox"/><text x="640" y="528" class="note" text-anchor="middle">Card placement avoids grid ambiguity; each relation shows endpoint cardinality and a separate label pill.</text>
 </svg>
