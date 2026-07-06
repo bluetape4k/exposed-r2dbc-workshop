@@ -13,6 +13,16 @@ instead of opening a DuckDB JDBC session.
 - Render grouped analytics SQL.
 - Document why DuckDB remains a JDBC-centered embedded engine in this workshop.
 
+## Diagrams
+
+The ERD shows local order events, DTO rows, daily category sales, and the
+DuckDB boundary note. The sequence diagram shows the H2 R2DBC projection while
+keeping the DuckDB path explicit and non-default.
+
+![DuckDB embedded analytics ERD](../../docs/assets/readme-diagrams/issue-115-chapter13-09-duckdb-embedded-analytics-erd-01.png)
+
+![DuckDB embedded analytics sequence](../../docs/assets/readme-diagrams/issue-115-chapter13-09-duckdb-embedded-analytics-sequence-01.png)
+
 ## Verification
 
 ```bash

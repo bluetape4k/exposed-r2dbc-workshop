@@ -13,6 +13,16 @@ transaction을 Exposed R2DBC로 재실행합니다.
 - Reservation을 재실행하고 ledger row는 정확히 하나만 저장합니다.
 - Non-retryable SQLSTATE는 즉시 실패합니다.
 
+## 다이어그램
+
+ERD는 inventory state, 성공한 reservation ledger row, snapshot projection,
+retry policy를 보여줍니다. Sequence Diagram은 retryable SQLSTATE branch와
+non-retryable failure branch를 함께 보여줍니다.
+
+![CockroachDB retry ERD](../../docs/assets/readme-diagrams/issue-115-chapter13-03-cockroachdb-retry-erd-01.png)
+
+![CockroachDB retry sequence](../../docs/assets/readme-diagrams/issue-115-chapter13-03-cockroachdb-retry-sequence-01.png)
+
 ## 검증
 
 ```bash

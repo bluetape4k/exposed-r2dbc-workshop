@@ -12,6 +12,15 @@ does not require credentials.
 - Build `BigQueryDryRunRequest` with `dryRun = true` and `useLegacySql = false`.
 - Keep default dataset, location, labels, priority, and timeout explicit.
 
+## Diagrams
+
+The ERD shows the local source table, adapter profile, and typed request
+boundary. The sequence diagram shows the default credential-free test flow.
+
+![BigQuery dry-run ERD](../../docs/assets/readme-diagrams/issue-115-chapter13-01-bigquery-dry-run-erd-01.png)
+
+![BigQuery dry-run sequence](../../docs/assets/readme-diagrams/issue-115-chapter13-01-bigquery-dry-run-sequence-01.png)
+
 ## Verification
 
 ```bash

@@ -13,6 +13,16 @@ shape plus headers.
   and session properties.
 - Wrap the local SQL with `EXPLAIN` to document the handoff boundary.
 
+## Diagrams
+
+The ERD shows the local line-item table, session option model, and EXPLAIN
+handoff shape. The sequence diagram shows how SQL rendering and Trino headers
+stay visible without starting a Trino coordinator.
+
+![Trino session options ERD](../../docs/assets/readme-diagrams/issue-115-chapter13-02-trino-session-options-erd-01.png)
+
+![Trino session options sequence](../../docs/assets/readme-diagrams/issue-115-chapter13-02-trino-session-options-sequence-01.png)
+
 ## Verification
 
 ```bash

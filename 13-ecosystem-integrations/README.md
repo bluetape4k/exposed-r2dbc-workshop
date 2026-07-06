@@ -17,6 +17,10 @@ targets but makes the default path local, deterministic, and credential-free.
 | [`04-starrocks-olap-local`](04-starrocks-olap-local/) | Prepare OLAP rollup rows and document the StarRocks adapter boundary | H2 R2DBC local projection; no StarRocks server |
 | [`09-duckdb-embedded-analytics`](09-duckdb-embedded-analytics/) | Preserve the embedded analytics lesson while documenting the DuckDB JDBC boundary | H2 R2DBC local projection; no DuckDB driver |
 
+Each example README includes its own ERD and sequence diagram so the local
+schema/request model and the default execution flow can be reviewed without
+opening the source first.
+
 ## Architecture
 
 The chapter separates three concerns:
