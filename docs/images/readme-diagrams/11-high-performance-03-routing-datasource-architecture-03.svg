@@ -23,7 +23,8 @@
       .teal{stroke:#4f8f8b}
       .rose{stroke:#a85f7f}
       .note{fill:#f7fffe;stroke:#9fd0cb;stroke-width:2}
-    </style>
+
+    .syntax-keyword{fill:#7E22CE}.syntax-type{fill:#0F766E}.syntax-function{fill:#1D4ED8}.syntax-string{fill:#B45309}.syntax-number{fill:#C2410C}.syntax-comment{fill:#64748B}.syntax-operator{fill:#BE123C}</style>
   </defs>
 
   <rect class="canvas" width="1980" height="980"/>
@@ -72,39 +73,39 @@
     <rect class="card" x="80" y="430" width="340" height="140" rx="16" fill="#ffffff" stroke="#3f83b8"/>
     <path class="header" d="M80,482 L80,446 Q80,430 96,430 L404,430 Q420,430 420,446 L420,482 Z" fill="#eef5fa"/>
     <text class="cardTitle" x="250" y="464" text-anchor="middle">TenantRoutingWebFilter</text>
-    <text class="mono" x="108" y="512">tenant = header ?: default</text>
-    <text class="mono" x="108" y="538">readOnly = header ?: path rule</text>
+    <text class="mono" x="108" y="512" data-code-snippet="kotlin">tenant <tspan class="syntax-operator">=</tspan> header <tspan class="syntax-operator">?:</tspan> default</text>
+    <text class="mono" x="108" y="538" data-code-snippet="kotlin">readOnly <tspan class="syntax-operator">=</tspan> header <tspan class="syntax-operator">?:</tspan> path rule</text>
   </g>
 
   <g data-card="Reactor Context" data-x="470" data-y="430" data-width="330" data-height="140">
     <rect class="card" x="470" y="430" width="330" height="140" rx="16" fill="#f8fcf7" stroke="#6f8f52"/>
     <path class="header" d="M470,482 L470,446 Q470,430 486,430 L784,430 Q800,430 800,446 L800,482 Z" fill="#f1f6ec"/>
     <text class="cardTitle" x="635" y="464" text-anchor="middle">Reactor Context</text>
-    <text class="mono" x="502" y="512">TENANT = tenant</text>
-    <text class="mono" x="502" y="538">READ_ONLY = readOnly</text>
+    <text class="mono" x="502" y="512" data-code-snippet="kotlin"><tspan class="syntax-type">TENANT</tspan> <tspan class="syntax-operator">=</tspan> tenant</text>
+    <text class="mono" x="502" y="538" data-code-snippet="kotlin"><tspan class="syntax-type">READ_ONLY</tspan> <tspan class="syntax-operator">=</tspan> readOnly</text>
   </g>
 
   <g data-card="ContextAwareRoutingKeyResolver" data-x="850" data-y="430" data-width="350" data-height="140">
     <rect class="card" x="850" y="430" width="350" height="140" rx="16" fill="#fff9ef" stroke="#a36f3e"/>
     <path class="header" d="M850,482 L850,446 Q850,430 866,430 L1184,430 Q1200,430 1200,446 L1200,482 Z" fill="#f5eee4"/>
     <text class="cardTitle" x="1025" y="464" text-anchor="middle">ContextAware Resolver</text>
-    <text class="mono" x="882" y="512">mode = readOnly ? ro : rw</text>
-    <text class="mono" x="882" y="538">key = "$tenant:$mode"</text>
+    <text class="mono" x="882" y="512" data-code-snippet="kotlin">mode <tspan class="syntax-operator">=</tspan> readOnly <tspan class="syntax-operator">?</tspan> ro <tspan class="syntax-operator">:</tspan> rw</text>
+    <text class="mono" x="882" y="538" data-code-snippet="kotlin">key <tspan class="syntax-operator">=</tspan> <tspan class="syntax-string">"$tenant:$mode"</tspan></text>
   </g>
 
   <g data-card="DynamicRoutingConnectionFactory" data-x="1250" data-y="430" data-width="350" data-height="140">
     <rect class="card" x="1250" y="430" width="350" height="140" rx="16" fill="#fff7f7" stroke="#a85f7f"/>
     <path class="header" d="M1250,482 L1250,446 Q1250,430 1266,430 L1584,430 Q1600,430 1600,446 L1600,482 Z" fill="#f5eef2"/>
     <text class="cardTitle" x="1425" y="464" text-anchor="middle">DynamicRouting CF</text>
-    <text class="mono" x="1282" y="512">Mono.deferContextual</text>
-    <text class="mono" x="1282" y="538">registry.get(key)</text>
+    <text class="mono" x="1282" y="512" data-code-snippet="kotlin"><tspan class="syntax-type">Mono</tspan>.deferContextual</text>
+    <text class="mono" x="1282" y="538" data-code-snippet="kotlin">registry.<tspan class="syntax-function">get</tspan>(key)</text>
   </g>
 
   <g data-card="Target ConnectionFactory" data-x="1650" data-y="430" data-width="230" data-height="140">
     <rect class="card" x="1650" y="430" width="230" height="140" rx="16" fill="#f7fffe" stroke="#4f8f8b"/>
     <path class="header" d="M1650,482 L1650,446 Q1650,430 1666,430 L1864,430 Q1880,430 1880,446 L1880,482 Z" fill="#eef7f6"/>
     <text class="cardTitle" x="1765" y="464" text-anchor="middle">Target CF</text>
-    <text class="mono" x="1680" y="512">target.create()</text>
+    <text class="mono" x="1680" y="512" data-code-snippet="kotlin">target.<tspan class="syntax-function">create</tspan>()</text>
     <text class="mono" x="1680" y="538">actual DB connection</text>
   </g>
 

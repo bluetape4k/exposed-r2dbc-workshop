@@ -24,7 +24,8 @@
       .rose{stroke:#a85f7f}
       .brown{stroke:#8a6f55}
       .note{fill:#f7fffe;stroke:#9fd0cb;stroke-width:2}
-    </style>
+
+    .syntax-keyword{fill:#7E22CE}.syntax-type{fill:#0F766E}.syntax-function{fill:#1D4ED8}.syntax-string{fill:#B45309}.syntax-number{fill:#C2410C}.syntax-comment{fill:#64748B}.syntax-operator{fill:#BE123C}</style>
   </defs>
 
   <rect class="canvas" width="2000" height="1100"/>
@@ -73,7 +74,7 @@
     <text class="cardTitle" x="695" y="544" text-anchor="middle">CoroutineUserCache</text>
     <text class="cardTitle" x="695" y="572" text-anchor="middle">Repository</text>
     <text class="mono" x="532" y="618">read cache on Dispatchers.IO</text>
-    <text class="mono" x="532" y="646">cold miss joins loader.load(id)</text>
+    <text class="mono" x="532" y="646" data-code-snippet="kotlin">cold miss joins loader.<tspan class="syntax-function">load</tspan>(id)</text>
     <text class="mono" x="532" y="674">writeCacheSafely records failures</text>
   </g>
 
@@ -82,7 +83,7 @@
     <path class="header" d="M990,562 L990,526 Q990,510 1006,510 L1364,510 Q1380,510 1380,526 L1380,562 Z" fill="#f1f6ec"/>
     <text class="cardTitle" x="1185" y="544" text-anchor="middle">SingleFlight</text>
     <text class="cardTitle" x="1185" y="572" text-anchor="middle">CacheLoader</text>
-    <text class="mono" x="1022" y="618">ConcurrentHashMap&lt;K, Deferred&gt;</text>
+    <text class="mono" x="1022" y="618" data-code-snippet="kotlin"><tspan class="syntax-type">ConcurrentHashMap</tspan><tspan class="syntax-operator">&lt;</tspan><tspan class="syntax-type">K</tspan>, <tspan class="syntax-type">Deferred</tspan><tspan class="syntax-operator">&gt;</tspan></text>
     <text class="mono" x="1022" y="646">Primary performs DB fallback</text>
     <text class="mono" x="1022" y="674">Shared returns COALESCED</text>
   </g>
