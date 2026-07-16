@@ -25,7 +25,8 @@
       .brown{stroke:#8a6f55}
       .note{fill:#f7fffe;stroke:#9fd0cb;stroke-width:2}
       .keyBox{fill:#ffffff;stroke-width:2}
-    </style>
+
+    .syntax-keyword{fill:#7E22CE}.syntax-type{fill:#0F766E}.syntax-function{fill:#1D4ED8}.syntax-string{fill:#B45309}.syntax-number{fill:#C2410C}.syntax-comment{fill:#64748B}.syntax-operator{fill:#BE123C}</style>
   </defs>
 
   <rect class="canvas" width="1900" height="980"/>
@@ -53,16 +54,16 @@
     <path class="header" d="M560,272 L560,236 Q560,220 576,220 L904,220 Q920,220 920,236 L920,272 Z" fill="#f1f6ec"/>
     <text class="cardTitle" x="740" y="254" text-anchor="middle">RoutingR2dbcConfig</text>
     <text class="mono" x="592" y="310">forEach tenant</text>
-    <text class="mono" x="592" y="338">register("$tenant:rw", rw)</text>
-    <text class="mono" x="592" y="366">register("$tenant:ro", ro ?: rw)</text>
+    <text class="mono" x="592" y="338" data-code-snippet="kotlin"><tspan class="syntax-function">register</tspan>(<tspan class="syntax-string">"$tenant:rw"</tspan>, rw)</text>
+    <text class="mono" x="592" y="366" data-code-snippet="kotlin"><tspan class="syntax-function">register</tspan>(<tspan class="syntax-string">"$tenant:ro"</tspan>, ro <tspan class="syntax-operator">?:</tspan> rw)</text>
   </g>
 
   <g data-card="DynamicRoutingConnectionFactory" data-x="560" data-y="460" data-width="360" data-height="150">
     <rect class="card" x="560" y="460" width="360" height="150" rx="16" fill="#fff9ef" stroke="#a36f3e"/>
     <path class="header" d="M560,512 L560,476 Q560,460 576,460 L904,460 Q920,460 920,476 L920,512 Z" fill="#f5eee4"/>
     <text class="cardTitle" x="740" y="494" text-anchor="middle">DynamicRouting CF</text>
-    <text class="mono" x="592" y="548">keyResolver.currentLookupKey()</text>
-    <text class="mono" x="592" y="576">registry.get(key).create()</text>
+    <text class="mono" x="592" y="548" data-code-snippet="kotlin">keyResolver.<tspan class="syntax-function">currentLookupKey</tspan>()</text>
+    <text class="mono" x="592" y="576" data-code-snippet="kotlin">registry.<tspan class="syntax-function">get</tspan>(key).<tspan class="syntax-function">create</tspan>()</text>
   </g>
 
   <g data-card="ConnectionFactoryRegistry" data-x="1010" data-y="220" data-width="390" data-height="390">

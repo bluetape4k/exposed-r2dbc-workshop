@@ -24,7 +24,8 @@
       .rose{stroke:#a85f7f}
       .brown{stroke:#8a6f55}
       .note{fill:#f7fffe;stroke:#9fd0cb;stroke-width:2}
-    </style>
+
+    .syntax-keyword{fill:#7E22CE}.syntax-type{fill:#0F766E}.syntax-function{fill:#1D4ED8}.syntax-string{fill:#B45309}.syntax-number{fill:#C2410C}.syntax-comment{fill:#64748B}.syntax-operator{fill:#BE123C}</style>
   </defs>
 
   <rect class="canvas" width="2000" height="1050"/>
@@ -72,7 +73,7 @@
     <path class="header" d="M470,562 L470,526 Q470,510 486,510 L754,510 Q770,510 770,526 L770,562 Z" fill="#f1f6ec"/>
     <text class="cardTitle" x="620" y="546" text-anchor="middle">RoutingRequest</text>
     <text class="mono" x="498" y="594">tenant + readOnly</text>
-    <text class="mono" x="498" y="620">key = tenant:rw|ro</text>
+    <text class="mono" x="498" y="620" data-code-snippet="kotlin">key <tspan class="syntax-operator">=</tspan> tenant<tspan class="syntax-operator">:</tspan>rw|ro</text>
   </g>
 
   <g data-card="RoutingMarkerRoutes" data-x="845" data-y="510" data-width="300" data-height="125">
@@ -80,7 +81,7 @@
     <path class="header" d="M845,562 L845,526 Q845,510 861,510 L1129,510 Q1145,510 1145,526 L1145,562 Z" fill="#f5eee4"/>
     <text class="cardTitle" x="995" y="546" text-anchor="middle">RoutingMarkerRoutes</text>
     <text class="mono" x="874" y="594">GET passes route as-is</text>
-    <text class="mono" x="874" y="620">PATCH calls asReadWrite()</text>
+    <text class="mono" x="874" y="620" data-code-snippet="kotlin"><tspan class="syntax-type">PATCH</tspan> calls <tspan class="syntax-function">asReadWrite</tspan>()</text>
   </g>
 
   <g data-card="RoutingMarkerRepository" data-x="1220" data-y="510" data-width="300" data-height="125">
@@ -88,14 +89,14 @@
     <path class="header" d="M1220,562 L1220,526 Q1220,510 1236,510 L1504,510 Q1520,510 1520,526 L1520,562 Z" fill="#f5eef2"/>
     <text class="cardTitle" x="1370" y="546" text-anchor="middle">MarkerRepository</text>
     <text class="mono" x="1248" y="594">awaitReady before work</text>
-    <text class="mono" x="1248" y="620">suspendTransaction(db)</text>
+    <text class="mono" x="1248" y="620" data-code-snippet="kotlin"><tspan class="syntax-function">suspendTransaction</tspan>(db)</text>
   </g>
 
   <g data-card="RoutingDatabaseRegistry" data-x="1595" data-y="510" data-width="300" data-height="125">
     <rect class="card" x="1595" y="510" width="300" height="125" rx="16" fill="#f7fffe" stroke="#4f8f8b"/>
     <path class="header" d="M1595,562 L1595,526 Q1595,510 1611,510 L1879,510 Q1895,510 1895,526 L1895,562 Z" fill="#eef7f6"/>
     <text class="cardTitle" x="1745" y="546" text-anchor="middle">DatabaseRegistry</text>
-    <text class="mono" x="1624" y="594">Map key -> R2dbcDatabase</text>
+    <text class="mono" x="1624" y="594" data-code-snippet="kotlin"><tspan class="syntax-keyword">Map</tspan> key <tspan class="syntax-operator">-&gt;</tspan> <tspan class="syntax-type">R2dbcDatabase</tspan></text>
     <text class="mono" x="1624" y="620">missing key is fatal</text>
   </g>
 

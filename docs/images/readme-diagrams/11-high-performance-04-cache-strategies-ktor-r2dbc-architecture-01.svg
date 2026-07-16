@@ -24,7 +24,8 @@
       .rose{stroke:#a85f7f}
       .brown{stroke:#8a6f55}
       .note{fill:#f7fffe;stroke:#9fd0cb;stroke-width:2}
-    </style>
+
+    .syntax-keyword{fill:#7E22CE}.syntax-type{fill:#0F766E}.syntax-function{fill:#1D4ED8}.syntax-string{fill:#B45309}.syntax-number{fill:#C2410C}.syntax-comment{fill:#64748B}.syntax-operator{fill:#BE123C}</style>
   </defs>
 
   <rect class="canvas" width="1900" height="1060"/>
@@ -79,9 +80,9 @@
     <rect class="card" x="900" y="505" width="360" height="190" rx="16" fill="#fff9ef" stroke="#a36f3e"/>
     <path class="header" d="M900,557 L900,521 Q900,505 916,505 L1244,505 Q1260,505 1260,521 L1260,557 Z" fill="#f5eee4"/>
     <text class="cardTitle" x="1080" y="539" text-anchor="middle">UserCacheRepository</text>
-    <text class="mono" x="932" y="594">findCached(): cache -> DB -> cache</text>
-    <text class="mono" x="932" y="622">create/update(): DB -> cache</text>
-    <text class="mono" x="932" y="650">invalidate/clear(): cache only</text>
+    <text class="mono" x="932" y="594" data-code-snippet="kotlin"><tspan class="syntax-function">findCached</tspan>()<tspan class="syntax-operator">:</tspan> cache <tspan class="syntax-operator">-&gt;</tspan> <tspan class="syntax-type">DB</tspan> <tspan class="syntax-operator">-&gt;</tspan> cache</text>
+    <text class="mono" x="932" y="622" data-code-snippet="kotlin">create<tspan class="syntax-operator">/</tspan><tspan class="syntax-keyword">update</tspan>()<tspan class="syntax-operator">:</tspan> <tspan class="syntax-type">DB</tspan> <tspan class="syntax-operator">-&gt;</tspan> cache</text>
+    <text class="mono" x="932" y="650" data-code-snippet="kotlin">invalidate<tspan class="syntax-operator">/</tspan><tspan class="syntax-function">clear</tspan>()<tspan class="syntax-operator">:</tspan> cache only</text>
   </g>
 
   <g data-card="CacheObservation" data-x="1380" data-y="520" data-width="340" data-height="140">
