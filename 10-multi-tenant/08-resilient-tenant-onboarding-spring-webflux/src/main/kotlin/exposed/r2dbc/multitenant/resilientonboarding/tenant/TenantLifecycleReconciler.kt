@@ -2,7 +2,10 @@ package exposed.r2dbc.multitenant.resilientonboarding.tenant
 
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.warn
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.withContext
 import java.time.Instant
+import kotlin.coroutines.cancellation.CancellationException
 
 class TenantLifecycleReconciler(
     private val repository: TenantLifecycleRepository,
@@ -30,6 +33,11 @@ class TenantLifecycleReconciler(
             resources = resourceFactory.restore(metadata)
             resourceFactory.probe(resources)
             registry.publish(resources)
+        } catch (cause: CancellationException) {
+            withContext(NonCancellable) {
+                resources?.let { resourceFactory.close(it) }
+            }
+            throw cause
         } catch (cause: Exception) {
             resources?.let { resourceFactory.close(it) }
             repository.markFailed(metadata.asOwner(), TenantFailureCode.RECOVERY, now)

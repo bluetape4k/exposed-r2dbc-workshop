@@ -244,6 +244,8 @@ launcher 수명 주기를 재사용하고 Docker가 없는 환경의 동작은 �
 | P1 | Security | Kotlin data class 문자열 표현이 PostgreSQL password를 노출할 수 있다. | 연결 속성 문자열 표현에서 password를 마스킹하도록 고정했다. |
 | P1 | Stability | singleton PostgreSQL 컨테이너에 보존된 schema가 고정 ID 테스트를 오염시킬 수 있다. | 컨테이너 테스트 tenant ID에 무작위 suffix를 사용한다. |
 | P1 | Stability / Ops | reconciler가 온보딩용 `create`를 재사용하면 누락된 schema를 새로 만들어 손상을 숨긴다. | factory에 DDL 없는 `restore`를 추가하고 startup은 restore 후 probe만 수행한다. |
+| P1 | Stability | 시작 복구 중 코루틴 취소를 일반 probe 장애로 처리하면 정상 `ACTIVE` 행이 `FAILED`로 바뀐다. | 취소 시 runtime resource만 `NonCancellable` 구역에서 닫고 영속 상태를 유지한 채 취소를 다시 전파한다. |
+| P1 | User / Ops | 상위 chapter README가 PostgreSQL profile 추가 뒤에도 08 모듈을 H2 전용으로 설명했다. | H2 기본 profile과 모듈 내부 PostgreSQL Testcontainers 검증을 구분해 양쪽 로케일을 갱신했다. |
 | P2 | Performance | raw driver connection factory는 pool보다 연결 비용이 크다. | 이번 workshop 범위에서는 정합성 학습을 우선하고 pool 도입은 보류한다. README에 production pool을 보장하지 않음을 명시한다. |
 
 최신 통합 검토 결과는 Performance, Stability, Security, Operator/Ops,
