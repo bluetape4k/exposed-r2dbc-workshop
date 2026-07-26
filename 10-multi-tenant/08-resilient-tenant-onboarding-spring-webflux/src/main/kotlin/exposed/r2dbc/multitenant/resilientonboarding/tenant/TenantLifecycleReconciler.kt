@@ -27,12 +27,12 @@ class TenantLifecycleReconciler(
     ) {
         var resources: TenantResources? = null
         try {
-            resources = resourceFactory.create(metadata)
+            resources = resourceFactory.restore(metadata)
             resourceFactory.probe(resources)
             registry.publish(resources)
         } catch (cause: Exception) {
             resources?.let { resourceFactory.close(it) }
-            repository.markFailed(metadata.asOwner(), TenantFailureCode.PROBE, now)
+            repository.markFailed(metadata.asOwner(), TenantFailureCode.RECOVERY, now)
             log.warn(cause) { "Tenant recovery probe failed. tenantId=${metadata.tenantId.value}" }
         }
     }
