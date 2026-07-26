@@ -11,7 +11,7 @@ Each tenant has one durable record containing its current state, attempt, reserv
 | State | Meaning |
 | --- | --- |
 | `PROVISIONING` | One reservation token owns a bounded preparation attempt. |
-| `ACTIVE` | The attempt completed and its runtime connection factory was published. |
+| `ACTIVE` | Durable resources are ready and can be published or republished after a restart. |
 | `FAILED` | The metadata remains available for inspection and a later retry. |
 
 Every update checks the tenant ID, reservation token, and version. A stale attempt therefore cannot mark a newer retry as failed or active.
@@ -38,11 +38,52 @@ curl -i http://localhost:8080/api/tenants/acme \
   -H 'X-ADMIN-TOKEN: workshop-admin'
 ```
 
+## Database profiles
+
+The default `h2` profile keeps the example fast and self-contained:
+
+```bash
+./gradlew :08-resilient-tenant-onboarding-spring-webflux:bootRun
+```
+
+The `postgres` profile uses one shared PostgreSQL database. Durable lifecycle
+records stay in `public.tenant_lifecycle`, while each tenant gets an isolated
+`tenant_<tenant-id>` schema:
+
+| Data | PostgreSQL location |
+| --- | --- |
+| Onboarding state, lease, attempt, failure category | `public.tenant_lifecycle` |
+| Tenant readiness and future business tables | `tenant_<tenant-id>` |
+
+Hyphens in a tenant ID become underscores, so `clinic-seoul` maps to
+`tenant_clinic_seoul`.
+
+```bash
+POSTGRES_HOST=localhost \
+POSTGRES_PORT=5432 \
+POSTGRES_DATABASE=postgres \
+POSTGRES_USERNAME=postgres \
+POSTGRES_PASSWORD=postgres \
+./gradlew :08-resilient-tenant-onboarding-spring-webflux:bootRun \
+  --args='--spring.profiles.active=postgres'
+```
+
+Schema creation commits before table preparation. If a later preparation or
+probe step fails, the lifecycle row becomes `FAILED` and the schema remains
+available for diagnosis and an idempotent retry. Startup recovery does not run
+provisioning DDL: it restores a reference to the expected schema, probes the
+existing readiness marker, and publishes only a healthy tenant.
+
 ## Recovery boundary
 
 At application startup, expired `PROVISIONING` rows become `FAILED(RECOVERY)` and remain visible. Each stored `ACTIVE` tenant is probed before its connection factory is placed in the process-local registry. A persisted `ACTIVE` row by itself is never enough to route a request.
 
-The H2 file-database variant is useful only for a restart-recovery test. It is not a distributed locking, PostgreSQL, authorization, or multi-node control plane example.
+The H2 file-database variant remains useful for a fast restart-recovery test,
+while the PostgreSQL profile proves schema creation, isolation, failure
+retention, and full application-context restart recovery against a real
+container. This workshop still does not provide automatic schema deletion,
+distributed locking, an external secret manager, production authorization,
+a production-tuned connection pool, or a multi-node control plane.
 
 ## Verify
 
