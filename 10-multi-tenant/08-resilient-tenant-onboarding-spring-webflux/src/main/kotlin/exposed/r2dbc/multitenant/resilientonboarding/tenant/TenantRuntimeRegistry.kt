@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap
 data class TenantResources(
     val tenantId: TenantId,
     val connectionFactory: ConnectionFactory,
+    val schemaName: TenantSchemaName? = null,
 )
 
 class TenantRuntimeRegistry {
@@ -17,6 +18,8 @@ class TenantRuntimeRegistry {
     }
 
     fun unregister(tenantId: TenantId): TenantResources? = resources.remove(tenantId)
+
+    fun resourcesOrNull(tenantId: TenantId): TenantResources? = resources[tenantId]
 
     fun connectionFactoryOrNull(tenantId: TenantId): ConnectionFactory? =
         resources[tenantId]?.connectionFactory
