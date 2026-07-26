@@ -11,6 +11,7 @@ import java.time.Duration
 import java.time.Instant
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 class TenantLifecycleReconcilerTest {
 
@@ -55,10 +56,27 @@ class TenantLifecycleReconcilerTest {
         assertEquals(listOf(TenantId("ready")), factory.probedTenantIds)
         assertNotNull(registry.connectionFactoryOrNull(TenantId("ready")))
     }
+
+    @Test
+    fun `active tenant probe failure is recorded as recovery failure`() = runSuspendIO {
+        val tenantId = TenantId("broken")
+        val owner = repository.claim(tenantId, "Broken", now) as TenantClaim.Owner
+        repository.markActive(owner, now)
+        factory.failingTenantId = tenantId
+
+        reconciler.reconcile(now.plusSeconds(1))
+
+        repository.find(tenantId).let { metadata ->
+            assertEquals(TenantLifecycleStatus.FAILED, metadata?.status)
+            assertEquals(TenantFailureCode.RECOVERY, metadata?.lastFailureCode)
+        }
+        assertNull(registry.connectionFactoryOrNull(tenantId))
+    }
 }
 
 private class RecordingResourceFactory: TenantRuntimeResourceFactory {
     val probedTenantIds = mutableListOf<TenantId>()
+    var failingTenantId: TenantId? = null
 
     override suspend fun create(metadata: TenantMetadata): TenantResources =
         TenantResources(
@@ -67,6 +85,7 @@ private class RecordingResourceFactory: TenantRuntimeResourceFactory {
         )
 
     override suspend fun probe(resources: TenantResources) {
+        check(resources.tenantId != failingTenantId) { "simulated recovery probe failure" }
         probedTenantIds += resources.tenantId
     }
 

@@ -32,6 +32,13 @@ class PostgreSqlSchemaTenantRuntimeResourceFactory(
         return TenantResources(metadata.tenantId, connectionFactory, schemaName)
     }
 
+    override suspend fun restore(metadata: TenantMetadata): TenantResources =
+        TenantResources(
+            tenantId = metadata.tenantId,
+            connectionFactory = connectionFactory,
+            schemaName = TenantSchemaName.from(metadata.tenantId),
+        )
+
     override suspend fun probe(resources: TenantResources) {
         val schemaName = requireNotNull(resources.schemaName) {
             "PostgreSQL tenant resources require a schema name"
