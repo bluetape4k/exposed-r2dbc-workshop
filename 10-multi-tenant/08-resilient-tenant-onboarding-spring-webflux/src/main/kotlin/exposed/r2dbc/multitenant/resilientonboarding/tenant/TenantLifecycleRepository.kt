@@ -32,7 +32,7 @@ class TenantLifecycleRepository(
         }
     }
 
-    suspend fun deleteAll() {
+    internal suspend fun deleteAll() {
         suspendTransaction(db = database) {
             TenantLifecycleTable.deleteAll()
         }
