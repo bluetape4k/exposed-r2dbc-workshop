@@ -20,8 +20,9 @@
 | `src/main/kotlin/.../config/PostgreSqlTenantOnboardingConfig.kt` | `postgres` profile의 공유 database와 schema factory를 구성한다. |
 | `src/main/kotlin/.../tenant/TenantDatabaseProperties.kt` | H2와 PostgreSQL 연결 속성을 각각 바인딩한다. |
 | `src/main/kotlin/.../tenant/TenantSchemaName.kt` | 외부 tenant ID를 안전한 PostgreSQL schema 이름으로 변환한다. |
-| `src/main/kotlin/.../tenant/PostgreSqlSchemaTenantRuntimeResourceFactory.kt` | schema와 readiness table을 멱등적으로 만들고 probe한다. |
-| `src/main/kotlin/.../tenant/TenantRuntimeRegistry.kt` | runtime resource에 tenant schema 정보를 함께 보존한다. |
+| `src/main/kotlin/.../tenant/PostgreSqlSchemaTenantRuntimeResourceFactory.kt` | schema를 먼저 커밋한 뒤 readiness table을 멱등적으로 만들고 probe한다. |
+| `src/main/kotlin/.../tenant/TenantRuntimeRegistry.kt` | runtime resource에 tenant schema 정보를 함께 보존하고 조회한다. |
+| `src/main/kotlin/.../tenant/TenantLifecycleReconciler.kt` | 시작 중 schema/probe 실패를 `RECOVERY`로 기록한다. |
 | `src/main/resources/application.yml` | 기본 profile과 공통 lifecycle 정책을 선언한다. |
 | `src/main/resources/application-h2.yml` | H2 registry URL을 선언한다. |
 | `src/main/resources/application-postgres.yml` | 환경 변수 기반 PostgreSQL 연결 기본값을 선언한다. |
@@ -139,6 +140,7 @@ git commit -m "Guard tenant schema identifiers before SQL execution" \
 - Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/config/H2TenantOnboardingConfig.kt`
 - Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/config/PostgreSqlTenantOnboardingConfig.kt`
 - Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantDatabaseProperties.kt`
+- Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/PostgreSqlSchemaTenantRuntimeResourceFactory.kt`
 - Modify: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleProperties.kt`
 - Modify: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/resources/application.yml`
 - Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/resources/application-h2.yml`
@@ -155,6 +157,7 @@ import exposed.r2dbc.multitenant.resilientonboarding.tenant.H2TenantDatabaseProp
 import exposed.r2dbc.multitenant.resilientonboarding.tenant.PostgreSqlSchemaTenantRuntimeResourceFactory
 import exposed.r2dbc.multitenant.resilientonboarding.tenant.PostgreSqlTenantDatabaseProperties
 import exposed.r2dbc.multitenant.resilientonboarding.tenant.TenantRuntimeResourceFactory
+import io.bluetape4k.assertions.shouldBeEqualTo
 import io.bluetape4k.assertions.shouldBeInstanceOf
 import org.junit.jupiter.api.Test
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -191,6 +194,13 @@ class TenantOnboardingProfileConfigTest {
                 context.getBean(TenantRuntimeResourceFactory::class.java)
                     .shouldBeInstanceOf<PostgreSqlSchemaTenantRuntimeResourceFactory>()
             }
+    }
+
+    @Test
+    fun `postgres properties redact the password`() {
+        PostgreSqlTenantDatabaseProperties(password = "secret-value")
+            .toString()
+            .contains("secret-value") shouldBeEqualTo false
     }
 }
 
@@ -253,6 +263,10 @@ data class PostgreSqlTenantDatabaseProperties(
             .option(ConnectionFactoryOptions.PASSWORD, password)
             .option(ConnectionFactoryOptions.SSL, false)
             .build()
+
+    override fun toString(): String =
+        "PostgreSqlTenantDatabaseProperties(host=$host, port=$port, database=$database, " +
+            "username=$username, password=****)"
 }
 ```
 
@@ -312,6 +326,25 @@ class PostgreSqlTenantOnboardingConfig {
 
 공통 `ResilientTenantOnboardingConfig`에서는 기존 `registryDatabase`와
 `tenantRuntimeResourceFactory` bean을 제거한다.
+
+Task 2에서는 profile wiring을 컴파일하고 bean 선택을 검증할 수 있도록 factory
+파일에 다음 RED 유지용 최소 구현을 둔다. 실제 schema 동작은 Task 3 테스트가 먼저
+실패한 뒤 구현한다.
+
+```kotlin
+class PostgreSqlSchemaTenantRuntimeResourceFactory(
+    private val connectionFactory: ConnectionFactory,
+    private val database: R2dbcDatabase,
+): TenantRuntimeResourceFactory {
+    override suspend fun create(metadata: TenantMetadata): TenantResources =
+        error("PostgreSQL tenant schema provisioning is not implemented")
+
+    override suspend fun probe(resources: TenantResources) =
+        error("PostgreSQL tenant schema probe is not implemented")
+
+    override suspend fun close(resources: TenantResources) = Unit
+}
+```
 
 - [ ] **Step 5: profile YAML 분리**
 
@@ -379,7 +412,7 @@ git commit -m "Separate tenant storage behind database profiles" \
 ### Task 3: PostgreSQL tenant schema 생성과 probe
 
 **Files:**
-- Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/PostgreSqlSchemaTenantRuntimeResourceFactory.kt`
+- Modify: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/PostgreSqlSchemaTenantRuntimeResourceFactory.kt`
 - Modify: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantRuntimeRegistry.kt`
 - Test: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/PostgreSqlSchemaTenantRuntimeResourceFactoryTest.kt`
 
@@ -398,6 +431,23 @@ private fun connectionOptions(): ConnectionFactoryOptions =
         .option(ConnectionFactoryOptions.PASSWORD, postgres.password ?: "test")
         .option(ConnectionFactoryOptions.SSL, false)
         .build()
+
+private fun uniqueTenant(prefix: String): TenantId =
+    TenantId("$prefix-${UUID.randomUUID().toString().take(8)}")
+
+private fun metadata(tenantId: TenantId): TenantMetadata =
+    TenantMetadata(
+        tenantId = tenantId,
+        displayName = tenantId.value,
+        status = TenantLifecycleStatus.PROVISIONING,
+        attempt = 1,
+        reservationToken = UUID.randomUUID(),
+        version = 0,
+        leaseExpiresAt = Instant.parse("2026-07-26T00:02:00Z"),
+        lastFailureCode = null,
+        createdAt = Instant.parse("2026-07-26T00:00:00Z"),
+        updatedAt = Instant.parse("2026-07-26T00:00:00Z"),
+    )
 ```
 
 `PostgreSQLServer`의 실제 accessor 이름이 현재 bluetape4k-testcontainers API와
@@ -410,35 +460,60 @@ private fun connectionOptions(): ConnectionFactoryOptions =
 ```kotlin
 @Test
 fun `create prepares a tenant schema and readiness marker`() = runSuspendIO {
-    val resources = factory.create(metadata("clinic-seoul"))
+    val tenantId = uniqueTenant("seoul")
+    val resources = factory.create(metadata(tenantId))
 
     factory.probe(resources)
 
-    resources.schemaName shouldBeEqualTo TenantSchemaName.from(TenantId("clinic-seoul"))
-    queryCurrentSchema(resources) shouldBeEqualTo "tenant_clinic_seoul"
-    queryMarkerTenant(resources) shouldBeEqualTo "clinic-seoul"
+    resources.schemaName shouldBeEqualTo TenantSchemaName.from(tenantId)
+    queryCurrentSchema(resources) shouldBeEqualTo TenantSchemaName.from(tenantId).value
+    queryMarkerTenant(resources) shouldBeEqualTo tenantId.value
 }
 
 @Test
 fun `two tenants use different schemas on the same connection factory`() = runSuspendIO {
-    val seoul = factory.create(metadata("clinic-seoul"))
-    val busan = factory.create(metadata("clinic-busan"))
+    val seoulId = uniqueTenant("seoul")
+    val busanId = uniqueTenant("busan")
+    val seoul = factory.create(metadata(seoulId))
+    val busan = factory.create(metadata(busanId))
 
     factory.probe(seoul)
     factory.probe(busan)
 
     (seoul.connectionFactory === busan.connectionFactory) shouldBeEqualTo true
-    queryMarkerTenant(seoul) shouldBeEqualTo "clinic-seoul"
-    queryMarkerTenant(busan) shouldBeEqualTo "clinic-busan"
+    queryMarkerTenant(seoul) shouldBeEqualTo seoulId.value
+    queryMarkerTenant(busan) shouldBeEqualTo busanId.value
 }
 
 @Test
 fun `closing failed resources does not drop the tenant schema`() = runSuspendIO {
-    val resources = factory.create(metadata("clinic-failed"))
+    val resources = factory.create(metadata(uniqueTenant("failed")))
 
     factory.close(resources)
 
     schemaExists(resources.schemaName).shouldBeTrue()
+}
+
+@Test
+fun `runtime registry returns schema aware resources`() = runSuspendIO {
+    val resources = factory.create(metadata(uniqueTenant("runtime")))
+    val registry = TenantRuntimeRegistry()
+
+    registry.publish(resources)
+
+    registry.resourcesOrNull(resources.tenantId) shouldBeEqualTo resources
+}
+
+@Test
+fun `creating the same tenant twice is idempotent`() = runSuspendIO {
+    val tenantId = uniqueTenant("retry")
+
+    val first = factory.create(metadata(tenantId))
+    val second = factory.create(metadata(tenantId))
+
+    factory.probe(first)
+    factory.probe(second)
+    queryMarkerTenant(second) shouldBeEqualTo tenantId.value
 }
 ```
 
@@ -463,7 +538,12 @@ data class TenantResources(
     val connectionFactory: ConnectionFactory,
     val schemaName: TenantSchemaName? = null,
 )
+
+fun resourcesOrNull(tenantId: TenantId): TenantResources? = resources[tenantId]
 ```
+
+이 메서드는 기존 `TenantRuntimeRegistry` 내부에 추가한다. `publish`, `unregister`,
+`connectionFactoryOrNull`은 H2 caller와 기존 테스트 호환성을 위해 유지한다.
 
 H2 factory는 기본값 `null`을 사용하므로 기존 테스트 동작을 유지한다.
 
@@ -479,8 +559,12 @@ class PostgreSqlSchemaTenantRuntimeResourceFactory(
         val schemaName = TenantSchemaName.from(metadata.tenantId)
         val schema = Schema(schemaName.value)
 
+        // PostgreSQL transactional DDL이 이후 준비 실패와 함께 rollback되지 않도록
+        // schema 예약을 별도 transaction에서 먼저 커밋한다.
         suspendTransaction(db = database) {
             SchemaUtils.createSchema(schema)
+        }
+        suspendTransaction(db = database) {
             SchemaUtils.setSchema(schema)
             SchemaUtils.create(TenantReadinessTable)
             TenantReadinessTable.insertIgnore {
@@ -550,6 +634,8 @@ git commit -m "Provision PostgreSQL tenants in isolated schemas" \
 **Files:**
 - Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/PostgreSqlTenantLifecycleRestartIntegrationTest.kt`
 - Modify: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/config/TenantOnboardingProfileConfigTest.kt`
+- Modify: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleReconciler.kt`
+- Modify: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleReconcilerTest.kt`
 
 - [ ] **Step 1: PostgreSQL Spring context 생성 helper 작성**
 
@@ -566,6 +652,9 @@ private fun postgresContext(postgres: PostgreSQLServer) =
             "spring.main.web-application-type=none",
         )
         .run()
+
+private fun uniqueTenant(prefix: String): TenantId =
+    TenantId("$prefix-${UUID.randomUUID().toString().take(8)}")
 ```
 
 launcher가 nullable accessor를 제공하면 테스트 fixture에서 `requireNotNull`로
@@ -576,7 +665,7 @@ launcher가 nullable accessor를 제공하면 테스트 fixture에서 `requireNo
 ```kotlin
 @Test
 fun `active tenant is republished after PostgreSQL application restart`() = runSuspendIO {
-    val tenantId = TenantId("restart-postgres")
+    val tenantId = uniqueTenant("restart")
 
     postgresContext(postgres).use { beforeRestart ->
         val provisioner = beforeRestart.getBean(ResilientTenantProvisioner::class.java)
@@ -600,7 +689,7 @@ fun `active tenant is republished after PostgreSQL application restart`() = runS
 ```kotlin
 @Test
 fun `active lifecycle row without a ready schema becomes recovery failure`() = runSuspendIO {
-    val tenantId = TenantId("missing-schema")
+    val tenantId = uniqueTenant("missing")
 
     postgresContext(postgres).use { context ->
         val repository = context.getBean(TenantLifecycleRepository::class.java)
@@ -624,7 +713,46 @@ fun `active lifecycle row without a ready schema becomes recovery failure`() = r
 }
 ```
 
-- [ ] **Step 4: 테스트가 profile 또는 복구 오류로 실패하는지 확인**
+- [ ] **Step 4: 실패한 온보딩의 schema 보존과 `public` registry 테스트 작성**
+
+```kotlin
+@Test
+fun `probe failure keeps the committed tenant schema and public lifecycle row`() = runSuspendIO {
+    val tenantId = uniqueTenant("failed")
+
+    postgresContext(postgres).use { context ->
+        val repository = context.getBean(TenantLifecycleRepository::class.java)
+        val registry = context.getBean(TenantRuntimeRegistry::class.java)
+        val delegate = context.getBean(TenantRuntimeResourceFactory::class.java)
+        val properties = context.getBean(TenantLifecycleProperties::class.java)
+        val failingFactory = object: TenantRuntimeResourceFactory by delegate {
+            override suspend fun probe(resources: TenantResources) {
+                error("simulated probe failure")
+            }
+        }
+        val provisioner = ResilientTenantProvisioner(
+            repository,
+            registry,
+            failingFactory,
+            properties,
+            Clock.fixed(now, ZoneOffset.UTC),
+        )
+
+        provisioner.onboard(TenantOnboardingCommand(tenantId, "Failed PostgreSQL"))
+            .shouldBeInstanceOf<TenantOnboardingResult.Failed>()
+
+        schemaExists(TenantSchemaName.from(tenantId)).shouldBeEqualTo true
+        lifecycleTableSchema(tenantId) shouldBeEqualTo "public"
+    }
+}
+```
+
+`schemaExists`와 `lifecycleTableSchema`는 테스트의 PostgreSQL
+`R2dbcDatabase`에서 `information_schema.schemata`와
+`information_schema.tables`를 조회하는 private suspend helper로 구현한다. 값은
+bind parameter로 전달하고 schema/table 식별자를 SQL에 직접 보간하지 않는다.
+
+- [ ] **Step 5: 테스트가 profile 또는 복구 오류로 실패하는지 확인**
 
 Run:
 
@@ -637,7 +765,31 @@ Run:
 Expected: 첫 구현 결함이 드러나는 지점에서 FAIL. 두 번째 문맥이 시작되기 전에
 첫 번째 문맥과 runtime registry가 실제로 닫혔는지 확인한다.
 
-- [ ] **Step 5: 재시작 시 schema-aware resource 재생성 보완**
+- [ ] **Step 6: 재시작 실패 코드를 `RECOVERY`로 통일**
+
+```kotlin
+private suspend fun publishIfHealthy(
+    metadata: TenantMetadata,
+    now: Instant,
+) {
+    var resources: TenantResources? = null
+    try {
+        resources = resourceFactory.create(metadata)
+        resourceFactory.probe(resources)
+        registry.publish(resources)
+    } catch (cause: Exception) {
+        resources?.let { resourceFactory.close(it) }
+        repository.markFailed(metadata.asOwner(), TenantFailureCode.RECOVERY, now)
+        log.warn(cause) { "Tenant recovery probe failed. tenantId=${metadata.tenantId.value}" }
+    }
+}
+```
+
+`TenantLifecycleReconcilerTest`에는 active resource probe가 실패하면 상태가
+`FAILED`, 실패 코드가 `RECOVERY`, registry가 비어 있음을 검증하는 테스트를
+추가한다.
+
+- [ ] **Step 7: 재시작 시 schema-aware resource 재생성 보완**
 
 reconciler의 계약은 변경하지 않는다. factory의 `create(metadata)`가 기존 schema에
 멱등적으로 연결하고 `probe(resources)`가 readiness marker를 확인하게 한다. 실패한
@@ -648,7 +800,7 @@ driver connection factory만 사용한다면 추가 close bean을 만들지 않�
 registry는 연결 자원의 소유자가 아니라 준비 완료된 routing 참조의 소유자라는
 현재 계약을 유지한다.
 
-- [ ] **Step 6: PostgreSQL 통합 테스트와 H2 재시작 테스트 실행**
+- [ ] **Step 8: PostgreSQL 통합 테스트와 H2 재시작 테스트 실행**
 
 Run:
 
@@ -661,10 +813,12 @@ Run:
 
 Expected: PASS; PostgreSQL과 H2 모두 재시작 뒤 `ACTIVE` tenant를 다시 공개.
 
-- [ ] **Step 7: 재시작 통합 검증 커밋**
+- [ ] **Step 9: 재시작 통합 검증 커밋**
 
 ```bash
-git add 10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test
+git add \
+  10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleReconciler.kt \
+  10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test
 git commit -m "Prove PostgreSQL tenant recovery across restarts" \
   -m "Constraint: Recovery must use durable registry and schema state, not process memory." \
   -m "Rejected: Reinvoke only the reconciler in one context | it does not prove application restart wiring." \
@@ -803,3 +957,29 @@ git commit -m "Document PostgreSQL tenant schema operations" \
   `PostgreSqlSchemaTenantRuntimeResourceFactory`, `TenantResources.schemaName` 이름을
   모든 Task에서 동일하게 사용했다.
 - 코드 단계에 미정 placeholder를 남기지 않았다.
+
+## Step 3-R 계획 검토
+
+| Priority | Lens | Finding | 계획 보완 |
+| --- | --- | --- | --- |
+| P1 | Stability | schema와 readiness table을 한 transaction에서 만들면 준비 실패 시 PostgreSQL이 schema DDL도 rollback한다. | Task 3에서 schema 생성 transaction을 먼저 커밋하고 준비 transaction을 분리했다. |
+| P1 | Stability | singleton 컨테이너와 고정 tenant ID는 이전 실행의 보존 schema 때문에 테스트를 오염시킨다. | Task 3과 4 fixture에 짧은 UUID suffix를 추가했다. |
+| P1 | Security | password를 가진 Kotlin data class의 기본 `toString`이 secret을 노출한다. | Task 2에 마스킹 구현과 회귀 테스트를 추가했다. |
+| P1 | Security / User | registry가 shared connection factory만 노출하면 caller가 schema 선택을 누락할 수 있다. | Task 3에 `resourcesOrNull`과 schema-aware resource 검증을 추가했다. |
+| P1 | Operator/Ops | 기존 reconciler의 `PROBE` 코드와 승인 설계의 `RECOVERY` 코드가 불일치한다. | Task 4에서 구현과 단위·통합 테스트를 함께 수정한다. |
+| P1 | Developer/API | Task 2 profile config가 Task 3에서 생성될 factory에 선행 의존했다. | Task 2에서 명시적인 실패 stub을 만들고 Task 3 RED가 이를 실행해 실패하도록 순서를 수정했다. |
+| P2 | Performance | raw PostgreSQL driver factory는 pool을 제공하지 않는다. | workshop의 정합성 범위를 우선하고 Task 5 README에 production pool 비보장을 명시한다. |
+
+최신 통합 검토 결과는 Performance, Stability, Security, Operator/Ops,
+Developer/API, User/caller 모든 관점에서 P0=0, P1=0이다.
+
+## Step 3-P 위험 예측
+
+| 위험 | 관찰 신호 | 예방·완화 | rollback / rerun point |
+| --- | --- | --- | --- |
+| PostgreSQL transactional DDL이 실패 schema를 제거 | probe 실패 뒤 `information_schema.schemata` 조회가 0행 | schema 생성 transaction을 먼저 커밋 | Task 3 factory test로 돌아가 transaction 경계 수정 후 Task 3·4 전체 재실행 |
+| tenant search path가 registry query에 누출 | lifecycle table 조회가 없거나 tenant schema에 생성됨 | registry와 tenant transaction 경계를 분리하고 `public` 위치를 통합 테스트 | Task 2 profile 설정으로 돌아가 별도 connection factory 경계 보강 |
+| 시작 reconciler가 불완전 schema를 공개 | runtime registry에 resource가 존재하고 metadata가 `ACTIVE` 유지 | readiness marker probe 뒤에만 publish, 실패는 `RECOVERY` | Task 4 reconciler 단위 테스트부터 재실행 |
+| Testcontainers 상태가 테스트 간 누적 | 첫 실행과 재실행 결과가 다르거나 기존 attempt가 증가 | tenant ID에 짧은 UUID suffix 사용 | 해당 테스트 단독 2회 실행 후 모듈 전체 test 재실행 |
+| 설정 문자열에서 PostgreSQL password 노출 | 테스트 또는 로그에서 실제 password 발견 | redacted `toString`, connection options 로그 금지 | Task 2 속성 테스트와 source secret scan 재실행 |
+| 새 R2DBC driver가 H2 기본 profile을 깨뜨림 | profile 미지정 Spring context 실패 | `spring.profiles.default=h2`, 상호 배타 profile bean 테스트 | Task 2 context test와 기존 11개 테스트 전체 재실행 |
