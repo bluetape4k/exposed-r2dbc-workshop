@@ -88,7 +88,8 @@ PostgreSQL bean만 등록한다. 공통 설정은 특정 dialect나 driver를 �
 
 PostgreSQL 기본값은 로컬 개발에 유용한 비밀이 아닌 값만 제공한다. 자격 증명은 환경
 변수로 덮어쓸 수 있어야 하며, 로그·API·생명주기 행에는 URL, 사용자 이름, 비밀번호를
-기록하지 않는다.
+기록하지 않는다. 연결 속성 객체의 문자열 표현도 비밀번호를 마스킹해 우발적인 설정
+로그가 자격 증명을 노출하지 않게 한다.
 
 registry `R2dbcDatabase`는 profile에 따라 `H2Dialect` 또는
 `PostgreSQLDialect`를 명시한다. 생명주기 테이블은 PostgreSQL 기본 schema인
@@ -114,9 +115,10 @@ registry `R2dbcDatabase`는 profile에 따라 `H2Dialect` 또는
 PostgreSQL factory는 claim을 소유한 요청에 대해 다음을 수행한다.
 
 1. 공유 PostgreSQL connection factory로 연결한다.
-2. `CREATE SCHEMA IF NOT EXISTS tenant_<id>`를 실행한다.
-3. Exposed R2DBC transaction에서 해당 schema를 선택한다.
-4. 업무 테이블과 필요한 초기 데이터를 멱등적으로 준비한다.
+2. 첫 번째 transaction에서 `CREATE SCHEMA IF NOT EXISTS tenant_<id>`를 실행하고
+   커밋한다.
+3. 두 번째 Exposed R2DBC transaction에서 해당 schema를 선택한다.
+4. 업무 테이블과 필요한 초기 데이터를 멱등적으로 준비하고 커밋한다.
 5. 별도 probe transaction에서 현재 schema와 필수 테이블을 확인한다.
 6. probe를 통과한 runtime resource를 provisioner에 반환한다.
 7. provisioner가 생명주기 행을 `ACTIVE`로 전이한 뒤 runtime registry에 공개한다.
@@ -126,6 +128,12 @@ Schema 선택은 `03-multitenant-spring-webflux`와 같이
 세션 상태가 다음 요청으로 새어 나갈 수 있다는 가정에 기대지 않는다. 모든 테넌트
 업무 트랜잭션은 자신의 schema를 명시적으로 선택해야 한다.
 
+runtime registry는 connection factory만 단독으로 노출하는 API 외에 schema 이름을
+포함한 `TenantResources` 조회 API를 제공한다. PostgreSQL caller는 이 자원에서
+schema를 읽고 schema-aware transaction helper를 사용해야 한다. connection
+factory만 사용해 `public`에서 업무 쿼리를 실행하는 경로를 PostgreSQL 예제로
+권장하지 않는다.
+
 ## 실패와 재시도
 
 온보딩 실패 시 생성된 schema는 자동으로 삭제하지 않는다.
@@ -133,6 +141,8 @@ Schema 선택은 `03-multitenant-spring-webflux`와 같이
 - 현재 token을 가진 시도만 생명주기 행을 `FAILED`로 전이한다.
 - 실패한 시도가 만든 runtime resource는 닫되 schema와 이미 생성된 테이블은
   보존한다.
+- schema 생성은 별도 transaction에서 먼저 커밋하므로 이후 테이블 준비나 probe가
+  실패해도 생성된 schema는 롤백되지 않는다.
 - 재시도는 같은 schema에 `CREATE SCHEMA IF NOT EXISTS`와 멱등적인 테이블 준비를
   다시 수행한다.
 - schema 정리는 장애 조사와 보존 정책을 확인한 관리자가 별도의 offboarding
@@ -150,6 +160,8 @@ Schema 선택은 `03-multitenant-spring-webflux`와 같이
 - `ACTIVE`는 파생된 schema 이름으로 새 runtime resource를 만들고 probe한다.
 - schema와 필수 테이블이 준비되어 있으면 runtime registry에 다시 공개한다.
 - schema가 없거나 probe가 실패하면 해당 버전의 행만 `FAILED`로 전이한다.
+- 시작 재조정 중 발생한 schema 또는 probe 실패는 일반 온보딩 실패와 구분해
+  `RECOVERY` 코드로 기록한다.
 
 PostgreSQL 재시작 통합 테스트에서는 첫 번째 애플리케이션 문맥을 닫은 뒤 같은
 컨테이너와 데이터베이스를 사용하는 두 번째 문맥을 시작한다. 두 번째 문맥이
@@ -182,7 +194,8 @@ PostgreSQL 재시작 통합 테스트에서는 첫 번째 애플리케이션 문
 컨테이너가 필요한 테스트는 단위 테스트와 구분되는 이름과 태그를 사용하되, 해당
 모듈의 일반 `test` 실행에서도 검증 가능해야 한다. 저장소의 기존 Testcontainers
 launcher 수명 주기를 재사용하고 Docker가 없는 환경의 동작은 기존 프로젝트 정책과
-맞춘다.
+맞춘다. singleton 컨테이너를 공유하는 테스트의 tenant ID에는 짧은 무작위 suffix를
+붙여 이전 실행에서 보존된 schema와 lifecycle 행이 다음 실행을 오염시키지 않게 한다.
 
 ## 문서 변경
 
@@ -215,3 +228,17 @@ launcher 수명 주기를 재사용하고 Docker가 없는 환경의 동작은 �
 | H2와 PostgreSQL 설정이 동시에 등록됨 | 상호 배타적인 profile 설정과 문맥 테스트 |
 | registry query가 tenant schema로 전환됨 | registry 전용 database는 `public` 계약 유지 |
 | 컨테이너 테스트가 기존 빠른 테스트를 불안정하게 만듦 | 기존 launcher와 수명 주기를 재사용하고 profile 테스트를 분리 |
+
+## 설계 검토
+
+| Priority | Lens | Finding | 반영 |
+| --- | --- | --- | --- |
+| P1 | Stability | PostgreSQL DDL은 transaction rollback 대상이므로 schema와 테이블 준비를 한 transaction에 두면 실패 schema 보존 계약이 깨진다. | schema 생성 transaction을 먼저 커밋하고 준비·probe transaction을 분리했다. |
+| P1 | Security / User | shared connection factory만 조회하면 caller가 tenant schema 선택을 누락할 수 있다. | schema를 포함한 `TenantResources` 조회와 schema-aware transaction 사용 계약을 추가했다. |
+| P1 | Stability / Ops | 시작 probe 실패의 코드가 기존 구현의 `PROBE`와 설계의 `RECOVERY` 사이에서 불일치했다. | startup reconciliation 실패는 `RECOVERY`로 통일했다. |
+| P1 | Security | Kotlin data class 문자열 표현이 PostgreSQL password를 노출할 수 있다. | 연결 속성 문자열 표현에서 password를 마스킹하도록 고정했다. |
+| P1 | Stability | singleton PostgreSQL 컨테이너에 보존된 schema가 고정 ID 테스트를 오염시킬 수 있다. | 컨테이너 테스트 tenant ID에 무작위 suffix를 사용한다. |
+| P2 | Performance | raw driver connection factory는 pool보다 연결 비용이 크다. | 이번 workshop 범위에서는 정합성 학습을 우선하고 pool 도입은 보류한다. README에 production pool을 보장하지 않음을 명시한다. |
+
+최신 통합 검토 결과는 Performance, Stability, Security, Operator/Ops,
+Developer/API, User/caller 모든 관점에서 P0=0, P1=0이다.
