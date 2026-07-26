@@ -134,6 +134,11 @@ schema를 읽고 schema-aware transaction helper를 사용해야 한다. connect
 factory만 사용해 `public`에서 업무 쿼리를 실행하는 경로를 PostgreSQL 예제로
 권장하지 않는다.
 
+`TenantRuntimeResourceFactory`는 신규 온보딩의 `create`와 시작 재조정의
+`restore`를 분리한다. `create`는 schema와 readiness table을 멱등적으로 준비하지만,
+PostgreSQL `restore`는 파생된 schema 정보로 runtime resource만 재구성하고 DDL을
+실행하지 않는다. reconciler는 `restore` 뒤 `probe`가 성공한 자원만 공개한다.
+
 ## 실패와 재시도
 
 온보딩 실패 시 생성된 schema는 자동으로 삭제하지 않는다.
@@ -157,7 +162,7 @@ factory만 사용해 `public`에서 업무 쿼리를 실행하는 경로를 Post
 
 - 만료된 `PROVISIONING`은 `RECOVERY` 실패로 전이한다.
 - `FAILED`는 공개하지 않는다.
-- `ACTIVE`는 파생된 schema 이름으로 새 runtime resource를 만들고 probe한다.
+- `ACTIVE`는 파생된 schema 이름으로 기존 runtime resource를 복원하고 probe한다.
 - schema와 필수 테이블이 준비되어 있으면 runtime registry에 다시 공개한다.
 - schema가 없거나 probe가 실패하면 해당 버전의 행만 `FAILED`로 전이한다.
 - 시작 재조정 중 발생한 schema 또는 probe 실패는 일반 온보딩 실패와 구분해
@@ -238,6 +243,7 @@ launcher 수명 주기를 재사용하고 Docker가 없는 환경의 동작은 �
 | P1 | Stability / Ops | 시작 probe 실패의 코드가 기존 구현의 `PROBE`와 설계의 `RECOVERY` 사이에서 불일치했다. | startup reconciliation 실패는 `RECOVERY`로 통일했다. |
 | P1 | Security | Kotlin data class 문자열 표현이 PostgreSQL password를 노출할 수 있다. | 연결 속성 문자열 표현에서 password를 마스킹하도록 고정했다. |
 | P1 | Stability | singleton PostgreSQL 컨테이너에 보존된 schema가 고정 ID 테스트를 오염시킬 수 있다. | 컨테이너 테스트 tenant ID에 무작위 suffix를 사용한다. |
+| P1 | Stability / Ops | reconciler가 온보딩용 `create`를 재사용하면 누락된 schema를 새로 만들어 손상을 숨긴다. | factory에 DDL 없는 `restore`를 추가하고 startup은 restore 후 probe만 수행한다. |
 | P2 | Performance | raw driver connection factory는 pool보다 연결 비용이 크다. | 이번 workshop 범위에서는 정합성 학습을 우선하고 pool 도입은 보류한다. README에 production pool을 보장하지 않음을 명시한다. |
 
 최신 통합 검토 결과는 Performance, Stability, Security, Operator/Ops,
