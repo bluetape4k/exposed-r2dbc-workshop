@@ -56,3 +56,5 @@ sealed interface TenantClaim {
     data class Pending(val metadata: TenantMetadata): TenantClaim
     data class Conflict(val metadata: TenantMetadata): TenantClaim
 }
+
+fun TenantMetadata.asOwner(): TenantClaim.Owner = TenantClaim.Owner(this)
