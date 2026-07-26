@@ -635,6 +635,7 @@ git commit -m "Provision PostgreSQL tenants in isolated schemas" \
 - Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/PostgreSqlTenantLifecycleRestartIntegrationTest.kt`
 - Modify: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/config/TenantOnboardingProfileConfigTest.kt`
 - Modify: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleReconciler.kt`
+- Modify: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantRuntimeResourceFactory.kt`
 - Modify: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleReconcilerTest.kt`
 
 - [ ] **Step 1: PostgreSQL Spring context 생성 helper 작성**
@@ -765,7 +766,35 @@ Run:
 Expected: 첫 구현 결함이 드러나는 지점에서 FAIL. 두 번째 문맥이 시작되기 전에
 첫 번째 문맥과 runtime registry가 실제로 닫혔는지 확인한다.
 
-- [ ] **Step 6: 재시작 실패 코드를 `RECOVERY`로 통일**
+- [ ] **Step 6: 온보딩 create와 재시작 restore 경계를 분리**
+
+```kotlin
+interface TenantRuntimeResourceFactory {
+    suspend fun create(metadata: TenantMetadata): TenantResources
+
+    suspend fun restore(metadata: TenantMetadata): TenantResources = create(metadata)
+
+    suspend fun probe(resources: TenantResources)
+    suspend fun close(resources: TenantResources)
+}
+```
+
+H2와 기존 test fake는 기본 구현으로 호환성을 유지한다. PostgreSQL factory는
+DDL 없이 schema 이름만 복원한다.
+
+```kotlin
+override suspend fun restore(metadata: TenantMetadata): TenantResources =
+    TenantResources(
+        tenantId = metadata.tenantId,
+        connectionFactory = connectionFactory,
+        schemaName = TenantSchemaName.from(metadata.tenantId),
+    )
+```
+
+reconciler의 startup 경로는 `create(metadata)` 대신 `restore(metadata)`를 호출한다.
+따라서 누락되거나 불완전한 schema는 새로 만들어지지 않고 다음 `probe`에서 실패한다.
+
+- [ ] **Step 7: 재시작 실패 코드를 `RECOVERY`로 통일**
 
 ```kotlin
 private suspend fun publishIfHealthy(
@@ -789,18 +818,18 @@ private suspend fun publishIfHealthy(
 `FAILED`, 실패 코드가 `RECOVERY`, registry가 비어 있음을 검증하는 테스트를
 추가한다.
 
-- [ ] **Step 7: 재시작 시 schema-aware resource 재생성 보완**
+- [ ] **Step 8: 재시작 시 schema-aware resource 재생성 보완**
 
-reconciler의 계약은 변경하지 않는다. factory의 `create(metadata)`가 기존 schema에
-멱등적으로 연결하고 `probe(resources)`가 readiness marker를 확인하게 한다. 실패한
-probe는 reconciler의 기존 처리로 해당 행을 `RECOVERY` 실패로 바꾼다.
+factory의 `restore(metadata)`는 DDL 없이 runtime resource만 재구성하고
+`probe(resources)`가 기존 readiness marker를 확인하게 한다. 실패한 probe는
+reconciler가 해당 행을 `RECOVERY` 실패로 바꾼다.
 
 Spring context 종료 시 공유 `ConnectionPool`을 도입했다면 destroy method로 닫고,
 driver connection factory만 사용한다면 추가 close bean을 만들지 않는다. runtime
 registry는 연결 자원의 소유자가 아니라 준비 완료된 routing 참조의 소유자라는
 현재 계약을 유지한다.
 
-- [ ] **Step 8: PostgreSQL 통합 테스트와 H2 재시작 테스트 실행**
+- [ ] **Step 9: PostgreSQL 통합 테스트와 H2 재시작 테스트 실행**
 
 Run:
 
@@ -813,11 +842,12 @@ Run:
 
 Expected: PASS; PostgreSQL과 H2 모두 재시작 뒤 `ACTIVE` tenant를 다시 공개.
 
-- [ ] **Step 9: 재시작 통합 검증 커밋**
+- [ ] **Step 10: 재시작 통합 검증 커밋**
 
 ```bash
 git add \
   10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleReconciler.kt \
+  10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantRuntimeResourceFactory.kt \
   10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test
 git commit -m "Prove PostgreSQL tenant recovery across restarts" \
   -m "Constraint: Recovery must use durable registry and schema state, not process memory." \
@@ -968,6 +998,7 @@ git commit -m "Document PostgreSQL tenant schema operations" \
 | P1 | Security / User | registry가 shared connection factory만 노출하면 caller가 schema 선택을 누락할 수 있다. | Task 3에 `resourcesOrNull`과 schema-aware resource 검증을 추가했다. |
 | P1 | Operator/Ops | 기존 reconciler의 `PROBE` 코드와 승인 설계의 `RECOVERY` 코드가 불일치한다. | Task 4에서 구현과 단위·통합 테스트를 함께 수정한다. |
 | P1 | Developer/API | Task 2 profile config가 Task 3에서 생성될 factory에 선행 의존했다. | Task 2에서 명시적인 실패 stub을 만들고 Task 3 RED가 이를 실행해 실패하도록 순서를 수정했다. |
+| P1 | Stability / Ops | startup에서 `create`를 호출하면 누락된 schema를 다시 만들어 손상을 숨긴다. | Task 4에 DDL 없는 `restore` 경계와 missing-schema 복구 실패 테스트를 추가했다. |
 | P2 | Performance | raw PostgreSQL driver factory는 pool을 제공하지 않는다. | workshop의 정합성 범위를 우선하고 Task 5 README에 production pool 비보장을 명시한다. |
 
 최신 통합 검토 결과는 Performance, Stability, Security, Operator/Ops,
@@ -979,7 +1010,7 @@ Developer/API, User/caller 모든 관점에서 P0=0, P1=0이다.
 | --- | --- | --- | --- |
 | PostgreSQL transactional DDL이 실패 schema를 제거 | probe 실패 뒤 `information_schema.schemata` 조회가 0행 | schema 생성 transaction을 먼저 커밋 | Task 3 factory test로 돌아가 transaction 경계 수정 후 Task 3·4 전체 재실행 |
 | tenant search path가 registry query에 누출 | lifecycle table 조회가 없거나 tenant schema에 생성됨 | registry와 tenant transaction 경계를 분리하고 `public` 위치를 통합 테스트 | Task 2 profile 설정으로 돌아가 별도 connection factory 경계 보강 |
-| 시작 reconciler가 불완전 schema를 공개 | runtime registry에 resource가 존재하고 metadata가 `ACTIVE` 유지 | readiness marker probe 뒤에만 publish, 실패는 `RECOVERY` | Task 4 reconciler 단위 테스트부터 재실행 |
+| 시작 reconciler가 불완전 schema를 재생성·공개 | runtime registry에 resource가 존재하고 metadata가 `ACTIVE` 유지 | startup은 DDL 없는 `restore` 후 readiness marker probe, 실패는 `RECOVERY` | Task 4 reconciler 단위 테스트부터 재실행 |
 | Testcontainers 상태가 테스트 간 누적 | 첫 실행과 재실행 결과가 다르거나 기존 attempt가 증가 | tenant ID에 짧은 UUID suffix 사용 | 해당 테스트 단독 2회 실행 후 모듈 전체 test 재실행 |
 | 설정 문자열에서 PostgreSQL password 노출 | 테스트 또는 로그에서 실제 password 발견 | redacted `toString`, connection options 로그 금지 | Task 2 속성 테스트와 source secret scan 재실행 |
 | 새 R2DBC driver가 H2 기본 profile을 깨뜨림 | profile 미지정 Spring context 실패 | `spring.profiles.default=h2`, 상호 배타 profile bean 테스트 | Task 2 context test와 기존 11개 테스트 전체 재실행 |
