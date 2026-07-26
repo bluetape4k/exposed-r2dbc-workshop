@@ -1,0 +1,4 @@
+app:
+  resilient-onboarding:
+    lease-duration: PT2M
+    overall-provision-timeout: PT1M
