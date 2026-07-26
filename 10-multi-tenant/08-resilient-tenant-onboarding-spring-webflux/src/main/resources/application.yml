@@ -1,6 +1,9 @@
+spring:
+  profiles:
+    default: h2
+
 app:
   resilient-onboarding:
     lease-duration: PT2M
     overall-provision-timeout: PT1M
-    registry-url: r2dbc:h2:mem:///resilient_tenant_registry;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
-    admin-token: workshop-admin
+    admin-token: ${TENANT_ADMIN_TOKEN:workshop-admin}
