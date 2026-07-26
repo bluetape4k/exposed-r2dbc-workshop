@@ -2,6 +2,9 @@ package exposed.r2dbc.multitenant.resilientonboarding.tenant
 
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.r2dbc.spi.ConnectionFactories
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import org.jetbrains.exposed.v1.core.vendors.H2Dialect
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabaseConfig
@@ -49,5 +52,17 @@ class TenantLifecycleRepositoryTest {
         assertFalse(repository.markFailed(first, TenantFailureCode.POOL, now.plusSeconds(2)))
         assertEquals(retry.metadata.reservationToken, repository.find(TenantId("acme"))?.reservationToken)
         assertEquals(2, repository.find(TenantId("acme"))?.attempt)
+    }
+
+    @Test
+    fun `concurrent claims yield one owner and pending followers`() = runSuspendIO {
+        val claims = coroutineScope {
+            List(12) {
+                async { repository.claim(TenantId("parallel"), "Parallel", now) }
+            }.awaitAll()
+        }
+
+        assertEquals(1, claims.filterIsInstance<TenantClaim.Owner>().size)
+        assertEquals(11, claims.filterIsInstance<TenantClaim.Pending>().size)
     }
 }

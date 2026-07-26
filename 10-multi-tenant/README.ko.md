@@ -23,6 +23,7 @@ pool, authorization, runtime onboarding 중 어느 흐름을 타야 하는지 �
 | [`05-spring-security-tenant-authorization-spring-webflux`](./05-spring-security-tenant-authorization-spring-webflux/README.ko.md) | routing 전에 authenticated tenant와 `X-TENANT-ID`가 일치해야 할 때 | tenant routing 전 authorization | H2-focused security/error tests; `Examples.yml` 포함, project-wide CI assertion은 H2로 gate |
 | [`06-tenant-onboarding-spring-webflux`](./06-tenant-onboarding-spring-webflux/README.ko.md) | runtime에 tenant를 만들고 metadata 예약, pool provisioning, schema seed, cleanup이 필요할 때 | runtime tenant registry + tenant별 pool | H2-focused onboarding/failure tests; `Examples.yml` 포함, project-wide CI assertion은 H2로 gate |
 | [`07-multitenant-ktor`](./07-multitenant-ktor/README.ko.md) | ReactorContext나 Spring filter 없이 Ktor에서 같은 schema-per-tenant 요청 흐름을 보고 싶을 때 | 하나의 R2DBC database, tenant별 schema, Ktor call attributes | H2-focused Ktor request tests; `Examples.yml` 포함 |
+| [`08-resilient-tenant-onboarding-spring-webflux`](./08-resilient-tenant-onboarding-spring-webflux/README.ko.md) | runtime onboarding에서 실패 근거를 남기고, 오래된 소유자를 막고, 재시작 뒤 준비 완료 자원을 다시 구성해야 할 때 | 토큰·유효 시간으로 보호한 수명주기 + 프로세스 내 런타임 레지스트리 | H2-focused 수명주기·복구·WebFlux 계약 테스트; `Examples.yml` 포함 |
 
 ## Request Contracts
 
@@ -44,6 +45,7 @@ repo-test-summary -- ./gradlew \
   :05-spring-security-tenant-authorization-spring-webflux:test \
   :06-tenant-onboarding-spring-webflux:test \
   :07-multitenant-ktor:test \
+  :08-resilient-tenant-onboarding-spring-webflux:test \
   -PuseDB=H2 \
   --continue \
   --console=plain
@@ -53,7 +55,7 @@ repo-test-summary -- ./gradlew \
 set을 실행합니다. Nightly의 H2 full shard도 모든 모듈을 실행합니다. non-H2
 PostgreSQL/MySQL Nightly shard는 의도적으로 `03-multitenant-spring-webflux`만
 유지하고, MariaDB smoke shard는 chapter 10을 실행하지 않습니다. `04`, `05`,
-`06`, `07`은 아직 PostgreSQL/MySQL/MariaDB tenant database surface를 추가하지 않은
+`06`, `07`, `08`은 아직 PostgreSQL/MySQL/MariaDB tenant database surface를 추가하지 않은
 H2 workshop 전략이기 때문입니다.
 
 repository root에서 실행할 때는 고유한 Gradle project name을 사용합니다.
@@ -64,4 +66,5 @@ repository root에서 실행할 때는 고유한 Gradle project name을 사용�
 ./gradlew :05-spring-security-tenant-authorization-spring-webflux:test
 ./gradlew :06-tenant-onboarding-spring-webflux:test
 ./gradlew :07-multitenant-ktor:test
+./gradlew :08-resilient-tenant-onboarding-spring-webflux:test
 ```

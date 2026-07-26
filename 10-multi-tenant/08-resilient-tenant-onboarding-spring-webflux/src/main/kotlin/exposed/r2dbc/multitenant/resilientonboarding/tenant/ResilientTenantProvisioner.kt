@@ -56,7 +56,8 @@ class ResilientTenantProvisioner(
             throw cause
         } catch (cause: Exception) {
             cleanupFailedAttempt(currentOwner, resources, TenantFailureCode.SCHEMA)
-            return TenantOnboardingResult.Failed(currentOwner.metadata)
+            val failedMetadata = repository.find(currentOwner.metadata.tenantId) ?: currentOwner.metadata
+            return TenantOnboardingResult.Failed(failedMetadata)
         }
     }
 

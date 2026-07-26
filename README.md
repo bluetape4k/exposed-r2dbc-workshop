@@ -127,6 +127,8 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
   런타임 tenant metadata 예약, R2DBC pool provisioning, 실패 cleanup
 - [10-multi-tenant/07-multitenant-ktor](10-multi-tenant/07-multitenant-ktor/README.md)
   Ktor call attributes 기반 schema-per-tenant 요청 흐름
+- [10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux](10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/README.md)
+  토큰·유효 시간 기반 테넌트 온보딩 수명주기와 재시작 복구
 - [11-high-performance/03-routing-datasource](11-high-performance/03-routing-datasource/README.md)
   Reactor Context 기반 tenant/read-write routing datasource
 - [11-high-performance/04-cache-strategies-ktor-r2dbc](11-high-performance/04-cache-strategies-ktor-r2dbc/README.md),
