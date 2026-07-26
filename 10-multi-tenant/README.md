@@ -24,7 +24,7 @@ runtime onboarding.
 | [`05-spring-security-tenant-authorization-spring-webflux`](./05-spring-security-tenant-authorization-spring-webflux/README.md) | Requests must prove the authenticated tenant matches `X-TENANT-ID` before routing | Authorization before tenant routing | H2-focused security/error tests; covered by `Examples.yml`, with project-wide CI assertions gated to H2 |
 | [`06-tenant-onboarding-spring-webflux`](./06-tenant-onboarding-spring-webflux/README.md) | Tenants are created at runtime and need metadata reservation, pool provisioning, schema seed, and cleanup | Runtime tenant registry plus tenant-owned pool | H2-focused onboarding/failure tests; covered by `Examples.yml`, with project-wide CI assertions gated to H2 |
 | [`07-multitenant-ktor`](./07-multitenant-ktor/README.md) | You want the same schema-per-tenant request flow in Ktor without ReactorContext or Spring filters | One R2DBC database, schema per tenant, Ktor call attributes | H2-focused Ktor request tests; covered by `Examples.yml` |
-| [`08-resilient-tenant-onboarding-spring-webflux`](./08-resilient-tenant-onboarding-spring-webflux/README.md) | Runtime onboarding must retain failure evidence, reject stale owners, and rebuild ready resources after restart | Token- and lease-guarded lifecycle plus process-local runtime registry | H2-focused lifecycle, recovery, and WebFlux contract tests; covered by `Examples.yml` |
+| [`08-resilient-tenant-onboarding-spring-webflux`](./08-resilient-tenant-onboarding-spring-webflux/README.md) | Runtime onboarding must retain failure evidence, reject stale owners, and rebuild ready resources after restart | Token- and lease-guarded lifecycle plus process-local runtime registry | H2 lifecycle/WebFlux tests plus PostgreSQL schema and restart integration tests; covered by `Examples.yml` |
 
 ## Request Contracts
 
@@ -56,8 +56,11 @@ repo-test-summary -- ./gradlew \
 touch these modules. Nightly's H2 full shard also runs every module. The non-H2
 PostgreSQL/MySQL Nightly shards intentionally keep only
 `03-multitenant-spring-webflux`; the MariaDB smoke shard does not run chapter 10.
-Modules `04`, `05`, `06`, `07`, and `08` are H2 workshop strategies with no
-PostgreSQL/MySQL/MariaDB tenant database surface yet.
+Modules `04`, `05`, `06`, and `07` are H2 workshop strategies with no
+PostgreSQL/MySQL/MariaDB tenant database surface yet. Module `08` keeps H2 as
+its default profile and verifies its PostgreSQL profile with Testcontainers
+inside the module test task instead of joining the parameterized non-H2 Nightly
+shard.
 
 When running from the repository root, use the unique Gradle project names below:
 

@@ -72,7 +72,7 @@ class PostgreSqlTenantLifecycleRestartIntegrationTest {
     }
 
     @Test
-    fun `probe failure keeps the tenant schema and public lifecycle row`() = runSuspendIO {
+    fun `probe failure keeps the tenant schema and retry succeeds`() = runSuspendIO {
         val tenantId = uniqueTenant("failed")
 
         postgresContext().use { context ->
@@ -102,6 +102,16 @@ class PostgreSqlTenantLifecycleRestartIntegrationTest {
             assertEquals(tenantId.value, readinessMarker(database, tenantId))
             assertEquals(1L, publicLifecycleRowCount(database, tenantId))
             assertNull(registry.resourcesOrNull(tenantId))
+
+            assertIs<TenantOnboardingResult.Created>(
+                context.getBean(ResilientTenantProvisioner::class.java)
+                    .onboard(TenantOnboardingCommand(tenantId, "Failed PostgreSQL")),
+            )
+            assertEquals(TenantLifecycleStatus.ACTIVE, repository.find(tenantId)?.status)
+            assertEquals(
+                TenantSchemaName.from(tenantId),
+                assertNotNull(registry.resourcesOrNull(tenantId)).schemaName,
+            )
         }
     }
 

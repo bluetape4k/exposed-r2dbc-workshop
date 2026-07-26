@@ -9,9 +9,12 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Duration
 import java.time.Instant
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class TenantLifecycleReconcilerTest {
 
@@ -72,11 +75,30 @@ class TenantLifecycleReconcilerTest {
         }
         assertNull(registry.connectionFactoryOrNull(tenantId))
     }
+
+    @Test
+    fun `recovery cancellation is propagated without changing durable state`() = runSuspendIO {
+        val tenantId = TenantId("cancelled")
+        val owner = repository.claim(tenantId, "Cancelled", now) as TenantClaim.Owner
+        repository.markActive(owner, now)
+        factory.cancellingTenantId = tenantId
+
+        val failure = runCatching {
+            reconciler.reconcile(now.plusSeconds(1))
+        }.exceptionOrNull()
+
+        assertIs<CancellationException>(failure)
+        assertEquals(TenantLifecycleStatus.ACTIVE, repository.find(tenantId)?.status)
+        assertTrue(factory.closedTenantIds.contains(tenantId))
+        assertNull(registry.connectionFactoryOrNull(tenantId))
+    }
 }
 
 private class RecordingResourceFactory: TenantRuntimeResourceFactory {
     val probedTenantIds = mutableListOf<TenantId>()
+    val closedTenantIds = mutableListOf<TenantId>()
     var failingTenantId: TenantId? = null
+    var cancellingTenantId: TenantId? = null
 
     override suspend fun create(metadata: TenantMetadata): TenantResources =
         TenantResources(
@@ -85,9 +107,14 @@ private class RecordingResourceFactory: TenantRuntimeResourceFactory {
         )
 
     override suspend fun probe(resources: TenantResources) {
+        if (resources.tenantId == cancellingTenantId) {
+            throw CancellationException("simulated recovery cancellation")
+        }
         check(resources.tenantId != failingTenantId) { "simulated recovery probe failure" }
         probedTenantIds += resources.tenantId
     }
 
-    override suspend fun close(resources: TenantResources) = Unit
+    override suspend fun close(resources: TenantResources) {
+        closedTenantIds += resources.tenantId
+    }
 }
