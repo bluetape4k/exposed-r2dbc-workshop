@@ -1,0 +1,4 @@
+app:
+  resilient-onboarding:
+    h2:
+      registry-url: r2dbc:h2:mem:///resilient_tenant_registry;DB_CLOSE_DELAY=-1;MODE=PostgreSQL

@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.r2dbc.spi)
     implementation(libs.r2dbc.pool)
     implementation(libs.r2dbc.h2)
+    implementation(libs.r2dbc.postgresql)
 
     implementation(libs.spring.boot.autoconfigure)
     annotationProcessor(libs.spring.boot.autoconfigure.processor)
@@ -59,6 +60,7 @@ dependencies {
     implementation(libs.spring.boot.starter.webflux)
 
     testImplementation(libs.bluetape4k.spring.boot.core)
+    testImplementation(libs.bluetape4k.testcontainers)
     testImplementation(libs.spring.boot.webtestclient)
     testImplementation(libs.spring.boot.starter.test) {
         exclude(group = "junit", module = "junit")
@@ -73,4 +75,5 @@ dependencies {
     implementation(libs.reactor.netty)
     implementation(libs.reactor.kotlin.extensions)
     testImplementation(libs.reactor.test)
+    testImplementation(libs.testcontainers.postgresql)
 }
