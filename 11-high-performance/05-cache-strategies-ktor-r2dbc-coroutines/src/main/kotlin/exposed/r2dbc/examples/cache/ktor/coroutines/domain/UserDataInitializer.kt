@@ -7,7 +7,7 @@ import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 
 /**
- * Creates tables and inserts deterministic seed users for the example.
+ * 코루틴 캐시 예제 실행에 필요한 테이블을 만들고 결정적인 seed 사용자를 삽입합니다.
  */
 class UserDataInitializer(
     private val database: R2dbcDatabase,

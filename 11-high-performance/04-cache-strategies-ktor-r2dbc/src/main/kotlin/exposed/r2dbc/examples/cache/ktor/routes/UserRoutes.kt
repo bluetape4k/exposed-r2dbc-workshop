@@ -19,7 +19,7 @@ import io.ktor.server.routing.put
 import io.ktor.server.routing.routing
 
 /**
- * Installs cache-observable user routes.
+ * 캐시 hit/miss와 무효화 결과를 관찰할 수 있는 사용자 route를 등록합니다.
  */
 fun Application.userCacheRoutes(
     repository: UserCacheRepository,

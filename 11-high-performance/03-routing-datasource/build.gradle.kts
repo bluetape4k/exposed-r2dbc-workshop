@@ -44,7 +44,7 @@ dependencies {
     implementation(libs.r2dbc.pool)
     implementation(libs.r2dbc.h2)
 
-    // Spring Boot
+    // Spring Boot 의존성
     implementation("org.springframework.boot:spring-boot-autoconfigure")
     annotationProcessor("org.springframework.boot:spring-boot-autoconfigure-processor")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
@@ -54,7 +54,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
-    // Coroutines / Reactor
+    // 코루틴 지원 의존성 / Reactor
     implementation(libs.kotlinx.coroutines.reactor)
     implementation(libs.reactor.kotlin.extensions)
 
