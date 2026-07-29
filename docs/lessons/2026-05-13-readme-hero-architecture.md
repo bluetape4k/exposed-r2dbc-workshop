@@ -1,19 +1,18 @@
-# README Hero And WIP Refresh
+# README Hero와 WIP 갱신
 
-## Context
+## 맥락
 
-The R2DBC workshop needed the shared visual entrypoint and an issue-synced WIP snapshot.
+R2DBC workshop에는 공통 시각적 진입점과 GitHub issue 상태에 맞춘 WIP snapshot이 필요했다.
 
-## Decision
+## 결정
 
-Store the generated image in `docs/assets/exposed-r2dbc-workshop-workbench.png`
-and create `WIP.md` showing no assigned open issues.
+생성한 이미지는 `docs/assets/exposed-r2dbc-workshop-workbench.png`에 저장하고, 할당된 열린 이슈가 없음을 보여 주는 `WIP.md`를 만든다.
 
-## Outcome
+## 결과
 
-Both README locales now surface the R2DBC workshop purpose and feature scope before the learning path.
+두 README locale 모두 learning path보다 앞에서 R2DBC workshop의 목적과 feature scope를 보여 준다.
 
-## Verification
+## 검증
 
-- Confirmed the generated asset exists as a PNG under `docs/assets`.
-- Verified both README locales reference the shared image path.
+- 생성된 asset이 `docs/assets` 아래 PNG로 존재함을 확인했다.
+- 두 README locale이 같은 image path를 참조하는지 확인했다.

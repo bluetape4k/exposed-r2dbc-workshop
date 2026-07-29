@@ -1,23 +1,23 @@
-# Central Dependency Governance Sync
+# 중앙 의존성 거버넌스 동기화
 
-## Context
+## 맥락
 
-Downstream Dependabot PRs were updating shared dependency versions one repository at a time, creating version drift across the bluetape4k organization.
+Downstream Dependabot PR이 저장소별로 shared dependency version을 각각 갱신하면서 bluetape4k organization 안에 version drift가 생기고 있었다.
 
-## Decision
+## 결정
 
-Shared dependency versions should be changed in `bluetape4k-dependencies` first, then materialized into this repository with `sync-shared-versions.py`. This repository also ignores centrally governed dependency names in Dependabot so future PRs route through the central source of truth.
+Shared dependency version은 먼저 `bluetape4k-dependencies`에서 바꾸고, 그다음 `sync-shared-versions.py`로 이 저장소에 materialize한다. 이 저장소의 Dependabot도 centrally governed dependency name을 ignore해서 이후 PR이 중앙 source of truth를 통하도록 한다.
 
-## Outcome
+## 결과
 
-The local version catalog and `.github/dependabot.yml` now follow the central dependency-governance policy.
+Local version catalog와 `.github/dependabot.yml`이 중앙 dependency-governance policy를 따른다.
 
-## Verification
+## 검증
 
-- `sync-shared-versions.py --write --check --summary` for this repository
-- `sync-dependabot-ignores.py --write --check --summary` for this repository
+- 이 저장소 대상으로 `sync-shared-versions.py --write --check --summary`
+- 이 저장소 대상으로 `sync-dependabot-ignores.py --write --check --summary`
 - `git diff --check`
 
-## Future Guard
+## 향후 방어선
 
-Do not merge repo-local Dependabot PRs for centrally governed dependencies. Update `bluetape4k-dependencies`, then sync this repository.
+Centrally governed dependency에 대한 repo-local Dependabot PR은 병합하지 않는다. 먼저 `bluetape4k-dependencies`를 갱신한 뒤 이 저장소를 sync한다.
