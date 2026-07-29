@@ -73,7 +73,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * 간단한 조건절을 가진 SELECT 문
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id,
      *        users."name",
      *        users.city_id,
@@ -101,7 +101,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * WHERE 조건들이 `AND` 로 연결된 경우
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users
      *  WHERE (users.id = 'andrey')
@@ -137,7 +137,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * WHERE 조건들이 `OR` 로 연결된 경우
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id,
      *        users."name",
      *        users.city_id,
@@ -166,7 +166,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * WHERE 조건에 NOT EQUAL에 해당하는 `<>` 연산자 사용
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users
      *  WHERE users.id <> 'andrey'
@@ -224,7 +224,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
         withCitiesAndUsers(testDB) { _, users, _ ->
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT users.id, users."name", users.city_id, users.flags
              *   FROM users
              *  WHERE users.id IN ('andrey', 'alex')
@@ -243,7 +243,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT users.id, users."name", users.city_id, users.flags
              *   FROM users
              *  WHERE users.id NOT IN ('ABC', 'DEF')
@@ -261,7 +261,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * `inList` 에 Pair 형식으로 사용하기
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users
      *  WHERE (users.id, users."name") IN (('andrey', 'Andrey'), ('sergey', 'Sergey'))
@@ -288,7 +288,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * `inSubQuery` 연산자 예제
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(*)
      *   FROM cities
      *  WHERE cities.city_id IN (SELECT cities.city_id
@@ -314,7 +314,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * `notInSubQuery` 연산자 사용
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(*)
      *   FROM cities
      *  WHERE cities.city_id NOT IN (SELECT cities.city_id FROM cities)
@@ -346,7 +346,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * SomeAmount 테이블의 amount 컬럼의 값과 같은 sales 테이블의 amount 컬럼의 갯수를 조회합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(*)
      *   FROM sales
      *  WHERE sales.amount IN (TABLE SomeAmounts)
@@ -371,7 +371,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * `notInTable` example
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(*)
      *   FROM sales
      *  WHERE sales.amount NOT IN (TABLE SomeAmounts)
@@ -399,7 +399,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * `eq` [anyFrom] with SubQuery
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(*)
      *   FROM cities
      *  WHERE cities.city_id = ANY (SELECT cities.city_id
@@ -429,7 +429,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * `neq` and [anyFrom] with SubQuery
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(*)
      *   FROM cities
      *  WHERE cities.city_id <> ANY (SELECT cities.city_id
@@ -461,7 +461,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * 참고: [anyFrom]은 Postgres, H2 만 지원합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users
      *  WHERE users.id = ANY (ARRAY['andrey','alex'])
@@ -494,7 +494,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * 참고: [anyFrom]은 Postgres, H2 만 지원합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users
      *  WHERE users.id = ANY (ARRAY['andrey','alex'])
@@ -527,7 +527,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * 참고: [anyFrom]은 Postgres, H2 만 지원합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(*)
      *   FROM users
      *  WHERE users.id <> ANY (ARRAY['andrey'])
@@ -556,7 +556,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * 참고: [anyFrom]은 Postgres, H2 만 지원합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(*)
      *   FROM users
      *  WHERE users.id <> ANY (ARRAY['andrey'])
@@ -583,7 +583,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * `greaterEq` [anyFrom] with Array
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT SALES."year", SALES."month", SALES.PRODUCT, SALES.AMOUNT
      *   FROM SALES
      *  WHERE SALES.AMOUNT >= ANY (ARRAY [100,1000])
@@ -615,7 +615,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * `greaterEq` [anyFrom] List
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT SALES."year", SALES."month", SALES.PRODUCT, SALES.AMOUNT
      *   FROM SALES
      *  WHERE SALES.AMOUNT >= ANY (ARRAY [100.0,1000.0])
@@ -648,7 +648,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * `eq` [anyFrom] with Table
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(*)
      *   FROM sales
      *  WHERE sales.amount = ANY (TABLE SomeAmounts)
@@ -674,7 +674,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      *`neq` [anyFrom] with Table
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(*)
      *   FROM sales
      *  WHERE sales.amount <> ANY (TABLE SomeAmounts)
@@ -702,7 +702,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * Subquery 에서 max() 를 사용하는 게 더 낫지 않나?
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT sales."year", sales."month", sales.product, sales.amount
      *   FROM sales
      *  WHERE sales.amount >= ALL (SELECT sales.amount
@@ -742,7 +742,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * array 의 max() 를 사용하는 게 더 낫지 않나?
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT sales."year", sales."month", sales.product, sales.amount
      *   FROM sales
      *  WHERE sales.amount >= ALL (ARRAY[100.0,1000.0])
@@ -774,7 +774,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * list 의 max() 를 사용하는 게 더 낫지 않나?
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT sales."year", sales."month", sales.product, sales.amount
      *   FROM sales
      *  WHERE sales.amount >= ALL (ARRAY[100.0,1000.0])
@@ -805,7 +805,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * table 대신 subquery의 max() 를 사용하는 게 더 낫지 않나?
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT sales."year", sales."month", sales.product, sales.amount
      *   FROM sales
      *  WHERE sales.amount >= ALL (TABLE SomeAmounts)
@@ -844,7 +844,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT COUNT(*)
              *   FROM (SELECT DISTINCT cities.city_id Cities_city_id,
              *                         cities."name" Cities_name
@@ -858,7 +858,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT COUNT(*)
              *   FROM (SELECT DISTINCT cities."name" Cities_name
              *           FROM cities
@@ -871,7 +871,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT COUNT(*)
              *   FROM (SELECT DISTINCT ON (cities."name")
              *                cities.city_id Cities_city_id,
@@ -952,7 +952,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * Prefix Comment
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(*)
      *   FROM (/*additional_info*/ SELECT cities.city_id Cities_city_id,       -- prefix comment
      *                                    cities."name" Cities_name
@@ -966,7 +966,7 @@ class Ex01_Select: AbstractR2dbcExposedTest() {
      * Suffix Comment
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(*)
      *   FROM (/*additional_info*/ SELECT cities.city_id Cities_city_id,
      *                                    cities."name" Cities_name

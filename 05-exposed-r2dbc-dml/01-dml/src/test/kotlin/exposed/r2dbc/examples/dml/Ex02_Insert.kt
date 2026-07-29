@@ -148,7 +148,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
      * 예외가 발생하지 않으면, `INSERT` 된 ROW의 ID를 반환합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO tmp (foo) VALUES ('1') ON CONFLICT DO NOTHING;
      * INSERT INTO tmp (foo) VALUES ('2') ON CONFLICT DO NOTHING;
      *
@@ -201,7 +201,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
          * code 컬럼은 Identity 컬럼으로도 사용된다.
          *
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS testtablewithid (code INT NOT NULL)
          * ```
          */
@@ -232,7 +232,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
      * ID 컬럼 명이 다른 경우에도, ID 컬럼을 통해 INSERT, SELECT 가 가능해야 합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS test_id_and_column_table (
      *      example_column VARCHAR(200) NOT NULL
      * );
@@ -274,7 +274,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
      * ```
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO tmp (id, foo) VALUES (1, '1') ON CONFLICT DO NOTHING;
      * INSERT INTO tmp (id, foo) VALUES (1, '2') ON CONFLICT DO NOTHING;
      * ```
@@ -318,7 +318,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO cities ("name") VALUES ('Paris');
              * INSERT INTO cities ("name") VALUES ('Moscow');
              * INSERT INTO cities ("name") VALUES ('Helsinki');
@@ -335,7 +335,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO users (id, "name", city_id) VALUES ('mdhXRY', 'UserFromParis', 4)
              * INSERT INTO users (id, "name", city_id) VALUES ('c5vVGN', 'UserFromMoscow', 5)
              * INSERT INTO users (id, "name", city_id) VALUES ('niR8mW', 'UserFromHelsinki', 6)
@@ -379,7 +379,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
      * Insert 후 생성된 ID를 반환합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS cities (
      *      city_id SERIAL PRIMARY KEY,
      *      "name" VARCHAR(50) NOT NULL
@@ -404,7 +404,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS test_longid (
      *      id BIGSERIAL PRIMARY KEY,
      *      "name" TEXT NOT NULL
@@ -422,7 +422,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
      * Insert 후 생성된 ID를 반환합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO test_longid ("name") VALUES ('Foo')
      * ```
      */
@@ -440,7 +440,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS test_intid (
      *      id SERIAL PRIMARY KEY,
      *      "name" TEXT NOT NULL
@@ -455,7 +455,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
      * [insertAndGetId] 는 insert 시 생성된 [EntityID] 값을 반환합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO test_intid ("name") VALUES ('Foo')
      * ```
      */
@@ -479,7 +479,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
      * 사용자가 제공하는 [EntityID] 값을 사용하여 데이터를 삽입합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS stringtable (
      *      id VARCHAR(15) NOT NULL,
      *      "name" TEXT NOT NULL
@@ -524,7 +524,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
      * Foreign key 를 가지는 테이블에 [EntityID]를 삽입합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS idtable (id SERIAL PRIMARY KEY);
      *
      * CREATE TABLE IF NOT EXISTS standardtable (
@@ -617,7 +617,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
     /**
      * [wrapAsExpression]을 이용하여, 특정 쿼리의 결과를 Expression으로 컬럼 값으로 지정할 수 있습니다.
      *
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * CREATE TABLE IF NOT EXISTS testinsert1 (
      *      id SERIAL PRIMARY KEY,
@@ -676,7 +676,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS ordereddata (
      *      id SERIAL PRIMARY KEY,
      *      "name" TEXT NOT NULL,
@@ -723,7 +723,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
     /**
      * Subquery 결과 값을 이용하여 INSERT, UPDATE 하기
      *
-     * Insert using subquery in Postgres:
+     * Insert using subquery in PostgreSQL DDL 예시:
      * ```sql
      * INSERT INTO tab1 (id)
      * VALUES ((SELECT tab2.id
@@ -731,7 +731,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
      *           WHERE tab2.id = 'foo'))
      * ```
      *
-     * Update using subquery in Postgres:
+     * Update using subquery in PostgreSQL DDL 예시:
      * ```sql
      * UPDATE tab1
      *    SET id=(SELECT tab2.id
@@ -773,14 +773,14 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
      * `clientDefault` 를 이용하여, 클라이언트에서 생성된 값을 사용하여 INSERT 합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS charidtable (
      *      id VARCHAR(50) PRIMARY KEY,
      *      foo INT NOT NULL
      * )
      * ```
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO charidtable (id, foo) VALUES ('XfwhfY', 42)
      * ```
      */
@@ -813,7 +813,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
     /**
      * 일반적인 트랜잭션에서 Constraint 예외가 발생하면, 해당 트랜잭션은 Rollback 되어야 합니다.
      *
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * CREATE TABLE IF NOT EXISTS testrollback (
      *      id SERIAL PRIMARY KEY,
@@ -861,7 +861,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
      * Suspend 트랜잭션에서 Constraint 예외가 발생하면, 해당 트랜잭션은 Rollback 되어야 합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS testrollback (
      *      id SERIAL PRIMARY KEY,
      *      foo INT NOT NULL,
@@ -912,7 +912,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
      * Batch Insert with ON CONFLICT DO NOTHING - [batchInsert] 시, 예외가 발생하면 해당 예외를 무시하고, 다음 작업을 수행합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS tester (id VARCHAR(10) NOT NULL);
      * ALTER TABLE tester ADD CONSTRAINT tester_id_unique UNIQUE (id);
      *
@@ -951,7 +951,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
     /**
      * INSERT 시 `databaseGenerated()` 를 사용하여 특정 컬럼 값을 입력합니다.
      *
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * CREATE TABLE IF NOT EXISTS generatedtable (
      *      id SERIAL PRIMARY KEY,
@@ -1033,7 +1033,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
      * NOTE: Postgres 만 지원합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS tester (
      *      default_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
      * )
@@ -1064,7 +1064,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
     /**
      * Postgres 에서는 `gen_random_uuid` 함수를 이용하여 기본 키로 사용할 수 있습니다.
      *
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * CREATE TABLE IF NOT EXISTS test_uuid_table (
      *      id uuid DEFAULT gen_random_uuid() PRIMARY KEY
