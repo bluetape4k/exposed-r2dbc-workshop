@@ -1,29 +1,20 @@
-# Issue 33 Ktor R2DBC Multi-Tenant
+# Issue 33 Ktor R2DBC Multi-tenant 교훈
 
-## Context
+## 맥락
 
-Issue #33 added `10-multi-tenant/07-multitenant-ktor`, a Ktor equivalent of
-the chapter 10 schema-per-tenant Spring WebFlux R2DBC example.
+Issue #33은 chapter 10 schema-per-tenant Spring WebFlux R2DBC 예제와 대응되는 Ktor module `10-multi-tenant/07-multitenant-ktor`를 추가했다.
 
-## Decision
+## 결정
 
-Use Ktor call attributes as the request tenant carrier and keep a local
-`suspendTransactionWithTenant` helper in the Ktor module. The duplication with
-the WebFlux helper is intentional: WebFlux teaches ReactorContext propagation,
-while Ktor teaches call-scoped tenant resolution without ThreadLocal or Spring
-filters.
+Ktor call attribute를 request tenant carrier로 사용하고, Ktor module 안에 local `suspendTransactionWithTenant` helper를 유지한다. WebFlux helper와의 중복은 의도적이다. WebFlux는 ReactorContext propagation을 가르치고, Ktor는 ThreadLocal이나 Spring filter 없이 call-scoped tenant resolution을 가르친다.
 
-`X-TENANT-ID` remains a workshop routing signal only. The README warns that
-production systems must bind tenant routing to authenticated identity.
+`X-TENANT-ID`는 workshop routing signal로만 남긴다. README는 production system에서는 tenant routing을 authenticated identity에 묶어야 한다고 경고한다.
 
-## Outcome
+## 결과
 
-The module exposes `GET /actors`, `GET /actors/{id}`, and `POST /actors` over
-Ktor. Tests cover structured tenant errors, duplicate headers, write isolation,
-rapid tenant alternation through a pool of size `1`, and overlapping tenant
-requests.
+Module은 Ktor 위에서 `GET /actors`, `GET /actors/{id}`, `POST /actors`를 노출한다. Tests는 structured tenant error, duplicate header, write isolation, size `1` pool을 통한 빠른 tenant 교대, overlapping tenant request를 다룬다.
 
-## Verification
+## 검증
 
 - `./gradlew projects --console=plain`
 - `./gradlew :07-multitenant-ktor:compileKotlin --warning-mode all --console=plain`
@@ -33,12 +24,10 @@ requests.
 - `actionlint .github/workflows/Examples.yml`
 - `git diff --check`
 - PNG diagram: `docs/images/readme-diagrams/10-multi-tenant-07-multitenant-ktor-architecture-01.png`, 1400 x 760.
-- IntelliJ diagnostics were unavailable for this worktree (`project_not_found`); compile/test/static checks were used as fallback.
+- IntelliJ diagnostics는 이 worktree에서 사용할 수 없었다(`project_not_found`). Compile/test/static checks를 fallback으로 사용했다.
 
-## Future Notes
+## 향후 메모
 
-- Keep raw tenant header values out of schema selection. Only validated
-  `Tenants.Tenant` enum instances should cross the Ktor plugin boundary.
-- Keep request routes free of bare `suspendTransaction` and `runBlocking`.
-- If a later issue adds non-H2 Ktor tenant coverage, revisit Examples/Nightly
-  shard scope and H2-only README wording.
+- Raw tenant header value를 schema selection에 넘기지 않는다. 검증된 `Tenants.Tenant` enum instance만 Ktor plugin boundary를 넘어야 한다.
+- Request route에는 bare `suspendTransaction`과 `runBlocking`을 두지 않는다.
+- 이후 issue가 non-H2 Ktor tenant coverage를 추가하면 Examples/Nightly shard scope와 H2-only README wording을 다시 검토한다.

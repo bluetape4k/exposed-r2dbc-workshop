@@ -1,17 +1,11 @@
-# Issue #34 Ktor R2DBC Cache Strategies
+# Issue #34 Ktor R2DBC Cache Strategies 교훈
 
-## Decision
+## 결정
 
-The Ktor cache strategies module uses a Redisson `RMap` plus explicit Exposed
-R2DBC table operations instead of Spring cache abstractions. Route responses
-carry `cacheStatus` so tests assert cache behavior directly instead of using
-timing as a proxy.
+Ktor cache strategies module은 Spring cache abstraction 대신 Redisson `RMap`과 명시적인 Exposed R2DBC table operation을 사용한다. Route response는 `cacheStatus`를 포함하므로 tests는 timing을 proxy로 쓰지 않고 cache behavior를 직접 assert한다.
 
-## Notes
+## 메모
 
-- Use a per-test cache name to avoid leaking Redis keys across reused
-  Testcontainers Redis instances.
-- Keep counters application-local. They are workshop diagnostics, not
-  production metrics.
-- Keep #69 separate for cancellation-aware population, single-flight loading,
-  and concurrent suspend-call behavior.
+- 재사용되는 Testcontainers Redis instance 사이에 Redis key가 새지 않도록 test마다 cache name을 분리한다.
+- Counter는 application-local로 유지한다. 이는 workshop diagnostic이지 production metric이 아니다.
+- Cancellation-aware population, single-flight loading, concurrent suspend-call behavior는 #69 범위로 분리한다.

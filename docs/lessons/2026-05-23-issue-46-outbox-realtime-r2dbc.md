@@ -1,28 +1,18 @@
-# Issue #46 Outbox Realtime R2DBC
+# Issue #46 Outbox Realtime R2DBC 교훈
 
-## Context
+## 맥락
 
-Issue #46 needed paired Spring Boot 4 and Ktor database-backed realtime
-notification patterns while preserving the existing two-module chapter 12
-layout from issues #44 and #45.
+Issue #46은 issue #44와 #45에서 잡은 기존 two-module chapter 12 layout을 보존하면서, Spring Boot 4와 Ktor 양쪽에 database-backed realtime notification pattern을 제공해야 했다.
 
-## Decision
+## 결정
 
-Keep realtime as a package-level slice inside the existing Spring and Ktor
-production modules:
+Realtime은 기존 Spring/Ktor production module 안의 package-level slice로 유지한다.
 
-- Work-item creation persists the work row and a realtime outbox row in the
-  same Exposed R2DBC `suspendTransaction`.
-- Outbox rows carry explicit `PENDING`, `PUBLISHED`, and `FAILED` state with an
-  attempt count and last error text.
-- Spring publishes through an in-process SSE hub; Ktor publishes through a
-  `MutableSharedFlow` WebSocket hub.
-- Replay endpoints return only `PUBLISHED` rows after the supplied cursor, so
-  reconnect behavior is database-backed rather than live-buffer-only.
+- Work item 생성은 같은 Exposed R2DBC `suspendTransaction` 안에서 work row와 realtime outbox row를 함께 저장한다.
+- Outbox row는 explicit `PENDING`, `PUBLISHED`, `FAILED` state와 attempt count, last error text를 가진다.
+- Spring은 in-process SSE hub를 통해 publish하고, Ktor는 `MutableSharedFlow` WebSocket hub를 통해 publish한다.
+- Replay endpoint는 supplied cursor 이후의 `PUBLISHED` row만 반환한다. 따라서 reconnect behavior는 live buffer에만 의존하지 않고 database-backed가 된다.
 
-## Guardrail
+## 방어선
 
-Future chapter 12 slices should continue extending the two existing modules
-unless the module boundary itself becomes the lesson. Realtime changes must
-keep testing event persistence before publish, cursor replay boundaries, live
-delivery, and failed delivery retention.
+향후 chapter 12 slice는 module boundary 자체가 lesson이 되지 않는 한 기존 두 module을 계속 확장해야 한다. Realtime 변경은 event persistence before publish, cursor replay boundary, live delivery, failed delivery retention을 계속 test로 보호해야 한다.
