@@ -18,6 +18,7 @@
 
 ```bash
 python3 scripts/localization/audit_scope.py
+python3 scripts/localization/localization_guard.py
 ```
 
 Use the script output as the authoritative inventory when opening or reviewing the stacked PR slices for #139 through #161.
@@ -63,6 +64,8 @@ The audit was taken from `develop` at `9ac94825527740d512617437f26b515349e14e5b`
 ## Validation Plan
 
 - Run `python3 scripts/localization/audit_scope.py` after each broad scope change.
+- Run `python3 scripts/localization/localization_guard.py` after each broad scope change.
+- Run `python3 scripts/localization/localization_guard.py --strict-korean` in #161 after the rewrite train has converged.
 - Run `git diff --check` for every PR.
 - Run targeted Gradle tests for each touched module.
 - Run full final validation in #161 before reporting merge-ready.
