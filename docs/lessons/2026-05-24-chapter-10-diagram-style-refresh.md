@@ -1,31 +1,23 @@
-# Chapter 10 Diagram Style Refresh
+# Chapter 10 Diagram Style Refresh 교훈
 
-## Context
+## 맥락
 
-Chapter 10's multi-tenant strategy image used a pipeline-style layout that did
-not match the preferred chapter 12 component arrangement. The requested style
-kept the chapter 10/11 `Architects Daughter` typography and switched arrows to
-filled triangular arrowheads with smaller markers.
+Chapter 10 multi-tenant strategy image는 preferred chapter 12 component arrangement와 맞지 않는 pipeline-style layout을 사용했다. 요청된 style은 chapter 10/11의 `Architects Daughter` typography를 유지하되, arrow를 더 작은 marker가 있는 filled triangular arrowhead로 바꾸는 것이었다.
 
-## Decision
+## 결정
 
-Regenerate the chapter 10 strategy SVG/PNG with two large framework panels
-(`Spring WebFlux tenant boundary` and `Ktor tenant boundary`) plus a shared
-R2DBC contracts band. Keep README paths stable.
+Chapter 10 strategy SVG/PNG를 두 개의 큰 framework panel(`Spring WebFlux tenant boundary`, `Ktor tenant boundary`)과 shared R2DBC contracts band로 다시 생성한다. README path는 안정적으로 유지한다.
 
-## Outcome
+## 결과
 
-`docs/images/readme-diagrams/10-multi-tenant-strategy-map-01.png` now presents
-chapter 10 using the preferred panel composition, smaller triangular arrows,
-and Architects Daughter headings.
+`docs/images/readme-diagrams/10-multi-tenant-strategy-map-01.png`는 이제 preferred panel composition, 더 작은 triangular arrow, Architects Daughter heading으로 chapter 10을 표현한다.
 
-## Verification
+## 검증
 
-- Rendered the PNG with `rsvg-convert`.
-- Visually inspected the rendered PNG.
-- Ran `git diff --check`.
+- `rsvg-convert`로 PNG를 render했다.
+- Rendered PNG를 visually inspected했다.
+- `git diff --check`를 실행했다.
 
-## Future Guidance
+## 향후 지침
 
-For chapter-level architecture diagrams, match chapter 12's panel layout first,
-then apply the workspace typography and arrow rules from the central guide.
+Chapter-level architecture diagram은 먼저 chapter 12 panel layout에 맞춘 뒤, central guide의 workspace typography와 arrow rule을 적용한다.

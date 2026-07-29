@@ -1,19 +1,21 @@
-## Context
+# Exposed Gradle Plugin 교훈
 
-Adopted the JetBrains Exposed Gradle plugin across R2DBC workshop modules that define tables in main sources.
+## 맥락
 
-## Decision
+Main source에 table을 정의하는 R2DBC workshop module 전반에 JetBrains Exposed Gradle plugin을 도입했다.
 
-The workshop uses a repo-local plugin alias tied to the existing Exposed version alias, not the managed `bt4k` catalog.
+## 결정
 
-## Outcome
+Workshop은 managed `bt4k` catalog가 아니라 기존 Exposed version alias에 묶인 repo-local plugin alias를 사용한다.
 
-Spring WebFlux, multi-tenant, cache, routing, Ktor, and production examples now expose `generateMigrations` with explicit migration settings.
+## 결과
 
-## Verification
+Spring WebFlux, multi-tenant, cache, routing, Ktor, production example은 이제 explicit migration setting이 있는 `generateMigrations`를 노출한다.
 
-Ran `git diff --check`, `./gradlew -q help`, and `:spring-webflux-exposed:tasks --all`.
+## 검증
 
-## Future Guard
+`git diff --check`, `./gradlew -q help`, `:spring-webflux-exposed:tasks --all`을 실행했다.
 
-Use an H2 JDBC migration database for plugin task discovery even when the example runtime path is R2DBC.
+## 향후 방어선
+
+Example runtime path가 R2DBC이더라도 plugin task discovery에는 H2 JDBC migration database를 사용한다.

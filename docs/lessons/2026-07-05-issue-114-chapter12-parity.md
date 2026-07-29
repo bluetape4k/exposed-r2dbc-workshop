@@ -1,28 +1,20 @@
-# Issue #114 Chapter 12 Parity Refresh
+# Issue #114 Chapter 12 Parity Refresh 교훈
 
-## Context
+## 맥락
 
-Issue #114 revisited Chapter 12 after `exposed-workshop` added ten
-topic-specific production-integration examples.
+Issue #114는 `exposed-workshop`이 topic-specific production-integration example 10개를 추가한 뒤 Chapter 12를 다시 검토했다.
 
-## Decision
+## 결정
 
-Keep `exposed-r2dbc-workshop` Chapter 12 as two runtime modules:
-`01-spring-production-integration` and `02-ktor-production-integration`. The
-R2DBC teaching target is the Spring/Ktor runtime boundary plus
-`suspendTransaction` repository slices, not one Gradle module per topic.
+`exposed-r2dbc-workshop` Chapter 12는 두 runtime module `01-spring-production-integration`, `02-ktor-production-integration`으로 유지한다. R2DBC teaching target은 topic마다 하나의 Gradle module을 만드는 것이 아니라 Spring/Ktor runtime boundary와 `suspendTransaction` repository slice다.
 
-## Guardrail
+## 방어선
 
-Future Chapter 12 R2DBC work should extend package slices inside the two
-existing modules unless a new issue proves that the module boundary itself is
-the learning goal.
+향후 Chapter 12 R2DBC work는 새 issue가 module boundary 자체가 learning goal임을 증명하지 않는 한 기존 두 module 안의 package slice를 확장해야 한다.
 
-README diagrams for Chapter 12 should stay source-backed: update both the
-architecture parity map and caller sequence when parity tables, route flow, or
-outbox/realtime semantics change, then rerender PNGs from SVG.
+Chapter 12 README diagram은 source-backed 상태로 유지한다. Parity table, route flow, outbox/realtime semantic이 바뀌면 architecture parity map과 caller sequence를 모두 갱신한 뒤 SVG에서 PNG를 다시 render한다.
 
-## Verification
+## 검증
 
 - `./gradlew projects`
 - `repo-test-summary -- ./gradlew :01-spring-production-integration:test :02-ktor-production-integration:test -PuseDB=H2 --continue --rerun-tasks --console=plain`

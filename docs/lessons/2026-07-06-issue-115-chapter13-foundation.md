@@ -1,28 +1,19 @@
-# Issue #115 Chapter 13 Foundation
+# Issue #115 Chapter 13 Foundation 교훈
 
-## Context
+## 맥락
 
-Issue #115 added the first R2DBC Chapter 13 ecosystem example based on
-`exposed-workshop/13-ecosystem-integrations`.
+Issue #115는 `exposed-workshop/13-ecosystem-integrations`를 바탕으로 첫 R2DBC Chapter 13 ecosystem example을 추가했다.
 
-## Decision
+## 결정
 
-Keep only CockroachDB retry handling in this R2DBC workshop chapter. CockroachDB
-can be taught through a PostgreSQL-compatible R2DBC boundary, while the default
-test stays local with H2 and a synthetic SQLSTATE `40001` retry failure.
+이 R2DBC workshop chapter에는 CockroachDB retry handling만 유지한다. CockroachDB는 PostgreSQL-compatible R2DBC boundary를 통해 가르칠 수 있고, default test는 H2와 synthetic SQLSTATE `40001` retry failure로 local에 남길 수 있다.
 
-Do not keep BigQuery, Trino, StarRocks, or DuckDB as local R2DBC stand-ins.
-Those examples are JDBC, HTTP/native-client, or embedded-client centered in this
-workshop context, so retaining them would create false parity.
+BigQuery, Trino, StarRocks, DuckDB를 local R2DBC stand-in으로 유지하지 않는다. 이 example들은 workshop context에서 JDBC, HTTP/native-client, embedded-client 중심이므로, 유지하면 false parity가 생긴다.
 
-## Guardrail
+## 방어선
 
-Before adding future ecosystem examples, verify that the target system has a
-real R2DBC-shaped driver or protocol path for the lesson being taught. If the
-source example is fundamentally JDBC, HTTP/native client, or embedded-client
-based, document it as out of R2DBC scope instead of adding a fake local adapter
-module.
+향후 ecosystem example을 추가하기 전에, 대상 system이 가르치려는 lesson에 대해 실제 R2DBC-shaped driver 또는 protocol path를 갖는지 확인한다. Source example이 근본적으로 JDBC, HTTP/native client, embedded-client 기반이라면 fake local adapter module을 추가하지 말고 R2DBC scope 밖이라고 문서화한다.
 
-## Verification
+## 검증
 
 - `repo-test-summary -- ./gradlew :03-cockroachdb-retry:test -PuseDB=H2 --continue --console=plain`

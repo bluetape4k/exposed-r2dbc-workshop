@@ -1,37 +1,26 @@
-# README Diagram Style Refresh
+# README Diagram Style Refresh 교훈
 
-## Context
+## 맥락
 
-The README diagram set mixed Mermaid blocks, ASCII package/layout diagrams, old
-open-arrow SVG markers, and sequence diagrams with very tall internal spacing.
-The requested target style was the refreshed chapter 10 sample: component-panel
-composition, smaller filled triangular arrows, and `Architects Daughter`
-headings.
+README diagram set에는 Mermaid block, ASCII package/layout diagram, old open-arrow SVG marker, 내부 spacing이 매우 큰 sequence diagram이 섞여 있었다. 요청된 target style은 refreshed chapter 10 sample과 같은 component-panel composition, 더 작은 filled triangular arrow, `Architects Daughter` heading이었다.
 
-## Decision
+## 결정
 
-Regenerate all committed README diagram SVG/PNG pairs through one style pass.
-Sequence diagrams use a compact renderer that keeps a visible outer frame and
-reduces participant/message spacing. Mermaid and ASCII diagram blocks in README
-files were replaced with PNG-backed diagrams.
+Committed README diagram SVG/PNG pair 전체를 한 번의 style pass로 다시 생성한다. Sequence diagram은 visible outer frame을 유지하면서 participant/message spacing을 줄이는 compact renderer를 사용한다. README file 안의 Mermaid와 ASCII diagram block은 PNG-backed diagram으로 교체한다.
 
-## Outcome
+## 결과
 
-All README diagram references now point to PNG assets. The repository has no
-remaining README Mermaid or `text` diagram fences. Existing SVG sources remain
-beside their PNGs for future regeneration.
+모든 README diagram reference는 이제 PNG asset을 가리킨다. Repository에는 남은 README Mermaid 또는 `text` diagram fence가 없다. 기존 SVG source는 향후 regeneration을 위해 PNG 옆에 유지한다.
 
-## Verification
+## 검증
 
-- Rendered 105 SVG files to PNG with `rsvg-convert`.
-- Validated 105 SVG files with `xmllint --noout`.
-- Checked README PNG references: 0 missing.
-- Confirmed README Mermaid fences: 0.
-- Confirmed README `text` diagram fences: 0.
-- Visually inspected representative architecture and sequence diagrams.
+- SVG file 105개를 `rsvg-convert`로 PNG에 render했다.
+- SVG file 105개를 `xmllint --noout`으로 검증했다.
+- README PNG reference 확인: 0 missing.
+- README Mermaid fence 확인: 0.
+- README `text` diagram fence 확인: 0.
+- Representative architecture와 sequence diagram을 visually inspected했다.
 
-## Future Guidance
+## 향후 지침
 
-When adding README diagrams, commit SVG and PNG together, reference only PNG
-from README files, use smaller filled triangular arrows, and keep sequence
-diagrams compact before review.
+README diagram을 추가할 때는 SVG와 PNG를 함께 commit하고, README에서는 PNG만 reference하며, 더 작은 filled triangular arrow를 사용하고, review 전에 sequence diagram을 compact하게 유지한다.

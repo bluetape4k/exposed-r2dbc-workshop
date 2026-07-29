@@ -1,33 +1,24 @@
-# Issue 97 Examples Weekly Gate
+# Issue 97 Examples Weekly Gate 교훈
 
-## Context
+## 맥락
 
-`exposed-r2dbc-workshop` already had an `Examples` workflow for selected
-multi-tenant, high-performance, and production-integration examples. Issue #97
-required that workflow to become a weekly downstream R2DBC scenario gate while
-retaining manual dispatch and path-filtered PR coverage.
+`exposed-r2dbc-workshop`에는 selected multi-tenant, high-performance, production-integration example용 `Examples` workflow가 이미 있었다. Issue #97은 manual dispatch와 path-filtered PR coverage를 유지하면서 이 workflow를 weekly downstream R2DBC scenario gate로 만들 것을 요구했다.
 
-## Decision
+## 결정
 
-- Add one weekly schedule to the existing `Examples` workflow.
-- Keep the selected examples on the H2/default smoke path for PR and scheduled
-  runs.
-- Leave heavier external database validation to CI/Nightly, not this
-  consumer-facing Examples gate.
+- 기존 `Examples` workflow에 weekly schedule 하나를 추가한다.
+- Selected example은 PR과 scheduled run에서 H2/default smoke path에 유지한다.
+- 더 무거운 external database validation은 이 consumer-facing Examples gate가 아니라 CI/Nightly에 남긴다.
 
-## Outcome
+## 결과
 
-The workflow remains separate from CI and Nightly, keeps `workflow_dispatch`,
-keeps push/PR path filters, and already uploads test result artifacts for each
-chapter job.
+Workflow는 CI와 Nightly에서 분리된 상태를 유지하고, `workflow_dispatch`, push/PR path filter, chapter job별 test result artifact upload도 계속 유지한다.
 
-## Verification
+## 검증
 
 - `actionlint .github/workflows/Examples.yml`
 - `git diff --check`
 
-## Future Guidance
+## 향후 지침
 
-When adding R2DBC downstream examples, prefer the weekly Examples workflow for
-representative consumer smoke coverage and avoid adding external credentials to
-this path.
+R2DBC downstream example을 추가할 때는 representative consumer smoke coverage에 weekly Examples workflow를 우선 사용하고, 이 path에는 external credential을 추가하지 않는다.
