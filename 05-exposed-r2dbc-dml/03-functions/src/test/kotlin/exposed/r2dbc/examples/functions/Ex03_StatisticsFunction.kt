@@ -117,7 +117,7 @@ class Ex03_StatisticsFunction: Ex00_FunctionBase() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT VAR_POP(sample_table."number") var_pop,
      *        VAR_SAMP(sample_table."number") var_samp
      *   FROM sample_table;

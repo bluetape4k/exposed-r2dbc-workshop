@@ -24,7 +24,7 @@ import org.junit.jupiter.params.provider.MethodSource
  * - PostgreSQL은 `autoCommit = true` 상태에서만 DB 생성/삭제 DDL을 실행할 수 있습니다.
  *
  * ```sql
- * -- Postgres
+ * -- PostgreSQL
  * CREATE DATABASE bluetape4k;
  * DROP DATABASE bluetape4k;
  *
@@ -78,7 +78,7 @@ class Ex01_CreateDatabase: AbstractR2dbcExposedTest() {
      * 데이터베이스 목록 조회하기 (Postgres)
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT datname FROM pg_database;
      *
      * CREATE DATABASE bluetape4k;

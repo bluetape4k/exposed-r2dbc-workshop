@@ -1,33 +1,29 @@
-# Issue 97 Examples Workflow Review
+# Issue 97 Examples Workflow 검토
 
-## Scope
+## 범위
 
 - `.github/workflows/Examples.yml`
 - `docs/lessons/2026-06-06-issue-97-examples-weekly.md`
 
-## Review Result
+## 검토 결과
 
 - P0: 0
 - P1: 0
 - P2: 0
 
-## Findings
+## 발견 사항
 
-No blocking findings.
+차단 findings 없음.
 
-## Evidence
+## 증거
 
-- The workflow has one weekly schedule: `30 21 * * 0`.
-- `workflow_dispatch`, push path filters, and pull request path filters remain
-  present.
-- Selected example jobs continue to use `-PuseDB=H2`, keeping this workflow on
-  the default smoke path.
-- Each chapter job already uploads test result artifacts with seven-day
-  retention.
-- `actionlint .github/workflows/Examples.yml` passed.
-- `git diff --check` passed.
+- Workflow에는 weekly schedule이 하나 있다: `30 21 * * 0`.
+- `workflow_dispatch`, push path filter, pull request path filter가 계속 존재한다.
+- Selected example job은 계속 `-PuseDB=H2`를 사용하므로 이 workflow는 default smoke path에 남아 있다.
+- 각 chapter job은 이미 7일 retention이 있는 test result artifact를 upload한다.
+- `actionlint .github/workflows/Examples.yml` 통과.
+- `git diff --check` 통과.
 
-## Residual Risk
+## 잔여 위험
 
-GitHub Actions checks still need to complete on the PR before merge. This
-workflow-only change does not add new example modules.
+Merge 전에 GitHub Actions checks가 PR에서 완료되어야 한다. 이 workflow-only change는 새 example module을 추가하지 않는다.

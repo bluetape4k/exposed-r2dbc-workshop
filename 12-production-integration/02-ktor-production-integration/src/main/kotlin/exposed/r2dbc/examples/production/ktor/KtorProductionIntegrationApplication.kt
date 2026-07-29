@@ -26,7 +26,7 @@ import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import java.security.SecureRandom
 
 /**
- * Installs the Ktor production integration example.
+ * Ktor production integration 예제 module을 설치합니다.
  */
 fun Application.productionIntegrationModule(
     repository: KtorProductionRepository = KtorProductionRepository(defaultProductionDatabase()),
@@ -80,7 +80,7 @@ fun Application.productionIntegrationModule(
 }
 
 /**
- * Creates the default H2 R2DBC database for the standalone Ktor example.
+ * 독립 실행 Ktor 예제에서 사용할 기본 H2 R2DBC 데이터베이스를 생성합니다.
  */
 fun defaultProductionDatabase(): R2dbcDatabase =
     R2dbcDatabase.connect("r2dbc:h2:mem:///ktor-production-integration;DB_CLOSE_DELAY=-1;USER=sa;")

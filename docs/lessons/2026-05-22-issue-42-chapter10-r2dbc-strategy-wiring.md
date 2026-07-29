@@ -1,39 +1,25 @@
-# Issue #42 Chapter 10 R2DBC Strategy Wiring Lesson
+# Issue #42 Chapter 10 R2DBC Strategy Wiring 교훈
 
-## Context
+## 맥락
 
-Issue #42 wires the chapter 10 Spring WebFlux R2DBC strategy examples into
-chapter-level documentation and focused verification.
+Issue #42는 chapter 10 Spring WebFlux R2DBC strategy example을 chapter-level documentation과 focused verification에 연결한다.
 
-## Decision
+## 결정
 
-Use `10-multi-tenant/README.md` and `README.ko.md` as the strategy entry point
-instead of linking the root README directly to the newest module. The chapter
-README compares schema-per-tenant, connection-factory-per-tenant, tenant
-authorization, and runtime onboarding by selection criteria, isolation model,
-and verification surface.
+Root README를 newest module에 직접 연결하지 않고 `10-multi-tenant/README.md`와 `README.ko.md`를 strategy entry point로 사용한다. Chapter README는 schema-per-tenant, connection-factory-per-tenant, tenant authorization, runtime onboarding을 selection criteria, isolation model, verification surface 기준으로 비교한다.
 
-`Examples.yml` now runs all chapter 10 Spring WebFlux R2DBC strategy modules,
-including `03-multitenant-spring-webflux`. Nightly's H2 full shard already runs
-all modules. Non-H2 PostgreSQL/MySQL Nightly shards intentionally keep only
-`03`, and the MariaDB smoke shard does not run chapter 10, because `04`, `05`,
-and `06` are H2-focused workshop strategies.
+`Examples.yml`은 이제 `03-multitenant-spring-webflux`를 포함한 모든 chapter 10 Spring WebFlux R2DBC strategy module을 실행한다. Nightly의 H2 full shard는 이미 모든 module을 실행한다. Non-H2 PostgreSQL/MySQL Nightly shard는 의도적으로 `03`만 유지하고, MariaDB smoke shard는 chapter 10을 실행하지 않는다. `04`, `05`, `06`은 H2-focused workshop strategy이기 때문이다.
 
-## Outcome
+## 결과
 
-The root README sends readers to the chapter-level strategy map. Focused example
-CI now covers all chapter 10 Spring WebFlux strategy modules and uploads all
-four modules' test reports.
+Root README는 reader를 chapter-level strategy map으로 보낸다. Focused example CI는 이제 모든 chapter 10 Spring WebFlux strategy module을 다루고 네 module의 test report를 모두 upload한다.
 
-## Verification
+## 검증
 
 - `repo-test-summary -- ./gradlew :03-multitenant-spring-webflux:test :04-connection-factory-per-tenant-spring-webflux:test :05-spring-security-tenant-authorization-spring-webflux:test :06-tenant-onboarding-spring-webflux:test -PuseDB=H2 --continue --console=plain`
 - `actionlint .github/workflows/Examples.yml`
 - `git diff --check`
 
-## Future Guidance
+## 향후 지침
 
-When adding chapter-level strategy docs, link root README entries to the
-chapter-level README, not to the newest leaf module. Keep `Examples.yml` aligned
-with the chapter README's strategy table so discoverability and verification do
-not drift.
+Chapter-level strategy docs를 추가할 때 root README entry는 newest leaf module이 아니라 chapter-level README에 연결한다. Discoverability와 verification이 drift하지 않도록 `Examples.yml`을 chapter README의 strategy table과 맞춘다.

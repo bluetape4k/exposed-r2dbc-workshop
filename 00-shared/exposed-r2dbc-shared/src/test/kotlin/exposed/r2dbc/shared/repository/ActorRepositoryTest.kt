@@ -175,10 +175,10 @@ class ActorRepositoryTest: AbstractR2dbcExposedTest() {
             val savedActor = repository.save(actor)
             savedActor.id.shouldNotBeNull()
 
-            // Delete savedActor
+            // 저장한 savedActor를 삭제한다.
             repository.deleteById(savedActor.id) shouldBeEqualTo 1
 
-            // Already deleted
+            // 이미 삭제된 상태를 확인한다.
             repository.deleteById(savedActor.id) shouldBeEqualTo 0
         }
     }
@@ -191,7 +191,7 @@ class ActorRepositoryTest: AbstractR2dbcExposedTest() {
 
             repository.deleteAll { ActorTable.lastName eq "Depp" } shouldBeEqualTo 1
 
-            // Delete 1 actor
+            // actor 1건을 삭제한다.
             repository.deleteAll() shouldBeEqualTo count.toInt() - 1
         }
     }
@@ -206,7 +206,7 @@ class ActorRepositoryTest: AbstractR2dbcExposedTest() {
 
             repository.deleteAllIgnore { ActorTable.lastName eq "Depp" } shouldBeEqualTo 1
 
-            // Delete 1 actor
+            // actor 1건을 삭제한다.
             repository.deleteAllIgnore() shouldBeEqualTo count.toInt() - 1
         }
     }

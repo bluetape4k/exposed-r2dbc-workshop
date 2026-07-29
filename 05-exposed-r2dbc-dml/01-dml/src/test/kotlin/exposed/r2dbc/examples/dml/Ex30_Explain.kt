@@ -130,7 +130,7 @@ class Ex30_Explain: AbstractR2dbcExposedTest() {
     /**
      * `EXPLAIN` 으로 시작하는 SQL 구문은 실행되지 않는다.
      *
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * EXPLAIN UPDATE userdata SET "value"=123 FROM users WHERE users.id = userdata.user_id
      * ```
@@ -164,7 +164,7 @@ class Ex30_Explain: AbstractR2dbcExposedTest() {
             debug = true
             statementCount = 0
 
-            // select statements
+            // select 구문
             explainAndIncrement {
                 cities.select(cities.id).where { cities.name like "A%" }
             }
@@ -177,11 +177,11 @@ class Ex30_Explain: AbstractR2dbcExposedTest() {
                 val query2 = users.selectAll().where { users.id eq "sergey" }
                 query1.union(query2).limit(1)
             }
-            // insert statements
+            // insert 구문
             explainAndIncrement { cities.insert { it[name] = cityName } }
             val subquery = userData.select(userData.userId, userData.comment, intParam(42))
             explainAndIncrement { userData.insert(subquery) }
-            // insert or... statements
+            // insert-or 계열 구문
             if (testDialect !is H2Dialect) {
                 explainAndIncrement { cities.insertIgnore { it[name] = cityName } }
                 explainAndIncrement { userData.insertIgnore(subquery) }
@@ -195,7 +195,7 @@ class Ex30_Explain: AbstractR2dbcExposedTest() {
                     it[name] = cityName
                 }
             }
-            // update statements
+            // update 구문
             explainAndIncrement { cities.update { it[name] = cityName } }
             if (testDialect !is SQLiteDialect) {
                 explainAndIncrement {
@@ -203,7 +203,7 @@ class Ex30_Explain: AbstractR2dbcExposedTest() {
                     join.update { it[userData.value] = 123 }
                 }
             }
-            // delete statements
+            // delete 구문
             explainAndIncrement { cities.deleteWhere { cities.id eq 1 } }
             if (testDialect is MysqlDialect) {
                 explainAndIncrement { cities.deleteIgnoreWhere { cities.id eq 1 } }
@@ -389,13 +389,13 @@ class Ex30_Explain: AbstractR2dbcExposedTest() {
                 else                     -> jsonString.shouldStartWith("[")
             }
 
-            // test multiple options only
+            // 여러 option 조합만 검증한다.
             if (testDB in TestDB.ALL_POSTGRES) {
                 // EXPLAIN (VERBOSE TRUE, COSTS FALSE) SELECT countries.id FROM countries WHERE countries.country_code LIKE 'A%'
                 explain(options = "VERBOSE TRUE, COSTS FALSE") { query }.toList()
             }
 
-            // test analyze + options
+            // analyze와 option 조합을 검증한다.
             val analyze = testDB != TestDB.MYSQL_V5
             val combinedOption = if (testDB == TestDB.MYSQL_V8) "FORMAT=TREE" else formatOption
             explain(analyze, combinedOption) { query }.toList().apply {

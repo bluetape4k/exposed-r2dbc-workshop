@@ -1,26 +1,20 @@
-# ASCII Diagram Image Conversion
+# ASCII Diagram Image Conversion 교훈
 
-## Context
+## 맥락
 
-Several workshop READMEs still contained ASCII/Unicode diagrams after the README
-diagram refresh. These blocks mixed Korean and English labels and did not follow
-the workspace rule of using rendered SVG/PNG diagram assets in README content.
+README diagram refresh 이후에도 여러 workshop README에 ASCII/Unicode diagram이 남아 있었다. 이 block들은 한국어와 영어 label을 섞고 있었고, README content에서는 rendered SVG/PNG diagram asset을 사용한다는 workspace rule도 따르지 않았다.
 
-## Decision
+## 결정
 
-Replace explanatory ASCII diagrams with PNG embeds backed by committed SVG
-sources under `docs/images/readme-diagrams/`. Reuse existing diagram assets when
-they already covered the same concept, and generate only the missing diagrams.
+설명용 ASCII diagram을 `docs/images/readme-diagrams/` 아래 committed SVG source가 뒷받침하는 PNG embed로 바꾼다. 같은 concept를 이미 다루는 diagram asset은 재사용하고, 누락된 diagram만 새로 생성한다.
 
-## Outcome
+## 결과
 
-- Converted remaining diagram-like ASCII blocks in advanced, JPA convert,
-  coroutine, Spring, multi-tenant, and high-performance README pairs.
-- Added nine SVG/PNG diagram asset pairs.
-- Fixed the Korean JPA convert README so the Blog ERD section points to the ERD
-  asset instead of the class diagram asset.
+- Advanced, JPA convert, coroutine, Spring, multi-tenant, high-performance README pair에 남아 있던 diagram-like ASCII block을 변환했다.
+- SVG/PNG diagram asset pair 9개를 추가했다.
+- Korean JPA convert README의 Blog ERD section이 class diagram asset이 아니라 ERD asset을 가리키도록 고쳤다.
 
-## Verification
+## 검증
 
 - Diagram-like ASCII fence scan: `count=0`.
 - README image link scan: `missing=0`, `localSvgLinks=0`.
@@ -28,8 +22,6 @@ they already covered the same concept, and generate only the missing diagrams.
 - `git diff --check`: clean.
 - Visual montage reviewed at `/tmp/exposed-r2dbc-diagram-montage.png`.
 
-## Future Rule
+## 향후 규칙
 
-When replacing README ASCII diagrams, keep image text in English, commit both SVG
-and PNG, and prefer reusing an existing concept-equivalent asset before creating
-a new one.
+README ASCII diagram을 교체할 때 image text는 영어로 유지하고, SVG와 PNG를 모두 commit하며, 새 asset을 만들기 전에 concept-equivalent existing asset 재사용을 우선한다.

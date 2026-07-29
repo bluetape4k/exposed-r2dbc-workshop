@@ -39,7 +39,7 @@ class BinarySerializedBlobColumnTypeTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      *  CREATE TABLE IF NOT EXISTS t1 (
      *      id SERIAL PRIMARY KEY,
      *      "name" VARCHAR(50) NOT NULL,

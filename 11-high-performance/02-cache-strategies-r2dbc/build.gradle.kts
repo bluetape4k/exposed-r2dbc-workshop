@@ -90,7 +90,7 @@ dependencies {
     implementation(libs.testcontainers.postgresql)
     runtimeOnly(libs.postgresql.driver)
 
-    // Spring Boot
+    // Spring Boot 의존성
     implementation("org.springframework.boot:spring-boot-autoconfigure")
     annotationProcessor("org.springframework.boot:spring-boot-autoconfigure-processor")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
@@ -115,7 +115,7 @@ dependencies {
     implementation(libs.jackson.module.kotlin)
     implementation(libs.jackson.module.blackbird)
 
-    // Redisson Cache
+    // Redis cache 의존성son Cache
     implementation(libs.redisson)
 
     // Codecs
@@ -132,14 +132,14 @@ dependencies {
 
     implementation(libs.datafaker)
 
-    // Coroutines
+    // 코루틴 지원 의존성
     implementation(libs.bluetape4k.coroutines)
     implementation(libs.kotlinx.coroutines.reactor)
     testImplementation(libs.kotlinx.coroutines.test)
     add("benchmarkImplementation", libs.kotlinx.benchmark.runtime)
     add("benchmarkImplementation", libs.kotlinx.benchmark.runtime.jvm)
 
-    // Reactor
+    // Reactor 연동 의존성
     implementation(libs.reactor.netty)
     implementation(libs.reactor.kotlin.extensions)
     testImplementation(libs.reactor.test)

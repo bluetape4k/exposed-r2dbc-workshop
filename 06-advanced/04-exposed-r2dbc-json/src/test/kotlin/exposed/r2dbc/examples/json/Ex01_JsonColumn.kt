@@ -58,10 +58,10 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 /**
- * `exposed-json` 모듈을 사용하여 JSON 컬럼에 `@Serializable` Kotlin 객체를 저장/조회하는 예제.
+ * `exposed-json` 모듈을 사용하여 Json 컬럼에 `@Serializable` Kotlin 객체를 저장/조회하는 예제.
  *
  * `kotlinx.serialization` 라이브러리로 직렬화/역직렬화하며, Exposed는 `json<T>()` / `jsonb<T>()`
- * 컬럼 타입을 통해 DB 네이티브 JSON 저장을 지원합니다.
+ * 컬럼 타입을 통해 DB 네이티브 Json 저장을 지원합니다.
  *
  * ## `json` vs `jsonb` 비교
  *
@@ -70,7 +70,7 @@ import org.junit.jupiter.params.provider.MethodSource
  * | `json`  | 텍스트 (원문 보존)     | 빠름      | 느림      | 불가    | PostgreSQL, MySQL 8, MariaDB, H2       |
  * | `jsonb` | 바이너리 분해          | 약간 느림  | 빠름      | 가능    | PostgreSQL만 네이티브 지원; MySQL은 미지원      |
  *
- * ## DB별 JSON 지원 현황
+ * ## DB별 Json 지원 현황
  *
  * | DB         | `json` | `jsonb` | `.extract()` | `.contains()` | `.exists()` |
  * |------------|--------|---------|--------------|---------------|-------------|
@@ -83,7 +83,7 @@ import org.junit.jupiter.params.provider.MethodSource
  *
  * ## `.extract()` 경로 문법 차이
  *
- * DB마다 JSON 경로 표현식 문법이 다릅니다:
+ * DB마다 Json 경로 표현식 문법이 다릅니다:
  * - **PostgreSQL**: 쉼표로 구분된 문자열 배열 사용 — `arrayOf("user", "name")`
  * - **MySQL / MariaDB**: 점 표기법 문자열 사용 — `".user.name"`
  *
@@ -101,13 +101,13 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
     companion object: KLoggingChannel()
 
     /**
-     * Insert and Select JSON data
+     * Insert and Select Json data
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS j_table (
      *      id SERIAL PRIMARY KEY,
-     *      j_column JSON NOT NULL
+     *      j_column Json NOT NULL
      * );
      *
      * INSERT INTO j_table (j_column)
@@ -137,7 +137,7 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
     }
 
     /**
-     * Update with JSON
+     * Update with Json
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
@@ -170,12 +170,12 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
 
         withJsonTable(testDB) { tester, user1, data1 ->
             val pathPrefix = if (currentDialectTest is PostgreSQLDialect) "" else "."
-            // SQLServer & Oracle return null if extracted JSON is not scalar
+            // SQLServer & Oracle return null if extracted Json is not scalar
             val requiresScalar = currentDialectTest is SQLServerDialect || currentDialectTest is OracleDialect
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT JSON_EXTRACT_PATH(j_table.j_column, 'active')
              *   FROM j_table;
              *
@@ -190,7 +190,7 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT JSON_EXTRACT_PATH(j_table.j_column, 'user')
              *   FROM j_table
              *
@@ -205,7 +205,7 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT JSON_EXTRACT_PATH_TEXT(j_table.j_column, 'user', 'name')
              *   FROM j_table;
              *
@@ -230,7 +230,7 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
      * Select where with extract
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT j_table.id
      *   FROM j_table
      *  WHERE CAST(JSON_EXTRACT_PATH_TEXT(j_table.j_column, 'logins') AS INT) >= 1000
@@ -286,7 +286,7 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
     private val jsonContainsSupported = TestDB.ALL_POSTGRES + TestDB.MYSQL_V5 + TestDB.MYSQL_V8
 
     /**
-     * JSON 컬럼의 내용 중 PATH 에 해당하는 데이터가 포함되어 있는지 확인합니다.
+     * Json 컬럼의 내용 중 PATH 에 해당하는 데이터가 포함되어 있는지 확인합니다.
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
@@ -296,7 +296,7 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
         withJsonTable(testDB) { tester, user1, data1 ->
             /**
              * Insert new entity
-             * Postgres:
+             * PostgreSQL DDL 예시:
              * ```sql
              * INSERT INTO j_table (j_column)
              * VALUES ({"user":{"name":"Admin","team":"Alpha"},"logins":10,"active":true,"team":null})
@@ -309,7 +309,7 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT j_table.id, j_table.j_column
              *   FROM j_table
              *  WHERE j_table.j_column::jsonb @> '{"active":false}'::jsonb
@@ -326,7 +326,7 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT COUNT(*)
              *   FROM j_table
              *  WHERE j_table.j_column::jsonb @> '{"user":{"name":"Admin","team":"Alpha"}}'::jsonb
@@ -337,14 +337,14 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
              *  WHERE JSON_CONTAINS(j_table.j_column, '{"user":{"name":"Admin","team":"Alpha"}}')
              * ```
              */
-            val alphaTreamUserAsJson = """{"user":${Json.encodeToString(alphaTeamUser)}}"""
-            val userIsInAlphaTeam = JsonTable.jsonColumn.contains(stringLiteral(alphaTreamUserAsJson))
+            val alphaTreamUserAsJSON = """{"user":${Json.encodeToString(alphaTeamUser)}}"""
+            val userIsInAlphaTeam = JsonTable.jsonColumn.contains(stringLiteral(alphaTreamUserAsJSON))
             tester.selectAll().where { userIsInAlphaTeam }.count() shouldBeEqualTo 1L
 
             // test target contains candidate at specified path
             if (testDB in TestDB.ALL_MYSQL_LIKE) {
                 /**
-                 * 아쉽게도 Postgres 에서는 JSON Path 의 값을 비교하는 방식은 지원하지 않습니다.
+                 * 아쉽게도 Postgres 에서는 Json Path 의 값을 비교하는 방식은 지원하지 않습니다.
                  * ```sql
                  * -- MySQL V8
                  * SELECT j_table.id, j_table.j_column
@@ -361,7 +361,7 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
     }
 
     /**
-     * JSON 객체에 대해 EXISTS 조건을 사용하여 특정 경로에 데이터가 존재하는지 확인합니다.
+     * Json 객체에 대해 EXISTS 조건을 사용하여 특정 경로에 데이터가 존재하는지 확인합니다.
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
@@ -387,10 +387,10 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
              * test data at path root `$` exists by providing no path arguments
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT COUNT(*)
              *   FROM j_table
-             *  WHERE JSONB_PATH_EXISTS(CAST(j_table.j_column as jsonb), '$')
+             *  WHERE jsonb_PATH_EXISTS(CAST(j_table.j_column as jsonb), '$')
              *
              *  -- MySQL V8
              *  SELECT COUNT(*)
@@ -403,9 +403,9 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT COUNT(*) FROM j_table
-             *  WHERE JSONB_PATH_EXISTS(CAST(j_table.j_column as jsonb), '$.fakeKey')
+             *  WHERE jsonb_PATH_EXISTS(CAST(j_table.j_column as jsonb), '$.fakeKey')
              *
              *  -- MySQL V8
              *  SELECT COUNT(*) FROM j_table
@@ -417,9 +417,9 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT COUNT(*) FROM j_table
-             *  WHERE JSONB_PATH_EXISTS(CAST(j_table.j_column as jsonb), '$.logins')
+             *  WHERE jsonb_PATH_EXISTS(CAST(j_table.j_column as jsonb), '$.logins')
              *
              * -- MySQL V8
              * SELECT COUNT(*) FROM j_table
@@ -433,11 +433,11 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
             val testDialect = currentDialectTest
             if (testDialect is PostgreSQLDialect) {
                 /**
-                 * Postgres:
+                 * PostgreSQL DDL 예시:
                  * ```sql
                  * SELECT j_table.id
                  *   FROM j_table
-                 *  WHERE JSONB_PATH_EXISTS(CAST(j_table.j_column as jsonb), '$.logins ? (@ == 1000)')
+                 *  WHERE jsonb_PATH_EXISTS(CAST(j_table.j_column as jsonb), '$.logins ? (@ == 1000)')
                  * ```
                  */
                 val filterPath = ".logins ? (@ == $maximumLogins)"
@@ -446,11 +446,11 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
                 usersWithMaxLogin.single()[tester.id] shouldBeEqualTo newId
 
                 /**
-                 * Postgres:
+                 * PostgreSQL DDL 예시:
                  * ```sql
                  * SELECT j_table.id
                  *   FROM j_table
-                 *  WHERE JSONB_PATH_EXISTS(CAST(j_table.j_column as jsonb), '$.user.team ? (@ == $team)', '{"team":"A"}')
+                 *  WHERE jsonb_PATH_EXISTS(CAST(j_table.j_column as jsonb), '$.user.team ? (@ == $team)', '{"team":"A"}')
                  *
                  * ```
                  */
@@ -464,16 +464,16 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
     }
 
     /**
-     * JSON 컬럼의 세부 데이터에 대해 검색 조건으로 사용한다.
+     * Json 컬럼의 세부 데이터에 대해 검색 조건으로 사용한다.
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `json extract with arrays`(testDB: TestDB) = runTest {
 
-        withJsonArrays(testDB) { tester, singleId, _ ->
+        withJSONArrays(testDB) { tester, singleId, _ ->
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT j_arrays.id, j_arrays."groups", j_arrays.numbers
              *   FROM j_arrays
              *  WHERE JSON_EXTRACT_PATH_TEXT(j_arrays."groups", 'users', '0', 'team') = 'Team A';
@@ -493,14 +493,14 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT JSON_EXTRACT_PATH_TEXT(j_arrays.numbers, '0') FROM j_arrays;
              *
              * --- MySQL V8
              * SELECT JSON_UNQUOTE(JSON_EXTRACT(j_arrays.numbers, "$[0]")) FROM j_arrays;
              * ```
              */
-            // older MySQL and MariaDB versions require non-scalar extracted value from JSON Array
+            // older MySQL and MariaDB versions require non-scalar extracted value from Json Array
             val toScala = testDB != TestDB.MYSQL_V5
             val path2 = if (currentDialectTest is PostgreSQLDialect) "0" else "[0]"
             val firstNumber = JsonArrayTable.numbers.extract<Int>(path2, toScalar = toScala)
@@ -509,15 +509,15 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
     }
 
     /**
-     * JSON ARRAY 컬럼에 대해 `Constains` 조건을 사용하여 특정 데이터가 포함되어 있는지 확인합니다.
+     * Json ARRAY 컬럼에 대해 `Constains` 조건을 사용하여 특정 데이터가 포함되어 있는지 확인합니다.
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `json contains with array`(testDB: TestDB) = runTest {
-        withJsonArrays(testDB) { tester, _, tripleId ->
+        withJSONArrays(testDB) { tester, _, tripleId ->
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT j_arrays.id, j_arrays."groups", j_arrays.numbers
              *   FROM j_arrays
              *  WHERE j_arrays.numbers::jsonb @> '[3, 5]'::jsonb
@@ -551,15 +551,15 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
     fun `json exists with array`(testDB: TestDB) = runTest {
         Assumptions.assumeTrue { testDB !in TestDB.ALL_H2 }
 
-        withJsonArrays(testDB) { tester, singleId, tripleId ->
+        withJSONArrays(testDB) { tester, singleId, tripleId ->
             val optional = if (testDB in TestDB.ALL_MYSQL_MARIADB_LIKE) "one" else null
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT j_arrays.id, j_arrays."groups", j_arrays.numbers
              *   FROM j_arrays
-             *  WHERE JSONB_PATH_EXISTS(CAST(j_arrays."groups" as jsonb), '$.users[1]')
+             *  WHERE jsonb_PATH_EXISTS(CAST(j_arrays."groups" as jsonb), '$.users[1]')
              *
              * -- MySQL V8
              * SELECT j_arrays.id, j_arrays.`groups`, j_arrays.numbers
@@ -572,10 +572,10 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT j_arrays.id, j_arrays."groups", j_arrays.numbers
              *   FROM j_arrays
-             *  WHERE JSONB_PATH_EXISTS(CAST(j_arrays.numbers as jsonb), '$[2]')
+             *  WHERE jsonb_PATH_EXISTS(CAST(j_arrays.numbers as jsonb), '$[2]')
              *
              * -- MySQL V8
              * SELECT j_arrays.id, j_arrays.`groups`, j_arrays.numbers
@@ -592,9 +592,9 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
      * ```sql
      * CREATE TABLE IF NOT EXISTS iterables (
      *      id SERIAL PRIMARY KEY,
-     *      user_list JSON NOT NULL,
-     *      user_set JSON NOT NULL,
-     *      user_array JSON NOT NULL
+     *      user_list Json NOT NULL,
+     *      user_set Json NOT NULL,
+     *      user_array Json NOT NULL
      * );
      * ```
      */
@@ -620,7 +620,7 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO iterables (user_list, user_set, user_array)
              * VALUES (
              *      [{"name":"A","team":"Team A"},{"name":"B","team":"Team B"}],
@@ -652,7 +652,7 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT iterables.id FROM iterables
              *  WHERE iterables.user_list::jsonb @> '[{"name":"A","team":"Team A"}]'::jsonb;
              *
@@ -684,10 +684,10 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
     fun `json with defaults`(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS default_tester (
-         *      user_1 JSON DEFAULT '{"name":"UNKNOWN","team":"UNASSIGNED"}'::json NOT NULL,
-         *      user_2 JSON NOT NULL
+         *      user_1 Json DEFAULT '{"name":"UNKNOWN","team":"UNASSIGNED"}'::json NOT NULL,
+         *      user_2 Json NOT NULL
          * );
          * ```
          */
@@ -723,15 +723,15 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
     }
 
     /**
-     * [StdOutSqlLogger] 에 JSON 컬럼 정보를 출력하는 예
+     * [StdOutSqlLogger] 에 Json 컬럼 정보를 출력하는 예
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS iterables_tester (
-     *      user_list JSON NOT NULL,
-     *      int_list JSON NOT NULL,
-     *      user_array JSON NOT NULL,
-     *      int_array JSON NOT NULL
+     *      user_list Json NOT NULL,
+     *      int_list Json NOT NULL,
+     *      user_array Json NOT NULL,
+     *      int_array Json NOT NULL
      * );
      *
      * INSERT INTO iterables_tester (user_list, int_list, user_array, int_array)
@@ -779,7 +779,7 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
     }
 
     /**
-     * JSON 컬럼이 NULLABLE인 경우
+     * Json 컬럼이 NULLABLE인 경우
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
@@ -788,7 +788,7 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
          * ```sql
          * CREATE TABLE IF NOT EXISTS nullable_tester (
          *      id SERIAL PRIMARY KEY,
-         *      "user" JSON NULL
+         *      "user" Json NULL
          * )
          * ```
          */
@@ -836,10 +836,10 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
             }
 
             /**
-             * Upsert with JSON
+             * Upsert with Json
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO j_table (id, j_column)
              * VALUES (2, {"user":{"name":"Pro","team":"Alpha"},"logins":999,"active":false,"team":"A"})
              * ON CONFLICT (id) DO UPDATE SET j_column=EXCLUDED.j_column;
@@ -862,7 +862,7 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
     }
 
     /**
-     * JSON 컬럼에 `transform` 함수를 사용하여 데이터 변환을 적용하는 예
+     * Json 컬럼에 `transform` 함수를 사용하여 데이터 변환을 적용하는 예
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
@@ -898,14 +898,14 @@ class Ex01_JsonColumn: R2dbcExposedJsonTest() {
         Assumptions.assumeTrue { testDB != TestDB.MYSQL_V5 }
 
         val defaultUser = User("name", "team")
-        val tester = object: IntIdTable("testJsonAsDefault") {
+        val tester = object: IntIdTable("testJSONAsDefault") {
             val value = json<User>("value", Json.Default).default(defaultUser)
         }
-        val testerDatabaseGenerated = object: IntIdTable("testJsonAsDefault") {
+        val testerDatabaseGenerated = object: IntIdTable("testJSONAsDefault") {
             val value = json<User>("value", Json.Default).databaseGenerated()
         }
 
-        // MySQL versions prior to 8.0.13 do not accept default values on JSON columns
+        // MySQL versions prior to 8.0.13 do not accept default values on Json columns
         withTables(testDB, tester) {
             testerDatabaseGenerated.insert { }
 

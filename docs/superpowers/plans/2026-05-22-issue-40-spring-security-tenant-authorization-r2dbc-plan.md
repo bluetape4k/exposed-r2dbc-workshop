@@ -1,8 +1,8 @@
-# Issue 40 Spring Security Tenant Authorization R2DBC Plan
+# Issue #40 Spring Security Tenant Authorization R2DBC 구현 계획
 
-## Scope
+## 범위
 
-Add `10-multi-tenant/05-spring-security-tenant-authorization-spring-webflux`, a
+추가: `10-multi-tenant/05-spring-security-tenant-authorization-spring-webflux`, a
 Spring WebFlux + Exposed R2DBC workshop module that authorizes tenant access
 before routing to a tenant connection factory.
 
@@ -10,34 +10,34 @@ Approved spec draft:
 
 - `docs/superpowers/specs/2026-05-22-issue-40-spring-security-tenant-authorization-r2dbc-design.md`
 
-This plan keeps the module H2-only and updates `Examples.yml` so chapter 10
+이 계획은 the module H2-only and updates `Examples.yml` so chapter 10
 examples include the new security module.
 
-## Implementation Tasks
+## 구현 작업
 
 ### 1. Scaffold module from chapter 10 connection-factory example
 
-Complexity: M
+복잡도: M
 
 - Copy module `10-multi-tenant/04-connection-factory-per-tenant-spring-webflux`
   to `10-multi-tenant/05-spring-security-tenant-authorization-spring-webflux`.
 - Rename package from `exposed.r2dbc.multitenant.connectionfactory` to
   `exposed.r2dbc.multitenant.security`.
 - Rename the Spring Boot entrypoint to `SecurityTenantApp.kt`.
-- Update `springBoot.mainClass`, build-info name, and README titles.
-- Keep actor/movie API and tenant fixture data comparable with module `04`.
+- 갱신: `springBoot.mainClass`, build-info name, and README titles.
+- 유지: actor/movie API and tenant fixture data comparable with module `04`.
 
-### 2. Add Spring Security dependencies and configuration
+### 2. 추가: Spring Security dependencies and configuration
 
-Complexity: M
+복잡도: M
 
-- Add version-catalog aliases for:
+- 추가: version-catalog aliases for:
   - `spring-boot-starter-security`.
   - `spring-boot-starter-oauth2-resource-server`.
   - `spring-security-oauth2-jose`, if the starter does not bring it directly
     enough for explicit compilation.
-- Add module dependencies through `libs.*` aliases.
-- Implement `config/SecurityConfig.kt`.
+- 추가: module dependencies through `libs.*` aliases.
+- 구현: `config/SecurityConfig.kt`.
   - `@EnableWebFluxSecurity`.
   - `SecurityWebFilterChain` bean.
   - CSRF disabled for this stateless JSON example.
@@ -46,17 +46,17 @@ Complexity: M
   - JWT resource server enabled.
   - API-key and demo-session authentication filters registered at
     `SecurityWebFiltersOrder.AUTHENTICATION`.
-  - `AuthorizedTenantContextWebFilter` registered after normal authentication
+  - `AuthorizedTenantContextWebFilter` registered 다음 위치 뒤: normal authentication
     and authenticated-request authorization, at `SecurityWebFiltersOrder.LAST`,
-    so it can write Reactor context for the downstream handler only after
+    so it can write Reactor context for the downstream handler only 다음 위치 뒤:
     tenant authorization succeeds.
 
-### 3. Implement tenant identity extraction
+### 3. 구현: tenant identity extraction
 
-Complexity: L
+복잡도: L
 
-- Add `security/AuthenticatedTenant.kt`.
-- Add `security/JwtTenantAuthenticationConverter.kt`.
+- 추가: `security/AuthenticatedTenant.kt`.
+- 추가: `security/JwtTenantAuthenticationConverter.kt`.
   - extracts `tenant_id`.
   - never fails JWT authentication for tenant-claim problems. Missing,
     malformed, or unknown tenant claims must remain authorization failures so
@@ -64,32 +64,32 @@ Complexity: L
   - stores the raw claim in the authentication token details or leaves it on the
     `Jwt` for `TenantAuthenticationResolver`.
   - preserves normal JWT authority mapping where useful.
-- Add `security/ApiKeyAuthenticationWebFilter.kt`.
+- 추가: `security/ApiKeyAuthenticationWebFilter.kt`.
   - fixed demo key map:
     - `demo-korean-key` -> `korean`.
     - `demo-english-key` -> `english`.
   - invalid key does not authenticate.
-- Add `security/SessionTenantAuthenticationWebFilter.kt`.
+- 추가: `security/SessionTenantAuthenticationWebFilter.kt`.
   - fixed demo session map:
     - `korean-session` -> `korean`.
     - `english-session` -> `english`.
   - no stateful login or persistent session store.
 
-### 4. Implement tenant authorization and routing bridge
+### 4. 구현: tenant authorization and routing bridge
 
-Complexity: L
+복잡도: L
 
-- Keep `TenantIdResolver` for header syntax and known-tenant validation.
+- 유지: `TenantIdResolver` for header syntax and known-tenant validation.
 - Replace header-trusting `TenantFilter` with a security-aware boundary:
   - validate `X-TENANT-ID` syntax.
   - never write Reactor tenant context directly from the header before
     authorization.
-- Add `security/TenantAuthenticationResolver.kt`.
-  - reads authenticated tenant identity from JWT claim, API-key authentication,
+- 추가: `security/TenantAuthenticationResolver.kt`.
+  - 읽는다: authenticated tenant identity from JWT claim, API-key authentication,
     or demo-session authentication.
   - returns explicit missing/malformed/unknown states so the authorization
     filter can return `403`.
-- Add `security/AuthorizedTenantContextWebFilter.kt`.
+- 추가: `security/AuthorizedTenantContextWebFilter.kt`.
   - registered at `SecurityWebFiltersOrder.LAST`.
   - read authenticated tenant from `Authentication`.
   - compare it with the normalized request header tenant.
@@ -98,14 +98,14 @@ Complexity: L
   - on grant, call `chain.filter(exchange).contextWrite { ... }` and write only
     the authorized tenant to Reactor context.
 - Ensure `TenantTransactionExecutor` uses only the authorized Reactor tenant.
-- Add an architecture test that production code writes
+- 추가: an architecture test that production code writes
   `TenantContextKeys.TENANT_ID` only in `AuthorizedTenantContextWebFilter`.
 
-### 5. Update tests
+### 5. 갱신: tests
 
-Complexity: L
+복잡도: L
 
-Use JUnit 5, `runSuspendIO`, WebTestClient, and bluetape4k assertions.
+사용: JUnit 5, `runSuspendIO`, WebTestClient, and bluetape4k assertions.
 
 - Security tests:
   - valid JWT claim accesses matching tenant through the demo
@@ -122,16 +122,16 @@ Use JUnit 5, `runSuspendIO`, WebTestClient, and bluetape4k assertions.
     for authenticated callers.
   - same actor ID returns tenant-specific fixture values for each auth source.
   - concurrent authorized Korean/English requests never cross-route.
-- Architecture tests:
+- Architecture test:
   - request-path production code does not call bare `suspendTransaction`.
   - only security authorization code writes request tenant context.
   - module package does not import classes from the connection-factory example.
   - implement these scans as focused source-text architecture tests, matching
     existing repository style and avoiding a new architecture-test dependency.
 
-### 6. Update README and workflows
+### 6. 갱신: README and workflows
 
-Complexity: M
+복잡도: M
 
 - Write `README.md` and `README.ko.md`.
 - Explain:
@@ -143,17 +143,17 @@ Complexity: M
   - request/error contract.
   - when to choose this strategy.
   - CI coverage and why Nightly remains unchanged.
-- Update `.github/workflows/Examples.yml`:
+- 갱신: `.github/workflows/Examples.yml`:
   - include module path in path filters.
   - add `:05-spring-security-tenant-authorization-spring-webflux:test` to the
     chapter 10 Gradle command.
-- Run `actionlint` after workflow edit.
+- 실행: `actionlint` 다음 위치 뒤: workflow edit.
 
 ### 7. Verify, review, and publish
 
-Complexity: M
+복잡도: M
 
-Run in order:
+실행: in order:
 
 1. `./gradlew projects --console=plain`
 2. `./gradlew :05-spring-security-tenant-authorization-spring-webflux:compileKotlin --warning-mode all --console=plain`
@@ -161,14 +161,14 @@ Run in order:
 4. `actionlint .github/workflows/Examples.yml`
 5. `git diff --check`
 6. IDE diagnostics if available; otherwise record compile/test fallback.
-7. Claude Step 6-R code review gate with `P0=0`, `P1=0`.
-8. Create `docs/lessons/2026-05-22-issue-40-spring-security-tenant-authorization-r2dbc.md`.
-9. Commit with Lore trailers.
-10. Push branch and open a draft PR assigned to `debop`.
-11. Add PR comment + formal review, wait for CI/Examples, then merge and clean
+7. Claude 단계 6-R code review gate with `P0=0`, `P1=0`.
+8. 생성: `docs/lessons/2026-05-22-issue-40-spring-security-tenant-authorization-r2dbc.md`.
+9. 커밋: with Lore trailers.
+10. 푸시: branch and open a draft PR assigned to `debop`.
+11. 추가: PR comment + formal review, wait for CI/Examples, then merge and clean
     local worktrees/branches because the user requested the full cycle.
 
-## Step 3-R Local Review
+## 단계 3-R 로컬 검토
 
 | Perspective | P0 | P1 | P2/P3 notes |
 |---|---:|---:|---|
@@ -176,7 +176,7 @@ Run in order:
 | Testability | 0 | 0 | WebTestClient tests cover JWT, API key, session, mismatch, and missing auth. |
 | CI scope | 0 | 0 | Examples workflow must include the new module; Nightly remains unchanged. |
 
-## Claude Step 2-R/3-R Advisor Iteration 1
+## Claude 단계 2-R/3-R Advisor Iteration 1
 
 Artifact: `.omx/artifacts/claude-issue-40-spec-plan-compact-20260522130111.md`
 
@@ -186,5 +186,5 @@ Artifact: `.omx/artifacts/claude-issue-40-spec-plan-compact-20260522130111.md`
 | P0 | `ReactiveAuthorizationManager` cannot reliably write Reactor context downstream. | Accepted | Replaced with `AuthorizedTenantContextWebFilter` registered at `SecurityWebFiltersOrder.LAST`. |
 | P1 | API-key/session filter order was underspecified. | Accepted | Plan pins them to `SecurityWebFiltersOrder.AUTHENTICATION`. |
 | P1 | WebTestClient security mutators were not named. | Accepted | Plan now requires real bearer-token WebTestClient requests through the demo decoder and demo headers for API/session paths. |
-| P2 | Architecture test tooling unnamed. | Accepted | Plan uses focused source-text architecture tests, avoiding a new dependency. |
+| P2 | Architecture test tooling unnamed. | Accepted | 계획은 focused source-text architecture test를 사용해 새 dependency 추가를 피한다. |
 | P3 | Demo session header could be mistaken for production session. | Accepted | README task now requires explicit caveat. |

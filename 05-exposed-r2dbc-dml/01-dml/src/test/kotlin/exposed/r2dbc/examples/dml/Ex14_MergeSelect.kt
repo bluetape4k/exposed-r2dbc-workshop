@@ -43,12 +43,12 @@ class Ex14_MergeSelect: Ex14_MergeBase() {
         Dest.key eq sourceQuery[Source.key]
 
     /**
-     * [mergeFrom] (`MERGE INFO`) from a select query
+     * [mergeFrom](`MERGE INTO`)를 select query 기반으로 수행하는 예제
      *
      * 대상 테이블에 없는 소스 테이블의 데이터를 대상 테이블에 추가합니다
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * MERGE INTO dest
      * USING ( SELECT "source".id,
      *                "source"."key",
@@ -86,12 +86,12 @@ class Ex14_MergeSelect: Ex14_MergeBase() {
     }
 
     /**
-     * Merge into ([mergeFrom]) from a select query with alias
+     * alias가 있는 select query에서 [mergeFrom]으로 merge를 수행하는 예제
      *
      * `whenNotMatchedInsert`를 이용하여 대상 테이블에 없는 소스 테이블의 데이터를 대상 테이블에 추가합니다
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * MERGE INTO dest dest_alias
      * USING ( SELECT "source".id,
      *                "source"."key",
@@ -131,7 +131,7 @@ class Ex14_MergeSelect: Ex14_MergeBase() {
      *
      * `whenMatchedUpdate` 를 이용하여 대상 테이블과 소스 테이블의 데이터가 일치하는 경우 대상 테이블의 데이터를 갱신합니다
      *
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * MERGE INTO dest
      * USING ( SELECT "source".id,
@@ -173,7 +173,7 @@ class Ex14_MergeSelect: Ex14_MergeBase() {
      * `whenMatchedUpdate` 를 이용하여 대상 테이블과 소스 테이블의 데이터가 일치하는 경우 대상 테이블의 데이터를 갱신합니다
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * MERGE INTO dest dest_alias
      * USING ( SELECT "source".id,
      *                "source"."key",
@@ -216,7 +216,7 @@ class Ex14_MergeSelect: Ex14_MergeBase() {
      * `whenMatchedDelete` 를 이용하여 대상 테이블과 소스 테이블의 데이터가 일치하는 경우 대상 테이블의 데이터를 삭제합니다
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * MERGE INTO dest
      * USING ( SELECT "source".id,
      *                "source"."key",
@@ -254,7 +254,7 @@ class Ex14_MergeSelect: Ex14_MergeBase() {
      * `whenMatchedUpdate` 를 이용하여 대상 테이블과 소스 테이블의 데이터가 일치하는 경우 대상 테이블의 데이터를 갱신합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * MERGE INTO dest
      * USING ( SELECT "source".id,
      *                "source"."key",
@@ -304,7 +304,7 @@ class Ex14_MergeSelect: Ex14_MergeBase() {
      * MergeFrom with whenMatchedDelete and condition
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * MERGE INTO dest
      * USING ( SELECT "source".id,
      *                "source"."key",
@@ -338,7 +338,7 @@ class Ex14_MergeSelect: Ex14_MergeBase() {
     /**
      * [mergeFrom] 과 다양한 조건 작업들 ...
      *
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * MERGE INTO dest
      * USING ( SELECT "source".id,
@@ -425,7 +425,7 @@ class Ex14_MergeSelect: Ex14_MergeBase() {
     /**
      * Subquery 를 Source로 사용하는 [mergeFrom] 예제 (PostgreSQL 전용)
      *
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * MERGE INTO dest
      * USING ( SELECT "source".id,
@@ -468,7 +468,7 @@ class Ex14_MergeSelect: Ex14_MergeBase() {
     /**
      * MergeFrom with const condition
      *
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * MERGE INTO dest
      * USING ( SELECT "source".id,

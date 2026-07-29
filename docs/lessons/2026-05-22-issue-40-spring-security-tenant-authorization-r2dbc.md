@@ -1,28 +1,20 @@
-# Issue #40 Spring Security Tenant Authorization R2DBC Lesson
+# Issue #40 Spring Security Tenant Authorization R2DBC 교훈
 
-## Context
+## 맥락
 
-Issue #40 added a chapter 10 workshop module for tenant-aware Spring Security on
-top of the existing Exposed R2DBC multi-tenant routing example.
+Issue #40은 기존 Exposed R2DBC multi-tenant routing 예제 위에 tenant-aware Spring Security를 보여 주는 chapter 10 workshop module을 추가했다.
 
-## Decision
+## 결정
 
-Keep request tenant routing and authentication separate. Demo API keys, demo
-sessions, and JWTs establish the authenticated tenant in Spring Security. Only
-`AuthorizedTenantContextWebFilter` writes `TenantContextKeys.TENANT_ID`, and it
-does so only after the authenticated tenant matches `X-TENANT-ID`.
+Request tenant routing과 authentication을 분리한다. Demo API key, demo session, JWT는 Spring Security 안에서 authenticated tenant를 확정한다. `AuthorizedTenantContextWebFilter`만 `TenantContextKeys.TENANT_ID`를 쓰며, authenticated tenant가 `X-TENANT-ID`와 일치한 뒤에만 쓴다.
 
-JWT tenant claim problems are authorization failures, not authentication
-failures. The JWT converter therefore accepts the token and leaves missing or
-unknown tenant claims to the tenant authorization filter, where they become 403.
+JWT tenant claim 문제는 authentication failure가 아니라 authorization failure다. 따라서 JWT converter는 token을 받아들이고, missing 또는 unknown tenant claim은 tenant authorization filter에 남겨 403으로 처리한다.
 
-## Outcome
+## 결과
 
-The new `05-spring-security-tenant-authorization-spring-webflux` module covers
-API-key, JWT, and demo-session tenant authorization paths. `Examples.yml` now
-runs the new module together with the existing chapter 10 routing example.
+새 `05-spring-security-tenant-authorization-spring-webflux` module은 API-key, JWT, demo-session tenant authorization path를 다룬다. `Examples.yml`은 이제 기존 chapter 10 routing 예제와 함께 새 module을 실행한다.
 
-## Verification
+## 검증
 
 - Claude spec/plan re-gate: `P0=0`, `P1=0`, PASS.
 - Claude code-review retry with `claude -p --model opus --verbose --output-format stream-json`: `P0 = 0`, `P1 = 0`, PASS.
@@ -35,9 +27,6 @@ runs the new module together with the existing chapter 10 routing example.
 - `./gradlew projects --console=plain`
 - `./gradlew detekt --parallel --console=plain`
 
-## Future Guidance
+## 향후 지침
 
-For tenant authorization examples, never let a request header directly write the
-R2DBC routing context. Add an architecture test that pins the single writer, and
-cover both authenticated bad-header 400 and unauthenticated bad-header 401
-ordering so filter-order regressions are visible.
+Tenant authorization 예제에서는 request header가 R2DBC routing context를 직접 쓰게 두지 않는다. Single writer를 고정하는 architecture test를 추가하고, authenticated bad-header 400과 unauthenticated bad-header 401 ordering을 모두 다뤄 filter-order regression이 보이게 한다.

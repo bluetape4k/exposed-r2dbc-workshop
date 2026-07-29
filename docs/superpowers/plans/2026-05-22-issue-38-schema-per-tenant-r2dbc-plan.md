@@ -1,6 +1,6 @@
-# Issue #38 Schema-Per-Tenant R2DBC Plan
+# Issue #38 Schema-Per-Tenant R2DBC 구현 계획
 
-## Classification
+## 분류
 
 Type A - Full Design.
 
@@ -19,7 +19,7 @@ routing, tests, docs, and CI/Nightly evidence.
 
 ## Current File Decisions
 
-Keep:
+유지:
 
 - `ExposedMultitenantWebfluxApp.kt`
 - `config/ExposedR2dbcConfig.kt`
@@ -38,7 +38,7 @@ Keep:
 - `ExposedR2dbcConfigTest.kt`
 - `ConnectionPoolSizingTest.kt`
 
-Modify:
+수정:
 
 - `tenant/TenantFilter.kt` — require `X-TENANT-ID`, keep unknown tenant `400`.
 - `controller/ActorControllerTest.kt` — align missing-header behavior and
@@ -46,40 +46,40 @@ Modify:
 - `README.md` and `README.ko.md` — clarify mandatory header, strategy choice,
   and CI/Nightly coverage.
 
-Do not add new orders-domain files or replacement tenant registry files.
+금지: add new orders-domain files or replacement tenant registry files.
 
-## Implementation Tasks
+## 구현 작업
 
 1. Lock current baseline.
-   - Run targeted module tests before editing to classify existing failures.
+   - 실행: targeted module tests before editing to classify existing failures.
    - Confirm whether missing-header currently defaults to `korean`.
 
 2. Tighten tenant validation.
    - In `TenantFilter`, treat missing or blank `X-TENANT-ID` as
      `ResponseStatusException(HttpStatus.BAD_REQUEST, ...)`.
-   - Keep unknown tenant as `400 Bad Request`.
-   - Keep `TENANT_HEADER = "X-TENANT-ID"` for README/test compatibility.
+   - 유지: unknown tenant as `400 Bad Request`.
+   - 유지: `TENANT_HEADER = "X-TENANT-ID"` for README/test compatibility.
    - Rewrite `TenantFilter` KDoc so it no longer documents default-tenant
      fallback for missing or blank HTTP headers.
-   - Document `TenantId.DEFAULT` as a non-WebFlux direct-call fallback and log a
+   - 문서화: `TenantId.DEFAULT` as a non-WebFlux direct-call fallback and log a
      warning when that fallback is used.
 
 3. Preserve routing helper semantics.
-   - Keep `suspendTransactionWithCurrentTenant` as the canonical WebFlux
+   - 유지: `suspendTransactionWithCurrentTenant` as the canonical WebFlux
      controller boundary.
-   - Keep `currentTenant()` for direct coroutine context use.
-   - Do not call plain `suspendTransaction` from controllers.
+   - 유지: `currentTenant()` for direct coroutine context use.
+   - 금지: call plain `suspendTransaction` from controllers.
    - Review `SchemaUtils.setSchema` usage for connection-state leakage notes.
 
-4. Update tests.
-   - `ActorControllerTest`: successful reads for every tenant.
+4. 갱신: tests.
+   - `ActorControllerTest`: successful 읽는다: for every tenant.
    - `ActorControllerTest`: same actor query path must not leak rows across
      tenants.
    - `ActorControllerTest`: missing header returns `400`.
    - `ActorControllerTest`: unknown tenant returns `400`.
-   - Keep config/pool tests unchanged unless compilation requires updates.
+   - 유지: config/pool tests unchanged unless compilation requires updates.
 
-5. Update docs.
+5. 갱신: docs.
    - `README.md`: document schema-per-tenant choice, mandatory `X-TENANT-ID`,
      actors API, and CI/Nightly coverage.
    - `README.ko.md`: mirror the same user-facing content.
@@ -95,29 +95,29 @@ Do not add new orders-domain files or replacement tenant registry files.
      `:03-multitenant-spring-webflux:test` shard entry together.
 
 7. Review gates.
-   - Rerun Claude spec/plan advisor after this re-baseline.
-   - Implement only after the spec/plan gate reports `P0=0`, `P1=0`.
-   - Run current-session code review and Claude code review after
+   - Rerun Claude spec/plan advisor 다음 위치 뒤: this re-baseline.
+   - 구현: only 다음 위치 뒤: the spec/plan gate reports `P0=0`, `P1=0`.
+   - 실행: current-session code review and Claude code review 다음 위치 뒤:
      implementation.
    - Fix all P0/P1 findings before PR.
 
 8. Capture and publish.
-   - Add `docs/lessons/2026-05-22-issue-38-schema-per-tenant-r2dbc.md`.
-   - Commit with Lore trailers.
-   - Push branch and create PR against `develop`, assigned to `debop`.
+   - 추가: `docs/lessons/2026-05-22-issue-38-schema-per-tenant-r2dbc.md`.
+   - 커밋: with Lore trailers.
+   - 푸시: branch and create PR against `develop`, assigned to `debop`.
    - Watch GitHub checks; do not merge automatically.
 
-## Risk Controls
+## 위험 제어
 
-- Keep #39 connection-factory routing out of scope.
-- Keep #40 authorization out of scope.
-- Use explicit tenant validation before any database operation.
+- 유지: #39 connection-factory routing out of scope.
+- 유지: #40 authorization out of scope.
+- 사용: explicit tenant validation before any database operation.
 - Treat `SchemaUtils.setSchema` as connection state and keep it behind the
   transaction helper.
 - Prefer tests that alternate tenants through the same application instance.
 - New public KDoc must be English; internal docs may be Korean.
 
-## Review Notes
+## 검토 메모
 
 Initial Claude advisor review artifact:
 `.omx/artifacts/claude-issue-38-spec-plan-review-20260522.md`.
@@ -132,7 +132,7 @@ Accepted P0/P1 fixes:
 - Reused existing file names and helpers.
 - Standardized on `X-TENANT-ID`.
 - Chose missing/unknown tenant `400`.
-- Added keep/modify decisions for existing tests and README files.
-- Added concrete IDE fallback command.
+- 추가함: keep/modify decisions for existing tests and README files.
+- 추가함: concrete IDE fallback command.
 
-Latest gate status: `P0=0`, `P1=0`, Gate `PASS`.
+최신 gate 상태: `P0=0`, `P1=0`, Gate `PASS`.

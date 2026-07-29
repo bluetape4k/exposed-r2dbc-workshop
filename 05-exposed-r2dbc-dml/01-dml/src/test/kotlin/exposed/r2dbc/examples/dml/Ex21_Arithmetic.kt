@@ -40,7 +40,7 @@ class Ex21_Arithmetic: AbstractR2dbcExposedTest() {
      * 컬럼 값을 산술 연산자를 사용하여 계산합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT userdata."value",
      *        (((userdata."value" - 5) * 2) / 2)
      *   FROM userdata

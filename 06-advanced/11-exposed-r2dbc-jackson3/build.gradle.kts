@@ -9,7 +9,7 @@ dependencies {
     // Exposed
     implementation(libs.jetbrains.exposed.r2dbc)
     implementation(libs.exposed.r2dbc)
-    // Jackson 3 (테스트에서만 사용)
+    // Jackson JSON 직렬화 의존성 3 (테스트에서만 사용)
     testImplementation(libs.exposed.jackson3)
     testImplementation(libs.bluetape4k.jackson3)
     testImplementation(libs.jackson3.module.kotlin)
@@ -37,7 +37,7 @@ dependencies {
     testRuntimeOnly(libs.mysql.connector.j)
     testRuntimeOnly(libs.postgresql.driver)
 
-    // Coroutines
+    // 코루틴 지원 의존성
     implementation(libs.bluetape4k.coroutines)
     implementation(libs.kotlinx.coroutines.core)
     testImplementation(libs.kotlinx.coroutines.debug)

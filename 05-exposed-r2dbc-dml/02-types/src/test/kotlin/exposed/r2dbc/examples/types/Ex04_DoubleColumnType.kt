@@ -33,7 +33,7 @@ class Ex04_DoubleColumnType: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS double_table (
      *      id SERIAL PRIMARY KEY,
      *      amount DOUBLE PRECISION NOT NULL
@@ -72,7 +72,7 @@ class Ex04_DoubleColumnType: AbstractR2dbcExposedTest() {
              * create table with double() column that uses SQL type REAL
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * CREATE TABLE IF NOT EXISTS double_table (
              *      id SERIAL PRIMARY KEY,
              *      amount REAL NOT NULL

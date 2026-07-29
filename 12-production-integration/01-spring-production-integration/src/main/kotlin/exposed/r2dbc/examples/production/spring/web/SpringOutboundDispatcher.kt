@@ -9,7 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitExchange
 
 /**
- * Dispatches persisted outbound requests through Spring WebFlux WebClient.
+ * 저장된 outbound 요청을 Spring WebFlux WebClient로 dispatch합니다.
  */
 @Component
 class SpringOutboundDispatcher(

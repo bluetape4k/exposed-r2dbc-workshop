@@ -41,7 +41,7 @@ object SimpleSchema {
      * Table
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS simple_entity (
      *      id BIGSERIAL PRIMARY KEY,
      *      "name" VARCHAR(255) NOT NULL,

@@ -41,7 +41,7 @@ class Ex01_Blog: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO posts (title) VALUES ('Post 1');
      *
      * INSERT INTO post_details (id, created_on, created_by)
@@ -49,7 +49,7 @@ class Ex01_Blog: AbstractR2dbcExposedTest() {
      * ```
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT posts.id, posts.title
      *   FROM posts
      *  WHERE posts.id = 1;

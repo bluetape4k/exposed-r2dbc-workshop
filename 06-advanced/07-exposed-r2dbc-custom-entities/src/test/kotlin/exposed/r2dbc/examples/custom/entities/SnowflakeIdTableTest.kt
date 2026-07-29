@@ -41,7 +41,7 @@ class SnowflakeIdTableTest: AbstractCustomIdTableTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS t_snowflake (
      *      id BIGINT PRIMARY KEY,
      *      "name" VARCHAR(255) NOT NULL,

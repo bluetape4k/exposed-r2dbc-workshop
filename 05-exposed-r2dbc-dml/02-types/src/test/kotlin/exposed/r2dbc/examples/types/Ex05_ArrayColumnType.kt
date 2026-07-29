@@ -81,7 +81,7 @@ class Ex05_ArrayColumnType: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS array_test_table (
      *      id SERIAL PRIMARY KEY,
      *      numbers INT[] DEFAULT ARRAY[5] NOT NULL,
@@ -177,7 +177,7 @@ class Ex05_ArrayColumnType: AbstractR2dbcExposedTest() {
      * PostgreSQL 은 array column 의 max cardinality 를 무시한다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO sized_test_table (numbers) VALUES (ARRAY[1,2,3,4,5,6]);
      *
      * SELECT sized_test_table.numbers
@@ -190,7 +190,7 @@ class Ex05_ArrayColumnType: AbstractR2dbcExposedTest() {
 
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS sized_test_table (
          *      numbers INT[5] DEFAULT ARRAY[]::int[] NOT NULL
          * )
@@ -337,7 +337,7 @@ class Ex05_ArrayColumnType: AbstractR2dbcExposedTest() {
         withArrayTestTable(testDB) {
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO array_test_table (numbers, strings, doubles)
              * VALUES (ARRAY[1,2,3], ARRAY['','','','hello'], ARRAY[1.0,2.0,3.0,4.0,5.0])
              * ```
@@ -352,7 +352,7 @@ class Ex05_ArrayColumnType: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT array_test_table.id,
              *        array_test_table.numbers,
              *        array_test_table.strings,
@@ -384,7 +384,7 @@ class Ex05_ArrayColumnType: AbstractR2dbcExposedTest() {
             if (currentDialectTest is PostgreSQLDialect) {
                 /**
                  * ```sql
-                 * -- Postgres
+                 * -- PostgreSQL
                  * SELECT array_test_table.id
                  *   FROM array_test_table
                  *  WHERE array_test_table.strings[4:] = ARRAY['hello']
@@ -413,7 +413,7 @@ class Ex05_ArrayColumnType: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * UPDATE array_test_table
              *    SET doubles=ARRAY[9.0]
              *  WHERE array_test_table.id = 1
@@ -455,7 +455,7 @@ class Ex05_ArrayColumnType: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO array_test_table (id, numbers, strings)
              * VALUES (1, ARRAY[1,2,3], ARRAY['A','B'])
              * ON CONFLICT (id) DO
@@ -498,7 +498,7 @@ class Ex05_ArrayColumnType: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT array_test_table.id
              *   FROM array_test_table
              *  WHERE array_test_table.id = ANY (array_test_table.numbers)
@@ -510,7 +510,7 @@ class Ex05_ArrayColumnType: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT array_test_table.id
              *   FROM array_test_table
              *  WHERE array_test_table.id = ANY (array_test_table.numbers[2:3])
@@ -557,7 +557,7 @@ class Ex05_ArrayColumnType: AbstractR2dbcExposedTest() {
         withArrayTestTable(testDB) {
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO array_test_table (byte_array) VALUES (ARRAY[,])
              * ```
              */
@@ -578,7 +578,7 @@ class Ex05_ArrayColumnType: AbstractR2dbcExposedTest() {
     fun `aliased array`(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS test_aliased_array (
          *      id SERIAL PRIMARY KEY,
          *      "value" INT[] NOT NULL
@@ -594,7 +594,7 @@ class Ex05_ArrayColumnType: AbstractR2dbcExposedTest() {
         withArrayTestTable(testDB, tester) {
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO test_aliased_array ("value") VALUES (ARRAY[1,2,3])
              * ```
              */
@@ -604,7 +604,7 @@ class Ex05_ArrayColumnType: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT test_aliased_array."value" aliased_value
              *   FROM test_aliased_array
              * ```

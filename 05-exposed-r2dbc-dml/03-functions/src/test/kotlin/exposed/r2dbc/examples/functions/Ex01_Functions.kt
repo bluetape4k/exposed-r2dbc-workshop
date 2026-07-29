@@ -102,7 +102,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * [sum] function
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT SUM(cities.city_id) FROM cities
      * ```
      */
@@ -128,7 +128,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * custom function with [IntegerColumnType]
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id,
      *        SUM((cities.city_id + userdata."value"))
      *   FROM users
@@ -165,7 +165,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * Calc function with [DecimalColumnType]
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id,
      *        SUM(((cities.city_id * 100) + (userdata."value" / 10))),           -- sum
      *        (SUM(((cities.city_id * 100) + (userdata."value" / 10))) / 100),   -- div
@@ -283,7 +283,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * [Expression.build] with alias for numeric PK
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT test_mod_on_pk.id,
      *        (test_mod_on_pk.id % 3) shard1,
      *        (test_mod_on_pk.id % 3) shard2,
@@ -333,7 +333,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * [Expression.build] with alias for numeric PK
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT test_mod_on_pk.id,
      *        (test_mod_on_pk.id % 3) shard1,
      *        (test_mod_on_pk.id % 3) shard2,
@@ -382,7 +382,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * `bitwiseAnd` function 사용 예 01
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT (users.flags & 1),
      *        (users.flags & 1) = 1
      *   FROM users
@@ -459,7 +459,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * `bitwiseOr` function 사용 예 01
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id,
      *        (users.flags | 2)
      *  FROM users
@@ -520,7 +520,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * `bitwiseXor` function 사용 예
      *
      * ```sql
-     * --- Postgres
+     * --- PostgreSQL
      * SELECT users.id,
      *        users.flags,
      *        (users.flags # 7)
@@ -558,7 +558,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * `bitwiseXor` function 사용 예
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id,
      *        users.flags,
      *        (users.flags # 7)
@@ -596,7 +596,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * `hasFlag` function 사용 예
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id FROM users
      *  WHERE (users.flags & 1) = 1
      *  ORDER BY users.id ASC
@@ -624,7 +624,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * [substring] function
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id,
      *        SUBSTRING(users."name", 1, 2)  -- 'Al', 'An', 'Eu', 'Se', 'So'
      *   FROM users
@@ -655,7 +655,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * [CharLength] function
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT SUM(CHAR_LENGTH(cities."name")) FROM cities
      * ```
      */
@@ -677,7 +677,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * [CharLength] function
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT CHAR_LENGTH(tester.null_string),
      *        CHAR_LENGTH(tester.empty_string),
      *        CHAR_LENGTH('안녕하세요 세계')
@@ -720,7 +720,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * `case` function
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id,
      *        CASE
      *          WHEN users.id = 'alex' THEN '11'
@@ -757,7 +757,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * [lowerCase], [upperCase] function
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT LOWER(cities."name") FROM cities;
      * SELECT UPPER(cities."name") FROM cities;
      * ```
@@ -779,7 +779,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * [locate] function (similar `indexOf`)
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT POSITION('e' IN cities."name") FROM cities
      *
      * -- MySQL
@@ -803,7 +803,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * [locate] function (similar `indexOf`)
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT POSITION('Peter' IN cities."name") FROM cities;
      *
      * -- MySQL
@@ -827,7 +827,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * [locate] function (similar `indexOf`) with case sensitives
      *
      * ```sql
-     * -- Postgres:
+     * -- PostgreSQL:
      * SELECT POSITION('p' IN cities."name") FROM cities;
      * -- MySQL:
      * SELECT LOCATE('p',Cities.`name`) FROM Cities
@@ -853,7 +853,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * [org.jetbrains.exposed.sql.Random] function
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT RANDOM()
      * ```
      */
@@ -881,7 +881,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * `regexp` function
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(*) FROM users WHERE users.id ~ 'a.+';
      * SELECT COUNT(*) FROM users WHERE users.id ~ 'an.+';
      * SELECT COUNT(*) FROM users WHERE users.id ~ '.*';
@@ -909,7 +909,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * `regexp` function
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(*) FROM users WHERE users.id ~ 'a.+';
      * SELECT COUNT(*) FROM users WHERE users.id ~ 'an.+';
      * SELECT COUNT(*) FROM users WHERE users.id ~ '.*';
@@ -939,7 +939,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * `concat` function
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT CONCAT('Foo', 'Bar');
      * SELECT CONCAT_WS('!','Foo', 'Bar');
      * ```
@@ -972,7 +972,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * `concat` function
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * -- concatField
      * SELECT CONCAT(users.id, ' - ', users."name")
      *   FROM users
@@ -1022,7 +1022,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * `concat` function
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * -- concatField
      * SELECT CONCAT(userdata.user_id, ' - ', userdata."comment", ' - ', userdata."value")
      *   FROM userdata
@@ -1065,7 +1065,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * DB vender 특화의 함수 사용 ([function])
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT lower(CITIES."name") FROM CITIES;
      * SELECT upper(CITIES."name") FROM CITIES;
      * ```
@@ -1088,7 +1088,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * DB vender 특화의 문자열 함수 ([CustomStringFunction])
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT REPLACE(cities."name", 'gue', 'foo')
      *   FROM cities
      *  WHERE cities."name" = 'Prague'
@@ -1119,7 +1119,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * custom numeric function ([function] with `SQRT`)
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT SQRT(cities.city_id) FROM cities
      * ```
      */
@@ -1145,7 +1145,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * [CustomLongFunction] with POWER
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT POWER(cities.city_id, 2) FROM cities
      * ```
      */
@@ -1264,7 +1264,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * [CustomOperator]를 정의하여 사용하기
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT userdata.user_id, userdata."comment", userdata."value"
      *   FROM userdata
      *  WHERE (userdata."value" + 15) = 35;
@@ -1294,7 +1294,7 @@ class Ex01_Functions: Ex00_FunctionBase() {
      * coalesce: 첫번째 인자가 null 이면 두번째 인자를 반환한다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.city_id,
      *        COALESCE(users.city_id, 1000)
      *   FROM users;

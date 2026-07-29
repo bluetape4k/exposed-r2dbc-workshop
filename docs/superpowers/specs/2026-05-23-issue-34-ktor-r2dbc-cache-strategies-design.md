@@ -1,12 +1,12 @@
-# Issue #34 Ktor R2DBC Cache Strategies Design
+# Issue #34 Ktor R2DBC Cache Strategies 설계
 
-## Goal
+## 목표
 
-Add a Ktor + Exposed R2DBC chapter 11 example that makes general cache strategy
+추가: a Ktor + Exposed R2DBC chapter 11 example that makes general cache strategy
 behavior observable without entering the coroutine-specific cache topic reserved
 for #69.
 
-## Context
+## 맥락
 
 - `exposed-r2dbc-workshop` issue #34 mirrors `exposed-workshop` issue #47.
 - Existing R2DBC cache behavior lives in
@@ -17,10 +17,10 @@ for #69.
   `repo-test-summary -- ./gradlew :02-cache-strategies-r2dbc:test -PuseDB=H2 --continue --console=plain`
   with 25 tests.
 
-## Scope
+## 범위
 
-- Add `11-high-performance/04-cache-strategies-ktor-r2dbc`.
-- Use Ktor routes with Exposed R2DBC and a Redisson-backed cache-aside
+- 추가: `11-high-performance/04-cache-strategies-ktor-r2dbc`.
+- 사용: Ktor routes with Exposed R2DBC and a Redisson-backed cache-aside
   repository that mirrors the cache strategy behavior from the Spring WebFlux
   R2DBC module without depending on Spring abstractions.
 - Show:
@@ -29,19 +29,19 @@ for #69.
   - invalidation that preserves DB rows,
   - write-through/update behavior,
   - database fallback after cache clear.
-- Add English and Korean README files.
-- Add a committed PNG diagram under `docs/images/readme-diagrams/` plus the SVG
+- 추가: English and Korean README files.
+- 추가: a committed PNG diagram under `docs/images/readme-diagrams/` plus the SVG
   source, matching the existing chapter 11 README diagram convention.
 - Wire the module into chapter 11 docs and `Examples.yml`.
 
-## Non-Goals
+## 비목표
 
-- Do not implement cancellation-aware cache population; that belongs to #69.
-- Do not add routing datasource behavior; that belongs to #35.
-- Do not add a new shared cache abstraction unless duplication becomes unsafe.
-- Do not add Java code.
+- 금지: implement cancellation-aware cache population; that belongs to #69.
+- 금지: add routing datasource behavior; that belongs to #35.
+- 금지: add a new shared cache abstraction unless duplication becomes unsafe.
+- 금지: add Java code.
 
-## Design
+## 설계
 
 ### Module Boundary
 
@@ -60,7 +60,7 @@ The module is standalone and Ktor-owned:
 | Method | Path | Behavior | Response |
 |---|---|---|---|
 | `GET` | `/users/{id}` | Read one user through cache with DB fallback | `200 UserCacheResponse`, or `404 UserCacheResponse(cacheStatus=NOT_FOUND)` |
-| `GET` | `/users` | List seeded users directly from DB; list reads are not cached | `200 List<UserRecord>` |
+| `GET` | `/users` | List seeded users directly from DB; list 읽는다: are not cached | `200 List<UserRecord>` |
 | `POST` | `/users` | Insert a new user and populate cache | `201 UserCacheResponse(cacheStatus=WRITTEN)` |
 | `PUT` | `/users/{id}` | Update an existing user and refresh cache | `200 UserCacheResponse(cacheStatus=WRITTEN)`, or `404 UserCacheResponse(cacheStatus=NOT_FOUND)` |
 | `DELETE` | `/users/{id}/cache` | Invalidate one cache key only | `200 InvalidationResponse(invalidated=0|1)` |
@@ -149,7 +149,7 @@ The diagram files are:
 - `docs/images/readme-diagrams/11-high-performance-04-cache-strategies-ktor-r2dbc-architecture-01.svg`
 - `docs/images/readme-diagrams/11-high-performance-04-cache-strategies-ktor-r2dbc-architecture-01.png`
 
-## Acceptance Criteria
+## 수용 기준
 
 - `:04-cache-strategies-ktor-r2dbc:test` passes.
 - Tests cover cache population, cache hit, invalidation/update behavior, and DB

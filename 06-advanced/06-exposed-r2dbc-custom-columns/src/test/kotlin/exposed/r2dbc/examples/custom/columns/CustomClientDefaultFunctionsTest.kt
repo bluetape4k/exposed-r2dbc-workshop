@@ -38,7 +38,7 @@ class CustomClientDefaultFunctionsTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS clientgenerated (
      *      id SERIAL PRIMARY KEY,
      *      timebased_uuid uuid NOT NULL,

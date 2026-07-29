@@ -1,24 +1,18 @@
-# Issue #43 Production Integration
+# Issue #43 Production Integration 교훈
 
-## Context
+## 맥락
 
-Chapter 12 needed paired Spring Boot 4 and Ktor examples for production-grade
-Exposed R2DBC service patterns.
+Chapter 12에는 production-grade Exposed R2DBC service pattern을 보여 주는 Spring Boot 4와 Ktor paired example이 필요했다.
 
-## Decision
+## 결정
 
-Use two Gradle modules, one per stack, and keep child issue traceability through
-package-level slices: `app`, `auth`, `realtime`, `outbound`, and `diagnostics`.
-This avoids ten small modules while preserving Spring/Ktor parity.
+Stack별로 하나씩 두 Gradle module을 사용하고, `app`, `auth`, `realtime`, `outbound`, `diagnostics` package-level slice를 통해 child issue traceability를 유지한다. 이렇게 하면 Spring/Ktor parity를 보존하면서도 작은 module 10개로 쪼개지 않는다.
 
-## Outcome
+## 결과
 
-Added `12-production-integration` with Spring WebFlux/SSE and Ktor
-WebSocket/MockEngine examples. Both stacks persist accounts, work items,
-realtime outbox events, outbound idempotency records, and readiness state with
-Exposed R2DBC.
+Spring WebFlux/SSE와 Ktor WebSocket/MockEngine 예제가 있는 `12-production-integration`을 추가했다. 두 stack 모두 account, work item, realtime outbox event, outbound idempotency record, readiness state를 Exposed R2DBC로 저장한다.
 
-## Verification
+## 검증
 
 - `./gradlew projects`
 - `repo-test-summary -- ./gradlew :01-spring-production-integration:test :02-ktor-production-integration:test --console=plain`
@@ -27,10 +21,6 @@ Exposed R2DBC.
 - Spring module: 4 tests passing.
 - Ktor module: 5 tests passing.
 
-## Future Guidance
+## 향후 지침
 
-For app-boundary examples, use H2 R2DBC with `DB_CLOSE_DELAY=-1`; otherwise each
-connection can see an empty in-memory database. Keep dialect matrix coverage at
-repository level unless app bootstrap is explicitly part of the lesson. Register
-new end-to-end examples in `.github/workflows/Examples.yml` so the focused
-workflow guards workshop adoption separately from the full CI matrix.
+App-boundary example에서는 H2 R2DBC에 `DB_CLOSE_DELAY=-1`을 사용한다. 그렇지 않으면 connection마다 빈 in-memory database를 볼 수 있다. App bootstrap 자체가 lesson scope가 아니라면 dialect matrix coverage는 repository level에 둔다. 새 end-to-end example은 `.github/workflows/Examples.yml`에 등록해 focused workflow가 full CI matrix와 별도로 workshop adoption을 보호하게 한다.

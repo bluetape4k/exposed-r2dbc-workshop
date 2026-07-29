@@ -128,7 +128,7 @@ class Ex05_Delete: AbstractR2dbcExposedTest() {
      * [deleteWhere] 함수에 limit 을 적용하면, 삭제 대상 행의 수를 제한할 수 있습니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * DELETE FROM USERDATA
      *  WHERE USERDATA."value" = 20
      *  LIMIT 1
@@ -164,7 +164,7 @@ class Ex05_Delete: AbstractR2dbcExposedTest() {
      * `Users` 테이블과 `UserData` 테이블을 조인하여, `UserData` 테이블의 일부 행을 삭제합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * DELETE
      *   FROM userdata USING users
      *  WHERE users.id = userdata.user_id
@@ -201,7 +201,7 @@ class Ex05_Delete: AbstractR2dbcExposedTest() {
      * ### Delete with multiple alias joins
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * DELETE FROM userdata stats
      *  USING cities towns, users people
      *  WHERE towns.city_id = people.city_id AND people.id = stats.user_id
@@ -247,7 +247,7 @@ class Ex05_Delete: AbstractR2dbcExposedTest() {
      * ### Delete with join subQuery ([joinQuery])
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * DELETE FROM userdata
      *  USING (SELECT users.id,
      *                users."name"

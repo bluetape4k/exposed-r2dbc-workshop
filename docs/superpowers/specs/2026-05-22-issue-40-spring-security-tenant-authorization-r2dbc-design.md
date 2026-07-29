@@ -1,6 +1,6 @@
 # Issue 40 Spring Security Tenant Authorization R2DBC Design
 
-## Context
+## 맥락
 
 Issue #40 adds the authorization layer that issue #39 deliberately excluded.
 The existing chapter 10 modules show tenant routing:
@@ -38,9 +38,9 @@ Security docs were checked directly.
   for OAuth2/JWT-style requests, including claim and authority customization.
   Source: <https://docs.spring.io/spring-security/reference/reactive/test/web/oauth2.html>
 
-## Goals
+## 목표s
 
-1. Add a chapter 10 module for tenant-aware Spring Security authorization with
+1. 추가: a chapter 10 module for tenant-aware Spring Security authorization with
    Exposed R2DBC.
 2. Keep the actor API and tenant data shape comparable to module `04`.
 3. Demonstrate three tenant identity sources:
@@ -52,22 +52,22 @@ Security docs were checked directly.
    - authenticated principal without tenant identity: `403 Forbidden`.
    - malformed or unknown tenant claim: `403 Forbidden`.
    - authenticated principal requesting a different tenant: `403 Forbidden`.
-5. Preserve the routing invariant from #39: the R2DBC transaction must receive
+5. 보존: the routing invariant from #39: the R2DBC transaction must receive
    the authorized tenant through Reactor context and must never fall back to the
    default tenant on HTTP request paths.
-6. Document when to choose this strategy, how it differs from routing-only
+6. 문서화: when to choose this strategy, how it differs from routing-only
    module `04`, and why CI/Examples coverage is sufficient for this H2-only
    security example.
 
 ## Non-goals
 
-- Do not build a production identity provider or authorization server.
-- Do not add dynamic tenant onboarding/provisioning; that belongs to #41.
-- Do not update chapter aggregate docs beyond direct module README links unless
+- 금지: build a production identity provider or authorization server.
+- 금지: add dynamic tenant onboarding/provisioning; that belongs to #41.
+- 금지: update chapter aggregate docs beyond direct module README links unless
   issue #42 is being implemented.
-- Do not introduce a shared bluetape4k security library API. This remains a
+- 금지: introduce a shared bluetape4k security library API. This remains a
   workshop example.
-- Do not add non-H2 Testcontainers coverage for this module unless a later issue
+- 금지: add non-H2 Testcontainers coverage for this module unless a later issue
   asks for it.
 
 ## Proposed Module Shape

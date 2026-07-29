@@ -26,9 +26,9 @@ abstract class R2dbcExposedJsonTest: AbstractR2dbcExposedTest() {
             val data1 = DataHolder(user1, 10, true, null)
 
             /**
-             * JSON column 에 JSON 데이터를 저장합니다.
+             * Json column 에 Json 데이터를 저장합니다.
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO j_table (j_column)
              * VALUES ({"user":{"name":"Admin","team":null},"logins":10,"active":true,"team":null})
              * ```
@@ -55,7 +55,7 @@ abstract class R2dbcExposedJsonTest: AbstractR2dbcExposedTest() {
         }
     }
 
-    protected suspend fun withJsonArrays(
+    protected suspend fun withJSONArrays(
         testDB: TestDB,
         statement: suspend R2dbcTransaction.(
             tester: JsonTestData.JsonArrayTable,
@@ -99,7 +99,7 @@ abstract class R2dbcExposedJsonTest: AbstractR2dbcExposedTest() {
         }
     }
 
-    protected suspend fun withJsonBArrays(
+    protected suspend fun withjsonbArrays(
         testDB: TestDB,
         statement: suspend R2dbcTransaction.(
             tester: JsonTestData.JsonBArrayTable,

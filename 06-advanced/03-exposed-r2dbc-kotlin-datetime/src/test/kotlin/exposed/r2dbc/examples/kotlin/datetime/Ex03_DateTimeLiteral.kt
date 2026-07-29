@@ -49,7 +49,7 @@ class Ex03_DateTimeLiteral: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS tablewithdatetime (
      *      id SERIAL PRIMARY KEY,
      *      datetime TIMESTAMP NOT NULL
@@ -72,7 +72,7 @@ class Ex03_DateTimeLiteral: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS tablewithtimestamp (
      *      id SERIAL PRIMARY KEY,
      *      "timestamp" TIMESTAMP NOT NULL
@@ -87,7 +87,7 @@ class Ex03_DateTimeLiteral: AbstractR2dbcExposedTest() {
      * [dateLiteral] 을 사용한 날짜 등가 테스트
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT tablewithdate."date"
      *   FROM tablewithdate
      *  WHERE tablewithdate."date" = '2000-01-01'
@@ -120,7 +120,7 @@ class Ex03_DateTimeLiteral: AbstractR2dbcExposedTest() {
      * [dateLiteral] 을 사용한 날짜 비교 테스트
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT tablewithdate.id, tablewithdate."date"
      *   FROM tablewithdate
      *  WHERE tablewithdate."date" < '3000-01-01';
@@ -151,7 +151,7 @@ class Ex03_DateTimeLiteral: AbstractR2dbcExposedTest() {
      * [dateTimeLiteral] 을 사용한 날짜시간 비교 테스트
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT tablewithdatetime.datetime
      *   FROM tablewithdatetime
      *  WHERE tablewithdatetime.datetime = '2000-01-01T08:00:00.1';
@@ -184,7 +184,7 @@ class Ex03_DateTimeLiteral: AbstractR2dbcExposedTest() {
      * [dateTimeLiteral] 을 사용한 날짜시간 비교 테스트
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT tablewithdatetime.id, tablewithdatetime.datetime
      *   FROM tablewithdatetime
      *  WHERE tablewithdatetime.datetime < '3000-01-01T08:00:00.1'
@@ -216,7 +216,7 @@ class Ex03_DateTimeLiteral: AbstractR2dbcExposedTest() {
      * [timestampLiteral] 을 사용한 타임스탬프 등가 테스트
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT tablewithtimestamp."timestamp"
      *   FROM tablewithtimestamp
      *  WHERE tablewithtimestamp."timestamp" = '2000-01-01T01:00:00'
@@ -249,7 +249,7 @@ class Ex03_DateTimeLiteral: AbstractR2dbcExposedTest() {
      * [timestampLiteral] 을 사용한 타임스탬프 비교 테스트
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT tablewithtimestamp."timestamp"
      *   FROM tablewithtimestamp
      *  WHERE tablewithtimestamp."timestamp" < '3000-01-01T01:00:00'

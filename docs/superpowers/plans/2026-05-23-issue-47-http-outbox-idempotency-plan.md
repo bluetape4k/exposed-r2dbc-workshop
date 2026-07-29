@@ -1,31 +1,31 @@
-# Issue #47 HTTP Outbox Idempotency Plan
+# Issue #47 HTTP Outbox Idempotency 구현 계획
 
-## Tasks
+## 작업
 
-1. Extend Spring and Ktor outbound models with explicit status, attempts,
+1. 확장: Spring and Ktor outbound models with explicit status, attempts,
    response code, and error fields.
-2. Extend Spring and Ktor R2DBC tables/repositories with durable status
+2. 확장: Spring and Ktor R2DBC tables/repositories with durable status
    transitions for pending, in-flight claim, retryable failure, permanent
-   failure, exhausted attempts, and success. Keep HTTP calls outside
+   failure, exhausted attempts, and success. 유지: HTTP calls outside
    `suspendTransaction`.
-3. Add injectable outbound dispatch boundaries:
+3. 추가: injectable outbound dispatch boundaries:
    - Spring WebFlux `WebClient` implementation.
    - Ktor `HttpClient` implementation.
-4. Add HTTP routes to list outbound rows and dispatch retryable rows; guard all
+4. 추가: HTTP routes to list outbound rows and dispatch retryable rows; guard all
    outbound routes with `outbound:create`.
-5. Add focused Spring WebTestClient and Ktor `testApplication` tests for:
+5. 추가: focused Spring WebTestClient and Ktor `testApplication` tests for:
    success, retry, duplicate idempotency key, permanent failure, and permission
    boundaries.
-6. Add repository/service tests for concurrent duplicate submit, concurrent
+6. 추가: repository/service tests for concurrent duplicate submit, concurrent
    dispatch single-send behavior, max-attempt exhaustion, and sanitized
    `lastError` persistence.
-7. Update chapter/module/root README pairs and add a PNG diagram asset under
+7. 갱신: chapter/module/root README pairs and add a PNG diagram asset under
    `docs/assets/`.
-8. Add `docs/lessons/2026-05-23-issue-47-http-outbox-idempotency-r2dbc.md`.
-9. Run targeted tests, anti-pattern scan, Codex 6-tier review, Claude Code CLI
+8. 추가: `docs/lessons/2026-05-23-issue-47-http-outbox-idempotency-r2dbc.md`.
+9. 실행: targeted tests, anti-pattern scan, Codex 6-tier review, Claude Code CLI
    6-tier review, then commit and open PR.
 
-## Verification
+## 검증
 
 - `repo-test-summary -- ./gradlew :01-spring-production-integration:test :02-ktor-production-integration:test -PuseDB=H2 --continue --console=plain`
 - `./gradlew detekt --parallel --console=plain`

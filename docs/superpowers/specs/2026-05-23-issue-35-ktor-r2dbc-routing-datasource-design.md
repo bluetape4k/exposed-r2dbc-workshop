@@ -1,6 +1,6 @@
 # Issue 35 Ktor R2DBC Routing Datasource Design
 
-## Context
+## 맥락
 
 Issue #35 adds the Ktor equivalent of chapter 11
 `03-routing-datasource`. The existing Spring WebFlux module demonstrates
@@ -13,9 +13,9 @@ The matching `exposed-workshop` issue is #49. The local Ktor examples from
 resource ownership, README localization, PNG diagram placement, and workflow
 verification pattern.
 
-## Goals
+## 목표s
 
-1. Add `11-high-performance/06-routing-datasource-ktor-r2dbc`.
+1. 추가: `11-high-performance/06-routing-datasource-ktor-r2dbc`.
 2. Demonstrate route-driven and header-driven R2DBC target selection:
    - tenant header `X-Tenant-Id`;
    - read-only header `X-Read-Only`;
@@ -25,19 +25,19 @@ verification pattern.
    Ktor call attributes and passing a value object into repository methods.
 4. Seed separate H2 R2DBC pools for `default:rw`, `default:ro`, `acme:rw`, and
    `acme:ro`, each with its own marker row.
-5. Add tests proving representative routes select the expected database path
+5. 추가: tests proving representative routes select the expected database path
    and updates affect only the read-write target for the selected tenant.
-6. Add English/Korean README files and a committed PNG diagram.
+6. 추가: English/Korean README files and a committed PNG diagram.
 
-## Non-Goals
+## 비목표
 
-- Do not reuse Spring WebFlux, Reactor Context, `TransactionalOperator`, or
+- 금지: reuse Spring WebFlux, Reactor Context, `TransactionalOperator`, or
   ThreadLocal request state.
-- Do not implement authentication or tenant authorization.
-- Do not introduce a general-purpose routing datasource library abstraction.
-- Do not change the existing Spring routing module except chapter README and CI
+- 금지: implement authentication or tenant authorization.
+- 금지: introduce a general-purpose routing datasource library abstraction.
+- 금지: change the existing Spring routing module except chapter README and CI
   discoverability links.
-- Do not run multi-database Testcontainers for this example; H2 is sufficient
+- 금지: run multi-database Testcontainers for this example; H2 is sufficient
   because the lesson is routing selection, not backend SQL compatibility.
 
 ## Module Shape
@@ -89,7 +89,7 @@ Ktor installs:
 
 1. `ContentNegotiation` with strict kotlinx JSON.
 2. `StatusPages` for stable JSON error responses.
-3. A routing request plugin that resolves tenant/read-only headers and stores a
+3. A routing request plugin that resolves tenant/read-only headers and 저장한다: a
    validated `RoutingRequest` value in `call.attributes`.
 
 The repository receives `RoutingRequest` explicitly:
@@ -129,15 +129,15 @@ with the server lifecycle before disposing pools.
   routing does not leak between coroutines by correlating each request's tenant
   input with that response's `tenant`, `readOnly`, and marker value.
 
-## Documentation and Workflow
+## 문서화 and Workflow
 
-- Add module README and README.ko.
-- Add PNG diagram under `docs/images/readme-diagrams/` and reference the PNG
+- 추가: module README and README.ko.
+- 추가: PNG diagram under `docs/images/readme-diagrams/` and reference the PNG
   from both module READMEs.
 - Link the module from chapter 11 README/README.ko.
-- Add the module to `.github/workflows/Examples.yml` chapter 11 path filters,
+- 추가: the module to `.github/workflows/Examples.yml` chapter 11 path filters,
   test command, and artifact paths.
-- Add a lesson note after implementation.
+- 추가: a lesson note after implementation.
 
 ## Verification Targets
 
@@ -148,7 +148,7 @@ with the server lifecycle before disposing pools.
 - `./gradlew detekt --parallel --console=plain`
 - `actionlint .github/workflows/Examples.yml`
 - `git diff --check`
-- Scan for `runBlocking`, `kotlinx.coroutines.runBlocking`, `ThreadLocal`,
+- scan: for `runBlocking`, `kotlinx.coroutines.runBlocking`, `ThreadLocal`,
   `ReactorContext`, `TransactionalOperator`, `GlobalScope`, direct
   `GenericContainer`, and swallowed `CancellationException`.
 

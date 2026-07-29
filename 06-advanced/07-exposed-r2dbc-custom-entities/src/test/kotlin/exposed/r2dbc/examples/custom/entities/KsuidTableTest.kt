@@ -41,7 +41,7 @@ class KsuidTableTest: AbstractCustomIdTableTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS t_ksuid (
      *      id VARCHAR(27) PRIMARY KEY,
      *      "name" VARCHAR(255) NOT NULL,

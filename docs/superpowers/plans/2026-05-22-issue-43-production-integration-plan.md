@@ -1,4 +1,4 @@
-# Issue #43 Chapter 12 Production Integration Plan
+# Issue #43 Chapter 12 Production Integration 구현 계획
 
 ## Target
 
@@ -7,49 +7,49 @@ documentation, tests, and verification evidence.
 
 ## Steps
 
-1. Add Gradle wiring.
-   - Add `includeModules("12-production-integration", false, false)`.
+1. 추가: Gradle wiring.
+   - 추가: `includeModules("12-production-integration", false, false)`.
    - Cross-check the existing `includeModules` signature in
      `settings.gradle.kts` before editing.
-   - Add Ktor aliases to `gradle/libs.versions.toml`.
+   - 추가: Ktor aliases to `gradle/libs.versions.toml`.
 
-2. Implement Spring module.
-   - Create build file and package structure.
-   - Add package slices: `app`, `auth`, `realtime`, `outbound`, and
+2. 구현: Spring module.
+   - 생성: build file and package structure.
+   - 추가: package slices: `app`, `auth`, `realtime`, `outbound`, and
      `diagnostics`.
-   - Add Exposed R2DBC schema, repositories, services, WebFlux handlers,
+   - 추가: Exposed R2DBC schema, repositories, services, WebFlux handlers,
      realtime SSE/WebSocket outbox replay, and readiness diagnostics.
-   - Add focused repository/service/WebTestClient tests. Keep app-boundary
+   - 추가: focused repository/service/WebTestClient tests. 유지: app-boundary
      tests on H2 R2DBC; use repository-level dialect matrix only where useful.
 
-3. Implement Ktor module.
-   - Create build file and package structure.
-   - Add matching package slices: `app`, `auth`, `realtime`, `outbound`, and
+3. 구현: Ktor module.
+   - 생성: build file and package structure.
+   - 추가: matching package slices: `app`, `auth`, `realtime`, `outbound`, and
      `diagnostics`.
-   - Add matching Exposed R2DBC schema, repositories, services, Ktor routing,
+   - 추가: matching Exposed R2DBC schema, repositories, services, Ktor routing,
      auth/session, WebSockets, StatusPages, and outbound client boundary.
-   - Add focused repository/service/`testApplication`/MockEngine tests.
-     Keep app-boundary tests on H2 R2DBC; use repository-level dialect matrix
+   - 추가: focused repository/service/`testApplication`/MockEngine tests.
+     유지: app-boundary tests on H2 R2DBC; use repository-level dialect matrix
      only where useful.
 
-4. Add documentation.
-   - Add `12-production-integration/README.md`.
-   - Add `12-production-integration/README.ko.md`.
-   - Update root `README.md` and `README.ko.md` learning path/module map.
+4. 추가: documentation.
+   - 추가: `12-production-integration/README.md`.
+   - 추가: `12-production-integration/README.ko.md`.
+   - 갱신: root `README.md` and `README.ko.md` learning path/module map.
 
 5. Verify.
-   - Run IDE diagnostics if available.
-   - Run `./gradlew projects`.
-   - Run targeted Chapter 12 tests sequentially, preferably through
+   - 실행: IDE diagnostics if available.
+   - 실행: `./gradlew projects`.
+   - 실행: targeted Chapter 12 tests sequentially, preferably through
      `repo-test-summary -- ./gradlew :01-spring-production-integration:test :02-ktor-production-integration:test`.
-   - Run code review gate and resolve P0/P1 findings.
+   - 실행: code review gate and resolve P0/P1 findings.
 
 6. Capture durable learning.
-   - Add `docs/lessons/2026-05-22-issue-43-production-integration.md`.
-   - Commit all changes with a Lore commit message.
-   - Create PR for Issue #43 after lessons are committed.
+   - 추가: `docs/lessons/2026-05-22-issue-43-production-integration.md`.
+   - 커밋: all changes with a Lore commit message.
+   - 생성: PR for Issue #43 다음 위치 뒤: lessons are committed.
 
-## Review Notes
+## 검토 메모
 
 Spec and plan are intentionally scoped to two modules. If advisor review finds
 that child issues require separate modules for traceability, split only the

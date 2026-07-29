@@ -8,7 +8,7 @@ import org.jetbrains.exposed.v1.core.statements.InsertStatement
 import java.math.BigDecimal
 
 /**
- * Postgres:
+ * PostgreSQL DDL 예시:
  * ```sql
  * CREATE TABLE IF NOT EXISTS misctable (
  *      "by" SMALLINT NOT NULL,

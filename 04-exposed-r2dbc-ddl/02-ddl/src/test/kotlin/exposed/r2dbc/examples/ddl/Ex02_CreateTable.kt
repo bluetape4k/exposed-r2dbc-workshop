@@ -164,7 +164,7 @@ class Ex02_CreateTable: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS book (
      *      id SERIAL,
      *      CONSTRAINT PK_Book_ID PRIMARY KEY (id)
@@ -179,7 +179,7 @@ class Ex02_CreateTable: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS person (
      *      id1 INT,
      *      id2 INT,
@@ -244,7 +244,7 @@ class Ex02_CreateTable: AbstractR2dbcExposedTest() {
      * `child1` 이 `parent1` 의 `id_a`, `id_b` 컬럼을 참조하는 Foreign Key를 가지고 있습니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS parent1 (
      *      id_a INT,
      *      id_b INT,
@@ -301,7 +301,7 @@ class Ex02_CreateTable: AbstractR2dbcExposedTest() {
      * `child1` 이 `parent1` 의 `id_a`, `id_b` 컬럼을 참조하는 Foreign Key를 가지고 있습니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS parent1 (
      *      pid_a INT,
      *      pid_b INT,

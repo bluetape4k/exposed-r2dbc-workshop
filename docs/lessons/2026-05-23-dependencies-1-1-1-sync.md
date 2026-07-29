@@ -1,36 +1,23 @@
-# Dependencies 1.1.1 Sync
+# Dependencies 1.1.1 동기화 교훈
 
-## Context
+## 맥락
 
-`bluetape4k-dependencies` 1.1.0 was superseded by 1.1.1 after the artifact
-availability audit found generated aliases for non-published mock web
-application modules. This workshop consumes the shared catalog and also runs a
-database matrix that can expose repository-specific R2DBC behavior after
-artifact availability is fixed.
+Artifact availability audit에서 게시되지 않은 mock web application module에 대한 generated alias가 발견된 뒤 `bluetape4k-dependencies` 1.1.0은 1.1.1로 대체되었다. 이 workshop은 shared catalog를 소비하고, artifact availability가 고쳐진 뒤 repository-specific R2DBC 동작을 드러낼 수 있는 database matrix도 실행한다.
 
-## Decision
+## 결정
 
-Consume `bluetape4k-dependencies = "1.1.1"` through the standard shared-version
-sync path. Keep catalog availability fixes separate from R2DBC compatibility
-fixes.
+표준 shared-version sync path를 통해 `bluetape4k-dependencies = "1.1.1"`을 사용한다. Catalog availability 수정은 R2DBC compatibility 수정과 분리해서 유지한다.
 
-## Outcome
+## 결과
 
-PR #85 aligned this repository to the 1.1.1 catalog and merged after CI passed.
-The PostgreSQL matrix then exposed an Exposed R2DBC batch insert generated-key
-issue, recorded separately in
-`docs/lessons/2026-05-23-r2dbc-batch-insert-generated-values.md`.
+PR #85는 이 repository를 1.1.1 catalog에 맞췄고 CI 통과 후 병합됐다. 이후 PostgreSQL matrix가 Exposed R2DBC batch insert generated-key 문제를 드러냈으며, 이는 `docs/lessons/2026-05-23-r2dbc-batch-insert-generated-values.md`에 별도로 기록했다.
 
-## Verification
+## 검증
 
 - `./gradlew :exposed-r2dbc-shared:test -PuseDB=POSTGRESQL --max-workers=1 --continue`
 - GitHub PR #85 status checks passed before merge.
-- Workspace-level `scripts/sync-shared-versions.py --workspace .. --check --summary`
-  passed after the downstream PRs were merged.
+- Downstream PR 병합 후 workspace-level `scripts/sync-shared-versions.py --workspace .. --check --summary` 통과.
 
-## Future Guidance
+## 향후 지침
 
-When the shared catalog patch fixes publication availability, wait until Maven
-Central `repo1` resolves the new version before rerunning downstream CI. If a
-database matrix then fails, preserve the dependency sync and fix the
-repository-specific database behavior in the same PR or a follow-up patch.
+Shared catalog patch가 publication availability를 고치면, downstream CI를 다시 돌리기 전에 Maven Central `repo1`에서 새 version을 resolve할 수 있는지 기다린다. 이후 database matrix가 실패하면 dependency sync는 보존하고 repository-specific database behavior를 같은 PR이나 follow-up patch에서 고친다.

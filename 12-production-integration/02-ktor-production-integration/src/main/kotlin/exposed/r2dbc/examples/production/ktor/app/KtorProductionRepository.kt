@@ -40,7 +40,7 @@ import kotlin.time.toKotlinDuration
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 /**
- * Exposed R2DBC repository for the Ktor production slices.
+ * Ktor production slice에서 사용하는 Exposed R2DBC repository입니다.
  */
 class KtorProductionRepository(
     private val database: R2dbcDatabase,
@@ -53,7 +53,7 @@ class KtorProductionRepository(
         const val maxOutboxErrorLength = 240
         const val maxOutboundErrorLength = 240
         const val maxOutboundAttempts = 3
-        // Longest prefix preserved before a sanitized error body, e.g. "HTTP 599 ".
+        // 정제된 오류 본문 앞에 보존할 가장 긴 prefix입니다. 예: "HTTP 599 ".
         private const val maxHttpStatusPrefixLength = 9
         val outboundDispatchTimeout: Duration = Duration.ofSeconds(5)
         val idempotencyKeyPattern = Regex("[A-Za-z0-9._-]{1,120}")

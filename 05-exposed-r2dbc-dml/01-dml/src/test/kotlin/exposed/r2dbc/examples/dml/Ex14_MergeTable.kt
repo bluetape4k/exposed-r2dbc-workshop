@@ -53,7 +53,7 @@ class Ex14_MergeTable: Ex14_MergeBase() {
      * `whenNotMatchedInsert` 는 매치되는 행이 없을 때에 `INSERT` 구문을 실행합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * MERGE INTO dest
      * USING "source" ON "source"."key" = dest."key"
      *  WHEN NOT MATCHED THEN
@@ -93,7 +93,7 @@ class Ex14_MergeTable: Ex14_MergeBase() {
      * [mergeFrom] 함수를 사용하여 [org.jetbrains.exposed.v1.core.statements.MergeStatement.whenNotMatchedInsert] 를 테스트합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * MERGE INTO dest dest_alias
      * USING "source" source_alias ON source_alias."key" = dest_alias."key"
      *  WHEN NOT MATCHED THEN
@@ -132,7 +132,7 @@ class Ex14_MergeTable: Ex14_MergeBase() {
      *
      * `whenMatchedUpdate` 는 매치되는 행이 있을 때에 `UPDATE` 구문을 실행합니다.
      *
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * MERGE INTO dest
      * USING "source" ON "source"."key" = dest."key"
@@ -167,7 +167,7 @@ class Ex14_MergeTable: Ex14_MergeBase() {
      * MergeFrom with whenMatchedUpdate
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * MERGE INTO dest dest_alias
      * USING "source" ON "source"."key" = dest_alias."key"
      *  WHEN MATCHED THEN
@@ -204,7 +204,7 @@ class Ex14_MergeTable: Ex14_MergeBase() {
      * `whenMatchedDelete` 는 매치되는 행이 있을 때에 `DELETE` 구문을 실행합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * MERGE INTO dest
      * USING "source" ON "source"."key" = dest."key"
      * WHEN MATCHED THEN
@@ -236,7 +236,7 @@ class Ex14_MergeTable: Ex14_MergeBase() {
      * * `whenMatchedUpdate` 는 매치되는 행이 있을 때에 `UPDATE` 구문을 실행합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * MERGE INTO dest
      * USING "source" ON "source"."key" = dest."key"
      *  WHEN NOT MATCHED AND ("source"."value" > 2) THEN
@@ -310,7 +310,7 @@ class Ex14_MergeTable: Ex14_MergeBase() {
      * MergeFrom with multiple clauses
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * MERGE INTO dest
      * USING "source" ON "source"."key" = dest."key"
      *  WHEN NOT MATCHED AND ("source"."value" = 1) THEN
@@ -391,7 +391,7 @@ class Ex14_MergeTable: Ex14_MergeBase() {
     /**
      * MergeFrom with auto generated on condition
      *
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * MERGE INTO dest
      * USING "source" ON dest.id="source".id
@@ -458,7 +458,7 @@ class Ex14_MergeTable: Ex14_MergeBase() {
      * `whenNotMatchedDoNothing` 는 매치되는 행이 없을 때 아무 작업도 수행하지 않습니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * MERGE INTO dest
      * USING "source" ON "source"."key" = dest."key"
      *  WHEN NOT MATCHED AND ("source"."value" > 1) THEN
@@ -503,7 +503,7 @@ class Ex14_MergeTable: Ex14_MergeBase() {
      * `whenMatchedDoNothing` 는 매치되는 행이 있을 때 아무 작업도 수행하지 않습니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * MERGE INTO dest
      * USING "source" ON "source"."key" = dest."key"
      *  WHEN MATCHED AND ("source"."value" = 1) THEN
@@ -542,7 +542,7 @@ class Ex14_MergeTable: Ex14_MergeBase() {
     /**
      * Postgres 에서 `OVERRIDING SYSTEM VALUE` 옵션을 사용하여 DEST 테이블의 ID 값을 덮어쓰는 테스트입니다.
      *
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * MERGE INTO dest
      * USING src ON dest.id=src.id
@@ -581,7 +581,7 @@ class Ex14_MergeTable: Ex14_MergeBase() {
     /**
      * Postgres 에서 `OVERRIDING USER VALUE` 옵션을 사용하여 DEST 테이블의 ID 값을 덮어쓰는 테스트입니다.
      *
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * MERGE INTO dest
      * USING src ON dest.id=src.id
@@ -635,7 +635,7 @@ class Ex14_MergeTable: Ex14_MergeBase() {
      * [mergeFrom] with `whenNotMatchedInsert` 시 기본 값 사용하기
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * MERGE INTO dest
      * USING source ON dest.id=source.id
      *  WHEN NOT MATCHED THEN
@@ -674,7 +674,7 @@ class Ex14_MergeTable: Ex14_MergeBase() {
      * [mergeFrom] with `whenNotMatchedInsert` 시 상수 값 사용하기
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * MERGE INTO dest
      * USING (
      *      SELECT "source".id,

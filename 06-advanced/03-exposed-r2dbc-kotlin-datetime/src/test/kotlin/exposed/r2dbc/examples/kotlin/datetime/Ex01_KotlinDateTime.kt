@@ -272,7 +272,7 @@ class Ex01_KotlinDateTime: AbstractR2dbcExposedTest() {
      * [Instant] 컬럼을 `expression` 을 사용하여 조회하는 테스트
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO tester (ts, tsn)
      * VALUES ('2025-02-04T13:51:14.734797', '2025-02-04T13:51:14.734797');
      *
@@ -328,7 +328,7 @@ class Ex01_KotlinDateTime: AbstractR2dbcExposedTest() {
      * [LocalDate] 수형의 [date] 컬럼을 비교하는 테스트
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT test_table.created, test_table.deleted
      *   FROM test_table
      *  WHERE test_table.created = test_table.deleted;
@@ -403,7 +403,7 @@ class Ex01_KotlinDateTime: AbstractR2dbcExposedTest() {
      * [LocalDateTime] 컬럼을 비교하는 테스트
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO test_table_dt (created, modified)
      * VALUES ('2011-05-04T13:00:21.871130789', '2011-05-04T13:00:21.871130789');
      * INSERT INTO test_table_dt (created, modified)
@@ -479,10 +479,10 @@ class Ex01_KotlinDateTime: AbstractR2dbcExposedTest() {
     }
 
     /**
-     * `jsonb` 컬럼에 [LocalDateTime] 속성을 가진 Object를 저장하고 조회하는 테스트
+     * `JSONB` 컬럼에 [LocalDateTime] 속성을 가진 Object를 저장하고 조회하는 테스트
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO tester (created, modified)
      * VALUES ('2024-02-04T00:00:00', {"userId":1,"timestamp":"2025-02-04T14:09:02.148894"});
      *
@@ -521,7 +521,7 @@ class Ex01_KotlinDateTime: AbstractR2dbcExposedTest() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun testDateTimeAsJsonB(testDB: TestDB) = runTest {
+    fun testDateTimeAsJSONB(testDB: TestDB) = runTest {
         /**
          * ```sql
          * CREATE TABLE IF NOT EXISTS tester (
@@ -569,9 +569,9 @@ class Ex01_KotlinDateTime: AbstractR2dbcExposedTest() {
              * SELECT JSONB_EXTRACT_PATH(tester.modified, 'timestamp') FROM tester
              * ```
              */
-            val modifiedAsJson = tester.modified.extract<LocalDateTime>("${prefix}timestamp", toScalar = false)
-            val allModifiedAsJson = tester.select(modifiedAsJson)
-            allModifiedAsJson.all { it[modifiedAsJson] == dateTimeNow }.shouldBeTrue()
+            val modifiedAsJSON = tester.modified.extract<LocalDateTime>("${prefix}timestamp", toScalar = false)
+            val allModifiedAsJSON = tester.select(modifiedAsJSON)
+            allModifiedAsJSON.all { it[modifiedAsJSON] == dateTimeNow }.shouldBeTrue()
 
             /**
              * PostgreSQL requires explicit type cast to timestamp for in-DB comparison
@@ -597,7 +597,7 @@ class Ex01_KotlinDateTime: AbstractR2dbcExposedTest() {
      * `TIMESTAMP WITH TIME ZONE` 컬럼을 [OffsetDateTime]으로 활용하는 방법
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO testtable (timestamptz) VALUES ('2025-02-04T16:01:31.537352+02:00');
      * INSERT INTO testtable (timestamptz) VALUES ('2025-02-04T16:01:31.537352+02:00');
      * INSERT INTO testtable (timestamptz) VALUES ('2025-02-04T16:01:31.537352+02:00');
@@ -712,7 +712,7 @@ class Ex01_KotlinDateTime: AbstractR2dbcExposedTest() {
      * `TIMESTAMP WITH TIME ZONE` 컬럼을 활용하는 확장 함수 테스트
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO testtable ("timestamptz-column")
      * VALUES ('2023-05-04T05:04:01.123123123Z');
      *
@@ -826,7 +826,7 @@ class Ex01_KotlinDateTime: AbstractR2dbcExposedTest() {
      * [Duration] 컬럼 값에 무한대의 값을 저장하는 테스트 ([Long.MAX_VALUE]/2 값)
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO tester (duration) VALUES ('9223372036854775807');
      *
      * SELECT tester.duration
@@ -866,7 +866,7 @@ class Ex01_KotlinDateTime: AbstractR2dbcExposedTest() {
      * [LocalDate], [LocalDateTime] 를 배열로 가지는 컬럼을 테스트
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO array_tester (dates, datetimes)
      * VALUES (
      *      ARRAY['2020-05-04','2021-05-04','2022-05-04'],

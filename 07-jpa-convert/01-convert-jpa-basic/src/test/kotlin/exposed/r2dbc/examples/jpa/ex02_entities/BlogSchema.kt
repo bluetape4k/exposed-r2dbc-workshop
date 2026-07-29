@@ -55,7 +55,7 @@ object BlogSchema: KLoggingChannel() {
 
     /**
      * ```sql
-     * -- Postgres:
+     * -- PostgreSQL:
      * CREATE TABLE IF NOT EXISTS posts (
      *      id BIGSERIAL PRIMARY KEY,
      *      title VARCHAR(255) NOT NULL

@@ -125,7 +125,7 @@ class Ex01_Connection: AbstractR2dbcExposedTest() {
      * 테이블 제약조건을 가져온다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS parent (
      *      id BIGSERIAL PRIMARY KEY,
      *      "scale" INT NOT NULL

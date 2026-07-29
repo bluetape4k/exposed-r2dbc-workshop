@@ -53,7 +53,7 @@ class Ex03_CreateMissingTableAndColumns: AbstractR2dbcExposedTest() {
      * 현재 DB에서 누락된 테이블과 컬럼을 생성 - 01
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS tester (
      *      id INT PRIMARY KEY,
      *      "name" VARCHAR(50) NOT NULL,
@@ -99,7 +99,7 @@ class Ex03_CreateMissingTableAndColumns: AbstractR2dbcExposedTest() {
      * 누락된 테이블과 컬럼을 생성 - 02
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS users2 (
      *      id VARCHAR(22) PRIMARY KEY,
      *      "name" VARCHAR(255) NOT NULL,
@@ -149,7 +149,7 @@ class Ex03_CreateMissingTableAndColumns: AbstractR2dbcExposedTest() {
      *
      * t1 으로 테이블 생성
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS tester (
      *      idcol SERIAL PRIMARY KEY,
      *      "text" VARCHAR(50) NOT NULL
@@ -158,7 +158,7 @@ class Ex03_CreateMissingTableAndColumns: AbstractR2dbcExposedTest() {
      *
      * t2 로 테이블 수정
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * ALTER TABLE tester
      *      ALTER COLUMN idcol TYPE INT,
      *      ALTER COLUMN idcol DROP DEFAULT;

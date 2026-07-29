@@ -37,7 +37,7 @@ class Ex12_InsertInto_Select: AbstractR2dbcExposedTest() {
      * Users 테이블에서 일부 컬럼을 선택하여 Cities 테이블에 추가하는 예제
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO cities ("name")
      * SELECT SUBSTRING(users."name", 1, 2)
      *   FROM users
@@ -75,7 +75,7 @@ class Ex12_InsertInto_Select: AbstractR2dbcExposedTest() {
      * 같은 테이블에 대해 `INSERT INTO ... SELECT ... FROM ...` 구문을 사용하는 예제
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO userdata (user_id, "comment", "value")
      * SELECT userdata.user_id, userdata."comment", 42
      *   FROM userdata
@@ -106,7 +106,7 @@ class Ex12_InsertInto_Select: AbstractR2dbcExposedTest() {
      * Expression 을 사용하여 `INSERT INTO ... SELECT ... FROM ...` 구문을 사용하는 예제
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO users (id, "name", city_id, flags)
      * SELECT SUBSTRING(CAST(RANDOM() AS VARCHAR(255)), 1, 10), 'Foo', 1, 0
      *   FROM users
@@ -119,8 +119,8 @@ class Ex12_InsertInto_Select: AbstractR2dbcExposedTest() {
         withCitiesAndUsers(testDB) { _, users, _ ->
             val userCount = users.selectAll().count()
 
-            // 이렇게 Expresssion 을 사용할 수 있습니다.
-            // Random() 은 org.jetbrains.exposed.sql.Random() 이다.
+            // 이렇게 Expression을 값 생성식으로 사용할 수 있다.
+            // Random()은 org.jetbrains.exposed.sql.Random() 표현식이다.
             val nullableExpression: Expression<BigDecimal?> = Random() as Expression<BigDecimal?>
 
             users.insert(
@@ -142,7 +142,7 @@ class Ex12_InsertInto_Select: AbstractR2dbcExposedTest() {
      * Expression 을 사용하여 특정 컬럼 값만 `INSERT INTO ... SELECT ... FROM ...` 구문을 사용하는 예제
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO users ("name", id)
      * SELECT 'Foo', SUBSTRING(CAST(RANDOM() AS VARCHAR(255)), 1, 10)
      *   FROM users
@@ -173,7 +173,7 @@ class Ex12_InsertInto_Select: AbstractR2dbcExposedTest() {
      * INSERT INTO ... SELECT ... FROM ... 구문에서 INSERT 할 컬럼을 지정하고, 행의 갯수도 LIMIT으로 제한하는 예제
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO users ("name", id)
      * SELECT 'Foo', 'Foo'
      *   FROM users

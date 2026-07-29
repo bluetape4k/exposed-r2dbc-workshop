@@ -36,7 +36,7 @@ class Ex07_UnsignedColumnType: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS ubyte_table (
      *      ubyte SMALLINT NOT NULL,
      *      CONSTRAINT chk_ubyte_table_unsigned_byte_ubyte
@@ -50,7 +50,7 @@ class Ex07_UnsignedColumnType: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS ushort_table (
      *      ushort INT NOT NULL,
      *
@@ -65,7 +65,7 @@ class Ex07_UnsignedColumnType: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS uint_table (
      *      uint BIGINT NOT NULL,
      *
@@ -80,7 +80,7 @@ class Ex07_UnsignedColumnType: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS ulong_table (
      *      ulong BIGINT NOT NULL
      * )
@@ -419,7 +419,7 @@ class Ex07_UnsignedColumnType: AbstractR2dbcExposedTest() {
 
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS tester_1 (
          *      num1 SMALLINT NOT NULL,
          *      num2 INT NOT NULL,
@@ -439,7 +439,7 @@ class Ex07_UnsignedColumnType: AbstractR2dbcExposedTest() {
 
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS tester_2 (
          *      num1 SMALLINT NOT NULL,
          *      num2 INT NOT NULL,

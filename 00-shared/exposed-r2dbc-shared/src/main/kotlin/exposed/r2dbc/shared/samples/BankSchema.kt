@@ -27,7 +27,7 @@ object BankSchema {
      * 은행 계좌 테이블
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS bank_account (
      *      id SERIAL PRIMARY KEY,
      *      "number" VARCHAR(255) NOT NULL
@@ -45,7 +45,7 @@ object BankSchema {
      * 계좌 소유자 테이블
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS account_owner (
      *      id SERIAL PRIMARY KEY,
      *      ssn VARCHAR(255) NOT NULL
@@ -60,7 +60,7 @@ object BankSchema {
     }
 
     /**
-     * 은행 계좌 - 계좌 소유자에 대한 Many-to-Many Mapping Table
+     * 은행 계좌 - 계좌 소유자에 대한 Many-to-Many 매핑 테이블
      *
      * ```sql
      * CREATE TABLE IF NOT EXISTS owner_account_map (

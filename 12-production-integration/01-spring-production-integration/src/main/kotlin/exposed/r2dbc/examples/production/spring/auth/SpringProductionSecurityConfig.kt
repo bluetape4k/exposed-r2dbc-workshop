@@ -16,7 +16,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository
 
 /**
- * Spring WebFlux Security configuration backed by Exposed R2DBC account rows.
+ * Exposed R2DBC 계정 행을 기반으로 동작하는 Spring WebFlux Security 설정입니다.
  */
 @Configuration(proxyBeanMethods = false)
 @EnableWebFluxSecurity

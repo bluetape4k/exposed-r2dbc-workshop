@@ -15,7 +15,7 @@ internal const val AMOUNT_SCALE = 5
  * [MonetaryAmount] 는 [BigDecimal] 과 [CurrencyUnit] 으로 구성되어 있습니다.
  *
  * ```sql
- * -- Postgres
+ * -- PostgreSQL
  * CREATE TABLE IF NOT EXISTS accounts (
  *      id SERIAL PRIMARY KEY,
  *      composite_money DECIMAL(8, 5) NULL,       -- amount

@@ -174,7 +174,7 @@ class Ex22_ColumnWithTransform: AbstractR2dbcExposedTest() {
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `nested transforms`(testDB: TestDB) = runTest {
         /**
-         * Postgres:
+         * PostgreSQL DDL 예시:
          * ```sql
          * CREATE TABLE IF NOT EXISTS nested_transformer (
          *      id SERIAL PRIMARY KEY,
@@ -310,7 +310,7 @@ class Ex22_ColumnWithTransform: AbstractR2dbcExposedTest() {
         /**
          * value class인 [CustomId]의 value 수형이 UUID 이므로, 테이블 기본 키의 수형은 UUID 이다.
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS tester (id uuid PRIMARY KEY)
          * ```
          */

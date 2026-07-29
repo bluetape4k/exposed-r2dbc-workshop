@@ -38,7 +38,7 @@ import org.junit.jupiter.params.provider.MethodSource
  * - **MySQL ENUM 타입**: `customEnumeration()`과 SQL ENUM DDL을 함께 사용
  *
  * ```sql
- * -- Postgres 네이티브 ENUM
+ * -- PostgreSQL 네이티브 ENUM
  * CREATE TYPE Status AS ENUM ('ACTIVE', 'INACTIVE');
  *
  * -- MySQL ENUM 컬럼
@@ -118,7 +118,7 @@ class Ex07_CustomEnumeration: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS tester (
      *      id SERIAL PRIMARY KEY,
      *      status_name VARCHAR(32) DEFAULT 'ACTIVE' NOT NULL
@@ -167,7 +167,7 @@ class Ex07_CustomEnumeration: AbstractR2dbcExposedTest() {
                 EnumTable.initEnumColumn(sqlType)
                 SchemaUtils.create(EnumTable)
 
-                // drop shared table object's unique index if created in other test
+                // 다른 테스트에서 생성한 shared table object의 unique index를 제거한다.
                 if (EnumTable.indices.isNotEmpty()) {
                     exec(EnumTable.indices.first().dropStatement().single())
                 }

@@ -56,33 +56,33 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 /**
- * Jackson 3.x 기반 JSON 컬럼(`jackson()`) 테스트 모음.
+ * Jackson 3.x 기반 Json 컬럼(`jackson()`) 테스트 모음.
  *
- * `bluetape4k-exposed` 의 `jackson()` 확장 함수로 정의한 JSON(텍스트) 컬럼에 대해
+ * `bluetape4k-exposed` 의 `jackson()` 확장 함수로 정의한 Json(텍스트) 컬럼에 대해
  * 다음 기능을 검증합니다:
  *
- * - **삽입 및 조회**: `insertAndGetId` / `selectAll` 로 객체를 JSON 직렬화하여 저장하고 역직렬화하여 조회
- * - **업데이트**: `update` 로 JSON 컬럼 값 변경
- * - **경로 추출 (`extract`)**: DB 내장 함수로 JSON 내부 필드를 직접 SELECT
+ * - **삽입 및 조회**: `insertAndGetId` / `selectAll` 로 객체를 Json 직렬화하여 저장하고 역직렬화하여 조회
+ * - **업데이트**: `update` 로 Json 컬럼 값 변경
+ * - **경로 추출 (`extract`)**: DB 내장 함수로 Json 내부 필드를 직접 SELECT
  *   - PostgreSQL: `JSON_EXTRACT_PATH` / `JSON_EXTRACT_PATH_TEXT`
  *   - MySQL: `JSON_EXTRACT` / `JSON_UNQUOTE(JSON_EXTRACT(...))`
- * - **포함 여부 검사 (`contains`)**: 특정 JSON 조각이 컬럼 값에 포함되는지 확인
+ * - **포함 여부 검사 (`contains`)**: 특정 Json 조각이 컬럼 값에 포함되는지 확인
  *   - PostgreSQL: `::jsonb @>` 연산자
  *   - MySQL/MariaDB: `JSON_CONTAINS()`
  * - **경로 존재 여부 (`exists`)**: 지정 경로에 데이터가 존재하는지 확인
- *   - PostgreSQL: `JSONB_PATH_EXISTS()`
+ *   - PostgreSQL: `jsonb_PATH_EXISTS()`
  *   - MySQL/MariaDB: `JSON_CONTAINS_PATH()`
  * - **배열 컬럼 처리**: `jackson<UserGroup>`, `jackson<IntArray>` 등 컬렉션 타입 컬럼 지원
- * - **기본값**: `default()` / `clientDefault()` 로 JSON 컬럼 기본값 설정
+ * - **기본값**: `default()` / `clientDefault()` 로 Json 컬럼 기본값 설정
  * - **nullable 컬럼**: `nullable()` 선언 후 null 값 삽입 및 조회
- * - **UPSERT**: `upsert {}` 블록에서 JSON 컬럼 지원
+ * - **UPSERT**: `upsert {}` 블록에서 Json 컬럼 지원
  * - **transform**: `transform(wrap, unwrap)` 으로 저장 타입과 도메인 타입 분리
  * - **databaseGenerated**: DB 측 기본값으로 선언된 컬럼을 애플리케이션에서 읽기 전용으로 사용
  *
  * Jackson 3.x 는 Jakarta EE 네임스페이스 기반의 최신 메이저 버전이며,
  * `io.bluetape4k.exposed.core.jackson3.*` 패키지의 확장 함수를 사용합니다.
  *
- * 참고: H2는 JSON 경로 추출/검색 함수를 지원하지 않으므로 일부 테스트는 `Assumptions.assumeTrue`로 제외됩니다.
+ * 참고: H2는 Json 경로 추출/검색 함수를 지원하지 않으므로 일부 테스트는 `Assumptions.assumeTrue`로 제외됩니다.
  */
 @Suppress("DEPRECATION")
 class JacksonColumnTest: AbstractR2dbcExposedTest() {
@@ -93,20 +93,20 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
      * ```sql
      * -- H2
      * INSERT INTO JACKSON_TABLE (JACKSON_COLUMN)
-     * VALUES (JSON '{"user":{"name":"Pro","team":"Alpha"},"logins":999,"active":true,"team":"A"}' FORMAT JSON);
+     * VALUES (Json '{"user":{"name":"Pro","team":"Alpha"},"logins":999,"active":true,"team":"A"}' FORMAT Json);
      *
      * -- MySQL V8
      * INSERT INTO jackson_table (jackson_column)
      * VALUES ({"user":{"name":"Pro","team":"Alpha"},"logins":999,"active":true,"team":"A"});
      *
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO jackson_table (jackson_column)
      * VALUES ({"user":{"name":"Pro","team":"Alpha"},"logins":999,"active":true,"team":"A"});
      * ```
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `JSON 컬럼에 대해 삽입 및 조회하기`(testDB: TestDB) = runTest {
+    fun `Json 컬럼에 대해 삽입 및 조회하기`(testDB: TestDB) = runTest {
         withJacksonTable(testDB) { tester, _, _ ->
             val newData = DataHolder(User("Pro", "Alpha"), 999, true, "A")
             val newId = tester.insertAndGetId {
@@ -120,14 +120,14 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * UPDATE jackson_table
      *    SET jackson_column={"user":{"name":"Admin","team":null},"logins":10,"active":false,"team":null}
      * ```
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `update JSON 컬럼`(testDB: TestDB) = runTest {
+    fun `update Json 컬럼`(testDB: TestDB) = runTest {
         withJacksonTable(testDB) { tester, _, data1 ->
             tester.selectAll().single()[tester.jacksonColumn] shouldBeEqualTo data1
 
@@ -142,7 +142,7 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT JSON_EXTRACT_PATH(jackson_table.jackson_column, 'active') FROM jackson_table;
      * SELECT JSON_EXTRACT_PATH(jackson_table.jackson_column, 'user') FROM jackson_table;
      * SELECT JSON_EXTRACT_PATH_TEXT(jackson_table.jackson_column, 'user', 'name') FROM jackson_table;
@@ -155,13 +155,13 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `JSON 컬럼의 특정 속성만 조회하기`(testDB: TestDB) = runTest {
+    fun `Json 컬럼의 특정 속성만 조회하기`(testDB: TestDB) = runTest {
         Assumptions.assumeTrue { testDB !in TestDB.ALL_H2 }
 
         withJacksonTable(testDB) { tester, user1, data1 ->
             val pathPrefix = if (currentDialectTest is PostgreSQLDialect) "" else "."
 
-            // SQLServer & Oracle return null if extracted JSON is not scalar
+            // SQLServer & Oracle return null if extracted Json is not scalar
             val requiresScala = currentDialectTest is SQLServerDialect || currentDialectTest is OracleDialect
             val isActive = tester.jacksonColumn.extract<Boolean>("${pathPrefix}active", toScalar = requiresScala)
             val row = tester.select(isActive).singleOrNull()
@@ -183,7 +183,7 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT jackson_table.id
      *   FROM jackson_table
      *  WHERE CAST(JSON_EXTRACT_PATH_TEXT(jackson_table.jackson_column, 'logins') AS INT) >= 1000;
@@ -218,8 +218,8 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
-     * CREATE TABLE IF NOT EXISTS tester (j_col JSON NOT NULL)
+     * -- PostgreSQL
+     * CREATE TABLE IF NOT EXISTS tester (j_col Json NOT NULL)
      * ```
      */
     @ParameterizedTest
@@ -235,11 +235,11 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
         }
     }
 
-    private val supportsJsonContains = TestDB.ALL_POSTGRES + TestDB.ALL_MYSQL_MARIADB
+    private val supportsJSONContains = TestDB.ALL_POSTGRES + TestDB.ALL_MYSQL_MARIADB
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT jackson_table.id, jackson_table.jackson_column
      *   FROM jackson_table
      *  WHERE jackson_table.jackson_column::jsonb @> '{"active":false}'::jsonb;
@@ -265,7 +265,7 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `json contains 함수 사용하기`(testDB: TestDB) = runTest {
-        Assumptions.assumeTrue { testDB in supportsJsonContains }
+        Assumptions.assumeTrue { testDB in supportsJSONContains }
 
         withJacksonTable(testDB) { tester, user1, data1 ->
             val alphaTeamUser = user1.copy(team = "Alpha")
@@ -277,8 +277,8 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
             val rows = tester.selectAll().where { userIsInactive }.toList()
             rows.shouldBeEmpty()
 
-            val alphaTeamUserAsJson = """{"user":${DefaultJacksonSerializer.serializeAsString(alphaTeamUser)}}"""
-            var userIsInAlphaTeam = tester.jacksonColumn.contains(stringLiteral(alphaTeamUserAsJson))
+            val alphaTeamUserAsJSON = """{"user":${DefaultJacksonSerializer.serializeAsString(alphaTeamUser)}}"""
+            var userIsInAlphaTeam = tester.jacksonColumn.contains(stringLiteral(alphaTeamUserAsJSON))
             tester.selectAll().where { userIsInAlphaTeam }.count() shouldBeEqualTo 1L
 
             // test target contains candidate at specified path
@@ -292,15 +292,15 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(*) FROM jackson_table
-     *  WHERE JSONB_PATH_EXISTS(CAST(jackson_table.jackson_column as jsonb), '$');
+     *  WHERE jsonb_PATH_EXISTS(CAST(jackson_table.jackson_column as jsonb), '$');
      *
      * SELECT COUNT(*) FROM jackson_table
-     *  WHERE JSONB_PATH_EXISTS(CAST(jackson_table.jackson_column as jsonb), '$.fakeKey');
+     *  WHERE jsonb_PATH_EXISTS(CAST(jackson_table.jackson_column as jsonb), '$.fakeKey');
      *
      * SELECT COUNT(*) FROM jackson_table
-     *  WHERE JSONB_PATH_EXISTS(CAST(jackson_table.jackson_column as jsonb), '$.logins');
+     *  WHERE jsonb_PATH_EXISTS(CAST(jackson_table.jackson_column as jsonb), '$.logins');
      *
      * -- MySQL V8
      * SELECT COUNT(*) FROM jackson_table
@@ -361,7 +361,7 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT jackson_arrays.id, jackson_arrays."groups", jackson_arrays.numbers
      *   FROM jackson_arrays
      *  WHERE JSON_EXTRACT_PATH_TEXT(jackson_arrays."groups", 'users', '0', 'team') = 'Team A';
@@ -391,7 +391,7 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
             val firstIsOnTeamA = tester.groups.extract<String>(*path1) eq "Team A"
             tester.selectAll().where { firstIsOnTeamA }.single()[tester.id] shouldBeEqualTo singleId
 
-            // older MySQL and MariaDB versions require non-scalar extracted value from JSON Array
+            // older MySQL and MariaDB versions require non-scalar extracted value from Json Array
             val toScalar = testDB != TestDB.MYSQL_V5
             val path2 = when (currentDialectTest) {
                 is PostgreSQLDialect -> "0"
@@ -406,7 +406,7 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT jackson_arrays.id, jackson_arrays."groups", jackson_arrays.numbers
      *   FROM jackson_arrays
      *  WHERE jackson_arrays.numbers::jsonb @> '[3, 5]'::jsonb;
@@ -424,7 +424,7 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `배열 수형의 jackson 컬럼에서 contains 사용하기`(testDB: TestDB) = runTest {
-        Assumptions.assumeTrue { testDB in supportsJsonContains }
+        Assumptions.assumeTrue { testDB in supportsJSONContains }
 
         withJacksonArrays(testDB) { tester, _, tripleId ->
             val hasSmallNumbers = tester.numbers.contains("[3, 5]")
@@ -442,14 +442,14 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT jackson_arrays.id, jackson_arrays."groups", jackson_arrays.numbers
      *   FROM jackson_arrays
-     *  WHERE JSONB_PATH_EXISTS(CAST(jackson_arrays."groups" as jsonb), '$.users[1]');
+     *  WHERE jsonb_PATH_EXISTS(CAST(jackson_arrays."groups" as jsonb), '$.users[1]');
      *
      * SELECT jackson_arrays.id, jackson_arrays."groups", jackson_arrays.numbers
      *   FROM jackson_arrays
-     *  WHERE JSONB_PATH_EXISTS(CAST(jackson_arrays.numbers as jsonb), '$[2]');
+     *  WHERE jsonb_PATH_EXISTS(CAST(jackson_arrays.numbers as jsonb), '$[2]');
      *
      * -- MySQL V8
      * SELECT jackson_arrays.id, jackson_arrays.`groups`, jackson_arrays.numbers
@@ -485,7 +485,7 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT iterables.id FROM iterables
      *  WHERE iterables.user_list::jsonb @> '[{"name":"A","team":"Team A"}]'::jsonb;
      *
@@ -509,7 +509,7 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `Iterables 수형의 json 컬럼에 contains 사용하기`(testDB: TestDB) = runTest {
-        Assumptions.assumeTrue { testDB in supportsJsonContains }
+        Assumptions.assumeTrue { testDB in supportsJSONContains }
 
         val iterables = object: IntIdTable("iterables") {
             val userList = jackson<List<User>>("user_list")
@@ -547,16 +547,16 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS default_tester (
-     *      user_1 JSON DEFAULT '{"name":"UNKNOWN","team":"UNASSIGNED"}'::json NOT NULL,
-     *      user_2 JSON NOT NULL
+     *      user_1 Json DEFAULT '{"name":"UNKNOWN","team":"UNASSIGNED"}'::json NOT NULL,
+     *      user_2 Json NOT NULL
      * );
      *
      * -- MySQL V8
      * CREATE TABLE IF NOT EXISTS default_tester (
-     *      user_1 JSON DEFAULT ('{"name":"UNKNOWN","team":"UNASSIGNED"}') NOT NULL,
-     *      user_2 JSON NOT NULL
+     *      user_1 Json DEFAULT ('{"name":"UNKNOWN","team":"UNASSIGNED"}') NOT NULL,
+     *      user_2 Json NOT NULL
      * );
      * ```
      */
@@ -688,8 +688,8 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
-     * CREATE TABLE IF NOT EXISTS tester (numbers JSON NOT NULL);
+     * -- PostgreSQL
+     * CREATE TABLE IF NOT EXISTS tester (numbers Json NOT NULL);
      *
      * INSERT INTO tester (numbers) VALUES ([1,2,3]);
      * ```
@@ -717,16 +717,16 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS jackson_default (
      *      id SERIAL PRIMARY KEY,
-     *      "value" JSON DEFAULT '{"name":"name","team":"team"}'::json NOT NULL
+     *      "value" Json DEFAULT '{"name":"name","team":"team"}'::json NOT NULL
      * );
      *
      * -- MySQL V8
      * CREATE TABLE IF NOT EXISTS jackson_default (
      *      id INT AUTO_INCREMENT PRIMARY KEY,
-     *      `value` JSON DEFAULT ('{"name":"name","team":"team"}') NOT NULL
+     *      `value` Json DEFAULT ('{"name":"name","team":"team"}') NOT NULL
      * );
      * ```
      */
@@ -744,7 +744,7 @@ class JacksonColumnTest: AbstractR2dbcExposedTest() {
             val value = jackson<User>("value").databaseGenerated()
         }
 
-        // MySQL versions prior to 8.0.13 do not accept default values on JSON columns
+        // MySQL versions prior to 8.0.13 do not accept default values on Json columns
         Assumptions.assumeTrue { testDB != TestDB.MYSQL_V5 }
         withTables(testDB, tester) {
             testerDatabaseGenerated.insert { }

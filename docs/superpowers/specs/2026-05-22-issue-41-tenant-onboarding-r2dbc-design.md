@@ -1,6 +1,6 @@
 # Issue 41 Tenant Onboarding and Provisioning R2DBC Design
 
-## Context
+## 맥락
 
 Issue #41 is part of the Chapter 10 Spring WebFlux R2DBC multi-tenant epic
 (#37). The matching `bluetape4k/exposed-workshop` issue #55 has the same core
@@ -33,7 +33,7 @@ chapter wiring, which remains #42, or Ktor examples, which remain #33/#69.
   Source: Context7 `/jetbrains/exposed/1.1.1`, transactions and
   connection-factory docs.
 
-## Local Reuse Evidence
+## Local 재사용: Evidence
 
 - `04-connection-factory-per-tenant-spring-webflux` already proves:
   - registry-owned tenant pools.
@@ -53,9 +53,9 @@ chapter wiring, which remains #42, or Ktor examples, which remain #33/#69.
     independent initializer pools.
   - update `.github/workflows/Examples.yml` when adding chapter examples.
 
-## Goals
+## 목표s
 
-1. Add a new Chapter 10 module:
+1. 추가: a new Chapter 10 module:
    `10-multi-tenant/06-tenant-onboarding-spring-webflux`.
 2. Demonstrate dynamic tenant onboarding over Spring WebFlux + Exposed R2DBC:
    - persist tenant metadata in a registry database.
@@ -66,26 +66,26 @@ chapter wiring, which remains #42, or Ktor examples, which remain #33/#69.
    - duplicate tenant ID returns a deterministic conflict.
    - provisioning failure cleans up metadata and runtime registration.
    - failed onboarding does not expose the tenant to request routing.
-4. Preserve isolation:
+4. 보존: isolation:
    - tenant-aware request code uses `TenantTransactionExecutor`.
    - data created under one onboarded tenant is not visible under another.
 5. Update English/Korean README files and include a generated PNG diagram asset.
 6. Update CI example workflow coverage and record the Nightly coverage decision.
-7. Add a deliberately simple admin guard for the onboarding endpoint so the
+7. 추가: a deliberately simple admin guard for the onboarding endpoint so the
    privileged resource-creation API is not anonymous in the example.
 
 ## Non-goals
 
-- Do not implement Ktor tenant onboarding; that belongs to #33/#69.
-- Do not build production-grade distributed provisioning, migrations, or
+- 금지: implement Ktor tenant onboarding; that belongs to #33/#69.
+- 금지: build production-grade distributed provisioning, migrations, or
   cross-node registry synchronization.
-- Do not build a production identity provider or authorization server.
-- Do not implement tenant offboarding/deletion. This issue covers onboarding
+- 금지: build a production identity provider or authorization server.
+- 금지: implement tenant offboarding/deletion. This issue covers onboarding
   and failure cleanup only.
-- Do not wire aggregate chapter documentation beyond the new module README and
+- 금지: wire aggregate chapter documentation beyond the new module README and
   directly required root README links; issue #42 owns aggregate wiring.
-- Do not add non-H2 Testcontainers coverage unless a later issue asks for it.
-- Do not introduce a shared bluetape4k library API. This remains a workshop
+- 금지: add non-H2 Testcontainers coverage unless a later issue asks for it.
+- 금지: introduce a shared bluetape4k library API. This remains a workshop
   example module.
 
 ## Proposed Module Shape
@@ -117,11 +117,11 @@ chapter wiring, which remains #42, or Ktor examples, which remain #33/#69.
 └── src/test/kotlin/exposed/r2dbc/multitenant/onboarding/
 ```
 
-Use the actor/movie domain from #04/#05 so the workshop remains comparable
+사용: the actor/movie domain from #04/#05 so the workshop remains comparable
 across strategies. Keep public class names specific to `onboarding` to avoid
 cross-module ambiguity.
 
-## Tenant Contract
+## Tenant 계약
 
 Tenant IDs are external request/API values.
 
@@ -131,7 +131,7 @@ Tenant IDs are external request/API values.
 - Unknown tenant on tenant-scoped actor APIs: `404 Not Found`.
 - Duplicate onboarding request: `409 Conflict`.
 
-Use bluetape4k validation helpers at API boundaries where practical. Use
+사용: bluetape4k validation helpers at API boundaries where practical. Use
 `check()` only for internal invariants.
 
 Represent validated tenant IDs as a value type, not raw strings:
@@ -167,7 +167,7 @@ real authentication and authorization. Tenant-scoped actor APIs still use
 
 ### Registry Database
 
-Add a small registry database/table that stores onboarded tenant metadata:
+추가: a small registry database/table that 저장한다: onboarded tenant metadata:
 
 - `tenant_id`
 - `display_name`
@@ -217,7 +217,7 @@ Registry constraints:
 
 ### Tenant Resource
 
-Use H2 in-memory R2DBC databases for the workshop implementation:
+사용: H2 in-memory R2DBC databases for the workshop implementation:
 
 ```text
 r2dbc:h2:mem:///tenant_onboarding_<tenant_id>_<safe_suffix>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -281,7 +281,7 @@ enum class ProvisioningFailurePoint {
 }
 ```
 
-Do not use reflection, mutable static state, hidden global toggles, or any
+금지: use reflection, mutable static state, hidden global toggles, or any
 external property/env switch that can activate failure points in production.
 
 Provisioning should use explicit timeouts:
@@ -294,16 +294,16 @@ Provisioning should use explicit timeouts:
 
 ## Runtime Routing Model
 
-Reuse the #04/#05 request-time pattern:
+재사용: the #04/#05 request-time pattern:
 
-- `TenantIdResolver` reads `X-TENANT-ID`.
-- `TenantRoutingConnectionFactory.determineCurrentLookupKey()` reads Reactor
+- `TenantIdResolver` 읽는다: `X-TENANT-ID`.
+- `TenantRoutingConnectionFactory.determineCurrentLookupKey()` 읽는다: Reactor
   context.
 - `TenantTransactionExecutor.execute { ... }` bridges Reactor context into
   Exposed `suspendTransaction(db = tenantRoutingDatabase)`.
 - Actor repositories do not call `suspendTransaction` directly.
 
-Use the same Reactor bridge shape as #04/#05: the WebFlux handler writes
+사용: the same Reactor bridge shape as #04/#05: the WebFlux handler writes
 `TenantContextKeys.TENANT_ID` into Reactor context, and
 `TenantTransactionExecutor` preserves the `ReactorContext` coroutine element
 while awaiting this boundary:
@@ -352,7 +352,7 @@ configuration:
 - `tenantRoutingDatabase`
 - every provisioned tenant database wrapper
 
-Use explicit bean qualifiers to avoid accidental database injection:
+사용: explicit bean qualifiers to avoid accidental database injection:
 
 - `@Qualifier("registryDatabase")`
 - `@Qualifier("tenantRoutingDatabase")`
@@ -407,16 +407,16 @@ after a tenant has been onboarded and route through `X-TENANT-ID`.
 
 ## Error Contract
 
-Use explicit exception types for controller mapping:
+사용: explicit exception types for controller mapping:
 
 - `InvalidTenantIdException` -> `400`
 - `DuplicateTenantException` -> `409`
 - `UnknownTenantException` -> `404`
 - `TenantProvisioningException` -> `500`
 
-Do not leak raw R2DBC URLs or stack traces in HTTP responses.
+금지: leak raw R2DBC URLs or stack traces in HTTP responses.
 
-## Tests
+## 테스트
 
 Required tests:
 
@@ -474,12 +474,12 @@ Required tests:
     infrastructure are allowlisted for direct `suspendTransaction(db = ...)`.
   - actor repositories and controllers never call `suspendTransaction`.
 
-Use `runSuspendIO` for real R2DBC IO. Keep tests H2-only and serial through the
+사용: `runSuspendIO` for real R2DBC IO. Keep tests H2-only and serial through the
 existing Gradle/JUnit test mutex patterns.
 
-## Documentation
+## 문서화
 
-Add `README.md` and `README.ko.md` for the new module:
+추가: `README.md` and `README.ko.md` for the new module:
 
 - when to choose onboarding/provisioning:
   - choose it when tenants must be created at runtime and receive isolated
@@ -506,13 +506,13 @@ Diagram asset path:
 docs/images/readme-diagrams/issue-41-tenant-onboarding-r2dbc-01.png
 ```
 
-## CI/Nightly Decision
+## CI/Nightly 결정
 
 - Update `.github/workflows/Examples.yml` path filters, chapter 10 Gradle task
   list, and uploaded artifacts for
   `:06-tenant-onboarding-spring-webflux:test`.
 - Run `actionlint` after workflow changes.
-- Do not add the new module to Nightly matrix in this issue unless the existing
+- 금지: add the new module to Nightly matrix in this issue unless the existing
   Chapter 10 shard is already broadened. The module is H2-only and covered by
   Examples; record this decision in README and lesson.
 - Verify `./gradlew projects` discovers the module.
@@ -524,8 +524,8 @@ H2-only and not container-heavy.
 ## Observability and Runtime Limits
 
 The module should log one structured event per onboarding step with `tenantId`,
-step name, duration, and outcome using `KLoggingChannel`. Do not log raw R2DBC
-URLs. Use explicit pool defaults for each onboarded tenant:
+step name, duration, and outcome using `KLoggingChannel`. 금지: log raw R2DBC
+URLs. 사용: explicit pool defaults for each onboarded tenant:
 
 - `app.onboarding.pool.initial-size`: 1.
 - `app.onboarding.pool.max-size`: 4.
@@ -540,7 +540,7 @@ advanced metrics, and admin-token rotation as intentional workshop omissions.
 The implementation should still expose a small baseline: one Micrometer counter
 for onboarding failures and one gauge for active tenants.
 
-## Acceptance Criteria
+## 수용 기준
 
 - New module builds and focused tests pass with `-PuseDB=H2`.
 - Tenant onboarding persists metadata, provisions schema/resources, and exposes
@@ -569,11 +569,11 @@ for onboarding failures and one gauge for active tenants.
 
 | Priority | Finding | Decision | Follow-up |
 |---|---|---|---|
-| P1 | Tenant ID was raw-string based and URL interpolation relied on controller validation. | Accepted | Added `TenantId` value type requirement and provisioner raw-string ban. |
-| P1 | Privileged onboarding endpoint was unauthenticated. | Accepted | Added workshop admin-header guard. |
-| P1 | Concurrent duplicate onboarding and unique constraint behavior were underspecified. | Accepted | Added registry unique constraint and concurrency test. |
+| P1 | Tenant ID was raw-string based and URL interpolation relied on controller validation. | Accepted | 추가함: `TenantId` value type requirement and provisioner raw-string ban. |
+| P1 | Privileged onboarding endpoint was unauthenticated. | Accepted | 추가함: workshop admin-header guard. |
+| P1 | Concurrent duplicate onboarding and unique constraint behavior were underspecified. | Accepted | 추가함: registry unique constraint and concurrency test. |
 | P1 | Dynamic routing over `AbstractRoutingConnectionFactory` was ambiguous. | Accepted | Switched spec to direct `ConnectionFactory` implementation. |
-| P1 | Pool shutdown and cancellation cleanup were underspecified. | Accepted | Added `DisposableBean`, reverse cleanup, `NonCancellable` cleanup, and tests. |
+| P1 | Pool shutdown and cancellation cleanup were underspecified. | Accepted | 추가함: `DisposableBean`, reverse cleanup, `NonCancellable` cleanup, and tests. |
 
 ### Claude Code Opus Advisor
 
@@ -584,13 +584,13 @@ Model: `${CLAUDE_ADVISOR_MODEL:-claude-opus-4-7}`
 |---|---|---|---|
 | P0 | Value-type validation, onboarding auth, duplicate race, routing design, arch allowlist, pool shutdown, and cancellation cleanup were blocking gaps. | Accepted | Spec sections updated for all seven gaps. |
 | P1 | Stale provisioning status, plaintext URL warning, timeout, tenant cap, pool sizing, observability, failure-hook wiring, qualifier, isolation, and dynamic visibility were missing or weak. | Accepted | Spec sections/tests updated. |
-| P1 | Rerun found test coverage and architecture allowlist policy needed to be more explicit. | Accepted | Added `Architecture Test Policy`, recovery/unknown/max/admin tests, exact diagram path, and CI/Nightly acceptance wording. |
+| P1 | Rerun found test coverage and architecture allowlist policy needed to be more explicit. | Accepted | 추가함: `Architecture Test Policy`, recovery/unknown/max/admin tests, exact diagram path, and CI/Nightly acceptance wording. |
 | P1 | Second rerun found timeout inversion and ambiguous `FAILED` row retry semantics. | Accepted | Overall timeout increased to 60s, reservation timeout added, runtime failure deletes metadata, stale `FAILED` rows are retryable. |
 | P2 | Second rerun requested exact Reactor bridge, H2 cleanup, duplicate ordering, failure-point enum, pool property names, offboarding non-goal, and architecture-test mechanism. | Accepted | Spec updated to pin each item before planning. |
-| P1 | Third rerun found retry atomicity, custom `ConnectionFactory.getMetadata()`, and Exposed dialect binding were underspecified. | Accepted | Added per-tenant mutex plus reserve transaction, static H2 metadata, and `H2Dialect` config requirement. |
-| P2 | Third rerun requested R2dbcDatabase lifecycle, timeout cleanup test, failure simulator prod guard, and baseline metrics. | Accepted | Added cache/evict ownership, timeout test, no prod activation switch, counter/gauge baseline. |
-| P1 | Fourth rerun found explicit dialect missing on registry/routing DBs, reserve fallback missing SELECT/unique catch, and H2 restart `ACTIVE` semantics undefined. | Accepted | Added explicit dialect for all DB beans, reserve SELECT/unique fallback, and startup `ACTIVE -> FAILED` H2 policy. |
-| P2 | Fifth rerun passed gate and recommended tightening `maxTenants`, admin auth, registry outage, response DTO, and suffix language. | Accepted | Added global onboarding mutex, Admin Authentication heading, outage tests, response DTO exclusion, and UUID-derived suffix. |
+| P1 | Third rerun found retry atomicity, custom `ConnectionFactory.getMetadata()`, and Exposed dialect binding were underspecified. | Accepted | 추가함: per-tenant mutex plus reserve transaction, static H2 metadata, and `H2Dialect` config requirement. |
+| P2 | Third rerun requested R2dbcDatabase lifecycle, timeout cleanup test, failure simulator prod guard, and baseline metrics. | Accepted | 추가함: cache/evict ownership, timeout test, no prod activation switch, counter/gauge baseline. |
+| P1 | Fourth rerun found explicit dialect missing on registry/routing DBs, reserve fallback missing SELECT/unique catch, and H2 restart `ACTIVE` semantics undefined. | Accepted | 추가함: explicit dialect for all DB beans, reserve SELECT/unique fallback, and startup `ACTIVE -> FAILED` H2 policy. |
+| P2 | Fifth rerun passed gate and recommended tightening `maxTenants`, admin auth, registry outage, response DTO, and suffix language. | Accepted | 추가함: global onboarding mutex, Admin Authentication heading, outage tests, response DTO exclusion, and UUID-derived suffix. |
 | P2 | Production-grade restart recovery and non-H2 coverage would expand scope. | Rejected | H2-only workshop and stale `PROVISIONING` -> `FAILED` sweep recorded. |
 
 ### Integrated Step 2-R Findings
@@ -631,6 +631,6 @@ Model: `${CLAUDE_ADVISOR_MODEL:-claude-opus-4-7}`
 | Official docs checked | Done | Spring routing and Exposed R2DBC docs checked through Context7. |
 | Current repo reuse searched | Done | Chapter 10 modules #03/#04/#05 and workflow wiring inspected. |
 | Third-party API assumptions checked | Done | Routing initialization and Exposed `suspendTransaction(db=...)` checked. |
-| Adopt/borrow/skip decisions recorded | Done | Reuse #04/#05 routing/executor; skip Ktor, production auth, Nightly expansion. |
+| Adopt/borrow/skip decisions recorded | Done | 재사용: #04/#05 routing/executor; skip Ktor, production auth, Nightly expansion. |
 | Technical constraints identified | Done | Kotlin-only, H2 R2DBC, Spring WebFlux, Exposed 1.1.1, JDK 21. |
-| Research summary ready | Done | Captured in Context, External Evidence, Local Reuse Evidence. |
+| Research summary ready | Done | Captured in Context, External Evidence, Local 재사용: Evidence. |

@@ -20,7 +20,7 @@ import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import java.time.LocalDate
 
 /**
- * Creates tenant schemas and inserts deterministic sample data.
+ * tenant schema를 만들고 deterministic sample data를 삽입한다.
  */
 class DataInitializer(
     private val database: R2dbcDatabase,

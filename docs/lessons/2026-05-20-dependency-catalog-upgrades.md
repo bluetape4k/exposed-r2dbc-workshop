@@ -1,22 +1,18 @@
-# Dependency Catalog Upgrades
+# Dependency Catalog Upgrade 정리
 
-## Context
+## 맥락
 
-`bluetape4k-dependencies` folded the Apache Fory Dependabot PRs into the
-central dependency upgrade batch. The same batch also moved the central
-bluetape4k BOM constraints to the `1.8.1-SNAPSHOT` family.
+`bluetape4k-dependencies`가 Apache Fory Dependabot PR을 중앙 dependency upgrade batch에 포함했다. 같은 batch에서 중앙 bluetape4k BOM constraint도 `1.8.1-SNAPSHOT` 계열로 이동했다.
 
-## Decision
+## 결정
 
-Materialize the central Fory Kotlin catalog version and align direct bluetape4k
-snapshot aliases with the published `1.8.1-SNAPSHOT` modules.
+중앙 Fory Kotlin catalog version을 materialize하고, direct bluetape4k snapshot alias를 게시된 `1.8.1-SNAPSHOT` module에 맞춘다.
 
-## Outcome
+## 결과
 
-`gradle/libs.versions.toml` now carries Fory Kotlin `0.17.0` and direct
-bluetape4k aliases resolve against `1.8.1-SNAPSHOT`.
+`gradle/libs.versions.toml`은 Fory Kotlin `0.17.0`을 담고, direct bluetape4k alias는 `1.8.1-SNAPSHOT`을 기준으로 resolve된다.
 
-## Verification
+## 검증
 
 - `./gradlew build -x test --no-daemon`
 - `./gradlew :02-cache-strategies-r2dbc:dependencyInsight --configuration testRuntimeClasspath --dependency bluetape4k-io --refresh-dependencies --no-daemon --no-configuration-cache`

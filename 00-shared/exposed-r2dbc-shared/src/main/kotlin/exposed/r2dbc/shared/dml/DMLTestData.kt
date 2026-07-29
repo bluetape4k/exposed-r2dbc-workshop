@@ -23,7 +23,7 @@ import java.math.BigDecimal
 object DMLTestData {
 
     /**
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * CREATE TABLE IF NOT EXISTS cities (
      *      city_id SERIAL PRIMARY KEY,
@@ -39,7 +39,7 @@ object DMLTestData {
     }
 
     /**
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * CREATE TABLE IF NOT EXISTS users (
      *      id VARCHAR(10) PRIMARY KEY,
@@ -67,7 +67,7 @@ object DMLTestData {
     }
 
     /**
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * CREATE TABLE IF NOT EXISTS userdata (
      *      user_id VARCHAR(10) NOT NULL,
@@ -86,7 +86,7 @@ object DMLTestData {
     }
 
     /**
-     * Postgres:
+     * PostgreSQL DDL 예시:
      *
      * ```sql
      * CREATE TABLE IF NOT EXISTS sales (
@@ -105,7 +105,7 @@ object DMLTestData {
     }
 
     /**
-     * Postgres:
+     * PostgreSQL DDL 예시:
      *
      * ```sql
      * CREATE TABLE IF NOT EXISTS someamounts (
@@ -365,7 +365,7 @@ object DMLTestData {
     }
 
     /**
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * CREATE TABLE IF NOT EXISTS orgs (
      *      id SERIAL PRIMARY KEY,
@@ -383,7 +383,7 @@ object DMLTestData {
     }
 
     /**
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * CREATE TABLE IF NOT EXISTS orgmemberships (
      *      id SERIAL PRIMARY KEY,

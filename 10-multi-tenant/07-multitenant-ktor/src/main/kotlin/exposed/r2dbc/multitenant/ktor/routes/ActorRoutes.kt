@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.toList
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 
 /**
- * Installs tenant-aware actor routes.
+ * tenant-aware actor route를 설치한다.
  */
 fun Application.actorRoutes(
     database: R2dbcDatabase,

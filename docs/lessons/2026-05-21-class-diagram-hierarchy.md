@@ -1,23 +1,23 @@
-# Class Diagram Hierarchy Audit
+# Class Diagram Hierarchy Audit 정리
 
-## Context
+## 맥락
 
-README class diagrams can become misleading when Mermaid-to-SVG conversion preserves a layout where inheritance or implementation arrows point downward to parent contracts.
+Mermaid-to-SVG conversion이 inheritance 또는 implementation arrow가 parent contract를 향해 아래쪽으로 가리키는 layout을 보존하면 README class diagram이 오해를 만들 수 있다.
 
-## Decision
+## 결정
 
-Keep interface, abstract, and base contract nodes above their implementors or subclasses when an inheritance or implementation edge exists. Re-route those edges as orthogonal paths so the open-triangle marker lands on the parent node.
+Inheritance 또는 implementation edge가 있으면 interface, abstract, base contract node를 implementor 또는 subclass 위에 둔다. Open-triangle marker가 parent node에 닿도록 해당 edge를 orthogonal path로 다시 routing한다.
 
-## Outcome
+## 결과
 
-Exposed R2DBC workshop README class diagram assets were re-laid out top-down and PNGs were regenerated from the corrected SVG sources.
+Exposed R2DBC workshop README class diagram asset은 top-down으로 다시 layout됐고, 수정된 SVG source에서 PNG를 재생성했다.
 
-## Verification
+## 검증
 
-- Scanned all workspace class SVGs for downward `inheritLine` and `implLine` endpoints: `COUNT 0`.
-- Re-rendered changed PNG assets with `rsvg-convert`.
-- Validated changed SVG files with `xmllint --noout`.
+- Workspace class SVG 전체에서 downward `inheritLine`, `implLine` endpoint를 scan했다: `COUNT 0`.
+- 변경된 PNG asset을 `rsvg-convert`로 다시 render했다.
+- 변경된 SVG 파일을 `xmllint --noout`으로 검증했다.
 
-## Future Guidance
+## 향후 지침
 
-Before publishing README class diagrams, run an inheritance-direction scan against `docs/images/readme-diagrams/*class*.svg` and visually inspect at least one rendered PNG from each changed diagram family.
+README class diagram을 게시하기 전에 `docs/images/readme-diagrams/*class*.svg`에 대해 inheritance-direction scan을 실행하고, 변경된 diagram family마다 rendered PNG를 하나 이상 눈으로 확인한다.

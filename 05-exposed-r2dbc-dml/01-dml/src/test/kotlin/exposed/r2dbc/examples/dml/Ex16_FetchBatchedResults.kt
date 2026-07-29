@@ -71,7 +71,7 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
      * ```
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT cities.city_id, cities."name"
      *   FROM cities
      *  WHERE (cities.city_id < 51) AND (cities.city_id > 0)
@@ -128,7 +128,7 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
      * `fetchBatchedResults` 함수의 `sortOrder` 옵션을 이용하여 정렬할 수 있다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT cities.city_id, cities."name"
      *   FROM cities
      *  WHERE cities.city_id < 51
@@ -182,7 +182,7 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
      * batchSize 가 전체 레코드 수보다 크면, 한 번에 모든 레코드를 가져온다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT cities.city_id,
      *        cities."name"
      *   FROM cities
@@ -218,7 +218,7 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
      * 레코드가 없을 때, 빈 리스트를 반환한다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT cities.city_id,
      *        cities."name"
      *   FROM cities
@@ -248,7 +248,7 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
     /**
      * 조건에 맞는 레코드가 없을 때, 빈 리스트를 반환한다.
      *
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * SELECT cities.city_id, cities."name"
      *   FROM cities
@@ -302,7 +302,7 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
      * Auto Increment EntityID 를 가진 테이블에 대해서 `fetchBatchedResults` 함수를 사용하는 예
      *
      * ```
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS table_1 (
      *      id SERIAL PRIMARY KEY,
      *      "data" VARCHAR(255) NOT NULL
@@ -353,7 +353,7 @@ class Ex16_FetchBatchedResults: AbstractR2dbcExposedTest() {
      * Alias 를 사용하여 `fetchBatchedResults` 함수를 사용할 수 있다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT tester_alias.id, tester_alias."name"
      *   FROM tester tester_alias
      *  WHERE TRUE AND (tester_alias.id > 0)

@@ -29,7 +29,7 @@ import reactor.core.publisher.Flux
 import java.security.Principal
 
 /**
- * WebFlux controller exposing the chapter 12 production slices.
+ * 12장 production slice를 노출하는 WebFlux controller입니다.
  */
 @RestController
 @RequestMapping("/production")

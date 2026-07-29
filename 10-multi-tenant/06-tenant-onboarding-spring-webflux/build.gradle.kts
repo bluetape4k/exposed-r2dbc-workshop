@@ -52,7 +52,7 @@ dependencies {
     implementation(libs.r2dbc.pool)
     implementation(libs.r2dbc.h2)
 
-    // Spring Boot
+    // Spring Boot WebFlux 의존성
     implementation(libs.spring.boot.autoconfigure)
     annotationProcessor(libs.spring.boot.autoconfigure.processor)
     annotationProcessor(libs.spring.boot.configuration.processor)
@@ -72,12 +72,12 @@ dependencies {
         exclude(module = "mockito-core")
     }
 
-    // Coroutines
+    // 코루틴 지원 의존성
     implementation(libs.bluetape4k.coroutines)
     implementation(libs.kotlinx.coroutines.reactor)
     testImplementation(libs.kotlinx.coroutines.test)
 
-    // Reactor
+    // Reactor context 연동 의존성
     implementation(libs.reactor.netty)
     implementation(libs.reactor.kotlin.extensions)
     testImplementation(libs.reactor.test)

@@ -1,24 +1,18 @@
-# CTE Query Builder Example
+# CTE Query Builder 예제
 
-## Context
+## 맥락
 
-`bluetape4k-dependencies` published `1.0.1-SNAPSHOT`, which manages
-`bluetape4k-exposed` `1.8.1-SNAPSHOT`. The R2DBC workshop can now consume the
-new CTE Query Builder API through the managed dependency line.
+`bluetape4k-dependencies`가 `bluetape4k-exposed` `1.8.1-SNAPSHOT`을 관리하는 `1.0.1-SNAPSHOT`을 게시했다. 이제 R2DBC workshop은 managed dependency line을 통해 새 CTE Query Builder API를 사용할 수 있다.
 
-## Lesson
+## 교훈
 
-For R2DBC workshop examples, update the dependencies BOM first and then verify
-that version catalog aliases match the published artifact IDs. The current
-Exposed artifacts use `bluetape4k-exposed-*` names.
+R2DBC workshop 예제에서는 먼저 dependencies BOM을 갱신하고, version catalog alias가 게시된 artifact ID와 일치하는지 확인한다. 현재 Exposed artifact는 `bluetape4k-exposed-*` 이름을 사용한다.
 
-## Evidence
+## 증거
 
-- Added `Ex51_CteQueryBuilder` beside the existing raw SQL `Ex50_RecursiveCTE`.
-- Verified `CteTable` and R2DBC `withCte` with H2 through the `:01-dml:test`
-  fast path.
+- 기존 raw SQL `Ex50_RecursiveCTE` 옆에 `Ex51_CteQueryBuilder`를 추가했다.
+- `:01-dml:test` fast path에서 H2로 `CteTable`과 R2DBC `withCte`를 검증했다.
 
-## Future Guard
+## 향후 방어선
 
-When a BOM snapshot changes managed artifact names, check the resolved POM and
-catalog aliases before adding example code.
+BOM snapshot이 managed artifact name을 바꿀 때는 example code를 추가하기 전에 resolved POM과 catalog alias를 확인한다.

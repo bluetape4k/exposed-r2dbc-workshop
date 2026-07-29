@@ -61,7 +61,7 @@ class Ex20_AdjustQuery: AbstractR2dbcExposedTest() {
      * `adjustSelect` 를 사용하면 기존 Query에서 조회할 컬럼을 변경할 수 있다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users."name", cities."name"
      *   FROM users INNER JOIN cities ON cities.city_id = users.city_id
      *  WHERE (users.id = 'andrey')
@@ -115,7 +115,7 @@ class Ex20_AdjustQuery: AbstractR2dbcExposedTest() {
      * `adjustColumnSet` 함수를 사용하여 기존 Query 에서 ColumnSet 을 변경할 수 있다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT USERS."name", CITIES."name"
      *   FROM USERS INNER JOIN CITIES ON CITIES.CITY_ID = USERS.CITY_ID
      *  WHERE (USERS.ID = 'andrey')
@@ -185,7 +185,7 @@ class Ex20_AdjustQuery: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users."name", cities."name"
      *   FROM users INNER JOIN cities ON cities.city_id = users.city_id
      *  WHERE (users.id = 'andrey')
@@ -219,7 +219,7 @@ class Ex20_AdjustQuery: AbstractR2dbcExposedTest() {
      * `adjustHaving` 함수를 사용하여 HAVING 절을 변경할 수 있다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT CITIES."name"
      *   FROM CITIES INNER JOIN USERS ON CITIES.CITY_ID = USERS.CITY_ID
      *  GROUP BY CITIES."name"
@@ -294,7 +294,7 @@ class Ex20_AdjustQuery: AbstractR2dbcExposedTest() {
      * `adjustHaving` 함수를 사용하여 HAVING 절에 `OR` 을 추가합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT cities."name"
      *   FROM cities INNER JOIN users ON cities.city_id = users.city_id
      *  GROUP BY cities."name"

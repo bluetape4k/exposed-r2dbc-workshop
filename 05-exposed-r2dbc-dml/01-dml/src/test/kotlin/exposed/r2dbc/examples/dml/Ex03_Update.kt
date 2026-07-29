@@ -54,7 +54,7 @@ class Ex03_Update: AbstractR2dbcExposedTest() {
      * Update 예제
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * UPDATE users
      *    SET "name"='Alexey'
      *  WHERE users.id = 'alex'
@@ -145,7 +145,7 @@ class Ex03_Update: AbstractR2dbcExposedTest() {
             /**
              * Users 와 UserData 테이블을 Inner Join 하여 Update 하기
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * UPDATE userdata
              *    SET "comment"=users."name",
              *        "value"=123
@@ -168,7 +168,7 @@ class Ex03_Update: AbstractR2dbcExposedTest() {
              * 명시적으로 Join 조건을 지정
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * UPDATE userdata
              *    SET "comment"=users."name",
              *        "value"=0
@@ -237,7 +237,7 @@ class Ex03_Update: AbstractR2dbcExposedTest() {
      * 다중 조인을 사용한 Update 문
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * UPDATE userdata
      *    SET "comment"=users."name",
      *        "value"=123
@@ -279,7 +279,7 @@ class Ex03_Update: AbstractR2dbcExposedTest() {
      * 다중 테이블 조인과 Where 조건을 추가한 Update
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * UPDATE table_b
      *    SET bar='baz'
      *   FROM table_a
@@ -366,7 +366,7 @@ class Ex03_Update: AbstractR2dbcExposedTest() {
              * single join query using join()
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * UPDATE userdata
              *    SET "value"=123
              *   FROM (SELECT users.id, users."name", users.city_id, users.flags
@@ -391,7 +391,7 @@ class Ex03_Update: AbstractR2dbcExposedTest() {
              * single join query using join() with update(where)
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * UPDATE userdata
              *    SET "value"=42
              *   FROM (SELECT users.id,
@@ -417,7 +417,7 @@ class Ex03_Update: AbstractR2dbcExposedTest() {
              * multiple join queries using [joinQuery]
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * UPDATE userdata
              *    SET "value"=99
              *   FROM (SELECT users.id,

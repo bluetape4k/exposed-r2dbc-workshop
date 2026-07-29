@@ -1,27 +1,21 @@
-# Dependencies-Only Consumer Policy
+# Dependencies-only Consumer Policy 교훈
 
-## Context
+## 맥락
 
-The R2DBC workshop already imported `bluetape4k-dependencies`, but the catalog
-also pinned some bluetape4k artifacts directly. That duplicated version
-ownership in a consumer repository.
+R2DBC workshop은 이미 `bluetape4k-dependencies`를 가져오고 있었지만, catalog가 일부 bluetape4k artifact를 직접 pin하고 있었다. Consumer repository 안에서 version ownership이 중복된 상태였다.
 
-## Decision
+## 결정
 
-Keep `bluetape4k-dependencies` as the only bluetape4k version source and make
-all bluetape4k artifact aliases versionless.
+`bluetape4k-dependencies`를 유일한 bluetape4k version source로 유지하고, 모든 bluetape4k artifact alias는 versionless로 둔다.
 
-## Outcome
+## 결과
 
-The catalog no longer carries direct bluetape4k artifact versions or separate
-assertions aliases. Artifact resolution now follows the BOM.
+Catalog에는 더 이상 직접 bluetape4k artifact version이나 별도 assertions alias가 없다. Artifact resolution은 이제 BOM을 따른다.
 
-## Verification
+## 검증
 
-Ran forbidden-reference grep, `git diff --check`, and
-`./gradlew compileKotlin --no-daemon --no-configuration-cache`.
+Forbidden-reference grep, `git diff --check`, `./gradlew compileKotlin --no-daemon --no-configuration-cache`를 실행했다.
 
-## Future Guidance
+## 향후 지침
 
-When the ecosystem BOM changes, upgrade the BOM alias first and let the
-catalog's bluetape4k artifacts remain versionless.
+Ecosystem BOM이 바뀌면 먼저 BOM alias를 올리고, catalog의 bluetape4k artifact는 versionless 상태로 유지한다.

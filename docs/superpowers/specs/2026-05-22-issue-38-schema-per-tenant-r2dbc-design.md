@@ -1,6 +1,6 @@
-# Issue #38 Schema-Per-Tenant R2DBC Design
+# Issue #38 Schema-Per-Tenant R2DBC 설계
 
-## Context
+## 맥락
 
 Issue #38 is part of the Chapter 10 multi-tenant epic (#37). The existing
 `10-multi-tenant/03-multitenant-spring-webflux` module already contains a
@@ -8,9 +8,9 @@ Spring WebFlux + Exposed R2DBC implementation around the actors/movies domain.
 This work re-baselines on that implementation and closes the gaps against the
 issue acceptance criteria.
 
-## Existing Inventory
+## 기존 Inventory
 
-Keep and evolve these files:
+다음 파일은 유지하며 발전시킨다:
 
 - `ExposedMultitenantWebfluxApp.kt`
 - `config/ExposedR2dbcConfig.kt`
@@ -34,53 +34,52 @@ Keep and evolve these files:
 - `ExposedR2dbcConfigTest.kt`
 - `ConnectionPoolSizingTest.kt`
 
-Do not replace the actors/movies domain with a new orders aggregate. The current
+대체하지 않는다: the actors/movies domain with a new orders aggregate. The current
 domain is already used by the README and tests, and it is sufficient to prove
 schema-per-tenant isolation.
 
-## Goal
+## 목표
 
-Show tenant-specific schema routing with shared R2DBC database infrastructure in
-a Spring WebFlux + Kotlin coroutine example.
+Spring WebFlux + Kotlin coroutine 예제에서 shared R2DBC database infrastructure로 tenant별 schema routing을 보여준다.
 
-## Scope
+## 범위
 
-- Preserve the existing actors/movies domain and `/actors` API.
-- Resolve tenants from the `X-TENANT-ID` request header.
-- Propagate the resolved tenant through Reactor context into coroutine
+- 보존: the existing actors/movies domain and `/actors` API.
+- 해결: tenants from the `X-TENANT-ID` request header.
+- 전파: the resolved tenant through Reactor context into coroutine
   controllers.
-- Use `suspendTransactionWithCurrentTenant` to set the Exposed R2DBC schema for
+- 사용: `suspendTransactionWithCurrentTenant` to set the Exposed R2DBC schema for
   every tenant-aware transaction.
-- Tighten error handling and tests for missing tenant, unknown tenant, and
+- 강화: error handling and tests for missing tenant, unknown tenant, and
   cross-tenant isolation.
-- Document schema-per-tenant tradeoffs in `README.md` and `README.ko.md`.
-- Record CI/Nightly coverage decisions.
+- 문서화: schema-per-tenant tradeoffs in `README.md` and `README.ko.md`.
+- 기록: CI/Nightly coverage decisions.
 
-## Non-Goals
+## 비목표
 
-- Do not implement connection-factory-per-tenant routing. That belongs to #39.
-- Do not implement Spring Security tenant authorization. That belongs to #40.
-- Do not implement tenant onboarding/provisioning flows. That belongs to #41.
-- Do not add a new aggregate or public API beyond what is needed for #38.
+- 금지: implement connection-factory-per-tenant routing. That belongs to #39.
+- 금지: implement Spring Security tenant authorization. That belongs to #40.
+- 금지: implement tenant onboarding/provisioning flows. That belongs to #41.
+- 금지: add a new aggregate or public API beyond what is needed for #38.
 
-## Tenant Contract
+## Tenant 계약
 
 - Header: `X-TENANT-ID`
-- Supported tenant IDs: `korean`, `english`
-- Missing or blank header: `400 Bad Request`
-- Unknown tenant ID: `400 Bad Request`
+- 지원 tenant ID: `korean`, `english`
+- 누락 또는 blank header: `400 Bad Request`
+- 알 수 없는 tenant ID: `400 Bad Request`
 
 The existing default-on-missing behavior is changed because Issue #38 explicitly
 requires a missing-tenant test. In a schema-per-tenant example, silent fallback
 can hide data isolation bugs, so the request must name its tenant.
 
-## Context Propagation
+## 맥락 Propagation
 
-Use the existing `TenantFilter` and `TenantId` helpers:
+사용: the existing `TenantFilter` and `TenantId` helpers:
 
-- `TenantFilter` reads `X-TENANT-ID`, validates it, and stores `TenantId` in the
+- `TenantFilter` 읽는다: `X-TENANT-ID`, 검증한다, and 저장한다: `TenantId` in the
   Reactor context.
-- Controllers call `suspendTransactionWithCurrentTenant`, which reads the
+- Controller는 호출한다: `suspendTransactionWithCurrentTenant`, which 읽는다: the
   Reactor-context tenant through `currentReactorTenant()`.
 - `currentTenant()` remains the coroutine-context helper for non-WebFlux direct
   calls; WebFlux controllers use `currentReactorTenant()` through
@@ -90,8 +89,8 @@ Use the existing `TenantFilter` and `TenantId` helpers:
   the fallback is used. The HTTP WebFlux path must reject missing or blank
   headers before any fallback is used.
 
-Spring official documentation confirms WebFlux supports coroutine controllers
-and Kotlin coroutine-specific WebFilter support. Spring also documents Reactor
+Spring 공식 문서는 다음을 확인한다: WebFlux supports coroutine controllers
+and Kotlin coroutine-specific WebFilter support. Spring은 또한 다음을 문서화한다: Reactor
 context as the propagation path for nested reactive operations.
 
 ## Schema Routing
@@ -103,11 +102,11 @@ transaction helper is the module's intended teaching point.
 
 Risk control:
 
-- Set the tenant schema at the beginning of every tenant-aware transaction.
-- Add tests that execute requests for different tenants through the same app
+- 설정: the tenant schema at the beginning of every tenant-aware transaction.
+- 추가: tests that execute requests for different tenants through the same app
   instance and verify no rows leak.
-- Avoid using plain `suspendTransaction` in controllers.
-- If a future change adds non-tenant transactions to this module, reset schema
+- 회피: using plain `suspendTransaction` in controllers.
+- 향후 변경이 추가하면 non-tenant transactions to this module, reset schema
   state explicitly or use schema-qualified table factories for that path.
 
 The design accepts that `SchemaUtils.setSchema` is connection state. The example
@@ -118,30 +117,30 @@ connection-factory isolation.
 
 - `GET /actors`
   - Header: `X-TENANT-ID`
-  - Returns actors from only the resolved tenant schema.
+  - 해결된 tenant schema의 actor만 반환한다.
 - `GET /actors/{id}`
   - Header: `X-TENANT-ID`
-  - Returns the actor from only the resolved tenant schema.
+  - 해결된 tenant schema의 actor만 반환한다.
 
-No new endpoint is required for #38.
+#38에는 새 endpoint가 필요하지 않다.
 
-## Tests
+## 테스트
 
-Keep existing tests and update/add focused cases:
+기존 test는 유지하고 focused case를 갱신/추가한다:
 
 - `ActorControllerTest`
-  - keep tenant parameterized successful reads.
-  - keep unknown tenant error test, aligned to `400`.
-  - replace default-tenant missing-header expectation with `400`.
-  - add or strengthen cross-tenant isolation evidence.
+  - tenant parameterized successful read 유지.
+  - unknown tenant error test 유지, aligned to `400`.
+  - default-tenant missing-header expectation을 다음으로 대체: `400`.
+  - cross-tenant isolation evidence 추가 또는 강화.
 - `ExposedR2dbcConfigTest`
   - keep repository/schema initialization coverage.
 - `ConnectionPoolSizingTest`
-  - keep unchanged.
+  - 변경 없이 유지.
 - `AbstractMultitenantTest`
-  - keep unchanged unless test bootstrap needs explicit reset.
+  - 변경 없이 유지 unless test bootstrap needs explicit reset.
 
-## Documentation
+## 문서화
 
 Update the existing English/Korean README files without deleting current
 architecture sections:
@@ -151,7 +150,7 @@ architecture sections:
 - record that #39 handles connection-factory-per-tenant.
 - record CI/Nightly coverage decisions.
 
-## CI/Nightly Decision
+## CI/Nightly 결정
 
 No new workflow is required for #38:
 
@@ -163,7 +162,7 @@ No new workflow is required for #38:
 - If the module name changes, update this local command and the Nightly
   `:03-multitenant-spring-webflux:test` shard entry together.
 
-## Evidence
+## 증거
 
 - Issue #38 requires schema routing, missing tenant, unknown tenant, and
   cross-tenant isolation tests.
@@ -175,21 +174,21 @@ No new workflow is required for #38:
 - Spring docs confirm coroutine controller support and Reactor context
   propagation.
 
-## Review Notes
+## 검토 메모
 
-Initial Claude advisor review artifact:
+초기 Claude advisor review 산출물:
 `.omx/artifacts/claude-issue-38-spec-plan-review-20260522.md`.
 
-Claude advisor re-review artifact:
+Claude advisor re-review 산출물:
 `.omx/artifacts/claude-issue-38-spec-plan-rereview-20260522.md`.
 
-Accepted P0/P1 fixes:
+수락한 P0/P1 수정:
 
-- Re-baselined on existing source and tests.
-- Kept actors/movies domain instead of adding orders.
-- Kept `X-TENANT-ID`.
-- Chose missing/unknown tenant `400`.
-- Kept `SchemaUtils.setSchema` and documented pooled connection-state risk.
-- Added explicit keep/modify decisions for existing tests and README files.
+- 재기준화: on existing source and tests.
+- 유지함: actors/movies domain instead of adding orders.
+- 유지함: `X-TENANT-ID`.
+- 선택함: missing/unknown tenant `400`.
+- 유지함: `SchemaUtils.setSchema` and documented pooled connection-state risk.
+- 추가함: explicit keep/modify decisions for existing tests and README files.
 
-Latest gate status: `P0=0`, `P1=0`, Gate `PASS`.
+최신 gate 상태: `P0=0`, `P1=0`, Gate `PASS`.

@@ -42,7 +42,7 @@ class TimebasedUUIDTableTest: AbstractCustomIdTableTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS t_timebased_uuid (
      *      id uuid PRIMARY KEY,
      *      "name" VARCHAR(255) NOT NULL,

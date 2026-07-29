@@ -27,7 +27,7 @@ class RedissonConfig {
         var attempts = 0
         val maxAttempts = 10
 
-        // Redis 가 준비 안되었을 경우를 대비해서 재시도 (최대 10회, 지수 백오프)
+        // Redis cache 의존성 가 준비 안되었을 경우를 대비해서 재시도 (최대 10회, 지수 백오프)
         while (client == null && attempts < maxAttempts) {
             try {
                 client = RedisServer.Launcher.RedissonLib.getRedisson(
@@ -46,7 +46,7 @@ class RedissonConfig {
                 Thread.sleep(1000L * attempts)
 
             }
-            // Redis Server 및 RedissonClient 가 준비될 수 있도록 대기한다
+            // Redis cache 의존성 Server 및 RedissonClient 가 준비될 수 있도록 대기한다
             Thread.sleep(100L * attempts)
         }
         return client ?: throw IllegalStateException("Redis 클라이언트 생성 실패")

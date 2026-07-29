@@ -39,7 +39,7 @@ class Ex03_DateTimeLiteral: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS tablewithdate (
      *      id SERIAL PRIMARY KEY,
      *      "date" DATE NOT NULL
@@ -70,7 +70,7 @@ class Ex03_DateTimeLiteral: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS tablewithtimestamp (
      *      id SERIAL PRIMARY KEY,
      *      "timestamp" TIMESTAMP NOT NULL
@@ -85,7 +85,7 @@ class Ex03_DateTimeLiteral: AbstractR2dbcExposedTest() {
      * [dateLiteral] 을 이용하여 검색하기 (`eq`)
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO tablewithdate ("date") VALUES ('2000-01-01');
      *
      * SELECT tablewithdate."date"
@@ -110,7 +110,7 @@ class Ex03_DateTimeLiteral: AbstractR2dbcExposedTest() {
      * [dateLiteral] 을 이용하여 비교하기 (`less`)
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO tablewithdate ("date") VALUES ('2000-01-01');
      *
      * SELECT tablewithdate."date"
@@ -135,7 +135,7 @@ class Ex03_DateTimeLiteral: AbstractR2dbcExposedTest() {
      * [dateTimeLiteral] 을 이용하여 검색하기 (`eq`)
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO tablewithdatetime (datetime)
      * VALUES ('2000-01-01T08:00:00.1');
      *
@@ -173,7 +173,7 @@ class Ex03_DateTimeLiteral: AbstractR2dbcExposedTest() {
      * [dateTimeLiteral] 을 이용하여 비교 검색하기 (`less`)
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO tablewithdatetime (datetime)
      * VALUES ('2000-01-01T08:00:00.1');
      *
@@ -209,7 +209,7 @@ class Ex03_DateTimeLiteral: AbstractR2dbcExposedTest() {
      * [timestampLiteral] 을 이용하여 검색하기 (`eq`)
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO tablewithtimestamp ("timestamp")
      * VALUES ('2000-01-01T01:00:00');
      *
@@ -246,7 +246,7 @@ class Ex03_DateTimeLiteral: AbstractR2dbcExposedTest() {
      * [timestampLiteral] 을 이용하여 비교 검색하기
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO tablewithtimestamp ("timestamp")
      * VALUES ('2000-01-01T01:00:00');
      *

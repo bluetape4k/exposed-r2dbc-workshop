@@ -56,19 +56,19 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 /**
- * Jackson 기반 JSONB(`jacksonb()`) 컬럼의 직렬화/역직렬화와 JSON 검색 함수를 검증하는 테스트.
+ * Jackson 기반 jsonb(`jacksonb()`) 컬럼의 직렬화/역직렬화와 Json 검색 함수를 검증하는 테스트.
  *
- * `bluetape4k-exposed` 의 `jacksonb()` 확장 함수를 사용하여 Kotlin 객체를 JSONB 바이너리 형식으로
- * 컬럼에 저장합니다. JSONB는 PostgreSQL에서 바이너리로 저장되어 검색 성능이 JSON보다 우수합니다.
- * MySQL/MariaDB에서는 JSON과 동일하게 처리됩니다.
+ * `bluetape4k-exposed` 의 `jacksonb()` 확장 함수를 사용하여 Kotlin 객체를 jsonb 바이너리 형식으로
+ * 컬럼에 저장합니다. jsonb는 PostgreSQL에서 바이너리로 저장되어 검색 성능이 Json보다 우수합니다.
+ * MySQL/MariaDB에서는 Json과 동일하게 처리됩니다.
  *
- * [JacksonColumnTest]와 동일한 테스트 케이스를 JSONB 컬럼으로 검증합니다:
- * - INSERT/SELECT, UPDATE, `extract`, `contains`, `exists`, 배열 컬럼 JSON 검색
+ * [JacksonColumnTest]와 동일한 테스트 케이스를 jsonb 컬럼으로 검증합니다:
+ * - INSERT/SELECT, UPDATE, `extract`, `contains`, `exists`, 배열 컬럼 Json 검색
  * - `default`, `clientDefault`, `databaseGenerated`, `transform`, `upsert`, nullable 컬럼
  * - PostgreSQL 전용 `??` 연산자: 최상위 키 존재 여부를 확인하는 커스텀 연산자 (`keyExists`)
  *   (JDBC 파라미터 치환 문자와 충돌을 피하기 위해 이중 `?` 이스케이프 처리)
  *
- * @see JacksonColumnTest JSON 컬럼(텍스트) 테스트
+ * @see JacksonColumnTest Json 컬럼(텍스트) 테스트
  * @see JacksonSchema 스키마 및 헬퍼 함수 정의
  */
 @Suppress("DEPRECATION")
@@ -78,7 +78,7 @@ class JacksonBColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO jackson_b_table (jackson_b_column)
      * VALUES ({"user":{"name":"Pro","team":"Alpha"},"logins":999,"active":true,"team":"A"});
      *
@@ -106,7 +106,7 @@ class JacksonBColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * UPDATE jackson_b_table
      *    SET jackson_b_column={"user":{"name":"Admin","team":null},"logins":10,"active":false,"team":null}
      *
@@ -134,10 +134,10 @@ class JacksonBColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
-     * SELECT JSONB_EXTRACT_PATH(jackson_b_table.jackson_b_column, 'active') FROM jackson_b_table;
-     * SELECT JSONB_EXTRACT_PATH(jackson_b_table.jackson_b_column, 'user') FROM jackson_b_table;
-     * SELECT JSONB_EXTRACT_PATH_TEXT(jackson_b_table.jackson_b_column, 'user', 'name') FROM jackson_b_table;
+     * -- PostgreSQL
+     * SELECT jsonb_EXTRACT_PATH(jackson_b_table.jackson_b_column, 'active') FROM jackson_b_table;
+     * SELECT jsonb_EXTRACT_PATH(jackson_b_table.jackson_b_column, 'user') FROM jackson_b_table;
+     * SELECT jsonb_EXTRACT_PATH_TEXT(jackson_b_table.jackson_b_column, 'user', 'name') FROM jackson_b_table;
      *
      * -- MySQL V8
      * SELECT JSON_EXTRACT(jackson_b_table.jackson_b_column, "$.active") FROM jackson_b_table;
@@ -176,10 +176,10 @@ class JacksonBColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT jackson_b_table.id
      *   FROM jackson_b_table
-     *  WHERE CAST(JSONB_EXTRACT_PATH_TEXT(jackson_b_table.jackson_b_column, 'logins') AS INT) >= 1000;
+     *  WHERE CAST(jsonb_EXTRACT_PATH_TEXT(jackson_b_table.jackson_b_column, 'logins') AS INT) >= 1000;
      *
      * -- MySQL V8
      * SELECT jackson_b_table.id
@@ -216,7 +216,7 @@ class JacksonBColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(*) FROM jackson_b_table
      *  WHERE jackson_b_table.jackson_b_column @> '{"active":false}';
      *
@@ -251,8 +251,8 @@ class JacksonBColumnTest: AbstractR2dbcExposedTest() {
                 .where { userIsInActive }
                 .count() shouldBeEqualTo 0L
 
-            val alphaTeamUserAsJson = """{"user":${DefaultJacksonSerializer.serializeAsString(alphaTeamUser)}}"""
-            val userIsInAlphaTeam = tester.jacksonBColumn.contains(alphaTeamUserAsJson)
+            val alphaTeamUserAsJSON = """{"user":${DefaultJacksonSerializer.serializeAsString(alphaTeamUser)}}"""
+            val userIsInAlphaTeam = tester.jacksonBColumn.contains(alphaTeamUserAsJSON)
             tester
                 .selectAll()
                 .where { userIsInAlphaTeam }
@@ -284,21 +284,21 @@ class JacksonBColumnTest: AbstractR2dbcExposedTest() {
             val optional = if (testDB in TestDB.ALL_MYSQL_MARIADB_LIKE) "one" else null
 
             // test data at path root '$' exists by providing no path arguments
-            // SELECT COUNT(*) FROM jackson_b_table WHERE JSONB_PATH_EXISTS(jackson_b_table.jackson_b_column, '$')
+            // SELECT COUNT(*) FROM jackson_b_table WHERE jsonb_PATH_EXISTS(jackson_b_table.jackson_b_column, '$')
             val hasAnyData = tester.jacksonBColumn.exists(optional = optional)
             tester
                 .selectAll()
                 .where { hasAnyData }
                 .count() shouldBeEqualTo 2L
 
-            // SELECT COUNT(*) FROM jackson_b_table WHERE JSONB_PATH_EXISTS(jackson_b_table.jackson_b_column, '$.fakeKey')
+            // SELECT COUNT(*) FROM jackson_b_table WHERE jsonb_PATH_EXISTS(jackson_b_table.jackson_b_column, '$.fakeKey')
             val hasFakeKey = tester.jacksonBColumn.exists(".fakeKey", optional = optional)
             tester
                 .selectAll()
                 .where { hasFakeKey }
                 .count() shouldBeEqualTo 0L
 
-            // SELECT COUNT(*) FROM jackson_b_table WHERE JSONB_PATH_EXISTS(jackson_b_table.jackson_b_column, '$.logins')
+            // SELECT COUNT(*) FROM jackson_b_table WHERE jsonb_PATH_EXISTS(jackson_b_table.jackson_b_column, '$.logins')
             val hasLogins = tester.jacksonBColumn.exists(".logins", optional = optional)
             tester
                 .selectAll()
@@ -308,7 +308,7 @@ class JacksonBColumnTest: AbstractR2dbcExposedTest() {
             // test data at path exists with filter condition & optional arguments
             if (currentDialectTest is PostgreSQLDialect) {
                 // SELECT jackson_b_table.id FROM jackson_b_table
-                //  WHERE JSONB_PATH_EXISTS(jackson_b_table.jackson_b_column, '$.logins ? (@ == 1000)')
+                //  WHERE jsonb_PATH_EXISTS(jackson_b_table.jackson_b_column, '$.logins ? (@ == 1000)')
                 val filterPath = ".logins ? (@ == $maximumLogins)"
                 val hasMaxLogins = tester.jacksonBColumn.exists(filterPath)
                 val usersWithMaxLogin = tester
@@ -317,7 +317,7 @@ class JacksonBColumnTest: AbstractR2dbcExposedTest() {
                 usersWithMaxLogin.single()[tester.id] shouldBeEqualTo newId
 
                 // SELECT jackson_b_table.id FROM jackson_b_table
-                //  WHERE JSONB_PATH_EXISTS(jackson_b_table.jackson_b_column, '$.user.team ? (@ == $team)', '{"team":"A"}')
+                //  WHERE jsonb_PATH_EXISTS(jackson_b_table.jackson_b_column, '$.user.team ? (@ == $team)', '{"team":"A"}')
                 val (jsonPath, optionalArg) = ".user.team ? (@ == \$team)" to "{\"team\":\"$teamA\"}"
                 val isOnTeamA = tester.jacksonBColumn.exists(jsonPath, optional = optionalArg)
                 val usersOnTeamA = tester
@@ -330,12 +330,12 @@ class JacksonBColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT jackson_b_arrays.id, jackson_b_arrays."groups", jackson_b_arrays.numbers
      *   FROM jackson_b_arrays
-     *  WHERE JSONB_EXTRACT_PATH_TEXT(jackson_b_arrays."groups", 'users', '0', 'team') = 'Team A';
+     *  WHERE jsonb_EXTRACT_PATH_TEXT(jackson_b_arrays."groups", 'users', '0', 'team') = 'Team A';
      *
-     * SELECT JSONB_EXTRACT_PATH_TEXT(jackson_b_arrays.numbers, '0')
+     * SELECT jsonb_EXTRACT_PATH_TEXT(jackson_b_arrays.numbers, '0')
      *   FROM jackson_b_arrays;
      *
      * -- MySQL V8
@@ -363,7 +363,7 @@ class JacksonBColumnTest: AbstractR2dbcExposedTest() {
                 .where { firstIsOnTeamA }
                 .single()[tester.id] shouldBeEqualTo singleId
 
-            // older MySQL and MariaDB versions require non-scalar extracted value from JSON Array
+            // older MySQL and MariaDB versions require non-scalar extracted value from Json Array
             val toScalar = testDB != TestDB.MYSQL_V5
             val path2 = when (currentDialectTest) {
                 is PostgreSQLDialect -> "0"
@@ -379,7 +379,7 @@ class JacksonBColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT jackson_b_arrays.id, jackson_b_arrays."groups", jackson_b_arrays.numbers
      *   FROM jackson_b_arrays
      *  WHERE jackson_b_arrays.numbers @> '[3, 5]';
@@ -415,14 +415,14 @@ class JacksonBColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT jackson_b_arrays.id, jackson_b_arrays."groups", jackson_b_arrays.numbers
      *   FROM jackson_b_arrays
-     *  WHERE JSONB_PATH_EXISTS(jackson_b_arrays."groups", '$.users[1]');
+     *  WHERE jsonb_PATH_EXISTS(jackson_b_arrays."groups", '$.users[1]');
      *
      * SELECT jackson_b_arrays.id, jackson_b_arrays."groups", jackson_b_arrays.numbers
      *   FROM jackson_b_arrays
-     *  WHERE JSONB_PATH_EXISTS(jackson_b_arrays.numbers, '$[2]');
+     *  WHERE jsonb_PATH_EXISTS(jackson_b_arrays.numbers, '$[2]');
      *
      * -- MySQL V8
      * SELECT jackson_b_arrays.id, jackson_b_arrays.`groups`, jackson_b_arrays.numbers
@@ -618,7 +618,7 @@ class JacksonBColumnTest: AbstractR2dbcExposedTest() {
             val value = jacksonb<User>("value").databaseGenerated()
         }
 
-        // MySQL versions prior to 8.0.13 do not accept default values on JSON columns
+        // MySQL versions prior to 8.0.13 do not accept default values on Json columns
         Assumptions.assumeTrue { testDB != TestDB.MYSQL_V5 }
         withTables(testDB, tester) {
             testerDatabaseGenerated.insert { }
@@ -636,7 +636,7 @@ class JacksonBColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT jackson_b_table.id, jackson_b_table.jackson_b_column
      *   FROM jackson_b_table
      *  WHERE jackson_b_table.jackson_b_column ?? 'logins';

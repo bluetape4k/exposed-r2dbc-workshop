@@ -1,6 +1,6 @@
 # Issue 33 Ktor R2DBC Multi-Tenant Design
 
-## Context
+## 맥락
 
 Issue #33 adds the Ktor equivalent of the chapter 10 schema-per-tenant R2DBC
 example. The closest local implementation is
@@ -15,33 +15,33 @@ The matching `exposed-workshop` issue #46 has the same workshop shape for
 blocking Exposed. This R2DBC module must stay coroutine-first and avoid
 ThreadLocal tenant state.
 
-## Goals
+## 목표s
 
-1. Add `10-multi-tenant/07-multitenant-ktor`.
+1. 추가: `10-multi-tenant/07-multitenant-ktor`.
 2. Demonstrate schema-per-tenant routing through Ktor request handling:
    - resolve tenant from `X-TENANT-ID`;
    - reject missing, blank, or unknown tenant values with `400`;
    - keep tenant state scoped to the Ktor call/coroutine request path;
    - execute Exposed R2DBC work only through tenant-aware transaction helpers.
-3. Reuse the actor/movie domain shape from
+3. 재사용: the actor/movie domain shape from
    `03-multitenant-spring-webflux` so chapter 10 comparisons stay direct.
-4. Add focused tests for successful tenant reads, missing/invalid tenant
+4. 추가: focused tests for successful tenant reads, missing/invalid tenant
    handling, lowercase header compatibility, and same-ID cross-tenant
    isolation.
-5. Add English and Korean README files plus committed PNG diagram assets.
-6. Record CI/Nightly coverage decisions without taking over aggregate
+5. 추가: English and Korean README files plus committed PNG diagram assets.
+6. 기록: CI/Nightly coverage decisions without taking over aggregate
    documentation owned by #36.
 
-## Non-Goals
+## 비목표
 
-- Do not implement connection-factory-per-tenant routing; #35 covers routing
+- 금지: implement connection-factory-per-tenant routing; #35 covers routing
   datasource behavior.
-- Do not implement tenant authorization or onboarding.
-- Do not change existing Spring WebFlux chapter 10 modules except chapter
+- 금지: implement tenant authorization or onboarding.
+- 금지: change existing Spring WebFlux chapter 10 modules except chapter
   links required for discoverability.
-- Do not add Java code or new external dependencies outside the existing Ktor,
+- 금지: add Java code or new external dependencies outside the existing Ktor,
   Exposed R2DBC, H2, and shared test stack.
-- Do not use ThreadLocal, ReactorContext, or Spring infrastructure in the Ktor
+- 금지: use ThreadLocal, ReactorContext, or Spring infrastructure in the Ktor
   request path.
 
 ## Proposed Module Shape
@@ -71,11 +71,11 @@ ThreadLocal tenant state.
 └── src/test/kotlin/exposed/r2dbc/multitenant/ktor/
 ```
 
-## Tenant Contract
+## Tenant 계약
 
 - Request header: `X-TENANT-ID`.
 - Valid tenant values: `korean`, `english`.
-- Missing or blank header: `400 Bad Request`.
+- 누락 또는 blank header: `400 Bad Request`.
 - Unknown header: `400 Bad Request`.
 - Header name matching should rely on Ktor's case-insensitive header lookup.
 - Tenant state is represented by a validated `Tenants.Tenant` enum, never a
@@ -116,7 +116,7 @@ helper as accidental drift.
 
 ## Database and Initialization
 
-- Use a single H2 R2DBC database by default:
+- 사용: a single H2 R2DBC database by default:
   `r2dbc:h2:mem:///ktor-multitenant;DB_CLOSE_DELAY=-1;USER=sa;`.
 - At module startup, create one schema per tenant and seed language-specific
   actor/movie rows.
@@ -146,7 +146,7 @@ unknown tenant cases.
 
 ## Required Tests
 
-- Successful `/actors` and `/actors/{id}` reads for every tenant.
+- Successful `/actors` and `/actors/{id}` 읽는다: for every tenant.
 - Missing header, empty header, whitespace header, and unknown header all return
   `400` with `INVALID_TENANT`.
 - Lowercase `x-tenant-id` resolves the same tenant.
@@ -162,12 +162,12 @@ unknown tenant cases.
 - Tests use Ktor `testApplication` and Ktor client APIs; production paths must
   not use `runBlocking`.
 
-## Documentation and Diagram
+## 문서화 and Diagram
 
-- Add module `README.md` and `README.ko.md`.
+- 추가: module `README.md` and `README.ko.md`.
 - Link the module from `10-multi-tenant/README.md` and
   `10-multi-tenant/README.ko.md`.
-- Add a PNG diagram under `docs/images/readme-diagrams/` and reference the
+- 추가: a PNG diagram under `docs/images/readme-diagrams/` and reference the
   same relative path from both README files.
 - Explain why Ktor uses call-scoped attributes instead of ReactorContext.
 - Explain the schema switch cost and link forward to #35 for connection-factory
@@ -202,8 +202,8 @@ unknown tenant cases.
 
 | Priority | Finding | Decision | Follow-up |
 |---|---|---|---|
-| P2 | Error response body shape was implicit. | Accepted | Added `INVALID_TENANT` JSON contract and body assertions. |
-| P2 | Startup initialization failure behavior was implicit. | Accepted | Added fail-fast startup rule. |
+| P2 | Error response body shape was implicit. | Accepted | 추가함: `INVALID_TENANT` JSON contract and body assertions. |
+| P2 | Startup initialization failure behavior was implicit. | Accepted | 추가함: fail-fast startup rule. |
 
 ### Claude Code Opus Advisor
 
@@ -212,11 +212,11 @@ Artifact: `.omx/artifacts/claude-issue-33-spec-review-20260523045833.md`
 | Priority | Finding | Decision | Follow-up |
 |---|---|---|---|
 | P1 | Tenant header trust boundary unspecified. | Accepted | README/spec must state header is not auth and production must bind tenant to identity. |
-| P1 | Connection-pool schema-state leakage needs explicit test. | Accepted | Added constrained-pool tenant alternation and concurrent request tests. |
+| P1 | Connection-pool schema-state leakage needs explicit test. | Accepted | 추가함: constrained-pool tenant alternation and concurrent request tests. |
 | P1 | Duplicate tenant transaction helper decision was silent. | Accepted | Keep local duplication intentionally; document standalone module rationale. |
-| P1 | Test matrix missed concurrency and write isolation. | Accepted | Added write-isolation and overlapping request tests. |
-| P2 | Raw header must never reach schema selection. | Accepted | Added enum-only boundary invariant. |
-| P2 | Ktor current tenant must not default. | Accepted | Added no-fallback extension contract. |
+| P1 | Test matrix missed concurrency and write isolation. | Accepted | 추가함: write-isolation and overlapping request tests. |
+| P2 | Raw header must never reach schema selection. | Accepted | 추가함: enum-only boundary invariant. |
+| P2 | Ktor current tenant must not default. | Accepted | 추가함: no-fallback extension contract. |
 
 Claude rerun artifact:
 `.omx/artifacts/claude-issue-33-spec-review-rerun-20260523050109.md`.

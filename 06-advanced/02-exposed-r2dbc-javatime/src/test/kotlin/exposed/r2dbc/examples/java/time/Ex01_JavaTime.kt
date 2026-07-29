@@ -127,7 +127,7 @@ class Ex01_JavaTime: AbstractR2dbcExposedTest() {
             /**
              * Insert a city with local time
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO citiestime ("name", local_time)
              * VALUES ('Seoul', '2025-02-04T10:40:53.969116')
              * ```
@@ -141,7 +141,7 @@ class Ex01_JavaTime: AbstractR2dbcExposedTest() {
              * Select the city with local time
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT Extract(YEAR FROM citiestime.local_time),
              *        Extract(MONTH FROM citiestime.local_time),
              *        Extract(DAY FROM citiestime.local_time),
@@ -257,14 +257,14 @@ class Ex01_JavaTime: AbstractR2dbcExposedTest() {
      *
      * Insert two `LocalDateTime` with nanos
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO testlocaldatetime ("time") VALUES ('2025-02-04T09:13:33.000111112')
      * INSERT INTO testlocaldatetime ("time") VALUES ('2025-02-04T09:13:33.000111118')
      * ```
      *
      * Load the `LocalDateTime` with nanos from the DB
      * ```
-     * -- Postgres, MySQL, H2_PSQL
+     * -- PostgreSQL, MySQL, H2_PSQL
      * dateTimesFromDB=[2025-02-04T09:24:16.000111, 2025-02-04T09:24:16.000111]
      * -- H2, H2_MYSQL, H2_MARIADB
      * dateTimesFromDB=[2025-02-04T09:24:16.000111112, 2025-02-04T09:24:16.000111118]
@@ -456,7 +456,7 @@ class Ex01_JavaTime: AbstractR2dbcExposedTest() {
     }
 
     /**
-     * LocalDateTime을 가진 [ModifierData] 클래스를 [jsonb] 형식으로 저장, 조회하기
+     * LocalDateTime을 가진 [ModifierData] 클래스를 [JSONB] 형식으로 저장, 조회하기
      *
      * ```sql
      * CREATE TABLE IF NOT EXISTS tester (
@@ -482,7 +482,7 @@ class Ex01_JavaTime: AbstractR2dbcExposedTest() {
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
-    fun `DateTime as JsonB`(testDB: TestDB) = runTest {
+    fun `DateTime as JSONB`(testDB: TestDB) = runTest {
         Assumptions.assumeTrue { testDB !in TestDB.ALL_H2 }
 
         val tester = object: IntIdTable("tester") {
@@ -777,7 +777,7 @@ class Ex01_JavaTime: AbstractR2dbcExposedTest() {
      * Postgres에서 [LocalDate], [LocalDateTime]의 Array 방식으로 저장하고 조회한다.
      *
      * ```
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS array_tester (
      *      dates DATE[] DEFAULT ARRAY['2025-02-04'::date] NOT NULL,
      *      datetimes TIMESTAMP[] DEFAULT ARRAY['2025-02-04 09:44:53.184'::timestamp without time zone] NOT NULL
@@ -809,7 +809,7 @@ class Ex01_JavaTime: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO array_tester (dates, datetimes)
              * VALUES (
              *      ARRAY['2020-05-04','2021-05-04','2022-05-04'],
@@ -826,7 +826,7 @@ class Ex01_JavaTime: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT array_tester.dates[3],
              *        array_tester.datetimes[1:2]
              *   FROM array_tester
@@ -894,7 +894,7 @@ class Ex01_JavaTime: AbstractR2dbcExposedTest() {
      * [CurrentDate] 를 [date] 컬럼의 default expression 으로 사용한다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS test_table (
      *      id SERIAL PRIMARY KEY,
      *      "date" DATE DEFAULT CURRENT_DATE NOT NULL
@@ -1030,7 +1030,7 @@ val today: LocalDate = LocalDate.now()
 
 /**
  * ```sql
- * -- Postgres
+ * -- PostgreSQL
  * CREATE TABLE IF NOT EXISTS citiestime (
  *      id SERIAL PRIMARY KEY,
  *      "name" VARCHAR(50) NOT NULL,

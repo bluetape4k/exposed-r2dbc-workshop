@@ -56,18 +56,18 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 /**
- * Fastjson2 기반 JSONB(`fastjsonb()`) 컬럼의 직렬화/역직렬화와 JSON 검색 함수를 검증하는 테스트.
+ * Fastjson2 기반 jsonb(`fastjsonb()`) 컬럼의 직렬화/역직렬화와 Json 검색 함수를 검증하는 테스트.
  *
- * `bluetape4k-exposed` 의 `fastjsonb()` 확장 함수를 사용하여 Kotlin 객체를 JSONB 바이너리 형식으로
- * 컬럼에 저장합니다. JSONB는 PostgreSQL에서 바이너리로 저장되어 검색 성능이 JSON보다 우수합니다.
- * MySQL/MariaDB에서는 JSON과 동일하게 처리됩니다.
+ * `bluetape4k-exposed` 의 `fastjsonb()` 확장 함수를 사용하여 Kotlin 객체를 jsonb 바이너리 형식으로
+ * 컬럼에 저장합니다. jsonb는 PostgreSQL에서 바이너리로 저장되어 검색 성능이 Json보다 우수합니다.
+ * MySQL/MariaDB에서는 Json과 동일하게 처리됩니다.
  *
- * [FastjsonColumnTest]와 동일한 테스트 케이스를 JSONB 컬럼으로 검증합니다:
- * - INSERT/SELECT, UPDATE, `extract`, `contains`, `exists`, 배열 컬럼 JSON 검색
+ * [FastjsonColumnTest]와 동일한 테스트 케이스를 jsonb 컬럼으로 검증합니다:
+ * - INSERT/SELECT, UPDATE, `extract`, `contains`, `exists`, 배열 컬럼 Json 검색
  * - `default`, `clientDefault`, `databaseGenerated`, `transform`, `upsert`, nullable 컬럼
  * - PostgreSQL 전용 `??` 연산자: 최상위 키 존재 여부를 확인하는 커스텀 연산자 (`keyExists`)
  *
- * @see FastjsonColumnTest JSON 컬럼(텍스트) 테스트
+ * @see FastjsonColumnTest Json 컬럼(텍스트) 테스트
  * @see FastjsonSchema 스키마 및 헬퍼 함수 정의
  */
 @Suppress("DEPRECATION")
@@ -77,7 +77,7 @@ class FastjsonBColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO fastjson_b_table (fastjson_b_column)
      * VALUES ({"user":{"name":"Pro","team":"Alpha"},"logins":999,"active":true,"team":"A"});
      *
@@ -102,7 +102,7 @@ class FastjsonBColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * UPDATE fastjson_b_table
      *    SET fastjson_b_column={"user":{"name":"Admin","team":null},"logins":10,"active":false,"team":null}
      *
@@ -130,10 +130,10 @@ class FastjsonBColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
-     * SELECT JSONB_EXTRACT_PATH(fastjson_b_table.fastjson_b_column, 'active') FROM fastjson_b_table;
-     * SELECT JSONB_EXTRACT_PATH(fastjson_b_table.fastjson_b_column, 'user') FROM fastjson_b_table;
-     * SELECT JSONB_EXTRACT_PATH_TEXT(fastjson_b_table.fastjson_b_column, 'user', 'name') FROM fastjson_b_table;
+     * -- PostgreSQL
+     * SELECT jsonb_EXTRACT_PATH(fastjson_b_table.fastjson_b_column, 'active') FROM fastjson_b_table;
+     * SELECT jsonb_EXTRACT_PATH(fastjson_b_table.fastjson_b_column, 'user') FROM fastjson_b_table;
+     * SELECT jsonb_EXTRACT_PATH_TEXT(fastjson_b_table.fastjson_b_column, 'user', 'name') FROM fastjson_b_table;
      *
      * -- MySQL V8
      * SELECT JSON_EXTRACT(fastjson_b_table.fastjson_b_column, "$.active") FROM fastjson_b_table;
@@ -168,10 +168,10 @@ class FastjsonBColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT fastjson_b_table.id
      *   FROM fastjson_b_table
-     *  WHERE CAST(JSONB_EXTRACT_PATH_TEXT(fastjson_b_table.fastjson_b_column, 'logins') AS INT) >= 1000;
+     *  WHERE CAST(jsonb_EXTRACT_PATH_TEXT(fastjson_b_table.fastjson_b_column, 'logins') AS INT) >= 1000;
      *
      * -- MySQL V8
      * SELECT fastjson_b_table.id
@@ -208,7 +208,7 @@ class FastjsonBColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(*) FROM fastjson_b_table
      *  WHERE fastjson_b_table.fastjson_b_column @> '{"active":false}';
      *
@@ -240,8 +240,8 @@ class FastjsonBColumnTest: AbstractR2dbcExposedTest() {
             val userIsInActive = tester.fastjsonBColumn.contains("""{"active":false}""")
             tester.selectAll().where { userIsInActive }.count() shouldBeEqualTo 0L
 
-            val alphaTeamUserAsJson = """{"user":${FastjsonSerializer.Default.serializeAsString(alphaTeamUser)}}"""
-            val userIsInAlphaTeam = tester.fastjsonBColumn.contains(alphaTeamUserAsJson)
+            val alphaTeamUserAsJSON = """{"user":${FastjsonSerializer.Default.serializeAsString(alphaTeamUser)}}"""
+            val userIsInAlphaTeam = tester.fastjsonBColumn.contains(alphaTeamUserAsJSON)
             tester.selectAll().where { userIsInAlphaTeam }.count() shouldBeEqualTo 1L
 
             // test target contains candidate at specified path
@@ -270,19 +270,19 @@ class FastjsonBColumnTest: AbstractR2dbcExposedTest() {
             val optional = if (testDB in TestDB.ALL_MYSQL_MARIADB_LIKE) "one" else null
 
             // test data at path root '$' exists by providing no path arguments
-            // SELECT COUNT(*) FROM fastjson_b_table WHERE JSONB_PATH_EXISTS(fastjson_b_table.fastjson_b_column, '$')
+            // SELECT COUNT(*) FROM fastjson_b_table WHERE jsonb_PATH_EXISTS(fastjson_b_table.fastjson_b_column, '$')
             val hasAnyData: Exists = tester.fastjsonBColumn.exists(optional = optional)
             tester.selectAll()
                 .where { hasAnyData }
                 .count() shouldBeEqualTo 2L
 
-            // SELECT COUNT(*) FROM fastjson_b_table WHERE JSONB_PATH_EXISTS(fastjson_b_table.fastjson_b_column, '$.fakeKey')
+            // SELECT COUNT(*) FROM fastjson_b_table WHERE jsonb_PATH_EXISTS(fastjson_b_table.fastjson_b_column, '$.fakeKey')
             val hasFakeKey: Exists = tester.fastjsonBColumn.exists(".fakeKey", optional = optional)
             tester.selectAll()
                 .where { hasFakeKey }
                 .count() shouldBeEqualTo 0L
 
-            // SELECT COUNT(*) FROM fastjson_b_table WHERE JSONB_PATH_EXISTS(fastjson_b_table.fastjson_b_column, '$.logins')
+            // SELECT COUNT(*) FROM fastjson_b_table WHERE jsonb_PATH_EXISTS(fastjson_b_table.fastjson_b_column, '$.logins')
             val hasLogins = tester.fastjsonBColumn.exists(".logins", optional = optional)
             tester.selectAll()
                 .where { hasLogins }
@@ -291,14 +291,14 @@ class FastjsonBColumnTest: AbstractR2dbcExposedTest() {
             // test data at path exists with filter condition & optional arguments
             if (currentDialectTest is PostgreSQLDialect) {
                 // SELECT fastjson_b_table.id FROM fastjson_b_table
-                //  WHERE JSONB_PATH_EXISTS(fastjson_b_table.fastjson_b_column, '$.logins ? (@ == 1000)')
+                //  WHERE jsonb_PATH_EXISTS(fastjson_b_table.fastjson_b_column, '$.logins ? (@ == 1000)')
                 val filterPath = ".logins ? (@ == $maximumLogins)"
                 val hasMaxLogins = tester.fastjsonBColumn.exists(filterPath)
                 val usersWithMaxLogin = tester.select(tester.id).where { hasMaxLogins }
                 usersWithMaxLogin.single()[tester.id] shouldBeEqualTo newId
 
                 // SELECT fastjson_b_table.id FROM fastjson_b_table
-                //  WHERE JSONB_PATH_EXISTS(fastjson_b_table.fastjson_b_column, '$.user.team ? (@ == $team)', '{"team":"A"}')
+                //  WHERE jsonb_PATH_EXISTS(fastjson_b_table.fastjson_b_column, '$.user.team ? (@ == $team)', '{"team":"A"}')
                 val (jsonPath, optionalArg) = ".user.team ? (@ == \$team)" to "{\"team\":\"$teamA\"}"
                 val isOnTeamA: Exists = tester.fastjsonBColumn.exists(jsonPath, optional = optionalArg)
                 val usersOnTeamA: Query = tester
@@ -311,12 +311,12 @@ class FastjsonBColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT fastjson_b_arrays.id, fastjson_b_arrays."groups", fastjson_b_arrays.numbers
      *   FROM fastjson_b_arrays
-     *  WHERE JSONB_EXTRACT_PATH_TEXT(fastjson_b_arrays."groups", 'users', '0', 'team') = 'Team A';
+     *  WHERE jsonb_EXTRACT_PATH_TEXT(fastjson_b_arrays."groups", 'users', '0', 'team') = 'Team A';
      *
-     * SELECT JSONB_EXTRACT_PATH_TEXT(fastjson_b_arrays.numbers, '0')
+     * SELECT jsonb_EXTRACT_PATH_TEXT(fastjson_b_arrays.numbers, '0')
      *   FROM fastjson_b_arrays;
      *
      * -- MySQL V8
@@ -341,7 +341,7 @@ class FastjsonBColumnTest: AbstractR2dbcExposedTest() {
             val firstIsOnTeamA = tester.groups.extract<String>(*path1) eq "Team A"
             tester.selectAll().where { firstIsOnTeamA }.single()[tester.id] shouldBeEqualTo singleId
 
-            // older MySQL and MariaDB versions require non-scalar extracted value from JSON Array
+            // older MySQL and MariaDB versions require non-scalar extracted value from Json Array
             val toScalar = testDB != TestDB.MYSQL_V5
             val path2 = when (currentDialectTest) {
                 is PostgreSQLDialect -> "0"
@@ -357,7 +357,7 @@ class FastjsonBColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT fastjson_b_arrays.id, fastjson_b_arrays."groups", fastjson_b_arrays.numbers
      *   FROM fastjson_b_arrays
      *  WHERE fastjson_b_arrays.numbers @> '[3, 5]';
@@ -393,14 +393,14 @@ class FastjsonBColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT fastjson_b_arrays.id, fastjson_b_arrays."groups", fastjson_b_arrays.numbers
      *   FROM fastjson_b_arrays
-     *  WHERE JSONB_PATH_EXISTS(fastjson_b_arrays."groups", '$.users[1]');
+     *  WHERE jsonb_PATH_EXISTS(fastjson_b_arrays."groups", '$.users[1]');
      *
      * SELECT fastjson_b_arrays.id, fastjson_b_arrays."groups", fastjson_b_arrays.numbers
      *   FROM fastjson_b_arrays
-     *  WHERE JSONB_PATH_EXISTS(fastjson_b_arrays.numbers, '$[2]');
+     *  WHERE jsonb_PATH_EXISTS(fastjson_b_arrays.numbers, '$[2]');
      *
      * -- MySQL V8
      * SELECT fastjson_b_arrays.id, fastjson_b_arrays.`groups`, fastjson_b_arrays.numbers
@@ -595,7 +595,7 @@ class FastjsonBColumnTest: AbstractR2dbcExposedTest() {
             val value = fastjsonb<User>("value").databaseGenerated()
         }
 
-        // MySQL versions prior to 8.0.13 do not accept default values on JSON columns
+        // MySQL versions prior to 8.0.13 do not accept default values on Json columns
         Assumptions.assumeTrue { testDB != TestDB.MYSQL_V5 }
         withTables(testDB, tester) {
             testerDatabaseGenerated.insert { }
@@ -611,7 +611,7 @@ class FastjsonBColumnTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT fastjson_b_table.id, fastjson_b_table.fastjson_b_column
      *   FROM fastjson_b_table
      *  WHERE fastjson_b_table.fastjson_b_column ?? 'logins';
