@@ -9,7 +9,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Sinks
 
 /**
- * In-process realtime fan-out used by the Spring production example.
+ * Spring production 예제에서 사용하는 프로세스 내부 realtime fan-out입니다.
  */
 @Component
 class SpringRealtimeHub: RealtimeDelivery {

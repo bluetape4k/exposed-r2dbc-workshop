@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service
 import kotlin.time.TimeSource
 
 /**
- * Application service that keeps coroutine and WebFlux boundaries explicit.
+ * 코루틴과 WebFlux 경계를 명시적으로 유지하는 application service입니다.
  */
 @Service
 class SpringProductionWorkflowService(

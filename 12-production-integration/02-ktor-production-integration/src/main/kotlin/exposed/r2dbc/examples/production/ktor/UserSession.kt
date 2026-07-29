@@ -3,7 +3,7 @@ package exposed.r2dbc.examples.production.ktor
 import java.io.Serializable
 
 /**
- * Session identity stored in the Ktor session cookie.
+ * Ktor session cookie에 저장하는 세션 식별 정보입니다.
  */
 @kotlinx.serialization.Serializable
 data class UserSession(

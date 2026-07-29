@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.function.client.WebClient
 
 /**
- * Starts the Spring Boot 4 production integration example.
+ * Spring Boot 4 production integration 예제를 시작합니다.
  */
 @SpringBootApplication
 class SpringProductionIntegrationApplication
@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
 }
 
 /**
- * Provides the H2 R2DBC database used by the Spring app-boundary example.
+ * Spring app-boundary 예제에서 사용하는 H2 R2DBC 데이터베이스를 제공합니다.
  */
 @Configuration
 class SpringProductionDatabaseConfig {

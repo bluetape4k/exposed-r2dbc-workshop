@@ -11,7 +11,7 @@ import org.springframework.web.server.ServerWebExchange
 import org.springframework.web.server.ServerWebInputException
 
 /**
- * Converts workshop exceptions into stable structured HTTP responses.
+ * workshop 예외를 안정적인 구조화 HTTP 응답으로 변환합니다.
  */
 @RestControllerAdvice
 class SpringProductionErrorHandler {

@@ -15,7 +15,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 /**
- * Dispatches persisted outbound requests through a Ktor HTTP client.
+ * 저장된 outbound 요청을 Ktor HTTP client로 dispatch합니다.
  */
 class KtorOutboundDispatcher(
     private val client: HttpClient = defaultOutboundClient(),

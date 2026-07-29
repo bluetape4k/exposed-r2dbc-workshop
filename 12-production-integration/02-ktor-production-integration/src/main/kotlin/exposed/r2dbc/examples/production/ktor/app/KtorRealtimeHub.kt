@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 /**
- * In-process realtime fan-out used by the Ktor production example.
+ * Ktor production 예제에서 사용하는 프로세스 내부 realtime fan-out입니다.
  */
 class KtorRealtimeHub: RealtimeDelivery {
     private val events = MutableSharedFlow<OutboxEventView>(

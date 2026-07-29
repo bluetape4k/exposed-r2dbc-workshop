@@ -24,7 +24,7 @@ internal fun ServerWebExchange.requestId(): String =
     attributes[REQUEST_ID_ATTRIBUTE]?.toString().orEmpty()
 
 /**
- * Adds a safe request id to every Spring WebFlux response before security and routes run.
+ * security와 route 실행 전에 모든 Spring WebFlux 응답에 안전한 request id를 추가합니다.
  */
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
