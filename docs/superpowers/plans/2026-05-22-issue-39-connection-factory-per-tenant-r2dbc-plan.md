@@ -1,114 +1,112 @@
-# Issue 39 Connection-factory-per-tenant R2DBC Plan
+# Issue #39 Connection-factory-per-tenant R2DBC 구현 계획
 
-## Scope
+## 범위
 
-Add `10-multi-tenant/04-connection-factory-per-tenant-spring-webflux`, a
+추가: `10-multi-tenant/04-connection-factory-per-tenant-spring-webflux`, a
 Spring WebFlux + Exposed R2DBC workshop module that routes each tenant to a
 distinct pooled `ConnectionFactory`.
 
-Approved spec:
+승인된 명세:
 
 - `docs/superpowers/specs/2026-05-22-issue-39-connection-factory-per-tenant-r2dbc-design.md`
 
-This plan keeps the module H2-only for the first implementation. Root CI covers
-it through `./gradlew test`; no Nightly shard edit is planned unless non-H2
+이 계획은 the module H2-only for the first implementation. root CI가 이를 커버한다 through `./gradlew test`; non-H2 profile이 구현 중 추가되지 않는 한 Nightly shard 수정은 계획하지 않는다: non-H2
 profiles are added during implementation.
 
-## Implementation Tasks
+## 구현 작업
 
 ### 1. Scaffold module from chapter 10 schema-per-tenant example
 
-Complexity: M
+복잡도: M
 
-- Copy the module shape from
+- module shape를 다음에서 복사한다:
   `10-multi-tenant/03-multitenant-spring-webflux` into
   `10-multi-tenant/04-connection-factory-per-tenant-spring-webflux`.
-- Rename package to `exposed.r2dbc.multitenant.connectionfactory`.
-- Rename the app entrypoint to `ConnectionFactoryTenantApp.kt` and update
+- package를 다음으로 변경한다: `exposed.r2dbc.multitenant.connectionfactory`.
+- app entrypoint를 다음으로 변경한다: `ConnectionFactoryTenantApp.kt` and update
   `springBoot.mainClass`.
-- Keep the actor/movie API shape and fixture semantics so readers can compare
+- 유지: the actor/movie API shape and fixture semantics so readers can compare
   strategy `03` and strategy `04`.
-- Drop schema-switching helpers from the request path.
-- Keep `src/test/resources/junit-platform.properties` and `logback-test.xml`.
-- Keep public KDoc English in all new or materially changed public classes.
+- request path에서 schema-switching helper를 제거한다.
+- 유지: `src/test/resources/junit-platform.properties` and `logback-test.xml`.
+- 유지: public KDoc English in all new or materially changed public classes.
 
-Rollback point: the new module is isolated under one directory and can be
-removed without touching existing examples.
+Rollback point: 새 module은 한 directory 아래에 격리되어 있어 기존 example을 건드리지 않고 제거할 수 있다.
 
 ### 2. Configure tenant connection factories and pools
 
-Complexity: L
+복잡도: L
 
-- Add `app.tenants.default-tenant` and `app.tenants.definitions.*.url` to
+- 추가: `app.tenants.default-tenant` and `app.tenants.definitions.*.url` to
   `application.yml`.
-- Add bounded pool settings:
+- 추가: bounded pool setting:
   `max-create-connection-time`, `max-acquire-time`, `acquire-retry`,
   `max-idle-time`, and conservative `max-size`.
-- Implement configuration properties in
+- 구현: configuration properties in
   `config/ConnectionFactoryTenantR2dbcConfig.kt`.
-- Create tenant pools eagerly at startup from distinct H2 URLs:
+- 생성: tenant pools eagerly at startup from distinct H2 URLs:
   - `tenant_cf_korean`
   - `tenant_cf_english`
-- Use `io.r2dbc.pool.ConnectionPool` and
+- 사용: `io.r2dbc.pool.ConnectionPool` and
   `io.r2dbc.pool.ConnectionPoolConfiguration` as the owned factory type.
-- Do not create independent initializer pools.
+- 금지: 독립 initializer pool을 생성한다.
 
-Ordering dependency: task 3 uses this registry and the routing factory.
+Ordering dependency: 작업 3은 이 registry와 routing factory를 사용한다.
 
-### 3. Implement routing registry, routing factory, and explicit databases
+### 3. 구현: routing registry, routing factory, and explicit databases
 
-Complexity: L
+복잡도: L
 
-- Implement `tenant/TenantConnectionFactoryRegistry.kt`.
-  - Sole owner of tenant `ConnectionPool` instances.
-  - Provides `get(tenantId)`, `keys()`, and a target map for Spring routing.
-  - Implements Spring shutdown cleanup and calls `ConnectionPool.dispose()` once
-    per pool. Local r2dbc-pool `1.0.2.RELEASE` exposes synchronous
-    `dispose()`, plus reactive `disposeLater()`; use synchronous `dispose()` in
-    `DisposableBean.destroy()` and keep shutdown deterministic without
+- 구현: `tenant/TenantConnectionFactoryRegistry.kt`.
+  - tenant `ConnectionPool` instance의 단일 owner.
+  - provides `get(tenantId)`, `keys()`, and a target map for Spring routing.
+  - Spring shutdown cleanup을 구현한다 and calls `ConnectionPool.dispose()` once
+    per pool. local r2dbc-pool `1.0.2.RELEASE` 는 synchronous
+    `dispose()`, plus reactive `disposeLater()`; 사용: `dispose()` in
+    `DisposableBean.destroy()` and shutdown을 deterministic하게 유지한다 without
     `runBlocking`.
-- Implement `tenant/TenantRoutingConnectionFactory.kt` extending Spring
+- 구현: `tenant/TenantRoutingConnectionFactory.kt` extending Spring
   `AbstractRoutingConnectionFactory`.
-  - `determineCurrentLookupKey()` reads `TenantContextKeys.TENANT_ID` with
+  - `determineCurrentLookupKey()` 읽는다: `TenantContextKeys.TENANT_ID` with
     `Mono.deferContextual`.
-  - Empty lookup-key publisher lets Spring use the configured default factory.
-  - Unknown emitted lookup key fails because bean creation calls
+  - 빈 lookup-key publisher는 Spring이 configured default factory를 사용하게 한다.
+  - 알 수 없는 emitted lookup key는 bean creation에서
     `setLenientFallback(false)`.
 - In `ConnectionFactoryTenantR2dbcConfig.kt`, create:
   - primary routing `ConnectionFactory`.
-  - call Spring initialization explicitly with `afterPropertiesSet()` after
+  - call Spring initialization explicitly with `다음 위치 뒤:PropertiesSet()` 다음 위치 뒤:
     `setTargetConnectionFactories`, `setDefaultTargetConnectionFactory`, and
     `setLenientFallback(false)`.
   - explicit `tenantRoutingDatabase` from the routing factory.
   - explicit initializer `Map<Tenant, R2dbcDatabase>` using registry-owned
     tenant pools.
-- Use the same `Dispatchers.IO` `R2dbcDatabaseConfig` convention as existing
+- 사용: the same `Dispatchers.IO` `R2dbcDatabaseConfig` convention as existing
   R2DBC workshop modules; document it as local consistency, not because R2DBC
   itself is blocking.
-- Avoid deprecated Exposed imports such as `SqlExpressionBuilder.eq`.
+- 회피: deprecated Exposed imports such as `SqlExpressionBuilder.eq`.
 
-Risk control: every request transaction must use the explicit routing database
-instead of depending on Exposed default database state.
+Risk control: every request transaction은 다음을 사용해야 한다: the explicit routing database
+Exposed default database state에 의존하지 않는다.
 
-### 4. Implement tenant contract and transaction boundary
+### 4. 구현: tenant contract and transaction boundary
 
-Complexity: M
+복잡도: M
 
-- Implement `tenant/Tenants.kt` for fixed `korean` and `english` tenants.
-- Implement `tenant/TenantContextKeys.kt`.
-- Implement strict tenant ID validation:
-  - trim before validation.
+- 구현: `tenant/Tenants.kt` 고정 `korean` and `english` tenants.
+- 구현: `tenant/TenantContextKeys.kt`.
+- 구현: strict tenant ID validation:
+  - validation 전에 trim한다.
   - accept only `[a-zA-Z0-9_-]{1,64}`.
-  - reject empty, whitespace-only, control-character, too-long, unsupported
+  - 거부: empty, whitespace-only, control-character, too-long, unsupported
     character, and unknown tenant IDs with `400 Bad Request`.
-- Implement `TenantFilter`.
+- 구현: `TenantFilter`.
   - Reads mandatory `X-TENANT-ID`.
   - Validates before registry/database access.
   - Writes the normalized tenant ID to Reactor context.
-  - Uses fixed error messages for invalid or unknown tenant headers. Do not echo
-    raw header values in `ResponseStatusException` messages.
-  - Logs only the normalized tenant ID after it passes the regex allowlist.
-- Implement `TenantTransactionExecutor`.
+  - Uses fixed error messages for invalid or unknown tenant headers. 금지: echo
+    raw 헤더 값을 읽는다 in `ResponseStatusException` messages.
+  - Logs only the normalized tenant ID 다음 위치 뒤: it passes the regex allowlist.
+- 구현: `TenantTransactionExecutor`.
   - The only request-path production class allowed to call
     `suspendTransaction(db = tenantRoutingDatabase)`.
   - Does not catch broad exceptions around suspend calls; cancellation must
@@ -121,15 +119,15 @@ Complexity: M
       `TenantContextKeys.TENANT_ID` into the routing factory subscriber context;
     - call `suspendTransaction(db = tenantRoutingDatabase, ...)` inside that
       boundary.
-  - Keep the 50-request concurrent WebFlux test as a regression guard for this
+  - 유지: the 50-request concurrent WebFlux test as a regression guard for this
     bridge, not as a discovery mechanism.
 - Controller and repository code must never call bare `suspendTransaction`.
 
 ### 5. Initialize isolated tenant data
 
-Complexity: M
+복잡도: M
 
-- Implement `tenant/DataInitializer.kt`.
+- 구현: `tenant/DataInitializer.kt`.
   - Uses explicit initializer `R2dbcDatabase` for each tenant.
   - Creates actor/movie tables per tenant database.
   - Uses `SchemaUtils.create(...)` for the fresh H2 example database and does
@@ -138,14 +136,14 @@ Complexity: M
     changing the initializer.
   - Seeds different Korean and English actor names for the same IDs.
   - Does not use schema switching.
-- Keep startup deterministic and idempotent by skipping seed insert when actor
+- 유지: startup deterministic and idempotent by skipping seed insert when actor
   rows already exist.
-- Document that initializer databases reuse registry-owned pooled factories and
+- 문서화: that initializer databases reuse registry-owned pooled factories and
   do not own pool shutdown.
 
-### 6. Add focused tests before broad verification
+### 6. 추가: focused tests before broad verification
 
-Complexity: L
+복잡도: L
 
 Tests must use JUnit 5, `runSuspendIO`, and bluetape4k assertions.
 
@@ -159,8 +157,8 @@ Tests must use JUnit 5, `runSuspendIO`, and bluetape4k assertions.
   - known Reactor context tenant routes to the matching factory.
   - unknown emitted tenant fails with lenient fallback disabled.
 - Tenant validation tests:
-  - reject `""`, whitespace-only, control-character, too-long, unsupported
-    character, and unknown tenant IDs before registry lookup.
+  - 거부: `""`, whitespace-only, control-character, too-long, unsupported
+    character, and unknown tenant IDs registry lookup 전에 거부한다.
 - HTTP integration tests:
   - `GET /actors` succeeds for every tenant.
   - `GET /actors/{id}` returns tenant-specific fixture values for the same ID.
@@ -181,7 +179,7 @@ Tests must use JUnit 5, `runSuspendIO`, and bluetape4k assertions.
 
 ### 7. Write README pair and delivery notes
 
-Complexity: M
+복잡도: M
 
 - Write `README.md` and `README.ko.md`.
 - Explain:
@@ -195,30 +193,30 @@ Complexity: M
 - Include the concrete bounded pool YAML snippet in both README files.
 - Include a Mermaid architecture flow in both README files so readers can
   compare visually with module `03`.
-- Do not update chapter aggregate docs beyond this module because issue #42 owns
+- 금지: update chapter aggregate docs beyond this module because issue #42 owns
   that wiring.
 
 ### 8. Verify, review, and publish
 
-Complexity: M
+복잡도: M
 
-Run in order:
+실행: in order:
 
 1. `./gradlew projects --console=plain`
 2. `./gradlew :04-connection-factory-per-tenant-spring-webflux:compileKotlin --warning-mode all --console=plain`
 3. `repo-test-summary -- ./gradlew :04-connection-factory-per-tenant-spring-webflux:test "-PuseDB=H2" --continue --console=plain`
 4. `git diff --check`
 5. IDE diagnostics if available; otherwise record compile/test fallback.
-6. Claude Step 6-R code review gate with `P0=0`, `P1=0`.
-7. Create `docs/lessons/2026-05-22-issue-39-connection-factory-per-tenant-r2dbc.md`.
-8. Commit with Lore trailers.
-9. Push branch and open a draft PR assigned to `debop`.
+6. Claude 단계 6-R code review gate with `P0=0`, `P1=0`.
+7. 생성: `docs/lessons/2026-05-22-issue-39-connection-factory-per-tenant-r2dbc.md`.
+8. 커밋: with Lore trailers.
+9. 푸시: branch and open a draft PR assigned to `debop`.
 
-## Step 3-R Local Review
+## 단계 3-R 로컬 검토
 
 | Perspective | P0 | P1 | P2/P3 notes |
 |---|---:|---:|---|
-| Implementer | 0 | 0 | Task order is scaffold -> routing/config -> contract -> data -> tests/docs. High-risk bridge and lifecycle work is split before controller tests. |
+| Implementer | 0 | 0 | 작업 순서는 scaffold -> routing/config -> contract -> data -> tests/docs다. High-risk bridge와 lifecycle 작업은 controller test 전에 분리한다. |
 | Test engineer | 0 | 0 | Success, failure, edge validation, concurrency, coroutine cancellation, lifecycle, and architecture tests are named. |
 | Architect | 0 | 0 | New module is isolated, reuses chapter 10 API shape and chapter 11 routing patterns without extracting shared APIs. |
 | Delivery | 0 | 0 | README pair, CI/Nightly decision, KDoc, lesson, verification, commit, and PR tasks are explicit. |
@@ -235,26 +233,26 @@ Artifact: `.omx/artifacts/ask-claude-issue-39-plan-review-20260522102931.md`
 | P2 | Config naming and `Dispatchers.IO` rationale were loose | Accepted | Plan names `ConnectionFactoryTenantR2dbcConfig.kt` and records local consistency rationale |
 | P2 | Schema helper choice unspecified | Accepted with bounded choice | Plan uses `SchemaUtils.create(...)` for fresh H2 DBs and avoids `createMissingTablesAndColumns`; `MigrationUtils` only for diagnostics |
 | P2 | README config snippet missing | Accepted | Plan requires bounded pool YAML in both README files |
-| P3 | `afterPropertiesSet()` omitted | Accepted | Plan requires explicit routing factory initialization |
+| P3 | `다음 위치 뒤:PropertiesSet()` omitted | Accepted | Plan requires explicit routing factory initialization |
 | P3 | Mermaid diagram optional | Accepted | Plan requires README diagram parity |
 
 Re-review artifact:
 `.omx/artifacts/ask-claude-issue-39-plan-rereview-20260522103352.md`
 
-Latest re-review verdict: `P0=0`, `P1=0`, `P2=0`, `P3=0`. Step 3-R passes.
+최신 재검토 판정: `P0=0`, `P1=0`, `P2=0`, `P3=0`. 단계 3-R passes.
 
-## Step 3-R Integration Status
+## 단계 3-R Integration Status
 
-Latest status: `P0=0`, `P1=0`; implementation may proceed.
+최신 상태: `P0=0`, `P1=0`; implementation may proceed.
 
-## Step 6-R Code Review Gate
+## 단계 6-R 코드 검토 Gate
 
 Artifact:
 `.omx/artifacts/ask-claude-issue-39-code-review-gate-20260522110157.md`
 
-Latest verdict: `P0=0`, `P1=0`, `P2=2`, `P3=0`, `VERDICT=PASS`.
+최신 판정: `P0=0`, `P1=0`, `P2=2`, `P3=0`, `VERDICT=PASS`.
 
 | Priority | Finding | Decision | Follow-up |
 |---|---|---|---|
 | P2 | `R2dbcDatabase` beans rely on registry-owned pool disposal | Accepted | This is intentional for the workshop: registry owns pools; initializer/routing databases do not own independent pools |
-| P2 | Architecture allowlist must be maintained if transaction files move | Accepted | Keep `ArchitectureTest` allowlist updated with any future transaction-boundary file move |
+| P2 | Architecture allowlist must be maintained if transaction files move | Accepted | 향후 transaction-boundary file 이동 시 `ArchitectureTest` allowlist를 함께 갱신한다. |
