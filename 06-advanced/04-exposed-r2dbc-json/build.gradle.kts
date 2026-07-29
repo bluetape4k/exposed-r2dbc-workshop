@@ -15,7 +15,7 @@ dependencies {
     testImplementation(libs.jetbrains.exposed.json)
     testImplementation(libs.jetbrains.exposed.migration.r2dbc)
 
-    // Kotlin Serialization Json
+    // Kotlin Serialization JSON
     testImplementation(platform(libs.kotlinx.serialization.bom))
     testImplementation(libs.kotlinx.serialization.json)
 
@@ -42,7 +42,7 @@ dependencies {
     testRuntimeOnly(libs.mysql.connector.j)
     testRuntimeOnly(libs.postgresql.driver)
 
-    // Coroutines
+    // 코루틴 지원 의존성
     testImplementation(libs.bluetape4k.coroutines)
     testImplementation(libs.kotlinx.coroutines.core)
     testImplementation(libs.kotlinx.coroutines.debug)

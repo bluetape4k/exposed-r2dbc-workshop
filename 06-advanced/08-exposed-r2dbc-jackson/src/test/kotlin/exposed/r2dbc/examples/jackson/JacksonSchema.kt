@@ -13,26 +13,26 @@ import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.insertAndGetId
 
 /**
- * Jackson 2.x 기반 JSON/JSONB 컬럼 테스트에 사용하는 공유 스키마 및 헬퍼 함수 모음.
+ * Jackson 2.x 기반 Json/jsonb 컬럼 테스트에 사용하는 공유 스키마 및 헬퍼 함수 모음.
  *
  * `bluetape4k-exposed` 의 `jackson()` / `jacksonb()` 확장 함수를 사용하여
- * Kotlin 객체를 JSON(텍스트) 또는 JSONB(바이너리) 형식으로 컬럼에 저장합니다.
+ * Kotlin 객체를 Json(텍스트) 또는 jsonb(바이너리) 형식으로 컬럼에 저장합니다.
  * `@Serializable` 어노테이션 없이 표준 Kotlin 데이터 클래스를 그대로 사용할 수 있습니다.
  *
  * ## ObjectMapper 설정 주의사항
  *
  * 내부적으로 `KotlinModule`이 자동 등록된 `ObjectMapper`를 사용합니다.
  * - `DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES` 기본값은 `true`이므로
- *   스키마 진화가 필요한 경우 `false`로 설정하거나 `@JsonIgnoreProperties(ignoreUnknown = true)`를 사용하세요.
+ *   스키마 진화가 필요한 경우 `false`로 설정하거나 `@JSONIgnoreProperties(ignoreUnknown = true)`를 사용하세요.
  * - `SerializationFeature.WRITE_DATES_AS_TIMESTAMPS` 기본값은 `true`이므로
  *   날짜를 ISO 8601 문자열로 저장하려면 `false`로 설정하세요.
  * - `ObjectMapper`는 스레드 안전(thread-safe)하므로 단일 인스턴스를 공유해도 됩니다.
  *
  * 제공 테이블:
- * - [JacksonTable]: JSON 컬럼 테이블 (`jackson_table`)
- * - [JacksonBTable]: JSONB 컬럼 테이블 (`jackson_b_table`)
- * - [JacksonArrayTable]: JSON 배열 컬럼 테이블 (`jackson_arrays`)
- * - [JacksonBArrayTable]: JSONB 배열 컬럼 테이블 (`jackson_b_arrays`)
+ * - [JacksonTable]: Json 컬럼 테이블 (`jackson_table`)
+ * - [JacksonBTable]: jsonb 컬럼 테이블 (`jackson_b_table`)
+ * - [JacksonArrayTable]: Json 배열 컬럼 테이블 (`jackson_arrays`)
+ * - [JacksonBArrayTable]: jsonb 배열 컬럼 테이블 (`jackson_b_arrays`)
  *
  * 제공 데이터 클래스:
  * - [DataHolder]: 테스트용 복합 객체 (중첩 [User] 포함)
@@ -50,10 +50,10 @@ object JacksonSchema {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS jackson_table (
      *      id SERIAL PRIMARY KEY,
-     *      jackson_column JSON NOT NULL
+     *      jackson_column Json NOT NULL
      * )
      * ```
      */
@@ -63,10 +63,10 @@ object JacksonSchema {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS jackson_b_table (
      *      id SERIAL PRIMARY KEY,
-     *      jackson_b_column JSONB NOT NULL
+     *      jackson_b_column jsonb NOT NULL
      * );
      * ```
      */
@@ -78,8 +78,8 @@ object JacksonSchema {
      * ```sql
      * CREATE TABLE IF NOT EXISTS jackson_arrays (
      *      id SERIAL PRIMARY KEY,
-     *      "groups" JSON NOT NULL,
-     *      numbers JSON NOT NULL
+     *      "groups" Json NOT NULL,
+     *      numbers Json NOT NULL
      * );
      * ```
      */
@@ -144,7 +144,7 @@ object JacksonSchema {
             tripleId: EntityID<Int>,
         ) -> Unit,
     ) {
-        // Assumptions.assumeTrue(testDB !in TestDB.ALL_H2_V1, "H2V1 does not support JSON arrays")
+        // Assumptions.assumeTrue(testDB !in TestDB.ALL_H2_V1, "H2V1 does not support Json arrays")
 
         val tester = JacksonArrayTable
 
@@ -170,7 +170,7 @@ object JacksonSchema {
             tripleId: EntityID<Int>,
         ) -> Unit,
     ) {
-        // Assumptions.assumeTrue(testDB !in TestDB.ALL_H2_V1, "H2V1 does not support JSON arrays")
+        // Assumptions.assumeTrue(testDB !in TestDB.ALL_H2_V1, "H2V1 does not support Json arrays")
 
         val tester = JacksonBArrayTable
 

@@ -47,7 +47,7 @@ import kotlin.test.assertNull
  * 다양한 수형을 테스트 하기 위한 테이블 정의입니다.
  *
  * ```sql
- * -- Postgres
+ * -- PostgreSQL
  * CREATE TABLE IF NOT EXISTS misc (
  *      "by" SMALLINT NOT NULL,
  *      byn SMALLINT NULL,
@@ -1150,13 +1150,13 @@ class Ex04_MiscTable: AbstractR2dbcExposedTest() {
      * Update nullable columns to null
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO misc ("by", byn, sm, smn, n, nn, d, dn, t, tn, dt, dtn, ts, tsn, dr, drn, e, en, es, esn, "c", s, sn, dc, dcn, fcn)
      * VALUES (13, 13, -10, -10, 42, 42, '2025-02-04', '2025-02-04', '10:56:20.258842', '10:56:20.258842', '2025-02-04T10:56:20.258846', '2025-02-04T10:56:20.258846', '2025-02-04T10:56:20.258852', '2025-02-04T10:56:20.258852', '60000000000', '60000000000', 0, 0, 'ONE', 'ONE', 'test', 'test', 'test', 239.42, 239.42, 239.42)
      * ```
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * UPDATE misc
      *    SET byn=NULL, smn=NULL, nn=NULL, dn=NULL, tn=NULL, dtn=NULL, tsn=NULL, drn=NULL, en=NULL, esn=NULL, cn=NULL, sn=NULL, dcn=NULL, fcn=NULL WHERE misc.n = 42
      * ```

@@ -93,7 +93,7 @@ class Ex02_Defaults: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS t_db_default (
      *      id SERIAL PRIMARY KEY,
      *      field VARCHAR(100) NOT NULL,
@@ -364,7 +364,7 @@ class Ex02_Defaults: AbstractR2dbcExposedTest() {
      * 컬럼의 기본값을 Custom Expression 으로 설정하기
      *
      * ```sql
-     * -- Postgres:
+     * -- PostgreSQL:
      * CREATE TABLE IF NOT EXISTS tester (
      *      id SERIAL PRIMARY KEY,
      *      "name" TEXT NOT NULL,
@@ -506,7 +506,7 @@ class Ex02_Defaults: AbstractR2dbcExposedTest() {
      * Timestamp 에 Time Zone 을 포함한 컬럼을 사용할 때 (`TIMESTAMP WITH TIME ZONE DEFAULT`)
      *
      * ```sql
-     * -- Postgres:
+     * -- PostgreSQL:
      * CREATE TABLE IF NOT EXISTS t (
      *      id SERIAL PRIMARY KEY,
      *      t1 TIMESTAMP WITH TIME ZONE DEFAULT '2024-07-18 13:19:44+00'::timestamp with time zone NOT NULL,
@@ -658,7 +658,7 @@ class Ex02_Defaults: AbstractR2dbcExposedTest() {
      * Timestamp 컬럼에 Default 값을 설정할 때, ALTER TABLE 문이 발생하지 않아야 한다.
      *
      * ```sql
-     * -- Postgres:
+     * -- PostgreSQL:
      * CREATE TABLE IF NOT EXISTS tester (
      *      "timestampWithDefault" TIMESTAMP DEFAULT '2023-05-04 05:04:00.7'::timestamp without time zone NOT NULL,
      *      "timestampWithDefaultExpression" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL

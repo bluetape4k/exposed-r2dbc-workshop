@@ -229,7 +229,7 @@ class Ex02_Defaults: AbstractR2dbcExposedTest() {
     fun testDefaults01(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS t (
          *      id SERIAL PRIMARY KEY,
          *      s VARCHAR(100) DEFAULT 'test' NOT NULL,
@@ -476,7 +476,7 @@ class Ex02_Defaults: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT COUNT(*)
              *   FROM tester
              *  WHERE tester."dateTime" BETWEEN '2019-12-25T00:00:00' AND '2020-01-08T00:00:00'
@@ -490,7 +490,7 @@ class Ex02_Defaults: AbstractR2dbcExposedTest() {
              */
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT COUNT(*)
              *   FROM tester
              *  WHERE tester."dateTime" BETWEEN '2019-12-25T00:00:00' AND '2020-01-08T00:00:00'
@@ -516,7 +516,7 @@ class Ex02_Defaults: AbstractR2dbcExposedTest() {
     fun testConsistentSchemeWithFunctionAsDefaultExpression(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS tester (
          *      id SERIAL PRIMARY KEY,
          *      "name" TEXT NOT NULL,
@@ -547,7 +547,7 @@ class Ex02_Defaults: AbstractR2dbcExposedTest() {
 
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS t (
          *      id SERIAL PRIMARY KEY,
          *      t1 TIMESTAMP WITH TIME ZONE DEFAULT '2024-07-18 13:19:44.1+00'::timestamp with time zone NOT NULL,
@@ -629,7 +629,7 @@ class Ex02_Defaults: AbstractR2dbcExposedTest() {
     fun testDefaultCurrentDateTime(testDB: TestDB) = runSuspendIO {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS testdate (
          *      id SERIAL PRIMARY KEY,
          *      "time" TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
@@ -759,7 +759,7 @@ class Ex02_Defaults: AbstractR2dbcExposedTest() {
     fun testTimestampWithTimeZoneDefaultDoesNotTriggerAlterStatement(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS tester (
          *  "timestampWithTimeZoneWithDefault" TIMESTAMP WITH TIME ZONE DEFAULT '2023-05-04 05:04:01.7+00'::timestamp with time zone NOT NULL
          * )
@@ -834,7 +834,7 @@ class Ex02_Defaults: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS test_table (
      *      id SERIAL PRIMARY KEY,
      *      "timestamp" TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL

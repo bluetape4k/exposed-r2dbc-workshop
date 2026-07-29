@@ -10,10 +10,10 @@ object JsonTestData {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS j_table (
      *      id SERIAL PRIMARY KEY,
-     *      j_column JSON NOT NULL
+     *      j_column Json NOT NULL
      * )
      * ```
      */
@@ -23,16 +23,16 @@ object JsonTestData {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS j_b_table (
      *      id SERIAL PRIMARY KEY,
-     *      j_b_column JSONB NOT NULL
+     *      j_b_column jsonb NOT NULL
      * );
      *
      * -- MySQL
      * CREATE TABLE IF NOT EXISTS j_b_table (
      *      id INT AUTO_INCREMENT PRIMARY KEY,
-     *      j_b_column JSON NOT NULL
+     *      j_b_column Json NOT NULL
      * )
      * ```
      */
@@ -41,14 +41,14 @@ object JsonTestData {
     }
 
     /**
-     * Array 수형을 JSON으로 저장합니다.
+     * Array 수형을 Json으로 저장합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS j_arrays (
      *      id SERIAL PRIMARY KEY,
-     *      "groups" JSON NOT NULL,
-     *      numbers JSON NOT NULL
+     *      "groups" Json NOT NULL,
+     *      numbers Json NOT NULL
      * );
      * ```
      */
@@ -59,11 +59,11 @@ object JsonTestData {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS j_b_arrays (
      *      id SERIAL PRIMARY KEY,
-     *      "groups" JSONB NOT NULL,
-     *      numbers JSONB NOT NULL
+     *      "groups" jsonb NOT NULL,
+     *      numbers jsonb NOT NULL
      * );
      * ```
      */
