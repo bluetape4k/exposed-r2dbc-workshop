@@ -6,7 +6,7 @@ import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
 
 /**
  * ```sql
- * -- Postgres
+ * -- PostgreSQL
  * CREATE TABLE IF NOT EXISTS country (
  *      id SERIAL PRIMARY KEY,
  *      "name" VARCHAR(50) NOT NULL
@@ -21,7 +21,7 @@ object CountryTable: IntIdTable() {
 
 /**
  * ```sql
- * -- Postgres
+ * -- PostgreSQL
  * CREATE TABLE IF NOT EXISTS city (
  *      id SERIAL PRIMARY KEY,
  *      "name" VARCHAR(50) NOT NULL,
@@ -46,7 +46,7 @@ object CityTable: IntIdTable() {
 
 /**
  * ```sql
- * -- Postgres
+ * -- PostgreSQL
  * CREATE TABLE IF NOT EXISTS "User" (
  *      id SERIAL PRIMARY KEY,
  *      "name" VARCHAR(50) NOT NULL,
@@ -63,7 +63,7 @@ object UserTable: IntIdTable() {
 
 
 /**
- * City - User  Many-to-many relationship table
+ * City와 User의 Many-to-many 관계를 연결하는 매핑 테이블
  *
  * ```sql
  * CREATE TABLE IF NOT EXISTS usertocity (

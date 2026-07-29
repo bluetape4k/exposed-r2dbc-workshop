@@ -53,7 +53,7 @@ suspend fun withTables(
         } catch (ex: CancellationException) {
             throw ex
         } catch (_: Throwable) {
-            // Ignore stale table cleanup failures before the test schema is created.
+            // 테스트 schema가 만들어지기 전 stale table 정리 실패는 무시한다.
         }
         SchemaUtils.create(*tables)
         commit()

@@ -8,7 +8,7 @@ configurations {
 
 dependencies {
 
-    // Exposed
+    // Exposed R2DBC 의존성
     implementation(libs.jetbrains.exposed.core)
     implementation(libs.jetbrains.exposed.dao)
     implementation(libs.jetbrains.exposed.jdbc)
@@ -19,7 +19,7 @@ dependencies {
     implementation(libs.jetbrains.exposed.money)
     implementation(libs.jetbrains.exposed.migration.r2dbc)
 
-    // bluetape4k
+    // bluetape4k 테스트/검증 의존성
     implementation(libs.exposed.r2dbc)
     implementation(libs.bluetape4k.jdbc)
     implementation(libs.bluetape4k.r2dbc)
@@ -51,22 +51,22 @@ dependencies {
     implementation(libs.bluetape4k.idgenerators)
     implementation(libs.java.uuid.generator)
 
-    // Coroutines
+    // 코루틴 지원 의존성
     implementation(libs.bluetape4k.coroutines)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.reactor)
     testImplementation(libs.kotlinx.coroutines.debug)
     testImplementation(libs.kotlinx.coroutines.test)
 
-    // Kotlin Serialization Json
+    // Kotlin Serialization JSON 지원
     implementation(platform(libs.kotlinx.serialization.bom))
     implementation(libs.kotlinx.serialization.json)
 
-    // Java Money
+    // Java Money 금액 타입 지원
     implementation(libs.bluetape4k.money)
     implementation(libs.javax.money.api)
     implementation(libs.javamoney.moneta)
 
-    // Logcaptor
+    // 로그 캡처 테스트 지원
     api(libs.logcaptor)
 }

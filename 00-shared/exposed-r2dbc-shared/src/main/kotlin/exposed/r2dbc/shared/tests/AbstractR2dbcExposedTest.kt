@@ -25,7 +25,7 @@ import java.util.*
  *     @MethodSource(ENABLE_DIALECTS_METHOD)
  *     fun `select example`(testDB: TestDB) = runTest {
  *         withTables(testDB, MyTable) {
- *             // Exposed R2DBC DSL 사용
+ *             // Exposed R2DBC 의존성 R2DBC DSL 사용
  *             MyTable.insert { it[name] = "test" }
  *             val rows = MyTable.selectAll().toList()
  *             rows shouldHaveSize 1
