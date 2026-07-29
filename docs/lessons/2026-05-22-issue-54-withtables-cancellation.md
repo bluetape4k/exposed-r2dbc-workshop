@@ -1,26 +1,18 @@
 # Issue 54 WithTables Cancellation
 
-## Context
+## 맥락
 
-`withTables()` is shared R2DBC test infrastructure. It previously used
-`runCatching` and broad `Throwable` handling around suspend cleanup paths, which
-made coroutine cancellation handling rely on incidental behavior.
+`withTables()`는 shared R2DBC test infrastructure다. 이전 구현은 suspend cleanup path 주변에서 `runCatching`과 넓은 `Throwable` 처리를 사용해 coroutine cancellation handling을 우연한 동작에 의존하게 했다.
 
-## Decision
+## 결정
 
-Rethrow `CancellationException` before generic cleanup handling in all
-`withTables()` cleanup paths. Keep ordinary cleanup failures as suppressed
-exceptions on ordinary statement failures, but do not attach cleanup failures to
-statement cancellation. If cancellation is raised by cleanup or recovery after a
-statement failure, keep cancellation as the thrown exception and attach the prior
-failure as suppressed diagnostic context.
+모든 `withTables()` cleanup path에서 generic cleanup handling 전에 `CancellationException`을 다시 던진다. 일반 statement failure에서는 ordinary cleanup failure를 suppressed exception으로 유지하지만, statement cancellation에는 cleanup failure를 붙이지 않는다. Statement failure 이후 cleanup이나 recovery에서 cancellation이 발생하면 cancellation을 thrown exception으로 유지하고 prior failure를 suppressed diagnostic context로 붙인다.
 
-## Outcome
+## 결과
 
-The helper now preserves structured cancellation while retaining cleanup
-diagnostics for non-cancellation failures.
+Helper는 이제 structured cancellation을 보존하면서 non-cancellation failure에 대한 cleanup diagnostic도 유지한다.
 
-## Verification
+## 검증
 
 - `./gradlew :exposed-r2dbc-shared:compileKotlin --warning-mode all --console=plain`
 - `repo-test-summary -- ./gradlew :exposed-r2dbc-shared:test --tests "exposed.r2dbc.shared.tests.WithTablesTest" -PuseDB=H2 --continue --console=plain`
@@ -28,8 +20,6 @@ diagnostics for non-cancellation failures.
 - `./gradlew detekt --parallel --console=plain`
 - `git diff --check`
 
-## Future Guidance
+## 향후 지침
 
-Do not wrap suspend cleanup in `runCatching` when cancellation must propagate.
-For shared test helpers, handle `CancellationException` explicitly before any
-generic `Throwable` recovery path.
+Cancellation propagation이 필요한 suspend cleanup은 `runCatching`으로 감싸지 않는다. Shared test helper에서는 generic `Throwable` recovery path보다 먼저 `CancellationException`을 명시적으로 처리한다.
