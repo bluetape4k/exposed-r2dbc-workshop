@@ -1,6 +1,6 @@
-# Issue #43 Chapter 12 Production Integration Design
+# Issue #43 Chapter 12 Production Integration 설계
 
-## Context
+## 맥락
 
 Issue #43 asks for a new `12-production-integration` chapter that compares
 production-grade Exposed R2DBC service patterns in Spring Boot 4 and Ktor.
@@ -39,25 +39,25 @@ child remains traceable without multiplying Gradle projects:
 PR follow-up comments should explain this split on child issues #44-#49 before
 closing them.
 
-## Scope
+## 범위
 
-- Add Chapter 12 modules to `settings.gradle.kts`.
-- Add Ktor dependencies to `gradle/libs.versions.toml`.
+- 추가: Chapter 12 modules to `settings.gradle.kts`.
+- 추가: Ktor dependencies to `gradle/libs.versions.toml`.
 - Implement a shared production-workflow domain per stack:
   - request validation and structured errors,
   - credential/session persistence,
   - domain event outbox and replay boundaries,
   - outbound request outbox with idempotency keys,
   - readiness/degraded diagnostics.
-- Use Exposed R2DBC repositories with `suspendTransaction`.
-- Add focused tests for service/repository behavior and the stack boundary:
+- 사용: Exposed R2DBC repositories with `suspendTransaction`.
+- 추가: focused tests for service/repository behavior and the stack boundary:
   - Spring: WebFlux/WebTestClient focused coverage where lightweight.
   - Ktor: `testApplication`, WebSockets, and MockEngine where useful.
-- Add `12-production-integration/README.md` and `README.ko.md`.
+- 추가: `12-production-integration/README.md` and `README.ko.md`.
 - Update root `README.md` and `README.ko.md` module maps.
-- Add a concise lesson after implementation.
+- 추가: a concise lesson after implementation.
 
-## Non-Goals
+## 비목표
 
 - No real external service calls.
 - No production authentication provider integration.
@@ -119,7 +119,7 @@ Ktor official docs checked on 2026-05-22:
   WebSockets client plugin.
 - Client testing uses `ktor-client-mock` / MockEngine.
 
-## Acceptance Criteria
+## 수용 기준
 
 - `./gradlew :01-spring-production-integration:test :02-ktor-production-integration:test`
   passes.

@@ -1,6 +1,6 @@
-# Issue #48 Observability Readiness Design
+# Issue #48 Observability Readiness 설계
 
-## Context
+## 맥락
 
 Issue #48 finishes the diagnostics slice for chapter 12. The matching
 `exposed-workshop` issue #62 used dedicated JDBC modules:
@@ -20,7 +20,7 @@ instead of introducing topic-specific Gradle modules.
 
 ## Decision
 
-Add a coroutine-first diagnostics slice to both stacks.
+추가: a coroutine-first diagnostics slice to both stacks.
 
 - Persist diagnostic operation rows in R2DBC tables owned by each module.
 - Keep readiness state durable enough for tests by using the existing
@@ -30,12 +30,12 @@ Add a coroutine-first diagnostics slice to both stacks.
     CR, LF, spaces, unsupported characters, or excessive length are rejected
     and replaced with a generated UUIDv4.
   - Spring WebFlux: an `Ordered.HIGHEST_PRECEDENCE` `WebFilter` reads
-    `X-Request-ID`, stores the safe id in the exchange attributes and Reactor
+    `X-Request-ID`, 저장한다: the safe id in the exchange attributes and Reactor
     context, and echoes it on every response.
-  - Ktor: `CallId` reads `X-Request-ID`, verifies the same pattern, generates a
+  - Ktor: `CallId` 읽는다: `X-Request-ID`, verifies the same pattern, generates a
     UUIDv4 when missing or invalid, exposes it through `call.callId`, and
     echoes it on every response.
-- Use the same request id in persisted diagnostic operation rows and structured
+- 사용: the same request id in persisted diagnostic operation rows and structured
   error responses.
 - Measure synthetic slow operations without blocking threads. The operation
   endpoint may accept a `delayMs` parameter, but it must use coroutine delay
@@ -49,7 +49,7 @@ Add a coroutine-first diagnostics slice to both stacks.
   250 ms.
 - Keep diagnostics endpoints outside the auth/session examples so readiness and
   operational probes can run without user credentials.
-- Preserve existing structured error behavior for previous slices while adding
+- 보존: existing structured error behavior for previous slices while adding
   request id metadata to error responses.
 - List diagnostics endpoints are intentionally unauthenticated for workshop
   readability; production deployments should restrict them through internal
@@ -63,7 +63,7 @@ Keep the existing single-row diagnostics status table:
 Diagnostics(name varchar primary key, status varchar, details varchar)
 ```
 
-Add a separate operation history table for each stack:
+추가: a separate operation history table for each stack:
 
 ```text
 DiagnosticOperations(
@@ -98,7 +98,7 @@ Readiness combines sticky degraded state with a live R2DBC ping.
 - `markDatabaseDegraded` is an idempotent upsert on `Diagnostics.name =
   "database"` and `clearDatabaseDegraded` is delete-if-exists.
 
-## Non-Goals
+## 비목표
 
 - No Micrometer registry, tracing backend, OpenTelemetry exporter, or metrics
   server integration.
@@ -107,7 +107,7 @@ Readiness combines sticky degraded state with a live R2DBC ping.
 - No new shared abstraction across Spring and Ktor.
 - No topic-specific Gradle modules.
 
-## Acceptance Criteria
+## 수용 기준
 
 - Spring and Ktor expose readiness and diagnostic operation endpoints.
 - Readiness reports `UP` when the database is reachable and `DEGRADED` when the

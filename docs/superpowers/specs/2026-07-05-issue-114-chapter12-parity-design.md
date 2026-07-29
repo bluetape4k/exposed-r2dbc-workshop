@@ -1,6 +1,6 @@
-# Issue #114 Chapter 12 R2DBC Parity Design
+# Issue #114 Chapter 12 R2DBC Parity 설계
 
-## Context
+## 맥락
 
 Issue [#114](https://github.com/bluetape4k/exposed-r2dbc-workshop/issues/114)
 refreshes Chapter 12 parity against the current
@@ -51,7 +51,7 @@ explicitly map the current ten `exposed-workshop` source examples to the two
 R2DBC modules. That makes future roadmap triage prone to reopening duplicate
 module-split work.
 
-## Design Decision
+## 설계 Decision
 
 Keep the existing two-module R2DBC shape and add source-example parity tables
 to the Chapter 12 README pair.
@@ -71,7 +71,7 @@ module split.
 
 ## Alternatives Considered
 
-### Approach A: Keep Two Modules And Add Explicit Parity Tables
+### Approach A: Keep Two Modules And 추가: Explicit Parity Tables
 
 This is the selected approach. It matches the Issue #43 design, preserves
 existing CI coverage, and makes the ten source examples visible without adding
@@ -89,7 +89,7 @@ Rejected. The current README says Chapter 12 is covered, but it does not map
 the current source-workshop module names. That is enough ambiguity to cause
 duplicate backlog issues.
 
-## Scope
+## 범위
 
 Required changes:
 
@@ -99,7 +99,7 @@ Required changes:
   Korean.
 - Keep root README parity text consistent if the Chapter 12 row needs wording
   clarification.
-- Add a lesson note for the Issue #114 parity refresh.
+- 추가: a lesson note for the Issue #114 parity refresh.
 
 Out of scope:
 
@@ -127,7 +127,7 @@ Out of scope:
   Mitigation: keep Chapter 12 public docs aligned to `gradle/libs.versions.toml`
   and record the evidence in the review artifact.
 
-## Acceptance Criteria
+## 수용 기준
 
 - `12-production-integration/README.md` and `README.ko.md` contain a parity
   table for all ten current `exposed-workshop` Chapter 12 examples.

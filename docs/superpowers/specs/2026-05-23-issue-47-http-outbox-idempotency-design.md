@@ -1,6 +1,6 @@
-# Issue #47 HTTP Outbox Idempotency Design
+# Issue #47 HTTP Outbox Idempotency 설계
 
-## Context
+## 맥락
 
 Issue #47 completes the outbound HTTP client slice inside the existing chapter
 12 Spring Boot 4 and Ktor R2DBC production integration modules. Earlier chapter
@@ -32,20 +32,20 @@ machine instead of adding topic-specific Gradle modules.
   `RETRYABLE_FAILED` until `maxAttempts` is exhausted, then mark
   `PERMANENT_FAILED`. `maxAttempts` is a per-module repository constant for
   this workshop slice.
-- Preserve retry evidence with `attempts`, `lastStatusCode`, and `lastError`.
+- 보존: retry evidence with `attempts`, `lastStatusCode`, and `lastError`.
 - Store only sanitized failure metadata in `lastError`: status class, exception
-  simple name, and a truncated safe message. Do not persist headers, request
+  simple name, and a truncated safe message. 금지: persist headers, request
   bodies, response bodies, or secrets.
 - Keep the existing DB unique index on `idempotencyKey`; the repository keeps a
   deterministic single-process duplicate check and maps duplicate constraint
   failures to the same HTTP 409 conflict.
 - Restrict enqueue, list, and dispatch routes to the existing
   `outbound:create` permission. Users with only `work:create` must receive 403.
-- Use stack-native clients behind injectable boundaries:
+- 사용: stack-native clients behind injectable boundaries:
   - Spring: WebFlux `WebClient` coroutine APIs.
   - Ktor: `HttpClient` with MockEngine-friendly request inspection.
 
-## Non-Goals
+## 비목표
 
 - No real external service dependency in tests.
 - No replay of a previous successful response for duplicate keys.
@@ -56,7 +56,7 @@ machine instead of adding topic-specific Gradle modules.
 - No stale `IN_FLIGHT` reaper after process crash; production systems need a
   lease timeout or recovery job.
 
-## Acceptance Criteria
+## 수용 기준
 
 - Success, retryable failure plus retry, duplicate idempotency key, and
   permanent failure paths are tested for both stacks.

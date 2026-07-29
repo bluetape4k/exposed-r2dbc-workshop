@@ -1,12 +1,12 @@
-# Issue #69 Ktor R2DBC Coroutine Cache Design
+# Issue #69 Ktor R2DBC Coroutine Cache 설계
 
-## Goal
+## 목표
 
-Add a chapter 11 Ktor + Exposed R2DBC example focused on coroutine-specific
+추가: a chapter 11 Ktor + Exposed R2DBC example focused on coroutine-specific
 cache behavior: concurrent suspend callers, cancellation-safe cache population,
 single-flight database fallback, and explicit invalidation/update behavior.
 
-## Context
+## 맥락
 
 - `exposed-r2dbc-workshop` issue #69 mirrors `exposed-workshop` issue #48.
 - #69 was split from #34 so the general cache strategy module can stay focused
@@ -18,35 +18,35 @@ single-flight database fallback, and explicit invalidation/update behavior.
 - Existing JDBC coroutine cache reference in `exposed-workshop`:
   `11-high-performance/02-cache-strategies-coroutines`.
 
-## Scope
+## 범위
 
-- Add `11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines`.
-- Use Ktor suspend route handlers and Exposed R2DBC transactions.
-- Use Redisson `RMap` as the distributed cache backend, with blocking Redisson
+- 추가: `11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines`.
+- 사용: Ktor suspend route handlers and Exposed R2DBC transactions.
+- 사용: Redisson `RMap` as the distributed cache backend, with blocking Redisson
   operations isolated behind `withContext(Dispatchers.IO)`.
-- Add a small app-lifecycle-bound single-flight loader so concurrent cache
+- 추가: a small app-lifecycle-bound single-flight loader so concurrent cache
   misses for the same key share one DB fallback.
 - Keep request cancellation explicit:
   - cancelled request waiters rethrow `CancellationException`,
   - failed/cancelled in-flight deferred values are removed,
   - application shutdown cancels the loader scope,
   - cancellation does not poison later cache reads.
-- Add English and Korean README files that explain how this differs from #34.
-- Add a committed PNG diagram under `docs/images/readme-diagrams/` plus its SVG
+- 추가: English and Korean README files that explain how this differs from #34.
+- 추가: a committed PNG diagram under `docs/images/readme-diagrams/` plus its SVG
   source.
 - Wire chapter 11 docs and Examples CI paths/job/artifacts.
 
-## Non-Goals
+## 비목표
 
-- Do not reimplement the broad cache strategy comparison already covered by
+- 금지: reimplement the broad cache strategy comparison already covered by
   `02-cache-strategies-r2dbc`.
-- Do not duplicate #34's stats-only general cache module under a new name.
-- Do not add routing datasource behavior; that belongs to #35.
-- Do not add Java code.
-- Do not introduce a reusable production cache framework. This is a workshop
+- 금지: duplicate #34's stats-only general cache module under a new name.
+- 금지: add routing datasource behavior; that belongs to #35.
+- 금지: add Java code.
+- 금지: introduce a reusable production cache framework. This is a workshop
   module that demonstrates one bounded coroutine pattern.
 
-## Design
+## 설계
 
 ### Module Boundary
 
@@ -145,7 +145,7 @@ from the route layer. Callers may still have shorter request/test timeouts.
 2. Read Redisson on `Dispatchers.IO`.
 3. Return `HIT` if present.
 4. Otherwise call the single-flight loader.
-5. The loader optionally delays, reads from Exposed R2DBC inside
+5. The loader optionally delays, 읽는다: from Exposed R2DBC inside
    `suspendTransaction`, writes the loaded row into Redisson on
    `Dispatchers.IO`, and returns the row.
 6. Map loader ownership to `MISS` or `COALESCED`.
@@ -161,7 +161,7 @@ the response remains `WRITTEN`, and cache refresh failure is visible through
 stats and logs.
 
 Catch ordering is part of the contract: `CancellationException` must be caught
-and rethrown before any broad exception handling. Do not wrap suspend paths in
+and rethrown before any broad exception handling. 금지: wrap suspend paths in
 `runCatching`; it can hide coroutine cancellation and violates the module goal.
 
 Cache entries have no TTL in this example. The README pair must call out that
@@ -180,7 +180,7 @@ rows: cache backend, single-flight behavior, cancellation behavior,
 Targeted tests must cover:
 
 - first read is `MISS`, second read is `HIT`,
-- concurrent reads for one cold key produce one `MISS` and the rest
+- concurrent 읽는다: for one cold key produce one `MISS` and the rest
   `COALESCED`,
 - cancellation of the producer-owner request waiter is rethrown while other
   coalesced waiters still receive the loaded value,
@@ -192,16 +192,16 @@ Targeted tests must cover:
   later retry can succeed,
 - create/update refresh cache,
 - invalidation and cache clear keep DB fallback working,
-- list reads bypass cache counters,
+- list 읽는다: bypass cache counters,
 - invalid ids and invalid dates return structured `400`.
 
-Use `runSuspendIO` for real Ktor/Testcontainers/R2DBC I/O. Use
+사용: `runSuspendIO` for real Ktor/Testcontainers/R2DBC I/O. Use
 `kotlinx.coroutines.test.runTest` only for pure single-flight unit tests without
 real I/O. Coalescing tests must use an explicit synchronization barrier such as
 `CompletableDeferred` or `CountDownLatch`; a sleep-only timing assertion is not
 sufficient.
 
-## Acceptance Criteria
+## 수용 기준
 
 - `:05-cache-strategies-ktor-r2dbc-coroutines:test` passes.
 - `./gradlew projects --console=plain` discovers the module.

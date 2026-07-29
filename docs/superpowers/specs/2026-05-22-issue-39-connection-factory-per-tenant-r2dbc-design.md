@@ -1,6 +1,6 @@
 # Issue 39 Connection-factory-per-tenant R2DBC Design
 
-## Context
+## 맥락
 
 Issue #39 extends chapter 10 with a Spring WebFlux R2DBC multi-tenant strategy
 that routes each tenant to its own `ConnectionFactory`, instead of sharing one
@@ -41,7 +41,7 @@ were checked directly instead.
   abstraction.
   Source: <https://docs.spring.io/spring-framework/reference/data-access/r2dbc.html>
 
-## Local Reuse Evidence
+## Local 재사용: Evidence
 
 Existing local patterns:
 
@@ -57,11 +57,11 @@ Existing local patterns:
     narrow the concept to tenant isolation rather than read-write/read-only
     routing.
 
-## Goals
+## 목표s
 
-1. Add a chapter 10 Spring WebFlux R2DBC module that demonstrates
+1. 추가: a chapter 10 Spring WebFlux R2DBC module that demonstrates
    connection-factory-per-tenant routing.
-2. Preserve the user-facing actor API shape from module `03` so readers can
+2. 보존: the user-facing actor API shape from module `03` so readers can
    compare the two tenant strategies.
 3. Make tenant routing fail closed on HTTP paths:
    - missing header: `400 Bad Request`.
@@ -71,7 +71,7 @@ Existing local patterns:
    - no Reactor tenant key emitted to the routing connection factory uses the
      configured default tenant connection.
    - emitted unknown lookup key fails because lenient fallback is disabled.
-5. Document resource lifecycle assumptions:
+5. 문서화: resource lifecycle assumptions:
    - each tenant owns a distinct pooled `ConnectionFactory`.
    - all tenant pools are closed on Spring shutdown.
    - pool count grows with tenant count, so this strategy is for bounded tenant
@@ -79,12 +79,12 @@ Existing local patterns:
 
 ## Non-goals
 
-- Do not add Spring Security tenant authorization; that is issue #40.
-- Do not add tenant onboarding/provisioning workflow; that is issue #41.
-- Do not wire chapter 10 aggregate docs/verification beyond the new module's
+- 금지: add Spring Security tenant authorization; that is issue #40.
+- 금지: add tenant onboarding/provisioning workflow; that is issue #41.
+- 금지: wire chapter 10 aggregate docs/verification beyond the new module's
   direct CI/Nightly coverage decision; that is issue #42.
-- Do not support dynamic runtime tenant registration in this issue.
-- Do not introduce a shared bluetape4k library API. This remains a workshop
+- 금지: support dynamic runtime tenant registration in this issue.
+- 금지: introduce a shared bluetape4k library API. This remains a workshop
   example module.
 
 ## Proposed Module Shape
@@ -108,17 +108,17 @@ Key production components:
 - `tenant/Tenants.kt`
   - enum-style tenant registry: `korean`, `english`.
 - `tenant/TenantFilter.kt`
-  - reads mandatory `X-TENANT-ID`, validates tenant, writes tenant ID to Reactor
+  - 읽는다: mandatory `X-TENANT-ID`, validates tenant, writes tenant ID to Reactor
     context.
 - `tenant/TenantContextKeys.kt`
   - Reactor context key constants.
 - `tenant/TenantRoutingConnectionFactory.kt`
   - extends Spring `AbstractRoutingConnectionFactory`.
-  - `determineCurrentLookupKey()` reads `TenantContextKeys.TENANT_ID` from
+  - `determineCurrentLookupKey()` 읽는다: `TenantContextKeys.TENANT_ID` from
     Reactor context.
   - `setLenientFallback(false)` is used during bean creation.
 - `tenant/TenantConnectionFactoryRegistry.kt`
-  - stores tenant ID to `ConnectionFactory`.
+  - 저장한다: tenant ID to `ConnectionFactory`.
   - owns connection pool lifecycle and closes pools on shutdown.
 - `config/ConnectionFactoryTenantR2dbcConfig.kt`
   - binds `app.tenants.*` settings.
@@ -138,7 +138,7 @@ Key production components:
 
 ## Configuration Contract
 
-Use H2 tenant databases by default to keep the module CI-friendly:
+사용: H2 tenant databases by default to keep the module CI-friendly:
 
 ```yaml
 app:
@@ -192,7 +192,7 @@ while unknown fails when `setLenientFallback(false)` is configured.
 
 ## Coroutine and Reactor Context Bridge
 
-The routing connection factory reads the tenant from Reactor subscriber context,
+The routing connection factory 읽는다: the tenant from Reactor subscriber context,
 not directly from Kotlin coroutine context. This module must prove the bridge
 because controllers are `suspend` functions and Exposed opens R2DBC connections
 inside coroutine-backed transactions.
@@ -225,7 +225,7 @@ Controllers and repositories in this module must not call bare
 - All request-path Exposed work goes through `TenantTransactionExecutor`, which
   always supplies `db = tenantRoutingDatabase`.
 - `DataInitializer` may use explicit tenant initializer databases during startup.
-- Add an architecture test that scans this module's production Kotlin files and
+- 추가: an architecture test that scans this module's production Kotlin files and
   fails if bare `suspendTransaction` appears outside the allowed executor and
   initializer files. The initial implementation may use a strict regex plus
   explicit file allowlist:
@@ -248,7 +248,7 @@ databases are connected.
   they do not create or own independent pools.
 - The registry implements Spring shutdown cleanup with `DisposableBean` or
   `@PreDestroy` and calls `ConnectionPool.dispose()` once per pool.
-- Add a unit test with close-tracking fake or wrapped factories proving registry
+- 추가: a unit test with close-tracking fake or wrapped factories proving registry
   cleanup is invoked exactly once per registered pool.
 - Connection pool settings must include bounded acquisition behavior:
   `maxCreateConnectionTime`, `maxAcquireTime`, `acquireRetry`, `maxIdleTime`,
@@ -272,7 +272,7 @@ Focused tests must cover:
 - HTTP routing:
   - `GET /actors` succeeds for every tenant.
   - same actor ID returns different fixture values for `korean` and `english`.
-  - concurrent Korean and English requests never cross-route. Use at least 50
+  - concurrent Korean and English requests never cross-route. 사용: at least 50
     concurrent requests over both tenants and assert the tenant fingerprint in
     every response.
   - missing header returns `400`.
@@ -286,7 +286,7 @@ Focused tests must cover:
   - architecture test forbids bare `suspendTransaction` in production request
     code outside `TenantTransactionExecutor` and `DataInitializer`.
 
-Use `runSuspendIO`, JUnit 5, and bluetape4k assertions. Avoid
+사용: `runSuspendIO`, JUnit 5, and bluetape4k assertions. Avoid
 Testcontainers-backed tests in this module unless they become necessary during
 implementation.
 
@@ -350,11 +350,11 @@ Model: `${CLAUDE_ADVISOR_MODEL:-claude-opus-4-7}`
 
 | Priority | Finding | Decision | Follow-up |
 |---|---|---|---|
-| P0 | Reactor context to coroutine/Exposed bridge unspecified | Accepted | Added bridge section and concurrent tenant regression requirement |
-| P0 | `TenantTransactionExecutor` not enforced | Accepted | Added transaction boundary rule and architecture test requirement |
-| P1 | Initializer database/pool lifecycle unspecified | Accepted | Added resource lifecycle section and cleanup test requirement |
-| P1 | Tenant header trusted without auth/validation note | Accepted | Added validation regex and issue #40 security note |
-| P1 | Pool timeouts and shutdown unspecified | Accepted | Added bounded pool settings and eager startup requirement |
+| P0 | Reactor context to coroutine/Exposed bridge unspecified | Accepted | 추가함: bridge section and concurrent tenant regression requirement |
+| P0 | `TenantTransactionExecutor` not enforced | Accepted | 추가함: transaction boundary rule and architecture test requirement |
+| P1 | Initializer database/pool lifecycle unspecified | Accepted | 추가함: resource lifecycle section and cleanup test requirement |
+| P1 | Tenant header trusted without auth/validation note | Accepted | 추가함: validation regex and issue #40 security note |
+| P1 | Pool timeouts and shutdown unspecified | Accepted | 추가함: bounded pool settings and eager startup requirement |
 
 Re-review artifact: `.omx/artifacts/ask-claude-issue-39-spec-rereview-20260522102420.md`
 
