@@ -1,21 +1,18 @@
-# README UML 다이어그램 추가 Implementation Plan
+# README UML 다이어그램 추가 구현 계획
 
-> **For agentic workers:
-** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (
-`- [ ]`) syntax for tracking.
+> **작업자 참고:** 이 계획은 task 단위로 구현하며, 권장 실행 표면은 superpowers:subagent-driven-development이고 대안은 superpowers:executing-plans다. 진행 상태는 checkbox(`- [ ]`)로 추적한다.
 
-**Goal:** 25개 서브모듈 README에 모듈 성격에 맞는 Mermaid UML 다이어그램(erDiagram/classDiagram/sequenceDiagram/flowchart)을 추가한다.
+**목표:** 25개 서브모듈 README에 모듈 성격에 맞는 Mermaid UML 다이어그램(erDiagram/classDiagram/sequenceDiagram/flowchart)을 추가한다.
 
-**Architecture:
-** 모듈 그룹별 순차 처리. 각 모듈의 Kotlin 소스 파일을 읽어 실제 구조를 파악한 뒤 다이어그램을 생성한다. 기존 README 내용은 삭제하지 않으며, "기술 스택" 표 직후 또는 "핵심 개념" 섹션 앞에 삽입한다.
+**아키텍처:** 모듈 그룹별 순차 처리. 각 모듈의 Kotlin 소스 파일을 읽어 실제 구조를 파악한 뒤 다이어그램을 생성한다. 기존 README 내용은 삭제하지 않으며, "기술 스택" 표 직후 또는 "핵심 개념" 섹션 앞에 삽입한다.
 
-**Tech Stack:** Mermaid (GitHub Markdown 렌더링), Kotlin/Exposed R2DBC, Testcontainers
+**기술 스택:** Mermaid (GitHub Markdown 렌더링), Kotlin/Exposed R2DBC, Testcontainers
 
-**Spec:** `docs/superpowers/specs/2026-03-23-readme-uml-diagrams-design.md`
+**명세:** `docs/superpowers/specs/2026-03-23-readme-uml-diagrams-design.md`
 
 ---
 
-## 다이어그램 삽입 규칙 (모든 Task 공통)
+## 다이어그램 삽입 규칙 (모든 작업 공통)
 
 1. **소스 코드 먼저 읽기** — 실제 클래스/테이블/API를 파악한 뒤 다이어그램 작성 (추측 금지)
 2. **삽입 위치** — 기술 스택 표 바로 다음, 또는 "핵심 개념" / "예제 카테고리" 섹션 바로 앞
@@ -26,15 +23,15 @@
 
 ---
 
-## Task 1: 05-dml — `01-dml` (erDiagram)
+## 작업 1: 05-dml — `01-dml` (erDiagram)
 
-**Files:**
+**파일:**
 
-- Modify: `05-exposed-r2dbc-dml/01-dml/README.md`
-- Read: `00-shared/exposed-r2dbc-shared/src/main/kotlin/exposed/r2dbc/shared/dml/DMLTestData.kt`
+- 수정: `05-exposed-r2dbc-dml/01-dml/README.md`
+- 읽기: `00-shared/exposed-r2dbc-shared/src/main/kotlin/exposed/r2dbc/shared/dml/DMLTestData.kt`
 
-- [ ] **Step 1: 소스 읽기** — `DMLTestData.kt`에서 Cities, Users, UserData, Sales, SomeAmounts 테이블 정의와 FK 관계 파악
-- [ ] **Step 2: erDiagram 작성 후 README 삽입**
+- [ ] **단계 1: 소스 읽기** — `DMLTestData.kt`에서 Cities, Users, UserData, Sales, SomeAmounts 테이블 정의와 FK 관계 파악
+- [ ] **단계 2: erDiagram 작성 후 README 삽입**
 
 삽입 위치: "기술 스택" 표 바로 다음
 
@@ -74,7 +71,7 @@ erDiagram
 
 ```
 
-- [ ] **Step 3: 커밋**
+- [ ] **단계 3: 커밋**
 
 ```bash
 git add 05-exposed-r2dbc-dml/01-dml/README.md
@@ -83,15 +80,15 @@ git commit -m "docs: 01-dml README에 erDiagram 추가"
 
 ---
 
-## Task 2: 05-dml — `02-types` (classDiagram)
+## 작업 2: 05-dml — `02-types` (classDiagram)
 
-**Files:**
+**파일:**
 
-- Modify: `05-exposed-r2dbc-dml/02-types/README.md`
-- Read: `05-exposed-r2dbc-dml/02-types/src/test/kotlin/exposed/r2dbc/examples/types/` (파일 목록 확인)
+- 수정: `05-exposed-r2dbc-dml/02-types/README.md`
+- 읽기: `05-exposed-r2dbc-dml/02-types/src/test/kotlin/exposed/r2dbc/examples/types/` (파일 목록 확인)
 
-- [ ] **Step 1: 소스 읽기** — 테스트 파일 목록으로 다루는 컬럼 타입 범주 파악
-- [ ] **Step 2: classDiagram 작성 후 README 삽입**
+- [ ] **단계 1: 소스 읽기** — 테스트 파일 목록으로 다루는 컬럼 타입 범주 파악
+- [ ] **단계 2: classDiagram 작성 후 README 삽입**
 
 삽입 위치: "기술 스택" 표 바로 다음
 
@@ -141,7 +138,7 @@ classDiagram
 
 > **참고**: 실제 테스트 파일을 읽어 다루는 타입 범주를 정확히 반영할 것
 
-- [ ] **Step 3: 커밋**
+- [ ] **단계 3: 커밋**
 
 ```bash
 git add 05-exposed-r2dbc-dml/02-types/README.md
@@ -150,15 +147,15 @@ git commit -m "docs: 02-types README에 classDiagram 추가"
 
 ---
 
-## Task 3: 05-dml — `03-functions` (flowchart)
+## 작업 3: 05-dml — `03-functions` (flowchart)
 
-**Files:**
+**파일:**
 
-- Modify: `05-exposed-r2dbc-dml/03-functions/README.md`
-- Read: `05-exposed-r2dbc-dml/03-functions/src/test/kotlin/exposed/r2dbc/examples/functions/` (파일 목록)
+- 수정: `05-exposed-r2dbc-dml/03-functions/README.md`
+- 읽기: `05-exposed-r2dbc-dml/03-functions/src/test/kotlin/exposed/r2dbc/examples/functions/` (파일 목록)
 
-- [ ] **Step 1: 소스 읽기** — 파일 목록으로 함수 카테고리 파악 (문자열/수학/날짜/집계 등)
-- [ ] **Step 2: flowchart 작성 후 README 삽입**
+- [ ] **단계 1: 소스 읽기** — 파일 목록으로 함수 카테고리 파악 (문자열/수학/날짜/집계 등)
+- [ ] **단계 2: flowchart 작성 후 README 삽입**
 
 삽입 위치: "기술 스택" 표 바로 다음
 
@@ -180,7 +177,7 @@ flowchart TD
 
 > **참고**: 실제 테스트 파일 목록을 읽어 카테고리를 정확히 반영할 것
 
-- [ ] **Step 3: 커밋**
+- [ ] **단계 3: 커밋**
 
 ```bash
 git add 05-exposed-r2dbc-dml/03-functions/README.md
@@ -189,15 +186,15 @@ git commit -m "docs: 03-functions README에 flowchart 추가"
 
 ---
 
-## Task 4: 05-dml — `04-transactions` (sequenceDiagram + flowchart)
+## 작업 4: 05-dml — `04-transactions` (sequenceDiagram + flowchart)
 
-**Files:**
+**파일:**
 
-- Modify: `05-exposed-r2dbc-dml/04-transactions/README.md`
-- Read: `05-exposed-r2dbc-dml/04-transactions/src/test/kotlin/exposed/r2dbc/examples/transactions/` (파일 목록 + 주요 테스트)
+- 수정: `05-exposed-r2dbc-dml/04-transactions/README.md`
+- 읽기: `05-exposed-r2dbc-dml/04-transactions/src/test/kotlin/exposed/r2dbc/examples/transactions/` (파일 목록 + 주요 테스트)
 
-- [ ] **Step 1: 소스 읽기** — 트랜잭션 테스트 파일 목록 확인, suspendTransaction/중첩 트랜잭션 패턴 파악
-- [ ] **Step 2: sequenceDiagram 작성 후 README 삽입**
+- [ ] **단계 1: 소스 읽기** — 트랜잭션 테스트 파일 목록 확인, suspendTransaction/중첩 트랜잭션 패턴 파악
+- [ ] **단계 2: sequenceDiagram 작성 후 README 삽입**
 
 ```markdown
 ## 실행 흐름
@@ -240,7 +237,7 @@ flowchart TD
 
 ```
 
-- [ ] **Step 3: 커밋**
+- [ ] **단계 3: 커밋**
 
 ```bash
 git add 05-exposed-r2dbc-dml/04-transactions/README.md
@@ -249,15 +246,15 @@ git commit -m "docs: 04-transactions README에 sequenceDiagram + flowchart 추�
 
 ---
 
-## Task 5: 04-ddl — `01-connection` (sequenceDiagram)
+## 작업 5: 04-ddl — `01-connection` (sequenceDiagram)
 
-**Files:**
+**파일:**
 
-- Modify: `04-exposed-r2dbc-ddl/01-connection/README.md`
-- Read: `04-exposed-r2dbc-ddl/01-connection/src/test/kotlin/` (주요 테스트)
+- 수정: `04-exposed-r2dbc-ddl/01-connection/README.md`
+- 읽기: `04-exposed-r2dbc-ddl/01-connection/src/test/kotlin/` (주요 테스트)
 
-- [ ] **Step 1: 소스 읽기** — R2DBC 연결 설정 및 생명주기 관련 코드 파악
-- [ ] **Step 2: sequenceDiagram 작성 후 README 삽입**
+- [ ] **단계 1: 소스 읽기** — R2DBC 연결 설정 및 생명주기 관련 코드 파악
+- [ ] **단계 2: sequenceDiagram 작성 후 README 삽입**
 
 ```markdown
 ## 실행 흐름
@@ -284,7 +281,7 @@ sequenceDiagram
 
 ```
 
-- [ ] **Step 3: 커밋**
+- [ ] **단계 3: 커밋**
 
 ```bash
 git add 04-exposed-r2dbc-ddl/01-connection/README.md
@@ -293,15 +290,15 @@ git commit -m "docs: 01-connection README에 sequenceDiagram 추가"
 
 ---
 
-## Task 6: 04-ddl — `02-ddl` (classDiagram + flowchart)
+## 작업 6: 04-ddl — `02-ddl` (classDiagram + flowchart)
 
-**Files:**
+**파일:**
 
-- Modify: `04-exposed-r2dbc-ddl/02-ddl/README.md`
-- Read: `04-exposed-r2dbc-ddl/02-ddl/src/test/kotlin/` (주요 테스트)
+- 수정: `04-exposed-r2dbc-ddl/02-ddl/README.md`
+- 읽기: `04-exposed-r2dbc-ddl/02-ddl/src/test/kotlin/` (주요 테스트)
 
-- [ ] **Step 1: 소스 읽기** — Table 정의 패턴, SchemaUtils 사용, DDL 연산 파악
-- [ ] **Step 2: classDiagram + flowchart 작성 후 README 삽입**
+- [ ] **단계 1: 소스 읽기** — Table 정의 패턴, SchemaUtils 사용, DDL 연산 파악
+- [ ] **단계 2: classDiagram + flowchart 작성 후 README 삽입**
 
 ```markdown
 ## 구조 다이어그램
@@ -353,7 +350,7 @@ flowchart TD
 
 ```
 
-- [ ] **Step 3: 커밋**
+- [ ] **단계 3: 커밋**
 
 ```bash
 git add 04-exposed-r2dbc-ddl/02-ddl/README.md
@@ -362,15 +359,15 @@ git commit -m "docs: 02-ddl README에 classDiagram + flowchart 추가"
 
 ---
 
-## Task 7: 03-basic — `exposed-r2dbc-sql-example` (erDiagram + classDiagram)
+## 작업 7: 03-basic — `exposed-r2dbc-sql-example` (erDiagram + classDiagram)
 
-**Files:**
+**파일:**
 
-- Modify: `03-exposed-r2dbc-basic/exposed-r2dbc-sql-example/README.md`
-- Read: `03-exposed-r2dbc-basic/exposed-r2dbc-sql-example/src/test/kotlin/` (테이블 정의 + 예제)
+- 수정: `03-exposed-r2dbc-basic/exposed-r2dbc-sql-example/README.md`
+- 읽기: `03-exposed-r2dbc-basic/exposed-r2dbc-sql-example/src/test/kotlin/` (테이블 정의 + 예제)
 
-- [ ] **Step 1: 소스 읽기** — 예제 테이블 정의, SQL DSL Query 구조 파악
-- [ ] **Step 2: erDiagram + classDiagram 작성 후 README 삽입**
+- [ ] **단계 1: 소스 읽기** — 예제 테이블 정의, SQL DSL Query 구조 파악
+- [ ] **단계 2: erDiagram + classDiagram 작성 후 README 삽입**
 
 ```markdown
 ## 구조 다이어그램
@@ -412,7 +409,7 @@ classDiagram
 
 ```
 
-- [ ] **Step 3: 커밋**
+- [ ] **단계 3: 커밋**
 
 ```bash
 git add 03-exposed-r2dbc-basic/exposed-r2dbc-sql-example/README.md
@@ -421,15 +418,15 @@ git commit -m "docs: exposed-r2dbc-sql-example README에 erDiagram + classDiagra
 
 ---
 
-## Task 8: 06-advanced — `01-crypt` (sequenceDiagram)
+## 작업 8: 06-advanced — `01-crypt` (sequenceDiagram)
 
-**Files:**
+**파일:**
 
-- Modify: `06-advanced/01-exposed-r2dbc-crypt/README.md`
-- Read: `06-advanced/01-exposed-r2dbc-crypt/src/test/kotlin/`
+- 수정: `06-advanced/01-exposed-r2dbc-crypt/README.md`
+- 읽기: `06-advanced/01-exposed-r2dbc-crypt/src/test/kotlin/`
 
-- [ ] **Step 1: 소스 읽기** — Vault/암호화 컬럼 정의, 저장/조회 패턴 파악
-- [ ] **Step 2: sequenceDiagram 작성 후 README 삽입**
+- [ ] **단계 1: 소스 읽기** — Vault/암호화 컬럼 정의, 저장/조회 패턴 파악
+- [ ] **단계 2: sequenceDiagram 작성 후 README 삽입**
 
 ```markdown
 ## 실행 흐름
@@ -456,7 +453,7 @@ sequenceDiagram
 
 ```
 
-- [ ] **Step 3: 커밋**
+- [ ] **단계 3: 커밋**
 
 ```bash
 git add 06-advanced/01-exposed-r2dbc-crypt/README.md
@@ -465,16 +462,16 @@ git commit -m "docs: 01-crypt README에 sequenceDiagram 추가"
 
 ---
 
-## Task 9: 06-advanced — `02-javatime` + `03-kotlin-datetime` (classDiagram)
+## 작업 9: 06-advanced — `02-javatime` + `03-kotlin-datetime` (classDiagram)
 
-**Files:**
+**파일:**
 
-- Modify: `06-advanced/02-exposed-r2dbc-javatime/README.md`
-- Modify: `06-advanced/03-exposed-r2dbc-kotlin-datetime/README.md`
-- Read: 각 모듈 테스트 파일 (사용하는 타입 확인)
+- 수정: `06-advanced/02-exposed-r2dbc-javatime/README.md`
+- 수정: `06-advanced/03-exposed-r2dbc-kotlin-datetime/README.md`
+- 읽기: 각 모듈 테스트 파일 (사용하는 타입 확인)
 
-- [ ] **Step 1: 두 모듈 소스 동시 읽기** — Java Time / kotlinx-datetime 컬럼 타입 매핑 파악
-- [ ] **Step 2: `02-javatime` classDiagram 삽입**
+- [ ] **단계 1: 두 모듈 소스 동시 읽기** — Java Time / kotlinx-datetime 컬럼 타입 매핑 파악
+- [ ] **단계 2: `02-javatime` classDiagram 삽입**
 
 ```markdown
 ## 구조 다이어그램
@@ -509,8 +506,8 @@ classDiagram
 
 ```
 
-- [ ] **Step 3: `03-kotlin-datetime` classDiagram 삽입** (kotlinx.datetime 타입으로 동일 패턴 작성)
-- [ ] **Step 4: 커밋**
+- [ ] **단계 3: `03-kotlin-datetime` classDiagram 삽입** (kotlinx.datetime 타입으로 동일 패턴 작성)
+- [ ] **단계 4: 커밋**
 
 ```bash
 git add 06-advanced/02-exposed-r2dbc-javatime/README.md 06-advanced/03-exposed-r2dbc-kotlin-datetime/README.md
@@ -519,15 +516,15 @@ git commit -m "docs: javatime/kotlin-datetime README에 classDiagram 추가"
 
 ---
 
-## Task 10: 06-advanced — JSON 계열 4개 모듈 (classDiagram)
+## 작업 10: 06-advanced — JSON 계열 4개 모듈 (classDiagram)
 
-**Files:**
+**파일:**
 
-- Modify: `06-advanced/04-exposed-r2dbc-json/README.md`
-- Modify: `06-advanced/08-exposed-r2dbc-jackson/README.md`
-- Modify: `06-advanced/09-exposed-r2dbc-fastjson2/README.md`
-- Modify: `06-advanced/11-exposed-r2dbc-jackson3/README.md`
-- Read: 각 모듈 소스 (사용하는 JSON 직렬화 방식 파악)
+- 수정: `06-advanced/04-exposed-r2dbc-json/README.md`
+- 수정: `06-advanced/08-exposed-r2dbc-jackson/README.md`
+- 수정: `06-advanced/09-exposed-r2dbc-fastjson2/README.md`
+- 수정: `06-advanced/11-exposed-r2dbc-jackson3/README.md`
+- 읽기: 각 모듈 소스 (사용하는 JSON 직렬화 방식 파악)
 
 각 모듈별 차별화 포인트:
 
@@ -536,12 +533,12 @@ git commit -m "docs: javatime/kotlin-datetime README에 classDiagram 추가"
 - `09-fastjson2`: JSONReader/JSONWriter 기반 고성능 직렬화
 - `11-jackson3`: Jackson3 API 변경점 (패키지 변경, 설정 방식 차이)
 
-- [ ] **Step 1: 4개 모듈 소스 동시 읽기**
-- [ ] **Step 2: `04-json` classDiagram 삽입** (json vs jsonb 강조)
-- [ ] **Step 3: `08-jackson` classDiagram 삽입** (ObjectMapper 통합 강조)
-- [ ] **Step 4: `09-fastjson2` classDiagram 삽입** (JSONReader/Writer 강조)
-- [ ] **Step 5: `11-jackson3` classDiagram 삽입** (Jackson3 API 변경점 강조)
-- [ ] **Step 6: 커밋**
+- [ ] **단계 1: 4개 모듈 소스 동시 읽기**
+- [ ] **단계 2: `04-json` classDiagram 삽입** (json vs jsonb 강조)
+- [ ] **단계 3: `08-jackson` classDiagram 삽입** (ObjectMapper 통합 강조)
+- [ ] **단계 4: `09-fastjson2` classDiagram 삽입** (JSONReader/Writer 강조)
+- [ ] **단계 5: `11-jackson3` classDiagram 삽입** (Jackson3 API 변경점 강조)
+- [ ] **단계 6: 커밋**
 
 ```bash
 git add 06-advanced/04-exposed-r2dbc-json/README.md \
@@ -553,18 +550,18 @@ git commit -m "docs: JSON 계열 4개 모듈 README에 classDiagram 추가"
 
 ---
 
-## Task 11: 06-advanced — `05-money` + `06-custom-columns` (classDiagram)
+## 작업 11: 06-advanced — `05-money` + `06-custom-columns` (classDiagram)
 
-**Files:**
+**파일:**
 
-- Modify: `06-advanced/05-exposed-r2dbc-money/README.md`
-- Modify: `06-advanced/06-exposed-r2dbc-custom-columns/README.md`
-- Read: 각 모듈 소스
+- 수정: `06-advanced/05-exposed-r2dbc-money/README.md`
+- 수정: `06-advanced/06-exposed-r2dbc-custom-columns/README.md`
+- 읽기: 각 모듈 소스
 
-- [ ] **Step 1: 두 모듈 소스 동시 읽기**
-- [ ] **Step 2: `05-money` classDiagram 삽입** (MonetaryAmount/Money 컬럼 계층)
-- [ ] **Step 3: `06-custom-columns` classDiagram 삽입** (Column → CustomColumn 확장 패턴)
-- [ ] **Step 4: 커밋**
+- [ ] **단계 1: 두 모듈 소스 동시 읽기**
+- [ ] **단계 2: `05-money` classDiagram 삽입** (MonetaryAmount/Money 컬럼 계층)
+- [ ] **단계 3: `06-custom-columns` classDiagram 삽입** (Column → CustomColumn 확장 패턴)
+- [ ] **단계 4: 커밋**
 
 ```bash
 git add 06-advanced/05-exposed-r2dbc-money/README.md 06-advanced/06-exposed-r2dbc-custom-columns/README.md
@@ -573,15 +570,15 @@ git commit -m "docs: money/custom-columns README에 classDiagram 추가"
 
 ---
 
-## Task 12: 06-advanced — `07-custom-entities` (classDiagram + erDiagram)
+## 작업 12: 06-advanced — `07-custom-entities` (classDiagram + erDiagram)
 
-**Files:**
+**파일:**
 
-- Modify: `06-advanced/07-exposed-r2dbc-custom-entities/README.md`
-- Read: `06-advanced/07-exposed-r2dbc-custom-entities/src/test/kotlin/`
+- 수정: `06-advanced/07-exposed-r2dbc-custom-entities/README.md`
+- 읽기: `06-advanced/07-exposed-r2dbc-custom-entities/src/test/kotlin/`
 
-- [ ] **Step 1: 소스 읽기** — Entity DAO 클래스 계층 + 테이블 관계 파악
-- [ ] **Step 2: classDiagram + erDiagram 작성 후 삽입**
+- [ ] **단계 1: 소스 읽기** — Entity DAO 클래스 계층 + 테이블 관계 파악
+- [ ] **단계 2: classDiagram + erDiagram 작성 후 삽입**
 
 > **참고**: 실제 소스를 읽어 엔티티 클래스명과 테이블 관계를 정확히 반영할 것
 
@@ -634,7 +631,7 @@ erDiagram
 
 ```
 
-- [ ] **Step 3: 커밋**
+- [ ] **단계 3: 커밋**
 
 ```bash
 git add 06-advanced/07-exposed-r2dbc-custom-entities/README.md
@@ -643,18 +640,18 @@ git commit -m "docs: custom-entities README에 classDiagram + erDiagram 추가"
 
 ---
 
-## Task 13: 06-advanced — 암호화 2개 (`10-jasypt`, `12-tink`) (sequenceDiagram)
+## 작업 13: 06-advanced — 암호화 2개 (`10-jasypt`, `12-tink`) (sequenceDiagram)
 
-**Files:**
+**파일:**
 
-- Modify: `06-advanced/10-exposed-r2dbc-jasypt/README.md`
-- Modify: `06-advanced/12-exposed-r2dbc-tink/README.md`
-- Read: 각 모듈 소스
+- 수정: `06-advanced/10-exposed-r2dbc-jasypt/README.md`
+- 수정: `06-advanced/12-exposed-r2dbc-tink/README.md`
+- 읽기: 각 모듈 소스
 
-- [ ] **Step 1: 두 모듈 소스 동시 읽기** — Jasypt/Tink 암호화 컬럼 패턴 파악
-- [ ] **Step 2: `10-jasypt` sequenceDiagram 삽입** (BasicTextEncryptor 기반 흐름)
-- [ ] **Step 3: `12-tink` sequenceDiagram 삽입** (Tink KeysetHandle/Aead 기반 흐름)
-- [ ] **Step 4: 커밋**
+- [ ] **단계 1: 두 모듈 소스 동시 읽기** — Jasypt/Tink 암호화 컬럼 패턴 파악
+- [ ] **단계 2: `10-jasypt` sequenceDiagram 삽입** (BasicTextEncryptor 기반 흐름)
+- [ ] **단계 3: `12-tink` sequenceDiagram 삽입** (Tink KeysetHandle/Aead 기반 흐름)
+- [ ] **단계 4: 커밋**
 
 ```bash
 git add 06-advanced/10-exposed-r2dbc-jasypt/README.md 06-advanced/12-exposed-r2dbc-tink/README.md
@@ -663,15 +660,15 @@ git commit -m "docs: jasypt/tink README에 sequenceDiagram 추가"
 
 ---
 
-## Task 14: 07-jpa-convert — `01-convert-jpa-basic` (flowchart)
+## 작업 14: 07-jpa-convert — `01-convert-jpa-basic` (flowchart)
 
-**Files:**
+**파일:**
 
-- Modify: `07-jpa-convert/01-convert-jpa-basic/README.md`
-- Read: `07-jpa-convert/01-convert-jpa-basic/src/test/kotlin/`
+- 수정: `07-jpa-convert/01-convert-jpa-basic/README.md`
+- 읽기: `07-jpa-convert/01-convert-jpa-basic/src/test/kotlin/`
 
-- [ ] **Step 1: 소스 읽기** — JPA Entity/Repository → Exposed Table/DSL 변환 패턴 파악
-- [ ] **Step 2: flowchart 작성 후 삽입**
+- [ ] **단계 1: 소스 읽기** — JPA Entity/Repository → Exposed Table/DSL 변환 패턴 파악
+- [ ] **단계 2: flowchart 작성 후 삽입**
 
 ```markdown
 ## JPA → Exposed R2DBC 마이그레이션 경로
@@ -699,7 +696,7 @@ flowchart LR
 
 ```
 
-- [ ] **Step 3: 커밋**
+- [ ] **단계 3: 커밋**
 
 ```bash
 git add 07-jpa-convert/01-convert-jpa-basic/README.md
@@ -708,15 +705,15 @@ git commit -m "docs: 01-convert-jpa-basic README에 flowchart 추가"
 
 ---
 
-## Task 15: 08-coroutines — `01-coroutines-basic` (sequenceDiagram + flowchart)
+## 작업 15: 08-coroutines — `01-coroutines-basic` (sequenceDiagram + flowchart)
 
-**Files:**
+**파일:**
 
-- Modify: `08-r2dbc-coroutines/01-exposed-r2dbc-coroutines-basic/README.md`
-- Read: `08-r2dbc-coroutines/01-exposed-r2dbc-coroutines-basic/src/test/kotlin/`
+- 수정: `08-r2dbc-coroutines/01-exposed-r2dbc-coroutines-basic/README.md`
+- 읽기: `08-r2dbc-coroutines/01-exposed-r2dbc-coroutines-basic/src/test/kotlin/`
 
-- [ ] **Step 1: 소스 읽기** — coroutine scope, suspendTransaction, Flow 수집 패턴 파악
-- [ ] **Step 2: sequenceDiagram + flowchart 작성 후 삽입**
+- [ ] **단계 1: 소스 읽기** — coroutine scope, suspendTransaction, Flow 수집 패턴 파악
+- [ ] **단계 2: sequenceDiagram + flowchart 작성 후 삽입**
 
 ```markdown
 ## 실행 흐름
@@ -757,7 +754,7 @@ flowchart TD
 
 ```
 
-- [ ] **Step 3: 커밋**
+- [ ] **단계 3: 커밋**
 
 ```bash
 git add 08-r2dbc-coroutines/01-exposed-r2dbc-coroutines-basic/README.md
@@ -766,15 +763,15 @@ git commit -m "docs: 01-coroutines-basic README에 sequenceDiagram + flowchart �
 
 ---
 
-## Task 16: 08-coroutines — `02-virtualthreads-basic` (sequenceDiagram)
+## 작업 16: 08-coroutines — `02-virtualthreads-basic` (sequenceDiagram)
 
-**Files:**
+**파일:**
 
-- Modify: `08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/README.md`
-- Read: `08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/src/test/kotlin/`
+- 수정: `08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/README.md`
+- 읽기: `08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/src/test/kotlin/`
 
-- [ ] **Step 1: 소스 읽기** — `runSuspendVT`, `virtualThreadTransaction`, API 사용 패턴 파악
-- [ ] **Step 2: sequenceDiagram 작성 후 삽입**
+- [ ] **단계 1: 소스 읽기** — `runSuspendVT`, `virtualThreadTransaction`, API 사용 패턴 파악
+- [ ] **단계 2: sequenceDiagram 작성 후 삽입**
 
 ```markdown
 ## 실행 흐름
@@ -800,7 +797,7 @@ sequenceDiagram
 
 ```
 
-- [ ] **Step 3: 커밋**
+- [ ] **단계 3: 커밋**
 
 ```bash
 git add 08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/README.md
@@ -809,15 +806,15 @@ git commit -m "docs: 02-virtualthreads-basic README에 sequenceDiagram 추가"
 
 ---
 
-## Task 17: 09-spring — `07-spring-suspended-cache` (sequenceDiagram)
+## 작업 17: 09-spring — `07-spring-suspended-cache` (sequenceDiagram)
 
-**Files:**
+**파일:**
 
-- Modify: `09-spring/07-spring-suspended-cache/README.md`
-- Read: `09-spring/07-spring-suspended-cache/src/main/kotlin/` + `src/test/kotlin/`
+- 수정: `09-spring/07-spring-suspended-cache/README.md`
+- 읽기: `09-spring/07-spring-suspended-cache/src/main/kotlin/` + `src/test/kotlin/`
 
-- [ ] **Step 1: 소스 읽기** — Redis 캐시 조회 흐름, cache hit/miss 패턴 파악
-- [ ] **Step 2: sequenceDiagram 작성 후 삽입**
+- [ ] **단계 1: 소스 읽기** — Redis 캐시 조회 흐름, cache hit/miss 패턴 파악
+- [ ] **단계 2: sequenceDiagram 작성 후 삽입**
 
 ```markdown
 ## 실행 흐름
@@ -844,7 +841,7 @@ sequenceDiagram
 
 ```
 
-- [ ] **Step 3: 커밋**
+- [ ] **단계 3: 커밋**
 
 ```bash
 git add 09-spring/07-spring-suspended-cache/README.md
@@ -853,15 +850,15 @@ git commit -m "docs: spring-suspended-cache README에 sequenceDiagram 추가"
 
 ---
 
-## Task 18: 11-high-performance — `README` (flowchart)
+## 작업 18: 11-high-performance — `README` (flowchart)
 
-**Files:**
+**파일:**
 
-- Modify: `11-high-performance/README.md`
-- Read: `11-high-performance/README.md` (현재 내용 파악)
+- 수정: `11-high-performance/README.md`
+- 읽기: `11-high-performance/README.md` (현재 내용 파악)
 
-- [ ] **Step 1: README 읽기** — 현재 내용과 다루는 모듈 파악
-- [ ] **Step 2: flowchart 작성 후 삽입** (전략 개요)
+- [ ] **단계 1: README 읽기** — 현재 내용과 다루는 모듈 파악
+- [ ] **단계 2: flowchart 작성 후 삽입** (전략 개요)
 
 ```markdown
 ## 고성능 전략 개요
@@ -883,7 +880,7 @@ flowchart TD
 
 ```
 
-- [ ] **Step 3: 커밋**
+- [ ] **단계 3: 커밋**
 
 ```bash
 git add 11-high-performance/README.md
@@ -892,15 +889,15 @@ git commit -m "docs: 11-high-performance README에 flowchart 추가"
 
 ---
 
-## Task 19: 11-high-performance — `02-cache-strategies-r2dbc` (classDiagram + flowchart)
+## 작업 19: 11-high-performance — `02-cache-strategies-r2dbc` (classDiagram + flowchart)
 
-**Files:**
+**파일:**
 
-- Modify: `11-high-performance/02-cache-strategies-r2dbc/README.md`
-- Read: `11-high-performance/02-cache-strategies-r2dbc/src/` (캐시 전략 클래스)
+- 수정: `11-high-performance/02-cache-strategies-r2dbc/README.md`
+- 읽기: `11-high-performance/02-cache-strategies-r2dbc/src/` (캐시 전략 클래스)
 
-- [ ] **Step 1: 소스 읽기** — 캐시 전략 클래스 구조, 계층 흐름 파악
-- [ ] **Step 2: classDiagram + flowchart 작성 후 삽입**
+- [ ] **단계 1: 소스 읽기** — 캐시 전략 클래스 구조, 계층 흐름 파악
+- [ ] **단계 2: classDiagram + flowchart 작성 후 삽입**
 
 > **참고**: 실제 소스를 읽어 캐시 전략 클래스명과 계층 흐름을 정확히 반영할 것
 
@@ -955,7 +952,7 @@ flowchart TD
 
 ```
 
-- [ ] **Step 3: 커밋**
+- [ ] **단계 3: 커밋**
 
 ```bash
 git add 11-high-performance/02-cache-strategies-r2dbc/README.md
