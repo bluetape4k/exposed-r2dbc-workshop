@@ -39,7 +39,7 @@ class Ex08_BlobColumnType: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS test_blob (
      *      id SERIAL PRIMARY KEY,
      *      "content" bytea NOT NULL
@@ -54,7 +54,7 @@ class Ex08_BlobColumnType: AbstractR2dbcExposedTest() {
      * Test: Write and read blob value via alias
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO TEST_BLOB (CONTENT) VALUES (X'');
      *
      * SELECT TEST_BLOB.CONTENT content_column FROM TEST_BLOB;
@@ -127,7 +127,7 @@ class Ex08_BlobColumnType: AbstractR2dbcExposedTest() {
 
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS testtable (
          *      "number" INT NOT NULL,
          *      "blobWithDefault" bytea DEFAULT E'\\x74657374' NOT NULL
@@ -177,7 +177,7 @@ class Ex08_BlobColumnType: AbstractR2dbcExposedTest() {
 //    fun `blob as object identifier`(testDB: TestDB) = runTest {
 //        /**
 //         * ```sql
-//         * -- Postgres
+//         * -- PostgreSQL
 //         * CREATE TABLE IF NOT EXISTS blob_tester (
 //         *      blob_col oid DEFAULT lo_from_bytea(0, E'\\x74657374' :: bytea) NOT NULL
 //         * )

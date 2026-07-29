@@ -54,7 +54,7 @@ class Ex03_NumericColumnType: AbstractR2dbcExposedTest() {
      * [Short] 수형의 허용 범위에서만 작업이 가능합니다. (-32768 ~ 32767)
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS tester (short SMALLINT NOT NULL);
      *
      * INSERT INTO tester (short) VALUES (-32768);
@@ -99,7 +99,7 @@ class Ex03_NumericColumnType: AbstractR2dbcExposedTest() {
     fun `byte accepts only allowed range`(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS tester (
          *      byte SMALLINT NOT NULL,
          *
@@ -145,7 +145,7 @@ class Ex03_NumericColumnType: AbstractR2dbcExposedTest() {
      * [Int] 수형의 허용 범위에서만 작업이 가능합니다. (-2147483648 ~ 2147483647)
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS tester (
      *      integer_column INT NOT NULL
      * );
@@ -192,7 +192,7 @@ class Ex03_NumericColumnType: AbstractR2dbcExposedTest() {
     fun `numeric params`(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS tester (
          *      byte_column SMALLINT NOT NULL,
          *      ubyte_column SMALLINT NOT NULL,
@@ -278,7 +278,7 @@ class Ex03_NumericColumnType: AbstractR2dbcExposedTest() {
     fun testCustomCheckConstraintName(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS tester (
          *      byte_column SMALLINT NOT NULL,
          *      ubyte_column SMALLINT NOT NULL,

@@ -51,7 +51,7 @@ class Ex15_Returning: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS items (
      *      id SERIAL PRIMARY KEY,
      *      "name" VARCHAR(32) NOT NULL,
@@ -178,7 +178,7 @@ class Ex15_Returning: AbstractR2dbcExposedTest() {
              * 기본적으로 작업된 행의 모든 컬럼을 [ResultRow]로 반환합니다.
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              *  INSERT INTO items ("name", price) VALUES ('A', 99.0)
              *  ON CONFLICT (id) DO
              *      UPDATE SET "name"=EXCLUDED."name",
@@ -348,7 +348,7 @@ class Ex15_Returning: AbstractR2dbcExposedTest() {
              * price가 200.0인 레코드를 삭제하고, 삭제된 행을 반환합니다.
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * DELETE FROM items
              *  WHERE items.price = 200.0
              * RETURNING items.id, items."name", items.price
@@ -365,7 +365,7 @@ class Ex15_Returning: AbstractR2dbcExposedTest() {
              * 모든 Items 행을 삭제하고, 삭제된 행의 id를 반환합니다.
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * DELETE FROM items RETURNING items.id
              * ```
              */

@@ -104,14 +104,14 @@ class Ex23_Conditions: AbstractR2dbcExposedTest() {
                 it[number2] = null
             }
 
-            // null == null returns null
+            // null == null 비교는 null을 반환한다.
             table.selectAll()
                 .where { table.number1 eq table.number2 }
                 .map { it[table.id] }
                 .toList() shouldBeEqualTo listOf(sameNumberId)
 
             /**
-             * null == null returns true
+             * null == null 비교가 true를 반환한다
              *
              * ```sql
              * SELECT foo.id, foo.number1, foo.number2
@@ -124,14 +124,14 @@ class Ex23_Conditions: AbstractR2dbcExposedTest() {
                 .map { it[table.id] }
                 .toList() shouldBeEqualTo listOf(sameNumberId, bothNullId)
 
-            // null != null return null
+            // null != null 비교는 null을 반환한다.
             table.selectAll()
                 .where { table.number1 neq table.number2 }
                 .map { it[table.id] }
                 .toList() shouldBeEqualTo listOf(differentNumberId)
 
             /**
-             * null != null return false
+             * null != null 비교가 false를 반환한다
              *
              * ```sql
              * SELECT foo.id, foo.number1, foo.number2
@@ -145,7 +145,7 @@ class Ex23_Conditions: AbstractR2dbcExposedTest() {
                 .toList() shouldBeEqualTo listOf(differentNumberId, oneNullId)
 
             /**
-             * (number1 is not null) != (number2 is null) returns true when both are null or neither is null
+             * 두 값이 모두 null이거나 모두 null이 아닐 때 `(number1 is not null) != (number2 is null)`은 true를 반환한다
              *
              * ```sql
              * SELECT foo.id, foo.number1, foo.number2
@@ -159,7 +159,7 @@ class Ex23_Conditions: AbstractR2dbcExposedTest() {
                 .toList() shouldBeEqualTo listOf(sameNumberId, differentNumberId, bothNullId)
 
             /**
-             * (number1 is not null) == (number2 is null) returns true when only 1 is null
+             * 한쪽 값만 null일 때 `(number1 is not null) == (number2 is null)`은 true를 반환한다
              *
              * ```sql
              * SELECT foo.id, foo.number1, foo.number2
@@ -227,7 +227,7 @@ class Ex23_Conditions: AbstractR2dbcExposedTest() {
             selectIdWhere { longTable.id isDistinctFrom longTable.amount } shouldBeEqualTo listOf(id1, id3)
             selectIdWhere { longTable.id isDistinctFrom 2 } shouldBeEqualTo listOf(id1, id3)
 
-            // symmetric operators (EntityID value on right) should not show a warning either
+            // 오른쪽에 EntityID value가 있는 symmetric operator도 warning을 내지 않아야 한다.
             selectIdWhere { longTable.amount eq longTable.id } shouldBeEqualTo listOf(id2)
             selectIdWhere { longTable.amount neq longTable.id } shouldBeEqualTo listOf(id1, id3)
             selectIdWhere { longTable.amount less longTable.id } shouldBeEqualTo listOf(id3)
@@ -461,7 +461,7 @@ class Ex23_Conditions: AbstractR2dbcExposedTest() {
                 .When(condition, stringLiteral(original))
                 .Else(Op.nullOp())
 
-            // Case().When().Else() invokes CaseWhenElse() so the 2 formats should be interchangeable as arguments
+            // Case().When().Else()는 CaseWhenElse()를 호출하므로 두 형식은 argument로 상호 교환 가능해야 한다.
             val caseCondition2 = Case()
                 .When(condition, stringLiteral(original))
                 .Else(Op.nullOp())
@@ -492,7 +492,7 @@ class Ex23_Conditions: AbstractR2dbcExposedTest() {
     }
 
     /**
-     * Nested CaseWhenElse syntax
+     * 중첩 CaseWhenElse 문법
      *
      * ```sql
      * SELECT CITIES."name",

@@ -42,7 +42,7 @@ class Ex02_CharColumnType: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS chartable (
      *      id SERIAL PRIMARY KEY,
      *      "charColumn" CHAR NOT NULL
@@ -85,7 +85,7 @@ class Ex02_CharColumnType: AbstractR2dbcExposedTest() {
          * )
          * ```
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS tester (
          *      letter CHAR(1) COLLATE "C" NOT NULL
          * )

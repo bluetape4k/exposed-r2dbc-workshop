@@ -89,7 +89,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
      * ```
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO auto_inc_table ("name") VALUES ('B')
      *  ON CONFLICT (id) DO UPDATE SET "name"=EXCLUDED."name";
      *
@@ -134,7 +134,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
      * [upsert] with Composite PK Conflict
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO tester (id_a, id_b, "name") VALUES (1, 1, 'A');
      *
      * INSERT INTO tester (id_a, id_b, "name") VALUES (7, 1, 'B')
@@ -283,7 +283,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
             /**
              * Insert
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO words ("name", "count") VALUES ('A', 10)
              *  ON CONFLICT ("name") DO UPDATE SET "count"=EXCLUDED."count"
              * ```
@@ -296,7 +296,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
             /**
              * Insert - word 가 conflict 되지 않는 경우
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO words ("name", "count") VALUES ('B', 10)
              *  ON CONFLICT ("name") DO UPDATE SET "count"=EXCLUDED."count"
              * ```
@@ -309,7 +309,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
             /**
              * Update - word 가 conflict 되는 경우
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO words ("name", "count") VALUES ('A', 9)
              *      ON CONFLICT ("name") DO
              *      UPDATE SET "count"=EXCLUDED."count"
@@ -368,7 +368,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
             /**
              * updated - idA 가 충돌하는 경우에는 Update
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO tester (id_a, id_b, "name") VALUES (1, 2, 'B')
              *      ON CONFLICT (id_a) DO
              *      UPDATE SET id_b=EXCLUDED.id_b,
@@ -386,7 +386,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
             /**
              * updated - idB 가 충돌하는 경우에는 Update
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO tester (id_a, id_b, "name") VALUES (99, 2, 'C')
              *     ON CONFLICT (id_b) DO
              *     UPDATE SET id_a=EXCLUDED.id_a,
@@ -442,7 +442,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
     fun `upsert with UUID Key conflict`(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS tester (
          *      id uuid PRIMARY KEY,
          *      title TEXT NOT NULL
@@ -460,7 +460,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
             /**
              * Insert
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO tester (id, title)
              * VALUES ('2a6167bc-d495-4de7-b9f7-0b52b3ab8c3c', 'A')
              *      ON CONFLICT (id) DO UPDATE SET title=EXCLUDED.title
@@ -473,7 +473,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
             /**
              * Update (id가 동일한 경우)
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO tester (id, title)
              * VALUES ('2a6167bc-d495-4de7-b9f7-0b52b3ab8c3c', 'B')
              *      ON CONFLICT (id) DO UPDATE SET title=EXCLUDED.title
@@ -548,7 +548,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
              * 첫번째는 Insert, 두번째, 세번째는 Update 를 수행하도록 한다.
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO words ("name") VALUES ('Test')
              * ON CONFLICT ("name") DO
              *      UPDATE SET "count"=(words."count" + 1)
@@ -570,7 +570,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
              *  AS NEW ON DUPLICATE KEY UPDATE `count`=1000
              * ```
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO words ("name") VALUES ('Test')
              *  ON CONFLICT ("name") DO
              *  UPDATE SET "count"=1000
@@ -592,7 +592,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
     fun `upsert with multiple manual updates`(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS tester (
          *      item VARCHAR(64) NOT NULL,
          *      amount INT DEFAULT 25 NOT NULL,
@@ -628,7 +628,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
              * `upsert` 작업에서 `update` 시에 `onUpdate` 를 지정하여 다른 작업을 수행할 수 있도록 한다.
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO tester (item, gains, losses, amount) VALUES ('Item B', 200, 0, 25)
              *      ON CONFLICT (item) DO
              *      UPDATE SET gains=(tester.gains + tester.amount),
@@ -656,7 +656,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
              * insert 시에 amount=10, gains=200, losses=0 이고, update 시에는 gains=100 + 25, losses=100-10 이 된다.
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO tester (item, amount, gains, losses) VALUES ('Item A', 10, 200, 0)
              *      ON CONFLICT (item) DO
              *      UPDATE SET gains=(tester.gains + tester.amount),
@@ -684,7 +684,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
     fun `upsert with column expression`(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS tester (
          *      word VARCHAR(256) NOT NULL,
          *      phrase VARCHAR(256) DEFAULT ('Phrase') NOT NULL
@@ -710,7 +710,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO tester (word) VALUES ('Test')
              * ON CONFLICT (word) DO
              *      UPDATE SET phrase=CONCAT_WS(' - ',tester.word, tester.phrase)
@@ -727,7 +727,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
              * 멀리라인, 특수문자가 들어간 문자열로 Update 하는 예
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO tester (word) VALUES ('Test')
              * ON CONFLICT (word) DO
              *      UPDATE SET phrase='This is a phrase with a new line\nand some other difficult strings ''\n\nIndentation should be preserved'
@@ -752,7 +752,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
              * [upsert] 수행 중 insert 시에 expression 을 사용
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO tester (word, phrase) VALUES ('Test 2', CONCAT('foo', 'bar'))
              * ON CONFLICT (word) DO
              *      UPDATE SET phrase=EXCLUDED.phrase
@@ -797,7 +797,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
              * AS NEW ON DUPLICATE KEY UPDATE `count`=(100 * NEW.`count`)
              * ```
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO tester (id, "name", "count") VALUES (1, 'Word B', 9)
              * ON CONFLICT (id) DO UPDATE SET "count"=(100 * EXCLUDED."count")
              * ```
@@ -829,7 +829,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
              *             `count`=(1 + NEW.`count`)
              * ```
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO tester (id, "name", "count") VALUES (2, 'Word B', 2)
              *      ON CONFLICT (id) DO
              *      UPDATE SET "name"=CONCAT(tester."name", ' || ', EXCLUDED."count"),
@@ -868,7 +868,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
 
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS tester (
          *      item VARCHAR(64) NOT NULL,
          *      code uuid NOT NULL,
@@ -904,7 +904,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
                  * upsert 에 지정되지 않은 컬럼(code)은 기본값으로 업데이트 된다.
                  *
                  * ```sql
-                 * -- Postgres
+                 * -- PostgreSQL
                  * INSERT INTO tester (code, item, gains, losses)
                  * VALUES ('c901e3df-286f-4e3b-a053-a363fcbe32e9', 'Item A', 200, 0)
                  * ON CONFLICT (item) DO
@@ -933,7 +933,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
              * `onUpdateExclude` 에 지정된 컬럼은 업데이트 시 제외된다.
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO tester (code, item, gains, losses)
              * VALUES ('c901e3df-286f-4e3b-a053-a363fcbe32e9', 'Item A', 200, 0)
              * ON CONFLICT (item) DO
@@ -1002,7 +1002,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
              * Update 시에 where 조건에 맞는 행만 업데이트 된다
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO tester ("name", address, age)
              * VALUES ('A', 'Address A', 20)
              * ON CONFLICT ("name") DO
@@ -1023,7 +1023,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
              * Update 시에 where 조건에 맞는 행만 업데이트 된다
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO tester ("name", address, age)
              * VALUES ('B', 'Address B', 20)
              * ON CONFLICT ("name") DO
@@ -1085,7 +1085,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
             /**
              * Insert
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO tester ("name", age) VALUES ('Anna', 50)
              * ON CONFLICT (id) DO
              *      UPDATE SET "name"=EXCLUDED."name",
@@ -1106,7 +1106,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
              * `upsert` 작업 중 `update` 시에만 조건 절을 지정할 수 있다.
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO tester ("name", age) VALUES ('Anya', 20)
              * ON CONFLICT ("name") DO
              *      UPDATE SET age=EXCLUDED.age
@@ -1137,7 +1137,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
 
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS tester_1 (
          *      id SERIAL PRIMARY KEY,
          *      "name" VARCHAR(32) NOT NULL
@@ -1150,7 +1150,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
 
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS tester_2 (
          *      id SERIAL PRIMARY KEY,
          *      "name" VARCHAR(32) NOT NULL
@@ -1180,7 +1180,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
              * AS NEW ON DUPLICATE KEY UPDATE `name`=NEW.`name`
              * ```
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO tester_2 ("name")
              * VALUES ((SELECT tester_1."name"
              *            FROM tester_1
@@ -1207,7 +1207,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
              * AS NEW ON DUPLICATE KEY UPDATE id=NEW.id, `name`=NEW.`name`
              * ```
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO tester_2 (id, "name")
              * VALUES (1, (SELECT tester_1."name" FROM tester_1 WHERE tester_1.id = 2))
              * ON CONFLICT (id) DO UPDATE SET "name"=EXCLUDED."name"
@@ -1240,7 +1240,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
      * ```
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO words ("name", "count") VALUES ('Word A', 10)
      *      ON CONFLICT ("name") DO
      *      UPDATE SET "count"=EXCLUDED."count";
@@ -1307,7 +1307,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
      * [batchUpsert] 작업 시 sequence 를 사용하기
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO words ("name") VALUES ('RC1TL3Sy4B9B')
      *      ON CONFLICT ("name") DO
      *          UPDATE SET "name"=EXCLUDED."name";
@@ -1338,7 +1338,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
      * [batchUpsert] 작업 시 조건절 사용하기
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO words ("name") VALUES ('A')
      *   ON CONFLICT ("name") DO
      *      UPDATE SET "count"=(words."count" + 1)
@@ -1404,7 +1404,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
              * all new rows inserted
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO auto_inc_table (id, "name") VALUES (1, 'A')
              *     ON CONFLICT (id) DO UPDATE SET "name"=EXCLUDED."name"
              * ```
@@ -1433,14 +1433,14 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
              * 이미 존재하는 행은 update 되고, 1개의 새로운 행이 추가된다.
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO auto_inc_table (id, "name")
              * VALUES (1, 'newA')
              * ON CONFLICT (id) DO
              *      UPDATE SET "name"=EXCLUDED."name"
              * ```
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO auto_inc_table (id, "name")
              * VALUES (4, 'D')
              * ON CONFLICT (id) DO
@@ -1473,7 +1473,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
 
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS tester (
          *      id uuid PRIMARY KEY,
          *      test_key INT NOT NULL,
@@ -1499,7 +1499,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO upsert_test (id, test_key, test_value)
              * VALUES ('e8a41a28-f9d8-418d-aa48-d0603d10f44e', 1, 'two')
              * ON CONFLICT (test_key) DO
@@ -1556,7 +1556,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
              * `batchUpdate` 시에 conflict를 판단하는 컬럼을 `tester.key`로 하고, Update 작업 시에는 `tester.id` 는 제외한다.
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO batch_upsert_test (test_key, test_value, id)
              * VALUES (1, 'two', '6b594a66-dc19-4f9e-a3f1-2349eead4548')
              *     ON CONFLICT (test_key) DO
@@ -1581,7 +1581,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS auto_inc_table (
      *      id SERIAL PRIMARY KEY,
      *      "name" VARCHAR(64) NOT NULL
@@ -1597,7 +1597,7 @@ class Ex04_Upsert: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS words (
      *      "name" VARCHAR(64) NOT NULL,
      *      "count" INT DEFAULT 1 NOT NULL

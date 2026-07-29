@@ -80,7 +80,7 @@ class Ex05_WindowFunction: Ex00_FunctionBase() {
      * Window functions
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT ROW_NUMBER() OVER(PARTITION BY sales."year", sales.product ORDER BY sales.amount ASC)
      *   FROM sales
      *  ORDER BY sales."year" ASC,
@@ -519,7 +519,7 @@ class Ex05_WindowFunction: Ex00_FunctionBase() {
      * Window frame clause
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT SUM(sales.amount) OVER(PARTITION BY sales."year", sales.product ORDER BY sales.amount ASC ROWS UNBOUNDED PRECEDING)
      *   FROM sales
      *  ORDER BY sales."year" ASC,

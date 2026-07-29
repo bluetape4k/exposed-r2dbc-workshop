@@ -32,7 +32,7 @@ abstract class Ex00_FunctionBase: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS faketable (
      *      id SERIAL PRIMARY KEY
      * )

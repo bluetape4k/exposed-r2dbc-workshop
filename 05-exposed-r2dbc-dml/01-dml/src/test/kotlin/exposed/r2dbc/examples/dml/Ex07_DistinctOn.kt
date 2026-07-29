@@ -45,7 +45,7 @@ class Ex07_DistinctOn: AbstractR2dbcExposedTest() {
 
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS tester (
          *      id SERIAL PRIMARY KEY,
          *      v1 INT NOT NULL,
@@ -73,7 +73,7 @@ class Ex07_DistinctOn: AbstractR2dbcExposedTest() {
              * `DISTINCT ON (tester.v1)` 을 사용한 쿼리입니다.
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT DISTINCT ON (tester.v1)
              *        tester.id,
              *        tester.v1,
@@ -95,7 +95,7 @@ class Ex07_DistinctOn: AbstractR2dbcExposedTest() {
              * `DISTINCT ON (tester.v2)` 을 사용한 쿼리입니다.
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT DISTINCT ON (tester.v2)
              *        tester.id,
              *        tester.v1,
@@ -118,7 +118,7 @@ class Ex07_DistinctOn: AbstractR2dbcExposedTest() {
              * `DISTINCT ON (tester.v1, tester.v2)` 을 사용한 쿼리입니다.
              *
              *  ```sql
-             *  -- Postgres
+             *  -- PostgreSQL
              *  SELECT DISTINCT ON (tester.v1, tester.v2)
              *         tester.id,
              *         tester.v1,
@@ -141,7 +141,7 @@ class Ex07_DistinctOn: AbstractR2dbcExposedTest() {
              * `DISTINCT ON (tester.v1, tester.v2)` 을 정렬 방식과 같이 사용할 수 있다
              *
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT DISTINCT ON (tester.v1, tester.v2)
              *        tester.id,
              *        tester.v1,
@@ -171,7 +171,7 @@ class Ex07_DistinctOn: AbstractR2dbcExposedTest() {
 
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS tester (
          *      id SERIAL PRIMARY KEY,
          *      v1 INT NOT NULL
@@ -202,7 +202,7 @@ class Ex07_DistinctOn: AbstractR2dbcExposedTest() {
         Assumptions.assumeTrue { testDB in distinctOnSupportedDb }
 
         /**
-         * Postgres:
+         * PostgreSQL DDL 예시:
          * ```sql
          * CREATE TABLE IF NOT EXISTS tester (
          *      id SERIAL PRIMARY KEY,
@@ -229,7 +229,7 @@ class Ex07_DistinctOn: AbstractR2dbcExposedTest() {
             /**
              * 컬럼을 제공하지 않았으므로, `distinct on` 이 사용되지 않는다.
              *
-             * Postgres:
+             * PostgreSQL DDL 예시:
              * ```sql
              * SELECT tester.id, tester.v1
              *   FROM tester
@@ -244,7 +244,7 @@ class Ex07_DistinctOn: AbstractR2dbcExposedTest() {
      * `withDistinctOn` 을 사용한 쿼리에 대한 COUNT 쿼리를 실행합니다. (MySQL에서는 group by 를 사용해야 합니다.)
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(*)
      *   FROM (SELECT DISTINCT ON (tester."name")
      *                tester."name"

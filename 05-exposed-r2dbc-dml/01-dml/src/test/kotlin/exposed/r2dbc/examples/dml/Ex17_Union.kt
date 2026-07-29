@@ -47,7 +47,7 @@ class Ex17_Union: AbstractR2dbcExposedTest() {
      * ### LIMIT 을 적용한 UNION 쿼리를 테스트합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users
      *  WHERE users.id = 'andrey'
@@ -82,7 +82,7 @@ class Ex17_Union: AbstractR2dbcExposedTest() {
      * ### LIMIT 과 OFFSET 을 적용한 UNION 쿼리를 테스트합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users WHERE users.id = 'andrey'
      *  UNION
@@ -115,7 +115,7 @@ class Ex17_Union: AbstractR2dbcExposedTest() {
      * ### UNION 쿼리의 COUNT 를 테스트합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(*)
      *   FROM (SELECT users.id, users."name", users.city_id, users.flags
      *           FROM users
@@ -147,7 +147,7 @@ class Ex17_Union: AbstractR2dbcExposedTest() {
      *
      * * withDistinct(true) 를 적용한 경우 (UNION):
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id id_alias FROM users WHERE users.id IN ('andrey', 'sergey')
      * UNION
      * SELECT users.id id_alias FROM users WHERE users.id IN ('andrey', 'sergey')
@@ -156,7 +156,7 @@ class Ex17_Union: AbstractR2dbcExposedTest() {
      *
      * * withDistinct(false) 를 적용한 경우 (UNION ALL):
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id id_alias FROM users WHERE users.id IN ('andrey', 'sergey')
      * UNION ALL
      * SELECT users.id id_alias FROM users WHERE users.id IN ('andrey', 'sergey')
@@ -185,7 +185,7 @@ class Ex17_Union: AbstractR2dbcExposedTest() {
      * ### [union] 쿼리
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users
      *  WHERE users.id = 'andrey'
@@ -214,7 +214,7 @@ class Ex17_Union: AbstractR2dbcExposedTest() {
      * ### [unionAll]과 [intersect]를 적용한 쿼리
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users
      *
@@ -277,7 +277,7 @@ class Ex17_Union: AbstractR2dbcExposedTest() {
      * ### 2개의 쿼리에 대한 [except] 적용
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users
      *
@@ -309,7 +309,7 @@ class Ex17_Union: AbstractR2dbcExposedTest() {
      * ### [unionAll] 과 [except] 를 적용하는 예
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users
      *
@@ -362,7 +362,7 @@ class Ex17_Union: AbstractR2dbcExposedTest() {
      * ### 다수의 [except] 쿼리 적용
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users
      *
@@ -491,7 +491,7 @@ class Ex17_Union: AbstractR2dbcExposedTest() {
     /**
      * ### [union] of limited queries
      *
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * (
      *  SELECT users.id, users."name", users.city_id, users.flags
@@ -536,7 +536,7 @@ class Ex17_Union: AbstractR2dbcExposedTest() {
      * ### [unionAll] of limited queries
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * (
      *  SELECT users.id, users."name", users.city_id, users.flags
      *    FROM users
@@ -584,7 +584,7 @@ class Ex17_Union: AbstractR2dbcExposedTest() {
      * ### [union] with distinct results
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users
      *  WHERE users.id = 'andrey'
@@ -615,7 +615,7 @@ class Ex17_Union: AbstractR2dbcExposedTest() {
      * ### [unionAll] with all results
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users
      *  WHERE users.id = 'andrey'
@@ -646,7 +646,7 @@ class Ex17_Union: AbstractR2dbcExposedTest() {
      * ### [unionAll] with all results of three queries
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users
      *  WHERE users.id = 'andrey'
@@ -684,7 +684,7 @@ class Ex17_Union: AbstractR2dbcExposedTest() {
      * ### [unionAll] with expressions
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, 10 exp1, 'aaa' exp2
      *   FROM users
      *  WHERE users.id = 'andrey'
@@ -723,7 +723,7 @@ class Ex17_Union: AbstractR2dbcExposedTest() {
      * ### [unionAll] with expressions and alias
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT unionAlias.id, exp1, exp2
      *   FROM (
      *      SELECT users.id, 10 exp1, 'aaa' exp2

@@ -67,7 +67,7 @@ class Ex09_GroupBy: AbstractR2dbcExposedTest() {
      * [groupBy] 를 이용한 조회
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT cities."name",
      *        COUNT(users.id),
      *        COUNT(users.id) c
@@ -114,7 +114,7 @@ class Ex09_GroupBy: AbstractR2dbcExposedTest() {
      * [groupBy] 와 `having` 을 이용하여 조건에 맞는 데이터를 조회한다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT cities."name",
      *        COUNT(users.id)
      *   FROM cities INNER JOIN users ON cities.city_id = users.city_id
@@ -142,7 +142,7 @@ class Ex09_GroupBy: AbstractR2dbcExposedTest() {
      * [groupBy] 와 `having` 을 이용하여 조건에 맞는 데이터를 조회한다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT cities."name",
      *        COUNT(users.id),
      *        MAX(cities.city_id)
@@ -188,7 +188,7 @@ class Ex09_GroupBy: AbstractR2dbcExposedTest() {
      * [groupBy] 와 `having` 을 이용하여 조건에 맞는 데이터를 조회한다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT cities."name",
      *        COUNT(users.id),
      *        MAX(cities.city_id)
@@ -227,7 +227,7 @@ class Ex09_GroupBy: AbstractR2dbcExposedTest() {
      * MAX, MIN 등 집계 함수를 사용하여 데이터를 조회한다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT MAX(cities.city_id)
      *   FROM cities;
      *
@@ -265,7 +265,7 @@ class Ex09_GroupBy: AbstractR2dbcExposedTest() {
      * Aggregate function AVG
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT AVG(cities.city_id)
      *   FROM cities;
      *
@@ -348,7 +348,7 @@ class Ex09_GroupBy: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT cities."name", STRING_AGG(users."name", ', ')
              *   FROM cities LEFT JOIN users ON cities.city_id = users.city_id
              *  GROUP BY cities.city_id, cities."name";
@@ -375,7 +375,7 @@ class Ex09_GroupBy: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT cities."name", STRING_AGG( DISTINCT users."name", ' | ')
              *   FROM cities LEFT JOIN users ON cities.city_id = users.city_id
              *  GROUP BY cities.city_id, cities."name";
@@ -407,7 +407,7 @@ class Ex09_GroupBy: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT cities."name", STRING_AGG(users."name", ' | ' ORDER BY users."name" ASC)
              *   FROM cities LEFT JOIN users ON cities.city_id = users.city_id
              *  GROUP BY cities.city_id, cities."name";
@@ -422,7 +422,7 @@ class Ex09_GroupBy: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT cities."name", STRING_AGG(users."name", ' | ' ORDER BY users."name" DESC)
              *   FROM cities LEFT JOIN users ON cities.city_id = users.city_id
              *  GROUP BY cities.city_id, cities."name";

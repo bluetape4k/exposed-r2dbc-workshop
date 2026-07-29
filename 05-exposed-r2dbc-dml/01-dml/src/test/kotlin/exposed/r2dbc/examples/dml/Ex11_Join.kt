@@ -52,7 +52,7 @@ class Ex11_Join: AbstractR2dbcExposedTest() {
      * `innerJoin` 의 조건이 자동으로 지정되지만, 사용자가 where 절에 추가할 수도 있다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users."name",
      *        cities."name"
      *   FROM users INNER JOIN cities ON cities.city_id = users.city_id
@@ -84,7 +84,7 @@ class Ex11_Join: AbstractR2dbcExposedTest() {
      * `innerJoin` 시 Foreign Key 가 정의되어 있으면 그 조건으로 자동으로 join 한다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users."name",
      *        users.city_id,
      *        cities."name"
@@ -113,7 +113,7 @@ class Ex11_Join: AbstractR2dbcExposedTest() {
      * 3개의 테이블을 `innerJoin` 하는 예제
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT cities.city_id,
      *        cities."name",
      *        users.id,
@@ -169,7 +169,7 @@ class Ex11_Join: AbstractR2dbcExposedTest() {
         /**
          * `numbers` 와 `names` 테이블의 관계를 `many-to-many` 로 매핑하는 테이블
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS "map" (
          *      id_ref INT NOT NULL,
          *      name_ref VARCHAR(10) NOT NULL,
@@ -198,7 +198,7 @@ class Ex11_Join: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT numbers.id,
              *        "map".id_ref,
              *        "map".name_ref,
@@ -222,7 +222,7 @@ class Ex11_Join: AbstractR2dbcExposedTest() {
      * `crossJoin` 을 사용한 예제
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT
      *      users."name",
      *      users.city_id,
@@ -263,7 +263,7 @@ class Ex11_Join: AbstractR2dbcExposedTest() {
      * JOIN 조건에 2개의 FK 가 모두 포함되어야 한다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS foo (
      *      id SERIAL PRIMARY KEY,
      *      baz INT NOT NULL
@@ -320,7 +320,7 @@ class Ex11_Join: AbstractR2dbcExposedTest() {
      * Primary Key 를 참조하는 FK를 복수개를 가진다면, INNER JOIN 을 할 수 없다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS foo (
      *      id SERIAL PRIMARY KEY,
      *      baz INT NOT NULL
@@ -380,7 +380,7 @@ class Ex11_Join: AbstractR2dbcExposedTest() {
      * 동일 테이블을 Alias 를 이용해 Left Join 하기
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id,
      *        users."name",
      *        users.city_id,
@@ -433,7 +433,7 @@ class Ex11_Join: AbstractR2dbcExposedTest() {
      * 추가적인 조건절을 가진 Join
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(*)
      *   FROM CITIES INNER JOIN USERS u2
      *          ON CITIES.CITY_ID = u2.CITY_ID
@@ -459,7 +459,7 @@ class Ex11_Join: AbstractR2dbcExposedTest() {
      * Main table에만 데이터가 있고, Main table을 참조하는 Join table에 데이터가 없는 경우에는 null을 반환해야 한다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT jointable."dataCol"
      *   FROM maintable
      *      LEFT JOIN jointable ON jointable."idCol" = maintable."idCol"

@@ -86,7 +86,7 @@ class Ex10_OrderBy: AbstractR2dbcExposedTest() {
      * Users 테이블의 `city_id` 컬럼을 기준으로 내림차순 정렬하고, 그 다음 `id` 컬럼을 기준으로 오름차순 정렬합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users
      *  ORDER BY users.city_id DESC, users.id ASC
@@ -119,7 +119,7 @@ class Ex10_OrderBy: AbstractR2dbcExposedTest() {
      * Users 테이블의 `city_id` 컬럼을 기준으로 내림차순 정렬하고, 그 다음 `id` 컬럼을 기준으로 오름차순 정렬합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users
      *  ORDER BY users.city_id DESC, users.id ASC
@@ -154,7 +154,7 @@ class Ex10_OrderBy: AbstractR2dbcExposedTest() {
      * `orderBy` 함수와 [groupBy] 함수를 함께 사용하는 예
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT cities."name", COUNT(users.id)
      *   FROM cities INNER JOIN users ON cities.city_id = users.city_id
      *  GROUP BY cities."name"
@@ -186,7 +186,7 @@ class Ex10_OrderBy: AbstractR2dbcExposedTest() {
      * Expression을 사용하여 정렬하는 예
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users
      *  ORDER BY SUBSTRING(users.id, 2, 1) ASC
@@ -212,7 +212,7 @@ class Ex10_OrderBy: AbstractR2dbcExposedTest() {
      * [wrapAsExpression]을 사용하여 subquery를 expression으로 사용할 수 있다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT cities.city_id,
      *        cities."name"
      *   FROM cities
@@ -312,7 +312,7 @@ class Ex10_OrderBy: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS nullablestrings (
      *      id SERIAL PRIMARY KEY,
      *      "name" VARCHAR(50) NULL

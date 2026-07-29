@@ -82,7 +82,7 @@ abstract class Ex14_MergeBase: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS "source" (
      *      id SERIAL PRIMARY KEY,
      *      "key" VARCHAR(128) NOT NULL,
@@ -110,7 +110,7 @@ abstract class Ex14_MergeBase: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS dest (
      *      id SERIAL PRIMARY KEY,
      *      "key" VARCHAR(128) NOT NULL,

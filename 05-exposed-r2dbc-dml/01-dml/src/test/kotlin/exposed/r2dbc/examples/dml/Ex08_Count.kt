@@ -43,7 +43,7 @@ class Ex08_Count: AbstractR2dbcExposedTest() {
      * [count] with `withDistinct` 예
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * -- distinct with selectAll
      * SELECT COUNT(*)
      *   FROM (SELECT DISTINCT cities.city_id Cities_city_id,
@@ -56,7 +56,7 @@ class Ex08_Count: AbstractR2dbcExposedTest() {
      *        ) subquery
      * ```
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * -- distinct with cities.city_id, users.id
      * SELECT COUNT(*)
      *   FROM (SELECT DISTINCT cities.city_id Cities_city_id,
@@ -86,7 +86,7 @@ class Ex08_Count: AbstractR2dbcExposedTest() {
      * 특정 컬럼에 count 함수 적용하기
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(DISTINCT cities.city_id) FROM cities;
      * SELECT COUNT(users.id) FROM users
      * ```
@@ -171,7 +171,7 @@ class Ex08_Count: AbstractR2dbcExposedTest() {
                 tester.insert { it[tester.amount] = 99 }
             }
 
-            // count alias is generated for any query with distinct/groupBy/limit & throws if schema name included
+            // distinct/groupBy/limit이 포함된 query에는 count alias가 생성되며 schema name이 들어오면 예외가 발생한다.
             tester.select(tester.amount)
                 .withDistinct()
                 .count().toInt() shouldBeEqualTo 1

@@ -56,7 +56,7 @@ class Ex40_LateralJoin: AbstractR2dbcExposedTest() {
      * ### Lateral Join Query
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT parent.id,
      *        parent."value",
      *        q0.id,
@@ -247,7 +247,7 @@ class Ex40_LateralJoin: AbstractR2dbcExposedTest() {
      * Parent Table
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS parent (
      *      id SERIAL PRIMARY KEY,
      *      "value" INT NOT NULL
@@ -261,7 +261,7 @@ class Ex40_LateralJoin: AbstractR2dbcExposedTest() {
     /**
      * Child Table
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS child (
      *      id SERIAL PRIMARY KEY,
      *      parent_id INT NOT NULL,

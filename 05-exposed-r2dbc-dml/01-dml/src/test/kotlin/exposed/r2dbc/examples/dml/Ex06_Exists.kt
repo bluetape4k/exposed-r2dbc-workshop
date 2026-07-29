@@ -42,7 +42,7 @@ class Ex06_Exists: AbstractR2dbcExposedTest() {
      * [exists]를 조건절에 사용하는 예
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users
      *  WHERE EXISTS (
@@ -170,7 +170,7 @@ class Ex06_Exists: AbstractR2dbcExposedTest() {
      * [exists] 를 WHERE 절에 이용한 예제입니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users
      *  WHERE EXISTS (SELECT userdata.user_id
@@ -209,7 +209,7 @@ class Ex06_Exists: AbstractR2dbcExposedTest() {
      * [exists] 를 WHERE 절에 이용한 예제입니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users.id, users."name", users.city_id, users.flags
      *   FROM users
      *  WHERE EXISTS (SELECT userdata.user_id

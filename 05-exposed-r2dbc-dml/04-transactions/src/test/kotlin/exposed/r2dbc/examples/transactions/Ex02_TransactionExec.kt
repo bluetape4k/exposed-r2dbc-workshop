@@ -41,7 +41,7 @@ class Ex02_TransactionExec: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE SEQUENCE IF NOT EXISTS exec_id_seq
      *      START WITH 1 MINVALUE 1 MAXVALUE 9223372036854775807;
      *

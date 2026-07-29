@@ -37,7 +37,7 @@ class Ex01_BooleanColumnType: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS booleantable (
      *      id SERIAL PRIMARY KEY,
      *      "boolColumn" BOOLEAN NOT NULL
@@ -76,7 +76,7 @@ class Ex01_BooleanColumnType: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT booleantable.id, booleantable."boolColumn"
      *   FROM booleantable
      *  WHERE booleantable."boolColumn" = TRUE;
@@ -136,7 +136,7 @@ class Ex01_BooleanColumnType: AbstractR2dbcExposedTest() {
     fun `custom Char Boolean Column Type`(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS tester (
          *      char_bool CHAR NOT NULL,
          *      char_bool_default CHAR DEFAULT 'N' NOT NULL,
@@ -164,7 +164,7 @@ class Ex01_BooleanColumnType: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT COUNT(*)
              *   FROM tester
              *  WHERE (tester.char_bool = 'Y')
