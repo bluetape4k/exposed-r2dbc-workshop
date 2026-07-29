@@ -43,7 +43,7 @@ class CompressedBinaryColumnTypeTest: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS t1 (
      *      id SERIAL PRIMARY KEY,
      *      lz4_data bytea NULL,

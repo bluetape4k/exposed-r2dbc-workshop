@@ -74,7 +74,7 @@ class Ex02_Money: AbstractR2dbcExposedTest() {
      * Money 를 사용하는 테스트를 실행합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO accounts (composite_money, "composite_money_C")
      * VALUES (10.00000, 'USD');
      *
@@ -97,7 +97,7 @@ class Ex02_Money: AbstractR2dbcExposedTest() {
      * Floating 값을 가지는 Money 를 사용하는 테스트를 실행합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO accounts (composite_money, "composite_money_C")
      * VALUES (0.12345, 'USD');
      *
@@ -120,7 +120,7 @@ class Ex02_Money: AbstractR2dbcExposedTest() {
      * Null 값을 가지는 Money 를 사용하는 테스트를 실행합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO accounts (composite_money, "composite_money_C")
      * VALUES (NULL, NULL);
      *
@@ -241,7 +241,7 @@ class Ex02_Money: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * SELECT tester.currency,
              *        tester.nullable_currency
              *   FROM tester

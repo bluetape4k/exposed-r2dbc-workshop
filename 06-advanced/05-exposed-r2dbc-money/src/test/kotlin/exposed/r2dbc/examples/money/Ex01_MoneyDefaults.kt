@@ -37,7 +37,7 @@ class Ex01_MoneyDefaults: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS tablewithdbdefault (
      *      id SERIAL PRIMARY KEY,
      *      field VARCHAR(100) NOT NULL,

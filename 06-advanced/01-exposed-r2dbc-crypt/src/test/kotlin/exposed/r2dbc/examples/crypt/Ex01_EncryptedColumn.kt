@@ -104,7 +104,7 @@ class Ex01_EncryptedColumn: AbstractR2dbcExposedTest() {
     fun `encrypted column type with a string`(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS stringtable (
          *      id SERIAL PRIMARY KEY,
          *      "name" VARCHAR(80) NOT NULL,        -- AES_256_PBE_CBC
@@ -187,7 +187,7 @@ class Ex01_EncryptedColumn: AbstractR2dbcExposedTest() {
     fun `update encrypted column type`(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS stringtable (
          *      id SERIAL PRIMARY KEY,
          *      "name" VARCHAR(100) NOT NULL,       -- AES_256_PBE_GCM
@@ -209,7 +209,7 @@ class Ex01_EncryptedColumn: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * INSERT INTO stringtable ("name", city, address)
              * VALUES (GLYN2dtSPlEklEDqu2WuXdsOtQBLSUZ+5QgW8AdrHvfVj5JBQSQT5Q==,
              *        [B@677349fb,
@@ -233,7 +233,7 @@ class Ex01_EncryptedColumn: AbstractR2dbcExposedTest() {
 
             /**
              * ```sql
-             * -- Postgres
+             * -- PostgreSQL
              * UPDATE stringtable
              *    SET "name"=V8kN75IkkYqYAejR/Xz4Vs7hakXQGRrVL7vcCzTRku8dgwfqR5Ft+tE=,
              *        city=[B@4466cf5d,

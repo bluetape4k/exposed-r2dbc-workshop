@@ -43,7 +43,7 @@ class KsuidMillisTableTest: AbstractCustomIdTableTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS t_ksuid_millis (
      *      id VARCHAR(27) PRIMARY KEY,
      *      "name" VARCHAR(255) NOT NULL,
