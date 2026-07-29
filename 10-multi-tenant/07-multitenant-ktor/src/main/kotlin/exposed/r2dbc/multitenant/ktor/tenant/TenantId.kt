@@ -7,6 +7,6 @@ internal val TenantAttributeKey = AttributeKey<Tenants.Tenant>("Tenant")
 internal const val TenantHeader = "X-TENANT-ID"
 
 /**
- * Raised when the request tenant header cannot be resolved to a supported tenant.
+ * request tenant header가 지원 tenant로 해석되지 않을 때 발생한다.
  */
 class InvalidTenantException(message: String): IllegalArgumentException(message)
