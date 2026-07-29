@@ -63,7 +63,7 @@ class Ex01_Coroutines: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS coroutines_tester (id SERIAL PRIMARY KEY)
      * ```
      */

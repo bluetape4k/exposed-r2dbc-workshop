@@ -41,7 +41,7 @@ class Ex02_Person: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres:
+     * -- PostgreSQL:
      * -- DSL
      * SELECT COUNT(*) FROM persons WHERE persons.id < 3;
      * SELECT COUNT(persons.id) FROM persons WHERE persons.id < 3;
@@ -66,7 +66,7 @@ class Ex02_Person: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres:
+     * -- PostgreSQL:
      * SELECT COUNT(*) FROM persons;
      *
      * SELECT COUNT(*) FROM persons;
@@ -98,7 +98,7 @@ class Ex02_Person: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT COUNT(DISTINCT persons.last_name)
      *   FROM persons
      * ```
@@ -128,7 +128,7 @@ class Ex02_Person: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * DELETE FROM persons WHERE persons.id = 7
      * ```
      */

@@ -63,7 +63,7 @@ dependencies {
     implementation(libs.testcontainers.postgresql)
     runtimeOnly(libs.postgresql.driver)
 
-    // Spring Boot
+    // Spring Boot 통합 의존성
     implementation("org.springframework.boot:spring-boot-autoconfigure")
     annotationProcessor("org.springframework.boot:spring-boot-autoconfigure-processor")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
@@ -82,13 +82,13 @@ dependencies {
         exclude(module = "mockito-core")
     }
 
-    // Coroutines
+    // 코루틴 지원 의존성
     implementation(libs.bluetape4k.coroutines)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.reactor)
     testImplementation(libs.kotlinx.coroutines.test)
 
-    // Reactor
+    // Reactor 연동 의존성
     implementation(libs.reactor.netty)
     implementation(libs.reactor.kotlin.extensions)
     testImplementation(libs.reactor.test)
