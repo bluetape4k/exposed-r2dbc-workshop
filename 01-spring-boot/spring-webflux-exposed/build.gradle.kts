@@ -38,13 +38,13 @@ dependencies {
 
     implementation(project(":exposed-r2dbc-shared"))
 
-    // bluetape4k
+    // bluetape4k 테스트/검증 의존성
     implementation(libs.exposed.r2dbc)
     testImplementation(libs.bluetape4k.junit5)
     implementation(libs.bluetape4k.testcontainers)
     testImplementation(libs.bluetape4k.spring.boot.core)
 
-    // Jackson
+    // Jackson JSON 직렬화 의존성
     implementation(libs.bluetape4k.jackson2)
     implementation(libs.jackson.module.kotlin)
     implementation(libs.jackson.module.blackbird)
@@ -71,7 +71,7 @@ dependencies {
     implementation(libs.testcontainers.postgresql)
     runtimeOnly(libs.postgresql.driver)
 
-    // Spring Boot
+    // Spring Boot WebFlux 의존성
     implementation("org.springframework.boot:spring-boot-autoconfigure")
     annotationProcessor("org.springframework.boot:spring-boot-autoconfigure-processor")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
@@ -89,13 +89,13 @@ dependencies {
         exclude(module = "mockito-core")
     }
 
-    // Coroutines
+    // 코루틴 지원 의존성
     implementation(libs.bluetape4k.coroutines)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.reactor)
     testImplementation(libs.kotlinx.coroutines.test)
 
-    // Reactor
+    // Reactor 연동 의존성
     implementation(libs.reactor.netty)
     implementation(libs.reactor.kotlin.extensions)
     testImplementation(libs.reactor.test)
@@ -103,7 +103,7 @@ dependencies {
     // SpringDoc - OpenAPI 3.0
     implementation(libs.springdoc.openapi.starter.webflux.ui)
 
-    // Gatling
+    // Gatling 부하 테스트 의존성
     implementation(libs.gatling.app)
     implementation(libs.gatling.core.java)
     implementation(libs.gatling.http.java)

@@ -99,7 +99,7 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
     fun `table exists`(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS "testTable" (
          *      id INT PRIMARY KEY,
          *      "name" VARCHAR(42) NOT NULL
@@ -152,7 +152,7 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
                 it.prepareSQL(this, prepared = false) shouldBeEqualTo expectedSelect
             }
 
-            // check that identifiers match with returned jdbc metadata
+            // 반환된 JDBC metadata와 identifier가 일치하는지 확인한다.
 //            val statements = MigrationUtils.statementsRequiredForDatabaseMigration(tester, withLogs = false)
 //            statements.isEmpty().shouldBeTrue()
 
@@ -231,7 +231,7 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
                 it.prepareSQL(this, prepared = false) shouldBeEqualTo expectedSelect
             }
 
-            // check that identifiers match with returned jdbc metadata
+            // 반환된 JDBC metadata와 identifier가 일치하는지 확인한다.
 //            val statements = MigrationUtils.statementsRequiredForDatabaseMigration(keywordTable, withLogs = false)
 //            statements.shouldBeEmpty()
 
@@ -339,7 +339,7 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
         Assumptions.assumeTrue { testDB != TestDB.MYSQL_V5 }
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS with_different_column_types (
          *      id INT,
          *      "name" VARCHAR(42),
@@ -383,9 +383,9 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `auto increment on unsigned columns`(testDB: TestDB) = runTest {
         /**
-         * separate tables are necessary as some db only allow a single column to be auto-incrementing
+         * 일부 DB는 auto-increment column을 하나만 허용하므로 별도 table이 필요하다
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS u_int_tester (
          *      id BIGSERIAL PRIMARY KEY,
          *
@@ -401,7 +401,7 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
 
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS u_long_tester (
          *      id BIGSERIAL PRIMARY KEY
          * )
@@ -429,7 +429,7 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
     fun `table with multi PK and auto increment`(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS footable (
          *      bar INT,
          *      id BIGSERIAL,
@@ -515,7 +515,7 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
     fun `indices 01`(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS t1 (
          *      id INT PRIMARY KEY,
          *      "name" VARCHAR(255) NOT NULL
@@ -637,7 +637,7 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
     fun `unique indices 01`(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS t1 (
          *      id INT PRIMARY KEY,
          *      "name" VARCHAR(255) NOT NULL
@@ -673,7 +673,7 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
     fun `unique indices custom name`(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS t1 (
          *      id INT PRIMARY KEY,
          *      "name" VARCHAR(255) NOT NULL
@@ -709,7 +709,7 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
     fun `multi column index`(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS t1 (
          *      "type" VARCHAR(255) NOT NULL,
          *      "name" VARCHAR(255) NOT NULL
@@ -755,7 +755,7 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
     fun `multi column index custom name`(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS t1 (
          *      "type" VARCHAR(255) NOT NULL,
          *      "name" VARCHAR(255) NOT NULL
@@ -804,7 +804,7 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
 
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS tablewithbinary (
          *      "binaryColumn" bytea NOT NULL
          * );
@@ -848,7 +848,7 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
     fun `binary columns`(testDB: TestDB) = runTest {
         /**
          * ```sql
-         * -- Postgres
+         * -- PostgreSQL
          * CREATE TABLE IF NOT EXISTS t (
          *      "binary" bytea NULL,
          *      "byteCol" bytea NOT NULL
@@ -963,7 +963,7 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS table1 (
      *      id SERIAL PRIMARY KEY,
      *      "teamId" INT NOT NULL
@@ -981,7 +981,7 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS table2 (
      *      id SERIAL PRIMARY KEY,
      *      "teamId" INT NULL
@@ -1092,7 +1092,7 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
         Assumptions.assumeTrue { testDB in TestDB.ALL_POSTGRES_LIKE + TestDB.MYSQL_V5 }
 
         /**
-         * Postgres:
+         * PostgreSQL DDL 예시:
          * ```sql
          * CREATE TABLE IF NOT EXISTS differnt_text_column_types (
          *      id SERIAL PRIMARY KEY,
@@ -1138,7 +1138,7 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
                 listOf(LowerCase(testTable.txt), UpperCase(testTable.txtMed), LowerCase(testTable.txtLong))
             )
 
-            // just to be sure new type didn't break the functions
+            // 새 type이 기존 function 동작을 깨지 않았는지 확인한다.
             testTable.select(concat)
                 .collect {
                     it[concat] shouldBeEqualTo "1txt 1TXTMED 1txtlong"
@@ -1163,7 +1163,7 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
     }
 
     /**
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * CREATE TABLE IF NOT EXISTS checktable (
      *      positive INT NOT NULL,
@@ -1208,7 +1208,7 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
     }
 
     /**
-     * Postgres:
+     * PostgreSQL DDL 예시:
      * ```sql
      * CREATE TABLE IF NOT EXISTS multichecktable (
      *      positive INT NOT NULL,
@@ -1288,7 +1288,7 @@ class Ex10_DDL_Examples: AbstractR2dbcExposedTest() {
                 val negative = -9
                 tester.insert { it[amount] = negative }
 
-                // fails to create check constraint because negative values already stored
+                // 음수 값이 이미 저장되어 있어 check constraint 생성이 실패한다.
                 assertFailAndRollback("Check constraint violation") {
                     exec(createConstraint.single())
                 }

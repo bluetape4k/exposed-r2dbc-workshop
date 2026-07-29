@@ -20,7 +20,7 @@ object Schema: KLoggingChannel() {
      * 도시 정보를 저장하는 테이블
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      *
      * CREATE TABLE IF NOT EXISTS cities (
      *      id SERIAL,

@@ -37,7 +37,7 @@ class R2dbcExposedSQLExample: AbstractR2dbcExposedTest() {
      * 특정 조건에 맞는 행을 UPDATE 합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * UPDATE "users"
      *    SET "name"='Alexey'
      *  WHERE "users".ID = 'alex'
@@ -70,7 +70,7 @@ class R2dbcExposedSQLExample: AbstractR2dbcExposedTest() {
      * 조건절에 따라 행을 삭제합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * DELETE
      *   FROM "users"
      *  WHERE "users"."name" LIKE '%thing'
@@ -95,7 +95,7 @@ class R2dbcExposedSQLExample: AbstractR2dbcExposedTest() {
      * Manual Join 조건을 추가로 지정합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users."name",
      *        cities."name"
      *   FROM users INNER JOIN cities ON cities.id = users.city_id
@@ -129,7 +129,7 @@ class R2dbcExposedSQLExample: AbstractR2dbcExposedTest() {
      * Foreign Key를 이용하여 Join을 수행합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT users."name",
      *        users.city_id,
      *        cities."name"
@@ -161,7 +161,7 @@ class R2dbcExposedSQLExample: AbstractR2dbcExposedTest() {
      * `GROUP BY` 와 집계 함수를 사용합니다.
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * SELECT cities."name",
      *        COUNT(users.id)
      *   FROM cities INNER JOIN users ON cities.id = users.city_id

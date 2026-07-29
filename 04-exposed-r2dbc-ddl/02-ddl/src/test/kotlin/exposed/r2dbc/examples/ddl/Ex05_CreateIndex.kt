@@ -61,7 +61,7 @@ class Ex05_CreateIndex: AbstractR2dbcExposedTest() {
      * 일반적인 인덱스 생성하기
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS tester (
      *      id SERIAL PRIMARY KEY,
      *      "name" VARCHAR(255) NOT NULL
@@ -99,7 +99,7 @@ class Ex05_CreateIndex: AbstractR2dbcExposedTest() {
      * Hash Index 생성하기
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS tester (
      *      id SERIAL PRIMARY KEY,
      *      "name" VARCHAR(255) NOT NULL
@@ -145,7 +145,7 @@ class Ex05_CreateIndex: AbstractR2dbcExposedTest() {
     /**
      * 특정 조건일 때만 인덱싱 되는 partial index 정의
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS tester (
      *      id SERIAL PRIMARY KEY,
      *      "name" VARCHAR(50) NOT NULL,
@@ -200,7 +200,7 @@ class Ex05_CreateIndex: AbstractR2dbcExposedTest() {
      * Indexing 조건을 함수로 표현하는 `functional index` 생성하기
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS tester (
      *      id SERIAL PRIMARY KEY,
      *      amount INT NOT NULL,

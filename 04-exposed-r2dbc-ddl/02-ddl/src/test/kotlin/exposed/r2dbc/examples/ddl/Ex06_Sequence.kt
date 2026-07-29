@@ -44,7 +44,7 @@ class Ex06_Sequence: AbstractR2dbcExposedTest() {
      * SchemaUtils.createSequence(myseq)
      * ```
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE SEQUENCE IF NOT EXISTS my_sequence
      *      START WITH 4 INCREMENT BY 2 MINVALUE 1 MAXVALUE 100 CYCLE CACHE 20
      * ```
@@ -63,7 +63,7 @@ class Ex06_Sequence: AbstractR2dbcExposedTest() {
      * 시퀀스 생성하기
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE SEQUENCE IF NOT EXISTS my_sequence
      *      START WITH 4
      *      INCREMENT BY 2
@@ -85,7 +85,7 @@ class Ex06_Sequence: AbstractR2dbcExposedTest() {
 
     /**
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE TABLE IF NOT EXISTS developer (
      *      id INT, "name" VARCHAR(255),
      *      CONSTRAINT pk_developer PRIMARY KEY (id, "name")
@@ -103,7 +103,7 @@ class Ex06_Sequence: AbstractR2dbcExposedTest() {
      * 시퀀스를 사용하여 컬럼 값 지정하기
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * INSERT INTO developer (id, "name") VALUES (NEXTVAL('my_sequence'), 'John Doe');
      * INSERT INTO developer (id, "name") VALUES (NEXTVAL('my_sequence'), 'Jane Doe');
      * ```
@@ -143,7 +143,7 @@ class Ex06_Sequence: AbstractR2dbcExposedTest() {
      * `autoIncrement` 에 custom sequence 지정하기
      *
      * ```sql
-     * -- Postgres
+     * -- PostgreSQL
      * CREATE SEQUENCE IF NOT EXISTS my_sequence
      *      START WITH 4 INCREMENT BY 2 MINVALUE 1 MAXVALUE 100 CYCLE CACHE 20;
      *
