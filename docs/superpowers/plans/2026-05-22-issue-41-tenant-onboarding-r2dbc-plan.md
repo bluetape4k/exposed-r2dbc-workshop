@@ -311,7 +311,7 @@ Model: `${CLAUDE_ADVISOR_MODEL:-claude-opus-4-7}`
 - CI gate:
   - `statusCheckRollup` all `SUCCESS`/`SKIPPED`.
 - Merge using rebase merge 다음 위치 뒤: requested workflow gate is satisfied.
-- Sync local `develop` 다음 위치 뒤: merge, prune/cleanup worktree, run qmd update/embed.
+- Sync local `develop` 다음 위치 뒤: merge, prune/cleanup worktree, run gno update/embed.
 
 ## 단계 3 체크리스트 완료 보고
 

@@ -2,7 +2,7 @@
 
 ## 단계 1 - Baseline
 
-- 사용: qmd for #35, exposed-workshop #49, and prior Ktor module lessons.
+- 사용: GNO for #35, exposed-workshop #49, and prior Ktor module lessons.
 - Inspect `11-high-performance/03-routing-datasource`, #34, #69, and #33
   design notes.
 - 실행: targeted compile/test 다음 위치 뒤: scaffolding; no baseline source change is
@@ -68,4 +68,4 @@
 - Open PR with `Closes #35`.
 - 추가: 단계 7-R review evidence comment and attempt formal review.
 - Wait for CI, rebase merge, sync develop, cleanup branch/worktree, refresh
-  qmd, and verify issue/PR state.
+  GNO, and verify issue/PR state.

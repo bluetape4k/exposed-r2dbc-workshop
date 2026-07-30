@@ -2,7 +2,7 @@
 
 ## 단계 1 - Baseline
 
-- Confirm qmd issue context for #34, #69, and exposed-workshop #47/#48.
+- Confirm GNO issue context for #34, #69, and exposed-workshop #47/#48.
 - 실행: `:02-cache-strategies-r2dbc:test` with H2 to prove the existing cache
   module is healthy before adding the Ktor counterpart.
 
@@ -90,5 +90,5 @@
 - 커밋: with Lore trailers.
 - Open PR with `Closes #34`.
 - Post 단계 7-R review evidence and formal PR review.
-- Wait for CI, rebase-merge, sync local `develop`, refresh qmd, and verify
-  issue/PR state in qmd.
+- Wait for CI, rebase-merge, sync local `develop`, refresh GNO, and verify
+  issue/PR state in GNO.

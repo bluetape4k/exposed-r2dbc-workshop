@@ -45,7 +45,7 @@ chapter wiring, which remains #42, or Ktor examples, which remain #33/#69.
   - the same routing contract can be composed with WebFlux security.
   - only the authorized-tenant filter writes the request tenant context.
   - `DataInitializer` may be an allowlisted provisioning/seed boundary.
-- Existing qmd lessons require:
+- Existing GNO lessons require:
   - keep `TenantTransactionExecutor` as the only request-path Exposed
     transaction boundary unless the architecture test allowlist is deliberately
     updated.
@@ -618,7 +618,7 @@ Model: `${CLAUDE_ADVISOR_MODEL:-claude-opus-4-7}`
 | Item | Status | Notes |
 |------|--------|-------|
 | Target repository confirmed | Done | Worktree branch `feat/issue-41-tenant-onboarding` at `bbf5346`. |
-| Relevant memory anchors searched | Done | qmd query found #38/#39/#40 specs and #39/#40 lessons. |
+| Relevant memory anchors searched | Done | gno query found #38/#39/#40 specs and #39/#40 lessons. |
 | Review-only boundary recorded | N/A | User requested implementation workflow, not review-only. |
 | Concrete artifact inspected | Done | GitHub issue #41 and exposed-workshop #55 inspected. |
 | User intent and boundaries clear | Done | Work order and PNG diagram requirement are explicit. |

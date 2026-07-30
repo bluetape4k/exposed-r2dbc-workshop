@@ -4,7 +4,7 @@
 
 Type A Full Design. 이 module은 a new chapter 11 example with
 coroutine/concurrency behavior, so use the full spec, plan, implementation,
-verification, dual-review, lessons, PR, CI, merge, and qmd-sync sequence.
+verification, dual-review, lessons, PR, CI, merge, and GNO-sync sequence.
 
 ## 작업
 
@@ -100,8 +100,8 @@ verification, dual-review, lessons, PR, CI, merge, and qmd-sync sequence.
     - Rebase merge when green.
     - Remove feature worktree and branch.
     - Fast-forward local `develop`.
-    - 실행: GitHub qmd sync, `qmd update`, and `QMD_LLAMA_GPU=false qmd embed`.
-    - 검증: qmd sees issue #69 closed and the PR merged.
+    - 실행: GitHub GNO sync, `gno update`, and `gno embed`.
+    - 검증: GNO sees issue #69 closed and the PR merged.
 
 ## 위험 제어
 

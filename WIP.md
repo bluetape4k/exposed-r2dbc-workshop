@@ -10,7 +10,7 @@
 - 테스트 정리와 Kluent → `bluetape4k-assertions` 마이그레이션이 병합됨.
 - README hero/architecture refresh가 병합됨.
 - 새 `bluetape4k-exposed` API를 위한 CTE Query Builder 예제 브랜치는 별도로 존재함.
-- QMD 기반 audit가 shared `withTables()` cancellation handling 이슈 `#54`를 등록함.
+- GNO 기반 audit가 shared `withTables()` cancellation handling 이슈 `#54`를 등록함.
 
 ## 현재 방향
 

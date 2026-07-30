@@ -8,7 +8,7 @@ Child issues #44-#49 cover application architecture, authentication/session,
 realtime outbox delivery, outbound HTTP idempotency, observability/readiness,
 and documentation/verification wiring.
 
-qmd preflight found no prior Issue #43 design artifact. Existing workshop
+GNO preflight found no prior Issue #43 design artifact. Existing workshop
 structure uses chapter directories with leaf Gradle module names and keeps
 paired English/Korean README files for discoverability.
 
