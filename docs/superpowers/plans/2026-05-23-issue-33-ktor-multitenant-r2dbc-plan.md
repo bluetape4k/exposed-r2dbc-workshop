@@ -155,7 +155,7 @@ executed 15 tests; Ktor production integration tests also passed.
     - 커밋: with Lore trailers.
     - Push, create PR with `Closes #33`, post 단계 7-R PR comment and formal
       review.
-    - CI success를 기다리고, rebase merge, branch/worktree cleanup, qmd sync를 수행한다.
+    - CI success를 기다리고, rebase merge, branch/worktree cleanup, GNO sync를 수행한다.
 
 ## 위험 제어
 

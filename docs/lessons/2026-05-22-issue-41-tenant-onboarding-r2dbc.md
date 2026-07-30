@@ -29,4 +29,4 @@ Module은 onboarding이 shared-table tenancy, fixed tenant pool, tenant authoriz
 - Tenant pool lifecycle은 request path에서 nonblocking으로 유지한다. Suspend code에서 R2DBC pool warmup과 disposal을 호출할 때 `awaitSingle()`/`awaitSingleOrNull()`을 사용한다.
 - Failure injection test는 post-registration cleanup뿐 아니라 모든 provisioning checkpoint를 다뤄야 한다.
 - `bufferUntilChanged` grouping은 row를 flow로 변환하기 전에 group key에 대한 명시적인 SQL `orderBy`가 필요하다.
-- 이 작업 중 local `bluetape4k-github` qmd sync에는 `exposed-r2dbc-workshop`이 포함되지 않았다. 이 repository의 issue snapshot을 qmd에 의존하기 전에 해당 collection을 refresh하거나 sync script를 확장한다.
+- 이 작업 중 local `bluetape4k-github` GNO sync에는 `exposed-r2dbc-workshop`이 포함되지 않았다. 이 repository의 issue snapshot을 GNO에 의존하기 전에 해당 collection을 refresh하거나 sync script를 확장한다.
