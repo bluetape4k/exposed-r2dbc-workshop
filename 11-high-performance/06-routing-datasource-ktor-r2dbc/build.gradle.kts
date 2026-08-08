@@ -14,6 +14,7 @@ exposed {
 
 dependencies {
     implementation(project(":exposed-r2dbc-shared"))
+    implementation(libs.bluetape4k.r2dbc)
 
     implementation(libs.jetbrains.exposed.r2dbc)
     implementation(libs.exposed.r2dbc)

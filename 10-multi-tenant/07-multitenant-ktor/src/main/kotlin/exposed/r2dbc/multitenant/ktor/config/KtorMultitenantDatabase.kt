@@ -1,10 +1,8 @@
 package exposed.r2dbc.multitenant.ktor.config
 
+import exposed.r2dbc.shared.config.h2ConnectionFactoryOptions
+import io.bluetape4k.r2dbc.pool.connectionPoolOf
 import io.r2dbc.pool.ConnectionPool
-import io.r2dbc.pool.ConnectionPoolConfiguration
-import io.r2dbc.spi.ConnectionFactories
-import io.r2dbc.spi.ConnectionFactoryOptions
-import io.r2dbc.spi.Option
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabaseConfig
@@ -30,20 +28,14 @@ class KtorMultitenantDatabase private constructor(
             databaseName: String = "ktor_multitenant",
             maxPoolSize: Int = 8,
         ): KtorMultitenantDatabase {
-            val options = ConnectionFactoryOptions.builder()
-                .option(ConnectionFactoryOptions.DRIVER, "h2")
-                .option(ConnectionFactoryOptions.PROTOCOL, "mem")
-                .option(ConnectionFactoryOptions.DATABASE, databaseName)
-                .option(Option.valueOf("DB_CLOSE_DELAY"), "-1")
-                .option(Option.valueOf("DB_CLOSE_ON_EXIT"), "FALSE")
-                .build()
-            val pool = ConnectionPool(
-                ConnectionPoolConfiguration.builder(ConnectionFactories.get(options))
-                    .maxSize(maxPoolSize)
-                    .maxCreateConnectionTime(Duration.ofSeconds(5))
-                    .maxAcquireTime(Duration.ofSeconds(3))
-                    .build()
-            )
+            val options = h2ConnectionFactoryOptions(database = databaseName)
+            val pool = connectionPoolOf(options) {
+                maxSize = maxPoolSize
+                initialSize = minOf(10, maxPoolSize)
+                minIdle = 0
+                maxCreateConnectionTime = Duration.ofSeconds(5)
+                maxAcquireTime = Duration.ofSeconds(3)
+            }
             val config = R2dbcDatabaseConfig {
                 dispatcher = Dispatchers.IO
                 // Exposed uses the options for dialect metadata while the pool owns connection acquisition.

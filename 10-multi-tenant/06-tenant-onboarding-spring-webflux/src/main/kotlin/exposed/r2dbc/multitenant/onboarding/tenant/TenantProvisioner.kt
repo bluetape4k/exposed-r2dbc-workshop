@@ -8,12 +8,11 @@ import exposed.r2dbc.multitenant.onboarding.domain.model.MovieWithActorRecord
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.info
 import io.bluetape4k.logging.warn
+import io.bluetape4k.r2dbc.pool.connectionFactoryOptionsOf
+import io.bluetape4k.r2dbc.pool.connectionPoolOf
 import io.micrometer.core.instrument.Gauge
 import io.micrometer.core.instrument.MeterRegistry
 import io.r2dbc.pool.ConnectionPool
-import io.r2dbc.pool.ConnectionPoolConfiguration
-import io.r2dbc.spi.ConnectionFactories
-import io.r2dbc.spi.ConnectionFactoryOptions
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
@@ -86,7 +85,7 @@ class TenantProvisioner(
                 try {
                     failureSimulator.maybeFail(ProvisioningFailurePoint.AFTER_RESERVE)
                     log.info { "Tenant onboarding step=pool tenantId=$tenantId" }
-                    pool = ConnectionPool(poolConfiguration(r2dbcUrl))
+                    pool = poolConfiguration(r2dbcUrl)
                     withTimeout(properties.pool.maxCreateConnectionTime.toMillis()) {
                         pool.warmup().awaitSingle()
                     }
@@ -215,25 +214,23 @@ class TenantProvisioner(
     private fun tenantUrl(databaseName: String): String =
         "${properties.tenantUrlPrefix}$databaseName;${properties.tenantUrlOptions}"
 
-    private fun poolConfiguration(url: String): ConnectionPoolConfiguration {
-        val connectionFactory = ConnectionFactories.get(ConnectionFactoryOptions.parse(url))
-        return ConnectionPoolConfiguration.builder(connectionFactory)
-            .initialSize(properties.pool.initialSize)
-            .maxSize(properties.pool.maxSize)
-            .minIdle(properties.pool.minIdle)
-            .maxIdleTime(properties.pool.maxIdleTime)
-            .maxLifeTime(properties.pool.maxLifeTime)
-            .maxCreateConnectionTime(properties.pool.maxCreateConnectionTime)
-            .maxAcquireTime(properties.pool.maxAcquireTime)
-            .acquireRetry(properties.pool.acquireRetry)
-            .backgroundEvictionInterval(properties.pool.backgroundEvictionInterval)
-            .build()
-    }
+    private fun poolConfiguration(url: String): ConnectionPool =
+        connectionPoolOf(connectionFactoryOptionsOf(url)) {
+            initialSize = properties.pool.initialSize
+            maxSize = properties.pool.maxSize
+            minIdle = properties.pool.minIdle
+            maxIdleTime = properties.pool.maxIdleTime
+            maxLifeTime = properties.pool.maxLifeTime
+            maxCreateConnectionTime = properties.pool.maxCreateConnectionTime
+            maxAcquireTime = properties.pool.maxAcquireTime
+            acquireRetry = properties.pool.acquireRetry
+            backgroundEvictionInterval = properties.pool.backgroundEvictionInterval
+        }
 
     private fun databaseConfig(url: String): R2dbcDatabaseConfig.Builder =
         R2dbcDatabaseConfig {
             explicitDialect = H2Dialect()
-            connectionFactoryOptions = ConnectionFactoryOptions.parse(url)
+            connectionFactoryOptions = connectionFactoryOptionsOf(url)
         }
 }
 

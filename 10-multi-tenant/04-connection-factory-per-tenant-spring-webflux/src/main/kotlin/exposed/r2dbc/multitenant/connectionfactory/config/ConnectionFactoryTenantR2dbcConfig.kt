@@ -4,9 +4,9 @@ import exposed.r2dbc.multitenant.connectionfactory.tenant.TenantConnectionFactor
 import exposed.r2dbc.multitenant.connectionfactory.tenant.TenantRoutingConnectionFactory
 import exposed.r2dbc.multitenant.connectionfactory.tenant.Tenants
 import exposed.r2dbc.multitenant.connectionfactory.tenant.Tenants.Tenant
+import io.bluetape4k.r2dbc.pool.connectionFactoryOptionsOf
+import io.bluetape4k.r2dbc.pool.connectionPoolOf
 import io.r2dbc.pool.ConnectionPool
-import io.r2dbc.pool.ConnectionPoolConfiguration
-import io.r2dbc.spi.ConnectionFactories
 import io.r2dbc.spi.ConnectionFactory
 import io.r2dbc.spi.ConnectionFactoryOptions
 import kotlinx.coroutines.CoroutineDispatcher
@@ -47,7 +47,7 @@ class ConnectionFactoryTenantR2dbcConfig {
     ): TenantConnectionFactoryRegistry {
         val pools = Tenants.Tenant.entries.associateWith { tenant ->
             val definition = properties.definitionFor(tenant)
-            ConnectionPool(poolConfiguration(definition.url, poolProperties))
+            poolConfiguration(definition.url, poolProperties)
                 .also { it.warmup().block(poolProperties.maxCreateConnectionTime) }
         }
         return TenantConnectionFactoryRegistry(pools)
@@ -106,19 +106,16 @@ class ConnectionFactoryTenantR2dbcConfig {
     private fun poolConfiguration(
         url: String,
         properties: TenantConnectionPoolProperties,
-    ): ConnectionPoolConfiguration {
-        val connectionFactory = ConnectionFactories.get(ConnectionFactoryOptions.parse(url))
-        return ConnectionPoolConfiguration.builder(connectionFactory)
-            .maxIdleTime(properties.maxIdleTime)
-            .maxLifeTime(properties.maxLifeTime)
-            .maxCreateConnectionTime(properties.maxCreateConnectionTime)
-            .maxAcquireTime(properties.maxAcquireTime)
-            .maxSize(properties.maxSize)
-            .initialSize(properties.initialSize)
-            .minIdle(properties.minIdle)
-            .acquireRetry(properties.acquireRetry)
-            .backgroundEvictionInterval(properties.backgroundEvictionInterval)
-            .build()
+    ): ConnectionPool = connectionPoolOf(connectionFactoryOptionsOf(url)) {
+        maxIdleTime = properties.maxIdleTime
+        maxLifeTime = properties.maxLifeTime
+        maxCreateConnectionTime = properties.maxCreateConnectionTime
+        maxAcquireTime = properties.maxAcquireTime
+        maxSize = properties.maxSize
+        initialSize = properties.initialSize
+        minIdle = properties.minIdle
+        acquireRetry = properties.acquireRetry
+        backgroundEvictionInterval = properties.backgroundEvictionInterval
     }
 
     private fun r2dbcConfig(
@@ -127,7 +124,7 @@ class ConnectionFactoryTenantR2dbcConfig {
     ): R2dbcDatabaseConfig.Builder =
         R2dbcDatabaseConfig {
             this.dispatcher = dispatcher
-            this.connectionFactoryOptions = ConnectionFactoryOptions.parse(url)
+            this.connectionFactoryOptions = connectionFactoryOptionsOf(url)
         }
 }
 

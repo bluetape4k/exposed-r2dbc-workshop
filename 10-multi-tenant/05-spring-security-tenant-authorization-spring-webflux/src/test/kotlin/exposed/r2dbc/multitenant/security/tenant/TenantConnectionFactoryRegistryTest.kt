@@ -1,11 +1,9 @@
 package exposed.r2dbc.multitenant.security.tenant
 
+import exposed.r2dbc.shared.config.h2ConnectionFactoryOptions
 import io.bluetape4k.assertions.shouldBeEqualTo
+import io.bluetape4k.r2dbc.pool.connectionPoolOf
 import io.r2dbc.pool.ConnectionPool
-import io.r2dbc.pool.ConnectionPoolConfiguration
-import io.r2dbc.spi.ConnectionFactories
-import io.r2dbc.spi.ConnectionFactoryOptions
-import io.r2dbc.spi.Option
 import org.junit.jupiter.api.Test
 import java.time.Duration
 
@@ -27,20 +25,12 @@ class TenantConnectionFactoryRegistryTest {
         (registry.get(Tenants.Tenant.ENGLISH) as ConnectionPool).isDisposed shouldBeEqualTo true
     }
 
-    private fun connectionPool(databaseName: String): ConnectionPool {
-        val options = ConnectionFactoryOptions.builder()
-            .option(ConnectionFactoryOptions.DRIVER, "h2")
-            .option(ConnectionFactoryOptions.PROTOCOL, "mem")
-            .option(ConnectionFactoryOptions.DATABASE, databaseName)
-            .option(Option.valueOf("DB_CLOSE_DELAY"), "-1")
-            .option(Option.valueOf("DB_CLOSE_ON_EXIT"), "FALSE")
-            .build()
-        val config = ConnectionPoolConfiguration
-            .builder(ConnectionFactories.get(options))
-            .maxSize(1)
-            .maxCreateConnectionTime(Duration.ofSeconds(5))
-            .maxAcquireTime(Duration.ofSeconds(3))
-            .build()
-        return ConnectionPool(config)
-    }
+    private fun connectionPool(databaseName: String): ConnectionPool =
+        connectionPoolOf(h2ConnectionFactoryOptions(databaseName)) {
+            maxSize = 1
+            initialSize = 0
+            minIdle = 0
+            maxCreateConnectionTime = Duration.ofSeconds(5)
+            maxAcquireTime = Duration.ofSeconds(3)
+        }
 }

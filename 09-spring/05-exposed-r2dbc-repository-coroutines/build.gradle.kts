@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.jetbrains.exposed.java.time)
 
     // bluetape4k
+    implementation(libs.bluetape4k.r2dbc)
     implementation(libs.exposed.r2dbc)
 
     testImplementation(libs.bluetape4k.junit5)

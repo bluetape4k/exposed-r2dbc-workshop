@@ -36,6 +36,14 @@
 
 ## 진행 상태
 
-- 완료: CL-01~CL-06, CG-01~CG-03의 사전 조사·기준선 테스트·설계·실행 계획.
-- 진행 중: A-04/A-05 shared 계약과 예제 전환 구현.
-- 미완료: CG-04~CG-08, CG-14~CG-18 및 이슈 생성/read-back.
+- 완료: CL-01~CL-08, CG-01~CG-08, CG-14~CG-15, CG-17의 사전 조사·구현·검증.
+- 완료: shared `R2dbcConnectionOptions`와 옵션 회귀 테스트, Spring/Ktor/테넌트 예제의
+  `connectionFactoryOptionsOf`·`connectionPoolOf`·`connectionFactoryOf` 전환.
+- 완료: `./gradlew test -PuseFastDB=true --continue`와
+  `./gradlew build -x test -x detekt --continue` 성공, builder 잔여 검색과
+  `git diff --check` 성공.
+- 완료: Maven Central live POM/JAR/source 확인, upstream 전체 이슈 중복 재검색,
+  [bluetape4k-exposed #625](https://github.com/bluetape4k/bluetape4k-exposed/issues/625)
+  한국어 생성 및 read-back.
+- N/A: CG-09~CG-13 (PR·merge·release/publication을 요청하지 않음).
+- 진행 중: CG-16 runtime lane-complete/write-scope receipt와 CG-18 최종 DoD receipt.

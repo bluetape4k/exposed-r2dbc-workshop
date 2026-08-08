@@ -1,5 +1,7 @@
 package exposed.r2dbc.multitenant.resilientonboarding.tenant
 
+import exposed.r2dbc.shared.config.R2dbcServerCredentials
+import exposed.r2dbc.shared.config.postgresConnectionFactoryOptions
 import io.r2dbc.spi.ConnectionFactoryOptions
 import org.springframework.boot.context.properties.ConfigurationProperties
 
@@ -18,15 +20,10 @@ data class PostgreSqlTenantDatabaseProperties(
     val password: String = "postgres",
 ) {
     fun connectionFactoryOptions(): ConnectionFactoryOptions =
-        ConnectionFactoryOptions.builder()
-            .option(ConnectionFactoryOptions.DRIVER, "postgresql")
-            .option(ConnectionFactoryOptions.HOST, host)
-            .option(ConnectionFactoryOptions.PORT, port)
-            .option(ConnectionFactoryOptions.DATABASE, database)
-            .option(ConnectionFactoryOptions.USER, username)
-            .option(ConnectionFactoryOptions.PASSWORD, password)
-            .option(ConnectionFactoryOptions.SSL, false)
-            .build()
+        postgresConnectionFactoryOptions(
+            credentials = R2dbcServerCredentials(host, port, username, password),
+            database = database,
+        )
 
     override fun toString(): String =
         "PostgreSqlTenantDatabaseProperties(host=$host, port=$port, database=$database, " +

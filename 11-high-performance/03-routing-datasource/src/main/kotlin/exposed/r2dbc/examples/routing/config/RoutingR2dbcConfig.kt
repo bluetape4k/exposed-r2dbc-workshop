@@ -5,7 +5,8 @@ import exposed.r2dbc.examples.routing.datasource.ContextAwareRoutingKeyResolver
 import exposed.r2dbc.examples.routing.datasource.DynamicRoutingConnectionFactory
 import exposed.r2dbc.examples.routing.datasource.InMemoryConnectionFactoryRegistry
 import exposed.r2dbc.examples.routing.datasource.RoutingKeyResolver
-import io.r2dbc.spi.ConnectionFactories
+import io.bluetape4k.r2dbc.pool.connectionFactoryOf
+import io.bluetape4k.r2dbc.pool.connectionFactoryOptionsOf
 import io.r2dbc.spi.ConnectionFactory
 import io.r2dbc.spi.ConnectionFactoryOptions
 import kotlinx.coroutines.Dispatchers
@@ -32,8 +33,8 @@ class RoutingR2dbcConfig {
         val registry = InMemoryConnectionFactoryRegistry()
 
         properties.tenants.forEach { (tenantId, tenant) ->
-            val rwFactory = ConnectionFactories.get(tenant.rw)
-            val roFactory = ConnectionFactories.get(tenant.ro ?: tenant.rw)
+            val rwFactory = connectionFactoryOf(tenant.rw)
+            val roFactory = connectionFactoryOf(tenant.ro ?: tenant.rw)
 
             registry.register("$tenantId:rw", rwFactory)
             registry.register("$tenantId:ro", roFactory)
@@ -73,7 +74,7 @@ class RoutingR2dbcConfig {
     ): R2dbcDatabase {
         val defaultTenant = properties.tenants[properties.defaultTenant]
             ?: error("No default tenant config for '${properties.defaultTenant}'")
-        val defaultOptions = ConnectionFactoryOptions.parse(defaultTenant.rw)
+        val defaultOptions = connectionFactoryOptionsOf(defaultTenant.rw)
 
         val config = R2dbcDatabaseConfig {
             dispatcher = Dispatchers.IO
@@ -99,7 +100,7 @@ class RoutingR2dbcConfig {
 
         return urlByKey.entries.associate { (key, url) ->
             val connectionFactory = registry.get(key) ?: error("No ConnectionFactory for key=$key")
-            val options = ConnectionFactoryOptions.parse(url)
+            val options = connectionFactoryOptionsOf(url)
             val config = R2dbcDatabaseConfig {
                 dispatcher = Dispatchers.IO
                 connectionFactoryOptions = options

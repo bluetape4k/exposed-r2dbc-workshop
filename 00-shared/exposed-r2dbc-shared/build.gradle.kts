@@ -23,6 +23,8 @@ dependencies {
     implementation(libs.exposed.r2dbc)
     implementation(libs.bluetape4k.jdbc)
     implementation(libs.bluetape4k.r2dbc)
+    implementation(libs.r2dbc.spi)
+    implementation(libs.r2dbc.postgresql)
     implementation(libs.bluetape4k.junit5)
     implementation(libs.bluetape4k.assertions)
 

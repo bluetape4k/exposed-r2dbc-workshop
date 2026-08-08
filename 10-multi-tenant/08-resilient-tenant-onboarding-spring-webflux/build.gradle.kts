@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.jetbrains.exposed.java.time)
     implementation(libs.jetbrains.exposed.migration.r2dbc)
 
+    implementation(libs.bluetape4k.r2dbc)
     implementation(libs.exposed.r2dbc)
     testImplementation(libs.bluetape4k.junit5)
 

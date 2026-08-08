@@ -82,3 +82,14 @@ git diff --check
 
 명령이 환경 제약으로 실행되지 않으면 실패 로그와 대체 검증을 checklist와
 최종 DoD에 남긴다.
+
+## 실행 결과
+
+- shared 옵션 계약 테스트와 영향 모듈 compile/test가 통과했다.
+- Ktor `maxPoolSize=1` 경계에서 `connectionPoolOf` 기본 `initialSize` 충돌을
+  재현한 뒤 `initialSize=minOf(10, maxPoolSize)`, `minIdle=0`으로 수정하고
+  Ktor 29개 테스트를 통과했다.
+- 전체 fast-DB 테스트는 265개 actionable task 기준 `BUILD SUCCESSFUL`이다.
+- 전체 build(`-x test -x detekt --continue`)도 `BUILD SUCCESSFUL`이다.
+- published `withTables`의 취소 예외 취약점은 upstream 중복이 없어
+  [#625](https://github.com/bluetape4k/bluetape4k-exposed/issues/625)로 기록했다.
