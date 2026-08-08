@@ -5,9 +5,9 @@ import exposed.r2dbc.multitenant.onboarding.tenant.TenantConnectionFactoryRegist
 import exposed.r2dbc.multitenant.onboarding.tenant.TenantOnboardingProperties
 import exposed.r2dbc.multitenant.onboarding.tenant.TenantRegistryRepository
 import exposed.r2dbc.multitenant.onboarding.tenant.TenantRoutingConnectionFactory
-import io.r2dbc.spi.ConnectionFactories
+import io.bluetape4k.r2dbc.pool.connectionFactoryOf
+import io.bluetape4k.r2dbc.pool.connectionFactoryOptionsOf
 import io.r2dbc.spi.ConnectionFactory
-import io.r2dbc.spi.ConnectionFactoryOptions
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -33,7 +33,7 @@ class OnboardingTenantR2dbcConfig {
 
     @Bean("registryConnectionFactory")
     fun registryConnectionFactory(properties: TenantOnboardingProperties): ConnectionFactory =
-        ConnectionFactories.get(ConnectionFactoryOptions.parse(properties.registryUrl))
+        connectionFactoryOf(properties.registryUrl)
 
     @Bean("registryDatabase")
     fun registryDatabase(
@@ -94,7 +94,7 @@ class OnboardingTenantR2dbcConfig {
     ): R2dbcDatabaseConfig.Builder =
         R2dbcDatabaseConfig {
             this.dispatcher = dispatcher
-            this.connectionFactoryOptions = ConnectionFactoryOptions.parse(url)
+            this.connectionFactoryOptions = connectionFactoryOptionsOf(url)
             this.explicitDialect = H2Dialect()
         }
 }

@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.jetbrains.exposed.kotlin.datetime)
 
     // bluetape4k
+    implementation(libs.bluetape4k.r2dbc)
     implementation(libs.exposed.core)
     implementation(libs.exposed.r2dbc)
     implementation(libs.exposed.r2dbc.redisson)

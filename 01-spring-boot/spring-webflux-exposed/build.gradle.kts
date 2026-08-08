@@ -39,6 +39,7 @@ dependencies {
     implementation(project(":exposed-r2dbc-shared"))
 
     // bluetape4k 테스트/검증 의존성
+    implementation(libs.bluetape4k.r2dbc)
     implementation(libs.exposed.r2dbc)
     testImplementation(libs.bluetape4k.junit5)
     implementation(libs.bluetape4k.testcontainers)

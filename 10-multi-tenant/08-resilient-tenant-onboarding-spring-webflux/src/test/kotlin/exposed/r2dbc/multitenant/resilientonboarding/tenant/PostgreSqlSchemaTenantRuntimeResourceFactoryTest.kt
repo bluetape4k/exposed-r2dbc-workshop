@@ -1,5 +1,7 @@
 package exposed.r2dbc.multitenant.resilientonboarding.tenant
 
+import exposed.r2dbc.shared.config.R2dbcServerCredentials
+import exposed.r2dbc.shared.config.postgresConnectionFactoryOptions
 import io.bluetape4k.testcontainers.database.PostgreSQLServer
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.r2dbc.spi.ConnectionFactories
@@ -98,15 +100,15 @@ class PostgreSqlSchemaTenantRuntimeResourceFactoryTest {
     }
 
     private fun connectionOptions(): ConnectionFactoryOptions =
-        ConnectionFactoryOptions.builder()
-            .option(ConnectionFactoryOptions.DRIVER, "postgresql")
-            .option(ConnectionFactoryOptions.HOST, postgres.host)
-            .option(ConnectionFactoryOptions.PORT, postgres.port)
-            .option(ConnectionFactoryOptions.DATABASE, requireNotNull(postgres.databaseName))
-            .option(ConnectionFactoryOptions.USER, requireNotNull(postgres.username))
-            .option(ConnectionFactoryOptions.PASSWORD, requireNotNull(postgres.password))
-            .option(ConnectionFactoryOptions.SSL, false)
-            .build()
+        postgresConnectionFactoryOptions(
+            R2dbcServerCredentials(
+                host = postgres.host,
+                port = postgres.port,
+                user = requireNotNull(postgres.username),
+                password = requireNotNull(postgres.password),
+            ),
+            database = requireNotNull(postgres.databaseName),
+        )
 
     private suspend fun queryMarkerTenant(resources: TenantResources): String =
         suspendTransaction(db = database) {

@@ -124,6 +124,19 @@ subprojects {
 
             useJUnitPlatform()
 
+            // Colima의 Docker API는 macOS 호스트 소켓을 통해 연결되지만, Docker 데몬이
+            // 실행하는 Ryuk 컨테이너에서는 그 호스트 경로를 그대로 bind-mount할 수 없습니다.
+            // 공식 Testcontainers 경로(`/var/run/docker.sock`)를 기본값으로 사용하되,
+            // 사용자가 지정한 override와 Ryuk 설정은 그대로 보존합니다.
+            val colimaDockerSocket = file("${System.getProperty("user.home")}/.colima/default/docker.sock")
+            if (colimaDockerSocket.exists()) {
+                environment(
+                    "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE",
+                    providers.environmentVariable("TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE").orNull
+                        ?: "/var/run/docker.sock"
+                )
+            }
+
             // 테스트 시 아래와 같은 예외 메시지를 제거하기 위해서
             // OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
             jvmArgs(
