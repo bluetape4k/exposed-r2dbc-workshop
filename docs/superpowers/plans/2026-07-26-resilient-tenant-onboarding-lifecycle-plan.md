@@ -1,39 +1,39 @@
-# Resilient Tenant Onboarding Lifecycle Implementation Plan
+# 복구 가능한 테넌트 온보딩 생명주기 구현 계획
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **에이전트 작업자 참고:** 이 계획을 task 단위로 구현하려면 superpowers:subagent-driven-development(권장) 또는 superpowers:executing-plans를 반드시 사용한다. 단계 진행 상태는 checkbox(`- [ ]`) 문법으로 추적한다.
 
-**Goal:** Add a separate Workshop module that demonstrates token- and lease-guarded tenant onboarding, durable recovery, and safe runtime publication.
+**목표:** 토큰과 lease로 보호하는 테넌트 온보딩, 영속 복구, 안전한 runtime 공개를 보여 주는 별도의 Workshop 모듈을 추가한다.
 
-**Architecture:** Module 06 remains the introductory example; new module 08 owns the resilient flow. A lifecycle repository controls durable claims and token/version-guarded transitions, the provisioner controls one claimed attempt, and a startup reconciler rebuilds the ready-only process registry from durable active records.
+**아키텍처:** 모듈 06은 입문 예제로 유지하고, 새 모듈 08이 복구 가능한 흐름을 담당한다. 생명주기 repository는 영속 claim과 token/version으로 보호되는 상태 전이를 제어하고, provisioner는 자신이 claim한 한 번의 시도를 제어하며, startup reconciler는 영속 `ACTIVE` 행에서 준비된 항목만 담는 process registry를 다시 구성한다.
 
-**Tech Stack:** Kotlin 2.3, Spring Boot WebFlux, Exposed R2DBC, H2 R2DBC, Kotlin Coroutines, JUnit 5, WebTestClient, bluetape4k coroutine test utilities.
+**기술 스택:** Kotlin 2.3, Spring Boot WebFlux, Exposed R2DBC, H2 R2DBC, Kotlin Coroutines, JUnit 5, WebTestClient, bluetape4k coroutine test utilities.
 
 ---
 
-## File map
+## 파일 구조
 
-| Path | Responsibility |
+| 경로 | 책임 |
 | --- | --- |
-| `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/build.gradle.kts` | Reuses module 06 dependencies; adds no library. |
-| `src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleTypes.kt` | Immutable state, failure category, claim, and API-safe result models. |
-| `src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleRepository.kt` | Exposed table and token/version-guarded durable transitions. |
-| `src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantRuntimeRegistry.kt` | Process-local, ready-only connection factory ownership. |
-| `src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantRuntimeResourceFactory.kt` | Pool creation, schema/seed, probe, and close boundaries. |
-| `src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleReconciler.kt` | Startup recovery for stale and active records. |
-| `src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/ResilientTenantProvisioner.kt` | Claimed-attempt orchestration and cancellation-safe cleanup. |
-| `src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/controller/*.kt` | Onboarding, lifecycle polling, and error mapping. |
-| `src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/**/*.kt` | Repository, recovery, HTTP, concurrency, cancellation, restart contracts. |
+| `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/build.gradle.kts` | 모듈 06의 의존성을 재사용하며 library를 추가하지 않는다. |
+| `src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleTypes.kt` | 불변 상태, 실패 category, claim, API 안전 결과 model을 정의한다. |
+| `src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleRepository.kt` | Exposed table과 token/version으로 보호되는 영속 상태 전이를 정의한다. |
+| `src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantRuntimeRegistry.kt` | 프로세스 로컬에서 준비된 connection factory의 소유권을 관리한다. |
+| `src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantRuntimeResourceFactory.kt` | pool 생성, schema/seed, probe, close 경계를 관리한다. |
+| `src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleReconciler.kt` | stale 및 active 행의 startup 복구를 담당한다. |
+| `src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/ResilientTenantProvisioner.kt` | claim한 시도의 orchestration과 취소 안전 cleanup을 담당한다. |
+| `src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/controller/*.kt` | 온보딩, 생명주기 polling, 오류 mapping을 담당한다. |
+| `src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/**/*.kt` | repository, recovery, HTTP, concurrency, cancellation, restart 계약을 검증한다. |
 
-## Task 1: Bootstrap an independently runnable module
+## 작업 1: 독립 실행 가능한 모듈 부트스트랩
 
-**Files:**
-- Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/build.gradle.kts`
-- Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/ResilientTenantOnboardingApp.kt`
-- Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/config/ResilientTenantOnboardingConfig.kt`
-- Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/resources/application.yml`
-- Test: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/ResilientTenantOnboardingAppTest.kt`
+**파일:**
+- 생성: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/build.gradle.kts`
+- 생성: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/ResilientTenantOnboardingApp.kt`
+- 생성: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/config/ResilientTenantOnboardingConfig.kt`
+- 생성: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/resources/application.yml`
+- 테스트: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/ResilientTenantOnboardingAppTest.kt`
 
-- [ ] **Step 1: Write the failing context contract.**
+- [ ] **1단계: 실패하는 context 계약을 작성한다.**
 
 ```kotlin
 @SpringBootTest
@@ -54,12 +54,12 @@ class ResilientTenantOnboardingAppTest {
 }
 ```
 
-- [ ] **Step 2: Run it before creating the module.**
+- [ ] **2단계: 모듈을 만들기 전에 실행한다.**
 
-Run: `./gradlew :08-resilient-tenant-onboarding-spring-webflux:test --tests '*ResilientTenantOnboardingAppTest' --no-build-cache`
-Expected: FAIL because the module or application class is absent.
+실행: `./gradlew :08-resilient-tenant-onboarding-spring-webflux:test --tests '*ResilientTenantOnboardingAppTest' --no-build-cache`
+기대 결과: 모듈 또는 application class가 없으므로 FAIL.
 
-- [ ] **Step 3: Copy only the module 06 dependency topology and add the minimum boot boundary.**
+- [ ] **3단계: 모듈 06의 dependency topology만 복사하고 최소한의 boot 경계를 추가한다.**
 
 ```kotlin
 @SpringBootApplication
@@ -83,14 +83,14 @@ data class TenantLifecycleProperties(
 }
 ```
 
-Use the same dependency aliases as module 06. Change the migration package and Spring main class to `exposed.r2dbc.multitenant.resilientonboarding`; add no dependency. Set default application properties to an isolated in-memory H2 database.
+모듈 06과 같은 dependency alias를 사용한다. migration package와 Spring main class를 `exposed.r2dbc.multitenant.resilientonboarding`으로 변경하고 dependency는 추가하지 않는다. 기본 application properties는 격리된 인메모리 H2 database를 사용하도록 설정한다.
 
-- [ ] **Step 4: Verify bootstrapping and automatic module discovery.**
+- [ ] **4단계: 부트스트랩과 자동 모듈 검색을 검증한다.**
 
-Run: `./gradlew :08-resilient-tenant-onboarding-spring-webflux:test --tests '*ResilientTenantOnboardingAppTest' --no-build-cache && ./gradlew projects`
-Expected: PASS; module 08 appears in the project list.
+실행: `./gradlew :08-resilient-tenant-onboarding-spring-webflux:test --tests '*ResilientTenantOnboardingAppTest' --no-build-cache && ./gradlew projects`
+기대 결과: PASS; project list에 모듈 08이 나타난다.
 
-- [ ] **Step 5: Commit the bootstrap checkpoint.**
+- [ ] **5단계: 부트스트랩 checkpoint를 커밋한다.**
 
 ```bash
 git add 10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux
@@ -102,14 +102,14 @@ git commit -m "Establish a recoverable tenant onboarding example" \
   -m "Tested: ResilientTenantOnboardingAppTest and Gradle project discovery."
 ```
 
-## Task 2: Define lifecycle data and prove conditional ownership
+## 작업 2: 생명주기 데이터를 정의하고 조건부 소유권을 검증한다
 
-**Files:**
-- Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleTypes.kt`
-- Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleRepository.kt`
-- Test: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleRepositoryTest.kt`
+**파일:**
+- 생성: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleTypes.kt`
+- 생성: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleRepository.kt`
+- 테스트: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleRepositoryTest.kt`
 
-- [ ] **Step 1: Write failing claim/retry/stale-owner contracts.**
+- [ ] **1단계: 실패하는 claim/retry/stale-owner 계약을 작성한다.**
 
 ```kotlin
 @Test
@@ -123,14 +123,14 @@ fun `a stale reservation cannot fail a newer retry`() = runSuspendIO {
 }
 ```
 
-Add adjacent tests for a new claim (`attempt=1`), same active display name, live lease pending result, different display-name conflict, and expired provisioning selection.
+새 claim(`attempt=1`), 동일한 active display name, 유효한 lease의 pending 결과, 다른 display-name conflict, 만료된 provisioning 선택을 검증하는 인접 테스트도 추가한다.
 
-- [ ] **Step 2: Run the repository test.**
+- [ ] **2단계: repository test를 실행한다.**
 
-Run: `./gradlew :08-resilient-tenant-onboarding-spring-webflux:test --tests '*TenantLifecycleRepositoryTest' --no-build-cache`
-Expected: FAIL because lifecycle symbols do not exist.
+실행: `./gradlew :08-resilient-tenant-onboarding-spring-webflux:test --tests '*TenantLifecycleRepositoryTest' --no-build-cache`
+기대 결과: lifecycle symbol이 없으므로 FAIL.
 
-- [ ] **Step 3: Implement exact models and repository signatures.**
+- [ ] **3단계: 정확한 model과 repository signature를 구현한다.**
 
 ```kotlin
 enum class TenantLifecycleStatus { PROVISIONING, ACTIVE, FAILED }
@@ -167,7 +167,7 @@ suspend fun findExpiredProvisioning(now: Instant): List<TenantMetadata>
 suspend fun findActive(): List<TenantMetadata>
 ```
 
-Define `TenantMetadata` as an immutable value containing ID, display name, state, attempt, UUID reservation token, long version, lease expiry, optional failure code, and UTC timestamps. Every Exposed call runs in `suspendTransaction`. For every transition, use this predicate and treat zero updated rows as a lost ownership result:
+`TenantMetadata`는 ID, display name, state, attempt, UUID reservation token, long version, lease expiry, 선택적 failure code, UTC timestamp를 담는 불변 값으로 정의한다. 모든 Exposed 호출은 `suspendTransaction`에서 실행한다. 모든 상태 전이에는 다음 predicate를 사용하고, 갱신된 행이 0개이면 소유권을 잃은 결과로 처리한다.
 
 ```kotlin
 (TenantLifecycleTable.tenantId eq owner.metadata.tenantId.value) and
@@ -175,14 +175,14 @@ Define `TenantMetadata` as an immutable value containing ID, display name, state
     (TenantLifecycleTable.version eq owner.metadata.version)
 ```
 
-Never persist exception text, URLs, or credentials. Log only tenant ID, attempt, and failure category through `KLoggingChannel`.
+exception text, URL, credential는 절대 저장하지 않는다. `KLoggingChannel`을 통해 tenant ID, attempt, failure category만 logging한다.
 
-- [ ] **Step 4: Run ownership tests.**
+- [ ] **4단계: ownership test를 실행한다.**
 
-Run: `./gradlew :08-resilient-tenant-onboarding-spring-webflux:test --tests '*TenantLifecycleRepositoryTest' --no-build-cache`
-Expected: PASS; a failed row is retained, retry increments attempt, and a stale owner cannot write.
+실행: `./gradlew :08-resilient-tenant-onboarding-spring-webflux:test --tests '*TenantLifecycleRepositoryTest' --no-build-cache`
+기대 결과: PASS; 실패한 행은 유지되고 retry 시 attempt가 증가하며 stale owner는 쓸 수 없다.
 
-- [ ] **Step 5: Commit durable ownership behavior.**
+- [ ] **5단계: 영속 소유권 동작을 커밋한다.**
 
 ```bash
 git add 10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src
@@ -194,15 +194,15 @@ git commit -m "Protect tenant lifecycle transitions with durable ownership" \
   -m "Tested: TenantLifecycleRepositoryTest."
 ```
 
-## Task 3: Build ready-only runtime resources and startup recovery
+## 작업 3: 준비된 runtime resource와 startup recovery를 구현한다
 
-**Files:**
-- Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantRuntimeRegistry.kt`
-- Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantRuntimeResourceFactory.kt`
-- Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleReconciler.kt`
-- Test: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleReconcilerTest.kt`
+**파일:**
+- 생성: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantRuntimeRegistry.kt`
+- 생성: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantRuntimeResourceFactory.kt`
+- 생성: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleReconciler.kt`
+- 테스트: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleReconcilerTest.kt`
 
-- [ ] **Step 1: Write failing recovery contracts.**
+- [ ] **1단계: 실패하는 recovery 계약을 작성한다.**
 
 ```kotlin
 @Test
@@ -227,12 +227,12 @@ fun `active tenant is published only after probe`() = runSuspendIO {
 }
 ```
 
-- [ ] **Step 2: Run the recovery test.**
+- [ ] **2단계: recovery test를 실행한다.**
 
-Run: `./gradlew :08-resilient-tenant-onboarding-spring-webflux:test --tests '*TenantLifecycleReconcilerTest' --no-build-cache`
-Expected: FAIL because registry, factory, and reconciler are undefined.
+실행: `./gradlew :08-resilient-tenant-onboarding-spring-webflux:test --tests '*TenantLifecycleReconcilerTest' --no-build-cache`
+기대 결과: registry, factory, reconciler가 정의되지 않았으므로 FAIL.
 
-- [ ] **Step 3: Implement the resource boundary and reconciler.**
+- [ ] **3단계: resource 경계와 reconciler를 구현한다.**
 
 ```kotlin
 interface TenantRuntimeResourceFactory {
@@ -248,14 +248,14 @@ class TenantRuntimeRegistry {
 }
 ```
 
-`reconcile(now)` first calls `findExpiredProvisioning(now)` and records `RECOVERY` through its matching owner token/version. It then probes each `findActive()` resource before calling `publish`. Probe failure conditionally becomes `FAILED(PROBE)` and closes the candidate resource. Use the injected UTC `Clock`; do not use system time directly.
+`reconcile(now)`는 먼저 `findExpiredProvisioning(now)`을 호출하고 일치하는 owner token/version으로 `RECOVERY`를 기록한다. 그런 다음 각 `findActive()` resource를 probe한 뒤 `publish`를 호출한다. probe 실패는 조건에 따라 `FAILED(PROBE)`가 되며 후보 resource를 close한다. 주입된 UTC `Clock`을 사용하고 system time을 직접 사용하지 않는다.
 
-- [ ] **Step 4: Run recovery tests.**
+- [ ] **4단계: recovery test를 실행한다.**
 
-Run: `./gradlew :08-resilient-tenant-onboarding-spring-webflux:test --tests '*TenantLifecycleReconcilerTest' --no-build-cache`
-Expected: PASS; a durable row is not routing-ready until probe then registry publication succeed.
+실행: `./gradlew :08-resilient-tenant-onboarding-spring-webflux:test --tests '*TenantLifecycleReconcilerTest' --no-build-cache`
+기대 결과: PASS; probe와 registry 공개가 차례로 성공하기 전에는 영속 행이 routing-ready 상태가 아니다.
 
-- [ ] **Step 5: Commit recovery behavior.**
+- [ ] **5단계: recovery 동작을 커밋한다.**
 
 ```bash
 git add 10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src
@@ -267,17 +267,17 @@ git commit -m "Recover durable tenant lifecycle state before routing" \
   -m "Tested: TenantLifecycleReconcilerTest."
 ```
 
-## Task 4: Expose claimed provisioning and polling contracts
+## 작업 4: claim한 provisioning과 polling 계약을 공개한다
 
-**Files:**
-- Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/ResilientTenantProvisioner.kt`
-- Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantRoutingConnectionFactory.kt`
-- Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/controller/TenantOnboardingController.kt`
-- Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/controller/TenantLifecycleController.kt`
-- Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/controller/TenantApiExceptionHandler.kt`
-- Test: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/controller/TenantOnboardingControllerTest.kt`
+**파일:**
+- 생성: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/ResilientTenantProvisioner.kt`
+- 생성: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantRoutingConnectionFactory.kt`
+- 생성: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/controller/TenantOnboardingController.kt`
+- 생성: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/controller/TenantLifecycleController.kt`
+- 생성: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/main/kotlin/exposed/r2dbc/multitenant/resilientonboarding/controller/TenantApiExceptionHandler.kt`
+- 테스트: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/controller/TenantOnboardingControllerTest.kt`
 
-- [ ] **Step 1: Write failing WebFlux response contracts.**
+- [ ] **1단계: 실패하는 WebFlux response 계약을 작성한다.**
 
 ```kotlin
 webTestClient.post().uri("/api/admin/tenants")
@@ -295,14 +295,14 @@ webTestClient.get().uri("/api/tenants/acme")
     .expectBody().jsonPath("$.attempt").isEqualTo(1)
 ```
 
-Add individual assertions for same active input (`200`), live claim (`202`), different display name (`409`), retained failure followed by retry, missing operator token, and routing before runtime publication (`404`).
+동일한 active 입력(`200`), 유효한 claim(`202`), 다른 display name(`409`), 보존된 실패 뒤의 retry, operator token 누락, runtime 공개 전 routing(`404`)을 각각 검증하는 assertion을 추가한다.
 
-- [ ] **Step 2: Run controller tests.**
+- [ ] **2단계: controller test를 실행한다.**
 
-Run: `./gradlew :08-resilient-tenant-onboarding-spring-webflux:test --tests '*TenantOnboardingControllerTest' --no-build-cache`
-Expected: FAIL because the endpoints and DTOs do not exist.
+실행: `./gradlew :08-resilient-tenant-onboarding-spring-webflux:test --tests '*TenantOnboardingControllerTest' --no-build-cache`
+기대 결과: endpoint와 DTO가 없으므로 FAIL.
 
-- [ ] **Step 3: Implement orchestration and safe DTOs.**
+- [ ] **3단계: orchestration과 안전한 DTO를 구현한다.**
 
 ```kotlin
 suspend fun onboard(request: TenantOnboardingRequest): TenantOnboardingResult = when (
@@ -315,14 +315,14 @@ suspend fun onboard(request: TenantOnboardingRequest): TenantOnboardingResult = 
 }
 ```
 
-`provision(owner)` runs inside `withTimeout(properties.overallProvisionTimeout)`, renews the lease before each external phase, then creates resources, seeds schema, probes, conditionally marks active, and only then publishes in the registry. Configuration rejects `leaseDuration <= overallProvisionTimeout`, so a live owner lease always outlasts one bounded attempt. In `catch (CancellationException)`, call `cleanupFailedAttempt` in `withContext(NonCancellable)`, then rethrow. Other failures map to the appropriate enum category and return a safe failure result. Cleanup marks failed only with the owner token/version, unregisters only that tenant, and closes only the resources created by this call. DTOs expose only ID, display name, state, attempt, and optional failure category.
+`provision(owner)`는 `withTimeout(properties.overallProvisionTimeout)` 안에서 실행한다. 각 external phase 전에 lease를 갱신한 뒤 resource 생성, schema seed, probe, 조건부 active 전이, registry 공개를 차례로 수행한다. 설정은 `leaseDuration <= overallProvisionTimeout`을 거부하므로 살아 있는 owner lease가 제한된 한 번의 시도보다 항상 오래 유지된다. `catch (CancellationException)`에서는 `withContext(NonCancellable)` 안에서 `cleanupFailedAttempt`를 호출한 뒤 다시 던진다. 그 밖의 실패는 적절한 enum category로 변환해 안전한 failure result를 반환한다. cleanup은 owner token/version으로만 failed 전이를 수행하고, 해당 tenant만 unregister하며, 이번 호출이 만든 resource만 close한다. DTO에는 ID, display name, state, attempt, 선택적 failure category만 공개한다.
 
-- [ ] **Step 4: Run HTTP and routing contracts.**
+- [ ] **4단계: HTTP와 routing 계약을 실행한다.**
 
-Run: `./gradlew :08-resilient-tenant-onboarding-spring-webflux:test --tests '*TenantOnboardingControllerTest' --no-build-cache`
-Expected: PASS with exact `201/200/202/409` response behavior and no raw exception or R2DBC URL in output.
+실행: `./gradlew :08-resilient-tenant-onboarding-spring-webflux:test --tests '*TenantOnboardingControllerTest' --no-build-cache`
+기대 결과: 정확한 `201/200/202/409` response 동작으로 PASS하며 output에 raw exception이나 R2DBC URL이 없다.
 
-- [ ] **Step 5: Commit HTTP lifecycle semantics.**
+- [ ] **5단계: HTTP 생명주기 의미를 커밋한다.**
 
 ```bash
 git add 10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src
@@ -334,14 +334,14 @@ git commit -m "Surface recoverable tenant onboarding states safely" \
   -m "Tested: TenantOnboardingControllerTest."
 ```
 
-## Task 5: Prove concurrency, cancellation, and restart recovery
+## 작업 5: concurrency, cancellation, restart recovery를 검증한다
 
-**Files:**
-- Test: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/ResilientTenantProvisionerConcurrencyTest.kt`
-- Test: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/ResilientTenantProvisionerCancellationTest.kt`
-- Test: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleRestartRecoveryTest.kt`
+**파일:**
+- 테스트: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/ResilientTenantProvisionerConcurrencyTest.kt`
+- 테스트: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/ResilientTenantProvisionerCancellationTest.kt`
+- 테스트: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test/kotlin/exposed/r2dbc/multitenant/resilientonboarding/tenant/TenantLifecycleRestartRecoveryTest.kt`
 
-- [ ] **Step 1: Write failing same-tenant concurrency coverage.**
+- [ ] **1단계: 동일 tenant concurrency를 다루는 실패 테스트를 작성한다.**
 
 ```kotlin
 SuspendedJobTester()
@@ -357,7 +357,7 @@ requireNotNull(repository.find(TenantId("acme"))).apply {
 resourceFactory.createdCount(TenantId("acme")) shouldBeEqualTo 1
 ```
 
-- [ ] **Step 2: Write failing cancellation and restart coverage.**
+- [ ] **2단계: 실패하는 cancellation 및 restart 테스트를 작성한다.**
 
 ```kotlin
 val enteredCreate = CompletableDeferred<Unit>()
@@ -372,19 +372,19 @@ requireNotNull(repository.find(TenantId("cancelled"))).status shouldBeEqualTo Te
 resourceFactory.closedTenantIds shouldContain TenantId("cancelled")
 ```
 
-For restart, use a uniquely named temporary H2 file database, persist one active row, construct a new registry/reconciler from that file, reconcile, and assert it publishes only after probing. Close resources and remove the temporary file in cleanup.
+restart 검증에는 고유한 이름의 임시 H2 file database를 사용한다. active 행 하나를 저장하고 해당 파일에서 새 registry/reconciler를 구성한 뒤 reconcile을 실행하며, probe 후에만 공개되는지 검증한다. cleanup에서 resource를 close하고 임시 파일을 삭제한다.
 
-- [ ] **Step 3: Run resilience tests before changing implementation.**
+- [ ] **3단계: 구현을 변경하기 전에 resilience test를 실행한다.**
 
-Run: `./gradlew :08-resilient-tenant-onboarding-spring-webflux:test --tests '*ResilientTenantProvisioner*Test' --tests '*TenantLifecycleRestartRecoveryTest' --no-build-cache`
-Expected: FAIL until resource factory hooks and cleanup/rehydration satisfy the contracts.
+실행: `./gradlew :08-resilient-tenant-onboarding-spring-webflux:test --tests '*ResilientTenantProvisioner*Test' --tests '*TenantLifecycleRestartRecoveryTest' --no-build-cache`
+기대 결과: resource factory hook과 cleanup/rehydration이 계약을 만족할 때까지 FAIL.
 
-- [ ] **Step 4: Add only the seams required by those tests.** Keep a test-controlled resource factory in test sources; production code remains dependent on `TenantRuntimeResourceFactory`. Do not add a global JVM lock, a new dependency, external database, or test container.
+- [ ] **4단계: 해당 테스트에 필요한 seam만 추가한다.** test source에는 테스트가 제어하는 resource factory를 둔다. production code는 계속 `TenantRuntimeResourceFactory`에 의존한다. global JVM lock, 새 dependency, external database, test container는 추가하지 않는다.
 
-- [ ] **Step 5: Run from clean test output and commit.**
+- [ ] **5단계: 깨끗한 test output에서 실행하고 커밋한다.**
 
-Run: `./gradlew :08-resilient-tenant-onboarding-spring-webflux:cleanTest :08-resilient-tenant-onboarding-spring-webflux:test --no-build-cache`
-Expected: PASS; only one attempt creates resources, cancelled work retains `FAILED`, and fresh startup rehydrates a probed active tenant.
+실행: `./gradlew :08-resilient-tenant-onboarding-spring-webflux:cleanTest :08-resilient-tenant-onboarding-spring-webflux:test --no-build-cache`
+기대 결과: PASS; resource는 한 번의 attempt만 생성하고, 취소된 작업은 `FAILED`를 유지하며, 새 startup은 probe한 active tenant를 rehydrate한다.
 
 ```bash
 git add 10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/src/test
@@ -396,18 +396,18 @@ git commit -m "Prove tenant onboarding recovery under interruption" \
   -m "Tested: resilient provisioner concurrency, cancellation, and restart tests."
 ```
 
-## Task 6: Register bilingual documentation and CI coverage
+## 작업 6: 이중 언어 문서와 CI coverage를 등록한다
 
-**Files:**
-- Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/README.md`
-- Create: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/README.ko.md`
-- Modify: `10-multi-tenant/README.md`
-- Modify: `10-multi-tenant/README.ko.md`
-- Modify: `README.md`
-- Modify: `README.ko.md`
-- Modify: `.github/workflows/Examples.yml`
+**파일:**
+- 생성: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/README.md`
+- 생성: `10-multi-tenant/08-resilient-tenant-onboarding-spring-webflux/README.ko.md`
+- 수정: `10-multi-tenant/README.md`
+- 수정: `10-multi-tenant/README.ko.md`
+- 수정: `README.md`
+- 수정: `README.ko.md`
+- 수정: `.github/workflows/Examples.yml`
 
-- [ ] **Step 1: Run failing discoverability checks.**
+- [ ] **1단계: 실패하는 discoverability check를 실행한다.**
 
 ```bash
 rg -q '08-resilient-tenant-onboarding-spring-webflux' README.md
@@ -417,9 +417,9 @@ rg -q '08-resilient-tenant-onboarding-spring-webflux' 10-multi-tenant/README.ko.
 rg -q '08-resilient-tenant-onboarding-spring-webflux' .github/workflows/Examples.yml
 ```
 
-Expected: FAIL before the module is registered.
+기대 결과: 모듈을 등록하기 전에는 FAIL.
 
-- [ ] **Step 2: Write the English and Korean module READMEs.** Both must explain durable states, the `201/200/202/409` outcomes, polling, failure-code boundary, retry ownership, restart reconciliation, and that H2 file persistence is a test mechanism rather than a multi-node production control plane.
+- [ ] **2단계: English와 Korean 모듈 README를 작성한다.** 두 README 모두 영속 상태, `201/200/202/409` 결과, polling, failure-code 경계, retry ownership, restart reconciliation을 설명해야 하며, H2 file persistence가 multi-node production control plane이 아니라 테스트 수단임을 명시해야 한다.
 
 ```markdown
 | Result | Meaning |
@@ -428,14 +428,14 @@ Expected: FAIL before the module is registered.
 | `202 Accepted` | A non-expired claim is already being prepared; poll the lifecycle resource. |
 ```
 
-- [ ] **Step 3: Register module 08 after 07 in all READMEs and all three `Examples.yml` locations.** Add the same module path to the changed-path filter, Gradle task list/matrix, and test-artifact collection list. Do not change unrelated job conditions.
+- [ ] **3단계: 모든 README와 `Examples.yml`의 세 위치에서 모듈 08을 07 뒤에 등록한다.** 같은 모듈 경로를 changed-path filter, Gradle task list/matrix, test-artifact collection list에 추가한다. 관련 없는 job condition은 변경하지 않는다.
 
-- [ ] **Step 4: Verify docs and workflow syntax.**
+- [ ] **4단계: 문서와 workflow syntax를 검증한다.**
 
-Run: `./gradlew projects && actionlint .github/workflows/Examples.yml && git diff --check`
-Expected: PASS; 08 is discoverable in both languages and selected for CI execution and report collection.
+실행: `./gradlew projects && actionlint .github/workflows/Examples.yml && git diff --check`
+기대 결과: PASS; 두 언어에서 08을 찾을 수 있고 CI 실행과 report collection 대상으로 선택된다.
 
-- [ ] **Step 5: Commit documentation and CI parity.**
+- [ ] **5단계: 문서와 CI parity를 커밋한다.**
 
 ```bash
 git add README.md README.ko.md 10-multi-tenant/README.md 10-multi-tenant/README.ko.md \
@@ -450,12 +450,12 @@ git commit -m "Make resilient tenant onboarding discoverable and verified" \
   -m "Tested: Gradle projects, actionlint, and diff check."
 ```
 
-## Task 7: Run final gates and keep delivery separate
+## 작업 7: 최종 gate를 실행하고 delivery를 분리한다
 
-**Files:**
-- Modify only planned files above if a verification command exposes a defect.
+**파일:**
+- 검증 명령에서 defect가 드러날 때만 위에서 계획한 파일을 수정한다.
 
-- [ ] **Step 1: Run all final checks.**
+- [ ] **1단계: 모든 최종 check를 실행한다.**
 
 ```bash
 ./gradlew :08-resilient-tenant-onboarding-spring-webflux:test --no-build-cache
@@ -465,23 +465,23 @@ actionlint .github/workflows/Examples.yml
 git diff --check
 ```
 
-Expected: every command exits `0`.
+기대 결과: 모든 명령이 `0`으로 종료된다.
 
-- [ ] **Step 2: Perform the spec-coverage review.** Confirm module 06 is untouched; every transition includes token/version ownership; no failure deletes metadata; routing requires successful probe then registry publication; API/README omit raw errors and connection details; English/Korean docs and all CI entries list 08.
+- [ ] **2단계: spec coverage를 검토한다.** 모듈 06을 변경하지 않았는지 확인한다. 모든 상태 전이에 token/version ownership이 포함되고, 어떤 실패도 metadata를 삭제하지 않으며, routing은 성공한 probe 뒤의 registry 공개를 요구하는지 확인한다. API/README가 raw error와 connection detail을 제외하는지, English/Korean 문서와 모든 CI 항목이 08을 열거하는지도 확인한다.
 
-- [ ] **Step 3: Commit only verified repair work using the Lore protocol.**
+- [ ] **3단계: Lore protocol에 따라 검증된 repair work만 커밋한다.**
 
 ```bash
 git status --short
 git log -1 --format=full
 ```
 
-Expected: no out-of-scope file is present; each commit records constraint, rejected alternative, confidence, scope risk, directive, and fresh test evidence.
+기대 결과: 범위를 벗어난 파일이 없고, 각 커밋에 constraint, rejected alternative, confidence, scope risk, directive, fresh test evidence가 기록된다.
 
-- [ ] **Step 4: Stop on a review-ready local branch.** Do not create a pull request, merge, or deploy; those actions need a later explicit request.
+- [ ] **4단계: review-ready local branch에서 멈춘다.** pull request 생성, merge, deploy는 하지 않는다. 해당 작업에는 이후의 명시적 요청이 필요하다.
 
-## Rollback and risk controls
+## Rollback 및 위험 제어
 
-- Module 08 is isolated. Revert its directory, the four top-level/chapter README links, and the three `Examples.yml` entries to remove the feature without changing module 06.
-- H2 file persistence exists only to test restart recovery. The documentation must not imply distributed locks, external secret management, PostgreSQL semantics, or production authorization.
-- The runtime registry is a process-local cache. A durable `ACTIVE` row becomes routing-ready only after a fresh probe and successful registry publication.
+- 모듈 08은 격리되어 있다. 모듈 06을 변경하지 않고 기능을 제거하려면 모듈 08 디렉터리, 최상위/chapter README 링크 4개, `Examples.yml` 항목 3개를 되돌린다.
+- H2 file persistence는 restart recovery를 테스트하기 위한 용도로만 존재한다. 문서에서 distributed lock, external secret management, PostgreSQL semantics, production authorization을 지원한다고 오해하게 해서는 안 된다.
+- runtime registry는 프로세스 로컬 cache다. 영속 `ACTIVE` 행은 새 probe와 registry 공개가 성공한 뒤에만 routing-ready 상태가 된다.
