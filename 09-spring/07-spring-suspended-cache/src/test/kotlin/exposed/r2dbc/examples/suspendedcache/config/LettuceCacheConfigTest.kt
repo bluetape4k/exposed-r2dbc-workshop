@@ -7,7 +7,9 @@ import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.delay
 import io.bluetape4k.assertions.shouldBeEqualTo
+import io.bluetape4k.assertions.shouldBeSameInstanceAs
 import io.bluetape4k.assertions.shouldNotBeNull
+import io.bluetape4k.io.serializer.BinarySerializers
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
@@ -20,6 +22,13 @@ class LettuceCacheConfigTest(
     @Test
     fun `context loading`() {
         lettuceSuspendedCacheManager.shouldNotBeNull()
+    }
+
+    @Test
+    fun `FastFory codec를 사용한다`() {
+        lettuceSuspendedCacheManager.codec
+            .shouldNotBeNull()
+            .serializer shouldBeSameInstanceAs BinarySerializers.LZ4FastFory
     }
 
     @Test
