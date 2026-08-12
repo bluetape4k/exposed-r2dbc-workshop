@@ -16,7 +16,7 @@ An example implementing a Lettuce-based Suspended Cache with Coroutines in a Spr
 | ORM         | Exposed R2DBC                          |
 | Async       | Kotlin Coroutines                      |
 | Cache       | Lettuce (Redis Coroutines API)         |
-| Codec       | Fory, Kryo5                            |
+| Codec       | FastFory, Fory, Kryo                   |
 | Compression | LZ4, Snappy, Zstd                      |
 | DB          | H2 (default), MySQL 8, PostgreSQL      |
 | Container   | Testcontainers (DB + Redis)            |
@@ -174,7 +174,7 @@ class LettuceSuspendedCache<K: Any, V: Any>(
 
 ### 2. LettuceSuspendedCacheManager
 
-Manages cache instances by name via `getOrCreate()` and applies `LettuceBinaryCodec` (LZ4 + Fory serialization).
+Manages cache instances by name via `getOrCreate()` and applies `LettuceBinaryCodec` (LZ4 + FastFory serialization for volatile cache entries).
 
 ```kotlin
 @Bean
@@ -182,7 +182,7 @@ fun lettuceSuspendedCacheManager(redisClient: RedisClient): LettuceSuspendedCach
     return LettuceSuspendedCacheManager(
         redisClient = redisClient,
         ttlSeconds = 60L,
-        codec = LettuceBinaryCodecs.lz4Fory(),   // LZ4 compression + Fory serialization
+        codec = LettuceBinaryCodecs.lz4FastFory(),   // LZ4 compression + FastFory (SCHEMA_CONSISTENT)
     )
 }
 
@@ -194,6 +194,8 @@ private val cache: LettuceSuspendedCache<String, CountryRecord> by lazy {
     )
 }
 ```
+
+> **FastFory cache contract**: This example uses `LettuceBinaryCodecs.lz4FastFory()` for volatile Redis cache entries. It uses `CompatibleMode.SCHEMA_CONSISTENT`, is not wire-compatible with the Fory codec, and has no automatic fallback. Flush or rebuild existing cache entries when changing the codec; do not use FastFory for persistent binary columns or other durable data.
 
 ### 3. CachedCountryR2dbcRepository
 
@@ -289,8 +291,9 @@ Unlike `DEL`, `UNLINK` releases memory in the background and does not block the 
 
 | Setting             | Codec        | Compression | Characteristics                              |
 |---------------------|--------------|-------------|----------------------------------------------|
-| `lz4Fory()`         | Fory (Java)  | LZ4         | Fast serialization + moderate compression (default) |
-| `lz4Kryo5()`        | Kryo5        | LZ4         | Slightly slower than Fory but wider type support |
+| `lz4FastFory()`     | FastFory     | LZ4         | Volatile-cache codec (`SCHEMA_CONSISTENT`; not wire-compatible with Fory) |
+| `lz4Fory()`         | Fory (Java)  | LZ4         | Compatibility mode for existing Fory payloads |
+| `lz4Kryo()`         | Kryo         | LZ4         | Slightly slower than Fory but wider type support |
 | `snappyFory()`      | Fory         | Snappy      | Google compression (network transfer optimized) |
 | `zstdFory()`        | Fory         | Zstd        | High compression ratio (saves storage space) |
 

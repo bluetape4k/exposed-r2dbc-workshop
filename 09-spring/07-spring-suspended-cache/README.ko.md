@@ -17,7 +17,7 @@ Spring WebFlux + Exposed R2DBC 환경에서 Lettuce 기반의 Suspended Cache를
 | ORM       | Exposed R2DBC                  |
 | 비동기       | Kotlin Coroutines              |
 | Cache     | Lettuce (Redis Coroutines API) |
-| Codec     | Fory, Kryo5                    |
+| Codec     | FastFory, Fory, Kryo            |
 | 압축        | LZ4, Snappy, Zstd              |
 | DB        | H2 (기본), MySQL 8, PostgreSQL   |
 | 컨테이너      | Testcontainers (DB + Redis)    |
@@ -175,7 +175,7 @@ class LettuceSuspendedCache<K: Any, V: Any>(
 
 ### 2. LettuceSuspendedCacheManager
 
-캐시 인스턴스를 이름(name)별로 `getOrCreate()`로 관리하며, `LettuceBinaryCodec`(LZ4 + Fory 직렬화)을 적용합니다.
+캐시 인스턴스를 이름(name)별로 `getOrCreate()`로 관리하며, 휘발성 캐시 엔트리에 `LettuceBinaryCodec`(LZ4 + FastFory 직렬화)을 적용합니다.
 
 ```kotlin
 @Bean
@@ -183,7 +183,7 @@ fun lettuceSuspendedCacheManager(redisClient: RedisClient): LettuceSuspendedCach
     return LettuceSuspendedCacheManager(
         redisClient = redisClient,
         ttlSeconds = 60L,
-        codec = LettuceBinaryCodecs.lz4Fory(),   // LZ4 압축 + Fory 직렬화
+        codec = LettuceBinaryCodecs.lz4FastFory(),   // LZ4 압축 + FastFory (SCHEMA_CONSISTENT)
     )
 }
 
@@ -195,6 +195,8 @@ private val cache: LettuceSuspendedCache<String, CountryRecord> by lazy {
     )
 }
 ```
+
+> **FastFory 캐시 계약**: 이 예제는 휘발성 Redis 캐시 엔트리에 `LettuceBinaryCodecs.lz4FastFory()`를 사용합니다. `CompatibleMode.SCHEMA_CONSISTENT` 모드이므로 Fory codec과 와이어 포맷이 호환되지 않으며 자동 fallback도 없습니다. codec을 변경하면 기존 캐시 엔트리를 비우거나 다시 생성해야 하며, FastFory를 영속 바이너리 컬럼이나 기타 내구성 데이터에 사용하지 마십시오.
 
 ### 3. CachedCountryR2dbcRepository
 
@@ -290,8 +292,9 @@ Redis의 `KEYS` 또는 광범위한 keyspace scan은 대규모 데이터셋에�
 
 | 설정                  | Codec              | 압축  | 특징                           |
 |---------------------|--------------------|-----|------------------------------|
-| `lz4Fory()`         | Fory (Java)        | LZ4 | 빠른 직렬화 + 중간 압축 (기본값)         |
-| `lz4Kryo5()`        | Kryo5              | LZ4 | Fory보다 약간 느리지만 더 광범위한 타입 지원  |
+| `lz4FastFory()`     | FastFory           | LZ4 | 휘발성 캐시용 (`SCHEMA_CONSISTENT`; Fory와 와이어 포맷 비호환) |
+| `lz4Fory()`         | Fory (Java)        | LZ4 | 기존 Fory payload와의 호환 모드 |
+| `lz4Kryo()`         | Kryo               | LZ4 | Fory보다 약간 느리지만 더 광범위한 타입 지원  |
 | `snappyFory()`      | Fory               | Snappy | Google 압축 (네트워크 전송 최적화)   |
 | `zstdFory()`        | Fory               | Zstd | 높은 압축률 (저장 공간 절약)            |
 
