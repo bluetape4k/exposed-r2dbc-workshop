@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/bluetape4k/exposed-r2dbc-workshop/actions/workflows/ci.yml/badge.svg)](https://github.com/bluetape4k/exposed-r2dbc-workshop/actions/workflows/ci.yml)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.3-7F52FF?logo=kotlin)](https://kotlinlang.org)
-[![JVM](https://img.shields.io/badge/JVM-21-ED8B00?logo=openjdk)](https://openjdk.org)
+[![JVM](https://img.shields.io/badge/JVM-25-ED8B00?logo=openjdk)](https://openjdk.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ![Exposed R2DBC workshop 작업대 일러스트](./docs/assets/exposed-r2dbc-workshop-workbench.png)
@@ -39,14 +39,14 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 
 ## 핵심 포인트
 
-- Kotlin `2.3.20`, JDK `21+`, Exposed `1.1.1`, Spring Boot `3.5.11`, Bluetape4k `1.5.0-Beta1`
+- Kotlin `2.3.20`, JDK `25+`, Exposed `1.1.1`, Spring Boot `3.5.11`, Bluetape4k `1.5.0-Beta1`
 - 대부분의 예제가 테스트 중심으로 구성되어 있어, 코드보다 테스트를 따라가며 학습하기 좋습니다.
 - H2, PostgreSQL, MySQL 기반 시나리오를 함께 검증합니다.
 - Spring/WebFlux와 Ktor 모듈은 REST API, 캐시, 멀티테넌시, 라우팅 예제를 포함합니다.
 
 ## 요구사항
 
-- JDK 21 이상
+- JDK 25 이상
 - Docker / Colima 등 Testcontainers 실행 환경
 - Gradle Wrapper 사용 권장
 
