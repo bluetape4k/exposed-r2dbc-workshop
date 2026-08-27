@@ -4,10 +4,11 @@
 
 Chapter 13 keeps only ecosystem examples that can be taught as real R2DBC
 workshop material. CockroachDB retry handling, Ktor integration, a custom
-Spring Modulith publication log, and DDD boundary examples now share the same
-coroutine-first database boundary. BigQuery, Trino, StarRocks, and DuckDB are
-intentionally not ported here because their practical workshop paths are JDBC,
-HTTP/native client, or embedded-client centered rather than R2DBC.
+Spring Modulith publication log, DDD boundary examples, and a checkpointable
+batch sibling now share the same coroutine-first database boundary. BigQuery,
+Trino, StarRocks, and DuckDB are intentionally not ported here because their
+practical workshop paths are JDBC, HTTP/native client, or embedded-client
+centered rather than R2DBC.
 
 ## Modules
 
@@ -18,6 +19,7 @@ HTTP/native client, or embedded-client centered rather than R2DBC.
 | [`06-spring-modulith-publications`](06-spring-modulith-publications/) | Spring Modulith-shaped order/fulfillment handoff with a custom publication log | H2 R2DBC order/log transaction and coroutine dispatcher |
 | [`07-ddd-aggregate-repository`](07-ddd-aggregate-repository/) | Value-object aggregate, ordered domain events, and atomic repository rollback | H2 R2DBC aggregate, line, and event tables |
 | [`08-ddd-modulith-boundaries`](08-ddd-modulith-boundaries/) | Named-interface boundary verification between orders and shipping | H2 R2DBC event handoff plus valid/invalid Modulith checks |
+| [`09-checkpointable-r2dbc-batch`](09-checkpointable-r2dbc-batch/) | Checkpointable keyset batch with provider reader/writer, typed metadata, cancellation, and restart | H2 R2DBC source/target tables plus provider job/step metadata |
 
 Each example README explains its local schema, R2DBC trade-offs, and verification
 contract so the flow can be reviewed without opening the source first.
@@ -35,7 +37,11 @@ uses only `suspendTransaction` for repository access. The Spring Modulith
 example records a custom publication log because the official
 `EventPublicationRepository` SPI is synchronous and has no R2DBC implementation.
 The DDD examples make aggregate event sequencing, commit/rollback behavior, and
-named-interface boundary violations executable with local H2 R2DBC tests.
+named-interface boundary violations executable with local H2 R2DBC tests. The
+checkpointable batch sibling composes the published
+`bluetape4k-exposed-batch:1.12.1` R2DBC reader, writer, and metadata repository
+directly; its `STOPPED` restart proof is deliberately separate from the JDBC
+sibling in `exposed-workshop`.
 
 The removed source examples are not covered by local adapter stand-ins:
 
@@ -50,14 +56,15 @@ The removed source examples are not covered by local adapter stand-ins:
 | `06-spring-modulith-publications` | Covered by the custom R2DBC publication-log module; native SPI remains synchronous |
 | `07-ddd-aggregate-repository` | Covered by the atomic DDD aggregate repository module |
 | `08-ddd-modulith-boundaries` | Covered by the valid/invalid Spring Modulith boundary module |
+| `11-checkpointable-batch` | Covered by the checkpointable R2DBC batch sibling; keyset and cancellation semantics remain provider-native |
 
 ## Verification
 
 ```bash
 ./gradlew projects --console=plain
-repo-test-summary -- ./gradlew :03-cockroachdb-retry:test :05-ktor-exposed-integration:test :06-spring-modulith-publications:test :07-ddd-aggregate-repository:test :08-ddd-modulith-boundaries:test -PuseDB=H2 --continue --console=plain
+repo-test-summary -- ./gradlew :03-cockroachdb-retry:test :05-ktor-exposed-integration:test :06-spring-modulith-publications:test :07-ddd-aggregate-repository:test :08-ddd-modulith-boundaries:test :09-checkpointable-r2dbc-batch:test -PuseDB=H2 --continue --console=plain
 ```
 
-`.github/workflows/Examples.yml` runs the same five-module Chapter 13 H2 smoke
+`.github/workflows/Examples.yml` runs the same six-module Chapter 13 H2 smoke
 coverage when Chapter 13 files, root README files, shared infrastructure, Gradle
 files, or the workflow itself change.
