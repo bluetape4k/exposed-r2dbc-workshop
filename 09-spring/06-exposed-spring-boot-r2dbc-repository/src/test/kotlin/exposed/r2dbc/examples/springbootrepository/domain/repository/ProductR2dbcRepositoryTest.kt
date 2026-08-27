@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.parallel.ResourceAccessMode
 import org.junit.jupiter.api.parallel.ResourceLock
 import org.springframework.beans.factory.annotation.Autowired
+import java.lang.reflect.UndeclaredThrowableException
 
 /**
  * provider repository의 nullable ID mapping과 기본 CRUD/Flow 동작을 검증합니다.
@@ -71,7 +72,8 @@ class ProductR2dbcRepositoryTest : AbstractProductDatabaseTest() {
 
     @Test
     fun `single call constraint failure rolls back the failed insert`() = runTest {
-        assertFailsWith<Throwable> {
+        // Spring suspend repository proxy는 provider 예외를 이 wrapper로 노출합니다.
+        assertFailsWith<UndeclaredThrowableException> {
             repository.save(ProductRecord(null, "x".repeat(121), null))
         }
 

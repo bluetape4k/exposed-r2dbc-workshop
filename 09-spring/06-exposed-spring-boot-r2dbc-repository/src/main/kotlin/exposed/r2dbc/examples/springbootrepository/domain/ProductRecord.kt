@@ -1,5 +1,7 @@
 package exposed.r2dbc.examples.springbootrepository.domain
 
+import java.io.Serializable
+
 /**
  * Exposed row와 API 사이를 연결하는 불변 Product 모델입니다.
  *
@@ -12,4 +14,8 @@ data class ProductRecord(
     val name: String,
     /** Product의 선택적 설명입니다. */
     val description: String?,
-)
+): Serializable {
+    companion object {
+        private const val serialVersionUID = 1L
+    }
+}
