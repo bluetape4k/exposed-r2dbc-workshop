@@ -528,6 +528,15 @@
 
 ---
 
+## 현재 검증 blocker
+
+`bluetape4k-exposed-batch:1.12.1`은 2026-08-06 release이며, upstream #747은
+2026-08-27 merge된 `[2.0.0]` 변경이다. 현재 Maven Central에는 2.0.0 또는
+#747 backport artifact가 없어 실패 후 keyset restart를 검증할 수 없다.
+승인된 “workshop-local workaround 금지” 경계를 유지하는 동안 STOPPED
+restart만 완료로 기록하고, FAILED restart 회귀는 provider release 후
+추가한다.
+
 ## Plan self-review
 
 - **Spec coverage:** provider API/package boundary는 Tasks 1–3, all failure

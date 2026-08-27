@@ -272,7 +272,7 @@ jobs:
         env:
           GRADLE_OPTS: "-Dorg.gradle.daemon=false"
         # Weekly downstream gate: all Chapter 13 examples stay on the local H2
-        # R2DBC path so the ecosystem and DDD contracts are checked together.
+        # R2DBC path so ecosystem, batch, and DDD contracts are checked together.
         run: >-
           ./gradlew
           :03-cockroachdb-retry:test
@@ -280,6 +280,7 @@ jobs:
           :06-spring-modulith-publications:test
           :07-ddd-aggregate-repository:test
           :08-ddd-modulith-boundaries:test
+          :09-checkpointable-r2dbc-batch:test
           "-PuseDB=H2"
           --continue
 

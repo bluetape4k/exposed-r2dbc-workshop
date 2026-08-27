@@ -4,10 +4,10 @@
 
 13장은 실제 R2DBC workshop 예제로 설명할 수 있는 ecosystem integration만
 남깁니다. CockroachDB retry handling, Ktor integration, custom Spring Modulith
-publication log, DDD boundary 예제가 같은 coroutine-first database boundary를
-공유합니다. BigQuery, Trino, StarRocks, DuckDB는 실무 workshop 경로가 JDBC,
-HTTP/native client, embedded client 중심이므로 여기서는 R2DBC 예제로 포팅하지
-않습니다.
+publication log, DDD boundary, checkpointable batch sibling이 같은
+coroutine-first database boundary를 공유합니다. BigQuery, Trino, StarRocks,
+DuckDB는 실무 workshop 경로가 JDBC, HTTP/native client, embedded client
+중심이므로 여기서는 R2DBC 예제로 포팅하지 않습니다.
 
 ## 모듈
 
@@ -18,6 +18,7 @@ HTTP/native client, embedded client 중심이므로 여기서는 R2DBC 예제로
 | [`06-spring-modulith-publications`](06-spring-modulith-publications/) | custom publication log를 사용하는 Spring Modulith 형태의 order/fulfillment handoff | H2 R2DBC order/log transaction과 coroutine dispatcher |
 | [`07-ddd-aggregate-repository`](07-ddd-aggregate-repository/) | value object aggregate, 순서가 있는 domain event, atomic repository rollback | H2 R2DBC aggregate, line, event table |
 | [`08-ddd-modulith-boundaries`](08-ddd-modulith-boundaries/) | orders와 shipping 사이의 named-interface boundary verification | H2 R2DBC event handoff와 valid/invalid Modulith 검증 |
+| [`09-checkpointable-r2dbc-batch`](09-checkpointable-r2dbc-batch/) | provider reader/writer, typed metadata, cancellation, restart를 사용하는 checkpointable keyset batch | H2 R2DBC source/target table과 provider job/step metadata |
 
 각 예제 README는 local schema, R2DBC trade-off, verification contract를 설명하므로
 Source를 먼저 열지 않아도 flow를 확인할 수 있습니다.
@@ -35,7 +36,10 @@ Ktor 예제는 `ConnectionPool` lifecycle을 application이 소유하고 reposit
 `EventPublicationRepository` SPI가 synchronous이고 R2DBC 구현을 제공하지 않기
 때문에 custom publication log를 기록합니다. DDD 예제는 aggregate event sequence,
 commit/rollback, named-interface boundary violation을 local H2 R2DBC test로
-실행합니다.
+실행합니다. Checkpointable batch sibling은 공개된
+`bluetape4k-exposed-batch:1.12.1` R2DBC reader, writer, metadata repository를
+직접 조합합니다. `STOPPED` restart 증명은 `exposed-workshop`의 JDBC sibling과
+별도로 유지합니다.
 
 삭제한 source 예제는 local adapter stand-in으로 대체하지 않습니다.
 
@@ -50,14 +54,15 @@ commit/rollback, named-interface boundary violation을 local H2 R2DBC test로
 | `06-spring-modulith-publications` | custom R2DBC publication-log module로 cover; native SPI는 synchronous로 유지 |
 | `07-ddd-aggregate-repository` | atomic DDD aggregate repository module로 cover |
 | `08-ddd-modulith-boundaries` | valid/invalid Spring Modulith boundary module로 cover |
+| `11-checkpointable-batch` | checkpointable R2DBC batch sibling으로 cover; keyset과 cancellation semantics는 provider-native로 유지 |
 
 ## 검증
 
 ```bash
 ./gradlew projects --console=plain
-repo-test-summary -- ./gradlew :03-cockroachdb-retry:test :05-ktor-exposed-integration:test :06-spring-modulith-publications:test :07-ddd-aggregate-repository:test :08-ddd-modulith-boundaries:test -PuseDB=H2 --continue --console=plain
+repo-test-summary -- ./gradlew :03-cockroachdb-retry:test :05-ktor-exposed-integration:test :06-spring-modulith-publications:test :07-ddd-aggregate-repository:test :08-ddd-modulith-boundaries:test :09-checkpointable-r2dbc-batch:test -PuseDB=H2 --continue --console=plain
 ```
 
 `.github/workflows/Examples.yml`는 Chapter 13 파일, root README, shared
-infrastructure, Gradle 파일, workflow 자체가 바뀔 때 같은 5개 모듈 Chapter 13
+infrastructure, Gradle 파일, workflow 자체가 바뀔 때 같은 6개 모듈 Chapter 13
 H2 smoke coverage를 실행합니다.

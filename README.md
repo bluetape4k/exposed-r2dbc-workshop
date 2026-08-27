@@ -25,7 +25,8 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 - **JDK 25 Virtual Threads example** using the `bluetape4k-virtualthread-jdk25:1.12.1` provider selected by the `bluetape4k-dependencies:1.4.0` BOM.
 - **Multi-database verification** for H2, PostgreSQL, MySQL, and MariaDB.
 - **Production patterns** for repository, cache, multi-tenant schema, routing datasource,
-  realtime outbox, HTTP client outbox/idempotency, and observability/readiness examples.
+  realtime outbox, HTTP client outbox/idempotency, observability/readiness, and
+  checkpointable batch restart examples.
 
 상세 설명은 [Kotlin Exposed Book](https://debop.notion.site/Kotlin-Exposed-Book-1ad2744526b080428173e9c907abdae2)에서 확인할 수 있습니다.
 
@@ -93,7 +94,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 7. Spring repository variants: [09-spring/05-exposed-r2dbc-repository-coroutines](09-spring/05-exposed-r2dbc-repository-coroutines/README.md) (manual), [09-spring/06-exposed-spring-boot-r2dbc-repository](09-spring/06-exposed-spring-boot-r2dbc-repository/README.md) (provider adapter)
 8. 멀티테넌시 / 고성능: [10-multi-tenant](10-multi-tenant/README.md), [11-high-performance](11-high-performance/README.md)
 9. Production integration: [12-production-integration](12-production-integration/README.md)
-10. Ecosystem integrations: [13-ecosystem-integrations](13-ecosystem-integrations/README.md)
+10. Ecosystem integrations: [13-ecosystem-integrations](13-ecosystem-integrations/README.md), including the [checkpointable R2DBC batch](13-ecosystem-integrations/09-checkpointable-r2dbc-batch/README.md) sibling
 
 ## 모듈 맵
 
@@ -112,7 +113,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 | `10-multi-tenant`        | Schema, connection-factory, authorization, onboarding 멀티테넌시 + WebFlux/Ktor | [Multi-Tenant Strategies](10-multi-tenant/README.md) |
 | `11-high-performance`    | 캐시 전략, routing datasource, read/write 분리 + Ktor 비교 | [High Performance](11-high-performance/README.md)                             |
 | `12-production-integration` | Spring Boot 4/Ktor production service patterns, realtime replay, HTTP client outbox/idempotency, request correlation/readiness diagnostics | [Production Integration](12-production-integration/README.md)                 |
-| `13-ecosystem-integrations` | CockroachDB retry, Ktor, custom Spring Modulith publication, and DDD aggregate/boundary examples through R2DBC | [Ecosystem Integrations](13-ecosystem-integrations/README.md)                 |
+| `13-ecosystem-integrations` | CockroachDB retry, Ktor, custom Spring Modulith publication, DDD aggregate/boundary, and checkpointable batch examples through R2DBC | [Ecosystem Integrations](13-ecosystem-integrations/README.md)                 |
 
 ## 주목할 예제
 
@@ -145,7 +146,9 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
   [12-production-integration/02-ktor-production-integration](12-production-integration/02-ktor-production-integration/README.md)
   HTTP client outbox/idempotency plus request-correlation and readiness diagnostics
 - [13-ecosystem-integrations](13-ecosystem-integrations/README.md)
-  CockroachDB retry, Ktor, custom Spring Modulith publication, and DDD aggregate/boundary R2DBC examples; BigQuery, Trino, StarRocks, and DuckDB are documented as out of R2DBC scope
+  CockroachDB retry, Ktor, custom Spring Modulith publication, DDD aggregate/boundary, and checkpointable batch R2DBC examples; BigQuery, Trino, StarRocks, and DuckDB are documented as out of R2DBC scope
+- [13-ecosystem-integrations/09-checkpointable-r2dbc-batch](13-ecosystem-integrations/09-checkpointable-r2dbc-batch/README.md)
+  Provider-native keyset reader/writer, typed checkpoint metadata, cancellation `STOPPED`, and duplicate-visible `STOPPED` restart proof
 
 ## Architecture diagram
 
@@ -173,7 +176,7 @@ JDBC-only architecture choices remain distinct when the API model is different.
 | Ktor cache/routing issues `#47`, `#48`, `#49`, `#50` | Closed R2DBC issues `#34`, `#35`, `#36`, `#69`; modules `11-high-performance/04-06-*` | Covered by counterpart |
 | Spring Boot tenant strategy issues `#51`, `#55`, `#56` | Closed R2DBC issues `#37`-`#42`; modules `10-multi-tenant/03-06-*` | Covered by counterpart |
 | Chapter 12 production integration epic `#57` | Closed R2DBC issues `#43`-`#49`; modules `12-production-integration/01-*`, `02-*` | Covered by counterpart |
-| Chapter 13 ecosystem integrations | R2DBC issues `#113`, `#115`, `#116`, `#117`; modules `13-ecosystem-integrations/03`, `05`-`08` | CockroachDB retry, Ktor, custom Spring Modulith publication, and DDD aggregate/boundary paths are covered; BigQuery/Trino/StarRocks/DuckDB remain excluded as JDBC/HTTP/native-client centered |
+| Chapter 13 ecosystem integrations | R2DBC issues `#113`, `#115`, `#116`, `#117`, `#205`; modules `13-ecosystem-integrations/03`, `05`-`09` | CockroachDB retry, Ktor, custom Spring Modulith publication, DDD aggregate/boundary, and checkpointable batch paths are covered; BigQuery/Trino/StarRocks/DuckDB remain excluded as JDBC/HTTP/native-client centered |
 | R2DBC connection-factory-per-tenant | Closed R2DBC issue `#39`; no exact JDBC equivalent | Platform-specific, no duplicate issue |
 | JDBC DAO/entities, transaction template, benchmark | Blocking/JDBC-only modules in `exposed-workshop` | Platform-specific, no duplicate issue |
 

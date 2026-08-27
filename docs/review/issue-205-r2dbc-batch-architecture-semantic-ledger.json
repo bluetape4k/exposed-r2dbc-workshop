@@ -1,0 +1,43 @@
+{
+  "kind": "architecture",
+  "source": {
+    "question": "Checkpointable Exposed R2DBC batch에서 호출자, provider DSL, keyset reader, writer, 데이터베이스와 메타데이터 저장소의 책임 경계는 어디인가?",
+    "revision": "774e71a",
+    "paths": [
+      "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt",
+      "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/test/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshopTest.kt",
+      "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/README.md",
+      "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/README.ko.md"
+    ]
+  },
+  "nodes": [
+    {"id": "caller", "label": "Caller coroutine", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "job", "label": "checkpointableR2dbcBatchJob", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "reader", "label": "ExposedR2dbcBatchReader", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "processor", "label": "Suspend processor", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "writer", "label": "ExposedR2dbcBatchWriter", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "database", "label": "Caller-owned R2dbcDatabase", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "pool", "label": "H2 R2DBC pool / driver", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/test/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshopTest.kt"},
+    {"id": "source-table", "label": "Source table keyset", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "target-table", "label": "Target table sourceId PK", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "metadata", "label": "Provider metadata + checkpoint", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"}
+  ],
+  "edges": [
+    {"id": "caller-job", "from": "caller", "to": "job", "kind": "launch", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "job-reader", "from": "job", "to": "reader", "kind": "read", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "reader-processor", "from": "reader", "to": "processor", "kind": "flow", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "processor-writer", "from": "processor", "to": "writer", "kind": "write", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "database-pool", "from": "database", "to": "pool", "kind": "ownership", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/test/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshopTest.kt"},
+    {"id": "pool-source", "from": "pool", "to": "source-table", "kind": "r2dbc", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "pool-target", "from": "pool", "to": "target-table", "kind": "r2dbc", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "pool-metadata", "from": "pool", "to": "metadata", "kind": "r2dbc", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "reader-source", "from": "reader", "to": "source-table", "kind": "keyset", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "writer-target", "from": "writer", "to": "target-table", "kind": "batchInsert", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "job-metadata", "from": "job", "to": "metadata", "kind": "checkpoint", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"}
+  ],
+  "behavior": {"branches": 2, "loops": 1},
+  "repairs": [
+    {"target": "ownership-boundary", "reason": "caller-owned R2dbcDatabase와 provider-owned metadata/checkpoint 책임을 별도 카드로 분리", "touches": 4},
+    {"target": "keyset-boundary", "reason": "reader의 keyset 진행과 writer의 target sourceId PK를 서로 다른 데이터 경계로 배치", "touches": 3}
+  ]
+}

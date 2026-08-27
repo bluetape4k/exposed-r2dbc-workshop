@@ -1,0 +1,39 @@
+{
+  "kind": "sequence",
+  "source": {
+    "question": "첫 chunk checkpoint 이후 취소된 Exposed R2DBC batch가 STOPPED 메타데이터를 남기고, 재시작 시 다음 keyset부터 중복 없이 완료되는가?",
+    "revision": "774e71a",
+    "paths": [
+      "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt",
+      "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/test/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshopTest.kt",
+      "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/README.ko.md"
+    ]
+  },
+  "nodes": [
+    {"id": "caller", "label": "Test / caller", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/test/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshopTest.kt"},
+    {"id": "job", "label": "Batch job", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "reader", "label": "Keyset reader", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "processor", "label": "Suspend processor", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "writer", "label": "R2DBC writer", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "target-db", "label": "Target table", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "metadata", "label": "Metadata repository", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"}
+  ],
+  "edges": [
+    {"id": "launch", "from": "caller", "to": "job", "kind": "launch", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/test/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshopTest.kt"},
+    {"id": "read-first", "from": "job", "to": "reader", "kind": "keyset-read", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "process", "from": "reader", "to": "processor", "kind": "suspend-flow", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "write-first", "from": "processor", "to": "writer", "kind": "chunk-write", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "target-first", "from": "writer", "to": "target-db", "kind": "batch-insert", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "checkpoint", "from": "job", "to": "metadata", "kind": "checkpoint", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "cancel", "from": "caller", "to": "job", "kind": "cancel", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/test/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshopTest.kt"},
+    {"id": "stopped", "from": "job", "to": "metadata", "kind": "stopped", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/test/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshopTest.kt"},
+    {"id": "restart", "from": "caller", "to": "job", "kind": "restart", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/test/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshopTest.kt"},
+    {"id": "read-restored", "from": "job", "to": "reader", "kind": "restore-keyset", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt"},
+    {"id": "complete", "from": "metadata", "to": "caller", "kind": "completed", "source": "13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/test/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshopTest.kt"}
+  ],
+  "behavior": {"branches": 2, "loops": 1},
+  "repairs": [
+    {"target": "cancel-restart-frame", "reason": "첫 checkpoint 이후 취소와 restart 경계를 alt 프레임으로 드러내어 STOPPED와 COMPLETED를 혼동하지 않도록 함", "touches": 5},
+    {"target": "commit-order", "reason": "target write → commit → typed checkpoint 순서를 번호가 있는 message pill로 고정", "touches": 3}
+  ]
+}
