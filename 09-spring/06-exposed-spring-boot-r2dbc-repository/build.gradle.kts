@@ -55,8 +55,6 @@ dependencies {
     implementation(libs.spring.boot.starter.validation)
     annotationProcessor(libs.spring.boot.autoconfigure.processor)
     annotationProcessor(libs.spring.boot.configuration.processor)
-    runtimeOnly(libs.spring.boot.devtools)
-
     // Coroutines and WebFlux bridge
     implementation(libs.bluetape4k.coroutines)
     implementation(libs.kotlinx.coroutines.reactor)
