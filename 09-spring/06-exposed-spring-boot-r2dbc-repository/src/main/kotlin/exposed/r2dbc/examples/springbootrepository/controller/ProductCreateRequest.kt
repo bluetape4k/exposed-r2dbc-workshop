@@ -3,6 +3,7 @@ package exposed.r2dbc.examples.springbootrepository.controller
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
+import java.io.Serializable
 
 /**
  * Product 생성에 허용하는 외부 입력입니다. 식별자는 서버가 생성하므로 요청에
@@ -17,4 +18,8 @@ data class ProductCreateRequest(
     /** 저장할 Product의 선택적 설명입니다. */
     @field:Size(max = 500, message = "description은 500자 이하여야 합니다")
     val description: String?,
-)
+): Serializable {
+    companion object {
+        private const val serialVersionUID = 1L
+    }
+}
