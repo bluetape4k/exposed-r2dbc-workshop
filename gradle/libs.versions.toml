@@ -75,6 +75,7 @@ exposed-fastjson2 = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-
 exposed-jackson2 = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-jackson2" }
 exposed-jackson3 = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-jackson3" }
 exposed-r2dbc = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-r2dbc" }
+bluetape4k-exposed-spring-boot-r2dbc = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-spring-boot-r2dbc" }
 exposed-r2dbc-redisson = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-r2dbc-redisson" }
 exposed-tink = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-tink" }
 bluetape4k-fastjson2 = { module = "io.github.bluetape4k:bluetape4k-fastjson2" }

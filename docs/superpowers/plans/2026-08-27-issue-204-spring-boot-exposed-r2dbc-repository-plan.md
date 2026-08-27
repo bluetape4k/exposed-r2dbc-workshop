@@ -16,7 +16,7 @@
 - 기준 branch: `feat/issue-204-spring-boot-exposed-r2dbc`
 - 승인된 설계: `docs/superpowers/specs/2026-08-27-issue-204-spring-boot-exposed-r2dbc-repository-design.md` (`2bb7763d`)
 - 대상 issue: [#204](https://github.com/bluetape4k/exposed-r2dbc-workshop/issues/204)
-- 새 Gradle project name: `exposed-spring-boot-r2dbc-repository` (leaf-directory 자동 등록)
+- 새 Gradle project path: `:06-exposed-spring-boot-r2dbc-repository` (leaf-directory 자동 등록)
 - 패키지 기준: `exposed.r2dbc.examples.springbootrepository`
 - `09-spring/05-exposed-r2dbc-repository-coroutines`의 소스·build script·테스트는 수정하지 않는다.
 - 모든 새 KDoc, `README.ko.md`, issue/PR metadata와 pushed commit message는 한국어로 작성한다. `README.md`는 영어 prose를 사용하되 `README.ko.md`와 section/code/API 의미를 동등하게 유지하고, API 이름·경로·명령·URL·예외 타입은 원문을 보존한다.
@@ -55,7 +55,7 @@
 
 ### T1 — catalog alias와 leaf module build 추가
 
-- [ ] 구현 전에 현재 `AGENTS.md` 계층과 `gradle/libs.versions.toml`을 다시 읽고 toolchain/BOM/provider의 단일 source-of-truth를 확정한다. 다음 명령으로 실제 실행 JDK, Gradle/Kotlin/Spring/Exposed catalog 값과 provider resolution을 기록한다.
+- [x] 구현 전에 현재 `AGENTS.md` 계층과 `gradle/libs.versions.toml`을 다시 읽고 toolchain/BOM/provider의 단일 source-of-truth를 확정한다. 다음 명령으로 실제 실행 JDK, Gradle/Kotlin/Spring/Exposed catalog 값과 provider resolution을 기록한다.
 
   ```bash
   ./gradlew -version
@@ -65,7 +65,7 @@
 
   기대 결과: `gradle/libs.versions.toml`이 선언한 catalog/BOM이 구현 기준이고, `./gradlew -version`의 JVM이 그 기준의 Java 버전과 일치한다. `-PuseDB=H2`와 `USE_FAST_DB=true`의 실제 우선순위/지원 여부도 source에서 확인하여 이후 명령의 근거로 기록한다. provider dependency의 resolved 값은 alias/build script를 만든 직후 아래 T1 dependencyInsight로 확인한다. 저장소 overlay와 live catalog가 계속 충돌하면 임의로 버전을 섞지 말고 그 예외와 선택 근거를 이 plan/spec review artifact에 기록한 뒤 T1을 중지한다.
 
-- [ ] `gradle/libs.versions.toml`의 Bluetape4k library 영역에 다음 versionless alias를 추가하고, Spring validation catalog alias `libs.spring.boot.starter.validation`도 build dependency에 사용한다.
+- [x] `gradle/libs.versions.toml`의 Bluetape4k library 영역에 다음 versionless alias를 추가하고, Spring validation catalog alias `libs.spring.boot.starter.validation`도 build dependency에 사용한다.
 
   ```toml
   bluetape4k-exposed-spring-boot-r2dbc = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-spring-boot-r2dbc" }
@@ -73,9 +73,9 @@
 
   catalog의 `bluetape4k-dependencies = "1.4.0"` BOM이 실제 버전을 결정하게 하고, 별도 버전 문자열이나 새 repository를 추가하지 않는다.
 
-- [ ] `09-spring/06-exposed-spring-boot-r2dbc-repository/build.gradle.kts`를 생성한다. `alias(libs.plugins.exposed)`, `kotlin("plugin.spring")`, `alias(libs.plugins.spring.boot)`, `alias(libs.plugins.graalvm.native)`를 선언하고 `springBoot.mainClass`를 `exposed.r2dbc.examples.springbootrepository.ExposedSpringBootR2dbcRepositoryAppKt`로 고정한다.
-- [ ] build dependencies는 `project(":exposed-r2dbc-shared")`, `libs.bluetape4k.exposed.spring.boot.r2dbc`, `libs.bluetape4k.r2dbc`, `libs.exposed.r2dbc`, `libs.jetbrains.exposed.r2dbc`, `libs.jetbrains.exposed.core`, `libs.bluetape4k.coroutines`, `libs.kotlinx.coroutines.reactor`, H2/R2DBC pool/SPI/driver, Spring Boot autoconfigure/WebFlux/test, `libs.spring.boot.starter.validation`, `libs.bluetape4k.junit5`, `libs.kotlinx.coroutines.test`로 제한한다. `QueryByExample`, projection, `saveAll`, reactive transaction manager dependency는 추가하지 않는다. validation dependency는 `@Valid`/`ProblemDetail` contract를 위한 것이며 provider capability를 확장하지 않는다.
-- [ ] `build.gradle.kts`의 `exposed` migration block을 다음 값으로 고정하고, root convention이 제공하는 BOM과 공통 test dependency를 중복 선언하지 않는다.
+- [x] `09-spring/06-exposed-spring-boot-r2dbc-repository/build.gradle.kts`를 생성한다. `alias(libs.plugins.exposed)`, `kotlin("plugin.spring")`, `alias(libs.plugins.spring.boot)`, `alias(libs.plugins.graalvm.native)`를 선언하고 `springBoot.mainClass`를 `exposed.r2dbc.examples.springbootrepository.ExposedSpringBootR2dbcRepositoryAppKt`로 고정한다.
+- [x] build dependencies는 `project(":exposed-r2dbc-shared")`, `libs.bluetape4k.exposed.spring.boot.r2dbc`, `libs.bluetape4k.r2dbc`, `libs.exposed.r2dbc`, `libs.jetbrains.exposed.r2dbc`, `libs.jetbrains.exposed.core`, `libs.bluetape4k.coroutines`, `libs.kotlinx.coroutines.reactor`, H2/R2DBC pool/SPI/driver, Spring Boot autoconfigure/WebFlux/test, `libs.spring.boot.starter.validation`, `libs.bluetape4k.junit5`, `libs.kotlinx.coroutines.test`로 제한한다. `QueryByExample`, projection, `saveAll`, reactive transaction manager dependency는 추가하지 않는다. validation dependency는 `@Valid`/`ProblemDetail` contract를 위한 것이며 provider capability를 확장하지 않는다.
+- [x] `build.gradle.kts`의 `exposed` migration block을 다음 값으로 고정하고, root convention이 제공하는 BOM과 공통 test dependency를 중복 선언하지 않는다.
 
   ```kotlin
   exposed {
@@ -87,18 +87,18 @@
       }
   }
   ```
-- [ ] 아래 명령으로 자동 discovery와 provider resolution을 확인한다.
+- [x] 아래 명령으로 자동 discovery와 provider resolution을 확인한다.
 
   ```bash
   ./gradlew projects --console=plain
-  ./gradlew :exposed-spring-boot-r2dbc-repository:dependencies --configuration runtimeClasspath --no-daemon --console=plain
-  ./gradlew :exposed-spring-boot-r2dbc-repository:dependencyInsight \
+  ./gradlew :06-exposed-spring-boot-r2dbc-repository:dependencies --configuration runtimeClasspath --no-daemon --console=plain
+  ./gradlew :06-exposed-spring-boot-r2dbc-repository:dependencyInsight \
     --dependency bluetape4k-exposed-spring-boot-r2dbc \
     --configuration runtimeClasspath --no-daemon --console=plain
   ```
 
-  기대 결과: `projects`에 `:exposed-spring-boot-r2dbc-repository`가 한 번 나타나고, dependency insight가 catalog/BOM에서 해석된 provider artifact를 표시하며 duplicate version override가 없다.
-- [ ] RED 이전 단계에서 실패하면 `settings.gradle.kts`에 수동 include를 추가하지 말고 leaf-directory 탐색과 build script 경로를 바로잡는다. 이 단계의 rollback은 새 module directory와 alias만 제거하는 것으로 제한한다.
+  실제 결과: `projects`에 `:06-exposed-spring-boot-r2dbc-repository`가 한 번 나타났고, dependency insight가 `io.github.bluetape4k.exposed:bluetape4k-exposed-spring-boot-r2dbc:1.12.1`을 `bluetape4k-dependencies:1.4.0` 경유로 표시했다. 별도 버전 override 없이 provider가 해석되었다.
+- [x] RED 이전 단계에서 실패하면 `settings.gradle.kts`에 수동 include를 추가하지 말고 leaf-directory 탐색과 build script 경로를 바로잡는다. 이 단계의 rollback은 새 module directory와 alias만 제거하는 것으로 제한한다.
 
 ### T2 — Spring test harness를 먼저 RED로 고정
 
@@ -108,7 +108,7 @@
   - `config/ConfigurationTest.kt`: Spring context에서 app-owned `ConnectionPool`과 `R2dbcDatabase` bean만 주입되고 기본 H2 context가 기동해야 한다. repository scan assertion은 이 단계에 넣지 않는다.
 - [ ] `domain/repository/ProductR2dbcRepositoryTest.kt`와 `service/ProductTransactionServiceTest.kt`는 각각 T4와 T5 시작 시 실제 새 symbol을 참조하도록 추가하여 해당 slice의 RED를 만든다.
 - [ ] 공통 테스트는 `runTest`를 우선 사용하고, repository helper가 요구하는 경우에만 `runSuspendIO`를 사용한다. `runSuspendIO`를 선택하면 helper source를 읽어 structured cleanup/exception propagation을 확인하고 근거를 기록한다. `io.bluetape4k.assertions` assertion과 `kotlinx.coroutines.flow.toList`를 사용한다. `support/ProductTestDatabaseLifecycle.kt`의 app-owned `R2dbcDatabase` fixture `@BeforeEach`가 `suspendTransaction(db = database) { SchemaUtils.drop(Products); SchemaUtils.create(Products); seedFixtures() }`를 수행하고 `@AfterEach`가 drop/cleanup transaction을 실행해 initializer seed가 다음 테스트에 남지 않게 한다. `withTables(TestDB.H2, Products)`는 helper가 여는 hidden outer transaction과 default database 교체가 one-call/no-outer 측정을 오염시키므로 이 계약 테스트에는 사용하지 않는다. 이는 shared helper의 UTC·transaction restoration·mutex 규칙을 버리는 것이 아니며, 동일 규칙을 custom fixture에 명시적으로 재현한다는 예외 근거를 review artifact에 기록한다. 실제 호출은 fixture transaction이 끝난 뒤 app-owned database context에서 실행해야 one-call/no-outer 계약을 측정할 수 있다. DB-mutating class(`ProductR2dbcRepositoryTest`, `ProductTransactionServiceTest`, `CancellationAndLifecycleTest`, `ProductControllerTest`, `PerformanceStabilityTest`)에는 동일한 `@ResourceLock("issue-204-products-h2", mode = READ_WRITE)`를 붙여 class 간 병렬 실행을 막는다. context/lifecycle/invalid-config 테스트만 Spring app-owned bean을 직접 주입한다.
-- [ ] `./gradlew :exposed-spring-boot-r2dbc-repository:test --tests '*ConfigurationTest' --no-daemon --console=plain`을 실행해 unresolved `ExposedSpringBootR2dbcRepositoryApp` 또는 context bootstrap 실패를 확인한다. 실패가 아닌 조용한 성공이면 test source가 실제 새 symbol을 참조하는지 보강한다.
+- [ ] `./gradlew :06-exposed-spring-boot-r2dbc-repository:test --tests '*ConfigurationTest' --no-daemon --console=plain`을 실행해 unresolved `ExposedSpringBootR2dbcRepositoryApp` 또는 context bootstrap 실패를 확인한다. 실패가 아닌 조용한 성공이면 test source가 실제 새 symbol을 참조하는지 보강한다.
 - [ ] 이 RED 로그를 TDD evidence로 남기고, 이 단계에서는 production Kotlin source를 추가하지 않는다. rollback은 새 test/resource 파일을 제거하는 범위로만 한다.
 
 ### T3 — application-owned R2DBC 구성과 Product schema 구현
@@ -129,7 +129,7 @@
 - [ ] `domain/ProductRecord.kt`에 nullable `id: Long?`를 가진 immutable `data class`를 정의하고, 모든 reader-facing KDoc은 한국어로 작성한다.
 - [ ] `config/ProductDataInitializer.kt`에 application-owned `R2dbcDatabase`를 사용해 `ApplicationReadyEvent`에서 `runBlocking(Dispatchers.IO)` bridge와 `withTimeout(Duration.ofSeconds(15))`로 `SchemaUtils.create(Products)`와 최소 deterministic seed를 한 번 수행한다. `AtomicBoolean`으로 repeated `ApplicationReadyEvent`가 seed를 중복 실행하지 않게 하고, schema/seed timeout·실패는 sanitized error를 남긴 뒤 원래 예외를 재전파하여 readiness/startup failure로 남긴다. 초기화 경계 외의 repository/service 코드에는 `runBlocking`을 사용하지 않는다.
 - [ ] `src/main/resources/application.yml`에는 `spring.profiles.active: h2`, `spring.jackson.deserialization.fail-on-unknown-properties: true`, H2 R2DBC 옵션, `spring.sql.init`이 아닌 위 initializer 경계, `server.shutdown: graceful`, `spring.lifecycle.timeout-per-shutdown-phase: 10s`, server port/management의 최소 설정만 둔다. H2/initializer는 demo-only 경계이며 production profile/migration으로 사용하지 않는다는 주석과 README runbook을 함께 둔다. `src/main/resources/logback-spring.xml`은 기존 09-spring 로그 수준을 재사용하되 pool 생성/close, initializer 성공·실패, acquire timeout, cancellation, terminal DB failure는 low-cardinality sanitized key로 기록한다.
-- [ ] 아직 repository implementation이 없는 상태에서 `./gradlew :exposed-spring-boot-r2dbc-repository:test --tests '*ConfigurationTest' --no-daemon --console=plain`을 재실행한다. 기대 결과는 T2에서 정의한 app-owned pool/database context가 GREEN이고, H2 driver/pool configuration이 조용히 skip되지 않는 것이다. repository scan assertion은 T4의 `RepositoryScanTest`에서 별도 RED→GREEN으로 검증한다.
+- [ ] 아직 repository implementation이 없는 상태에서 `./gradlew :06-exposed-spring-boot-r2dbc-repository:test --tests '*ConfigurationTest' --no-daemon --console=plain`을 재실행한다. 기대 결과는 T2에서 정의한 app-owned pool/database context가 GREEN이고, H2 driver/pool configuration이 조용히 skip되지 않는 것이다. repository scan assertion은 T4의 `RepositoryScanTest`에서 별도 RED→GREEN으로 검증한다.
 - [ ] T3 실패 시 config/schema/initializer만 되돌리고 T2 RED fixture는 보존한다. H2 in-memory URL 또는 table 이름을 바꾸면 T2의 예상 실패와 영향 문서를 갱신한 뒤 재실행한다.
 
 ### T4 — provider mapping, CRUD, Flow/stream 경계 GREEN
@@ -166,7 +166,7 @@
   - bounded column을 넘는 입력의 single-call exception 뒤 기존 row 수가 보존되어 provider rollback을 검증한다.
 - [ ] `src/test/kotlin/exposed/r2dbc/examples/springbootrepository/support/RecordingConnectionFactory.kt`를 추가한다. R2DBC `ConnectionFactory`를 얇게 감싸 `create()` 횟수와 connection close 횟수를 `AtomicInteger`로 기록하고, query/connection recorder는 test source에서만 사용한다. `streamAll().take(1)`에는 충분한 row를 넣고 emitted row 수, connection acquire/close 균형, `take` 취소 후 recorder의 open count 0을 assert한다. `findAll().toList()`는 전체 materialization을 의도한 API test임을 주석/KDoc으로 한정하고 backpressure 성능을 주장하지 않는다. SQL statement/execute round-trip count는 N/A로 명시한다.
 - [ ] `ProductTestDatabaseLifecycle` fixture의 app-owned database setup transaction은 매 테스트 `SchemaUtils.drop(Products)` → `SchemaUtils.create(Products)`와 deterministic fixture seed를 수행하고, cleanup transaction은 다시 drop하여 initializer가 context 기동 때 넣은 seed가 다음 테스트에 남지 않게 한다. app H2 option의 `regular` database name과 일치시키며, 실제 repository 호출은 setup transaction이 끝난 뒤 app-owned database를 사용해야 one-call/no-outer 계약을 측정할 수 있다. `CancellationException` cleanup은 catch-all로 삼키지 않는다.
-- [ ] 먼저 `./gradlew :exposed-spring-boot-r2dbc-repository:test --tests '*RepositoryScanTest' --tests '*ProductR2dbcRepositoryTest' -PuseDB=H2 --no-daemon --console=plain`을 실행하여 RED→GREEN을 확인한 뒤 `./gradlew :exposed-spring-boot-r2dbc-repository:compileKotlin --no-daemon --console=plain`으로 public API diagnostics를 확인한다. recorder의 acquire/close count와 `streamAll().take(1)`의 emitted row count를 test output에 기록한다.
+- [ ] 먼저 `./gradlew :06-exposed-spring-boot-r2dbc-repository:test --tests '*RepositoryScanTest' --tests '*ProductR2dbcRepositoryTest' -PuseDB=H2 --no-daemon --console=plain`을 실행하여 RED→GREEN을 확인한 뒤 `./gradlew :06-exposed-spring-boot-r2dbc-repository:compileKotlin --no-daemon --console=plain`으로 public API diagnostics를 확인한다. recorder의 acquire/close count와 `streamAll().take(1)`의 emitted row count를 test output에 기록한다.
 - [ ] provider signature mismatch, `Flow` coldness, nullable id mapping 오류가 나면 provider API/source와 compiler output을 기준으로 최소 수정한다. 기존 05 repository를 복사해 이름만 바꾸는 방식은 rollback/대안으로 재사용하지 않는다.
 
 ### T5 — 명시적 outer transaction service와 atomicity tests
@@ -179,7 +179,7 @@
 - [ ] transaction service의 public method KDoc에 single-call provider transaction, explicit outer transaction, no-outer partial commit의 선택 기준과 Spring `@Transactional` 비사용 경계를 한국어로 기록한다.
 - [ ] `deleteIfExists`는 존재 시 `true`/삭제, 미존재 시 `false`/무변경을 반환하고 controller가 이를 각각 `204`/`404`로 변환한다. 존재 확인과 삭제 사이에 별도 transaction이 생기지 않는지 service test에서 고정한다.
 - [ ] T4의 `RecordingConnectionFactory`를 service test context에도 주입하고, atomic outer success/failure는 한 outer connection scope에서 두 repository 호출이 수행되는지, no-outer failure는 독립 호출별로 최소 두 번 acquire되는지 recorder로 assert한다. recorder가 provider 내부 구현을 과도하게 노출하면 exact count 대신 `outer acquire < no-outer acquire`와 모든 close count의 균형만 계약으로 고정한다.
-- [ ] `./gradlew :exposed-spring-boot-r2dbc-repository:test --tests '*ProductTransactionServiceTest' -PuseDB=H2 --no-daemon --console=plain`을 실행한다. 실패 시 nested transaction/provider reuse 여부를 stack trace, row count, acquire/close counters로 확인하고, transaction manager를 새로 추가하지 않는다.
+- [ ] `./gradlew :06-exposed-spring-boot-r2dbc-repository:test --tests '*ProductTransactionServiceTest' -PuseDB=H2 --no-daemon --console=plain`을 실행한다. 실패 시 nested transaction/provider reuse 여부를 stack trace, row count, acquire/close counters로 확인하고, transaction manager를 새로 추가하지 않는다.
 - [ ] rollback point는 T5 service/test 파일이다. provider behavior가 설계와 다르면 service API를 늘리지 말고 approved spec의 “outer transaction은 app-owned database로 명시” 경계를 유지한 채 테스트 기대를 source-backed behavior에 맞춘다.
 
 ### T6 — cancellation, pool lifecycle, invalid configuration
@@ -196,7 +196,7 @@
 - [ ] 다음 명령을 순서대로 실행한다.
 
   ```bash
-  ./gradlew :exposed-spring-boot-r2dbc-repository:test \
+  ./gradlew :06-exposed-spring-boot-r2dbc-repository:test \
     --tests '*CancellationAndLifecycleTest' \
     --tests '*InvalidR2dbcConfigurationTest' \
     -PuseDB=H2 --no-daemon --console=plain
@@ -211,7 +211,7 @@
 - [ ] `controller/ProductControllerTest.kt`에서 `WebTestClient`와 `runTest`(공통 helper가 요구할 때만 근거를 남긴 `runSuspendIO`)를 사용해 위 status/content-type/body 계약을 검증한다. GET list 응답은 `asFlow().toList()`로 의도적으로 소비하고 HTTP streaming/backpressure를 주장하지 않는다. GET missing, POST generated ID, DELETE existing/missing, validation error까지 deterministic fixture로 검증하고, 테스트 데이터는 unique faker 값과 deterministic cleanup을 사용한다.
 - [ ] controller 및 request DTO KDoc은 endpoint path, status/content-type/body, Flow materialization, validation과 no-disclosure 경계를 한국어로 설명한다.
 - [ ] 같은 테스트에 non-null `id`를 포함한 생성 payload가 unknown-property 4xx로 거부되고 기존 row를 덮어쓰지 않는 회귀, 공백·bounded `name` 또는 500자를 넘는 `description` payload가 repository/DB에 도달하지 않고 `400 application/problem+json`으로 끝나는 회귀를 추가한다. error response와 log에 SQL, R2DBC URL, credential이 포함되지 않는지 확인한다. name/description bounded validation은 선택 사항이 아니라 필수 계약으로 고정한다. QBE/projection/saveAll endpoint는 만들지 않는다.
-- [ ] `./gradlew :exposed-spring-boot-r2dbc-repository:test --tests '*ProductControllerTest' -PuseDB=H2 --no-daemon --console=plain`을 실행한다. HTTP failure는 controller mapping, JSON serialization, transaction boundary 순서로 진단하고, controller에서 `runBlocking`을 추가하지 않는다.
+- [ ] `./gradlew :06-exposed-spring-boot-r2dbc-repository:test --tests '*ProductControllerTest' -PuseDB=H2 --no-daemon --console=plain`을 실행한다. HTTP failure는 controller mapping, JSON serialization, transaction boundary 순서로 진단하고, controller에서 `runBlocking`을 추가하지 않는다.
 
 ### T8 — module README 두 locale 작성
 
@@ -229,8 +229,8 @@
 - [ ] README에는 실제 파일 경로와 다음 명령만 사용한다.
 
   ```bash
-  ./gradlew :exposed-spring-boot-r2dbc-repository:bootRun
-  ./gradlew :exposed-spring-boot-r2dbc-repository:test -PuseDB=H2
+  ./gradlew :06-exposed-spring-boot-r2dbc-repository:bootRun
+  ./gradlew :06-exposed-spring-boot-r2dbc-repository:test -PuseDB=H2
   ```
 
 - [ ] `README.md`는 English prose, `README.ko.md`는 Korean prose를 사용하고 같은 section 순서·code/API 의미를 유지한다. T9의 대응 PNG만 각 locale에 embed하고 SVG를 직접 embed하지 않는다. 링크 대상은 실제 파일 존재 여부와 대소문자를 검사한다.
@@ -281,7 +281,7 @@
 - [ ] `.github/workflows/Examples.yml`의 `push.paths`와 `pull_request.paths`에 `09-spring/06-exposed-spring-boot-r2dbc-repository/**`를 추가하고, `chapter-09` job을 만든다. job은 T1에서 확인한 실제 Gradle JVM과 동일한 Java setup/Gradle wrapper를 사용하여 다음을 실행한다.
 
   ```bash
-  ./gradlew :exposed-spring-boot-r2dbc-repository:test -PuseDB=H2 --continue
+  ./gradlew :06-exposed-spring-boot-r2dbc-repository:test -PuseDB=H2 --continue
   ```
 
   artifact upload에는 새 module의 `build/test-results/test/*.xml`과 `build/reports/tests/test/`를 포함한다. 09-spring의 unrelated 05/07 변경을 이 job이 검증한다고 가장하지 않는다.
@@ -318,22 +318,22 @@
 
   ```bash
   ./gradlew projects --console=plain
-  ./gradlew :exposed-spring-boot-r2dbc-repository:compileKotlin \
-    :exposed-spring-boot-r2dbc-repository:compileTestKotlin \
+  ./gradlew :06-exposed-spring-boot-r2dbc-repository:compileKotlin \
+    :06-exposed-spring-boot-r2dbc-repository:compileTestKotlin \
     --no-daemon --console=plain
-  ./gradlew :exposed-spring-boot-r2dbc-repository:test \
+  ./gradlew :06-exposed-spring-boot-r2dbc-repository:test \
     -PuseDB=H2 --no-daemon --console=plain
-  ./gradlew :exposed-spring-boot-r2dbc-repository:check \
+  ./gradlew :06-exposed-spring-boot-r2dbc-repository:check \
     -PuseDB=H2 --no-daemon --console=plain
   ./gradlew test -PuseDB=H2 --no-daemon --console=plain
   ```
 
   각 command의 `BUILD SUCCESSFUL`, test count, skipped/failed count를 기록한다. Docker/Testcontainers backend는 기본 DoD가 아니며 실행할 경우 다른 Gradle invocation과 병렬화하지 않는다.
-- [ ] `repo-test-summary -- ./gradlew :exposed-spring-boot-r2dbc-repository:test -PuseDB=H2`가 설치되어 있으면 결과 요약에 사용하고, 없으면 raw Gradle output을 보존한다.
+- [ ] `repo-test-summary -- ./gradlew :06-exposed-spring-boot-r2dbc-repository:test -PuseDB=H2`가 설치되어 있으면 결과 요약에 사용하고, 없으면 raw Gradle output을 보존한다.
 - [ ] repository hazard를 확인한다: catalog alias/BOM 정렬, leaf module discovery, Kover subproject inclusion, Examples workflow path/job, nightly 영향, README PNG refs, `09-spring/05` diff 불변, public KDoc/diagnostics, graceful shutdown/in-flight drain, initializer fail-fast/idempotence, sanitized lifecycle/error log, `git diff --check`.
 - [ ] public sample type/method KDoc의 실행 가능한 read-back을 수행한다. 새 module의 `src/main/kotlin` 선언을 `rg -n "^\\s*((public|private|protected|internal|override|suspend|open|final|abstract|data)\\s+)*(class|interface|object|fun)" 09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin`으로 modifier까지 포함해 열거하고 각 public 선언 직전 한국어 `/** 설명 */` 존재를 수동 대조한다. 누락·영문 reader-facing 설명·endpoint status/transaction/mapping 경계 누락은 T11 실패로 처리한다.
-- [ ] `src/test/kotlin/exposed/r2dbc/examples/springbootrepository/PerformanceStabilityTest.kt`를 별도 class로 추가한다. `maxSize=1` test pool에서 `repeat(5)` CRUD/stream cycle과 bounded concurrent caller 8개를 순차적으로 실행하고, 각 cycle의 elapsed time, acquire/close delta, timeout/failed count를 기록한다. 다음 targeted command의 결과를 독립 evidence로 보존한다. `./gradlew :exposed-spring-boot-r2dbc-repository:test --tests '*PerformanceStabilityTest' -PuseDB=H2 --no-daemon --console=plain`. 벤치마크나 처리량 수치는 범위 밖으로 명시하고, leak/timeout이 없다는 stability claim만 허용한다.
-- [ ] README의 `bootRun` 명령은 무제한 장기 프로세스로 남기지 않고 bounded startup smoke로 실행한다. macOS/Linux portability를 위해 `gtimeout`/`timeout` availability를 먼저 확인하고, 없으면 Python `subprocess` fallback으로 `./gradlew :exposed-spring-boot-r2dbc-repository:bootRun --no-daemon --console=plain`을 process group/session으로 실행한다. 30초 timeout 시 process group 전체에 TERM을 보내고 bounded grace 뒤 KILL하여 Gradle child와 application JVM orphan이 0인지 확인한다. application-ready 로그와 graceful shutdown 또는 명시적 timeout 경계를 확인하고 생성된 process를 정리한다. startup smoke가 실패하면 T3 config/initializer와 로그를 먼저 진단한다.
+- [ ] `src/test/kotlin/exposed/r2dbc/examples/springbootrepository/PerformanceStabilityTest.kt`를 별도 class로 추가한다. `maxSize=1` test pool에서 `repeat(5)` CRUD/stream cycle과 bounded concurrent caller 8개를 순차적으로 실행하고, 각 cycle의 elapsed time, acquire/close delta, timeout/failed count를 기록한다. 다음 targeted command의 결과를 독립 evidence로 보존한다. `./gradlew :06-exposed-spring-boot-r2dbc-repository:test --tests '*PerformanceStabilityTest' -PuseDB=H2 --no-daemon --console=plain`. 벤치마크나 처리량 수치는 범위 밖으로 명시하고, leak/timeout이 없다는 stability claim만 허용한다.
+- [ ] README의 `bootRun` 명령은 무제한 장기 프로세스로 남기지 않고 bounded startup smoke로 실행한다. macOS/Linux portability를 위해 `gtimeout`/`timeout` availability를 먼저 확인하고, 없으면 Python `subprocess` fallback으로 `./gradlew :06-exposed-spring-boot-r2dbc-repository:bootRun --no-daemon --console=plain`을 process group/session으로 실행한다. 30초 timeout 시 process group 전체에 TERM을 보내고 bounded grace 뒤 KILL하여 Gradle child와 application JVM orphan이 0인지 확인한다. application-ready 로그와 graceful shutdown 또는 명시적 timeout 경계를 확인하고 생성된 process를 정리한다. startup smoke가 실패하면 T3 config/initializer와 로그를 먼저 진단한다.
 - [ ] `git diff --stat`, `git status --short`, `git diff --check`, `rg -n "02-alternatives-to-jpa/r2dbc-example|QueryByExample|projection|saveAll"`를 검토한다. 마지막 `rg` 결과는 unsupported 설명을 제외한 실제 API/README claim이 없어야 한다.
 - [ ] 실패하면 retry PASS만으로 닫지 않고 raw failure를 읽어 root cause를 고친 뒤 해당 TDD slice와 T11 전체를 처음부터 재실행한다.
 
@@ -393,4 +393,4 @@
 - [x] 승인된 설계 문서와 선택 sibling 배치를 기준으로 계획 범위를 고정했다.
 - [ ] T1–T12 실행과 각 task의 fresh evidence.
 - [x] plan review P0=0/P1=0.
-- [ ] 사용자 실행 방식 선택.
+- [x] 사용자 실행 방식 선택 — Inline Execution.
