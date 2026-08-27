@@ -12,6 +12,7 @@ kotlinx-benchmark = "0.4.15"
 
 spring-boot = "4.1.0"
 ktor = "3.5.0"
+spring-modulith = "2.1.0"
 
 exposed = "1.4.0"
 
@@ -147,6 +148,12 @@ spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
 spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux" }
+spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter" }
+
+# Spring Modulith
+spring-modulith-bom = { module = "org.springframework.modulith:spring-modulith-bom", version.ref = "spring-modulith" }
+spring-modulith-core = { module = "org.springframework.modulith:spring-modulith-core" }
+spring-modulith-starter-core = { module = "org.springframework.modulith:spring-modulith-starter-core" }
 springdoc-openapi-starter-webflux-ui = { module = "org.springdoc:springdoc-openapi-starter-webflux-ui", version = "2.8.14" }
 
 # Ktor
