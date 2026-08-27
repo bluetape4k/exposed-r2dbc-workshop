@@ -1,0 +1,44 @@
+{
+  "kind": "architecture",
+  "source": {
+    "question": "어떤 컴포넌트가 Product HTTP 요청부터 application-owned R2DBC pool까지 책임을 가지며, provider transaction과 optional outer transaction은 어디에서 갈라지는가?",
+    "revision": "cc993b9",
+    "paths": [
+      "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/ExposedSpringBootR2dbcRepositoryApp.kt",
+      "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/controller/ProductController.kt",
+      "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/service/ProductTransactionService.kt",
+      "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/repository/ProductR2dbcRepository.kt",
+      "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/config/ExposedR2dbcConfig.kt",
+      "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/config/ConnectionPoolLifecycle.kt"
+    ]
+  },
+  "nodes": [
+    {"id": "http-suspend-caller", "label": "ProductController suspend API", "source": "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/controller/ProductController.kt"},
+    {"id": "product-service", "label": "ProductTransactionService", "source": "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/service/ProductTransactionService.kt"},
+    {"id": "provider-single-call-tx", "label": "Provider one-call transaction", "source": "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/repository/ProductR2dbcRepository.kt"},
+    {"id": "optional-outer-tx", "label": "Optional outer suspendTransaction", "source": "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/service/ProductTransactionService.kt"},
+    {"id": "repository-scan-proxy", "label": "ExposedR2dbcRepository proxy", "source": "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/ExposedSpringBootR2dbcRepositoryApp.kt"},
+    {"id": "exposed-mapping", "label": "Product table and row mapping", "source": "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/repository/ProductR2dbcRepository.kt"},
+    {"id": "r2dbc-database", "label": "Application-owned R2dbcDatabase", "source": "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/config/ExposedR2dbcConfig.kt"},
+    {"id": "connection-pool", "label": "Bounded ConnectionPool", "source": "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/config/ExposedR2dbcConfig.kt"},
+    {"id": "h2-r2dbc-driver", "label": "H2 R2DBC driver", "source": "09-spring/06-exposed-spring-boot-r2dbc-repository/build.gradle.kts"},
+    {"id": "pool-lifecycle", "label": "ConnectionPoolLifecycle", "source": "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/config/ConnectionPoolLifecycle.kt"}
+  ],
+  "edges": [
+    {"id": "http-to-service", "from": "http-suspend-caller", "to": "product-service", "kind": "request", "source": "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/controller/ProductController.kt"},
+    {"id": "service-to-single-call", "from": "product-service", "to": "provider-single-call-tx", "kind": "transaction", "source": "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/repository/ProductR2dbcRepository.kt"},
+    {"id": "service-to-outer", "from": "product-service", "to": "optional-outer-tx", "kind": "transaction", "source": "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/service/ProductTransactionService.kt"},
+    {"id": "single-call-to-proxy", "from": "provider-single-call-tx", "to": "repository-scan-proxy", "kind": "provider", "source": "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/repository/ProductR2dbcRepository.kt"},
+    {"id": "outer-to-proxy", "from": "optional-outer-tx", "to": "repository-scan-proxy", "kind": "outer-transaction", "source": "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/service/ProductTransactionService.kt"},
+    {"id": "proxy-to-mapping", "from": "repository-scan-proxy", "to": "exposed-mapping", "kind": "mapping", "source": "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/repository/ProductR2dbcRepository.kt"},
+    {"id": "mapping-to-database", "from": "exposed-mapping", "to": "r2dbc-database", "kind": "database", "source": "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/config/ExposedR2dbcConfig.kt"},
+    {"id": "database-to-pool", "from": "r2dbc-database", "to": "connection-pool", "kind": "ownership", "source": "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/config/ExposedR2dbcConfig.kt"},
+    {"id": "pool-to-driver", "from": "connection-pool", "to": "h2-r2dbc-driver", "kind": "connection", "source": "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/config/ExposedR2dbcConfig.kt"},
+    {"id": "database-to-lifecycle", "from": "r2dbc-database", "to": "pool-lifecycle", "kind": "lifecycle", "source": "09-spring/06-exposed-spring-boot-r2dbc-repository/src/main/kotlin/exposed/r2dbc/examples/springbootrepository/config/ConnectionPoolLifecycle.kt"}
+  ],
+  "behavior": {"branches": 1, "loops": 0},
+  "repairs": [
+    {"target": "transaction-branch", "reason": "single-call provider transaction과 optional outer suspendTransaction을 분리된 source-backed 카드로 배치", "touches": 2},
+    {"target": "long-identifiers", "reason": "provider와 lifecycle의 긴 기술 식별자를 subtitle 줄로 나누어 축약 없이 표시", "touches": 4}
+  ]
+}
