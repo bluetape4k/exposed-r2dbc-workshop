@@ -89,7 +89,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 4. 확장 기능: [06-advanced](06-advanced/README.md)
 5. JPA 변환: [07-jpa-convert/01-convert-jpa-basic](07-jpa-convert/01-convert-jpa-basic/README.md)
 6. Coroutines / Virtual Threads: [08-r2dbc-coroutines](08-r2dbc-coroutines/01-exposed-r2dbc-coroutines-basic/README.md)
-7. Spring Repository / Cache: [09-spring](09-spring/05-exposed-r2dbc-repository-coroutines/README.md)
+7. Spring repository variants: [09-spring/05-exposed-r2dbc-repository-coroutines](09-spring/05-exposed-r2dbc-repository-coroutines/README.md) (manual), [09-spring/06-exposed-spring-boot-r2dbc-repository](09-spring/06-exposed-spring-boot-r2dbc-repository/README.md) (provider adapter)
 8. 멀티테넌시 / 고성능: [10-multi-tenant](10-multi-tenant/README.md), [11-high-performance](11-high-performance/README.md)
 9. Production integration: [12-production-integration](12-production-integration/README.md)
 10. Ecosystem integrations: [13-ecosystem-integrations](13-ecosystem-integrations/README.md)
@@ -107,7 +107,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 | `06-advanced`            | 암호화, JSON, Money, Custom Column, Jackson/Tink | [Advanced](06-advanced/README.md)                                             |
 | `07-jpa-convert`         | JPA 패턴을 Exposed R2DBC로 전환                     | [JPA Convert](07-jpa-convert/01-convert-jpa-basic/README.md)                  |
 | `08-r2dbc-coroutines`    | Coroutines, Flow, Virtual Threads             | [Coroutines](08-r2dbc-coroutines/01-exposed-r2dbc-coroutines-basic/README.md) |
-| `09-spring`              | Repository 패턴, Redis 기반 suspended cache       | [Spring Examples](09-spring/05-exposed-r2dbc-repository-coroutines/README.md) |
+| `09-spring`              | Manual/provider repository patterns, Redis-backed suspended cache | [Manual Repository](09-spring/05-exposed-r2dbc-repository-coroutines/README.md), [Provider Adapter](09-spring/06-exposed-spring-boot-r2dbc-repository/README.md) |
 | `10-multi-tenant`        | Schema, connection-factory, authorization, onboarding 멀티테넌시 + WebFlux/Ktor | [Multi-Tenant Strategies](10-multi-tenant/README.md) |
 | `11-high-performance`    | 캐시 전략, routing datasource, read/write 분리 + Ktor 비교 | [High Performance](11-high-performance/README.md)                             |
 | `12-production-integration` | Spring Boot 4/Ktor production service patterns, realtime replay, HTTP client outbox/idempotency, request correlation/readiness diagnostics | [Production Integration](12-production-integration/README.md)                 |
@@ -117,6 +117,8 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 
 - [09-spring/05-exposed-r2dbc-repository-coroutines](09-spring/05-exposed-r2dbc-repository-coroutines/README.md)
   Spring WebFlux + Coroutines + Exposed repository 패턴
+- [09-spring/06-exposed-spring-boot-r2dbc-repository](09-spring/06-exposed-spring-boot-r2dbc-repository/README.md)
+  Spring Boot repository scanning, provider mapping, and single-call/outer transaction boundaries
 - [09-spring/07-spring-suspended-cache](09-spring/07-spring-suspended-cache/README.md)
   Lettuce coroutine cache와 Exposed repository 조합
 - [10-multi-tenant](10-multi-tenant/README.md)

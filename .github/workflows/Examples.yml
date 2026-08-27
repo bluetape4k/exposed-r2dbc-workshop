@@ -17,6 +17,7 @@ on:
       - '11-high-performance/04-cache-strategies-ktor-r2dbc/**'
       - '11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines/**'
       - '11-high-performance/06-routing-datasource-ktor-r2dbc/**'
+      - '09-spring/06-exposed-spring-boot-r2dbc-repository/**'
       - '12-production-integration/**'
       - '13-ecosystem-integrations/**'
       - 'README.md'
@@ -44,6 +45,7 @@ on:
       - '11-high-performance/04-cache-strategies-ktor-r2dbc/**'
       - '11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines/**'
       - '11-high-performance/06-routing-datasource-ktor-r2dbc/**'
+      - '09-spring/06-exposed-spring-boot-r2dbc-repository/**'
       - '12-production-integration/**'
       - '13-ecosystem-integrations/**'
       - 'README.md'
@@ -69,6 +71,43 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
+  chapter-09:
+    name: Chapter 9 Spring repository examples
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v5
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: wrapper
+          cache-read-only: ${{ github.event_name == 'pull_request' }}
+
+      - name: Run Spring Boot Exposed R2DBC repository example
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+        # H2-only demo profile: external DB compatibility is intentionally out
+        # of scope for this provider adapter example.
+        run: >-
+          ./gradlew
+          :06-exposed-spring-boot-r2dbc-repository:test
+          "-PuseDB=H2"
+          --continue
+
+      - name: Upload chapter 9 example test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: chapter-09-example-test-results
+          path: |
+            09-spring/06-exposed-spring-boot-r2dbc-repository/build/test-results/test/*.xml
+            09-spring/06-exposed-spring-boot-r2dbc-repository/build/reports/tests/test/
+          retention-days: 7
+
   chapter-10:
     name: Chapter 10 multi-tenant examples
     runs-on: ubuntu-latest
