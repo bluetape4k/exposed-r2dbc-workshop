@@ -110,7 +110,7 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 | `10-multi-tenant`        | Schema, connection-factory, authorization, onboarding 멀티테넌시 + WebFlux/Ktor | [Multi-Tenant Strategies](10-multi-tenant/README.ko.md) |
 | `11-high-performance`    | 캐시 전략, routing datasource, read/write 분리 + Ktor 비교 | [High Performance](11-high-performance/README.ko.md)                          |
 | `12-production-integration` | Spring Boot 4/Ktor production service patterns, realtime replay, HTTP client outbox/idempotency, request correlation/readiness diagnostics | [Production Integration](12-production-integration/README.ko.md)              |
-| `13-ecosystem-integrations` | PostgreSQL 호환 R2DBC 경계를 사용하는 CockroachDB retry handling | [Ecosystem Integrations](13-ecosystem-integrations/README.ko.md)              |
+| `13-ecosystem-integrations` | R2DBC를 사용하는 CockroachDB retry, Ktor, custom Spring Modulith publication, DDD aggregate/boundary 예제 | [Ecosystem Integrations](13-ecosystem-integrations/README.ko.md)              |
 
 ## 주목할 예제
 
@@ -140,7 +140,7 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
   [12-production-integration/02-ktor-production-integration](12-production-integration/02-ktor-production-integration/README.ko.md)
   HTTP client outbox/idempotency와 request-correlation/readiness diagnostics
 - [13-ecosystem-integrations](13-ecosystem-integrations/README.ko.md)
-  PostgreSQL 호환 R2DBC를 통한 CockroachDB retry handling. BigQuery, Trino, StarRocks, DuckDB는 R2DBC 범위 밖으로 문서화
+  R2DBC를 통한 CockroachDB retry, Ktor, custom Spring Modulith publication, DDD aggregate/boundary 예제. BigQuery, Trino, StarRocks, DuckDB는 R2DBC 범위 밖으로 문서화
 
 ## 아키텍처 개요
 
@@ -168,7 +168,7 @@ R2DBC 전용 구조와 JDBC 전용 구조는 API 모델이 다르면 별도 예�
 | Ktor cache/routing issues `#47`, `#48`, `#49`, `#50` | Closed R2DBC issues `#34`, `#35`, `#36`, `#69`; modules `11-high-performance/04-06-*` | counterpart 있음 |
 | Spring Boot tenant strategy issues `#51`, `#55`, `#56` | Closed R2DBC issues `#37`-`#42`; modules `10-multi-tenant/03-06-*` | counterpart 있음 |
 | Chapter 12 production integration epic `#57` | Closed R2DBC issues `#43`-`#49`; modules `12-production-integration/01-*`, `02-*` | counterpart 있음 |
-| Chapter 13 database adapters | R2DBC issue `#115`; module `13-ecosystem-integrations/03-cockroachdb-retry` | CockroachDB는 PostgreSQL 호환 R2DBC로 cover; BigQuery/Trino/StarRocks/DuckDB는 JDBC/HTTP/native-client 중심이라 제외 |
+| Chapter 13 ecosystem integrations | R2DBC issues `#113`, `#115`, `#116`, `#117`; modules `13-ecosystem-integrations/03`, `05`-`08` | CockroachDB retry, Ktor, custom Spring Modulith publication, DDD aggregate/boundary 경로를 cover; BigQuery/Trino/StarRocks/DuckDB는 JDBC/HTTP/native-client 중심이라 계속 제외 |
 | R2DBC connection-factory-per-tenant | Closed R2DBC issue `#39`; exact JDBC equivalent 없음 | 플랫폼 전용, 중복 issue 없음 |
 | JDBC DAO/entities, transaction template, benchmark | `exposed-workshop`의 blocking/JDBC 전용 모듈 | 플랫폼 전용, 중복 issue 없음 |
 
