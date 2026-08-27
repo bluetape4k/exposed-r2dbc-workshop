@@ -3,7 +3,8 @@
 ## 검토 범위와 기준
 
 - 대상: `docs/superpowers/specs/2026-08-28-issue-198-virtualthread-jdk25-design.md`
-- 기준 commit: `78ec7bd151b5fc6d2445416c643b9646752c7357`
+- 최초 기준 commit: `78ec7bd151b5fc6d2445416c643b9646752c7357`
+- amended spec 기준 commit: `4254572` (`JDK25 실행 계약·검증 gate 보강 반영`)
 - live 기준: GitHub Issue #198, JDK25 provider `1.12.1`, 현재 모듈/루트 README
 - 검토 방식: 서로 독립적인 6개 관점의 read-only review wave와 main 통합
 - 변경/커밋/외부 side effect: 없음 (본 문서 작성 자체는 review 증적)
@@ -19,7 +20,7 @@
 | Developer/API | WATCH | 0 | 0 | 2 | 1 | public discovery API assertion과 artifact graph assertion 분리; 전체 runtime exclusion 명시 |
 | User/Caller | COMMENT | 0 | 0 | 3 | 0 | root 학습 경로, expected count/allowlist, EN/KO provider 안내 보강 |
 
-## 통합 판단
+## 최초 통합 판단 및 설계 보강
 
 현재 설계에는 P0가 없고, 구현을 기술적으로 막는 P1은 운영 gate 보강으로 해소할 수
 있다. 다음 변경을 설계와 계획에 반영한 뒤 구현을 시작한다.
@@ -69,8 +70,34 @@
 
 ## Verdict
 
-**조건부 PASS — 설계 보강 후 계획 단계로 진행 가능**
+**최초 verdict: 조건부 PASS — 설계 보강 후 계획 단계로 진행 가능**
 
 P0/P1을 남기지 않는 조건은 위 1~7번 보강을 설계/계획 문서에 반영하고,
-`git diff --check`와 독립 review read-back을 다시 통과하는 것이다. 현재 코드
-구현은 아직 시작하지 않았다.
+`git diff --check`와 독립 review read-back을 다시 통과하는 것이었다. 해당
+보강은 amended design `4254572`에 반영되었고, 아래 fresh rereview에서
+재검증했다. 현재 코드 구현은 아직 시작하지 않았다.
+
+## Amended spec fresh rereview
+
+amended design과 위 통합 조치를 기준으로 performance, stability, security
+세 관점의 독립 read-only rereview를 다시 수행했다. 각 결과는 workflow
+receipt run `20260827T185619Z-32b9ae70`의 `rereview-*` lane에 기록했다.
+
+| 관점 | 결과 | P0 | P1 | P2 | P3 | 후속 조치 |
+|---|---|---:|---:|---:|---:|---|
+| Performance | PASS | 0 | 0 | 0 | 0 | 구현 후 fast/full execution gate와 resolved graph를 재실행 |
+| Stability | PASS | 0 | 0 | 0 | 0 | 구현 후 bounded fail-fast lifecycle 및 skip gate 재검증 |
+| Security | PASS / APPROVE | 0 | 0 | 0 | 1 | 테스트 JVM에 production secret을 주입하지 않고 raw env/system-property dump를 금지하는 체크리스트 문구를 구현 단계에 고정 |
+
+### Fresh integrated verdict
+
+- amended design의 계약 변경은 public discovery API, classfile/module metadata,
+  classpath isolation, bounded lifecycle, 실행 수/skip gate로 구체화되어 있다.
+- 세 관점 모두 P0/P1이 없고, security P3는 구현·CI 운영 경계에 대한 비차단
+  권고로 분류해 체크리스트에 반영한다.
+- `git diff --check`와 receipt checksum read-back을 통과했다.
+
+**최종 amended-spec verdict: PASS — 계획 작성 단계로 진행 가능**
+
+written spec의 사용자 read-back 승인 전에는 implementation plan이나 코드 변경을
+시작하지 않는다.
