@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: h2
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+  lifecycle:
+    timeout-per-shutdown-phase: 10s
+
+server:
+  shutdown: graceful
+  port: 0
+
+# H2와 ApplicationReadyEvent 초기화는 학습용 경계입니다. 운영 profile에서는 사용하지 않습니다.
