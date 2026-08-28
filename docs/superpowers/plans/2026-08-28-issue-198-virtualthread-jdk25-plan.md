@@ -347,7 +347,8 @@ tasks.register("verifyVirtualThreadTestExecution") {
         var skipped = 0
         var failures = 0
         var errors = 0
-        val skippedCases = mutableListOf<Pair<String, String>>()
+        data class SkippedCase(val name: String, val type: String, val message: String)
+        val skippedCases = mutableListOf<SkippedCase>()
         val caseIdentities = mutableListOf<Pair<String, String>>()
         reports.forEach { report ->
             val suite = factory.newDocumentBuilder().parse(report).documentElement
@@ -369,8 +370,10 @@ tasks.register("verifyVirtualThreadTestExecution") {
                 caseIdentities += testCase.getAttribute("classname") to testCase.getAttribute("name")
                 val skippedNodes = testCase.getElementsByTagName("skipped")
                 if (skippedNodes.length > 0) {
-                    val message = skippedNodes.item(0).attributes?.getNamedItem("message")?.nodeValue.orEmpty()
-                    skippedCases += testCase.getAttribute("name") to message
+                    val skippedNode = skippedNodes.item(0)
+                    val type = skippedNode.attributes?.getNamedItem("type")?.nodeValue.orEmpty()
+                    val message = skippedNode.attributes?.getNamedItem("message")?.nodeValue.orEmpty()
+                    skippedCases += SkippedCase(testCase.getAttribute("name"), type, message)
                 }
             }
         }
@@ -426,14 +429,18 @@ tasks.register("verifyVirtualThreadTestExecution") {
         val expectedSkippedNames = selectedDialects
             .filter { it == "MARIADB" || it == "H2_MARIADB" }
             .map { "$nestedTransactionDisplayName $it" }
-        require(skippedCases.map { it.first }.sorted() == expectedSkippedNames.sorted()) {
+        require(skippedCases.map { it.name }.sorted() == expectedSkippedNames.sorted()) {
             "허용된 MariaDB capability skip 수가 다릅니다: expected=$expectedSkipped actual=${skippedCases.size}"
         }
-        require(skippedCases.all { (name, message) ->
-            name in expectedSkippedNames &&
-                message == "MariaDB-compatible nested transactions are not supported"
+        val expectedSkipType = "org.opentest4j.TestAbortedException"
+        val expectedSkipMessage =
+            "org.opentest4j.TestAbortedException: Assumption failed: MariaDB-compatible nested transactions are not supported"
+        require(skippedCases.all { skippedCase ->
+            skippedCase.name in expectedSkippedNames &&
+                skippedCase.type == expectedSkipType &&
+                skippedCase.message == expectedSkipMessage
         }) {
-            "허용되지 않은 skipped testcase가 발견되었습니다."
+            "허용되지 않은 skipped testcase type/message가 발견되었습니다."
         }
         require(failures == 0 && errors == 0) {
             "테스트 failure/error가 있어 실행 수 gate를 통과할 수 없습니다: failures=$failures errors=$errors"
@@ -459,7 +466,10 @@ feature 설정이 JDK/Gradle XML parser에서 지원되지 않으면 task를 실
 않는다. parser는 `useDB`/`useFastDB` 값을 읽지만 그 값이나
 `System.getProperties()`/환경 변수 전체를 log하지 않는다. 명시적 MariaDB
 선택이 아닌 경우 모든 skip은 허용하지 않으며, 명시적 선택에서도 중첩
-transaction testcase 외의 skip과 exact capability message가 아닌 skip은 실패한다.
+transaction testcase 외의 skip과 exact JUnit abort type/message가 아닌 skip은
+실패한다. JUnit XML의 `<skipped>`에는 `type="org.opentest4j.TestAbortedException"`
+및 `message="org.opentest4j.TestAbortedException: Assumption failed: MariaDB-compatible nested transactions are not supported"`가
+직렬화된다는 실제 report 형식을 고정한다.
 `useFastDB`도 지정된 경우 정확히 `true` 또는 `false`만 허용하며, `maybe` 같은
 malformed 값은 기본 matrix로 전환하지 않고 즉시 실패시킨다.
 
@@ -620,7 +630,8 @@ test -d "$REPORT_DIR"
 Expected evidence: provider smoke 1개와 non-MariaDB nested transaction을 포함한
 parameterized 3개가 현재 관찰값 `total=5 executed=4 skipped=1`로 실행되며,
 skip은 정확히 `중첩된 virtual thread 용 트랜잭션을 async로 실행 H2_MARIADB`
-하나여야 한다. 이 값은 현재 matrix의 evidence이고 gate contract는
+하나이고 type/message는 JUnit의 `TestAbortedException` serialized value와
+일치해야 한다. 이 값은 현재 matrix의 evidence이고 gate contract는
 `minimumTotal=5`, `minimumExecuted=4`, `skipped=1`이다. 다른 skip, failure,
 error, 또는 명시적 MariaDB가 아닌 환경의 skip은 task failure다. 이어서 생성된
 JUnit XML의 capability message를 임시 복사본에서 다른 문자열로 바꾸고 `-x
@@ -641,6 +652,22 @@ while IFS= read -r candidate; do
 done < <(find "$REPORT_DIR" -type f -name 'TEST-*.xml' -print)
 test -n "$REPORT"
 test -f "$REPORT"
+python3 - "$REPORT" <<'PY'
+import sys
+import xml.etree.ElementTree as ET
+
+root = ET.parse(sys.argv[1]).getroot()
+skipped = [case for case in root.findall("testcase") if case.find("skipped") is not None]
+assert len(skipped) == 1
+case = skipped[0]
+assert case.attrib["name"] == "중첩된 virtual thread 용 트랜잭션을 async로 실행 H2_MARIADB"
+skipped_node = case.find("skipped")
+assert skipped_node.attrib["type"] == "org.opentest4j.TestAbortedException"
+assert skipped_node.attrib["message"] == (
+    "org.opentest4j.TestAbortedException: Assumption failed: "
+    "MariaDB-compatible nested transactions are not supported"
+)
+PY
 BACKUP="${REPORT}.issue-198-backup"
 cp "$REPORT" "$BACKUP"
 restore_report() {
@@ -875,15 +902,16 @@ for run in 1 2 3; do
   LOG="$LIVENESS_LOG_DIR/run-${run}.log"
   test -s "$LOG"
   rg -q 'BUILD SUCCESSFUL' "$LOG"
-  rg -q '5 tests completed' "$LOG"
+  rg -q '1 test completed' "$LOG"
 done
 awk '/^real / { print $2 }' "$LIVENESS_LOG_DIR"/run-*.log
 ```
 
 `set -euo pipefail`과 run별 raw log 보존으로 어느 한 실행의 non-zero를 숨기지
-않는다. 세 실행 모두 test hang 없이 PASS하고, 내부 deadline/외부 `@Timeout`이
-지켜지는 실제 `real` 시간을 기록한다. `BUILD SUCCESSFUL`과 `5 tests completed`
-확인이 모두 필요하며, 한 실행이라도 실패하면 loop가 즉시 중단된다. min/max/median은 이 test JVM의 liveness 증적일
+않는다. 세 실행 모두 smoke 한 개만 선택되어 test hang 없이 PASS하고, 내부
+deadline/외부 `@Timeout`이 지켜지는 실제 `real` 시간을 기록한다. `BUILD SUCCESSFUL`과
+`1 test completed` 확인이 모두 필요하며, fast matrix의 `5/0` 계약은 Step 4와
+execution gate에서 별도로 증명한다. 한 실행이라도 실패하면 loop가 즉시 중단된다. min/max/median은 이 test JVM의 liveness 증적일
 뿐이며 production latency benchmark나 SLO로 해석하지 않는다. 500ms deadline은
 bounded join 계약을 위한 값이고, 유지 근거는 deterministic latch와 세 번의
 반복 실행 결과다. 한 번이라도 timeout 또는 child lifecycle flag failure가
