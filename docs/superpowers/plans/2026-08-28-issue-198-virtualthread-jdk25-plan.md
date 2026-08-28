@@ -23,6 +23,23 @@
 - Kotlin-only 범위: production Kotlin/Java 소스와 새 모듈을 추가하지 않는다. 변경은 기존 테스트 fixture, Gradle 설정, catalog, README, KDoc, 증적 문서로 제한한다.
 - 실행 stop condition: plan review의 P0/P1이 0이고 사용자가 계획을 승인하기 전에는 구현 task를 시작하지 않는다. 구현 후에는 fast/default/명시적 MariaDB gate, dependency graph, compile/detekt/Kover, 문서 parity, final review가 모두 증명될 때까지 PR 단계로 이동하지 않는다.
 
+### 구현 commit과 rollback 경계
+
+- 구현 중간에 다음 세 commit 경계를 유지한다. 각 commit은 Lore trailer를 포함하고,
+  해당 경계의 targeted validation을 통과한 뒤에만 생성한다.
+  1. `Issue #198 JDK25 provider를 실제 테스트 경로에 연결`: JDK25
+     annotation/smoke, Version Catalog alias, JDK21 exclusion, JDK25 provider
+     dependency를 포함한다.
+  2. `Issue #198 0 tests 실행 수 gate를 fail-closed로 고정`: 실행 수 XML
+     검증 task와 그 negative-path 검증만 포함한다.
+  3. `Issue #198 JDK25 문서와 lesson을 실행 결과에 맞춰 정합화`: README,
+     KDoc, lesson, review/checklist 갱신을 포함한다.
+- provider/test commit을 되돌릴 때도 execution-gate commit은 유지한다.
+  selective revert 후 JDK25에서 `verifyVirtualThreadTestExecution`을 다시
+  실행하고, `0 tests executed` 또는 provider 부재를 gate failure로 관찰해야
+  한다. gate까지 되돌리는 전체 rollback은 원인 분석용으로만 허용하며,
+  복구 상태는 다시 fail-closed gate를 포함해야 한다.
+
 ## 파일 책임 지도
 
 | 경로 | 책임 | 변경 범위 |
@@ -127,10 +144,14 @@ import io.bluetape4k.concurrent.virtualthread.StructuredTaskScopeProvider
 import io.bluetape4k.concurrent.virtualthread.StructuredTaskScopes
 import io.bluetape4k.concurrent.virtualthread.VirtualThreadRuntime
 import io.bluetape4k.concurrent.virtualthread.VirtualThreads
+import io.bluetape4k.assertions.shouldBeInstanceOf
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Timeout
 import java.time.Instant
 import java.util.ServiceLoader
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 ```
 
 클래스 annotation은 RED 실행에서도 테스트가 실제로 선택되도록
@@ -145,6 +166,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 ```kotlin
 @Test
+@Timeout(value = 2, unit = TimeUnit.SECONDS)
 fun `JDK25 provider와 runtime을 선택하고 structured scope를 닫는다`() {
     val providers = ServiceLoader.load(StructuredTaskScopeProvider::class.java).toList()
     providers shouldHaveSize 1
@@ -161,34 +183,48 @@ fun `JDK25 provider와 runtime을 선택하고 structured scope를 닫는다`() 
     VirtualThreads.runtimeName() shouldBeEqualTo "jdk25"
 
     val childStopped = AtomicBoolean(false)
+    val childrenStarted = CountDownLatch(2)
     val failure = runCatching {
         StructuredTaskScopes.failFast(
             "issue-198-provider-smoke",
             VirtualThreads.threadFactory("issue-198-provider-smoke"),
         ) { scope ->
-            scope.fork { throw IllegalStateException("intentional child failure") }
             scope.fork {
+                childrenStarted.countDown()
+                childrenStarted.await(100, TimeUnit.MILLISECONDS) shouldBeEqualTo true
+                throw IllegalStateException("intentional child failure")
+            }
+            scope.fork {
+                childrenStarted.countDown()
                 try {
+                    childrenStarted.await(100, TimeUnit.MILLISECONDS) shouldBeEqualTo true
                     Thread.sleep(5_000)
                 } finally {
                     childStopped.set(true)
                 }
             }
+            childrenStarted.await(100, TimeUnit.MILLISECONDS) shouldBeEqualTo true
             scope.joinUntil(Instant.now().plusMillis(500))
             scope.throwIfFailed()
         }
     }.exceptionOrNull()
 
-    (failure != null) shouldBeEqualTo true
+    val childFailure = requireNotNull(failure)
+    childFailure shouldBeInstanceOf IllegalStateException::class
+    (childFailure as IllegalStateException).message shouldBeEqualTo "intentional child failure"
     childStopped.get() shouldBeEqualTo true
 }
 ```
 
-`runCatching`은 provider 구현에 따라 `joinUntil` 또는 `throwIfFailed`에서
-발생하는 실제 failure type을 보존한다. 특정 JDK internal exception class를
-assert하지 않고, child failure가 외부로 전파되고 scope close가 bounded child를
-끝내는 public contract만 고정한다. `childStopped`가 false이면 close/interruption
-순서를 조사하고 테스트를 통과시키기 위해 timeout을 늘리지 않는다.
+`CountDownLatch` 두 개의 child가 실제로 시작된 뒤 실패하도록 보장하므로
+`childStopped`는 scheduler 순서에 좌우되지 않는다. `runCatching`은
+provider 구현에 따라 `joinUntil` 또는 `throwIfFailed`에서 발생하는 실제
+failure를 보존하되, 이 provider의 public contract가 전파하는 정확한
+`IllegalStateException` type/message를 검사한다. 특정 JDK internal exception
+class는 assert하지 않는다. `@Timeout(2s)`는 테스트 전체의 최종 liveness
+경계이며, 내부 `500ms` deadline은 structured scope join의 bounded contract다.
+실패하면 close/interruption 순서를 조사하고 테스트를 통과시키기 위해 timeout을
+무작정 늘리지 않는다.
 
 - [ ] **Step 3: 의도한 RED를 실행한다.**
 
@@ -247,6 +283,18 @@ testRuntimeOnly(libs.bluetape4k.virtualthread.jdk25)
 기존 `testRuntimeOnly(libs.bluetape4k.virtualthread.jdk21)`는 제거한다. 다른
 dependency와 `implementation(libs.bluetape4k.coroutines)`는 바꾸지 않는다.
 
+execution gate를 아직 추가하지 않은 상태에서 다음 targeted GREEN을 먼저
+실행한다.
+
+```bash
+./gradlew :02-exposed-r2dbc-virtualthreads-basic:test \
+  -PuseFastDB=true --no-daemon --console=plain
+```
+
+provider smoke와 H2 parameterized test가 `5 executed / 0 skipped`인지 읽은
+뒤, catalog·module dependency·JDK25 test 변경만 첫 번째 Lore commit으로
+고정한다. 이 commit은 실행 수 gate 파일 변경을 포함하지 않는다.
+
 - [ ] **Step 3: JUnit XML을 fail-closed로 검사하는 Gradle task를 추가한다.**
 
 `build.gradle.kts`에 다음 책임을 가진 `verifyVirtualThreadTestExecution` task를
@@ -303,12 +351,16 @@ tasks.register("verifyVirtualThreadTestExecution") {
 
         val knownDialects = setOf("H2", "H2_MYSQL", "H2_PSQL", "H2_MARIADB", "H2_ORACLE", "H2_SQLSERVER", "MARIADB", "MYSQL_V5", "MYSQL_V8", "POSTGRESQL")
         val requested = project.providers.gradleProperty("useDB").orNull
-        val selectedDialects = if (!requested.isNullOrBlank()) {
-            requested.split(',')
-                .map { it.trim() }
-                .mapNotNull { name -> knownDialects.firstOrNull { it.equals(name, ignoreCase = true) } }
-                .toSet()
-                .ifEmpty { setOf("H2") }
+        val selectedDialects = if (requested != null) {
+            val requestedTokens = requested.split(',').map { it.trim() }
+            require(requestedTokens.all { token ->
+                token.isNotEmpty() && knownDialects.any { it.equals(token, ignoreCase = true) }
+            }) {
+                "useDB에 알 수 없거나 빈 dialect token이 포함되어 있어 실행 수를 검증할 수 없습니다."
+            }
+            requestedTokens.map { token ->
+                knownDialects.first { it.equals(token, ignoreCase = true) }
+            }.toSet()
         } else if (project.providers.gradleProperty("useFastDB").orNull?.toBoolean() == true) {
             setOf("H2")
         } else {
@@ -325,7 +377,7 @@ tasks.register("verifyVirtualThreadTestExecution") {
         }
         require(skippedCases.all { (name, message) ->
             name.contains(nestedTransactionDisplayName) &&
-                (message.isBlank() || message.contains("MariaDB-compatible nested transactions are not supported"))
+                message == "MariaDB-compatible nested transactions are not supported"
         }) {
             "허용되지 않은 skipped testcase가 발견되었습니다."
         }
@@ -342,13 +394,17 @@ tasks.register("verifyVirtualThreadTestExecution") {
 }
 ```
 
-실제 구현에서는 사용하지 않는 import를 남기지 않는다. 위 parser의 secure XML
+실제 구현에서는 사용하지 않는 import를 남기지 않는다. 명시적으로 전달된
+`useDB` 값은 대소문자만 정규화하고, unknown token·빈 token을 H2로 축소하지
+않고 즉시 실패시킨다. 따라서 `-PuseDB=TYPO`, `-PuseDB=H2,` 및
+`-PuseDB=`는 모두 execution gate failure이며 잘못된 matrix가 green으로
+남지 않는다. 위 parser의 secure XML
 feature 설정이 JDK/Gradle XML parser에서 지원되지 않으면 해당 feature 설정
 failure를 그대로 관찰하고, 외부 DTD/schema 접근 차단을 유지하는 표준 설정으로만
 조정한다. parser는 `useDB`/`useFastDB` 값을 읽지만 그 값이나
 `System.getProperties()`/환경 변수 전체를 log하지 않는다. 명시적 MariaDB
 선택이 아닌 경우 모든 skip은 허용하지 않으며, 명시적 선택에서도 중첩
-transaction testcase 외의 skip은 실패한다.
+transaction testcase 외의 skip과 exact capability message가 아닌 skip은 실패한다.
 
 - [ ] **Step 4: dependency와 provider smoke GREEN을 확인한다.**
 
@@ -365,6 +421,11 @@ Expected evidence: JDK25 provider smoke 1개와 H2 parameterized 4개가 실행�
 `total=5 executed=5 skipped=0 failures=0 errors=0`이다. provider 이름/runtime
 이름이 다르거나 ServiceLoader가 0개/2개이면 fallback으로 숨기지 않고
 dependency graph와 descriptor를 다시 조사한다.
+
+이 단계의 valid gate GREEN과 `git diff --check`를 읽은 뒤, execution-gate
+변경만 두 번째 Lore commit(`0 tests 실행 수 gate를 fail-closed로 고정`)으로
+생성한다. gate commit은 첫 번째 provider/test commit에 의존하지만, 첫 commit을
+selective revert해도 보고서 부재나 `0 tests`를 실패로 판정해야 한다.
 
 ## Task 4: JDK25 KDoc와 README locale 계약 갱신
 
@@ -483,7 +544,34 @@ rg -n 'JDK 25|Java 25|JAVA_25|JRE\.JAVA_25|virtualthread-jdk25|jdk25-structured-
 Expected evidence: provider smoke 1개와 non-MariaDB nested transaction을 포함한
 parameterized 3개가 실행되어 `total=5 executed=4 skipped=1`, skip은 정확히
 중첩 transaction testcase 하나다. 다른 skip, failure, error, 또는 명시적
-MariaDB가 아닌 환경의 skip은 task failure다.
+MariaDB가 아닌 환경의 skip은 task failure다. 이어서 생성된 JUnit XML의
+capability message를 임시 복사본에서 다른 문자열로 바꾸고 `-x test`로 gate만
+재실행했을 때도 task failure가 되어야 한다. 원본 XML은 검증 후 즉시 복구한다.
+
+```bash
+REPORT="$(rg -l 'MariaDB-compatible nested transactions are not supported' \
+  build/test-results/test/TEST-*.xml | head -1)"
+BACKUP="${REPORT}.issue-198-backup"
+cp "$REPORT" "$BACKUP"
+trap 'mv "$BACKUP" "$REPORT"' EXIT
+python3 - "$REPORT" <<'PY'
+from pathlib import Path
+import sys
+path = Path(sys.argv[1])
+text = path.read_text()
+text = text.replace(
+    "MariaDB-compatible nested transactions are not supported",
+    "unexpected capability skip reason",
+    1,
+)
+path.write_text(text)
+PY
+./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
+  -PuseDB=H2_MARIADB -x test --no-daemon --console=plain
+```
+
+이 negative command는 의도적으로 실패해야 하며, shell `trap`이 원본 report를
+복구한 뒤에만 다음 명령을 실행한다.
 
 - [ ] **Step 2: default dialect matrix를 직렬로 실행한다.**
 
@@ -498,6 +586,41 @@ Expected evidence: `H2,POSTGRESQL,MYSQL_V8` 각각의 네 parameterized test와
 provider smoke가 `total=13 executed=13 skipped=0 failures=0 errors=0`으로
 끝난다. Testcontainers/Colima 오류가 나면 skip으로 인정하지 않고 raw
 container/Gradle failure를 진단한 뒤 해당 명령부터 다시 실행한다.
+
+- [ ] **Step 2a: execution-count 입력을 fail-closed로 검증한다.**
+
+```bash
+./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
+  -PuseDB=TYPO --no-daemon --console=plain
+./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
+  -PuseDB=H2, --no-daemon --console=plain
+./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
+  -PuseDB= --no-daemon --console=plain
+```
+
+각 명령은 `unknown/empty dialect token` 메시지로 실패해야 하며 H2 fallback이나
+`0 tests` green을 남기지 않는다. 실패 output에는 property 값·환경 변수·credential
+값을 그대로 출력하지 않는다. 이 세 음성 검증은 execution-gate commit에 포함할
+수정의 완료 조건이다.
+
+- [ ] **Step 2b: smoke liveness를 세 번 반복 측정한다.**
+
+```bash
+for run in 1 2 3; do
+  /usr/bin/time -p ./gradlew :02-exposed-r2dbc-virtualthreads-basic:test \
+    -PuseFastDB=true --tests \
+    'exposed.r2dbc.examples.virtualthreads.Ex01_VirtualThreads.JDK25 provider와 runtime을 선택하고 structured scope를 닫는다' \
+    --no-daemon --console=plain
+done
+```
+
+세 실행 모두 test hang 없이 PASS하고, 내부 deadline/외부 `@Timeout`이 지켜지는
+실제 `real` 시간을 기록한다. min/max/median은 이 test JVM의 liveness 증적일
+뿐이며 production latency benchmark나 SLO로 해석하지 않는다. 500ms deadline은
+bounded join 계약을 위한 값이고, 유지 근거는 deterministic latch와 세 번의
+반복 실행 결과다. 한 번이라도 timeout 또는 child lifecycle flag failure가
+발생하면 raw output을 보존하고 timeout을 늘리지 않은 채 stability lane을
+재검토한다.
 
 - [ ] **Step 3: module registration, compile, static analysis와 coverage를 확인한다.**
 
@@ -711,10 +834,10 @@ plan check의 evidence에는 plan path, integrated review path, SPW-01~05 결과
 |---|---|---|---|
 | AC-01 catalog/BOM provider | Task 3-1/2 | `libs.versions.toml`, `dependencies`, `dependencyInsight` | alias/BOM resolution을 repair하고 Task 3-4 재실행 |
 | AC-02 JDK21 0개·JDK25 1개 | Task 3-2, Task 5-4 | `testRuntimeClasspath` graph, ServiceLoader list, service descriptors | exclusion 범위를 configuration 전체로 복구 |
-| AC-03 JDK25 실제 실행·0 tests 차단 | Task 2-1, Task 3-3/4, Task 5-1/2 | fast `5/0`, default `13/0`, gate XML count | annotation/gate를 repair하고 RED부터 재실행 |
+| AC-03 JDK25 실제 실행·0 tests 차단 | Task 2-1, Task 3-3/4, Task 5-1/2a | fast `5/0`, default `13/0`, gate XML count, `TYPO`/blank token negative paths | annotation/gate를 repair하고 RED부터 재실행 |
 | AC-04 public provider/runtime discovery | Task 2-2/3 | provider smoke, `providerName`, `runtimeName`, `isSupported`, singleton enumeration | internal class assertion을 추가하지 않고 public contract로 repair |
 | AC-05 Exposed R2DBC와 기존 capability 유지 | Task 4-1, Task 5-1/2 | existing four parameterized tests, MariaDB `4/1` allowlist | transaction/table 변경을 revert하고 test lifecycle 재검증 |
-| AC-06 bounded structured scope lifecycle | Task 2-2/3 | 500ms deadline, child failure non-null, `childStopped=true` | close/interruption order를 조사하고 timeout을 무작정 늘리지 않음 |
+| AC-06 bounded structured scope lifecycle | Task 2-2/3, Task 5-2b | deterministic latch, exact child failure type/message, 500ms deadline, external `@Timeout(2s)`, `childStopped=true`, three sequential liveness runs | close/interruption order를 조사하고 timeout을 무작정 늘리지 않음 |
 | AC-07 EN/KO root/module README와 KDoc | Task 4 | stale-token/link audit, locale read-back | affected docs를 함께 수정하고 writer gate 재실행 |
 | AC-08 module/Kover/diff/Kotlin checks | Task 5-3/6 | `projects`, compile, detekt, Kover, `git diff --check` | module registration/coverage path를 원상 경계에서 repair |
 
@@ -726,21 +849,32 @@ plan check의 evidence에는 plan path, integrated review path, SPW-01~05 결과
 | JDK21 provider가 transitive로 남음 | dependency graph에 JDK21 또는 ServiceLoader 2개 | `testRuntimeClasspath.exclude`를 전체 configuration에 적용하고 insight 확인 | module Gradle 수정 후 Task 3-4/5-4 재실행 |
 | JDK ABI/preview 불일치 | `UnsupportedClassVersionError`, `NoSuchMethodError`, `--enable-preview` 요구 | classfile `69/0`, module metadata JDK25, provider SHA/service descriptor 확인 | provider artifact 교체 없이 실행을 진행하지 않고 JDK25 forward-fix |
 | ServiceLoader descriptor 누락/unknown/duplicate | provider list 0개/2개, name/support mismatch | public singleton test와 resolved artifact descriptor를 함께 검사 | runtime dependency를 단일 provider로 복구 후 Task 2 RED/GREEN 재실행 |
-| execution gate false-green | `0 tests`, arbitrary skip, XML 없음 | XML report 필수, exact total/executed/skipped, testcase name allowlist, failure/error=0 | gate failure 원인부터 진단하고 이전 결과를 폐기 |
+| execution gate false-green | `0 tests`, arbitrary skip, XML 없음, `useDB` 오타/빈 token | XML report 필수, exact total/executed/skipped, fail-closed dialect token validation, testcase name/message allowlist, failure/error=0 | gate failure 원인부터 진단하고 이전 결과를 폐기 |
 | MariaDB capability skip 오판 | 명시적 MariaDB 외 skip 또는 nested 아닌 testcase skip | explicit selection count와 stable testcase/message allowlist | TestDB capability 범위는 유지하고 gate만 repair |
-| structured scope leak/deadlock | 500ms 이후 child flag false 또는 test hang | public `failFast`, deadline, `finally` flag, no unbounded sleep | implementation을 중단하고 provider lifecycle evidence 재수집 |
+| structured scope leak/deadlock | latch 이후에도 child flag false, 500ms deadline 초과 또는 test hang | public `failFast`, deterministic `CountDownLatch`, exact child failure type/message, 내부 deadline와 외부 `@Timeout(2s)`, `finally` flag | implementation을 중단하고 provider lifecycle evidence 재수집 |
 | Testcontainers/DB lifecycle flake | container startup/connection timeout, retry exhaustion | inherited Colima socket, heavyweight test 직렬화, raw failure 조사 | 실패 명령부터 순차 재실행; skip으로 치환하지 않음 |
 | locale/document drift | JDK21 token, broken link, command/count mismatch | EN/KO facts table와 reader/source audit, writer SPW gate | affected README/KDoc 함께 수정 후 Task 4-5 재실행 |
 | secret/log boundary 위반 | test report에 env/property/credential dump | gate는 aggregate/path만 log, test JVM에 production secret 미주입 | offending log/source 제거 후 security lane 재검토 |
 
 ## Rollback and rerun contract
 
-- technical rollback은 catalog alias, module provider/exclusion, JDK25
-  annotation, test smoke와 docs를 포함한 feature commit(또는 연속 Lore
-  commits)을 revert하는 경로다.
+- technical rollback은 세 Lore commit 경계를 사용한다. provider/test
+  연결 commit을 selective revert하고 execution-gate commit은 유지하는 것이
+  기본 경로다. gate commit까지 되돌리는 전체 rollback은 임시 진단 경로다.
 - rollback 후 JDK25에서 다시 `0 tests executed`가 되는 상태는 비수용이다.
-  rollback은 원인 분석용 임시 경로이며, 최종 복구는 JDK25 provider와 실행 수
-  gate를 다시 적용하는 forward-fix다.
+  provider/test commit을 되돌린 상태에서 gate는 report 부재, provider 부재,
+  또는 `0 tests`를 실패시켜야 한다. rollback은 원인 분석용 임시 경로이며,
+  최종 복구는 JDK25 provider와 실행 수 gate를 다시 적용하는 forward-fix다.
+- selective revert 검증 명령은 다음과 같다.
+
+  ```bash
+  ./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
+    -PuseFastDB=true --no-daemon --console=plain
+  ```
+
+  기존 JDK21 조건/provider만 남긴 rollback 상태에서는 이 명령이 `0 tests`
+  또는 expected count mismatch로 실패해야 하며, 그 실패를 무시하고 다음
+  task로 진행하지 않는다.
 - RED/GREEN 순서를 깨뜨린 경우 RED 증적을 새로 만들고 Task 2부터 순차 재실행한다.
 - Gradle/DB failure는 해당 명령의 raw output와 XML을 읽은 후 같은 명령을
   재실행한다. retry PASS만으로 lifecycle failure를 지우지 않는다.
