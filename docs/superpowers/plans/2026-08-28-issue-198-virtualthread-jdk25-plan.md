@@ -347,7 +347,7 @@ tasks.register("verifyVirtualThreadTestExecution") {
         var skipped = 0
         var failures = 0
         var errors = 0
-        data class SkippedCase(val name: String, val type: String, val message: String)
+        data class SkippedCase(val classname: String, val name: String, val type: String, val message: String)
         val skippedCases = mutableListOf<SkippedCase>()
         val caseIdentities = mutableListOf<Pair<String, String>>()
         reports.forEach { report ->
@@ -367,13 +367,21 @@ tasks.register("verifyVirtualThreadTestExecution") {
             errors += suite.getAttribute("errors").toInt()
             for (index in 0 until cases.length) {
                 val testCase = cases.item(index) as Element
-                caseIdentities += testCase.getAttribute("classname") to testCase.getAttribute("name")
+                val classname = testCase.getAttribute("classname")
+                val name = testCase.getAttribute("name")
+                require(classname.isNotBlank() && name.isNotBlank()) {
+                    "JUnit XML testcase classname/name이 비어 있습니다: ${report.name}"
+                }
+                caseIdentities += classname to name
                 val skippedNodes = testCase.getElementsByTagName("skipped")
+                require(skippedNodes.length <= 1) {
+                    "JUnit XML testcase에 skipped element가 둘 이상입니다: ${report.name}"
+                }
                 if (skippedNodes.length > 0) {
                     val skippedNode = skippedNodes.item(0)
                     val type = skippedNode.attributes?.getNamedItem("type")?.nodeValue.orEmpty()
                     val message = skippedNode.attributes?.getNamedItem("message")?.nodeValue.orEmpty()
-                    skippedCases += SkippedCase(testCase.getAttribute("name"), type, message)
+                    skippedCases += SkippedCase(classname, name, type, message)
                 }
             }
         }
@@ -421,9 +429,9 @@ tasks.register("verifyVirtualThreadTestExecution") {
         val actualIdentityCounts = caseIdentities.groupingBy { it }.eachCount()
         val expectedIdentityCounts = expectedIdentities.groupingBy { it }.eachCount()
         require(expectedIdentityCounts.all { (identity, expectedCount) ->
-            actualIdentityCounts.getOrDefault(identity, 0) >= expectedCount
+            actualIdentityCounts.getOrDefault(identity, 0) == expectedCount
         }) {
-            "JUnit XML에 기대한 virtual-thread testcase identity가 없습니다."
+            "JUnit XML에 기대한 virtual-thread testcase identity가 없거나 중복되었습니다."
         }
         val nestedTransactionDisplayName = "중첩된 virtual thread 용 트랜잭션을 async로 실행"
         val expectedSkippedNames = selectedDialects
@@ -436,7 +444,8 @@ tasks.register("verifyVirtualThreadTestExecution") {
         val expectedSkipMessage =
             "org.opentest4j.TestAbortedException: Assumption failed: MariaDB-compatible nested transactions are not supported"
         require(skippedCases.all { skippedCase ->
-            skippedCase.name in expectedSkippedNames &&
+            skippedCase.classname == testClassName &&
+                skippedCase.name in expectedSkippedNames &&
                 skippedCase.type == expectedSkipType &&
                 skippedCase.message == expectedSkipMessage
         }) {
@@ -623,8 +632,13 @@ test -d "$REPORT_DIR"
 - [ ] **Step 1: explicit MariaDB capability allowlist를 검증한다.**
 
 ```bash
+set -euo pipefail
+MODULE_DIR="08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic"
+GATE_LOG_DIR="$MODULE_DIR/build/reports/issue-198-gate"
+mkdir -p "$GATE_LOG_DIR"
 ./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
-  -PuseDB=H2_MARIADB --no-daemon --console=plain
+  -PuseDB=H2_MARIADB --no-daemon --console=plain \
+  2>&1 | tee "$GATE_LOG_DIR/h2-mariadb.log"
 ```
 
 Expected evidence: provider smoke 1개와 non-MariaDB nested transaction을 포함한
@@ -658,15 +672,24 @@ import xml.etree.ElementTree as ET
 
 root = ET.parse(sys.argv[1]).getroot()
 skipped = [case for case in root.findall("testcase") if case.find("skipped") is not None]
-assert len(skipped) == 1
+def require(condition, message):
+    if not condition:
+        raise SystemExit(message)
+
+require(len(skipped) == 1, "positive XML read-back에서 skipped testcase 수가 1이 아닙니다.")
 case = skipped[0]
-assert case.attrib["name"] == "중첩된 virtual thread 용 트랜잭션을 async로 실행 H2_MARIADB"
+require(case.attrib.get("classname") == "exposed.r2dbc.examples.virtualthreads.Ex01_VirtualThreads",
+        "positive XML read-back classname이 다릅니다.")
+require(case.attrib.get("name") == "중첩된 virtual thread 용 트랜잭션을 async로 실행 H2_MARIADB",
+        "positive XML read-back testcase name이 다릅니다.")
 skipped_node = case.find("skipped")
-assert skipped_node.attrib["type"] == "org.opentest4j.TestAbortedException"
-assert skipped_node.attrib["message"] == (
+require(skipped_node is not None, "positive XML read-back skipped element가 없습니다.")
+require(skipped_node.attrib.get("type") == "org.opentest4j.TestAbortedException",
+        "positive XML read-back skipped type이 다릅니다.")
+require(skipped_node.attrib.get("message") == (
     "org.opentest4j.TestAbortedException: Assumption failed: "
     "MariaDB-compatible nested transactions are not supported"
-)
+), "positive XML read-back skipped message가 다릅니다.")
 PY
 BACKUP="${REPORT}.issue-198-backup"
 cp "$REPORT" "$BACKUP"
@@ -686,7 +709,8 @@ mutated = text.replace(
     "unexpected capability skip reason",
     1,
 )
-assert mutated != text
+if mutated == text:
+    raise SystemExit("capability skip reason fixture가 report를 변경하지 못했습니다.")
 path.write_text(mutated)
 PY
 set +e
@@ -741,7 +765,8 @@ mutated = text.replace(
     "중첩된 virtual thread 용 트랜잭션을 async로 실행 H2_MARIADB crafted",
     1,
 )
-assert mutated != text
+if mutated == text:
+    raise SystemExit("testcase name fixture가 report를 변경하지 못했습니다.")
 path.write_text(mutated)
 PY
 set +e
@@ -790,7 +815,8 @@ import sys
 path = Path(sys.argv[1])
 text = path.read_text()
 mutated = text.replace("<testsuite ", "<suite ", 1).replace("</testsuite>", "</suite>", 1)
-assert mutated != text
+if mutated == text:
+    raise SystemExit("root fixture가 report를 변경하지 못했습니다.")
 path.write_text(mutated)
 PY
 set +e
@@ -830,7 +856,8 @@ text = path.read_text()
 def decrement(match):
     return f'tests="{int(match.group(1)) - 1}"'
 mutated = re.sub(r'tests="(\d+)"', decrement, text, count=1)
-assert mutated != text
+if mutated == text:
+    raise SystemExit("testcase count fixture가 report를 변경하지 못했습니다.")
 path.write_text(mutated)
 PY
 set +e
@@ -861,28 +888,67 @@ container/Gradle failure를 진단한 뒤 해당 명령부터 다시 실행한�
 - [ ] **Step 2a: execution-count 입력을 fail-closed로 검증한다.**
 
 ```bash
-./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
+set -euo pipefail
+MODULE_DIR="08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic"
+NEGATIVE_LOG_DIR="$MODULE_DIR/build/reports/issue-198-negative"
+mkdir -p "$NEGATIVE_LOG_DIR"
+run_expected_gate_failure() {
+  local label="$1"
+  local expected="$2"
+  shift 2
+  local output="$NEGATIVE_LOG_DIR/${label}.log"
+  set +e
+  "$@" >"$output" 2>&1
+  local status=$?
+  set -e
+  test "$status" -ne 0
+  test -s "$output"
+  rg -q --fixed-strings -- "$expected" "$output"
+}
+run_expected_gate_failure use-db-typo \
+  'useDB에 알 수 없거나 빈 dialect token이 포함되어 있어 실행 수를 검증할 수 없습니다.' \
+  ./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
   -PuseDB=TYPO -x test --no-daemon --console=plain
-./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
+run_expected_gate_failure use-db-empty-token \
+  'useDB에 알 수 없거나 빈 dialect token이 포함되어 있어 실행 수를 검증할 수 없습니다.' \
+  ./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
   -PuseDB=H2, -x test --no-daemon --console=plain
-./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
+run_expected_gate_failure use-db-empty \
+  'useDB에 알 수 없거나 빈 dialect token이 포함되어 있어 실행 수를 검증할 수 없습니다.' \
+  ./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
   -PuseDB= -x test --no-daemon --console=plain
 ```
 
 각 명령은 `unknown/empty dialect token` 메시지로 실패해야 하며 H2 fallback이나
 `0 tests` green을 남기지 않는다. 실패 output에는 property 값·환경 변수·credential
-값을 그대로 출력하지 않는다. 이 세 음성 검증은 execution-gate commit에 포함할
-수정의 완료 조건이다.
+값을 그대로 출력하지 않는다. 각 명령의 non-zero status, 정확한 fail-closed
+메시지와 raw output 경로를 함께 보존한다. 이 세 음성 검증은 execution-gate
+commit에 포함할 수정의 완료 조건이다.
 
 `useFastDB`가 지정된 경우에도 `true`/`false` 이외 값은 기본 matrix로 조용히
 전환하지 않아야 한다.
 
 ```bash
-./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
-  -PuseFastDB=maybe -x test --no-daemon --console=plain
+set -euo pipefail
+MODULE_DIR="08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic"
+NEGATIVE_LOG_DIR="$MODULE_DIR/build/reports/issue-198-negative"
+mkdir -p "$NEGATIVE_LOG_DIR"
+run_expected_gate_failure() {
+  local output="$NEGATIVE_LOG_DIR/use-fast-db-malformed.log"
+  set +e
+  ./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
+    -PuseFastDB=maybe -x test --no-daemon --console=plain >"$output" 2>&1
+  local status=$?
+  set -e
+  test "$status" -ne 0
+  test -s "$output"
+  rg -q --fixed-strings -- 'useFastDB는 true 또는 false여야 실행 수를 검증할 수 있습니다.' "$output"
+}
+run_expected_gate_failure
 ```
 
-위 명령도 `useFastDB는 true 또는 false여야` 메시지로 실패해야 한다.
+위 명령도 non-zero와 `useFastDB는 true 또는 false여야 실행 수를 검증할 수 있습니다.`
+메시지로 실패해야 하며, output은 다음 log scan에 포함한다.
 
 - [ ] **Step 2b: smoke liveness를 세 번 반복 측정한다.**
 
@@ -897,39 +963,50 @@ for run in 1 2 3; do
   /usr/bin/time -p ./gradlew :02-exposed-r2dbc-virtualthreads-basic:test \
     -PuseFastDB=true --tests \
     'exposed.r2dbc.examples.virtualthreads.Ex01_VirtualThreads.JDK25 provider와 runtime을 선택하고 structured scope를 닫는다' \
-    --no-daemon --console=plain >"$LOG" 2>&1
+    --rerun-tasks --no-build-cache --no-daemon --console=plain >"$LOG" 2>&1
+  REPORT="$(find "$REPORT_DIR" -type f -name '*Ex01_VirtualThreads*.xml' -print -quit)"
+  test -n "$REPORT"
+  test -f "$REPORT"
+  cp "$REPORT" "$LIVENESS_LOG_DIR/run-${run}.xml"
 done
 for run in 1 2 3; do
   LOG="$LIVENESS_LOG_DIR/run-${run}.log"
   test -s "$LOG"
   rg -q 'BUILD SUCCESSFUL' "$LOG"
-  REPORT="$(find "$REPORT_DIR" -type f -name '*Ex01_VirtualThreads*.xml' -print -quit)"
-  test -n "$REPORT"
-  test -f "$REPORT"
+  REPORT="$LIVENESS_LOG_DIR/run-${run}.xml"
+  test -s "$REPORT"
   python3 - "$REPORT" <<'PY'
 import sys
 import xml.etree.ElementTree as ET
 
 root = ET.parse(sys.argv[1]).getroot()
-assert root.tag == "testsuite"
-assert root.attrib["tests"] == "1"
-assert root.attrib["skipped"] == "0"
-assert root.attrib["failures"] == "0"
-assert root.attrib["errors"] == "0"
+def require(condition, message):
+    if not condition:
+        raise SystemExit(message)
+
+require(root.tag == "testsuite", "smoke XML root가 testsuite가 아닙니다.")
+require(root.attrib.get("tests") == "1", "smoke XML tests가 1이 아닙니다.")
+require(root.attrib.get("skipped") == "0", "smoke XML skipped가 0이 아닙니다.")
+require(root.attrib.get("failures") == "0", "smoke XML failures가 0이 아닙니다.")
+require(root.attrib.get("errors") == "0", "smoke XML errors가 0이 아닙니다.")
 cases = root.findall("testcase")
-assert len(cases) == 1
-assert cases[0].attrib["classname"] == "exposed.r2dbc.examples.virtualthreads.Ex01_VirtualThreads"
-assert cases[0].attrib["name"] == "JDK25 provider와 runtime을 선택하고 structured scope를 닫는다"
-assert cases[0].find("skipped") is None
-assert cases[0].find("failure") is None
-assert cases[0].find("error") is None
+require(len(cases) == 1, "smoke XML testcase 수가 1이 아닙니다.")
+require(cases[0].attrib.get("classname") == "exposed.r2dbc.examples.virtualthreads.Ex01_VirtualThreads",
+        "smoke XML classname이 다릅니다.")
+require(cases[0].attrib.get("name") == "JDK25 provider와 runtime을 선택하고 structured scope를 닫는다",
+        "smoke XML testcase name이 다릅니다.")
+require(cases[0].find("skipped") is None, "smoke XML에 skipped가 있습니다.")
+require(cases[0].find("failure") is None, "smoke XML에 failure가 있습니다.")
+require(cases[0].find("error") is None, "smoke XML에 error가 있습니다.")
 PY
 done
 awk '/^real / { print $2 }' "$LIVENESS_LOG_DIR"/run-*.log
 ```
 
-`set -euo pipefail`과 run별 raw log 보존으로 어느 한 실행의 non-zero를 숨기지
-않는다. 세 실행 모두 smoke 한 개만 선택되어 test hang 없이 PASS하고, 내부
+`set -euo pipefail`과 run별 raw log/XML snapshot 보존으로 어느 한 실행의
+non-zero를 숨기지 않는다. 각 run은 `--rerun-tasks --no-build-cache`로 실제
+smoke 한 개를 다시 실행한 직후 고유 XML을 복사하고 검증하므로, 마지막 report를
+세 번 읽는 착시가 없다. 세 실행 모두 smoke 한 개만 선택되어 test hang 없이 PASS하고, 내부
 deadline/외부 `@Timeout`이 지켜지는 실제 `real` 시간을 기록한다. `BUILD SUCCESSFUL`과
 모듈 JUnit XML의 `tests=1`, provider smoke identity 1개, `skipped/failures/errors=0`
 확인이 모두 필요하며, fast matrix의 `5/0` 계약은 Step 4와 execution gate에서
@@ -962,6 +1039,7 @@ Expected evidence: `projects`에 새 module이 없고 기존 module path가 그�
 - [ ] **Step 4: dependency graph와 ABI/preview 경계를 읽는다.**
 
 ```bash
+set -euo pipefail
 ./gradlew :02-exposed-r2dbc-virtualthreads-basic:dependencies \
   --configuration testRuntimeClasspath --no-daemon --console=plain
 ./gradlew :02-exposed-r2dbc-virtualthreads-basic:dependencyInsight \
@@ -976,7 +1054,10 @@ jar tf "$JDK25_JAR" | rg 'META-INF/services/io\.bluetape4k\.concurrent\.virtualt
 javap -verbose -classpath "$JDK25_JAR" \
   io.bluetape4k.concurrent.virtualthread.jdk25.Jdk25VirtualThreadRuntime \
   | rg 'major version|minor version'
-rg -n -- '--enable-preview' build.gradle.kts 08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/build.gradle.kts
+if rg -n -- '--enable-preview' build.gradle.kts 08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/build.gradle.kts; then
+  echo '--enable-preview가 새로 추가되었습니다.' >&2
+  exit 1
+fi
 ```
 
 Expected evidence: resolved JDK25 provider는 정확히 하나, JDK21 provider
@@ -990,35 +1071,58 @@ ServiceLoader descriptor 두 개의 payload와 JAR SHA-256이 정확히 일치�
 새 dependency verification 정책을 만들지 않는다.
 
 ```bash
+set -euo pipefail
 JDK25_ROOT="/Users/debop/.gradle/caches/modules-2/files-2.1/io.github.bluetape4k/bluetape4k-virtualthread-jdk25/1.12.1"
 JDK25_JAR="$JDK25_ROOT/6ed90ada6fa00481ec92222c9cb573cf0028cf6a/bluetape4k-virtualthread-jdk25-1.12.1.jar"
-JDK25_MODULE="$(find "$JDK25_ROOT" -type f -name '*.module' -print -quit)"
+JDK25_MODULE_NAME='bluetape4k-virtualthread-jdk25-1.12.1.module'
+JDK25_MODULE_COUNT="$(find "$JDK25_ROOT" -type f -name "$JDK25_MODULE_NAME" -print | wc -l | tr -d ' ')"
+test "$JDK25_MODULE_COUNT" -eq 1
+JDK25_MODULE="$(find "$JDK25_ROOT" -type f -name "$JDK25_MODULE_NAME" -print -quit)"
 test -f "$JDK25_JAR"
 test -f "$JDK25_MODULE"
-test "$(sha256sum "$JDK25_JAR" | awk '{print $1}')" = \
-  "aab053515aba60ce238dc49d2bccc4c2d05f640f3ce8bf4746c680b616a964a9"
+test "$(basename "$(dirname "$JDK25_JAR")")" = "6ed90ada6fa00481ec92222c9cb573cf0028cf6a"
+test "$(basename "$(dirname "$JDK25_MODULE")")" = "7cd1cf6a79b41a91b5677c78472b07400f08a95c"
+JDK25_SHA='aab053515aba60ce238dc49d2bccc4c2d05f640f3ce8bf4746c680b616a964a9'
+test "$(sha256sum "$JDK25_JAR" | awk '{print $1}')" = "$JDK25_SHA"
 python3 - "$JDK25_MODULE" <<'PY'
 import json
 import sys
 from pathlib import Path
 
 metadata = json.loads(Path(sys.argv[1]).read_text())
-variants = metadata["variants"]
-assert variants and all(
-    variant["attributes"].get("org.gradle.jvm.version") == 25
-    for variant in variants
-)
-assert all(
-    file_entry["sha256"] == "aab053515aba60ce238dc49d2bccc4c2d05f640f3ce8bf4746c680b616a964a9"
-    for variant in variants
-    for file_entry in variant.get("files", [])
-)
+def require(condition, message):
+    if not condition:
+        raise SystemExit(message)
+
+require(metadata.get("formatVersion") == "1.1", "Gradle module metadata format이 다릅니다.")
+require(metadata.get("component") == {
+    "group": "io.github.bluetape4k",
+    "module": "bluetape4k-virtualthread-jdk25",
+    "version": "1.12.1",
+    "attributes": {"org.gradle.status": "release"},
+}, "Gradle module metadata coordinate가 다릅니다.")
+variants = metadata.get("variants", [])
+require(len(variants) == 2, "Gradle module metadata variant 수가 다릅니다.")
+for variant in variants:
+    require(variant.get("attributes", {}).get("org.gradle.jvm.version") == 25,
+            "Gradle module metadata JDK version이 25가 아닙니다.")
+    files = variant.get("files", [])
+    require(len(files) == 1, "Gradle module metadata file 수가 다릅니다.")
+    file_entry = files[0]
+    require(file_entry.get("name") == "bluetape4k-virtualthread-jdk25-1.12.1.jar",
+            "Gradle module metadata file name이 다릅니다.")
+    require(file_entry.get("url") == "bluetape4k-virtualthread-jdk25-1.12.1.jar",
+            "Gradle module metadata file URL이 다릅니다.")
+    require(file_entry.get("sha256") == "aab053515aba60ce238dc49d2bccc4c2d05f640f3ce8bf4746c680b616a964a9",
+            "Gradle module metadata SHA-256이 다릅니다.")
 PY
 SCOPE_SERVICE='META-INF/services/io.bluetape4k.concurrent.virtualthread.StructuredTaskScopeProvider'
 RUNTIME_SERVICE='META-INF/services/io.bluetape4k.concurrent.virtualthread.VirtualThreadRuntime'
 for descriptor in "$SCOPE_SERVICE" "$RUNTIME_SERVICE"; do
   test "$(jar tf "$JDK25_JAR" | rg -F -c -x -- "$descriptor")" -eq 1
 done
+printf '%s\n' "$SCOPE_SERVICE" "$RUNTIME_SERVICE" | sort | \
+  cmp -s - <(jar tf "$JDK25_JAR" | rg '^META-INF/services/(io\.bluetape4k\.concurrent\.virtualthread\.(StructuredTaskScopeProvider|VirtualThreadRuntime))$' | sort)
 printf '%s\n' 'io.bluetape4k.concurrent.virtualthread.jdk25.Jdk25StructuredTaskScopeProvider' \
   | cmp -s - <(unzip -p "$JDK25_JAR" "$SCOPE_SERVICE")
 printf '%s\n' 'io.bluetape4k.concurrent.virtualthread.jdk25.Jdk25VirtualThreadRuntime' \
@@ -1032,18 +1136,30 @@ test ! -e gradle/verification-metadata.xml
 set -euo pipefail
 MODULE_DIR="08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic"
 REPORT_DIR="$MODULE_DIR/build/test-results/test"
+REPORT_PATHS=(
+  "$REPORT_DIR"
+  "$MODULE_DIR/build/reports/tests"
+  "$MODULE_DIR/build/reports/issue-198-gate"
+  "$MODULE_DIR/build/reports/issue-198-liveness"
+  "$MODULE_DIR/build/reports/issue-198-negative"
+)
+for path in "${REPORT_PATHS[@]}"; do
+  test -e "$path"
+done
 set +e
 rg -n 'System\.getProperties|System\.getenv|print.*environment|dump.*property|EXPOSED_.*PASS|PASSWORD|SECRET|TOKEN' \
-  "$REPORT_DIR" "$MODULE_DIR/build/reports/tests" 2>/dev/null
+  "${REPORT_PATHS[@]}" 2>/dev/null
 status=$?
 set -e
 test "$status" -eq 1
 ```
 
-Expected evidence: test report/log에 raw environment, system property, production
-secret, credential 값 dump가 없고 gate log에는 report 수와 집계 수만 남는다.
-검색 결과가 있으면 source/log를 확인해 값을 제거하고 관련 보안 review를
-재실행한다.
+Expected evidence: test report와 캡처한 gate/liveness/negative log에 raw
+environment, system property, production secret, credential 값 dump가 없고 gate
+log에는 report 수와 집계 수만 남는다. 모든 expected output directory가 실제로
+존재하는지도 먼저 확인하므로, 로그가 생성되지 않은 상태를 clean scan으로
+오인하지 않는다. 검색 결과가 있으면 source/log를 확인해 값을 제거하고 관련
+보안 review를 재실행한다.
 
 - [ ] **Step 5a: hostile XML fixture가 외부 entity/XInclude를 차단하는지 확인한다.**
 
@@ -1059,13 +1175,16 @@ test -n "$REPORT"
 test -f "$REPORT"
 BACKUP="${REPORT}.issue-198-xml-backup"
 OUTPUT="$(mktemp)"
-cp "$REPORT" "$BACKUP"
 restore_report() {
-  cp "$BACKUP" "$REPORT"
-  cmp -s "$BACKUP" "$REPORT"
+  if test -f "$BACKUP"; then
+    cp "$BACKUP" "$REPORT"
+    cmp -s "$BACKUP" "$REPORT"
+    rm -f "$BACKUP"
+  fi
   rm -f "$BACKUP" "$SENTINEL" "$OUTPUT"
 }
 trap restore_report EXIT
+cp "$REPORT" "$BACKUP"
 cat > "$REPORT" <<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE testsuite [<!ENTITY xxe SYSTEM "file://$SENTINEL">]>
@@ -1087,6 +1206,7 @@ else
 fi
 set -e
 test "$status" -ne 0
+rg -q --fixed-strings -- 'DOCTYPE is disallowed' "$OUTPUT"
 if rg -q 'ISSUE-198-XXE-SENTINEL' "$OUTPUT"; then
   echo 'external entity or XInclude content was exposed' >&2
   exit 1
@@ -1097,11 +1217,94 @@ rm -f "$BACKUP" "$SENTINEL" "$OUTPUT"
 trap - EXIT
 ```
 
-DOCTYPE가 거부되고, entity/XInclude가 확장되지 않으며, sentinel 내용이 task
-output에 나타나지 않아야 한다. fixture 실행은 의도적으로 실패하고, status를
-보존한 뒤 원본 XML을 복구하여 `cmp -s`까지 통과해야 한다. 중단 시에도 같은
-복구와 비교를 수행하도록 실행 shell에 backup 복구 trap을 추가한다. 이 검증을
-통과시키기 위해 secure parser 설정을 완화하지 않는다.
+DOCTYPE fixture는 parser의 `DOCTYPE is disallowed` 거부를 직접 확인해야 하며,
+단순히 다른 XML 계약 위반으로 실패한 것으로 통과시키지 않는다. entity가
+확장되거나 sentinel 내용이 task output에 나타나면 실패한다. fixture 실행은
+의도적으로 실패하고, status를 보존한 뒤 원본 XML을 복구하여 `cmp -s`까지
+통과해야 한다. backup 전 단계부터 trap을 설치하고 backup이 있을 때만 복구해
+중단 시에도 임시 파일을 정리한다. 이 검증을 통과시키기 위해 secure parser
+설정을 완화하지 않는다.
+
+DOCTYPE와 독립적으로 XInclude 비활성화를 확인한다. 유효한 원본 JUnit XML에
+외부 파일을 포함하는 `xi:include`를 추가하고, XInclude가 꺼져 있으면 gate가
+원래 XML만 읽어 성공해야 한다. XInclude가 켜져 있으면 외부 testcase가
+확장되어 선언된 testcase 수가 달라지므로 성공할 수 없다.
+
+```bash
+set -euo pipefail
+MODULE_DIR="08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic"
+REPORT_DIR="$MODULE_DIR/build/test-results/test"
+test -d "$REPORT_DIR"
+./gradlew :02-exposed-r2dbc-virtualthreads-basic:test \
+  -PuseDB=H2_MARIADB --rerun-tasks --no-build-cache --no-daemon --console=plain
+REPORT=""
+while IFS= read -r candidate; do
+  if rg -q --fixed-strings -- 'MariaDB-compatible nested transactions are not supported' "$candidate"; then
+    REPORT="$candidate"
+    break
+  fi
+done < <(find "$REPORT_DIR" -type f -name 'TEST-*.xml' -print)
+test -n "$REPORT"
+test -f "$REPORT"
+XINCLUDE_PAYLOAD="$(mktemp)"
+cat > "$XINCLUDE_PAYLOAD" <<'XML'
+<testcase name="ISSUE-198-XINCLUDE-SENTINEL" classname="xinclude-sentinel"/>
+XML
+BACKUP="${REPORT}.issue-198-xinclude-backup"
+OUTPUT="$(mktemp)"
+restore_report() {
+  if test -f "$BACKUP"; then
+    cp "$BACKUP" "$REPORT"
+    cmp -s "$BACKUP" "$REPORT"
+    rm -f "$BACKUP"
+  fi
+  rm -f "$BACKUP" "$XINCLUDE_PAYLOAD" "$OUTPUT"
+}
+trap restore_report EXIT
+cp "$REPORT" "$BACKUP"
+python3 - "$REPORT" "$XINCLUDE_PAYLOAD" <<'PY'
+from pathlib import Path
+import sys
+
+report_path = Path(sys.argv[1])
+payload_uri = Path(sys.argv[2]).resolve().as_uri()
+text = report_path.read_text()
+if "<testsuite " not in text or "</testsuite>" not in text:
+    raise SystemExit("XInclude fixture가 기대한 testsuite root를 찾지 못했습니다.")
+mutated = text.replace(
+    "<testsuite ",
+    '<testsuite xmlns:xi="http://www.w3.org/2001/XInclude" ',
+    1,
+).replace(
+    "</testsuite>",
+    f'  <xi:include href="{payload_uri}" />\n</testsuite>',
+    1,
+)
+if mutated == text:
+    raise SystemExit("XInclude fixture가 report를 변경하지 못했습니다.")
+report_path.write_text(mutated)
+PY
+set +e
+./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
+  -PuseDB=H2_MARIADB -x test --no-daemon --console=plain >"$OUTPUT" 2>&1
+status=$?
+set -e
+test "$status" -eq 0
+if rg -q --fixed-strings -- 'ISSUE-198-XINCLUDE-SENTINEL' "$OUTPUT"; then
+  echo 'XInclude payload was exposed in task output' >&2
+  exit 1
+fi
+cp "$BACKUP" "$REPORT"
+cmp -s "$BACKUP" "$REPORT"
+rm -f "$BACKUP" "$XINCLUDE_PAYLOAD" "$OUTPUT"
+trap - EXIT
+```
+
+XInclude fixture는 parser가 외부 파일을 확장하지 않고 원본 report의
+`total=5/executed=4/skipped=1` 계약을 그대로 통과시키는지 확인한다. 포함된
+sentinel testcase가 실제로 확장되면 testcase count gate가 실패해야 하므로,
+성공 결과와 sentinel 미노출을 함께 확인한다. 두 fixture 모두 원본 XML을
+복구한 뒤 `cmp -s`를 통과해야 다음 검증으로 진행한다.
 
 - [ ] **Step 6: diff와 변경 surface를 닫는다.**
 
