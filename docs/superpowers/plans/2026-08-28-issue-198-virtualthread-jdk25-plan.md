@@ -317,7 +317,10 @@ tasks.register("verifyVirtualThreadTestExecution") {
             .orEmpty()
         require(reports.isNotEmpty()) { "JUnit XML report가 없어 virtual-thread 실행 수를 검증할 수 없습니다." }
 
-        val factory = DocumentBuilderFactory.newInstance().apply {
+        val factory = DocumentBuilderFactory.newDefaultInstance().apply {
+            isNamespaceAware = true
+            isXIncludeAware = false
+            isExpandEntityReferences = false
             setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true)
             setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)
             setFeature("http://xml.org/sax/features/external-general-entities", false)
@@ -351,6 +354,13 @@ tasks.register("verifyVirtualThreadTestExecution") {
 
         val knownDialects = setOf("H2", "H2_MYSQL", "H2_PSQL", "H2_MARIADB", "H2_ORACLE", "H2_SQLSERVER", "MARIADB", "MYSQL_V5", "MYSQL_V8", "POSTGRESQL")
         val requested = project.providers.gradleProperty("useDB").orNull
+        val requestedFastDb = project.providers.gradleProperty("useFastDB").orNull
+        val useFastDb = when (requestedFastDb) {
+            null -> false
+            "true" -> true
+            "false" -> false
+            else -> error("useFastDB는 true 또는 false여야 실행 수를 검증할 수 있습니다.")
+        }
         val selectedDialects = if (requested != null) {
             val requestedTokens = requested.split(',').map { it.trim() }
             require(requestedTokens.all { token ->
@@ -361,7 +371,7 @@ tasks.register("verifyVirtualThreadTestExecution") {
             requestedTokens.map { token ->
                 knownDialects.first { it.equals(token, ignoreCase = true) }
             }.toSet()
-        } else if (project.providers.gradleProperty("useFastDB").orNull?.toBoolean() == true) {
+        } else if (useFastDb) {
             setOf("H2")
         } else {
             setOf("H2", "POSTGRESQL", "MYSQL_V8")
@@ -371,12 +381,13 @@ tasks.register("verifyVirtualThreadTestExecution") {
         val expectedTotal = 1 + selectedDialects.size * 4
         val expectedSkipped = allowedMariaDbSkips
         val expectedExecuted = expectedTotal - expectedSkipped
-        val nestedTransactionDisplayName = "중첩된 virtual thread 용 트랜잭션을 async로 실행"
-        require(skippedCases.size == expectedSkipped) {
+        val nestedTransactionDisplayName = "중첩된 virtual thread 용 트랜잭션을 async로 실행(TestDB)"
+        val expectedSkippedNames = List(expectedSkipped) { nestedTransactionDisplayName }
+        require(skippedCases.map { it.first }.sorted() == expectedSkippedNames.sorted()) {
             "허용된 MariaDB capability skip 수가 다릅니다: expected=$expectedSkipped actual=${skippedCases.size}"
         }
         require(skippedCases.all { (name, message) ->
-            name.contains(nestedTransactionDisplayName) &&
+            name == nestedTransactionDisplayName &&
                 message == "MariaDB-compatible nested transactions are not supported"
         }) {
             "허용되지 않은 skipped testcase가 발견되었습니다."
@@ -399,12 +410,15 @@ tasks.register("verifyVirtualThreadTestExecution") {
 않고 즉시 실패시킨다. 따라서 `-PuseDB=TYPO`, `-PuseDB=H2,` 및
 `-PuseDB=`는 모두 execution gate failure이며 잘못된 matrix가 green으로
 남지 않는다. 위 parser의 secure XML
-feature 설정이 JDK/Gradle XML parser에서 지원되지 않으면 해당 feature 설정
-failure를 그대로 관찰하고, 외부 DTD/schema 접근 차단을 유지하는 표준 설정으로만
-조정한다. parser는 `useDB`/`useFastDB` 값을 읽지만 그 값이나
+feature 설정이 JDK/Gradle XML parser에서 지원되지 않으면 task를 실패시키고,
+외부 DTD/schema 접근 차단과 hostile XML negative fixture를 통과하는 동등한
+표준 설정으로 교체한 뒤에만 재실행한다. 보안 feature를 생략한 채 진행하지
+않는다. parser는 `useDB`/`useFastDB` 값을 읽지만 그 값이나
 `System.getProperties()`/환경 변수 전체를 log하지 않는다. 명시적 MariaDB
 선택이 아닌 경우 모든 skip은 허용하지 않으며, 명시적 선택에서도 중첩
 transaction testcase 외의 skip과 exact capability message가 아닌 skip은 실패한다.
+`useFastDB`도 지정된 경우 정확히 `true` 또는 `false`만 허용하며, `maybe` 같은
+malformed 값은 기본 matrix로 전환하지 않고 즉시 실패시킨다.
 
 - [ ] **Step 4: dependency와 provider smoke GREEN을 확인한다.**
 
@@ -573,6 +587,34 @@ PY
 이 negative command는 의도적으로 실패해야 하며, shell `trap`이 원본 report를
 복구한 뒤에만 다음 명령을 실행한다.
 
+같은 임시 복사본 절차로 testcase 이름에 suffix를 붙인 crafted XML도 gate가
+거부하는지 확인한다. 이름 비교는 `contains`가 아니라 exact equality여야 한다.
+
+```bash
+REPORT="$(rg -l '중첩된 virtual thread 용 트랜잭션을 async로 실행\(TestDB\)' \
+  build/test-results/test/TEST-*.xml | head -1)"
+BACKUP="${REPORT}.issue-198-name-backup"
+cp "$REPORT" "$BACKUP"
+trap 'mv "$BACKUP" "$REPORT"' EXIT
+python3 - "$REPORT" <<'PY'
+from pathlib import Path
+import sys
+path = Path(sys.argv[1])
+text = path.read_text()
+text = text.replace(
+    "중첩된 virtual thread 용 트랜잭션을 async로 실행(TestDB)",
+    "중첩된 virtual thread 용 트랜잭션을 async로 실행(TestDB) crafted",
+    1,
+)
+path.write_text(text)
+PY
+./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
+  -PuseDB=H2_MARIADB -x test --no-daemon --console=plain
+```
+
+이름 crafted negative도 의도적으로 실패해야 하며, 원본 report 복구 후 다음
+검증을 진행한다.
+
 - [ ] **Step 2: default dialect matrix를 직렬로 실행한다.**
 
 ```bash
@@ -602,6 +644,16 @@ container/Gradle failure를 진단한 뒤 해당 명령부터 다시 실행한�
 `0 tests` green을 남기지 않는다. 실패 output에는 property 값·환경 변수·credential
 값을 그대로 출력하지 않는다. 이 세 음성 검증은 execution-gate commit에 포함할
 수정의 완료 조건이다.
+
+`useFastDB`가 지정된 경우에도 `true`/`false` 이외 값은 기본 matrix로 조용히
+전환하지 않아야 한다.
+
+```bash
+./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
+  -PuseFastDB=maybe --no-daemon --console=plain
+```
+
+위 명령도 `useFastDB는 true 또는 false여야` 메시지로 실패해야 한다.
 
 - [ ] **Step 2b: smoke liveness를 세 번 반복 측정한다.**
 
@@ -663,16 +715,47 @@ rg -n -- '--enable-preview' build.gradle.kts 08-r2dbc-coroutines/02-exposed-r2db
 Expected evidence: resolved JDK25 provider는 정확히 하나, JDK21 provider
 dependencyInsight는 resolved result를 내지 않는다. provider classfile은
 `major=69`, `minor=0`, Gradle module metadata는 `org.gradle.jvm.version=25`,
-ServiceLoader descriptor 두 개와 기존 SHA-256을 보존한다. `--enable-preview`는
-새로 추가되지 않는다. classfile/metadata가 다르면 artifact identity를 먼저
-repair하고 테스트 결과를 재사용하지 않는다. 현재 저장소에
+ServiceLoader descriptor 두 개의 payload와 JAR SHA-256이 정확히 일치한다.
+각 비교 명령은 mismatch에서 non-zero로 끝나며 `|| true`로 실패를 숨기지
+않는다. `--enable-preview`는 새로 추가되지 않는다. classfile/metadata가
+다르면 artifact identity를 먼저 repair하고 테스트 결과를 재사용하지 않는다. 현재 저장소에
 `gradle/verification-metadata.xml`이 없다는 사실도 확인하고 이번 계획에서
 새 dependency verification 정책을 만들지 않는다.
 
 ```bash
-rg -n '"org\.gradle\.jvm\.version"\s*:\s*25' \
-  "/Users/debop/.gradle/caches/modules-2/metadata-"*/descriptors/io.github.bluetape4k/bluetape4k-virtualthread-jdk25/1.12.1 \
-  || true
+JDK25_ROOT="/Users/debop/.gradle/caches/modules-2/files-2.1/io.github.bluetape4k/bluetape4k-virtualthread-jdk25/1.12.1"
+JDK25_JAR="$JDK25_ROOT/6ed90ada6fa00481ec92222c9cb573cf0028cf6a/bluetape4k-virtualthread-jdk25-1.12.1.jar"
+JDK25_MODULE="$(find "$JDK25_ROOT" -type f -name '*.module' -print -quit)"
+test -f "$JDK25_JAR"
+test -f "$JDK25_MODULE"
+test "$(sha256sum "$JDK25_JAR" | awk '{print $1}')" = \
+  "aab053515aba60ce238dc49d2bccc4c2d05f640f3ce8bf4746c680b616a964a9"
+python3 - "$JDK25_MODULE" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+metadata = json.loads(Path(sys.argv[1]).read_text())
+variants = metadata["variants"]
+assert variants and all(
+    variant["attributes"].get("org.gradle.jvm.version") == 25
+    for variant in variants
+)
+assert all(
+    file_entry["sha256"] == "aab053515aba60ce238dc49d2bccc4c2d05f640f3ce8bf4746c680b616a964a9"
+    for variant in variants
+    for file_entry in variant.get("files", [])
+)
+PY
+SCOPE_SERVICE='META-INF/services/io.bluetape4k.concurrent.virtualthread.StructuredTaskScopeProvider'
+RUNTIME_SERVICE='META-INF/services/io.bluetape4k.concurrent.virtualthread.VirtualThreadRuntime'
+for descriptor in "$SCOPE_SERVICE" "$RUNTIME_SERVICE"; do
+  test "$(jar tf "$JDK25_JAR" | rg -F -c -x -- "$descriptor")" -eq 1
+done
+printf '%s\n' 'io.bluetape4k.concurrent.virtualthread.jdk25.Jdk25StructuredTaskScopeProvider' \
+  | cmp -s - <(unzip -p "$JDK25_JAR" "$SCOPE_SERVICE")
+printf '%s\n' 'io.bluetape4k.concurrent.virtualthread.jdk25.Jdk25VirtualThreadRuntime' \
+  | cmp -s - <(unzip -p "$JDK25_JAR" "$RUNTIME_SERVICE")
 test ! -e gradle/verification-metadata.xml
 ```
 
@@ -687,6 +770,43 @@ Expected evidence: test report/log에 raw environment, system property, producti
 secret, credential 값 dump가 없고 gate log에는 report 수와 집계 수만 남는다.
 검색 결과가 있으면 source/log를 확인해 값을 제거하고 관련 보안 review를
 재실행한다.
+
+- [ ] **Step 5a: hostile XML fixture가 외부 entity/XInclude를 차단하는지 확인한다.**
+
+```bash
+SENTINEL="$(mktemp)"
+printf '%s\n' 'ISSUE-198-XXE-SENTINEL' > "$SENTINEL"
+REPORT="$(find build/test-results/test -type f -name 'TEST-*.xml' -print -quit)"
+BACKUP="${REPORT}.issue-198-xml-backup"
+OUTPUT="$(mktemp)"
+cp "$REPORT" "$BACKUP"
+trap 'mv "$BACKUP" "$REPORT"; rm -f "$SENTINEL" "$OUTPUT"' EXIT
+cat > "$REPORT" <<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE testsuite [<!ENTITY xxe SYSTEM "file://$SENTINEL">]>
+<testsuite name="fixture" tests="5" skipped="0" failures="1" errors="0"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
+  <testcase name="fixture" classname="fixture">
+    <failure>&xxe;</failure>
+    <xi:include href="file://$SENTINEL" />
+  </testcase>
+</testsuite>
+XML
+if ./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
+  -PuseFastDB=true -x test --no-daemon --console=plain > "$OUTPUT" 2>&1; then
+  echo 'hostile XML fixture was unexpectedly accepted' >&2
+  exit 1
+fi
+if rg -q 'ISSUE-198-XXE-SENTINEL' "$OUTPUT"; then
+  echo 'external entity or XInclude content was exposed' >&2
+  exit 1
+fi
+```
+
+DOCTYPE가 거부되고, entity/XInclude가 확장되지 않으며, sentinel 내용이 task
+output에 나타나지 않아야 한다. fixture 실행은 의도적으로 실패하고 `trap`이
+원본 XML과 임시 파일을 복구한다. 이 검증을 통과시키기 위해 secure parser
+설정을 완화하지 않는다.
 
 - [ ] **Step 6: diff와 변경 surface를 닫는다.**
 
@@ -833,7 +953,7 @@ plan check의 evidence에는 plan path, integrated review path, SPW-01~05 결과
 | Spec AC | 구현 task | 증명 명령/산출물 | 실패 시 되돌림 |
 |---|---|---|---|
 | AC-01 catalog/BOM provider | Task 3-1/2 | `libs.versions.toml`, `dependencies`, `dependencyInsight` | alias/BOM resolution을 repair하고 Task 3-4 재실행 |
-| AC-02 JDK21 0개·JDK25 1개 | Task 3-2, Task 5-4 | `testRuntimeClasspath` graph, ServiceLoader list, service descriptors | exclusion 범위를 configuration 전체로 복구 |
+| AC-02 JDK21 0개·JDK25 1개 | Task 3-2, Task 5-4 | `testRuntimeClasspath` graph, ServiceLoader list, exact descriptor payload/count, JAR SHA-256, JDK25 module metadata | exclusion 범위를 configuration 전체로 복구 |
 | AC-03 JDK25 실제 실행·0 tests 차단 | Task 2-1, Task 3-3/4, Task 5-1/2a | fast `5/0`, default `13/0`, gate XML count, `TYPO`/blank token negative paths | annotation/gate를 repair하고 RED부터 재실행 |
 | AC-04 public provider/runtime discovery | Task 2-2/3 | provider smoke, `providerName`, `runtimeName`, `isSupported`, singleton enumeration | internal class assertion을 추가하지 않고 public contract로 repair |
 | AC-05 Exposed R2DBC와 기존 capability 유지 | Task 4-1, Task 5-1/2 | existing four parameterized tests, MariaDB `4/1` allowlist | transaction/table 변경을 revert하고 test lifecycle 재검증 |
@@ -848,9 +968,9 @@ plan check의 evidence에는 plan path, integrated review path, SPW-01~05 결과
 | BOM 또는 versionless alias drift | provider resolution error 또는 1.12.1 이외 resolution | alias에는 version을 중복하지 않고 BOM/metadata를 read-back | catalog/dependency만 revert 후 Task 1-2와 Task 3 재실행 |
 | JDK21 provider가 transitive로 남음 | dependency graph에 JDK21 또는 ServiceLoader 2개 | `testRuntimeClasspath.exclude`를 전체 configuration에 적용하고 insight 확인 | module Gradle 수정 후 Task 3-4/5-4 재실행 |
 | JDK ABI/preview 불일치 | `UnsupportedClassVersionError`, `NoSuchMethodError`, `--enable-preview` 요구 | classfile `69/0`, module metadata JDK25, provider SHA/service descriptor 확인 | provider artifact 교체 없이 실행을 진행하지 않고 JDK25 forward-fix |
-| ServiceLoader descriptor 누락/unknown/duplicate | provider list 0개/2개, name/support mismatch | public singleton test와 resolved artifact descriptor를 함께 검사 | runtime dependency를 단일 provider로 복구 후 Task 2 RED/GREEN 재실행 |
+| ServiceLoader descriptor 누락/unknown/duplicate | provider list 0개/2개, name/support mismatch, descriptor count/payload drift | public singleton test와 resolved artifact의 두 descriptor exact count/payload, JAR SHA-256을 함께 검사 | runtime dependency를 단일 provider로 복구 후 Task 2 RED/GREEN 재실행 |
 | execution gate false-green | `0 tests`, arbitrary skip, XML 없음, `useDB` 오타/빈 token | XML report 필수, exact total/executed/skipped, fail-closed dialect token validation, testcase name/message allowlist, failure/error=0 | gate failure 원인부터 진단하고 이전 결과를 폐기 |
-| MariaDB capability skip 오판 | 명시적 MariaDB 외 skip 또는 nested 아닌 testcase skip | explicit selection count와 stable testcase/message allowlist | TestDB capability 범위는 유지하고 gate만 repair |
+| MariaDB capability skip 오판 | 명시적 MariaDB 외 skip, nested 아닌 testcase, crafted name/reason | explicit selection count와 exact testcase-name/message multiset allowlist, crafted XML negative path | TestDB capability 범위는 유지하고 gate만 repair |
 | structured scope leak/deadlock | latch 이후에도 child flag false, 500ms deadline 초과 또는 test hang | public `failFast`, deterministic `CountDownLatch`, exact child failure type/message, 내부 deadline와 외부 `@Timeout(2s)`, `finally` flag | implementation을 중단하고 provider lifecycle evidence 재수집 |
 | Testcontainers/DB lifecycle flake | container startup/connection timeout, retry exhaustion | inherited Colima socket, heavyweight test 직렬화, raw failure 조사 | 실패 명령부터 순차 재실행; skip으로 치환하지 않음 |
 | locale/document drift | JDK21 token, broken link, command/count mismatch | EN/KO facts table와 reader/source audit, writer SPW gate | affected README/KDoc 함께 수정 후 Task 4-5 재실행 |
