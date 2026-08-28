@@ -316,9 +316,9 @@ live review, and merge remain pending.
 
 ## Task 10: Authorized PR delivery and merge-ready handoff
 
-- [ ] Refresh guidance, issue metadata, PR template, and workflow rows
+- [x] Refresh guidance, issue metadata, PR template, and workflow rows
   immediately before push/PR (`CG-12A`).
-- [ ] Push `feat/issue-213-r2dbc-caffeine`, verify local/remote exact head,
+- [x] Push `feat/issue-213-r2dbc-caffeine`, verify local/remote exact head,
   create Korean PR against `develop`, assign `debop`, mirror Issue #213
   milestone/labels, link `#213`, and end the body with `## DoD Status`.
 - [ ] Read the live PR back, wait for exact-head CI, inspect reviews/threads,
