@@ -6,7 +6,7 @@
 - 기준 commit: `a6f5d69aa099a5f2d73a9d75f7a4e0ba8662f442`
 - 기준 설계: `docs/superpowers/specs/2026-08-28-issue-198-virtualthread-jdk25-design.md`
 - workflow run: `20260827T185619Z-32b9ae70`
-- 최신 review receipt: sequence 67, checksum `bfef0ca8dcb90c1b0759edc41f6442029efe4801249a675267f995c1b28d7d84`
+- 최신 review receipt: sequence 67, checksum `bfef0ca8dcb90c1b0759edc41f6442029efe4801249a675267f995c1b28d7d84`; plan check 기록 후 현재 receipt sequence 68, checksum `ff0313a3883fcca563529985fb47578965dc0970797b23d052808f34c9824ca3`
 - 방법: `step-3r-plan-review.md`와 `review-perspectives.md`에 따라 여섯 관점을 독립 검토하고, 본 문서에서 중복·우선순위·처리 상태를 통합했다.
 
 계획의 실행 stop condition은 P0/P1이 0이고 별도 사용자 계획 `승인`을 받기 전에는 코드 mutation을 시작하지 않는 것이다. 이번 검토 동안 추적 코드·Gradle·README는 변경하지 않았다.
