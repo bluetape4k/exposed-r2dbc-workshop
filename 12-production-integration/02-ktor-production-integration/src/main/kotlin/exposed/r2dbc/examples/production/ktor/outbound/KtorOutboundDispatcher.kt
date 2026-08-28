@@ -3,15 +3,14 @@ package exposed.r2dbc.examples.production.ktor.outbound
 import exposed.r2dbc.examples.production.ktor.app.OutboundDelivery
 import exposed.r2dbc.examples.production.ktor.app.OutboundDispatchResult
 import exposed.r2dbc.examples.production.ktor.app.OutboundRequestView
+import io.bluetape4k.http.ktor.KtorClientTimeouts
+import io.bluetape4k.http.ktor.ktorCioJsonHttpClientOf
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 /**
@@ -38,14 +37,18 @@ class KtorOutboundDispatcher(
     }
 }
 
-private fun defaultOutboundClient(): HttpClient =
-    HttpClient(CIO) {
-        install(ContentNegotiation) {
-            json(
-                Json {
-                    ignoreUnknownKeys = true
-                    encodeDefaults = true
-                }
-            )
-        }
-    }
+/** 기본 outbound client가 유지해야 하는 JSON 직렬화 의미입니다. */
+internal val defaultOutboundClientJson: Json = Json {
+    ignoreUnknownKeys = true
+    encodeDefaults = true
+}
+
+/** helper가 설치하는 client-level timeout을 명시적으로 고정합니다. */
+internal val defaultOutboundClientTimeouts: KtorClientTimeouts = KtorClientTimeouts()
+
+/** CIO JSON helper로 기본 outbound client를 생성합니다. */
+internal fun defaultOutboundClient(): HttpClient =
+    ktorCioJsonHttpClientOf(
+        json = defaultOutboundClientJson,
+        timeouts = defaultOutboundClientTimeouts,
+    )

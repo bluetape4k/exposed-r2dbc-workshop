@@ -81,6 +81,7 @@ bluetape4k-exposed-r2dbc-caffeine = { module = "io.github.bluetape4k.exposed:blu
 exposed-tink = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-tink" }
 bluetape4k-fastjson2 = { module = "io.github.bluetape4k:bluetape4k-fastjson2" }
 bluetape4k-grpc = { module = "io.github.bluetape4k:bluetape4k-grpc" }
+bluetape4k-http = { module = "io.github.bluetape4k:bluetape4k-http" }
 bluetape4k-idgenerators = { module = "io.github.bluetape4k:bluetape4k-idgenerators" }
 bluetape4k-io = { module = "io.github.bluetape4k:bluetape4k-io" }
 bluetape4k-jackson2 = { module = "io.github.bluetape4k:bluetape4k-jackson2" }
