@@ -42,6 +42,7 @@ dependencies {
     runtimeOnly(libs.logback)
 
     testImplementation(libs.bluetape4k.junit5)
+    testImplementation(libs.bluetape4k.ktor.testing)
     testImplementation(libs.ktor.client.mock)
     testImplementation(libs.ktor.client.websockets)
     testImplementation(libs.ktor.server.test.host)

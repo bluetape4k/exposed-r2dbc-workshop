@@ -93,6 +93,7 @@ bluetape4k-r2dbc = { module = "io.github.bluetape4k:bluetape4k-r2dbc" }
 bluetape4k-redis = { module = "io.github.bluetape4k:bluetape4k-redis" }
 bluetape4k-spring-boot-core = { module = "io.github.bluetape4k:bluetape4k-spring-boot-core" }
 bluetape4k-testcontainers = { module = "io.github.bluetape4k:bluetape4k-testcontainers" }
+bluetape4k-ktor-testing = { module = "io.github.bluetape4k:bluetape4k-ktor-testing" }
 bluetape4k-tink = { module = "io.github.bluetape4k:bluetape4k-tink" }
 bluetape4k-virtualthread-jdk21 = { module = "io.github.bluetape4k:bluetape4k-virtualthread-jdk21" }
 bluetape4k-virtualthread-jdk25 = { module = "io.github.bluetape4k:bluetape4k-virtualthread-jdk25" }

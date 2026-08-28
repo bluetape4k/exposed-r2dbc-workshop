@@ -17,9 +17,8 @@ import io.bluetape4k.assertions.shouldContain
 import io.bluetape4k.assertions.shouldHaveSize
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.info
-import io.ktor.client.HttpClient
+import io.bluetape4k.ktor.testing.bluetape4kJsonClient
 import io.ktor.client.call.body
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.headers
@@ -28,13 +27,11 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
-import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.call
 import io.ktor.server.response.respond
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
-import io.ktor.server.testing.ApplicationTestBuilder
 import io.ktor.server.testing.testApplication
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -196,7 +193,7 @@ class KtorMultitenantApplicationTest {
         application {
             ktorMultitenantModule(newDatabase("read-all"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorMultitenantJson)
 
         Tenant.entries.forEach { tenant ->
             val actors = client.get("/actors") {
@@ -217,7 +214,7 @@ class KtorMultitenantApplicationTest {
         application {
             ktorMultitenantModule(newDatabase("read-one"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorMultitenantJson)
 
         val koreanActor = client.get("/actors/2") {
             header(TenantHeader, Tenant.KOREAN.id)
@@ -238,7 +235,7 @@ class KtorMultitenantApplicationTest {
         application {
             ktorMultitenantModule(newDatabase("lowercase"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorMultitenantJson)
 
         val actors = client.get("/actors") {
             header("x-tenant-id", Tenant.KOREAN.id)
@@ -252,7 +249,7 @@ class KtorMultitenantApplicationTest {
         application {
             ktorMultitenantModule(newDatabase("invalid"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorMultitenantJson)
 
         val missing = client.get("/actors")
         missing.status shouldBeEqualTo HttpStatusCode.BadRequest
@@ -284,7 +281,7 @@ class KtorMultitenantApplicationTest {
         application {
             ktorMultitenantModule(newDatabase("duplicate"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorMultitenantJson)
 
         val same = client.get("/actors") {
             headers {
@@ -309,7 +306,7 @@ class KtorMultitenantApplicationTest {
         application {
             ktorMultitenantModule(newDatabase("write-isolation"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorMultitenantJson)
 
         val created = client.post("/actors") {
             header(TenantHeader, Tenant.KOREAN.id)
@@ -333,7 +330,7 @@ class KtorMultitenantApplicationTest {
         application {
             ktorMultitenantModule(newDatabase("pool-one", maxPoolSize = 1))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorMultitenantJson)
 
         val observed = (1..20).map { index ->
             val tenant = if (index % 2 == 0) Tenant.ENGLISH else Tenant.KOREAN
@@ -355,7 +352,7 @@ class KtorMultitenantApplicationTest {
         application {
             ktorMultitenantModule(newDatabase("concurrent", maxPoolSize = 1))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorMultitenantJson)
 
         val firstNames = coroutineScope {
             (1..16).map { index ->
@@ -377,7 +374,7 @@ class KtorMultitenantApplicationTest {
         application {
             ktorMultitenantModule(newDatabase("invalid-id"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorMultitenantJson)
 
         val nonNumeric = client.get("/actors/not-a-number") {
             header(TenantHeader, Tenant.KOREAN.id)
@@ -397,7 +394,7 @@ class KtorMultitenantApplicationTest {
         application {
             ktorMultitenantModule(newDatabase("malformed-json"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorMultitenantJson)
 
         val response = client.post("/actors") {
             header(TenantHeader, Tenant.KOREAN.id)
@@ -414,13 +411,6 @@ class KtorMultitenantApplicationTest {
             databaseName = "ktor_multitenant_${slug}_${UUID.randomUUID().toString().replace("-", "")}",
             maxPoolSize = maxPoolSize,
         )
-
-    private fun ApplicationTestBuilder.createJsonClient(): HttpClient =
-        createClient {
-            install(ContentNegotiation) {
-                json(KtorMultitenantJson)
-            }
-        }
 
     private suspend fun <T> ApplicationCall.withFixtureTenant(
         nestedTenant: Tenant,
