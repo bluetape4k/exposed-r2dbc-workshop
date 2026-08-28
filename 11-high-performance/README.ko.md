@@ -32,6 +32,7 @@ Exposed R2DBC 환경에서 성능과 확장성을 높이기 위한 예제를 모
 | [04-cache-strategies-ktor-r2dbc](./04-cache-strategies-ktor-r2dbc/README.ko.md) | Ktor route에서 관찰하는 cache hit/miss, invalidation, write refresh, DB fallback | Spring WebFlux controller 없이 일반 캐시 전략을 보고 싶을 때 |
 | [05-cache-strategies-ktor-r2dbc-coroutines](./05-cache-strategies-ktor-r2dbc-coroutines/README.ko.md) | Ktor coroutine single-flight cache fallback, cancellation, coalesced read | 일반 Ktor cache 예제와 분리해 coroutine 전용 cache 동작을 보고 싶을 때 |
 | [06-routing-datasource-ktor-r2dbc](./06-routing-datasource-ktor-r2dbc/README.ko.md) | Reactor Context 없는 Ktor tenant + read/write R2DBC target routing | Routing datasource 주제를 Ktor request handling으로 보고 싶을 때 |
+| [07-cache-strategies-r2dbc-caffeine](./07-cache-strategies-r2dbc-caffeine/README.ko.md) | Exposed R2DBC Caffeine adapter, 세 가지 write mode, bounded write-behind lifecycle | provider 기반 local cache와 직접 DB/health 검증을 함께 보고 싶을 때 |
 
 ## 권장 순서
 
@@ -40,7 +41,8 @@ Exposed R2DBC 환경에서 성능과 확장성을 높이기 위한 예제를 모
 3. `04-cache-strategies-ktor-r2dbc`로 같은 캐시 전략 표면을 Ktor route에서 비교합니다.
 4. `05-cache-strategies-ktor-r2dbc-coroutines`에서 single-flight fallback과 cancellation 동작을 확인합니다.
 5. `06-routing-datasource-ktor-r2dbc`에서 Ktor call attributes와 Spring Reactor Context routing을 비교합니다.
-6. 필요하면 `09-spring`, `10-multi-tenant` 모듈과 함께 비교해 패턴 차이를 봅니다.
+6. `07-cache-strategies-r2dbc-caffeine`에서 provider 기반 Caffeine adapter, write mode, 자원 종료를 비교합니다.
+7. 필요하면 `09-spring`, `10-multi-tenant` 모듈과 함께 비교해 패턴 차이를 봅니다.
 
 ## 실행 팁
 
@@ -59,6 +61,9 @@ Exposed R2DBC 환경에서 성능과 확장성을 높이기 위한 예제를 모
 
 # Ktor routing datasource 모듈 테스트
 ./gradlew :06-routing-datasource-ktor-r2dbc:test
+
+# Exposed R2DBC Caffeine adapter 테스트
+./gradlew :07-cache-strategies-r2dbc-caffeine:test -PuseDB=H2
 ```
 
 이 명령들은 `./gradlew projects`가 보여주는 고유한 Gradle project name을

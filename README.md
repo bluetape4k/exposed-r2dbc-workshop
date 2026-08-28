@@ -136,8 +136,9 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
   Reactor Context 기반 tenant/read-write routing datasource
 - [11-high-performance/04-cache-strategies-ktor-r2dbc](11-high-performance/04-cache-strategies-ktor-r2dbc/README.md),
   [11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines](11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines/README.md),
-  [11-high-performance/06-routing-datasource-ktor-r2dbc](11-high-performance/06-routing-datasource-ktor-r2dbc/README.md)
-  Ktor R2DBC cache, coroutine single-flight cache, routing datasource 비교
+  [11-high-performance/06-routing-datasource-ktor-r2dbc](11-high-performance/06-routing-datasource-ktor-r2dbc/README.md),
+  [11-high-performance/07-cache-strategies-r2dbc-caffeine](11-high-performance/07-cache-strategies-r2dbc-caffeine/README.md)
+  Ktor R2DBC cache, coroutine single-flight cache, routing datasource, provider-backed Caffeine adapter 비교
 - [12-production-integration](12-production-integration/README.md)
   Spring Boot 4/Ktor production service boundary comparison
 - [12-production-integration/01-spring-production-integration](12-production-integration/01-spring-production-integration/README.md),

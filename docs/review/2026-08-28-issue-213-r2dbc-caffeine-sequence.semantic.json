@@ -1,0 +1,50 @@
+{
+  "kind": "sequence",
+  "source": {
+    "question": "GET cache miss/hit와 WRITE_BEHIND PUT이 Ktor service, provider cache, H2 DB, health/lifecycle 경계를 어떤 순서로 통과하는가?",
+    "revision": "ed2f82c",
+    "paths": [
+      "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/routes/ProductCacheRoutes.kt",
+      "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/service/ProductCacheService.kt",
+      "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/domain/ProductCaffeineRepository.kt",
+      "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/config/R2dbcCaffeineResources.kt",
+      "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/test/kotlin/exposed/r2dbc/examples/cache/caffeine/R2dbcCaffeineCacheApplicationTest.kt",
+      "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/test/kotlin/exposed/r2dbc/examples/cache/caffeine/R2dbcCaffeineRepositoryLifecycleTest.kt"
+    ]
+  },
+  "nodes": [
+    {"id": "client", "label": "HTTP Client", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/test/kotlin/exposed/r2dbc/examples/cache/caffeine/R2dbcCaffeineCacheApplicationTest.kt"},
+    {"id": "routes", "label": "ProductCacheRoutes", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/routes/ProductCacheRoutes.kt"},
+    {"id": "service", "label": "ProductCacheService", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/service/ProductCacheService.kt"},
+    {"id": "repository", "label": "ProductCaffeineRepository", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/domain/ProductCaffeineRepository.kt"},
+    {"id": "cache", "label": "Caffeine AsyncCache", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/domain/ProductCaffeineRepository.kt"},
+    {"id": "database", "label": "H2 R2DBC database", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/config/R2dbcCaffeineResources.kt"},
+    {"id": "health", "label": "Cache health", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/service/ProductCacheService.kt"},
+    {"id": "resources", "label": "R2dbcCaffeineResources", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/config/R2dbcCaffeineResources.kt"}
+  ],
+  "edges": [
+    {"id": "request", "from": "client", "to": "routes", "kind": "request", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/routes/ProductCacheRoutes.kt"},
+    {"id": "route-get", "from": "routes", "to": "service", "kind": "get", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/routes/ProductCacheRoutes.kt"},
+    {"id": "cache-probe", "from": "service", "to": "cache", "kind": "probe", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/service/ProductCacheService.kt"},
+    {"id": "cache-hit", "from": "cache", "to": "service", "kind": "hit", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/service/ProductCacheService.kt"},
+    {"id": "provider-get", "from": "service", "to": "repository", "kind": "read-through", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/service/ProductCacheService.kt"},
+    {"id": "db-select", "from": "repository", "to": "database", "kind": "select", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/domain/ProductCaffeineRepository.kt"},
+    {"id": "db-record", "from": "database", "to": "repository", "kind": "record", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/domain/ProductCaffeineRepository.kt"},
+    {"id": "cache-store", "from": "repository", "to": "cache", "kind": "populate", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/domain/ProductCaffeineRepository.kt"},
+    {"id": "get-response", "from": "service", "to": "routes", "kind": "response", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/service/ProductCacheService.kt"},
+    {"id": "http-response", "from": "routes", "to": "client", "kind": "response", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/routes/ProductCacheRoutes.kt"},
+    {"id": "put-request", "from": "client", "to": "routes", "kind": "put", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/routes/ProductCacheRoutes.kt"},
+    {"id": "update-call", "from": "routes", "to": "service", "kind": "update", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/routes/ProductCacheRoutes.kt"},
+    {"id": "put-admission", "from": "service", "to": "repository", "kind": "write-behind", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/service/ProductCacheService.kt"},
+    {"id": "publish", "from": "repository", "to": "cache", "kind": "publish", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/domain/ProductCaffeineRepository.kt"},
+    {"id": "flush", "from": "repository", "to": "database", "kind": "batch-flush", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/domain/ProductCaffeineRepository.kt"},
+    {"id": "health-read", "from": "routes", "to": "health", "kind": "health", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/service/ProductCacheService.kt"},
+    {"id": "health-report", "from": "health", "to": "routes", "kind": "report", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/service/ProductCacheService.kt"},
+    {"id": "shutdown", "from": "resources", "to": "repository", "kind": "close", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/config/R2dbcCaffeineResources.kt"}
+  ],
+  "behavior": {"branches": 1, "loops": 1},
+  "repairs": [
+    {"target": "read-alt", "reason": "cache HIT와 provider MISS/DB fallback을 시간 순서가 보이는 하나의 alt frame으로 분리", "touches": 5},
+    {"target": "write-behind-loop", "reason": "bounded queue admission과 batch flush/health 관찰을 loop frame으로 묶어 종료 경계와 구분", "touches": 4}
+  ]
+}

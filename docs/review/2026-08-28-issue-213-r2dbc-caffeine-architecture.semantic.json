@@ -1,0 +1,47 @@
+{
+  "kind": "architecture",
+  "source": {
+    "question": "어떤 경계가 Ktor 상품 요청, provider Caffeine cache, Exposed R2DBC 데이터베이스, 그리고 종료 자원의 소유권을 나누는가?",
+    "revision": "ed2f82c",
+    "paths": [
+      "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/R2dbcCaffeineCacheApplication.kt",
+      "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/config/R2dbcCaffeineResources.kt",
+      "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/routes/ProductCacheRoutes.kt",
+      "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/service/ProductCacheService.kt",
+      "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/domain/ProductCaffeineRepository.kt",
+      "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/domain/ProductTable.kt"
+    ]
+  },
+  "nodes": [
+    {"id": "application", "label": "R2dbcCaffeineCacheApplication", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/R2dbcCaffeineCacheApplication.kt"},
+    {"id": "routes", "label": "ProductCacheRoutes", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/routes/ProductCacheRoutes.kt"},
+    {"id": "service", "label": "ProductCacheService", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/service/ProductCacheService.kt"},
+    {"id": "resources", "label": "R2dbcCaffeineResources", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/config/R2dbcCaffeineResources.kt"},
+    {"id": "repository", "label": "ProductCaffeineRepository", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/domain/ProductCaffeineRepository.kt"},
+    {"id": "async-cache", "label": "Caffeine AsyncCache", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/domain/ProductCaffeineRepository.kt"},
+    {"id": "health", "label": "CacheHealthReport", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/service/ProductCacheService.kt"},
+    {"id": "table", "label": "ProductTable and ProductRecord", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/domain/ProductTable.kt"},
+    {"id": "database", "label": "R2dbcDatabase", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/config/R2dbcCaffeineResources.kt"},
+    {"id": "pool", "label": "Bounded H2 ConnectionPool", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/config/R2dbcCaffeineResources.kt"},
+    {"id": "stopped", "label": "ApplicationStopped close", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/R2dbcCaffeineCacheApplication.kt"}
+  ],
+  "edges": [
+    {"id": "application-routes", "from": "application", "to": "routes", "kind": "install", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/R2dbcCaffeineCacheApplication.kt"},
+    {"id": "routes-service", "from": "routes", "to": "service", "kind": "request", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/routes/ProductCacheRoutes.kt"},
+    {"id": "service-repository", "from": "service", "to": "repository", "kind": "cache-adapter", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/service/ProductCacheService.kt"},
+    {"id": "repository-cache", "from": "repository", "to": "async-cache", "kind": "cache", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/domain/ProductCaffeineRepository.kt"},
+    {"id": "repository-table", "from": "repository", "to": "table", "kind": "mapping", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/domain/ProductCaffeineRepository.kt"},
+    {"id": "table-database", "from": "table", "to": "database", "kind": "transaction", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/domain/ProductTable.kt"},
+    {"id": "database-pool", "from": "database", "to": "pool", "kind": "connection", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/config/R2dbcCaffeineResources.kt"},
+    {"id": "resources-repository", "from": "resources", "to": "repository", "kind": "ownership", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/config/R2dbcCaffeineResources.kt"},
+    {"id": "resources-database", "from": "resources", "to": "database", "kind": "ownership", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/config/R2dbcCaffeineResources.kt"},
+    {"id": "resources-pool", "from": "resources", "to": "pool", "kind": "ownership", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/config/R2dbcCaffeineResources.kt"},
+    {"id": "service-health", "from": "service", "to": "health", "kind": "observability", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/service/ProductCacheService.kt"},
+    {"id": "application-stopped", "from": "application", "to": "stopped", "kind": "lifecycle", "source": "11-high-performance/07-cache-strategies-r2dbc-caffeine/src/main/kotlin/exposed/r2dbc/examples/cache/caffeine/R2dbcCaffeineCacheApplication.kt"}
+  ],
+  "behavior": {"branches": 1, "loops": 1},
+  "repairs": [
+    {"target": "ownership-boundary", "reason": "R2dbcCaffeineResources의 pool/database/repository 소유권을 별도 행으로 묶어 request 경계와 분리", "touches": 4},
+    {"target": "long-identifiers", "reason": "긴 Kotlin 타입명은 카드 제목과 subtitle 줄로 나누되 식별자를 축약하지 않음", "touches": 6}
+  ]
+}

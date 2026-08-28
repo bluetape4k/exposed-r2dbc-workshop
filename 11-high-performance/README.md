@@ -32,6 +32,7 @@ The examples in this directory cover topics closer to production environments â€
 | [04-cache-strategies-ktor-r2dbc](./04-cache-strategies-ktor-r2dbc/README.md) | Ktor route-visible cache hit/miss, invalidation, write refresh, DB fallback | When you want the general cache strategy topic without Spring WebFlux controllers |
 | [05-cache-strategies-ktor-r2dbc-coroutines](./05-cache-strategies-ktor-r2dbc-coroutines/README.md) | Ktor coroutine single-flight cache fallback, cancellation, coalesced reads | When you want coroutine-specific cache behavior separate from the general Ktor cache example |
 | [06-routing-datasource-ktor-r2dbc](./06-routing-datasource-ktor-r2dbc/README.md) | Ktor tenant + read/write R2DBC target routing without Reactor Context | When you want the routing datasource topic through Ktor request handling |
+| [07-cache-strategies-r2dbc-caffeine](./07-cache-strategies-r2dbc-caffeine/README.md) | Exposed R2DBC Caffeine adapter, three write modes, bounded write-behind lifecycle | When you want a provider-backed local cache with direct DB and health verification |
 
 ## Recommended Order
 
@@ -40,7 +41,8 @@ The examples in this directory cover topics closer to production environments â€
 3. Compare `04-cache-strategies-ktor-r2dbc` when you want to see the same cache strategy surface through Ktor routes.
 4. Read `05-cache-strategies-ktor-r2dbc-coroutines` for single-flight fallback and cancellation behavior.
 5. Read `06-routing-datasource-ktor-r2dbc` to compare Ktor call attributes with Spring Reactor Context routing.
-6. Optionally compare with the `09-spring` and `10-multi-tenant` modules to see the pattern differences.
+6. Read `07-cache-strategies-r2dbc-caffeine` to compare a provider-backed Caffeine adapter, write modes, and resource shutdown.
+7. Optionally compare with the `09-spring` and `10-multi-tenant` modules to see the pattern differences.
 
 ## Running Tips
 
@@ -59,6 +61,9 @@ The examples in this directory cover topics closer to production environments â€
 
 # Test the Ktor routing datasource module
 ./gradlew :06-routing-datasource-ktor-r2dbc:test
+
+# Test the Exposed R2DBC Caffeine adapter
+./gradlew :07-cache-strategies-r2dbc-caffeine:test -PuseDB=H2
 ```
 
 These commands use the unique Gradle project names reported by `./gradlew projects`.
