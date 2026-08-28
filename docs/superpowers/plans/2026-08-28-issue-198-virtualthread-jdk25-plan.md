@@ -325,6 +325,31 @@ val virtualThreadTest = tasks.named<Test>("test")
 tasks.register("verifyVirtualThreadTestExecution") {
     dependsOn(virtualThreadTest)
     doLast {
+        val knownDialects = setOf("H2", "H2_MYSQL", "H2_PSQL", "H2_MARIADB", "H2_ORACLE", "H2_SQLSERVER", "MARIADB", "MYSQL_V5", "MYSQL_V8", "POSTGRESQL")
+        val requested = project.providers.gradleProperty("useDB").orNull
+        val requestedFastDb = project.providers.gradleProperty("useFastDB").orNull
+        val useFastDb = when (requestedFastDb) {
+            null -> false
+            "true" -> true
+            "false" -> false
+            else -> error("useFastDB는 true 또는 false여야 실행 수를 검증할 수 있습니다.")
+        }
+        val selectedDialects = if (requested != null) {
+            val requestedTokens = requested.split(',').map { it.trim() }
+            require(requestedTokens.all { token ->
+                token.isNotEmpty() && knownDialects.any { it.equals(token, ignoreCase = true) }
+            }) {
+                "useDB에 알 수 없거나 빈 dialect token이 포함되어 있어 실행 수를 검증할 수 없습니다."
+            }
+            requestedTokens.map { token ->
+                knownDialects.first { it.equals(token, ignoreCase = true) }
+            }.toSet()
+        } else if (useFastDb) {
+            setOf("H2")
+        } else {
+            setOf("H2", "POSTGRESQL", "MYSQL_V8")
+        }
+
         val reportDir = layout.buildDirectory.dir("test-results/test").get().asFile
         val reports = reportDir.listFiles { file -> file.isFile && file.name.startsWith("TEST-") && file.extension == "xml" }
             ?.sortedBy { it.name }
@@ -393,31 +418,6 @@ tasks.register("verifyVirtualThreadTestExecution") {
                     skippedCases += SkippedCase(classname, name, type, message)
                 }
             }
-        }
-
-        val knownDialects = setOf("H2", "H2_MYSQL", "H2_PSQL", "H2_MARIADB", "H2_ORACLE", "H2_SQLSERVER", "MARIADB", "MYSQL_V5", "MYSQL_V8", "POSTGRESQL")
-        val requested = project.providers.gradleProperty("useDB").orNull
-        val requestedFastDb = project.providers.gradleProperty("useFastDB").orNull
-        val useFastDb = when (requestedFastDb) {
-            null -> false
-            "true" -> true
-            "false" -> false
-            else -> error("useFastDB는 true 또는 false여야 실행 수를 검증할 수 있습니다.")
-        }
-        val selectedDialects = if (requested != null) {
-            val requestedTokens = requested.split(',').map { it.trim() }
-            require(requestedTokens.all { token ->
-                token.isNotEmpty() && knownDialects.any { it.equals(token, ignoreCase = true) }
-            }) {
-                "useDB에 알 수 없거나 빈 dialect token이 포함되어 있어 실행 수를 검증할 수 없습니다."
-            }
-            requestedTokens.map { token ->
-                knownDialects.first { it.equals(token, ignoreCase = true) }
-            }.toSet()
-        } else if (useFastDb) {
-            setOf("H2")
-        } else {
-            setOf("H2", "POSTGRESQL", "MYSQL_V8")
         }
 
         val allowedMariaDbSkips = selectedDialects.count { it == "MARIADB" || it == "H2_MARIADB" }
