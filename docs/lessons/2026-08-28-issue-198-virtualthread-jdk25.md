@@ -49,8 +49,9 @@ provider를 그대로 로드하면 JDK25 JVM에서
   `org.opentest4j.TestAbortedException` capability message 하나로 고정됐다.
 - malformed `useDB` 3종과 `useFastDB=maybe`는 각각 non-zero와 fail-closed
   메시지를 남겼다. capability/message, exact testcase identity, wrong classname,
-  duplicate/nested skip, root/count 위반 hostile XML 11종도 모두 의도한 오류로
-  거부됐고 원본 report를 `cmp -s`로 복구했다.
+  duplicate/nested skip, root/count 위반, aggregate 속성과 불일치하는
+  `<failure>`/`<error>` node hostile XML 12종도 모두 의도한 오류로 거부됐고
+  원본 report를 `cmp -s`로 복구했다.
 - DOCTYPE fixture는 `DOCTYPE is disallowed`로 거부됐고, XInclude fixture는
   외부 sentinel을 확장하지 않은 채 `5/4/1` gate를 통과했다.
 - JDK25 provider artifact는 dependency insight에서 단일 resolved 결과로

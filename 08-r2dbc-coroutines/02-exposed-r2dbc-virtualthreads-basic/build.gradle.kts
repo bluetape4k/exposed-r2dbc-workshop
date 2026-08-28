@@ -125,6 +125,13 @@ abstract class VerifyVirtualThreadTestExecutionTask : DefaultTask() {
                 }
                 caseIdentities += classname to name
 
+                require(testCase.getElementsByTagName("failure").length == 0) {
+                    "JUnit XML testcase에 failure element가 있어 실행 수 gate를 통과할 수 없습니다: ${report.name}"
+                }
+                require(testCase.getElementsByTagName("error").length == 0) {
+                    "JUnit XML testcase에 error element가 있어 실행 수 gate를 통과할 수 없습니다: ${report.name}"
+                }
+
                 val descendantSkippedNodes = testCase.getElementsByTagName("skipped")
                 val directSkippedNodes = (0 until testCase.childNodes.length)
                     .map { testCase.childNodes.item(it) }
