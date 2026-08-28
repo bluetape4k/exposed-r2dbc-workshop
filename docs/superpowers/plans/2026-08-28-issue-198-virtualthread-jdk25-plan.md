@@ -889,6 +889,7 @@ container/Gradle failure를 진단한 뒤 해당 명령부터 다시 실행한�
 ```bash
 set -euo pipefail
 MODULE_DIR="08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic"
+REPORT_DIR="$MODULE_DIR/build/test-results/test"
 LIVENESS_LOG_DIR="$MODULE_DIR/build/reports/issue-198-liveness"
 mkdir -p "$LIVENESS_LOG_DIR"
 for run in 1 2 3; do
@@ -902,7 +903,27 @@ for run in 1 2 3; do
   LOG="$LIVENESS_LOG_DIR/run-${run}.log"
   test -s "$LOG"
   rg -q 'BUILD SUCCESSFUL' "$LOG"
-  rg -q '1 test completed' "$LOG"
+  REPORT="$(find "$REPORT_DIR" -type f -name '*Ex01_VirtualThreads*.xml' -print -quit)"
+  test -n "$REPORT"
+  test -f "$REPORT"
+  python3 - "$REPORT" <<'PY'
+import sys
+import xml.etree.ElementTree as ET
+
+root = ET.parse(sys.argv[1]).getroot()
+assert root.tag == "testsuite"
+assert root.attrib["tests"] == "1"
+assert root.attrib["skipped"] == "0"
+assert root.attrib["failures"] == "0"
+assert root.attrib["errors"] == "0"
+cases = root.findall("testcase")
+assert len(cases) == 1
+assert cases[0].attrib["classname"] == "exposed.r2dbc.examples.virtualthreads.Ex01_VirtualThreads"
+assert cases[0].attrib["name"] == "JDK25 provider와 runtime을 선택하고 structured scope를 닫는다"
+assert cases[0].find("skipped") is None
+assert cases[0].find("failure") is None
+assert cases[0].find("error") is None
+PY
 done
 awk '/^real / { print $2 }' "$LIVENESS_LOG_DIR"/run-*.log
 ```
@@ -910,8 +931,9 @@ awk '/^real / { print $2 }' "$LIVENESS_LOG_DIR"/run-*.log
 `set -euo pipefail`과 run별 raw log 보존으로 어느 한 실행의 non-zero를 숨기지
 않는다. 세 실행 모두 smoke 한 개만 선택되어 test hang 없이 PASS하고, 내부
 deadline/외부 `@Timeout`이 지켜지는 실제 `real` 시간을 기록한다. `BUILD SUCCESSFUL`과
-`1 test completed` 확인이 모두 필요하며, fast matrix의 `5/0` 계약은 Step 4와
-execution gate에서 별도로 증명한다. 한 실행이라도 실패하면 loop가 즉시 중단된다. min/max/median은 이 test JVM의 liveness 증적일
+모듈 JUnit XML의 `tests=1`, provider smoke identity 1개, `skipped/failures/errors=0`
+확인이 모두 필요하며, fast matrix의 `5/0` 계약은 Step 4와 execution gate에서
+별도로 증명한다. 한 실행이라도 실패하면 loop가 즉시 중단된다. min/max/median은 이 test JVM의 liveness 증적일
 뿐이며 production latency benchmark나 SLO로 해석하지 않는다. 500ms deadline은
 bounded join 계약을 위한 값이고, 유지 근거는 deterministic latch와 세 번의
 반복 실행 결과다. 한 번이라도 timeout 또는 child lifecycle flag failure가
