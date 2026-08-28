@@ -40,12 +40,14 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExecutorCoroutineDispatcher
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -53,6 +55,7 @@ class KtorMultitenantApplicationTest {
 
     companion object: KLoggingChannel() {
         const val TRACE_REQUEST_COUNT = 2
+        const val TRACE_DISPATCHER = "ktor-tenant-fixture-reused"
     }
 
     @Test
@@ -61,125 +64,131 @@ class KtorMultitenantApplicationTest {
         val ready = CompletableDeferred<Unit>()
         val release = CompletableDeferred<Unit>()
         val arrivals = AtomicInteger()
-        val traceDispatcher = Dispatchers.Default.limitedParallelism(1)
+        val traceDispatcher: ExecutorCoroutineDispatcher = Executors.newSingleThreadExecutor { runnable ->
+            Thread(runnable, TRACE_DISPATCHER)
+        }.asCoroutineDispatcher()
 
-        application {
-            installKtorMultitenantPlugins()
-            routing {
-                get("/tenant-trace/{traceId}") {
-                    val traceId = call.parameters["traceId"]
-                        ?: error("fixture trace id is missing")
-                    val expectedTenant = call.currentTenant()
-                    val recorder = KtorTenantTraceRecorder { trace -> log.info { trace.toLogLine() } }
-                    recorder.record(
-                        expectedTenant = expectedTenant.id,
-                        observedTenant = call.currentTenant().id,
-                        subscriptionId = "ktor-$traceId",
-                        dispatcher = "ktor-call",
-                        phase = TracePhase.START,
-                    )
-
-                    if (arrivals.incrementAndGet() == TRACE_REQUEST_COUNT) {
-                        ready.complete(Unit)
-                    }
-                    ready.await()
-                    release.await()
-
-                    withContext(traceDispatcher) {
+        try {
+            application {
+                installKtorMultitenantPlugins()
+                routing {
+                    get("/tenant-trace/{traceId}") {
+                        val traceId = call.parameters["traceId"]
+                            ?: error("fixture trace id is missing")
+                        val expectedTenant = call.currentTenant()
+                        val recorder = KtorTenantTraceRecorder { trace -> log.info { trace.toLogLine() } }
                         recorder.record(
                             expectedTenant = expectedTenant.id,
                             observedTenant = call.currentTenant().id,
                             subscriptionId = "ktor-$traceId",
-                            dispatcher = "Dispatchers.Default.limitedParallelism(1)",
-                            phase = TracePhase.RESUME,
+                            dispatcher = "ktor-call",
+                            phase = TracePhase.START,
                         )
 
-                        val nestedTenant = expectedTenant.other()
-                        try {
-                            call.withFixtureTenant(nestedTenant) {
-                                recorder.record(
-                                    expectedTenant = expectedTenant.id,
-                                    observedTenant = call.currentTenant().id,
-                                    subscriptionId = "ktor-$traceId",
-                                    dispatcher = "Dispatchers.Default.limitedParallelism(1)",
-                                    phase = TracePhase.NESTED_ENTER,
-                                )
-                                if (traceId.endsWith("-failure")) {
-                                    error("fixture failure")
-                                }
-                                recorder.record(
-                                    expectedTenant = expectedTenant.id,
-                                    observedTenant = call.currentTenant().id,
-                                    subscriptionId = "ktor-$traceId",
-                                    dispatcher = "Dispatchers.Default.limitedParallelism(1)",
-                                    phase = TracePhase.NESTED_SUCCESS,
-                                )
-                            }
-                        } catch (_: IllegalStateException) {
+                        if (arrivals.incrementAndGet() == TRACE_REQUEST_COUNT) {
+                            ready.complete(Unit)
+                        }
+                        ready.await()
+                        release.await()
+
+                        withContext(traceDispatcher) {
                             recorder.record(
                                 expectedTenant = expectedTenant.id,
                                 observedTenant = call.currentTenant().id,
                                 subscriptionId = "ktor-$traceId",
-                                dispatcher = "Dispatchers.Default.limitedParallelism(1)",
-                                phase = TracePhase.NESTED_FAILURE,
+                                dispatcher = TRACE_DISPATCHER,
+                                phase = TracePhase.RESUME,
+                            )
+
+                            val nestedTenant = expectedTenant.other()
+                            try {
+                                call.withFixtureTenant(nestedTenant) {
+                                    recorder.record(
+                                        expectedTenant = expectedTenant.id,
+                                        observedTenant = call.currentTenant().id,
+                                        subscriptionId = "ktor-$traceId",
+                                        dispatcher = TRACE_DISPATCHER,
+                                        phase = TracePhase.NESTED_ENTER,
+                                    )
+                                    if (traceId.endsWith("-failure")) {
+                                        error("fixture failure")
+                                    }
+                                    recorder.record(
+                                        expectedTenant = expectedTenant.id,
+                                        observedTenant = call.currentTenant().id,
+                                        subscriptionId = "ktor-$traceId",
+                                        dispatcher = TRACE_DISPATCHER,
+                                        phase = TracePhase.NESTED_SUCCESS,
+                                    )
+                                }
+                            } catch (_: IllegalStateException) {
+                                recorder.record(
+                                    expectedTenant = expectedTenant.id,
+                                    observedTenant = call.currentTenant().id,
+                                    subscriptionId = "ktor-$traceId",
+                                    dispatcher = TRACE_DISPATCHER,
+                                    phase = TracePhase.NESTED_FAILURE,
+                                )
+                            }
+
+                            recorder.record(
+                                expectedTenant = expectedTenant.id,
+                                observedTenant = call.currentTenant().id,
+                                subscriptionId = "ktor-$traceId",
+                                dispatcher = TRACE_DISPATCHER,
+                                phase = TracePhase.COMPLETE,
                             )
                         }
-
-                        recorder.record(
-                            expectedTenant = expectedTenant.id,
-                            observedTenant = call.currentTenant().id,
-                            subscriptionId = "ktor-$traceId",
-                            dispatcher = "Dispatchers.Default.limitedParallelism(1)",
-                            phase = TracePhase.COMPLETE,
-                        )
+                        traces[traceId] = recorder.events.toList()
+                        call.respond(HttpStatusCode.OK)
                     }
-                    traces[traceId] = recorder.events.toList()
-                    call.respond(HttpStatusCode.OK)
                 }
             }
-        }
 
-        val client = createClient {}
-        val expectedByTrace = mapOf(
-            "korean-success" to Tenant.KOREAN,
-            "english-failure" to Tenant.ENGLISH,
-        )
-        coroutineScope {
-            val requests = expectedByTrace.map { (traceId, tenant) ->
-                async {
-                    client.get("/tenant-trace/$traceId") {
-                        header(TenantHeader, tenant.id)
-                    }.status shouldBeEqualTo HttpStatusCode.OK
-                }
-            }
-            ready.await()
-            release.complete(Unit)
-            requests.awaitAll()
-        }
-
-        expectedByTrace.forEach { (traceId, expectedTenant) ->
-            val events = traces[traceId] ?: error("missing fixture trace for $traceId")
-            events shouldHaveSize 5
-            events
-                .filter { it.phase !in setOf(TracePhase.NESTED_ENTER, TracePhase.NESTED_SUCCESS) }
-                .forEach { it.observedTenant shouldBeEqualTo expectedTenant.id }
-            events
-                .filter { it.phase in setOf(TracePhase.NESTED_ENTER, TracePhase.NESTED_SUCCESS) }
-                .forEach { it.observedTenant shouldBeEqualTo expectedTenant.other().id }
-            events.map { it.phase }.toSet() shouldBeEqualTo setOf(
-                TracePhase.START,
-                TracePhase.RESUME,
-                TracePhase.NESTED_ENTER,
-                if (traceId.endsWith("-failure")) TracePhase.NESTED_FAILURE else TracePhase.NESTED_SUCCESS,
-                TracePhase.COMPLETE,
+            val client = createClient {}
+            val expectedByTrace = mapOf(
+                "korean-success" to Tenant.KOREAN,
+                "english-failure" to Tenant.ENGLISH,
             )
+            coroutineScope {
+                val requests = expectedByTrace.map { (traceId, tenant) ->
+                    async {
+                        client.get("/tenant-trace/$traceId") {
+                            header(TenantHeader, tenant.id)
+                        }.status shouldBeEqualTo HttpStatusCode.OK
+                    }
+                }
+                ready.await()
+                release.complete(Unit)
+                requests.awaitAll()
+            }
+
+            expectedByTrace.forEach { (traceId, expectedTenant) ->
+                val events = traces[traceId] ?: error("missing fixture trace for $traceId")
+                events shouldHaveSize 5
+                events
+                    .filter { it.phase !in setOf(TracePhase.NESTED_ENTER, TracePhase.NESTED_SUCCESS) }
+                    .forEach { it.observedTenant shouldBeEqualTo expectedTenant.id }
+                events
+                    .filter { it.phase in setOf(TracePhase.NESTED_ENTER, TracePhase.NESTED_SUCCESS) }
+                    .forEach { it.observedTenant shouldBeEqualTo expectedTenant.other().id }
+                events.map { it.phase }.toSet() shouldBeEqualTo setOf(
+                    TracePhase.START,
+                    TracePhase.RESUME,
+                    TracePhase.NESTED_ENTER,
+                    if (traceId.endsWith("-failure")) TracePhase.NESTED_FAILURE else TracePhase.NESTED_SUCCESS,
+                    TracePhase.COMPLETE,
+                )
+            }
+
+            expectedByTrace
+                .map { (traceId, _) -> traces[traceId].orEmpty().single { it.phase == TracePhase.RESUME }.threadId }
+                .toSet() shouldHaveSize 1
+
+            client.get("/tenant-trace/after-request").status shouldBeEqualTo HttpStatusCode.BadRequest
+        } finally {
+            traceDispatcher.close()
         }
-
-        expectedByTrace
-            .map { (traceId, _) -> traces[traceId].orEmpty().single { it.phase == TracePhase.RESUME }.threadId }
-            .toSet() shouldHaveSize 1
-
-        client.get("/tenant-trace/after-request").status shouldBeEqualTo HttpStatusCode.BadRequest
     }
 
     @Test
