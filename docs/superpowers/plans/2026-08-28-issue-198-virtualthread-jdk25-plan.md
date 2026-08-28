@@ -633,11 +633,11 @@ container/Gradle failure를 진단한 뒤 해당 명령부터 다시 실행한�
 
 ```bash
 ./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
-  -PuseDB=TYPO --no-daemon --console=plain
+  -PuseDB=TYPO -x test --no-daemon --console=plain
 ./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
-  -PuseDB=H2, --no-daemon --console=plain
+  -PuseDB=H2, -x test --no-daemon --console=plain
 ./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
-  -PuseDB= --no-daemon --console=plain
+  -PuseDB= -x test --no-daemon --console=plain
 ```
 
 각 명령은 `unknown/empty dialect token` 메시지로 실패해야 하며 H2 fallback이나
@@ -650,7 +650,7 @@ container/Gradle failure를 진단한 뒤 해당 명령부터 다시 실행한�
 
 ```bash
 ./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
-  -PuseFastDB=maybe --no-daemon --console=plain
+  -PuseFastDB=maybe -x test --no-daemon --console=plain
 ```
 
 위 명령도 `useFastDB는 true 또는 false여야` 메시지로 실패해야 한다.
