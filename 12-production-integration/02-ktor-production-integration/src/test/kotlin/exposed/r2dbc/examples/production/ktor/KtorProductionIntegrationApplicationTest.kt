@@ -25,6 +25,9 @@ import exposed.r2dbc.examples.production.ktor.app.StructuredError
 import exposed.r2dbc.examples.production.ktor.app.WorkItemView
 import exposed.r2dbc.examples.production.ktor.config.REQUEST_ID_HEADER
 import exposed.r2dbc.examples.production.ktor.outbound.KtorOutboundDispatcher
+import exposed.r2dbc.examples.production.ktor.outbound.defaultOutboundClient
+import exposed.r2dbc.examples.production.ktor.outbound.defaultOutboundClientJson
+import exposed.r2dbc.examples.production.ktor.outbound.defaultOutboundClientTimeouts
 import io.bluetape4k.assertions.shouldBeEqualTo
 import io.bluetape4k.assertions.shouldBeGreaterThan
 import io.bluetape4k.assertions.shouldNotBeEqualTo
@@ -34,8 +37,10 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respondOk
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.cookies.HttpCookies
+import io.ktor.client.plugins.plugin
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.plugins.websocket.webSocket
 import io.ktor.client.request.get
@@ -711,7 +716,29 @@ class KtorProductionIntegrationApplicationTest {
         )
 
         result.statusCode shouldBeEqualTo HttpStatusCode.OK.value
-        dispatcherClient.close()
+        dispatcher.close()
+    }
+
+    @Test
+    fun `default outbound client keeps explicit JSON and timeout contract`() {
+        val client = defaultOutboundClient()
+        try {
+            client.plugin(ContentNegotiation).shouldNotBeNull()
+            client.plugin(HttpTimeout).shouldNotBeNull()
+            defaultOutboundClientJson.configuration.ignoreUnknownKeys shouldBeEqualTo true
+            defaultOutboundClientJson.configuration.encodeDefaults shouldBeEqualTo true
+            defaultOutboundClientJson.configuration.explicitNulls shouldBeEqualTo true
+            defaultOutboundClientTimeouts.requestTimeout shouldBeEqualTo Duration.ofSeconds(30)
+            defaultOutboundClientTimeouts.connectTimeout shouldBeEqualTo Duration.ofSeconds(10)
+            defaultOutboundClientTimeouts.socketTimeout shouldBeEqualTo Duration.ofSeconds(30)
+        } finally {
+            client.close()
+        }
+    }
+
+    @Test
+    fun `dispatcher closes its default client`() {
+        KtorOutboundDispatcher().close()
     }
 
     @Test
