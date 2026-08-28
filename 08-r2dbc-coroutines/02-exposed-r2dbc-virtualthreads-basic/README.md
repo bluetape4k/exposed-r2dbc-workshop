@@ -2,11 +2,16 @@
 
 # 02 R2DBC Virtual Threads Basic
 
-Learn how to perform asynchronous database operations in an Exposed R2DBC + Java 21 Virtual Threads environment.
+Learn how to perform asynchronous database operations in an Exposed R2DBC + Java 25 Virtual Threads environment.
 Use Virtual Threads-specific APIs such as `runSuspendVT`, `virtualThreadTransaction`, and `inTopLevelSuspendTransaction`
 to achieve high-performance async processing with blocking-style code.
 
-> **Requirement**: JDK 21 or later (`@EnabledOnJre(JRE.JAVA_21)` condition applied)
+> **Requirement**: JDK 25 (`@EnabledOnJre(JRE.JAVA_25)` condition applied)
+
+The Version Catalog uses a versionless `bluetape4k-virtualthread-jdk25` alias. The
+`bluetape4k-dependencies:1.4.0` BOM resolves it to
+`bluetape4k-virtualthread-jdk25:1.12.1`; the test must discover exactly
+`jdk25-structured-task-scope` and `jdk25` through the public ServiceLoader APIs.
 
 ---
 
@@ -18,7 +23,7 @@ to achieve high-performance async processing with blocking-style code.
 
 ## Learning Objectives
 
-- Understand how to integrate Java 21 Virtual Threads with Exposed R2DBC
+- Understand how to integrate Java 25 Virtual Threads with Exposed R2DBC
 - Use `runSuspendVT` / `virtualThreadTransaction` / `inTopLevelSuspendTransaction` APIs
 - Implement parallel processing based on Virtual Threads using the `Dispatchers.newVT()` dispatcher
 - Understand the differences between Virtual Thread transactions and standard `suspendTransaction`
@@ -45,7 +50,7 @@ to achieve high-performance async processing with blocking-style code.
 Run the test with `runSuspendVT` and create a nested transaction with `virtualThreadTransaction`.
 
 ```kotlin
-@EnabledOnJre(JRE.JAVA_21)
+@EnabledOnJre(JRE.JAVA_25)
 class Ex01_VirtualThreads: AbstractR2dbcExposedTest() {
 
     object VTester: IntIdTable("virtualthreads_table") {
@@ -170,9 +175,9 @@ fun `conditional query in virtual threads environment`(testDB: TestDB) = runSusp
 
 ---
 
-## Benefits of Virtual Threads (JDK 21)
+## Benefits of Virtual Threads (JDK 25)
 
-Java 21's Virtual Threads (Project Loom) overcome the limitations of traditional platform threads.
+Java 25's Virtual Threads (Project Loom) overcome the limitations of traditional platform threads.
 
 ### Performance Comparison
 
@@ -183,7 +188,7 @@ Java 21's Virtual Threads (Project Loom) overcome the limitations of traditional
 | Context switching  | OS level, high cost       | JVM level, low cost          |
 | Max concurrent     | Thousands                 | Millions                     |
 | Blocking I/O       | Thread occupied           | Auto unmount/remount         |
-| JDK requirement    | All versions              | 21+                          |
+| JDK requirement    | All versions              | 25                           |
 
 ### Benefits of R2DBC + Virtual Threads Combination
 
@@ -208,8 +213,8 @@ Java 21's Virtual Threads (Project Loom) overcome the limitations of traditional
 
 ## Cautions
 
-- **JDK 21 required**: Tests have `@EnabledOnJre(JRE.JAVA_21)`, so they are automatically skipped on JDK versions below 21.
-- **MariaDB-compatible nested transactions not supported**: Tests for nested transactions are skipped on MariaDB via `Assumptions.assumeTrue { testDB !in TestDB.ALL_MARIADB_LIKE }`.
+- **JDK 25 required**: Tests have `@EnabledOnJre(JRE.JAVA_25)`, so they are automatically skipped on older JDK versions.
+- **MariaDB-compatible nested transactions not supported**: The nested transaction test is skipped with the explicit capability reason `MariaDB-compatible nested transactions are not supported`.
 - **Use CopyOnWriteArrayList**: When collecting results from multiple Virtual Threads simultaneously, use a thread-safe collection.
 - **Set maxAttempts**: Conflicts can occur in parallel transactions, so setting `maxAttempts = 5~10` retries is recommended.
 
@@ -218,17 +223,35 @@ Java 21's Virtual Threads (Project Loom) overcome the limitations of traditional
 ## Running Tests
 
 ```bash
-# Run all tests in this module
+# Run the raw tests in this module (diagnostic use)
 ./gradlew :02-exposed-r2dbc-virtualthreads-basic:test
 
 # Fast test using only H2
 ./gradlew :02-exposed-r2dbc-virtualthreads-basic:test -PuseFastDB=true
+
+# Authoritative execution-count gate; this command runs test first
+./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution -PuseFastDB=true
+
+# Default H2, PostgreSQL, and MySQL 8 matrix (13 total / 13 executed / 0 skipped)
+./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution
+
+# MariaDB-compatible capability check (5 total / 4 executed / 1 skipped)
+./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution -PuseDB=H2_MARIADB
 ```
+
+The fast gate must report `5 total / 5 executed / 0 skipped`. The default matrix
+must report `13 total / 13 executed / 0 skipped`. With `MARIADB` or `H2_MARIADB`
+explicitly selected, only the nested-transaction capability skip is allowed.
+`verifyVirtualThreadTestExecution` already runs the test task, so the separate
+raw `test` command is only a diagnostic option. The gate fails closed for missing
+JUnit XML, malformed `useDB`/`useFastDB` values, unexpected skips, failures, and
+errors. The verification gate itself does not print environment variables, system
+properties, or secrets.
 
 ---
 
 ## References
 
 - [JEP 444: Virtual Threads](https://openjdk.org/jeps/444)
-- [Virtual Threads — Java 21 Guide](https://docs.oracle.com/en/java/javase/21/core/virtual-threads.html)
+- [Virtual Threads — Java 25 Guide](https://docs.oracle.com/en/java/javase/25/core/virtual-threads.html)
 - [Kotlin Coroutines + Virtual Threads](https://kotlinlang.org/docs/coroutines-overview.html)

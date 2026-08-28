@@ -56,10 +56,10 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
- * JDK 21 Virtual Threads와 Exposed R2DBC를 조합하는 예제 테스트.
+ * JDK 25 Virtual Threads와 Exposed R2DBC를 조합하는 예제 테스트.
  *
  * ## Virtual Threads란?
- * JDK 21에서 정식 도입된 경량 스레드(Project Loom). OS 스레드와 1:1 매핑되지 않으므로
+ * JDK 25에서 제공되는 경량 스레드(Project Loom). OS 스레드와 1:1 매핑되지 않으므로
  * 수천~수백만 개의 동시 작업을 적은 메모리로 처리할 수 있습니다.
  *
  * ## Exposed R2DBC + Virtual Threads 조합

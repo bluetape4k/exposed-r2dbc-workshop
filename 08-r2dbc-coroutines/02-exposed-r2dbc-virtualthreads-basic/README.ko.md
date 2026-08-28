@@ -2,11 +2,17 @@
 
 # 02 R2DBC Virtual Threads Basic (가상 스레드 기본)
 
-Exposed R2DBC + Java 21 Virtual Threads 환경에서 비동기 데이터베이스 작업을 수행하는 방법을 학습합니다.
+Exposed R2DBC + Java 25 Virtual Threads 환경에서 비동기 데이터베이스 작업을 수행하는 방법을 학습합니다.
 `runSuspendVT`, `virtualThreadTransaction`, `inTopLevelSuspendTransaction` 등 Virtual Threads 전용 API를 통해
 블로킹 스타일 코드로 고성능 비동기 처리를 구현합니다.
 
-> **요구 사항**: JDK 21 이상 (`@EnabledOnJre(JRE.JAVA_21)` 조건 적용)
+> **요구 사항**: JDK 25 (`@EnabledOnJre(JRE.JAVA_25)` 조건 적용)
+
+Version Catalog의 versionless `bluetape4k-virtualthread-jdk25` alias는
+`bluetape4k-dependencies:1.4.0` BOM을 통해
+`bluetape4k-virtualthread-jdk25:1.12.1`로 해석됩니다. 테스트는 public
+ServiceLoader API에서 `jdk25-structured-task-scope` provider와 `jdk25` runtime을
+각각 정확히 하나씩 발견해야 합니다.
 
 ---
 
@@ -18,7 +24,7 @@ Exposed R2DBC + Java 21 Virtual Threads 환경에서 비동기 데이터베이�
 
 ## 학습 목표
 
-- Java 21 Virtual Threads와 Exposed R2DBC 통합 방법 이해
+- Java 25 Virtual Threads와 Exposed R2DBC 통합 방법 이해
 - `runSuspendVT` / `virtualThreadTransaction` / `inTopLevelSuspendTransaction` API 활용
 - `Dispatchers.newVT()` 디스패처로 Virtual Threads 기반 병렬 처리 구현
 - 기존 `suspendTransaction` 대비 Virtual Threads 트랜잭션의 차이점 파악
@@ -45,7 +51,7 @@ Exposed R2DBC + Java 21 Virtual Threads 환경에서 비동기 데이터베이�
 `runSuspendVT`로 테스트를 실행하고, `virtualThreadTransaction`으로 중첩 트랜잭션을 생성합니다.
 
 ```kotlin
-@EnabledOnJre(JRE.JAVA_21)
+@EnabledOnJre(JRE.JAVA_25)
 class Ex01_VirtualThreads: AbstractR2dbcExposedTest() {
 
     object VTester: IntIdTable("virtualthreads_table") {
@@ -170,9 +176,9 @@ fun `virtual threads 환경에서 조건 조회`(testDB: TestDB) = runSuspendVT 
 
 ---
 
-## Virtual Thread (JDK 21) 활용 이점
+## Virtual Thread (JDK 25) 활용 이점
 
-JDK 21의 Virtual Threads(Project Loom)는 기존 플랫폼 스레드의 한계를 극복합니다.
+JDK 25의 Virtual Threads(Project Loom)는 기존 플랫폼 스레드의 한계를 극복합니다.
 
 ### 성능 비교
 
@@ -183,7 +189,7 @@ JDK 21의 Virtual Threads(Project Loom)는 기존 플랫폼 스레드의 한계�
 | 컨텍스트 스위칭   | OS 수준, 비용 높음   | JVM 수준, 비용 낮음   |
 | 최대 동시 스레드  | 수천 개              | 수백만 개             |
 | 블로킹 I/O       | 스레드 점유          | 자동 언마운트·재마운트  |
-| JDK 요구사항     | 모든 버전             | 21+                  |
+| JDK 요구사항     | 모든 버전             | 25                   |
 
 ### R2DBC + Virtual Threads 조합의 이점
 
@@ -208,8 +214,8 @@ JDK 21의 Virtual Threads(Project Loom)는 기존 플랫폼 스레드의 한계�
 
 ## 주의 사항
 
-- **JDK 21 필수**: 테스트 클래스에 `@EnabledOnJre(JRE.JAVA_21)` 적용되어 있어, JDK 21 미만에서는 자동 스킵됩니다.
-- **MariaDB 계열 중첩 트랜잭션 미지원**: `Assumptions.assumeTrue { testDB !in TestDB.ALL_MARIADB_LIKE }` 조건으로 MariaDB에서는 중첩 트랜잭션 테스트를 스킵합니다.
+- **JDK 25 필수**: 테스트 클래스에 `@EnabledOnJre(JRE.JAVA_25)`가 적용되어 있어, 이전 JDK에서는 자동 스킵됩니다.
+- **MariaDB 계열 중첩 트랜잭션 미지원**: `MariaDB-compatible nested transactions are not supported` capability 사유로 중첩 트랜잭션 테스트를 스킵합니다.
 - **CopyOnWriteArrayList 사용**: 여러 Virtual Thread에서 동시에 결과를 수집할 때 스레드 안전한 컬렉션을 사용해야 합니다.
 - **maxAttempts 설정**: 병렬 트랜잭션에서 충돌이 발생할 수 있으므로 `maxAttempts = 5~10` 재시도 설정을 권장합니다.
 
@@ -218,17 +224,35 @@ JDK 21의 Virtual Threads(Project Loom)는 기존 플랫폼 스레드의 한계�
 ## 테스트 실행
 
 ```bash
-# 이 모듈의 모든 테스트 실행
+# 이 모듈의 원시 테스트 실행 (진단용)
 ./gradlew :02-exposed-r2dbc-virtualthreads-basic:test
 
 # H2만 사용하는 빠른 테스트
 ./gradlew :02-exposed-r2dbc-virtualthreads-basic:test -PuseFastDB=true
+
+# 실행 수를 검증하는 권위 있는 gate (test를 먼저 실행)
+./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution -PuseFastDB=true
+
+# 기본 H2, PostgreSQL, MySQL 8 matrix (13 total / 13 executed / 0 skipped)
+./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution
+
+# MariaDB 호환 capability 확인 (5 total / 4 executed / 1 skipped)
+./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution -PuseDB=H2_MARIADB
 ```
+
+fast gate는 `5 total / 5 executed / 0 skipped`를, 기본 matrix는
+`13 total / 13 executed / 0 skipped`를 출력해야 합니다. `MARIADB` 또는
+`H2_MARIADB`를 명시하면 중첩 트랜잭션 capability skip 하나만 허용합니다.
+`verifyVirtualThreadTestExecution`이 내부에서 test task를 실행하므로 별도의
+`test` 명령은 진단할 때만 사용합니다. JUnit XML 누락, 잘못된
+`useDB`/`useFastDB` 값, 예상 밖 skip, failure, error가 있으면 gate가
+fail-closed로 종료됩니다. 검증 gate 자체는 환경 변수·system property·secret
+전체를 출력하지 않습니다.
 
 ---
 
 ## 참고 자료
 
 - [JEP 444: Virtual Threads](https://openjdk.org/jeps/444)
-- [Virtual Threads — Java 21 Guide](https://docs.oracle.com/en/java/javase/21/core/virtual-threads.html)
+- [Virtual Threads — Java 25 Guide](https://docs.oracle.com/en/java/javase/25/core/virtual-threads.html)
 - [Kotlin Coroutines + Virtual Threads](https://kotlinlang.org/docs/coroutines-overview.html)
