@@ -21,6 +21,7 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 
 - **Reactive SQL 학습 경로** — shared test infrastructure부터 high-performance routing까지
 - **Coroutine/R2DBC 예제** — `suspendTransaction`, Flow collection, WebFlux, Ktor request handling 포함
+- **JDK 25 Virtual Threads 예제** — `bluetape4k-dependencies:1.4.0` BOM이 선택하는 `bluetape4k-virtualthread-jdk25:1.12.1` provider 사용
 - **Multi-database 검증** — H2, PostgreSQL, MySQL, MariaDB
 - **운영형 패턴** — repository, cache, multi-tenant schema, routing datasource,
   realtime outbox, HTTP client outbox/idempotency, observability/readiness 예제
@@ -87,7 +88,7 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 3. DDL/DML 패턴: [04-exposed-r2dbc-ddl](04-exposed-r2dbc-ddl/01-connection/README.md), [05-exposed-r2dbc-dml](05-exposed-r2dbc-dml/01-dml/README.md)
 4. 확장 기능: [06-advanced](06-advanced/README.md)
 5. JPA 변환: [07-jpa-convert/01-convert-jpa-basic](07-jpa-convert/01-convert-jpa-basic/README.md)
-6. Coroutines / Virtual Threads: [08-r2dbc-coroutines](08-r2dbc-coroutines/01-exposed-r2dbc-coroutines-basic/README.md)
+6. Coroutines / Virtual Threads: [08-r2dbc-coroutines](08-r2dbc-coroutines/01-exposed-r2dbc-coroutines-basic/README.ko.md), [Virtual Threads (JDK25)](08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/README.ko.md)
 7. Spring repository 변형: [09-spring/05-exposed-r2dbc-repository-coroutines](09-spring/05-exposed-r2dbc-repository-coroutines/README.ko.md) (수동), [09-spring/06-exposed-spring-boot-r2dbc-repository](09-spring/06-exposed-spring-boot-r2dbc-repository/README.ko.md) (provider adapter)
 8. 멀티테넌시 / 고성능: [10-multi-tenant](10-multi-tenant/README.ko.md), [11-high-performance](11-high-performance/README.ko.md)
 9. Production integration: [12-production-integration](12-production-integration/README.ko.md)
@@ -105,7 +106,7 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 | `05-exposed-r2dbc-dml`   | CRUD, 함수, 타입, 트랜잭션                            | [DML](05-exposed-r2dbc-dml/01-dml/README.md)                                  |
 | `06-advanced`            | 암호화, JSON, Money, Custom Column, Jackson/Tink | [Advanced](06-advanced/README.md)                                             |
 | `07-jpa-convert`         | JPA 패턴을 Exposed R2DBC로 전환                     | [JPA Convert](07-jpa-convert/01-convert-jpa-basic/README.md)                  |
-| `08-r2dbc-coroutines`    | Coroutines, Flow, Virtual Threads             | [Coroutines](08-r2dbc-coroutines/01-exposed-r2dbc-coroutines-basic/README.md) |
+| `08-r2dbc-coroutines`    | Coroutines, Flow, Virtual Threads (JDK25 provider) | [Coroutines](08-r2dbc-coroutines/01-exposed-r2dbc-coroutines-basic/README.ko.md), [Virtual Threads](08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/README.ko.md) |
 | `09-spring`              | 수동/provider Repository 패턴, Redis 기반 suspended cache | [수동 Repository](09-spring/05-exposed-r2dbc-repository-coroutines/README.ko.md), [Provider Adapter](09-spring/06-exposed-spring-boot-r2dbc-repository/README.ko.md) |
 | `10-multi-tenant`        | Schema, connection-factory, authorization, onboarding 멀티테넌시 + WebFlux/Ktor | [Multi-Tenant Strategies](10-multi-tenant/README.ko.md) |
 | `11-high-performance`    | 캐시 전략, routing datasource, read/write 분리 + Ktor 비교 | [High Performance](11-high-performance/README.ko.md)                          |
