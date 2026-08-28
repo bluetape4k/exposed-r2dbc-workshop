@@ -40,6 +40,7 @@ import org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.transactionManager
 import org.junit.jupiter.api.Assumptions
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Timeout
 import org.junit.jupiter.api.condition.EnabledOnJre
@@ -118,6 +119,7 @@ class Ex01_VirtualThreads: AbstractR2dbcExposedTest() {
         }
 
     @Test
+    @DisplayName("JDK25 provider와 runtime을 선택하고 structured scope를 닫는다")
     @Timeout(value = 2, unit = TimeUnit.SECONDS)
     fun `JDK25 provider와 runtime을 선택하고 structured scope를 닫는다`() {
         val providers = ServiceLoader.load(StructuredTaskScopeProvider::class.java).toList()
@@ -169,6 +171,7 @@ class Ex01_VirtualThreads: AbstractR2dbcExposedTest() {
     }
 
     @ParameterizedTest(name = "{displayName} {0}")
+    @DisplayName("virtual threads 를 이용하여 순차 작업 수행하기")
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `virtual threads 를 이용하여 순차 작업 수행하기`(testDB: TestDB) = runSuspendVT {
         withTables(testDB, VTester) {
@@ -183,9 +186,13 @@ class Ex01_VirtualThreads: AbstractR2dbcExposedTest() {
     }
 
     @ParameterizedTest(name = "{displayName} {0}")
+    @DisplayName("중첩된 virtual thread 용 트랜잭션을 async로 실행")
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `중첩된 virtual thread 용 트랜잭션을 async로 실행`(testDB: TestDB) = runSuspendVT {
-        Assumptions.assumeTrue { testDB !in TestDB.ALL_MARIADB_LIKE }
+        Assumptions.assumeTrue(
+            testDB !in TestDB.ALL_MARIADB_LIKE,
+            "MariaDB-compatible nested transactions are not supported",
+        )
 
         withTables(testDB, VTester) {
             val recordCount = 5
@@ -226,6 +233,7 @@ class Ex01_VirtualThreads: AbstractR2dbcExposedTest() {
     }
 
     @ParameterizedTest(name = "{displayName} {0}")
+    @DisplayName("다수의 비동기 작업을 수행 후 대기")
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `다수의 비동기 작업을 수행 후 대기`(testDB: TestDB) = runSuspendVT {
         withTables(testDB, VTester) {
@@ -255,6 +263,7 @@ class Ex01_VirtualThreads: AbstractR2dbcExposedTest() {
     }
 
     @ParameterizedTest(name = "{displayName} {0}")
+    @DisplayName("virtual threads 환경에서 조건 조회")
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `virtual threads 환경에서 조건 조회`(testDB: TestDB) = runSuspendVT {
         withTables(testDB, VTester) {
