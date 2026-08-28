@@ -316,6 +316,7 @@ provider smoke와 H2 parameterized test가 `5 executed / 0 skipped`인지 읽은
 ```kotlin
 import org.gradle.api.tasks.testing.Test
 import org.w3c.dom.Element
+import org.w3c.dom.Node
 import javax.xml.XMLConstants
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -373,12 +374,20 @@ tasks.register("verifyVirtualThreadTestExecution") {
                     "JUnit XML testcase classname/name이 비어 있습니다: ${report.name}"
                 }
                 caseIdentities += classname to name
-                val skippedNodes = testCase.getElementsByTagName("skipped")
-                require(skippedNodes.length <= 1) {
+                val descendantSkippedNodes = testCase.getElementsByTagName("skipped")
+                val directSkippedNodes = (0 until testCase.childNodes.length)
+                    .map { testCase.childNodes.item(it) }
+                    .filter { node ->
+                        node.nodeType == Node.ELEMENT_NODE && node.nodeName == "skipped"
+                    }
+                require(descendantSkippedNodes.length == directSkippedNodes.size) {
+                    "JUnit XML testcase의 skipped element는 direct child여야 합니다: ${report.name}"
+                }
+                require(directSkippedNodes.size <= 1) {
                     "JUnit XML testcase에 skipped element가 둘 이상입니다: ${report.name}"
                 }
-                if (skippedNodes.length > 0) {
-                    val skippedNode = skippedNodes.item(0)
+                if (directSkippedNodes.isNotEmpty()) {
+                    val skippedNode = directSkippedNodes.single()
                     val type = skippedNode.attributes?.getNamedItem("type")?.nodeValue.orEmpty()
                     val message = skippedNode.attributes?.getNamedItem("message")?.nodeValue.orEmpty()
                     skippedCases += SkippedCase(classname, name, type, message)
@@ -593,16 +602,22 @@ alt text/geometry는 바꾸지 않는다.
 - [ ] **Step 5: 문서·source stale token과 link를 검사한다.**
 
 ```bash
-rg -n 'JDK 21|Java 21|JAVA_21|JRE\.JAVA_21|virtualthread-jdk21' \
-  README.md README.ko.md \
-  08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/README.md \
-  08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/README.ko.md \
+set -euo pipefail
+READER_FILES=(
+  README.md
+  README.ko.md
+  08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/README.md
+  08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/README.ko.md
   08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/src/test/kotlin/exposed/r2dbc/examples/virtualthreads/Ex01_VirtualThreads.kt
-rg -n 'JDK 25|Java 25|JAVA_25|JRE\.JAVA_25|virtualthread-jdk25|jdk25-structured-task-scope' \
-  README.md README.ko.md \
-  08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/README.md \
-  08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/README.ko.md \
-  08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/src/test/kotlin/exposed/r2dbc/examples/virtualthreads/Ex01_VirtualThreads.kt
+)
+if rg -n 'JDK 21|Java 21|JAVA_21|JRE\.JAVA_21|virtualthread-jdk21' "${READER_FILES[@]}"; then
+  echo 'reader/source 범위에 stale JDK21 token이 남아 있습니다.' >&2
+  exit 1
+fi
+rg -q 'JDK 25|Java 25|JAVA_25|JRE\.JAVA_25|virtualthread-jdk25|jdk25-structured-task-scope' \
+  "${READER_FILES[@]}"
+test -e 08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/README.md
+test -e 08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/README.ko.md
 ```
 
 첫 명령은 의도한 JDK21 exclusion을 포함하지 않는 reader/source 범위에서
@@ -784,6 +799,100 @@ trap - EXIT
 이름 crafted negative도 의도적으로 실패해야 하며, 원본 report 복구 후 다음
 검증을 진행한다. `REPORT_DIR` 밖의 root-level `build/test-results`는 읽지 않는다.
 
+skip allowlist의 tuple과 cardinality도 별도 crafted XML로 거부한다. capability
+skip testcase의 classname을 다른 값으로 바꾸면 exact identity가 사라져야 하고,
+같은 direct-child `<skipped>`를 두 개 넣거나 하나를 `<system-out>` 아래로
+옮기면 각각 duplicate/direct-child 오류로 실패해야 한다. 세 fixture는 하나의
+backup을 공유하되 각 gate 실행 뒤 원본을 `cmp -s`로 복구한다.
+
+```bash
+set -euo pipefail
+MODULE_DIR="08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic"
+REPORT_DIR="$MODULE_DIR/build/test-results/test"
+test -d "$REPORT_DIR"
+REPORT=""
+while IFS= read -r candidate; do
+  if rg -q --fixed-strings -- '중첩된 virtual thread 용 트랜잭션을 async로 실행 H2_MARIADB' "$candidate"; then
+    REPORT="$candidate"
+    break
+  fi
+done < <(find "$REPORT_DIR" -type f -name 'TEST-*.xml' -print)
+test -n "$REPORT"
+test -f "$REPORT"
+BACKUP="${REPORT}.issue-198-skip-shape-backup"
+OUTPUT="$(mktemp)"
+cp "$REPORT" "$BACKUP"
+restore_report() {
+  cp "$BACKUP" "$REPORT"
+  cmp -s "$BACKUP" "$REPORT"
+}
+cleanup() {
+  restore_report
+  rm -f "$BACKUP" "$OUTPUT"
+}
+trap cleanup EXIT
+run_expected_failure() {
+  local expected="$1"
+  set +e
+  ./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
+    -PuseDB=H2_MARIADB -x test --no-daemon --console=plain >"$OUTPUT" 2>&1
+  local status=$?
+  set -e
+  test "$status" -ne 0
+  test -s "$OUTPUT"
+  rg -q --fixed-strings -- "$expected" "$OUTPUT"
+  restore_report
+}
+python3 - "$REPORT" <<'PY'
+from pathlib import Path
+import re
+import sys
+
+path = Path(sys.argv[1])
+text = path.read_text()
+pattern = re.compile(
+    r'(<testcase\b(?=[^>]*\bname="중첩된 virtual thread 용 트랜잭션을 async로 실행 H2_MARIADB")[^>]*\bclassname=")'
+    r'exposed\.r2dbc\.examples\.virtualthreads\.Ex01_VirtualThreads(")',
+)
+mutated, count = pattern.subn(r'\1wrong.Ex01_VirtualThreads\2', text, count=1)
+if count != 1:
+    raise SystemExit("wrong-class skip fixture가 capability testcase를 찾지 못했습니다.")
+path.write_text(mutated)
+PY
+run_expected_failure 'JUnit XML에 기대한 virtual-thread testcase identity가 없거나 중복되었습니다.'
+python3 - "$REPORT" <<'PY'
+from pathlib import Path
+import re
+import sys
+
+path = Path(sys.argv[1])
+text = path.read_text()
+match = re.search(r'<skipped\b[^>]*/>|<skipped\b[^>]*>.*?</skipped>', text, re.S)
+if match is None:
+    raise SystemExit("duplicate skip fixture가 skipped element를 찾지 못했습니다.")
+node = match.group(0)
+path.write_text(text[:match.end()] + node + text[match.end():])
+PY
+run_expected_failure 'JUnit XML testcase에 skipped element가 둘 이상입니다.'
+python3 - "$REPORT" <<'PY'
+from pathlib import Path
+import re
+import sys
+
+path = Path(sys.argv[1])
+text = path.read_text()
+match = re.search(r'<skipped\b[^>]*/>|<skipped\b[^>]*>.*?</skipped>', text, re.S)
+if match is None:
+    raise SystemExit("nested skip fixture가 skipped element를 찾지 못했습니다.")
+node = match.group(0)
+path.write_text(text[:match.start()] + f'<system-out>{node}</system-out>' + text[match.end():])
+PY
+run_expected_failure 'JUnit XML testcase의 skipped element는 direct child여야 합니다.'
+restore_report
+trap - EXIT
+cleanup
+```
+
 root tag와 선언된 testcase 수도 각각 음성 fixture로 검증한다. 두 fixture 모두
 앞의 report 선택·backup/restore·`cmp -s` 절차를 재사용하고, 실제 XML 구조는
 유지한 채 root 이름만 `testsuite`에서 `suite`로 바꾸거나 첫 `tests` 속성 값을
@@ -874,6 +983,7 @@ trap - EXIT
 - [ ] **Step 2: default dialect matrix를 직렬로 실행한다.**
 
 ```bash
+set -euo pipefail
 ./gradlew :02-exposed-r2dbc-virtualthreads-basic:test \
   --no-daemon --console=plain
 ./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
@@ -1021,6 +1131,7 @@ bounded join 계약을 위한 값이고, 유지 근거는 deterministic latch와
 - [ ] **Step 3: module registration, compile, static analysis와 coverage를 확인한다.**
 
 ```bash
+set -euo pipefail
 ./gradlew projects --no-daemon --console=plain
 ./gradlew :02-exposed-r2dbc-virtualthreads-basic:compileTestKotlin \
   --no-daemon --console=plain
@@ -1309,6 +1420,7 @@ sentinel testcase가 실제로 확장되면 testcase count gate가 실패해야 
 - [ ] **Step 6: diff와 변경 surface를 닫는다.**
 
 ```bash
+set -euo pipefail
 git diff --check
 git diff --name-only origin/develop...HEAD
 git status --short
@@ -1319,7 +1431,11 @@ lesson/review/checklist/plan 범위 안에 있고 production transaction code,
 settings, diagram asset, `CHANGELOG.md`, unrelated worktree가 없다.
 
 ```bash
-git diff --name-only origin/develop...HEAD | rg '(^|/)(CHANGELOG\.md|docs/images/|settings\.gradle\.kts)$' || true
+set -euo pipefail
+if git diff --name-only origin/develop...HEAD | rg -n '(^|/)(CHANGELOG\.md|docs/images/|settings\.gradle\.kts)$'; then
+  echo '허용하지 않은 변경 surface가 발견되었습니다.' >&2
+  exit 1
+fi
 ```
 
 위 명령은 결과가 없어야 하며, diagram/asset 변경 없음은 이번 task의 구체적인
