@@ -132,7 +132,7 @@ Expected evidence: 현재 `@EnabledOnJre(JRE.JAVA_21)` 조건 때문에 JDK25에
 
 **Files:**
 - Modify: `08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic/src/test/kotlin/exposed/r2dbc/examples/virtualthreads/Ex01_VirtualThreads.kt`
-- Test: the same file, one additional `@Test` method; existing four `@ParameterizedTest` methods remain unchanged
+- Test: the same file, one additional `@Test` method; existing four `@ParameterizedTest` methods keep their SQL, transaction, retry, and lifecycle behavior while gaining the explicit XML display-name contract below
 
 - [ ] **Step 1: public API와 lifecycle 검증 import를 추가하고 JDK25 조건을 RED 테스트 준비로 바꾼다.**
 
@@ -162,7 +162,17 @@ import java.util.concurrent.TimeUnit
 - [ ] **Step 2: provider 단일성과 bounded fail-fast close를 한 개의 smoke test로 작성한다.**
 
 추가할 테스트는 다음 계약을 그대로 따른다. 하나의 `@Test`로 묶어 fast 실행
-수를 `1 provider smoke + 4 dialect parameterized = 5`로 고정한다.
+수를 `1 provider smoke + 4 dialect parameterized = 5`로 고정한다. 기존 네
+parameterized test에는 다음 명시적 display-name 계약을 적용해 JUnit XML의
+identity가 dialect와 method display name을 포함하도록 한다.
+
+```kotlin
+@ParameterizedTest(name = "{displayName} {0}")
+```
+
+`{displayName}`과 `{0}`의 조합은 각 기존 메서드에 동일하게 적용하며 SQL,
+transaction, retry, `TestDB` lifecycle은 바꾸지 않는다. 따라서 gate는
+`<method display name> <dialect>`의 exact name multiset을 확인할 수 있다.
 
 ```kotlin
 @Test
@@ -182,6 +192,7 @@ fun `JDK25 provider와 runtime을 선택하고 structured scope를 닫는다`() 
     runtime.isSupported shouldBeEqualTo true
     VirtualThreads.runtimeName() shouldBeEqualTo "jdk25"
 
+    val startupBudget = 1L
     val childStopped = AtomicBoolean(false)
     val childrenStarted = CountDownLatch(2)
     val failure = runCatching {
@@ -191,19 +202,19 @@ fun `JDK25 provider와 runtime을 선택하고 structured scope를 닫는다`() 
         ) { scope ->
             scope.fork {
                 childrenStarted.countDown()
-                childrenStarted.await(100, TimeUnit.MILLISECONDS) shouldBeEqualTo true
+                childrenStarted.await(startupBudget, TimeUnit.SECONDS) shouldBeEqualTo true
                 throw IllegalStateException("intentional child failure")
             }
             scope.fork {
                 childrenStarted.countDown()
                 try {
-                    childrenStarted.await(100, TimeUnit.MILLISECONDS) shouldBeEqualTo true
+                    childrenStarted.await(startupBudget, TimeUnit.SECONDS) shouldBeEqualTo true
                     Thread.sleep(5_000)
                 } finally {
                     childStopped.set(true)
                 }
             }
-            childrenStarted.await(100, TimeUnit.MILLISECONDS) shouldBeEqualTo true
+            childrenStarted.await(startupBudget, TimeUnit.SECONDS) shouldBeEqualTo true
             scope.joinUntil(Instant.now().plusMillis(500))
             scope.throwIfFailed()
         }
@@ -216,15 +227,17 @@ fun `JDK25 provider와 runtime을 선택하고 structured scope를 닫는다`() 
 }
 ```
 
-`CountDownLatch` 두 개의 child가 실제로 시작된 뒤 실패하도록 보장하므로
-`childStopped`는 scheduler 순서에 좌우되지 않는다. `runCatching`은
+`startupBudget`은 두 child와 main block이 함께 barrier를 통과해야 하는 하나의
+CI-safe startup budget이다. `@Timeout(2s)`와 `500ms` join deadline이 최종
+liveness를 제한하므로 이 값은 latency SLO가 아니다. `CountDownLatch` 두 개의
+child가 실제로 시작된 뒤 실패하도록 보장하므로 `childStopped`는 scheduler
+순서에 좌우되지 않는다. `runCatching`은
 provider 구현에 따라 `joinUntil` 또는 `throwIfFailed`에서 발생하는 실제
 failure를 보존하되, 이 provider의 public contract가 전파하는 정확한
 `IllegalStateException` type/message를 검사한다. 특정 JDK internal exception
-class는 assert하지 않는다. `@Timeout(2s)`는 테스트 전체의 최종 liveness
-경계이며, 내부 `500ms` deadline은 structured scope join의 bounded contract다.
-실패하면 close/interruption 순서를 조사하고 테스트를 통과시키기 위해 timeout을
-무작정 늘리지 않는다.
+class는 assert하지 않는다. 내부 `500ms` deadline은 structured scope join의
+bounded contract다. 실패하면 close/interruption 순서를 조사하고 테스트를
+통과시키기 위해 timeout을 무작정 늘리지 않는다.
 
 - [ ] **Step 3: 의도한 RED를 실행한다.**
 
@@ -335,15 +348,25 @@ tasks.register("verifyVirtualThreadTestExecution") {
         var failures = 0
         var errors = 0
         val skippedCases = mutableListOf<Pair<String, String>>()
+        val caseIdentities = mutableListOf<Pair<String, String>>()
         reports.forEach { report ->
             val suite = factory.newDocumentBuilder().parse(report).documentElement
-            total += suite.getAttribute("tests").toInt()
+            require(suite.tagName == "testsuite") {
+                "JUnit XML root가 testsuite가 아닙니다: ${report.name}"
+            }
+            val declaredTests = suite.getAttribute("tests").toIntOrNull()
+                ?: error("JUnit XML tests 속성이 정수가 아닙니다: ${report.name}")
+            val cases = suite.getElementsByTagName("testcase")
+            require(cases.length == declaredTests) {
+                "JUnit XML testcase 수가 선언값과 다릅니다: ${report.name}"
+            }
+            total += declaredTests
             skipped += suite.getAttribute("skipped").toInt()
             failures += suite.getAttribute("failures").toInt()
             errors += suite.getAttribute("errors").toInt()
-            val cases = suite.getElementsByTagName("testcase")
             for (index in 0 until cases.length) {
                 val testCase = cases.item(index) as Element
+                caseIdentities += testCase.getAttribute("classname") to testCase.getAttribute("name")
                 val skippedNodes = testCase.getElementsByTagName("skipped")
                 if (skippedNodes.length > 0) {
                     val message = skippedNodes.item(0).attributes?.getNamedItem("message")?.nodeValue.orEmpty()
@@ -378,16 +401,36 @@ tasks.register("verifyVirtualThreadTestExecution") {
         }
 
         val allowedMariaDbSkips = selectedDialects.count { it == "MARIADB" || it == "H2_MARIADB" }
-        val expectedTotal = 1 + selectedDialects.size * 4
+        val minimumTotal = 1 + selectedDialects.size * 4
         val expectedSkipped = allowedMariaDbSkips
-        val expectedExecuted = expectedTotal - expectedSkipped
-        val nestedTransactionDisplayName = "중첩된 virtual thread 용 트랜잭션을 async로 실행(TestDB)"
-        val expectedSkippedNames = List(expectedSkipped) { nestedTransactionDisplayName }
+        val minimumExecuted = minimumTotal - expectedSkipped
+        val testClassName = "exposed.r2dbc.examples.virtualthreads.Ex01_VirtualThreads"
+        val parameterizedDisplayNames = listOf(
+            "virtual threads 를 이용하여 순차 작업 수행하기",
+            "중첩된 virtual thread 용 트랜잭션을 async로 실행",
+            "다수의 비동기 작업을 수행 후 대기",
+            "virtual threads 환경에서 조건 조회",
+        )
+        val providerSmokeName = "JDK25 provider와 runtime을 선택하고 structured scope를 닫는다"
+        val expectedIdentities = selectedDialects.flatMap { dialect ->
+            parameterizedDisplayNames.map { displayName -> testClassName to "$displayName $dialect" }
+        } + (testClassName to providerSmokeName)
+        val actualIdentityCounts = caseIdentities.groupingBy { it }.eachCount()
+        val expectedIdentityCounts = expectedIdentities.groupingBy { it }.eachCount()
+        require(expectedIdentityCounts.all { (identity, expectedCount) ->
+            actualIdentityCounts.getOrDefault(identity, 0) >= expectedCount
+        }) {
+            "JUnit XML에 기대한 virtual-thread testcase identity가 없습니다."
+        }
+        val nestedTransactionDisplayName = "중첩된 virtual thread 용 트랜잭션을 async로 실행"
+        val expectedSkippedNames = selectedDialects
+            .filter { it == "MARIADB" || it == "H2_MARIADB" }
+            .map { "$nestedTransactionDisplayName $it" }
         require(skippedCases.map { it.first }.sorted() == expectedSkippedNames.sorted()) {
             "허용된 MariaDB capability skip 수가 다릅니다: expected=$expectedSkipped actual=${skippedCases.size}"
         }
         require(skippedCases.all { (name, message) ->
-            name == nestedTransactionDisplayName &&
+            name in expectedSkippedNames &&
                 message == "MariaDB-compatible nested transactions are not supported"
         }) {
             "허용되지 않은 skipped testcase가 발견되었습니다."
@@ -395,8 +438,8 @@ tasks.register("verifyVirtualThreadTestExecution") {
         require(failures == 0 && errors == 0) {
             "테스트 failure/error가 있어 실행 수 gate를 통과할 수 없습니다: failures=$failures errors=$errors"
         }
-        require(total == expectedTotal && skipped == expectedSkipped && total - skipped == expectedExecuted) {
-            "virtual-thread test 실행 수가 계약과 다릅니다: total=$total executed=${total - skipped} skipped=$skipped expectedTotal=$expectedTotal expectedExecuted=$expectedExecuted expectedSkipped=$expectedSkipped"
+        require(total >= minimumTotal && skipped == expectedSkipped && total - skipped >= minimumExecuted) {
+            "virtual-thread test 실행 수가 최소 계약과 다릅니다: total=$total executed=${total - skipped} skipped=$skipped minimumTotal=$minimumTotal minimumExecuted=$minimumExecuted expectedSkipped=$expectedSkipped"
         }
 
         // 환경 변수, system property, credential 값은 출력하지 않고 경로와 집계값만 출력한다.
@@ -419,6 +462,13 @@ feature 설정이 JDK/Gradle XML parser에서 지원되지 않으면 task를 실
 transaction testcase 외의 skip과 exact capability message가 아닌 skip은 실패한다.
 `useFastDB`도 지정된 경우 정확히 `true` 또는 `false`만 허용하며, `maybe` 같은
 malformed 값은 기본 matrix로 전환하지 않고 즉시 실패시킨다.
+
+실행 수 gate는 승인된 design과 동일한 minimum contract를 사용한다. 현재
+소스 기준 fast `5`, default `13`은 기대 evidence의 정확한 관찰값이지만,
+향후 의도적으로 테스트를 추가하면 gate는 `minimumTotal`/`minimumExecuted`
+이상으로 통과할 수 있다. 기존 테스트를 제거해 minimum 아래로 내려가거나
+허용되지 않은 skip이 생기면 실패하며, 추가·삭제 시 README/checklist의 관찰값과
+identity 목록을 함께 갱신한다.
 
 - [ ] **Step 4: dependency와 provider smoke GREEN을 확인한다.**
 
@@ -548,6 +598,18 @@ rg -n 'JDK 25|Java 25|JAVA_25|JRE\.JAVA_25|virtualthread-jdk25|jdk25-structured-
 - Modify: `docs/superpowers/checklists/2026-08-28-issue-198-type-a.md` with fresh evidence
 - Do not modify: production code, module registration, diagrams
 
+모든 XML/log 검증은 repository root에서 실행하되 결과가 생성되는 모듈 경로를
+명시적으로 고정한다. 각 음성 fixture 전에는 `REPORT_DIR`와 입력 report의
+존재를 확인하고, fixture 종료 뒤에는 원본 backup을 `cp`로 복원한 다음
+`cmp -s`로 byte-identical 여부를 확인한다.
+
+```bash
+set -euo pipefail
+MODULE_DIR="08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic"
+REPORT_DIR="$MODULE_DIR/build/test-results/test"
+test -d "$REPORT_DIR"
+```
+
 - [ ] **Step 1: explicit MariaDB capability allowlist를 검증한다.**
 
 ```bash
@@ -556,64 +618,204 @@ rg -n 'JDK 25|Java 25|JAVA_25|JRE\.JAVA_25|virtualthread-jdk25|jdk25-structured-
 ```
 
 Expected evidence: provider smoke 1개와 non-MariaDB nested transaction을 포함한
-parameterized 3개가 실행되어 `total=5 executed=4 skipped=1`, skip은 정확히
-중첩 transaction testcase 하나다. 다른 skip, failure, error, 또는 명시적
-MariaDB가 아닌 환경의 skip은 task failure다. 이어서 생성된 JUnit XML의
-capability message를 임시 복사본에서 다른 문자열로 바꾸고 `-x test`로 gate만
-재실행했을 때도 task failure가 되어야 한다. 원본 XML은 검증 후 즉시 복구한다.
+parameterized 3개가 현재 관찰값 `total=5 executed=4 skipped=1`로 실행되며,
+skip은 정확히 `중첩된 virtual thread 용 트랜잭션을 async로 실행 H2_MARIADB`
+하나여야 한다. 이 값은 현재 matrix의 evidence이고 gate contract는
+`minimumTotal=5`, `minimumExecuted=4`, `skipped=1`이다. 다른 skip, failure,
+error, 또는 명시적 MariaDB가 아닌 환경의 skip은 task failure다. 이어서 생성된
+JUnit XML의 capability message를 임시 복사본에서 다른 문자열로 바꾸고 `-x
+test`로 gate만 재실행했을 때도 task failure가 되어야 한다. 원본 XML은 검증
+후 즉시 복구하고 backup과 `cmp -s` 결과를 남긴다.
 
 ```bash
-REPORT="$(rg -l 'MariaDB-compatible nested transactions are not supported' \
-  build/test-results/test/TEST-*.xml | head -1)"
+set -euo pipefail
+MODULE_DIR="08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic"
+REPORT_DIR="$MODULE_DIR/build/test-results/test"
+test -d "$REPORT_DIR"
+REPORT=""
+while IFS= read -r candidate; do
+  if rg -q --fixed-strings -- 'MariaDB-compatible nested transactions are not supported' "$candidate"; then
+    REPORT="$candidate"
+    break
+  fi
+done < <(find "$REPORT_DIR" -type f -name 'TEST-*.xml' -print)
+test -n "$REPORT"
+test -f "$REPORT"
 BACKUP="${REPORT}.issue-198-backup"
 cp "$REPORT" "$BACKUP"
-trap 'mv "$BACKUP" "$REPORT"' EXIT
+restore_report() {
+  cp "$BACKUP" "$REPORT"
+  cmp -s "$BACKUP" "$REPORT"
+  rm -f "$BACKUP"
+}
+trap restore_report EXIT
 python3 - "$REPORT" <<'PY'
 from pathlib import Path
 import sys
 path = Path(sys.argv[1])
 text = path.read_text()
-text = text.replace(
+mutated = text.replace(
     "MariaDB-compatible nested transactions are not supported",
     "unexpected capability skip reason",
     1,
 )
-path.write_text(text)
+assert mutated != text
+path.write_text(mutated)
 PY
+set +e
 ./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
   -PuseDB=H2_MARIADB -x test --no-daemon --console=plain
+status=$?
+set -e
+test "$status" -ne 0
+cp "$BACKUP" "$REPORT"
+cmp -s "$BACKUP" "$REPORT"
+rm -f "$BACKUP"
+trap - EXIT
 ```
 
-이 negative command는 의도적으로 실패해야 하며, shell `trap`이 원본 report를
-복구한 뒤에만 다음 명령을 실행한다.
+위 negative command는 의도적으로 실패해야 한다. 명령 실행 구간만 `set +e`로
+감싸 status를 보존하고, 원본 report를 복구한 뒤 `cmp -s`가 성공해야 다음
+fixture로 진행한다. 실패·중단 시에도 별도 `trap`으로 backup을 복구하고
+`cmp -s`를 수행한다.
 
 같은 임시 복사본 절차로 testcase 이름에 suffix를 붙인 crafted XML도 gate가
 거부하는지 확인한다. 이름 비교는 `contains`가 아니라 exact equality여야 한다.
 
 ```bash
-REPORT="$(rg -l '중첩된 virtual thread 용 트랜잭션을 async로 실행\(TestDB\)' \
-  build/test-results/test/TEST-*.xml | head -1)"
+set -euo pipefail
+MODULE_DIR="08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic"
+REPORT_DIR="$MODULE_DIR/build/test-results/test"
+test -d "$REPORT_DIR"
+REPORT=""
+while IFS= read -r candidate; do
+  if rg -q --fixed-strings -- '중첩된 virtual thread 용 트랜잭션을 async로 실행 H2_MARIADB' "$candidate"; then
+    REPORT="$candidate"
+    break
+  fi
+done < <(find "$REPORT_DIR" -type f -name 'TEST-*.xml' -print)
+test -n "$REPORT"
+test -f "$REPORT"
 BACKUP="${REPORT}.issue-198-name-backup"
 cp "$REPORT" "$BACKUP"
-trap 'mv "$BACKUP" "$REPORT"' EXIT
+restore_report() {
+  cp "$BACKUP" "$REPORT"
+  cmp -s "$BACKUP" "$REPORT"
+  rm -f "$BACKUP"
+}
+trap restore_report EXIT
 python3 - "$REPORT" <<'PY'
 from pathlib import Path
 import sys
 path = Path(sys.argv[1])
 text = path.read_text()
-text = text.replace(
-    "중첩된 virtual thread 용 트랜잭션을 async로 실행(TestDB)",
-    "중첩된 virtual thread 용 트랜잭션을 async로 실행(TestDB) crafted",
+mutated = text.replace(
+    "중첩된 virtual thread 용 트랜잭션을 async로 실행 H2_MARIADB",
+    "중첩된 virtual thread 용 트랜잭션을 async로 실행 H2_MARIADB crafted",
     1,
 )
-path.write_text(text)
+assert mutated != text
+path.write_text(mutated)
 PY
+set +e
 ./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
   -PuseDB=H2_MARIADB -x test --no-daemon --console=plain
+status=$?
+set -e
+test "$status" -ne 0
+cp "$BACKUP" "$REPORT"
+cmp -s "$BACKUP" "$REPORT"
+rm -f "$BACKUP"
+trap - EXIT
 ```
 
 이름 crafted negative도 의도적으로 실패해야 하며, 원본 report 복구 후 다음
-검증을 진행한다.
+검증을 진행한다. `REPORT_DIR` 밖의 root-level `build/test-results`는 읽지 않는다.
+
+root tag와 선언된 testcase 수도 각각 음성 fixture로 검증한다. 두 fixture 모두
+앞의 report 선택·backup/restore·`cmp -s` 절차를 재사용하고, 실제 XML 구조는
+유지한 채 root 이름만 `testsuite`에서 `suite`로 바꾸거나 첫 `tests` 속성 값을
+1만큼 줄인다. 각 gate 실행은 `set +e` 구간에서 status를 저장해 non-zero인지
+확인하고, `test -n "$REPORT"`, `test -f "$REPORT"`, 복원 후 `cmp -s`를
+통과해야 한다. root fixture는 `JUnit XML root가 testsuite가 아닙니다`, count
+fixture는 `JUnit XML testcase 수가 선언값과 다릅니다` 메시지를 확인한다.
+
+```bash
+set -euo pipefail
+MODULE_DIR="08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic"
+REPORT_DIR="$MODULE_DIR/build/test-results/test"
+REPORT="$(find "$REPORT_DIR" -type f -name 'TEST-*.xml' -print -quit)"
+test -n "$REPORT"
+test -f "$REPORT"
+BACKUP="${REPORT}.issue-198-root-backup"
+OUTPUT="$(mktemp)"
+cp "$REPORT" "$BACKUP"
+restore_report() {
+  cp "$BACKUP" "$REPORT"
+  cmp -s "$BACKUP" "$REPORT"
+  rm -f "$BACKUP" "$OUTPUT"
+}
+trap restore_report EXIT
+python3 - "$REPORT" <<'PY'
+from pathlib import Path
+import sys
+
+path = Path(sys.argv[1])
+text = path.read_text()
+mutated = text.replace("<testsuite ", "<suite ", 1).replace("</testsuite>", "</suite>", 1)
+assert mutated != text
+path.write_text(mutated)
+PY
+set +e
+./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
+  -PuseDB=H2_MARIADB -x test --no-daemon --console=plain >"$OUTPUT" 2>&1
+status=$?
+set -e
+test "$status" -ne 0
+rg -q --fixed-strings -- 'JUnit XML root가 testsuite가 아닙니다' "$OUTPUT"
+restore_report
+trap - EXIT
+```
+
+```bash
+set -euo pipefail
+MODULE_DIR="08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic"
+REPORT_DIR="$MODULE_DIR/build/test-results/test"
+REPORT="$(find "$REPORT_DIR" -type f -name 'TEST-*.xml' -print -quit)"
+test -n "$REPORT"
+test -f "$REPORT"
+BACKUP="${REPORT}.issue-198-count-backup"
+OUTPUT="$(mktemp)"
+cp "$REPORT" "$BACKUP"
+restore_report() {
+  cp "$BACKUP" "$REPORT"
+  cmp -s "$BACKUP" "$REPORT"
+  rm -f "$BACKUP" "$OUTPUT"
+}
+trap restore_report EXIT
+python3 - "$REPORT" <<'PY'
+from pathlib import Path
+import re
+import sys
+
+path = Path(sys.argv[1])
+text = path.read_text()
+def decrement(match):
+    return f'tests="{int(match.group(1)) - 1}"'
+mutated = re.sub(r'tests="(\d+)"', decrement, text, count=1)
+assert mutated != text
+path.write_text(mutated)
+PY
+set +e
+./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
+  -PuseDB=H2_MARIADB -x test --no-daemon --console=plain >"$OUTPUT" 2>&1
+status=$?
+set -e
+test "$status" -ne 0
+rg -q --fixed-strings -- 'JUnit XML testcase 수가 선언값과 다릅니다' "$OUTPUT"
+restore_report
+trap - EXIT
+```
 
 - [ ] **Step 2: default dialect matrix를 직렬로 실행한다.**
 
@@ -658,21 +860,36 @@ container/Gradle failure를 진단한 뒤 해당 명령부터 다시 실행한�
 - [ ] **Step 2b: smoke liveness를 세 번 반복 측정한다.**
 
 ```bash
+set -euo pipefail
+MODULE_DIR="08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic"
+LIVENESS_LOG_DIR="$MODULE_DIR/build/reports/issue-198-liveness"
+mkdir -p "$LIVENESS_LOG_DIR"
 for run in 1 2 3; do
+  LOG="$LIVENESS_LOG_DIR/run-${run}.log"
   /usr/bin/time -p ./gradlew :02-exposed-r2dbc-virtualthreads-basic:test \
     -PuseFastDB=true --tests \
     'exposed.r2dbc.examples.virtualthreads.Ex01_VirtualThreads.JDK25 provider와 runtime을 선택하고 structured scope를 닫는다' \
-    --no-daemon --console=plain
+    --no-daemon --console=plain >"$LOG" 2>&1
 done
+for run in 1 2 3; do
+  LOG="$LIVENESS_LOG_DIR/run-${run}.log"
+  test -s "$LOG"
+  rg -q 'BUILD SUCCESSFUL' "$LOG"
+  rg -q '5 tests completed' "$LOG"
+done
+awk '/^real / { print $2 }' "$LIVENESS_LOG_DIR"/run-*.log
 ```
 
-세 실행 모두 test hang 없이 PASS하고, 내부 deadline/외부 `@Timeout`이 지켜지는
-실제 `real` 시간을 기록한다. min/max/median은 이 test JVM의 liveness 증적일
+`set -euo pipefail`과 run별 raw log 보존으로 어느 한 실행의 non-zero를 숨기지
+않는다. 세 실행 모두 test hang 없이 PASS하고, 내부 deadline/외부 `@Timeout`이
+지켜지는 실제 `real` 시간을 기록한다. `BUILD SUCCESSFUL`과 `5 tests completed`
+확인이 모두 필요하며, 한 실행이라도 실패하면 loop가 즉시 중단된다. min/max/median은 이 test JVM의 liveness 증적일
 뿐이며 production latency benchmark나 SLO로 해석하지 않는다. 500ms deadline은
 bounded join 계약을 위한 값이고, 유지 근거는 deterministic latch와 세 번의
 반복 실행 결과다. 한 번이라도 timeout 또는 child lifecycle flag failure가
-발생하면 raw output을 보존하고 timeout을 늘리지 않은 채 stability lane을
-재검토한다.
+발생하면 run별 raw output을 보존하고 timeout을 늘리지 않은 채 stability lane을
+재검토한다. `real` 값의 min/max/median을 checklist에 기록하되 성능 기준으로
+승격하지 않는다.
 
 - [ ] **Step 3: module registration, compile, static analysis와 coverage를 확인한다.**
 
@@ -762,8 +979,15 @@ test ! -e gradle/verification-metadata.xml
 - [ ] **Step 5: XML gate와 log의 보안 경계를 확인한다.**
 
 ```bash
+set -euo pipefail
+MODULE_DIR="08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic"
+REPORT_DIR="$MODULE_DIR/build/test-results/test"
+set +e
 rg -n 'System\.getProperties|System\.getenv|print.*environment|dump.*property|EXPOSED_.*PASS|PASSWORD|SECRET|TOKEN' \
-  build/test-results/test build/reports/tests 2>/dev/null
+  "$REPORT_DIR" "$MODULE_DIR/build/reports/tests" 2>/dev/null
+status=$?
+set -e
+test "$status" -eq 1
 ```
 
 Expected evidence: test report/log에 raw environment, system property, production
@@ -774,13 +998,24 @@ secret, credential 값 dump가 없고 gate log에는 report 수와 집계 수만
 - [ ] **Step 5a: hostile XML fixture가 외부 entity/XInclude를 차단하는지 확인한다.**
 
 ```bash
+set -euo pipefail
+MODULE_DIR="08-r2dbc-coroutines/02-exposed-r2dbc-virtualthreads-basic"
+REPORT_DIR="$MODULE_DIR/build/test-results/test"
+test -d "$REPORT_DIR"
 SENTINEL="$(mktemp)"
 printf '%s\n' 'ISSUE-198-XXE-SENTINEL' > "$SENTINEL"
-REPORT="$(find build/test-results/test -type f -name 'TEST-*.xml' -print -quit)"
+REPORT="$(find "$REPORT_DIR" -type f -name 'TEST-*.xml' -print -quit)"
+test -n "$REPORT"
+test -f "$REPORT"
 BACKUP="${REPORT}.issue-198-xml-backup"
 OUTPUT="$(mktemp)"
 cp "$REPORT" "$BACKUP"
-trap 'mv "$BACKUP" "$REPORT"; rm -f "$SENTINEL" "$OUTPUT"' EXIT
+restore_report() {
+  cp "$BACKUP" "$REPORT"
+  cmp -s "$BACKUP" "$REPORT"
+  rm -f "$BACKUP" "$SENTINEL" "$OUTPUT"
+}
+trap restore_report EXIT
 cat > "$REPORT" <<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE testsuite [<!ENTITY xxe SYSTEM "file://$SENTINEL">]>
@@ -792,21 +1027,31 @@ cat > "$REPORT" <<XML
   </testcase>
 </testsuite>
 XML
+set +e
 if ./gradlew :02-exposed-r2dbc-virtualthreads-basic:verifyVirtualThreadTestExecution \
   -PuseFastDB=true -x test --no-daemon --console=plain > "$OUTPUT" 2>&1; then
   echo 'hostile XML fixture was unexpectedly accepted' >&2
-  exit 1
+  status=0
+else
+  status=$?
 fi
+set -e
+test "$status" -ne 0
 if rg -q 'ISSUE-198-XXE-SENTINEL' "$OUTPUT"; then
   echo 'external entity or XInclude content was exposed' >&2
   exit 1
 fi
+cp "$BACKUP" "$REPORT"
+cmp -s "$BACKUP" "$REPORT"
+rm -f "$BACKUP" "$SENTINEL" "$OUTPUT"
+trap - EXIT
 ```
 
 DOCTYPE가 거부되고, entity/XInclude가 확장되지 않으며, sentinel 내용이 task
-output에 나타나지 않아야 한다. fixture 실행은 의도적으로 실패하고 `trap`이
-원본 XML과 임시 파일을 복구한다. 이 검증을 통과시키기 위해 secure parser
-설정을 완화하지 않는다.
+output에 나타나지 않아야 한다. fixture 실행은 의도적으로 실패하고, status를
+보존한 뒤 원본 XML을 복구하여 `cmp -s`까지 통과해야 한다. 중단 시에도 같은
+복구와 비교를 수행하도록 실행 shell에 backup 복구 trap을 추가한다. 이 검증을
+통과시키기 위해 secure parser 설정을 완화하지 않는다.
 
 - [ ] **Step 6: diff와 변경 surface를 닫는다.**
 
