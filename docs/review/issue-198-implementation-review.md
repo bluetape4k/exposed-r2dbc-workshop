@@ -6,7 +6,7 @@
 - 검토 범위: JDK25 provider catalog/runtime, `Ex01_VirtualThreads.kt`,
   execution-count gate, module/root EN·KO README, lesson과 checklist
 - 근거: 현재 구현 diff, `verifyVirtualThreadTestExecution` 기본·fast·
-  `H2_MARIADB` 실행, malformed property 4건, hostile XML 11종, DOCTYPE/
+  `H2_MARIADB` 실행, malformed property 4건, hostile XML 12종, DOCTYPE/
   XInclude fixture, dependency/artifact ABI, static/Kover, liveness 3회
 - 판정 기준: Issue #198 acceptance와 approved plan의 AC-01~AC-08, P0/P1
   blocker 부재, public API와 Kotlin/Exposed R2DBC 규칙 준수
@@ -16,7 +16,7 @@
 | 관점 | P0 | P1 | P2 | P3 | 판정 | 근거 |
 |---|---:|---:|---:|---:|---|---|
 | performance | 0 | 0 | 0 | 0 | APPROVE | provider smoke 3회가 timeout 없이 `9.53s/9.71s/9.85s`; production hot path 변경 없음 |
-| stability | 0 | 0 | 0 | 0 | APPROVE | fail-fast child failure/interruption, bounded `joinUntil`, exact XML count/identity와 report 복구 |
+| stability | 0 | 0 | 0 | 0 | APPROVE | fail-fast child failure/interruption, bounded `joinUntil`, aggregate와 `<failure>/<error>` node를 함께 보는 exact XML gate, report 복구 |
 | security | 0 | 0 | 1 | 0 | APPROVE (비차단) | DOM secure features, DOCTYPE 거부, XInclude 비확장, malformed 입력 선행 거부; shared test-only `password=test` report 출력은 기존 의존성 범위 |
 | operator/Ops | 0 | 0 | 0 | 0 | APPROVE | managed Gradle task, configuration cache 저장, 명시적 report path, aggregate-only gate log와 rerun evidence |
 | developer/API | 0 | 0 | 1 | 0 | APPROVE (watch) | versionless catalog alias/BOM, public ServiceLoader contract, JDK21 exclusion; module `detekt` task는 저장소에 미등록 |
@@ -31,7 +31,10 @@
 - `verifyVirtualThreadTestExecution`은 `test`를 dependency로 실행하고,
   malformed `useDB`/`useFastDB`를 report parse보다 먼저 거부한다. JUnit XML은
   `testsuite` root, 선언 testcase 수, direct-child skip, exact identity와
-  MariaDB capability tuple을 확인하며 zero failure/error를 요구한다.
+  MariaDB capability tuple을 확인하며 aggregate `failures/errors`뿐 아니라
+  각 testcase descendant `<failure>/<error>` node도 zero인지 요구한다. 두
+  node를 aggregate `0`으로 숨긴 hostile fixture가 각각 non-zero로 거부되고
+  원본 report가 byte-identical하게 복구됐다.
 - dependency insight와 실제 캐시 artifact의 metadata, SHA-256,
   ServiceLoader descriptor, classfile `major=69/minor=0`가 일치하고
   `bluetape4k-virtualthread-jdk21`은 runtime graph에 없다.
