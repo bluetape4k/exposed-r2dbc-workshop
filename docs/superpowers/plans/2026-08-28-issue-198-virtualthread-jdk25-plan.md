@@ -954,7 +954,7 @@ plan check의 evidence에는 plan path, integrated review path, SPW-01~05 결과
 |---|---|---|---|
 | AC-01 catalog/BOM provider | Task 3-1/2 | `libs.versions.toml`, `dependencies`, `dependencyInsight` | alias/BOM resolution을 repair하고 Task 3-4 재실행 |
 | AC-02 JDK21 0개·JDK25 1개 | Task 3-2, Task 5-4 | `testRuntimeClasspath` graph, ServiceLoader list, exact descriptor payload/count, JAR SHA-256, JDK25 module metadata | exclusion 범위를 configuration 전체로 복구 |
-| AC-03 JDK25 실제 실행·0 tests 차단 | Task 2-1, Task 3-3/4, Task 5-1/2a | fast `5/0`, default `13/0`, gate XML count, `TYPO`/blank token negative paths | annotation/gate를 repair하고 RED부터 재실행 |
+| AC-03 JDK25 실제 실행·0 tests 차단 | Task 2-1, Task 3-3/4, Task 5-1/2a | fast `5/0`, default `13/0`, gate XML count, `TYPO`/blank `useDB`, malformed `useFastDB` negative paths | annotation/gate를 repair하고 RED부터 재실행 |
 | AC-04 public provider/runtime discovery | Task 2-2/3 | provider smoke, `providerName`, `runtimeName`, `isSupported`, singleton enumeration | internal class assertion을 추가하지 않고 public contract로 repair |
 | AC-05 Exposed R2DBC와 기존 capability 유지 | Task 4-1, Task 5-1/2 | existing four parameterized tests, MariaDB `4/1` allowlist | transaction/table 변경을 revert하고 test lifecycle 재검증 |
 | AC-06 bounded structured scope lifecycle | Task 2-2/3, Task 5-2b | deterministic latch, exact child failure type/message, 500ms deadline, external `@Timeout(2s)`, `childStopped=true`, three sequential liveness runs | close/interruption order를 조사하고 timeout을 무작정 늘리지 않음 |
