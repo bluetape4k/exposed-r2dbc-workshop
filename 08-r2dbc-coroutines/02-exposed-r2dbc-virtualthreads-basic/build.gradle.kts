@@ -1,5 +1,11 @@
 configurations {
     testImplementation.get().extendsFrom(compileOnly.get(), runtimeOnly.get())
+    testRuntimeClasspath {
+        exclude(
+            group = "io.github.bluetape4k",
+            module = "bluetape4k-virtualthread-jdk21",
+        )
+    }
 }
 
 dependencies {
@@ -10,8 +16,8 @@ dependencies {
     testImplementation(libs.jetbrains.exposed.r2dbc)
     testImplementation(libs.exposed.r2dbc)
 
-    // Java 21 에서 Virtual Thread 를 사용할 때 (Java 25 에서는 jdk25 를 사용하세요)
-    testRuntimeOnly(libs.bluetape4k.virtualthread.jdk21)
+    // Java 25 Virtual Thread provider는 bluetape4k-dependencies BOM이 버전을 결정한다.
+    testRuntimeOnly(libs.bluetape4k.virtualthread.jdk25)
     testImplementation(libs.bluetape4k.junit5)
 
     testRuntimeOnly(libs.h2.v2)
