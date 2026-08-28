@@ -94,6 +94,7 @@ bluetape4k-spring-boot-core = { module = "io.github.bluetape4k:bluetape4k-spring
 bluetape4k-testcontainers = { module = "io.github.bluetape4k:bluetape4k-testcontainers" }
 bluetape4k-tink = { module = "io.github.bluetape4k:bluetape4k-tink" }
 bluetape4k-virtualthread-jdk21 = { module = "io.github.bluetape4k:bluetape4k-virtualthread-jdk21" }
+bluetape4k-virtualthread-jdk25 = { module = "io.github.bluetape4k:bluetape4k-virtualthread-jdk25" }
 
 # Kotlin
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }

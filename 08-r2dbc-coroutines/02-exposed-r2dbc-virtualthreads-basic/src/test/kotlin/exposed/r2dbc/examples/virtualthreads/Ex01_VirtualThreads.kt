@@ -5,10 +5,15 @@ import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.collections.intRangeOf
 import io.bluetape4k.concurrent.virtualthread.newVT
+import io.bluetape4k.concurrent.virtualthread.StructuredTaskScopeProvider
+import io.bluetape4k.concurrent.virtualthread.StructuredTaskScopes
+import io.bluetape4k.concurrent.virtualthread.VirtualThreadRuntime
+import io.bluetape4k.concurrent.virtualthread.VirtualThreads
 import io.bluetape4k.exposed.r2dbc.virtualThreadTransaction
 import io.bluetape4k.junit5.coroutines.runSuspendVT
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
+import io.bluetape4k.assertions.shouldBeInstanceOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -35,12 +40,19 @@ import org.jetbrains.exposed.v1.r2dbc.transactions.inTopLevelSuspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.transactions.transactionManager
 import org.junit.jupiter.api.Assumptions
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Timeout
 import org.junit.jupiter.api.condition.EnabledOnJre
 import org.junit.jupiter.api.condition.JRE
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.io.Serializable
+import java.time.Instant
+import java.util.ServiceLoader
+import java.util.concurrent.CountDownLatch
 import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * JDK 21 Virtual Threads와 Exposed R2DBC를 조합하는 예제 테스트.
@@ -63,7 +75,7 @@ import java.util.concurrent.CopyOnWriteArrayList
  * @see virtualThreadTransaction
  * @see inTopLevelSuspendTransaction
  */
-@EnabledOnJre(JRE.JAVA_21)
+@EnabledOnJre(JRE.JAVA_25)
 class Ex01_VirtualThreads: AbstractR2dbcExposedTest() {
 
     companion object: KLoggingChannel()
@@ -105,7 +117,58 @@ class Ex01_VirtualThreads: AbstractR2dbcExposedTest() {
                 .singleOrNull()
         }
 
-    @ParameterizedTest
+    @Test
+    @Timeout(value = 2, unit = TimeUnit.SECONDS)
+    fun `JDK25 provider와 runtime을 선택하고 structured scope를 닫는다`() {
+        val providers = ServiceLoader.load(StructuredTaskScopeProvider::class.java).toList()
+        providers shouldHaveSize 1
+        val provider = providers.single()
+        provider.providerName shouldBeEqualTo "jdk25-structured-task-scope"
+        provider.isSupported() shouldBeEqualTo true
+        StructuredTaskScopes.providerName() shouldBeEqualTo "jdk25-structured-task-scope"
+
+        val runtimes = ServiceLoader.load(VirtualThreadRuntime::class.java).toList()
+        runtimes shouldHaveSize 1
+        val runtime = runtimes.single()
+        runtime.runtimeName shouldBeEqualTo "jdk25"
+        runtime.isSupported() shouldBeEqualTo true
+        VirtualThreads.runtimeName() shouldBeEqualTo "jdk25"
+
+        val startupBudget = 1L
+        val childStopped = AtomicBoolean(false)
+        val childrenStarted = CountDownLatch(2)
+        val failure = runCatching {
+            StructuredTaskScopes.failFast(
+                "issue-198-provider-smoke",
+                VirtualThreads.threadFactory("issue-198-provider-smoke"),
+            ) { scope ->
+                scope.fork {
+                    childrenStarted.countDown()
+                    childrenStarted.await(startupBudget, TimeUnit.SECONDS) shouldBeEqualTo true
+                    throw IllegalStateException("intentional child failure")
+                }
+                scope.fork {
+                    childrenStarted.countDown()
+                    try {
+                        childrenStarted.await(startupBudget, TimeUnit.SECONDS) shouldBeEqualTo true
+                        Thread.sleep(5_000)
+                    } finally {
+                        childStopped.set(true)
+                    }
+                }
+                childrenStarted.await(startupBudget, TimeUnit.SECONDS) shouldBeEqualTo true
+                scope.joinUntil(Instant.now().plusMillis(500))
+                scope.throwIfFailed()
+            }
+        }.exceptionOrNull()
+
+        val childFailure = requireNotNull(failure)
+        childFailure shouldBeInstanceOf IllegalStateException::class
+        (childFailure as IllegalStateException).message shouldBeEqualTo "intentional child failure"
+        childStopped.get() shouldBeEqualTo true
+    }
+
+    @ParameterizedTest(name = "{displayName} {0}")
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `virtual threads 를 이용하여 순차 작업 수행하기`(testDB: TestDB) = runSuspendVT {
         withTables(testDB, VTester) {
@@ -119,7 +182,7 @@ class Ex01_VirtualThreads: AbstractR2dbcExposedTest() {
         }
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{displayName} {0}")
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `중첩된 virtual thread 용 트랜잭션을 async로 실행`(testDB: TestDB) = runSuspendVT {
         Assumptions.assumeTrue { testDB !in TestDB.ALL_MARIADB_LIKE }
@@ -162,7 +225,7 @@ class Ex01_VirtualThreads: AbstractR2dbcExposedTest() {
         }
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{displayName} {0}")
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `다수의 비동기 작업을 수행 후 대기`(testDB: TestDB) = runSuspendVT {
         withTables(testDB, VTester) {
@@ -191,7 +254,7 @@ class Ex01_VirtualThreads: AbstractR2dbcExposedTest() {
         }
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "{displayName} {0}")
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `virtual threads 환경에서 조건 조회`(testDB: TestDB) = runSuspendVT {
         withTables(testDB, VTester) {
