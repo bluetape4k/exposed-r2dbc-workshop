@@ -9,9 +9,8 @@ import exposed.r2dbc.examples.routing.ktor.routing.READ_ONLY_HEADER
 import exposed.r2dbc.examples.routing.ktor.routing.TENANT_HEADER
 import io.bluetape4k.assertions.shouldBeEqualTo
 import io.bluetape4k.assertions.shouldHaveSize
-import io.ktor.client.HttpClient
+import io.bluetape4k.ktor.testing.bluetape4kJsonClient
 import io.ktor.client.call.body
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.patch
@@ -19,8 +18,6 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
-import io.ktor.serialization.kotlinx.json.json
-import io.ktor.server.testing.ApplicationTestBuilder
 import io.ktor.server.testing.testApplication
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -35,7 +32,7 @@ class KtorRoutingDatasourceApplicationTest {
         application {
             ktorRoutingDatasourceModule(newResources("default-rw"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorRoutingDatasourceJson)
 
         val response = client.get("/routing/marker").body<RoutingMarkerResponse>()
 
@@ -50,7 +47,7 @@ class KtorRoutingDatasourceApplicationTest {
         application {
             ktorRoutingDatasourceModule(newResources("acme-rw"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorRoutingDatasourceJson)
 
         val response = client.get("/routing/marker") {
             header(TENANT_HEADER, "acme")
@@ -67,7 +64,7 @@ class KtorRoutingDatasourceApplicationTest {
         application {
             ktorRoutingDatasourceModule(newResources("readonly"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorRoutingDatasourceJson)
 
         val pathResponse = client.get("/routing/marker/readonly") {
             header(TENANT_HEADER, "acme")
@@ -88,7 +85,7 @@ class KtorRoutingDatasourceApplicationTest {
         application {
             ktorRoutingDatasourceModule(newResources("patch"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorRoutingDatasourceJson)
 
         val updated = client.patch("/routing/marker") {
             header(TENANT_HEADER, "acme")
@@ -112,7 +109,7 @@ class KtorRoutingDatasourceApplicationTest {
         application {
             ktorRoutingDatasourceModule(newResources("errors"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorRoutingDatasourceJson)
 
         val blankTenant = client.get("/routing/marker") {
             header(TENANT_HEADER, " ")
@@ -152,7 +149,7 @@ class KtorRoutingDatasourceApplicationTest {
         application {
             ktorRoutingDatasourceModule(newResources("concurrent"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorRoutingDatasourceJson)
         val tenants = listOf("default", "acme", "default", "acme", "default", "acme")
 
         val responses = coroutineScope {
@@ -179,10 +176,4 @@ class KtorRoutingDatasourceApplicationTest {
             databasePrefix = "routing_${name}_${UUID.randomUUID().toString().replace("-", "")}",
         )
 
-    private fun ApplicationTestBuilder.createJsonClient(): HttpClient =
-        createClient {
-            install(ContentNegotiation) {
-                json(KtorRoutingDatasourceJson)
-            }
-        }
 }

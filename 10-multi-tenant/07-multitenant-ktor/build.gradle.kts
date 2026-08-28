@@ -33,6 +33,7 @@ dependencies {
     runtimeOnly(libs.logback)
 
     testImplementation(libs.bluetape4k.junit5)
+    testImplementation(libs.bluetape4k.ktor.testing)
     testImplementation(libs.ktor.client.content.negotiation)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlinx.coroutines.test)

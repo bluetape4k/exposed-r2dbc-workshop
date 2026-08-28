@@ -14,9 +14,8 @@ import io.bluetape4k.assertions.shouldBeEqualTo
 import io.bluetape4k.assertions.shouldBeGreaterThan
 import io.bluetape4k.assertions.shouldHaveSize
 import io.bluetape4k.assertions.shouldNotBeNull
-import io.ktor.client.HttpClient
+import io.bluetape4k.ktor.testing.bluetape4kJsonClient
 import io.ktor.client.call.body
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
@@ -25,8 +24,6 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
-import io.ktor.serialization.kotlinx.json.json
-import io.ktor.server.testing.ApplicationTestBuilder
 import io.ktor.server.testing.testApplication
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -55,7 +52,7 @@ class KtorCacheStrategiesApplicationTest {
         application {
             ktorCacheStrategiesModule(newResources("read-hit"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorCacheJson)
 
         val first = client.get("/users/1").body<UserCacheResponse>()
         first.cacheStatus shouldBeEqualTo CacheStatus.MISS
@@ -75,7 +72,7 @@ class KtorCacheStrategiesApplicationTest {
         application {
             ktorCacheStrategiesModule(newResources("invalidate"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorCacheJson)
 
         client.get("/users/2").body<UserCacheResponse>().cacheStatus shouldBeEqualTo CacheStatus.MISS
         client.get("/users/2").body<UserCacheResponse>().cacheStatus shouldBeEqualTo CacheStatus.HIT
@@ -93,7 +90,7 @@ class KtorCacheStrategiesApplicationTest {
         application {
             ktorCacheStrategiesModule(newResources("write-through"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorCacheJson)
 
         val created = client.post("/users") {
             contentType(ContentType.Application.Json)
@@ -132,7 +129,7 @@ class KtorCacheStrategiesApplicationTest {
         application {
             ktorCacheStrategiesModule(newResources("clear"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorCacheJson)
 
         client.get("/users/1").body<UserCacheResponse>().cacheStatus shouldBeEqualTo CacheStatus.MISS
         client.get("/users/2").body<UserCacheResponse>().cacheStatus shouldBeEqualTo CacheStatus.MISS
@@ -150,7 +147,7 @@ class KtorCacheStrategiesApplicationTest {
         application {
             ktorCacheStrategiesModule(newResources("list"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorCacheJson)
 
         val users = client.get("/users").body<List<UserRecord>>()
 
@@ -165,7 +162,7 @@ class KtorCacheStrategiesApplicationTest {
         application {
             ktorCacheStrategiesModule(newResources("errors"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorCacheJson)
 
         val missing = client.get("/users/999")
         missing.status shouldBeEqualTo HttpStatusCode.NotFound
@@ -200,10 +197,4 @@ class KtorCacheStrategiesApplicationTest {
         }
     }
 
-    private fun ApplicationTestBuilder.createJsonClient(): HttpClient =
-        createClient {
-            install(ContentNegotiation) {
-                json(KtorCacheJson)
-            }
-        }
 }

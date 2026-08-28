@@ -17,9 +17,8 @@ import io.bluetape4k.assertions.shouldBeEqualTo
 import io.bluetape4k.assertions.shouldBeGreaterThan
 import io.bluetape4k.assertions.shouldHaveSize
 import io.bluetape4k.assertions.shouldNotBeNull
-import io.ktor.client.HttpClient
+import io.bluetape4k.ktor.testing.bluetape4kJsonClient
 import io.ktor.client.call.body
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
@@ -28,8 +27,6 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
-import io.ktor.serialization.kotlinx.json.json
-import io.ktor.server.testing.ApplicationTestBuilder
 import io.ktor.server.testing.testApplication
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -63,7 +60,7 @@ class KtorCoroutineCacheApplicationTest {
         application {
             ktorCoroutineCacheModule(newResources("read-hit"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorCoroutineCacheJson)
 
         val first = client.get("/users/1").body<CoroutineUserCacheResponse>()
         first.cacheStatus shouldBeEqualTo CacheStatus.MISS
@@ -83,7 +80,7 @@ class KtorCoroutineCacheApplicationTest {
         application {
             ktorCoroutineCacheModule(newResources("coalesce"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorCoroutineCacheJson)
 
         val responses = coroutineScope {
             (1..8)
@@ -109,7 +106,7 @@ class KtorCoroutineCacheApplicationTest {
         application {
             ktorCoroutineCacheModule(newResources("timeout", producerTimeout = 10.milliseconds))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorCoroutineCacheJson)
 
         val timeout = client.get("/users/1?loadDelayMillis=100")
         timeout.status shouldBeEqualTo HttpStatusCode.ServiceUnavailable
@@ -150,7 +147,7 @@ class KtorCoroutineCacheApplicationTest {
         application {
             ktorCoroutineCacheModule(newResources("invalidate"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorCoroutineCacheJson)
 
         client.get("/users/2").body<CoroutineUserCacheResponse>().cacheStatus shouldBeEqualTo CacheStatus.MISS
         client.get("/users/2").body<CoroutineUserCacheResponse>().cacheStatus shouldBeEqualTo CacheStatus.HIT
@@ -172,7 +169,7 @@ class KtorCoroutineCacheApplicationTest {
         application {
             ktorCoroutineCacheModule(newResources("write-through"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorCoroutineCacheJson)
 
         val created = client.post("/users") {
             contentType(ContentType.Application.Json)
@@ -211,7 +208,7 @@ class KtorCoroutineCacheApplicationTest {
         application {
             ktorCoroutineCacheModule(newResources("list"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorCoroutineCacheJson)
 
         val users = client.get("/users").body<List<UserRecord>>()
 
@@ -227,7 +224,7 @@ class KtorCoroutineCacheApplicationTest {
         application {
             ktorCoroutineCacheModule(newResources("errors"))
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(jsonFormat = KtorCoroutineCacheJson)
 
         val missing = client.get("/users/999")
         missing.status shouldBeEqualTo HttpStatusCode.NotFound
@@ -269,13 +266,6 @@ class KtorCoroutineCacheApplicationTest {
             redisson.shutdown()
         }
     }
-
-    private fun ApplicationTestBuilder.createJsonClient(): HttpClient =
-        createClient {
-            install(ContentNegotiation) {
-                json(KtorCoroutineCacheJson)
-            }
-        }
 
     private object FailingPutCacheStore: CoroutineUserCacheRepository.CoroutineUserCacheStore {
         override suspend fun get(id: Long): UserRecord? = null

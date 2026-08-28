@@ -29,6 +29,7 @@ import io.bluetape4k.assertions.shouldBeEqualTo
 import io.bluetape4k.assertions.shouldBeGreaterThan
 import io.bluetape4k.assertions.shouldNotBeEqualTo
 import io.bluetape4k.assertions.shouldNotBeNull
+import io.bluetape4k.ktor.testing.bluetape4kJsonClient
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.mock.MockEngine
@@ -73,7 +74,7 @@ class KtorProductionIntegrationApplicationTest {
         application {
             productionIntegrationModule(repository)
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(configure = { install(HttpCookies) })
 
         val account = client.post("/production/accounts") {
             contentType(ContentType.Application.Json)
@@ -103,7 +104,7 @@ class KtorProductionIntegrationApplicationTest {
         application {
             productionIntegrationModule(repository)
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(configure = { install(HttpCookies) })
 
         client.get("/production/profile").status shouldBeEqualTo HttpStatusCode.Unauthorized
         client.get("/production/profile") {
@@ -118,7 +119,7 @@ class KtorProductionIntegrationApplicationTest {
         application {
             productionIntegrationModule(repository)
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(configure = { install(HttpCookies) })
 
         val profile = client.get("/production/profile") {
             basic("alice", "password")
@@ -138,7 +139,7 @@ class KtorProductionIntegrationApplicationTest {
         application {
             productionIntegrationModule(repository)
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(configure = { install(HttpCookies) })
 
         val profile = client.get("/production/admin") {
             basic("admin", "password")
@@ -154,7 +155,7 @@ class KtorProductionIntegrationApplicationTest {
         application {
             productionIntegrationModule(repository)
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(configure = { install(HttpCookies) })
 
         val account = client.post("/production/accounts") {
             contentType(ContentType.Application.Json)
@@ -185,7 +186,7 @@ class KtorProductionIntegrationApplicationTest {
         application {
             productionIntegrationModule(repository)
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(configure = { install(HttpCookies) })
 
         val created = client.post("/production/sessions") {
             basic("alice", "password")
@@ -277,7 +278,7 @@ class KtorProductionIntegrationApplicationTest {
         application {
             productionIntegrationModule(repository, realtimeDelivery = FailingRealtimeDelivery)
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(configure = { install(HttpCookies) })
 
         client.post("/production/sessions") {
             basic("alice", "password")
@@ -301,7 +302,7 @@ class KtorProductionIntegrationApplicationTest {
         application {
             productionIntegrationModule(repository)
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(configure = { install(HttpCookies) })
 
         client.post("/production/sessions") {
             basic("alice", "password")
@@ -323,7 +324,7 @@ class KtorProductionIntegrationApplicationTest {
         application {
             productionIntegrationModule(repository)
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(configure = { install(HttpCookies) })
 
         val error = client.post("/production/accounts") {
             contentType(ContentType.Application.Json)
@@ -341,7 +342,7 @@ class KtorProductionIntegrationApplicationTest {
         application {
             productionIntegrationModule(repository)
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(configure = { install(HttpCookies) })
 
         val error = client.post("/production/work-items") {
             contentType(ContentType.Application.Json)
@@ -359,7 +360,7 @@ class KtorProductionIntegrationApplicationTest {
         application {
             productionIntegrationModule(repository)
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(configure = { install(HttpCookies) })
         val request = EnqueueOutboundRequest("payment-1", "https://example.test/payments", "payload")
 
         client.post("/production/sessions") {
@@ -390,7 +391,7 @@ class KtorProductionIntegrationApplicationTest {
         application {
             productionIntegrationModule(repository, outboundDelivery = outboundDelivery)
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(configure = { install(HttpCookies) })
 
         client.post("/production/sessions") {
             basic("admin", "password")
@@ -501,7 +502,7 @@ class KtorProductionIntegrationApplicationTest {
         application {
             productionIntegrationModule(repository)
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(configure = { install(HttpCookies) })
 
         client.post("/production/sessions") {
             basic("alice", "password")
@@ -526,7 +527,7 @@ class KtorProductionIntegrationApplicationTest {
         application {
             productionIntegrationModule(repository)
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(configure = { install(HttpCookies) })
 
         client.post("/production/sessions") {
             basic("admin", "password")
@@ -548,7 +549,7 @@ class KtorProductionIntegrationApplicationTest {
         application {
             productionIntegrationModule(repository)
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(configure = { install(HttpCookies) })
 
         client.post("/production/sessions") {
             basic("admin", "password")
@@ -570,7 +571,7 @@ class KtorProductionIntegrationApplicationTest {
         application {
             productionIntegrationModule(repository)
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(configure = { install(HttpCookies) })
 
         val up = client.get("/production/readiness") {
             header(REQUEST_ID_HEADER, "ktor-ready-up")
@@ -598,7 +599,7 @@ class KtorProductionIntegrationApplicationTest {
         application {
             productionIntegrationModule(repository)
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(configure = { install(HttpCookies) })
 
         val operation = client.get("/production/diagnostics/operations/import-orders?delayMs=260") {
             header(REQUEST_ID_HEADER, "ktor-diagnostic-1")
@@ -619,7 +620,7 @@ class KtorProductionIntegrationApplicationTest {
         application {
             productionIntegrationModule(repository)
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(configure = { install(HttpCookies) })
 
         val response = client.get("/production/diagnostics/operations/import") {
             header(REQUEST_ID_HEADER, "ktor trace with spaces")
@@ -637,7 +638,7 @@ class KtorProductionIntegrationApplicationTest {
         application {
             productionIntegrationModule(repository)
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(configure = { install(HttpCookies) })
 
         val delayError = client.get("/production/diagnostics/operations/import?delayMs=2001") {
             header(REQUEST_ID_HEADER, "ktor-diagnostic-2")
@@ -659,7 +660,7 @@ class KtorProductionIntegrationApplicationTest {
         application {
             productionIntegrationModule(repository)
         }
-        val client = createJsonClient()
+        val client = bluetape4kJsonClient(configure = { install(HttpCookies) })
         client.post("/production/sessions") {
             basic("alice", "password")
         }
@@ -817,14 +818,6 @@ class KtorProductionIntegrationApplicationTest {
     private fun repositoryForDatabase(databaseName: String): KtorProductionRepository {
         return KtorProductionRepository(R2dbcDatabase.connect("r2dbc:h2:mem:///$databaseName;DB_CLOSE_DELAY=-1;USER=sa;"))
     }
-
-    private fun io.ktor.server.testing.ApplicationTestBuilder.createJsonClient() =
-        createClient {
-            install(ContentNegotiation) {
-                json()
-            }
-            install(HttpCookies)
-        }
 
     private fun io.ktor.client.request.HttpRequestBuilder.basic(username: String, password: String) {
         val encoded = Base64.getEncoder().encodeToString("$username:$password".toByteArray())
