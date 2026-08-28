@@ -135,8 +135,9 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
   Reactor Context 기반 tenant/read-write routing datasource
 - [11-high-performance/04-cache-strategies-ktor-r2dbc](11-high-performance/04-cache-strategies-ktor-r2dbc/README.ko.md),
   [11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines](11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines/README.ko.md),
-  [11-high-performance/06-routing-datasource-ktor-r2dbc](11-high-performance/06-routing-datasource-ktor-r2dbc/README.ko.md)
-  Ktor R2DBC cache, coroutine single-flight cache, routing datasource 비교
+  [11-high-performance/06-routing-datasource-ktor-r2dbc](11-high-performance/06-routing-datasource-ktor-r2dbc/README.ko.md),
+  [11-high-performance/07-cache-strategies-r2dbc-caffeine](11-high-performance/07-cache-strategies-r2dbc-caffeine/README.ko.md)
+  Ktor R2DBC cache, coroutine single-flight cache, routing datasource, provider 기반 Caffeine adapter 비교
 - [12-production-integration](12-production-integration/README.ko.md)
   Spring Boot 4/Ktor production service boundary 비교
 - [12-production-integration/01-spring-production-integration](12-production-integration/01-spring-production-integration/README.ko.md),

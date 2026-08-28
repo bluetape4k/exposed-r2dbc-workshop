@@ -17,6 +17,7 @@ on:
       - '11-high-performance/04-cache-strategies-ktor-r2dbc/**'
       - '11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines/**'
       - '11-high-performance/06-routing-datasource-ktor-r2dbc/**'
+      - '11-high-performance/07-cache-strategies-r2dbc-caffeine/**'
       - '09-spring/06-exposed-spring-boot-r2dbc-repository/**'
       - '12-production-integration/**'
       - '13-ecosystem-integrations/**'
@@ -45,6 +46,7 @@ on:
       - '11-high-performance/04-cache-strategies-ktor-r2dbc/**'
       - '11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines/**'
       - '11-high-performance/06-routing-datasource-ktor-r2dbc/**'
+      - '11-high-performance/07-cache-strategies-r2dbc-caffeine/**'
       - '09-spring/06-exposed-spring-boot-r2dbc-repository/**'
       - '12-production-integration/**'
       - '13-ecosystem-integrations/**'
@@ -188,6 +190,7 @@ jobs:
           :04-cache-strategies-ktor-r2dbc:test
           :05-cache-strategies-ktor-r2dbc-coroutines:test
           :06-routing-datasource-ktor-r2dbc:test
+          :07-cache-strategies-r2dbc-caffeine:test
           "-PuseDB=H2"
           --continue
 
@@ -207,6 +210,8 @@ jobs:
             11-high-performance/05-cache-strategies-ktor-r2dbc-coroutines/build/reports/tests/test/
             11-high-performance/06-routing-datasource-ktor-r2dbc/build/test-results/test/*.xml
             11-high-performance/06-routing-datasource-ktor-r2dbc/build/reports/tests/test/
+            11-high-performance/07-cache-strategies-r2dbc-caffeine/build/test-results/test/*.xml
+            11-high-performance/07-cache-strategies-r2dbc-caffeine/build/reports/tests/test/
           retention-days: 7
 
   chapter-12:
