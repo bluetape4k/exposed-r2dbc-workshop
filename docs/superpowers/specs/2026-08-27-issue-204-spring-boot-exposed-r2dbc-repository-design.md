@@ -21,6 +21,15 @@ repository 접근 방식의 책임 경계와 선택 기준을 나란히 학습�
 repository 호출과 명시적 outer `suspendTransaction`의 범위를 테스트로 고정하는
 것이 목표다.
 
+### 2.0.0 provider 계약 migration
+
+이 설계의 최초 기준은 `bluetape4k-exposed:1.12.1`이었다. 현재 중앙 catalog가
+해석하는 `2.0.0-SNAPSHOT` 개발선은 direct JDK proxy에서
+`InvocationTargetException.targetException`을 wrapper 없이 재전파한다. 따라서
+제약 위반의 현재 consumer 관찰값은 `IllegalArgumentException`이며, 당시
+`UndeclaredThrowableException` 단언은 1.12.1 historical surface로만 보존한다.
+transaction ownership, rollback, partial commit 의미는 그대로 유지한다.
+
 ## 배치 조사 결과
 
 `exposed-workshop`의 live `develop`와 로컬 checkout을 대조했다.
@@ -224,6 +233,9 @@ Product service --(optional outer suspendTransaction)--> repository proxy
   `spring-boot/r2dbc/src/main/kotlin/io/bluetape4k/spring/data/exposed/r2dbc/repository/support/SimpleExposedR2dbcRepository.kt`
 - 공식 manual:
   https://github.com/bluetape4k/bluetape4k-exposed/blob/1.12.1/docs/manual/en/modules/bluetape4k-exposed-spring-boot-r2dbc.md
+
+현재 개발선 provider source:
+`https://github.com/bluetape4k/bluetape4k-exposed/blob/develop/spring-boot/r2dbc/src/main/kotlin/io/bluetape4k/spring/data/exposed/r2dbc/repository/support/ExposedR2dbcRepositoryFactory.kt`
 
 ## Writer gate
 

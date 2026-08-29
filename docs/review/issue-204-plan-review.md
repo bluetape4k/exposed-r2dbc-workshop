@@ -36,7 +36,7 @@
 - SPW-01: PASS — Issue, 승인 경계, 선택 경로, provider API/source와 비범위를 명시했다.
 - SPW-02: PASS — 목표, ordering, 파일 ownership, RED/GREEN 명령, docs/diagram/workflow, risks/rollback, acceptance traceability를 포함했다.
 - SPW-03: PASS — `README.md` English, `README.ko.md`·KDoc·공개 metadata Korean 계약을 분리하고 API/경로/명령/URL은 보존했다.
-- SPW-04: PASS — JDBC sibling 배치, shared H2/lifecycle, live catalog/BOM, provider 1.12.1 source/manual을 반영했다.
+- SPW-04: PASS — JDBC sibling 배치, shared H2/lifecycle, 원 설계 시점의 provider 1.12.1 source/manual을 반영했다. 이후 2.0.0-SNAPSHOT direct proxy 예외 표면은 별도 migration evidence로 갱신했다.
 - SPW-05: PASS — plan/spec read-back, required symbol/자리표시자 검사, `git diff --check`, `audit-korean-terms.mjs` 결과를 확인했다.
 
 ## 비차단 P2 처분
