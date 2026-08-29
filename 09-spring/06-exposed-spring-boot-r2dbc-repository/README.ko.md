@@ -105,6 +105,11 @@ cold `Flow`이므로 호출자가 `toList()` 같은 소비 방식을 명시합�
 단일 호출 rollback, outer rollback, 의도적으로 만든 no-outer partial commit을
 모두 새로운 H2 transaction으로 검증합니다.
 
+현재 `bluetape4k-exposed` 2.x direct JDK proxy는 implementation이 던진
+`IllegalArgumentException`을 wrapper 없이 호출자에게 재전파합니다. 1.12.1에서
+관찰되던 `UndeclaredThrowableException`은 해당 release의 historical surface이며,
+이 예제는 중앙 catalog가 해석한 현재 provider 계약을 따릅니다.
+
 ## HTTP API
 
 | Method | Path | 성공 응답 | Body |
@@ -158,4 +163,4 @@ workshop slice의 제외 범위입니다. Spring reactive transaction manager도
 추가하지 않습니다. 여기서 보여 주는 동작은 app-owned Exposed
 `suspendTransaction` 경계이기 때문입니다.
 
-Provider manual: [bluetape4k exposed-spring-boot-r2dbc 1.12.1](https://github.com/bluetape4k/bluetape4k-exposed/blob/1.12.1/spring-boot/r2dbc/README.md)
+Provider source/manual: [bluetape4k exposed-spring-boot-r2dbc 2.0.0-SNAPSHOT](https://github.com/bluetape4k/bluetape4k-exposed/blob/develop/spring-boot/r2dbc/README.md)

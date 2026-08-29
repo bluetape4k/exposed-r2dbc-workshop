@@ -98,6 +98,11 @@
   ```
 
   실제 결과: `projects`에 `:06-exposed-spring-boot-r2dbc-repository`가 한 번 나타났고, dependency insight가 `io.github.bluetape4k.exposed:bluetape4k-exposed-spring-boot-r2dbc:1.12.1`을 `bluetape4k-dependencies:1.4.0` 경유로 표시했다. 별도 버전 override 없이 provider가 해석되었다.
+- [x] 2026-08-29 major snapshot train에서 중앙 catalog를 `2.0.0-SNAPSHOT`으로
+  갱신한 뒤 provider source의 direct proxy 예외 전달을 다시 확인했다. 현재
+  `InvocationTargetException.targetException`이 wrapper 없이 재전파되므로,
+  consumer의 제약 위반 단언은 `IllegalArgumentException`으로 migration하고
+  1.12.1의 `UndeclaredThrowableException`은 historical contract로만 남긴다.
 - [x] RED 이전 단계에서 실패하면 `settings.gradle.kts`에 수동 include를 추가하지 말고 leaf-directory 탐색과 build script 경로를 바로잡는다. 이 단계의 rollback은 새 module directory와 alias만 제거하는 것으로 제한한다.
 
 ### T2 — Spring test harness를 먼저 RED로 고정
@@ -299,6 +304,16 @@
 - [x] `settings.gradle.kts`는 leaf-directory 자동 등록을 그대로 두고 수동 `include("exposed-spring-boot-r2dbc-repository")`를 중복 추가하지 않는다. `./gradlew projects` 결과와 workflow task name을 대조한다.
 - [x] live issue #204 body를 승인된 실제 배치와 계획/설계 경로로 갱신한다. 오래된 `02-alternatives-to-jpa/r2dbc-example`는 `09-spring/06-exposed-spring-boot-r2dbc-repository`로 교체하고, 목표·검증·out-of-scope를 설계와 일치시킨다.
 - [x] mutation 전 현재 issue title/assignee/labels/milestone을 기록하고 `/tmp/issue-204-body.md`에 갱신 body를 작성한 뒤 명령으로 실행했다. title·assignee·milestone·labels는 기존 값을 보존했고 live read-back으로 확인했다.
+
+### T12 후속 — 2.0.0 provider 계약 정합화
+
+- [x] 1.12.1 wrapper 관찰값과 2.0.0-SNAPSHOT direct proxy의 target exception
+  재전파를 별도 migration으로 기록한다.
+- [x] `ProductR2dbcRepositoryTest`와 `ProductTransactionServiceTest`는 현재
+  provider의 `IllegalArgumentException` surface를 단언하고 rollback/partial
+  commit 의미는 유지한다.
+- [ ] 변경된 consumer slice, Chapter 09 workflow, PR body와 Issue #204 migration
+  comment를 exact-head 기준으로 다시 검증한다.
 
   ```bash
   gh issue edit 204 --body-file /tmp/issue-204-body.md

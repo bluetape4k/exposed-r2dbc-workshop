@@ -8,7 +8,7 @@
 
 | 리뷰 lane | 결과 | 근거 |
 |---|---|---|
-| `code-reviewer` | COMMENT (비차단 diagnostics 공백) | 재검토 46 unique paths; CRITICAL/HIGH/MEDIUM/LOW=0. `Serializable`/`serialVersionUID`와 proxy `UndeclaredThrowableException` 단언 반영 확인. LSP client 부재로 `APPROVE` 대신 비차단 COMMENT |
+| `code-reviewer` | COMMENT (비차단 diagnostics 공백) | 재검토 46 unique paths; CRITICAL/HIGH/MEDIUM/LOW=0. `Serializable`/`serialVersionUID`와 당시 1.12.1 proxy wrapper 단언 반영 확인. LSP client 부재로 `APPROVE` 대신 비차단 COMMENT |
 | `architect` | CLEAR | lifecycle ownership, provider 경계, plan traceability 재검토; P0/P1/P2=0 |
 | security/plan review | PASS | validation, unknown-field, sanitizer, closed-pool, error disclosure; P0/P1/P2=0 |
 
@@ -28,9 +28,10 @@
 - touched test의 `kotlin.test`/JUnit assertion을 `bluetape4k-assertions`로 교체했다.
 - `ProductRecord`와 `ProductCreateRequest`에 기존 workshop DTO 관례인 `Serializable`과
   `serialVersionUID`를 추가했다.
-- 제약 위반 negative test의 `Throwable` 허용 범위를 Spring suspend repository
-  proxy가 실제로 노출하는 `UndeclaredThrowableException`으로 좁혔다. 이 wrapper는
-  provider 예외가 reflection proxy를 통과하는 경계를 직접 표현한다.
+- 제약 위반 negative test의 `Throwable` 허용 범위를 당시 1.12.1 Spring suspend
+  repository proxy가 노출하던 `UndeclaredThrowableException`으로 좁혔다. 이는
+  해당 release의 historical contract이며, 2.0.0-SNAPSHOT provider direct proxy의
+  target exception 재전파 계약으로 후속 migration되었다.
 - `PerformanceStabilityTest`의 suspend acquire/delay/close에서 `CancellationException`을 명시적으로 재전파하도록 바꿨다.
 - lifecycle/config KDoc에 `R2dbcDatabase` manager unregister → `ConnectionPool` dispose 순서를 명시했다.
 - T6 plan의 cancellation/config 문구를 실제 후속 `count`, raw connection caller, source read-back 증거 범위로 축소했다. recorder를 app-bound service proxy에 잘못 연결하지 않으며 in-flight drain timing과 framework/driver 전체 redaction은 N/A로 남겼다.
@@ -39,7 +40,7 @@
 
 | 검증 | 결과 |
 |---|---|
-| `./gradlew :06-exposed-spring-boot-r2dbc-repository:test --tests '*ProductR2dbcRepositoryTest' --tests '*ProductTransactionServiceTest' -PuseDB=H2 --no-daemon --console=plain` | `BUILD SUCCESSFUL`; 9 tests; proxy-wrapped constraint failure와 partial commit 검증 |
+| `./gradlew :06-exposed-spring-boot-r2dbc-repository:test --tests '*ProductR2dbcRepositoryTest' --tests '*ProductTransactionServiceTest' -PuseDB=H2 --no-daemon --console=plain` | `BUILD SUCCESSFUL`; 9 tests; 2.0.0-SNAPSHOT direct `IllegalArgumentException`과 partial commit/rollback 검증 |
 | `./gradlew :06-exposed-spring-boot-r2dbc-repository:check -PuseDB=H2 --no-daemon --console=plain` | `BUILD SUCCESSFUL`; 28 tests; Kover verify 포함 |
 | `repo-test-summary -- ./gradlew :06-exposed-spring-boot-r2dbc-repository:test -PuseDB=H2 --no-daemon --console=plain` | exit 0; 28 tests; failure/error/skip 0 |
 | `./gradlew test --rerun-tasks -PuseDB=H2 --no-daemon --console=plain` | `BUILD SUCCESSFUL`; fresh XML 187개/1,220 test cases, 1,072 executed·148 assumption skips; failure/error 0 |
@@ -52,8 +53,10 @@
 ## 최종 판정
 
 현재 구현·문서·계획·검증에서 unresolved P0/P1/P2는 없다. 독립
-`code-reviewer`의 LOW 두 건은 기존 DTO 관례와 실제 proxy 예외 타입으로
-반영되어 재검토에서 0건으로 닫혔다. LSP client 부재는 Kotlin compile/check와
-fresh 테스트로 보완한 비차단 diagnostics 공백이다.
+`code-reviewer`의 LOW 두 건은 기존 DTO 관례와 당시 1.12.1 proxy 예외 타입으로
+반영되어 재검토에서 0건으로 닫혔다. 이후 2.0.0-SNAPSHOT provider가 direct
+`IllegalArgumentException`을 재전파하므로 consumer 테스트는 그 공개 계약을
+따르도록 migration한다. LSP client 부재는 Kotlin compile/check와 fresh 테스트로
+보완한 비차단 diagnostics 공백이다.
 
 **현재 상태: PR-READY — code-reviewer COMMENT는 비차단 diagnostics 공백만 기록**

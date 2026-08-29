@@ -95,12 +95,24 @@ bounded caller를 수행해 timeout, 실패, acquire/close 불균형, open conne
 
 독립 code review에서 발견한 LOW 관례·테스트 지적도 반영했다. 기존 workshop DTO가
 `Serializable`/`serialVersionUID`를 사용하므로 `ProductRecord`와
-`ProductCreateRequest`에도 같은 계약을 적용했다. provider 제약 위반 테스트는
-무차별 `Throwable` 대신 Spring suspend repository proxy의 실제
-`UndeclaredThrowableException` 경계를 검사해, 예외가 발생했다는 사실과 partial
-commit/rollback 결과를 함께 고정했다. Kotlin LSP client는 현재 환경에 없어
-실행하지 못했지만 `compileKotlin`, `compileTestKotlin`, module `check`, root H2
-회귀로 컴파일·정적 품질·실행 경로를 검증했다.
+`ProductCreateRequest`에도 같은 계약을 적용했다. 원래 1.12.1 provider에서 제약
+위반 테스트는 Spring suspend repository proxy의 `UndeclaredThrowableException`
+경계를 검사했지만, 2.0.0-SNAPSHOT의 `bluetape4k-exposed` direct proxy는
+`InvocationTargetException.targetException`을 그대로 재전파한다. 따라서 현재
+consumer 테스트는 provider의 공개 `IllegalArgumentException` 계약을 검사하면서
+partial commit/rollback 결과를 그대로 고정한다. Kotlin LSP client는 현재 환경에
+없어 실행하지 못했지만 `compileKotlin`, `compileTestKotlin`, module `check`, root
+H2 회귀로 컴파일·정적 품질·실행 경로를 검증했다.
+
+## 2.0.0 provider 계약 migration
+
+| provider | 예외 표면 | workshop 대응 |
+|---|---|---|
+| `bluetape4k-exposed:1.12.1` | JDK reflection proxy의 `UndeclaredThrowableException` | Issue #204 당시 검증값 |
+| `bluetape4k-exposed:2.0.0-SNAPSHOT` | direct proxy가 target `IllegalArgumentException`을 재전파 | 현재 테스트·문서가 따르는 계약 |
+
+이 migration은 transaction ownership이나 rollback/partial commit 의미를 바꾸지
+않고, provider가 공개하는 예외 전달 표면만 major 개발선에 맞춰 갱신한다.
 
 초기 TDD RED 실행의 원시 콘솔 로그는 별도 artifact로 보존하지 못했다. 대신 계획
 문서의 RED 명령·실패 원인, source/test read-back, 이후 동일 slice의 fresh GREEN

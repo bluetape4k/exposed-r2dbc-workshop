@@ -102,6 +102,11 @@ suspend repository. It uses Exposed's explicit `suspendTransaction` boundary.
 Single-call provider rollback, outer rollback, and the deliberate no-outer
 partial commit are all asserted with fresh H2 transactions.
 
+The current `bluetape4k-exposed` 2.x direct JDK proxy rethrows an implementation's
+`IllegalArgumentException` to the caller without a wrapper. The
+`UndeclaredThrowableException` observed with 1.12.1 was that release's historical
+surface; this example follows the provider contract resolved by the central catalog.
+
 ## HTTP API
 
 | Method | Path | Success | Body |
@@ -155,4 +160,4 @@ provider capabilities. A Spring reactive transaction manager is also not added:
 the application-owned Exposed `suspendTransaction` boundary is the behavior
 being demonstrated.
 
-Provider manual: [bluetape4k exposed-spring-boot-r2dbc 1.12.1](https://github.com/bluetape4k/bluetape4k-exposed/blob/1.12.1/spring-boot/r2dbc/README.md)
+Provider source/manual: [bluetape4k exposed-spring-boot-r2dbc 2.0.0-SNAPSHOT](https://github.com/bluetape4k/bluetape4k-exposed/blob/develop/spring-boot/r2dbc/README.md)
