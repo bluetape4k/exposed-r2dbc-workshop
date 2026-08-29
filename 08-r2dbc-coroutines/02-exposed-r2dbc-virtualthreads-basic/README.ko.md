@@ -8,11 +8,12 @@ Exposed R2DBC + Java 25 Virtual Threads 환경에서 비동기 데이터베이�
 
 > **요구 사항**: JDK 25 (`@EnabledOnJre(JRE.JAVA_25)` 조건 적용)
 
-Version Catalog의 versionless `bluetape4k-virtualthread-jdk25` alias는
-`bluetape4k-dependencies:1.4.0` BOM을 통해
-`bluetape4k-virtualthread-jdk25:1.12.1`로 해석됩니다. 테스트는 public
-ServiceLoader API에서 `jdk25-structured-task-scope` provider와 `jdk25` runtime을
-각각 정확히 하나씩 발견해야 합니다.
+Version Catalog의 versionless `bluetape4k-virtualthread-jdk25` alias는 현재
+`bluetape4k-dependencies:2.0.0-SNAPSHOT` train을 통해
+`bluetape4k-virtualthread-jdk25:2.0.0-SNAPSHOT`으로 해석됩니다. 공개 discovery
+계약은 `io.bluetape4k.concurrent.virtualthread.api` 패키지에 있으며, 테스트는
+public ServiceLoader API에서 `jdk25-structured-task-scope` provider와 `jdk25`
+runtime을 각각 정확히 하나씩 발견해야 합니다.
 
 ---
 

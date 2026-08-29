@@ -155,6 +155,28 @@ ServiceLoader 경계가 검증된다. provider의 child failure 전파와 scope 
 
 ## 호환성과 migration
 
+### 2.0.0-SNAPSHOT API namespace migration
+
+현재 workshop catalog는 `bluetape4k-dependencies:2.0.0-SNAPSHOT`을 소비한다.
+이 train의 `bluetape4k-virtualthread-api`는 public discovery 계약을
+`io.bluetape4k.concurrent.virtualthread.api` namespace로 제공한다. 따라서
+기존 #198 구현의 다음 네 import는 snapshot API 계약에 맞춰야 한다.
+
+```kotlin
+import io.bluetape4k.concurrent.virtualthread.api.StructuredTaskScopeProvider
+import io.bluetape4k.concurrent.virtualthread.api.StructuredTaskScopes
+import io.bluetape4k.concurrent.virtualthread.api.VirtualThreadRuntime
+import io.bluetape4k.concurrent.virtualthread.api.VirtualThreads
+```
+
+`newVT`와 Exposed R2DBC transaction helper는 core의 기존
+`io.bluetape4k.concurrent.virtualthread` namespace를 유지하므로 함께 바꾸지
+않는다. provider implementation class를 직접 import하거나 구 API를 되살리는
+compatibility layer도 추가하지 않는다. migration의 성공 기준은
+`compileTestKotlin` 성공, fast test `5/5/0`, module `check` 성공이며, public
+ServiceLoader singleton/name/support 및 bounded scope assertions는 그대로
+유지한다.
+
 - root Java/Kotlin toolchain 25를 유지한다.
 - 이 변경은 테스트 fixture와 문서의 실행 전제만 바꾸며 production API나
   저장 데이터 schema를 변경하지 않는다.

@@ -5,10 +5,10 @@ import exposed.r2dbc.shared.tests.TestDB
 import exposed.r2dbc.shared.tests.withTables
 import io.bluetape4k.collections.intRangeOf
 import io.bluetape4k.concurrent.virtualthread.newVT
-import io.bluetape4k.concurrent.virtualthread.StructuredTaskScopeProvider
-import io.bluetape4k.concurrent.virtualthread.StructuredTaskScopes
-import io.bluetape4k.concurrent.virtualthread.VirtualThreadRuntime
-import io.bluetape4k.concurrent.virtualthread.VirtualThreads
+import io.bluetape4k.concurrent.virtualthread.api.StructuredTaskScopeProvider
+import io.bluetape4k.concurrent.virtualthread.api.StructuredTaskScopes
+import io.bluetape4k.concurrent.virtualthread.api.VirtualThreadRuntime
+import io.bluetape4k.concurrent.virtualthread.api.VirtualThreads
 import io.bluetape4k.exposed.r2dbc.virtualThreadTransaction
 import io.bluetape4k.junit5.coroutines.runSuspendVT
 import io.bluetape4k.logging.coroutines.KLoggingChannel
