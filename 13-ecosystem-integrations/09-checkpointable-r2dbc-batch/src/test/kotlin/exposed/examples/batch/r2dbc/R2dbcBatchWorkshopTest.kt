@@ -82,6 +82,39 @@ class R2dbcBatchWorkshopTest : AbstractR2dbcExposedTest() {
     }
 
     @Test
+    fun `failed execution persists checkpoint and restart resumes after the saved checkpoint`() = runTest {
+        val database = preparedDatabase("failure-restart", 1..8)
+        val options = R2dbcBatchOptions(
+            jobName = "checkpointable-r2dbc-failure-restart",
+            chunkSize = 3,
+        )
+
+        val failed = checkpointableR2dbcBatchJob(
+            database = database,
+            options = options,
+            writer = FailOnceWriter(r2dbcTargetWriter(database)),
+        ).run()
+
+        failed shouldBeInstanceOf BatchReport.Failure::class
+        failed.stepReports.single().status shouldBeEqualTo BatchStatus.FAILED
+        failed.stepReports.single().checkpoint shouldBeEqualTo 3L
+        val checkpoint = stepCheckpoint(database)
+        checkpoint?.contains("\"className\":\"java.lang.Long\"") shouldBeEqualTo true
+        checkpoint?.contains("\"payload\":\"3\"") shouldBeEqualTo true
+        targetRows(database).map { it.sourceId } shouldBeEqualTo listOf(1L, 2L, 3L)
+
+        val restarted = runCheckpointableR2dbcBatch(database, options)
+
+        restarted shouldBeInstanceOf BatchReport.Success::class
+        restarted.stepReports.single().status shouldBeEqualTo BatchStatus.COMPLETED
+        restarted.stepReports.single().checkpoint shouldBeEqualTo 8L
+        jobStatus(database) shouldBeEqualTo BatchStatus.COMPLETED
+        stepStatus(database) shouldBeEqualTo BatchStatus.COMPLETED
+        targetRows(database).map { it.sourceId } shouldBeEqualTo (1L..8L).toList()
+        targetRows(database).map { it.sourceId }.distinct().size shouldBeEqualTo 8
+    }
+
+    @Test
     fun `processor errors are skipped and successful records are written`() = runTest {
         val database = preparedDatabase("skip", 1..10)
         val processor = BatchProcessor<R2dbcSourceRecord, R2dbcTargetRecord> { source ->

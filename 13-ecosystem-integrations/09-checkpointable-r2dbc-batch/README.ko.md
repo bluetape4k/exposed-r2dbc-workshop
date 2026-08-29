@@ -17,19 +17,22 @@ job은 caller-owned `R2dbcDatabase`와 함께 `ExposedR2dbcBatchJobRepository`,
 않습니다.
 
 이 workshop이 해석하는 provider artifact는
-`io.github.bluetape4k.exposed:bluetape4k-exposed-batch:1.12.1`입니다. published
-artifact에서 R2DBC repository의 metadata table import는
+`io.github.bluetape4k.exposed:bluetape4k-exposed-batch:2.0.0-SNAPSHOT`입니다.
+`bluetape4k-dependencies:2.0.0-SNAPSHOT` catalog와
+`https://central.sonatype.com/repository/maven-snapshots/` repository를 통해
+해석합니다. 공개된 개발 버전에서 R2DBC repository의 metadata table import는
 `io.bluetape4k.batch.jdbc.tables.*`, codec은
-`io.bluetape4k.batch.internal.CheckpointJson`입니다. Package 이름은 artifact
+`io.bluetape4k.batch.CheckpointJson`입니다. Package 이름은 artifact
 호환성 경계이며 JDBC transaction을 사용한다는 뜻이 아닙니다. 아직 release되지
 않은 `io.bluetape4k.batch.r2dbc.tables` package는 import하지 않으며 provider
 Issue #745 workaround도 추가하지 않습니다.
 
-버전 경계를 주의해야 합니다. upstream PR #747은 `FAILED` report의 checkpoint
-보존을 수정했지만 `1.12.1` release 뒤에 merge되었고 아직 Maven Central에
-published되지 않았습니다. 따라서 이 workshop은 `1.12.1`에서 `STOPPED`
-restart를 검증하며, 해당 수정이 포함된 provider release가 해석되기 전에는
-`FAILED` 실행 재시작을 보장하지 않습니다.
+upstream PR #747은 이 개발 버전에 포함되어 `FAILED` report의 checkpoint를
+보존합니다. 첫 commit chunk 뒤 writer 오류가 발생하면 checkpoint `3`을
+저장하고, 같은 parameter로 다시 실행할 때 source key `4`부터 `8`까지
+완료하는 실패·재시작 테스트로 검증합니다. 개발 버전은 안정 provider release로
+승격되기 전의 개발 dependency이므로 catalog 예외를 명시적으로 유지하며,
+source workaround는 추가하지 않습니다.
 
 ## Schema와 API
 
@@ -100,11 +103,15 @@ val job = batchJob(options.jobName) {
 2. Provider R2DBC writer로 변환한 목록을 씁니다.
 3. Chunk를 commit하고 reader key를 전진시킨 뒤 provider metadata table에
    typed checkpoint JSON을 저장합니다.
-4. `STOPPED` 뒤 같은 job parameter로 다시 실행하면 마지막 commit key 이후부터
-   재개합니다. `FAILED` 실행 재시작은 위 provider 수정이 포함될 때까지
-   보류합니다.
+4. `STOPPED` 또는 `FAILED` 뒤 같은 job parameter로 다시 실행하면 마지막
+   checkpoint key 이후부터 재개합니다. key `3` 뒤 writer가 실패하면
+   checkpoint `3`을 보존하므로 key `4`부터 시작해 `8`까지 완료합니다.
 
 ![Checkpointable R2DBC batch lifecycle](../../docs/images/readme-diagrams/13-09-checkpointable-r2dbc-batch-lifecycle-01-ko.png)
+
+Lifecycle diagram은 cancellation branch를 중심으로 보여 줍니다. `FAILED`
+checkpoint/restart branch는 위 failure matrix와 회귀 테스트로 검증하므로,
+공통 lifecycle topology에 집중하는 현재 visual asset을 유지합니다.
 
 Cancellation test는 두 번째 write를 의도적으로 막습니다. 첫 chunk checkpoint가
 저장된 뒤 coroutine을 취소하면 job과 step metadata는 `STOPPED`가 되고
@@ -128,9 +135,10 @@ Message broker, scheduler, production outbox coordination은 이 모듈의 범�
 | `SkipPolicy.ALL` processor 오류 | 홀수 ID만 기록되고 step은 `COMPLETED_WITH_SKIPS` |
 | 일시적인 writer 오류 | `RetryPolicy(maxAttempts = 2, delay = 1.milliseconds)`로 재시도 후 성공 |
 | Commit timeout | timeout chunk에 partial target row 없이 skip |
-| 재시도하지 않는 writer 오류 | report와 metadata는 `FAILED`, 이전 commit chunk는 보이며 failed-run restart는 provider 버전에 좌우됨 |
+| 재시도하지 않는 writer 오류 | report와 metadata는 `FAILED`, 이전 commit chunk는 보이며 checkpoint `3`을 같은 parameter 재시작에 사용 |
 | Coroutine cancellation | `CancellationException` 재전파, job과 step은 `STOPPED` |
 | STOPPED restart | 저장된 keyset checkpoint 이후부터 재개하고 target ID 중복 없음 |
+| FAILED restart | 저장된 checkpoint `3` 이후 source key `4`부터 `8`까지 완료하고 target ID 중복 없음 |
 | 잘못된 option/schema | 양수 경계 적용, 모든 metadata/source/target table 생성 |
 
 ## JDBC sibling과 비교

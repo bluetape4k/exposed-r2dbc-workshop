@@ -36,10 +36,13 @@ Ktor 예제는 `ConnectionPool` lifecycle을 application이 소유하고 reposit
 `EventPublicationRepository` SPI가 synchronous이고 R2DBC 구현을 제공하지 않기
 때문에 custom publication log를 기록합니다. DDD 예제는 aggregate event sequence,
 commit/rollback, named-interface boundary violation을 local H2 R2DBC test로
-실행합니다. Checkpointable batch sibling은 공개된
-`bluetape4k-exposed-batch:1.12.1` R2DBC reader, writer, metadata repository를
-직접 조합합니다. `STOPPED` restart 증명은 `exposed-workshop`의 JDBC sibling과
-별도로 유지합니다.
+실행합니다. Checkpointable batch sibling은 공개된 개발 버전
+`io.github.bluetape4k.exposed:bluetape4k-exposed-batch:2.0.0-SNAPSHOT` R2DBC
+reader, writer, metadata repository를 직접 조합합니다. H2 test는 commit된
+target ID를 중복하지 않고 `STOPPED`와 `FAILED` restart를 모두 증명하며,
+`exposed-workshop`의 JDBC sibling과는 별도로 유지합니다. Provider가 안정
+release로 승격될 때까지 개발 버전 repository와 catalog 예외는 module README에
+기록합니다.
 
 삭제한 source 예제는 local adapter stand-in으로 대체하지 않습니다.
 

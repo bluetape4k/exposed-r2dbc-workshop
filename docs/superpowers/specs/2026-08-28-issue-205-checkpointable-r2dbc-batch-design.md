@@ -7,7 +7,9 @@
 - 배치: `13-ecosystem-integrations/09-checkpointable-r2dbc-batch`
 - branch/worktree: `feat/issue-205-checkpointable-r2dbc-batch`
 - 승인 경계: 승인된 실행 계획과 이 설계에 따라 구현을 시작한다.
-- 기준 artifact: `io.github.bluetape4k.exposed:bluetape4k-exposed-batch:1.12.1`
+- 기준 artifact: `io.github.bluetape4k.exposed:bluetape4k-exposed-batch:2.0.0-SNAPSHOT`
+- 기준 catalog/repository: `bluetape4k-dependencies:2.0.0-SNAPSHOT`,
+  `https://central.sonatype.com/repository/maven-snapshots/`
 
 ## 문제와 목표
 
@@ -32,16 +34,16 @@ coroutine-first 예제로 고정한다.
 | 근거 | 확인 결과 | 설계 의미 |
 |---|---|---|
 | `exposed-workshop/13-ecosystem-integrations/11-checkpointable-batch` | `JdbcBatchWorkshop.kt`와 테스트가 정상, 실패, skip, retry, timeout, cancellation/restart를 고정 | 같은 학습 목표를 R2DBC sibling으로 옮기되 R2DBC transaction/Flow 방식으로 재작성 |
-| `bluetape4k-exposed` PR #747 / Issue #745 | 2026-08-27에 FAILED checkpoint 보존 수정이 merge됐지만 1.12.1 release에는 포함되지 않음 | 현재 artifact로는 failed restart DoD를 닫을 수 없으므로 provider release 또는 승인된 범위 변경이 필요 |
-| published `bluetape4k-exposed-batch:1.12.1` | `ExposedR2dbcBatchJobRepository`, `ExposedR2dbcBatchReader`, `ExposedR2dbcBatchWriter`, `BatchJob`, `BatchStep` API가 존재 | source의 현재 unreleased package를 import하지 않고 catalog가 해석하는 artifact만 사용 |
-| published 1.12.1 bytecode/source | metadata table은 `io.bluetape4k.batch.jdbc.tables.*`, checkpoint codec은 `io.bluetape4k.batch.internal.CheckpointJson` | R2DBC job도 published artifact의 이 package 경계를 따름. 이는 workaround가 아닌 artifact compatibility 경계 |
+| `bluetape4k-exposed` PR #747 / Issue #745 | 2026-08-27에 FAILED checkpoint 보존 수정이 merge됐고 `2.0.0-SNAPSHOT` source에 포함됨 | 개발 버전 provider로 failed restart DoD를 검증하고 안정 release 승격 전 catalog 예외를 명시 |
+| `bluetape4k-exposed-batch:2.0.0-SNAPSHOT` | `ExposedR2dbcBatchJobRepository`, `ExposedR2dbcBatchReader`, `ExposedR2dbcBatchWriter`, `BatchJob`, `BatchStep` API가 존재 | source의 unreleased package를 import하지 않고 catalog가 해석하는 개발 버전 artifact만 사용 |
+| 개발 버전 bytecode/source | metadata table은 `io.bluetape4k.batch.jdbc.tables.*`, checkpoint codec은 공개 `io.bluetape4k.batch.CheckpointJson` | R2DBC job도 provider artifact의 이 package 경계를 따름. 이는 workaround가 아닌 artifact compatibility 경계 |
 | 현재 workshop shared fixture | `AbstractR2dbcExposedTest`, `withDb`, `withTables`, `TestDB.H2`가 UTC/H2 R2DBC lifecycle을 제공 | test lifecycle을 새로 만들지 않고 shared helper와 `runTest`를 사용 |
 
 `bluetape4k-exposed` 저장소의 최신 작업 트리에는 향후
-`io.bluetape4k.batch.r2dbc.tables` package가 보이지만, 현재 workshop catalog의
-central/BOM 해석은 1.12.1이다. 따라서 구현은 반드시 published 1.12.1의
-`jdbc.tables` metadata package를 사용한다. provider가 향후 package를 바꾸는
-것을 이 workshop에서 선제적으로 흉내 내지 않는다.
+`io.bluetape4k.batch.r2dbc.tables` package가 보이지만, 현재 workshop catalog는
+중앙 개발 버전 provider의 실제 package 경계를 따른다. 따라서 구현은
+`jdbc.tables` metadata package와 공개 `CheckpointJson`을 사용하고 provider가
+향후 package를 바꾸는 것을 이 workshop에서 선제적으로 흉내 내지 않는다.
 
 ## 결정
 
@@ -139,16 +141,16 @@ R2dbc batch job DSL
                          |
                          +--> cancellation: STOPPED
                          +--> STOPPED restart: last committed key 이후부터 재개
+                         +--> FAILED restart: saved key `3` 이후 key `4..8` 재개
 ```
 
 provider의 chunk 순서는 write → `onChunkCommitted` → checkpoint persist이며,
 successful chunk의 마지막 key만 다음 run의 시작점이 된다. target의
 `sourceId` primary key는 checkpoint와 writer 사이의 중복을 조용히 숨기지
-않고 관측 가능하게 한다. 현재 published `1.12.1`에서는 일반 예외의
-`FAILED` report가 checkpoint를 전달하지 않고 metadata의 기존 checkpoint도
-지울 수 있으므로, 이 예제는 `STOPPED` restart만 검증한다. #747 수정이
-포함된 정식 provider release가 해석될 때 `FAILED` restart를 별도 회귀
-테스트로 추가해야 한다. 외부 side effect까지 exactly-once라고 주장하지
+않고 관측 가능하게 한다. 현재 개발 버전 provider는 일반 예외의 `FAILED`
+report에도 checkpoint를 전달하므로, 첫 chunk 뒤 checkpoint `3`을 저장하고
+동일 parameter로 key `4..8`을 재시작하는 회귀 테스트를 검증한다. 외부
+side effect까지 exactly-once라고 주장하지
 않으며, writer가 DB commit 뒤 예외를 던지는 at-least-once 상황과 외부
 message broker 연동은 범위 밖이다.
 
@@ -160,9 +162,10 @@ message broker 연동은 범위 밖이다.
 | processor 예외 + `SkipPolicy.ALL` | 해당 item만 skip, 나머지 write, `COMPLETED_WITH_SKIPS` | skip test |
 | writer 일시 실패 + retry | bounded retry/backoff 뒤 성공 | retry test |
 | chunk commit timeout | timed-out chunk가 부분 target row 없이 skip/실패 정책 적용 | timeout test |
-| writer failure | report와 metadata가 `FAILED`로 남고 예외/attempt가 숨겨지지 않음 | failure test; checkpoint 보존은 provider release blocker |
+| writer failure | report와 metadata가 `FAILED`로 남고 예외/attempt와 checkpoint가 숨겨지지 않음 | failure test; 개발 버전 FAILED restart regression |
 | coroutine cancellation | `CancellationException`을 삼키지 않고 cleanup 뒤 caller로 재전파, metadata는 `STOPPED` | cancellation test |
 | cancellation 후 restart | 저장된 checkpoint 이후 source만 처리되고 target source key 중복 없음 | restart test |
+| failed-run restart | checkpoint `3` 이후 source key `4..8`을 처리하고 target source key 중복 없음 | failed restart regression test |
 | 잘못된 options | job name/chunk/page 경계가 즉시 `IllegalArgumentException` | options test |
 | schema helper | provider metadata와 source/target table이 생성됨 | schema test |
 | connection lifecycle | job helper가 caller-owned database/pool을 닫지 않음 | source read-back와 targeted test |
@@ -215,10 +218,10 @@ seed하고 H2 `R2dbcDatabase`를 caller가 소유한다.
 
 ## 호환성·범위 밖
 
-- catalog/BOM이 해석하는 현재 provider 1.12.1에 맞춘다. unreleased local
-  provider source package나 #745 workaround를 import/복사하지 않는다. 따라서
-  #747이 포함된 provider release 전에는 FAILED restart DoD를 완료로 판정하지
-  않는다.
+- catalog/BOM이 해석하는 현재 provider `2.0.0-SNAPSHOT`에 맞춘다. provider
+  source package나 #745 workaround를 import/복사하지 않는다. 안정 release
+승격 전까지 개발 버전 repository와 catalog 예외를 유지하고, 승격 시
+  version/import/README 계약을 다시 검증한다.
 - Spring Batch, JDBC transaction, `runBlocking`, custom transaction manager,
   external broker, exactly-once side effect, production scheduler, Actuator,
   Testcontainers DB matrix, release/tag는 추가하지 않는다.
@@ -231,8 +234,8 @@ seed하고 H2 `R2dbcDatabase`를 caller가 소유한다.
 - [ ] published provider API를 직접 사용하고 모든 DB access가 R2DBC
       `suspendTransaction` 경계를 따른다.
 - [ ] 정상, failure, skip, retry/backoff, timeout, cancellation→STOPPED,
-      checkpoint restart/no duplicate, schema/options 테스트가 H2에서 통과한다.
-      (FAILED restart는 provider release 후 추가 검증)
+      STOPPED/FAILED checkpoint restart/no duplicate, schema/options 테스트가
+      H2에서 통과한다.
 - [ ] module/root/chapter README, workflow module map/report, paired diagram
       SVG/PNG와 semantic ledger가 source-equivalent로 등록된다.
 - [ ] `git diff --check`, targeted compile/test, Kover/detekt 가능한 검사가
@@ -256,15 +259,11 @@ seed하고 H2 `R2dbcDatabase`를 caller가 소유한다.
 - SPW-05: 완료 — Markdown read-back과 placeholder/contradiction/scope scan을
   계획 작성 전에 수행했고 unresolved 항목이 없다.
 
-## 외부 blocker
+## 재개 기록
 
-- Maven Central의 `bluetape4k-exposed-batch` 최신/유일 release는 `1.12.1`
-  (2026-08-06)이다.
-- upstream PR #747은 2026-08-27 merge되어 1.12.1에 시간상 포함될 수 없고,
-  release 제목도 `[2.0.0]`이다.
-- 1.12.1의 `BatchStepRunner`는 일반 실패 보고서에 checkpoint를 넣지 않으며,
-  R2DBC `completeStepExecution`은 nullable report checkpoint를 그대로 대입한다.
-- 따라서 현재 승인 범위(1.12.1 provider-native, workshop-local workaround 금지)로는
-  Issue #205의 FAILED 후 restart DoD를 충족할 수 없다. provider backport/release,
-  명시적 scope 축소, 또는 workaround 허용 중 하나가 결정될 때까지 PR을 만들지
-  않는다.
+초기 설계는 `1.12.1` release에 #747이 없어 FAILED 후 restart를 검증할 수
+없다는 이유로 보류되었다. 2026-08-29 `2.0.0-SNAPSHOT`이 배포된 뒤 중앙
+개발 버전 metadata와 source에서 #747 계약을 확인했고, 새 회귀 테스트에서
+checkpoint `3` 보존 및 key `4..8` 재시작을 검증했다. 안정 release 전에는
+개발 버전 dependency라는 제한과 중앙 자동 동기화 대상 밖인 catalog 예외를
+문서화한다.

@@ -16,19 +16,22 @@ is performed by the provider through `suspendTransaction`; this module does
 not wrap JDBC calls, add `runBlocking`, or implement a second batch runner.
 
 The provider artifact resolved by this workshop is
-`io.github.bluetape4k.exposed:bluetape4k-exposed-batch:1.12.1`. In that published
-artifact, the R2DBC repository imports its metadata tables from
+`io.github.bluetape4k.exposed:bluetape4k-exposed-batch:2.0.0-SNAPSHOT` through
+the `bluetape4k-dependencies:2.0.0-SNAPSHOT` catalog and the
+`https://central.sonatype.com/repository/maven-snapshots/` repository. In that
+published snapshot, the R2DBC repository imports its metadata tables from
 `io.bluetape4k.batch.jdbc.tables.*` and its codec from
-`io.bluetape4k.batch.internal.CheckpointJson`. The package name is an artifact
+`io.bluetape4k.batch.CheckpointJson`. The package name is an artifact
 compatibility boundary, not a JDBC transaction requirement. The workshop does
 not import the newer, unreleased `io.bluetape4k.batch.r2dbc.tables` package and
 does not add a workaround for provider Issue #745.
 
-There is an important version boundary: upstream PR #747 fixes preservation of a
-checkpoint in a `FAILED` report, but it was merged after the `1.12.1` release and
-has not been published to Maven Central yet. This workshop therefore proves
-`STOPPED` restart with `1.12.1`; it does not claim `FAILED`-run restart until a
-provider release containing that fix is resolved.
+Upstream PR #747 is included in this snapshot and preserves the checkpoint in a
+`FAILED` report. The failure-restart test proves that a writer error after the
+first committed chunk stores checkpoint `3`, and a later run with the same
+parameters resumes at source key `4` and completes through `8`. The snapshot is a
+development dependency until a stable provider release is promoted; the
+workshop keeps this catalog exception explicit and adds no source workaround.
 
 ## Schema and API
 
@@ -99,11 +102,15 @@ Each chunk follows this order:
 2. Write the transformed list with the provider R2DBC writer.
 3. Commit the chunk, advance the reader key, and persist typed checkpoint JSON
    in the provider metadata tables.
-4. On a later run after `STOPPED` with the same job parameters, resume after the
-   last committed key. `FAILED`-run restart awaits the provider fix described
-   above.
+4. On a later run after `STOPPED` or `FAILED` with the same job parameters,
+   resume after the last checkpointed key. A failed write after key `3` stores
+   checkpoint `3`, so the restart begins at key `4` and finishes at `8`.
 
 ![Checkpointable R2DBC batch lifecycle](../../docs/images/readme-diagrams/13-09-checkpointable-r2dbc-batch-lifecycle-01-en.png)
+
+The lifecycle diagram highlights the cancellation branch; the `FAILED`
+checkpoint/restart branch is covered by the failure matrix and regression test
+above so the visual asset remains focused on the shared lifecycle topology.
 
 The cancellation test deliberately blocks the second write. After the first
 chunk checkpoint is persisted, cancelling the coroutine leaves job and step
@@ -127,9 +134,10 @@ coordination are outside this module.
 | Processor error with `SkipPolicy.ALL` | Odd IDs are written and step is `COMPLETED_WITH_SKIPS` |
 | Transient writer error | `RetryPolicy(maxAttempts = 2, delay = 1.milliseconds)` retries and succeeds |
 | Commit timeout | Timed-out chunk is skipped without partial target rows |
-| Non-retryable writer error | Report and metadata remain `FAILED`; committed earlier chunks remain visible; failed-run restart is provider-version dependent |
+| Non-retryable writer error | Report and metadata remain `FAILED`; committed earlier chunks remain visible; checkpoint `3` is retained for a same-parameter restart |
 | Coroutine cancellation | `CancellationException` is rethrown; job and step become `STOPPED` |
 | STOPPED restart | Saved keyset checkpoint resumes after the committed chunk with no duplicate target IDs |
+| FAILED restart | Saved checkpoint `3` resumes at source key `4` and completes through `8` with no duplicate target IDs |
 | Invalid options/schema | Positive boundaries are enforced and all metadata/source/target tables are created |
 
 ## JDBC sibling comparison
