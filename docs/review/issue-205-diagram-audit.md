@@ -1,6 +1,6 @@
 # Issue #205 diagram 감사
 
-검토일: 2026-08-28
+검토일: 2026-08-29
 
 ## 자산
 
@@ -25,6 +25,9 @@ SVG는 source asset으로 보존한다.
 - full-size image inspection: 네 PNG의 제목·번호 pill·lifeline·분기·arrowhead가 잘리지 않음
 - module README link audit: `missing_refs=[]`, `svg_refs=[]`, `duplicates={}`; 전체 공용 directory pair audit도 `missing_svg=[]`, `missing_png=[]`로 확인
 - 새 네 pair만 분리한 asset audit: `svg_count=4`, `png_count=4`, `pair_count=4`, `failures=[]`
+- 이번 재검증에서도 lifecycle diagram은 공통 cancellation topology를 시각화하고,
+  `FAILED` checkpoint/restart는 module README의 failure matrix와 회귀 테스트로
+  별도 증명하는 범위를 유지한다.
 
 shared `docs/images/readme-diagrams` 전체를 `--require-all-referenced`로
 검사하는 명령은 기존 공용 자산까지 이 module README가 모두 embed해야 하는

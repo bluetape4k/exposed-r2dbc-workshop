@@ -1,6 +1,6 @@
 # Issue #205 구현 계획 통합 검토
 
-검토일: 2026-08-28
+검토일: 2026-08-29
 대상: `feat/issue-205-checkpointable-r2dbc-batch`
 범위: Type A 새 sibling 모듈, published batch provider 조합, H2 R2DBC
 검증, EN/KO README, paired diagram, Chapter 13 workflow 등록과 PR 전 DoD
@@ -10,7 +10,7 @@
 | 관점 | 확인한 위험 | 계획·구현 반영 | 최종 상태 |
 |---|---|---|---|
 | Security | 실패 메시지나 provider 경계를 과장하면 운영 오용 가능 | caller-owned database, demo-only H2, exactly-once 비주장, 외부 broker/credential 범위 제외를 문서화 | P0/P1 없음 |
-| Correctness/API | unreleased `batch.r2dbc.tables` 또는 #745 workaround를 사용하면 published 계약과 어긋남; 1.12.1에는 #747 수정이 없음 | `bluetape4k-exposed-batch:1.12.1`의 `jdbc.tables` metadata와 `ExposedR2dbcBatch*` API를 직접 조합하되 FAILED restart는 release 전 보류 | P1 blocker |
+| Correctness/API | unreleased `batch.r2dbc.tables` 또는 #745 workaround를 사용하면 provider 계약과 어긋남 | `bluetape4k-exposed-batch:2.0.0-SNAPSHOT`의 `jdbc.tables` metadata와 공개 `CheckpointJson`/`ExposedR2dbcBatch*` API를 직접 조합하고 FAILED restart를 회귀 테스트 | P0/P1 없음 |
 | Performance/resource | page/chunk 경계와 timeout에서 partial write·checkpoint drift 위험 | keyset reader, chunk commit 뒤 checkpoint, 짧은 timeout과 H2 target PK를 테스트 | P0/P1 없음 |
 | Coroutine/stability | cancellation을 삼키거나 caller pool을 job이 닫을 위험 | `suspendTransaction`, `CancellationException` 재전파, provider `close`와 database lifecycle 분리 | P0/P1 없음 |
 | Developer/API | 예제 코드가 실제 bytecode signature와 다를 위험 | reader의 `rowMapper`·`keyExtractor`·`keyClass`를 포함한 compile-valid snippet과 KDoc 제공 | P0/P1 없음 |
@@ -21,10 +21,10 @@
 | 확인 항목 | 근거 | 결과 |
 |---|---|---|
 | sibling 선택 | `exposed-workshop/13-ecosystem-integrations/11-checkpointable-batch`의 JDBC 구현과 현재 Chapter 13 번호 | PASS |
-| provider 경계 | resolved `bluetape4k-exposed-batch:1.12.1`와 published source/bytecode | PASS |
+| provider 경계 | resolved `bluetape4k-exposed-batch:2.0.0-SNAPSHOT`와 개발 버전 source/bytecode | PASS |
 | Gradle 등록 | leaf directory 자동 discovery와 `./gradlew projects`의 `:09-checkpointable-r2dbc-batch` | PASS |
 | transaction/Flow | source schema와 read-back 모두 `suspendTransaction`; Flow는 `map`/`toList`/`single`로 명시 소비 | PASS |
-| 실패 계약 | normal/failure/skip/retry/timeout/cancellation→STOPPED/restart/schema/options 8 tests | STOPPED PASS; FAILED restart BLOCKED |
+| 실패 계약 | normal/failure/skip/retry/timeout/cancellation→STOPPED/STOPPED·FAILED restart/schema/options 9 tests | PASS |
 | 문서/도식 | module·chapter·root EN/KO 문서, semantic ledger, SVG/PNG pair | PASS |
 | CI | Examples Chapter 13 H2 task와 wildcard test artifact, dynamic changed-task mapping | PASS |
 
@@ -45,7 +45,7 @@
 
 ## 판정
 
-컴파일·문서·workflow read-back은 통과했지만, provider release boundary가
-틀렸다는 P1이 발견됐다. 1.12.1은 #747 수정 이전 artifact이므로 FAILED
-restart를 PASS로 판정할 수 없다. 현재 통합 상태는 `P0=0, P1=1,
-BLOCKED`이며 provider backport/release 또는 명시적 scope 변경이 필요하다.
+초기 검토에서 `1.12.1` release boundary가 #747 이전이라는 P1을 발견했지만,
+개발 버전 재개 후 provider source/metadata와 FAILED restart 회귀를 다시
+확인했다. 현재 통합 상태는 `P0=0, P1=0, PASS`이며 개발 버전은 안정 release
+승격 전까지 명시적 catalog 예외로 유지한다.

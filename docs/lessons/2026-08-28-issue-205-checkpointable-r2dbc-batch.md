@@ -3,20 +3,23 @@
 ## 결정
 
 JDBC sibling의 학습 목표를 R2DBC에 옮길 때 blocking runner를 감싸지 않고,
-published `bluetape4k-exposed-batch:1.12.1`의
+공개된 개발 버전 `bluetape4k-exposed-batch:2.0.0-SNAPSHOT`의
 `ExposedR2dbcBatchJobRepository`, `ExposedR2dbcBatchReader`,
 `ExposedR2dbcBatchWriter`를 provider DSL에서 직접 조합했다. Metadata table은
-현재 published artifact의 `io.bluetape4k.batch.jdbc.tables` 경계를 따르며,
-향후 unreleased package를 선제적으로 복제하지 않는다.
+현재 개발 버전 artifact의 `io.bluetape4k.batch.jdbc.tables` 경계를 따르며,
+`CheckpointJson`은 공개 API인 `io.bluetape4k.batch.CheckpointJson`에서 가져온다.
+향후 package를 선제적으로 복제하지 않고 개발 버전 repository와 catalog 예외를
+명시적으로 기록한다.
 
 ## 재사용할 패턴
 
 1. `R2dbcDatabase`는 caller가 소유하고 schema/fixture/query는
    `suspendTransaction` 안에 둔다.
 2. keyset reader는 마지막으로 commit된 `Long` key를 checkpoint로 저장하고,
-   target `sourceId` primary key로 restart 중복을 눈에 보이게 한다. 다만
-   published `1.12.1`은 일반 `FAILED` report에서 checkpoint를 보존하지
-   않으므로 현재 검증 범위는 `STOPPED` restart다.
+   target `sourceId` primary key로 restart 중복을 눈에 보이게 한다. 개발 버전
+   provider는 일반 `FAILED` report에도 checkpoint를 보존하므로, 첫 chunk 뒤
+   실패한 실행의 checkpoint `3`과 동일 parameter 재시작 `4..8` 완료를
+   회귀 테스트로 고정한다.
 3. cancellation은 catch-all 예외로 바꾸지 않고 `STOPPED` metadata를 남긴 뒤
    caller coroutine으로 재전파한다.
 4. EN/KO README는 source-equivalent로 유지하되 API names, paths, commands와
@@ -34,10 +37,10 @@ published `bluetape4k-exposed-batch:1.12.1`의
 - module-specific detekt task와 shared asset global strict exposure는 이
   repository/tool 범위에 없다. 없는 검사를 통과했다고 보고하지 않고 N/A로
   기록한다.
-- upstream #747의 FAILED checkpoint 수정은 `[2.0.0]` merge로 들어갔지만
-  Maven Central에는 아직 published되지 않았다. 1.12.1을 유지하면서
-  workaround를 넣지 않는 승인 경계에서는 FAILED restart를 완료로
-  주장하지 않고, provider release 또는 명시적 scope 결정까지 PR을 보류한다.
+- upstream #747의 FAILED checkpoint 수정이 `2.0.0-SNAPSHOT` artifact/source에
+  포함된 것을 중앙 개발 버전 metadata와 회귀 테스트로 확인했다. 안정 release
+  승격 전까지 workshop catalog의 개발 버전 예외를 유지하며, provider stable
+  promotion 때 version/import/README 계약을 다시 대조한다.
 
 ## 다음 작업에 적용할 점
 

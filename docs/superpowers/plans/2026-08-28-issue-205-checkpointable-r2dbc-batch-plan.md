@@ -2,11 +2,11 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Issue #205의 승인된 설계대로 `13-ecosystem-integrations/09-checkpointable-r2dbc-batch`를 추가하여 published Exposed R2DBC batch provider의 chunk commit, checkpoint/restart, skip, retry, timeout, cancellation 경계를 H2 R2DBC에서 실행 가능한 예제로 고정한다.
+**Goal:** Issue #205의 승인된 설계대로 `13-ecosystem-integrations/09-checkpointable-r2dbc-batch`를 추가하여 공개된 Exposed R2DBC batch provider 개발 버전의 chunk commit, checkpoint/restart, skip, retry, timeout, cancellation 경계를 H2 R2DBC에서 실행 가능한 예제로 고정한다.
 
-**Architecture:** 새 sibling 모듈은 `exposed.examples.batch.r2dbc` 패키지에서 source/target table, immutable record, options, schema helper, provider reader/processor/writer/job factory를 소유한다. `ExposedR2dbcBatchJobRepository`, `ExposedR2dbcBatchReader`, `ExposedR2dbcBatchWriter`를 `R2dbcDatabase`와 함께 직접 조합하고 caller-owned database/pool은 close하지 않는다. published `1.12.1`의 metadata package가 `io.bluetape4k.batch.jdbc.tables.*`인 사실을 그대로 사용하며 custom runner, JDBC API, `runBlocking`, Spring Batch는 추가하지 않는다.
+**Architecture:** 새 sibling 모듈은 `exposed.examples.batch.r2dbc` 패키지에서 source/target table, immutable record, options, schema helper, provider reader/processor/writer/job factory를 소유한다. `ExposedR2dbcBatchJobRepository`, `ExposedR2dbcBatchReader`, `ExposedR2dbcBatchWriter`를 `R2dbcDatabase`와 함께 직접 조합하고 caller-owned database/pool은 close하지 않는다. `2.0.0-SNAPSHOT`의 metadata package가 `io.bluetape4k.batch.jdbc.tables.*`인 사실을 그대로 사용하고 공개 `io.bluetape4k.batch.CheckpointJson` codec을 사용하며 custom runner, JDBC API, `runBlocking`, Spring Batch는 추가하지 않는다.
 
-**Tech Stack:** catalog/BOM이 해석하는 Kotlin 2.4.0, Exposed 1.4.0, `bluetape4k-dependencies:1.4.0`, `bluetape4k-exposed-batch:1.12.1`, Exposed R2DBC, `bluetape4k-jackson3`, Kotlin Coroutines/Flow, H2 R2DBC, JUnit 5, shared `AbstractR2dbcExposedTest`/`withDb`/`withTables`.
+**Tech Stack:** catalog/BOM이 해석하는 Kotlin 2.4.0, Exposed 1.4.0, `bluetape4k-dependencies:2.0.0-SNAPSHOT`, `bluetape4k-exposed-batch:2.0.0-SNAPSHOT`, Exposed R2DBC, `bluetape4k-jackson3`, Kotlin Coroutines/Flow, H2 R2DBC, JUnit 5, shared `AbstractR2dbcExposedTest`/`withDb`/`withTables`.
 
 ---
 
@@ -29,7 +29,7 @@
 | T2–T4 | `13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt` | table, record, options, schema, reader/processor/writer/job DSL |
 | T2–T4 | `13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/test/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshopTest.kt` | H2 RED/GREEN 정상·실패·skip·retry·timeout·cancellation/restart·schema/options 테스트 |
 | T5 | `13-ecosystem-integrations/09-checkpointable-r2dbc-batch/README.md`, `README.ko.md` | source-equivalent reader-facing module guide |
-| T6 | `docs/review/issue-205-r2dbc-batch-diagram-semantic-ledger.json`, `docs/images/readme-diagrams/13-09-checkpointable-r2dbc-batch-{architecture,lifecycle}-01-{en,ko}.{svg,png}` | paired architecture/lifecycle visual assets와 semantic ledger |
+| T6 | `docs/review/issue-205-r2dbc-batch-{architecture,lifecycle}-semantic-ledger.json`, `docs/images/readme-diagrams/13-09-checkpointable-r2dbc-batch-{architecture,lifecycle}-01-{en,ko}.{svg,png}` | paired architecture/lifecycle visual assets와 semantic ledger |
 | T7 | `13-ecosystem-integrations/README.md`, `README.ko.md`, root `README.md`, `README.ko.md`, `.github/workflows/Examples.yml` | Chapter 13/root module map, command, CI report 등록 |
 | T8 | `docs/review/issue-205-*`, `docs/lessons/2026-08-28-issue-205-checkpointable-r2dbc-batch.md` | six-lens review, verification evidence, Korean lesson |
 
@@ -46,7 +46,7 @@
 - Modify: `gradle/libs.versions.toml`의 `[libraries]` provider alias 인접 영역
 - Create: `13-ecosystem-integrations/09-checkpointable-r2dbc-batch/build.gradle.kts`
 
-- [ ] **Step 1: RED project discovery 확인**
+- [x] **Step 1: RED project discovery 확인**
 
   ```bash
   ./gradlew projects --console=plain | rg '09-checkpointable-r2dbc-batch'
@@ -55,7 +55,7 @@
   Expected before directory/build exists: no matching project. This is a
   discovery baseline, not a failure of the repository.
 
-- [ ] **Step 2: provider alias를 추가한다**
+- [x] **Step 2: provider alias를 추가한다**
 
   `gradle/libs.versions.toml`의 Exposed/bluetape4k alias 묶음에 다음 한 줄을
   추가한다. version은 central BOM에 맡긴다.
@@ -64,7 +64,7 @@
   exposed-batch = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-batch" }
   ```
 
-- [ ] **Step 3: module build를 작성한다**
+- [x] **Step 3: module build를 작성한다**
 
   ```kotlin
   plugins {
@@ -88,7 +88,7 @@
   }
   ```
 
-- [ ] **Step 4: project discovery와 dependency graph를 확인한다**
+- [x] **Step 4: project discovery와 dependency graph를 확인한다**
 
   ```bash
   ./gradlew projects --console=plain
@@ -108,7 +108,7 @@
 - Create: `13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/test/resources/junit-platform.properties`
 - Create: `13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/test/resources/logback-test.xml`
 
-- [ ] **Step 1: RED 테스트 골격을 작성한다**
+- [x] **Step 1: RED 테스트 골격을 작성한다**
 
   Test class는 `AbstractR2dbcExposedTest`를 확장하고 각 suspend test는
   `runTest` 또는 repository의 `runSuspendIO` convention을 사용한다. 아직
@@ -129,7 +129,7 @@
   }
   ```
 
-- [ ] **Step 2: RED를 실행하고 unresolved output을 저장한다**
+- [x] **Step 2: RED를 실행하고 unresolved output을 저장한다**
 
   ```bash
   ./gradlew :09-checkpointable-r2dbc-batch:test \
@@ -139,7 +139,7 @@
   Expected: source tables/functions are not yet defined. Do not weaken the
   assertion or add a fake provider implementation to make RED pass.
 
-- [ ] **Step 3: shared fixture 사용을 고정한다**
+- [x] **Step 3: shared fixture 사용을 고정한다**
 
   `preparedDatabase(name, values)`는 `R2dbcDatabase.connect`로 H2 memory
   database를 만들고 `createR2dbcBatchSchema(database)`와
@@ -154,7 +154,7 @@
 
 - Create: `13-ecosystem-integrations/09-checkpointable-r2dbc-batch/src/main/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshop.kt`
 
-- [ ] **Step 1: table/record/options를 작성한다**
+- [x] **Step 1: table/record/options를 작성한다**
 
   ```kotlin
   object R2dbcBatchSourceTable : Table("r2dbc_batch_source") {
@@ -180,7 +180,7 @@
   `require`한다. 기본 `commitTimeout`은 `BatchDefaults.COMMIT_TIMEOUT`을
   사용하며 `SkipPolicy.NONE`, `RetryPolicy.NONE`을 기본값으로 둔다.
 
-- [ ] **Step 2: published metadata와 schema helper를 연결한다**
+- [x] **Step 2: published metadata와 schema helper를 연결한다**
 
   ```kotlin
   val r2dbcBatchMetadataTables: List<Table> = listOf(
@@ -197,10 +197,11 @@
   }
   ```
 
-  Metadata imports는 `io.bluetape4k.batch.jdbc.tables.*`를 사용한다. published
-  1.12.1에 없는 unreleased `batch.r2dbc.tables`를 import하지 않는다.
+  Metadata imports는 `io.bluetape4k.batch.jdbc.tables.*`를 사용한다. 개발 버전
+  provider가 제공하는 공개 `io.bluetape4k.batch.CheckpointJson`을 사용하며,
+  별도 workaround와 선제적인 `batch.r2dbc.tables` 복제를 추가하지 않는다.
 
-- [ ] **Step 3: reader와 writer를 provider API로 조합한다**
+- [x] **Step 3: reader와 writer를 provider API로 조합한다**
 
   `ExposedR2dbcBatchReader`는 `database`, source table, `id` key column,
   `pageSize`, row mapper, `R2dbcSourceRecord::id`, `keyClass = Long::class`
@@ -211,7 +212,7 @@
   R2dbcBatchTargetTable)`의 bind lambda로 세 target column을 채운다.
   writer에서 `batchInsert`나 JDBC transaction을 직접 호출하지 않는다.
 
-- [ ] **Step 4: job DSL과 public runner를 구현한다**
+- [x] **Step 4: job DSL과 public runner를 구현한다**
 
   ```kotlin
   fun checkpointableR2dbcBatchJob(
@@ -239,10 +240,10 @@
   ): BatchReport = checkpointableR2dbcBatchJob(database, options).run()
   ```
 
-  `CheckpointJson.jackson3()`는 `io.bluetape4k.batch.internal`에서 import한다.
+  `CheckpointJson.jackson3()`는 `io.bluetape4k.batch`에서 import한다.
   `database`/pool close는 이 함수에 넣지 않는다.
 
-- [ ] **Step 5: compile와 첫 GREEN을 확인한다**
+- [x] **Step 5: compile와 첫 GREEN을 확인한다**
 
   ```bash
   ./gradlew :09-checkpointable-r2dbc-batch:compileKotlin \
@@ -260,7 +261,7 @@
 
 - Modify: `.../src/test/kotlin/exposed/examples/batch/r2dbc/R2dbcBatchWorkshopTest.kt`
 
-- [ ] **Step 1: failure/skip/retry 테스트를 추가한다**
+- [x] **Step 1: failure/skip/retry 테스트를 추가한다**
 
   - `FailOnceWriter`는 두 번째 `write`에서 한 번 예외를 발생시키고
     `RetryPolicy.NONE`으로 `BatchReport.Failure`, `FAILED` metadata와 첫 chunk
@@ -272,7 +273,7 @@
     `RetryPolicy(maxAttempts = 2, delay = 1.milliseconds)`로 성공하며 attempt
     count가 2인지 검증한다.
 
-- [ ] **Step 2: timeout 테스트를 추가한다**
+- [x] **Step 2: timeout 테스트를 추가한다**
 
   `SlowWriter(delegate, 50.milliseconds)`와 `chunkSize = 3`,
   `commitTimeout = 5.milliseconds`, `SkipPolicy.maxSkips(3)`를 사용한다.
@@ -280,7 +281,7 @@
   write count 0이고 target row가 없음을 검증한다. `Thread.sleep`이나
   `runBlocking`을 사용하지 않는다.
 
-- [ ] **Step 3: cancellation/restart 테스트를 추가한다**
+- [x] **Step 3: cancellation/restart 테스트를 추가한다**
 
   `CancellationWriter`는 첫 write를 delegate에 전달한 뒤
   `firstWriteCompleted.complete(Unit)`을 호출하고, 두 번째 write에 진입하면
@@ -293,14 +294,14 @@
   report가 `Success`/`COMPLETED`이고 target source IDs가 `1..8`의 unique 집합인지
   검증한다. checkpoint 이후부터 읽는다는 것을 중복 row count로 증명한다.
 
-- [ ] **Step 4: schema/options 테스트를 추가한다**
+- [x] **Step 4: schema/options 테스트를 추가한다**
 
   `r2dbcBatchMetadataTables` 각 table의 `selectAll().count()`가 0이고 table
   이름 집합이 일치하는지, target primary key가 `sourceId`인지 확인한다.
   blank job name, zero chunk/page size는 `assertFailsWith<IllegalArgumentException>`으로
   확인한다.
 
-- [ ] **Step 5: targeted test를 순서대로 실행한다**
+- [x] **Step 5: targeted test를 순서대로 실행한다**
 
   ```bash
   ./gradlew :09-checkpointable-r2dbc-batch:test \
@@ -318,23 +319,23 @@
 - Create: `13-ecosystem-integrations/09-checkpointable-r2dbc-batch/README.md`
 - Create: `13-ecosystem-integrations/09-checkpointable-r2dbc-batch/README.ko.md`
 
-- [ ] **Step 1: 동일 section 구조를 작성한다**
+- [x] **Step 1: 동일 section 구조를 작성한다**
 
   두 문서의 순서를 `목적/Scope → provider contract → schema/API → execution
   flow → checkpoint/restart → failure matrix → exactly-once boundary → test
   command → JDBC sibling 비교 → limitations → diagram`으로 동일하게 한다.
   English README는 영어 설명, Korean README는 자연스러운 한국어 설명을 쓴다.
 
-- [ ] **Step 2: source-backed code excerpt와 경계를 기록한다**
+- [x] **Step 2: source-backed code excerpt와 경계를 기록한다**
 
   README에는 `R2dbcBatchOptions`, `checkpointableR2dbcBatchJob`,
   `suspendTransaction`, `CheckpointJson.jackson3()`를 실제 source와 동일하게
-  보여 준다. metadata package가 published `1.12.1`에서 `jdbc.tables`인 이유와
-  unreleased `batch.r2dbc.tables`를 사용하지 않는 이유를 명시한다.
+  보여 준다. metadata package가 개발 버전 provider에서 `jdbc.tables`인 이유와
+  별도 `batch.r2dbc.tables` workaround를 사용하지 않는 이유를 명시한다.
   provider checkpoint 이후의 DB restart 경계만 exactly-once처럼 관찰되며
   외부 side effect는 at-least-once라는 한계를 명확히 쓴다.
 
-- [ ] **Step 3: command와 링크를 read-back한다**
+- [x] **Step 3: command와 링크를 read-back한다**
 
   ```bash
   ./gradlew :09-checkpointable-r2dbc-batch:test -PuseDB=H2
@@ -348,21 +349,21 @@
 
 **Files:**
 
-- Create: `docs/review/issue-205-r2dbc-batch-diagram-semantic-ledger.json`
+- Existing: `docs/review/issue-205-r2dbc-batch-architecture-semantic-ledger.json`, `docs/review/issue-205-r2dbc-batch-lifecycle-semantic-ledger.json`
 - Create: `docs/images/readme-diagrams/13-09-checkpointable-r2dbc-batch-architecture-01-en.svg`
 - Create: `docs/images/readme-diagrams/13-09-checkpointable-r2dbc-batch-architecture-01-ko.svg`
 - Create: `docs/images/readme-diagrams/13-09-checkpointable-r2dbc-batch-lifecycle-01-en.svg`
 - Create: `docs/images/readme-diagrams/13-09-checkpointable-r2dbc-batch-lifecycle-01-ko.svg`
 - Create: corresponding four `.png` files generated from SVG at scale 2
 
-- [ ] **Step 1: semantic ledger를 작성한다**
+- [x] **Step 1: semantic ledger를 작성한다**
 
   ledger에는 reader question, source anchors, unique node IDs, edge list,
   locale topology equivalence, complexity decision을 기록한다. Source anchor는
   `R2dbcBatchWorkshop.kt`의 table, reader, writer, job factory와 test의
   cancellation/restart method를 가리킨다.
 
-- [ ] **Step 2: 동일 topology SVG를 작성한다**
+- [x] **Step 2: 동일 topology SVG를 작성한다**
 
   architecture nodes: `caller coroutine`, `BatchJob DSL`, `R2dbcReader`,
   `processor`, `R2dbcWriter`, `R2dbcDatabase`, `source/target tables`,
@@ -370,7 +371,7 @@
   commit → checkpoint → next key; cancellation → STOPPED → restart. English와
   Korean은 node ID/edge를 동일하게 유지하고 label만 번역한다.
 
-- [ ] **Step 3: SVG/PNG audit를 실행한다**
+- [x] **Step 3: SVG/PNG audit를 실행한다**
 
   ```bash
   for locale in en ko; do
@@ -386,7 +387,9 @@
     done
   done
   python3 /Users/debop/.codex/skills/bluetape-diagram/scripts/diagram-semantic-audit.py \
-    --repo-root . --json docs/review/issue-205-r2dbc-batch-diagram-semantic-ledger.json
+    --repo-root . --json docs/review/issue-205-r2dbc-batch-architecture-semantic-ledger.json
+  python3 /Users/debop/.codex/skills/bluetape-diagram/scripts/diagram-semantic-audit.py \
+    --repo-root . --json docs/review/issue-205-r2dbc-batch-lifecycle-semantic-ledger.json
   ```
 
   PNG를 full-size로 inspect하고 text overlap, clipped label, arrowhead 방향,
@@ -400,26 +403,26 @@
 - Modify: root `README.md`, `README.ko.md`
 - Modify: `.github/workflows/Examples.yml`
 
-- [ ] **Step 1: Chapter 13 module map과 verification command를 갱신한다**
+- [x] **Step 1: Chapter 13 module map과 verification command를 갱신한다**
 
   두 locale 표에 `09-checkpointable-r2dbc-batch` row를 추가하고 기존 5개
   module command에 `:09-checkpointable-r2dbc-batch:test`를 추가한다. 문서의
   모듈 수, description, command가 서로 일치하는지 확인한다.
 
-- [ ] **Step 2: root README parity를 갱신한다**
+- [x] **Step 2: root README parity를 갱신한다**
 
   root README의 Chapter 13 module map/description와 Korean counterpart를
   동일한 row/order로 갱신한다. root 문서에 source에 없는 runtime promise를
   추가하지 않는다.
 
-- [ ] **Step 3: Examples workflow를 갱신한다**
+- [x] **Step 3: Examples workflow를 갱신한다**
 
   Chapter 13 H2 smoke test와 report aggregation에
   `:09-checkpointable-r2dbc-batch:test` 및 해당 `build/test-results`/
   `build/reports/tests` 경로를 추가한다. 기존 `--continue`, `-PuseDB=H2`,
   path filter를 보존한다.
 
-- [ ] **Step 4: registration read-back**
+- [x] **Step 4: registration read-back**
 
   ```bash
   ./gradlew projects --console=plain
@@ -438,7 +441,7 @@
 - Create: `docs/review/issue-205-verification.md`
 - Create: `docs/lessons/2026-08-28-issue-205-checkpointable-r2dbc-batch.md`
 
-- [ ] **Step 1: six-lens read-only review를 통합한다**
+- [x] **Step 1: six-lens read-only review를 통합한다**
 
   performance, stability, security, operator/Ops, developer/API, user/caller
   관점별로 exact file/line evidence, priority, required edit, rerun 여부를
@@ -446,7 +449,7 @@
   native subagent는 사용하지 않고 main session에서 각 관점을 독립적으로
   수행하되, 관점별 결론을 분리해서 artifact에 남긴다.
 
-- [ ] **Step 2: targeted와 proportional validation을 실행한다**
+- [x] **Step 2: targeted와 proportional validation을 실행한다**
 
   ```bash
   ./gradlew :09-checkpointable-r2dbc-batch:test -PuseDB=H2 --no-daemon --console=plain
@@ -461,40 +464,40 @@
   targeted evidence와 known gap으로 기록한다. Chapter 13 H2 smoke는 이후
   targeted tests가 통과한 뒤 한 번 실행한다.
 
-- [ ] **Step 3: verification report를 작성한다**
+- [x] **Step 3: verification report를 작성한다**
 
   각 command의 exit code, test count, Kover/detekt 결과, diagram audit,
   workflow/readme registration, baseline timeout을 표로 기록한다. `Required
   checks: X/Y; N/A: N; Blocked: N` 형식과 unchecked item을 포함한다.
 
-- [ ] **Step 4: Korean lesson을 PR 전 commit에 포함한다**
+- [x] **Step 4: Korean lesson을 PR 전 commit에 포함한다**
 
-  lesson에는 provider 1.12.1 package boundary, #745 workaround 금지, R2DBC
+  lesson에는 provider 개발 버전 package boundary, #745 workaround 금지, R2DBC
   Flow/cancellation test synchronization, target PK duplicate observability,
   future provider upgrade 주의점을 source-backed evidence와 함께 기록한다.
 
 ## Task 9: Lore commit, PR, CI와 merge-ready 상태를 마친다
 
-- [ ] **Step 1: transient workflow input을 제거한다**
+- [x] **Step 1: transient workflow input을 제거한다**
 
   `issue-205-lane*.json`, `issue-205-topology*.json` 같은 helper 입력 파일은
   source artifact가 아니므로 `apply_patch`로 삭제한다. `.bluetape/` runtime
   state는 ignored evidence로 남긴다.
 
-- [ ] **Step 2: Lore commit을 만든다**
+- [x] **Step 2: Lore commit을 만든다**
 
   commit message intent와 trailers는 한국어로 작성한다.
 
   ```text
   R2DBC batch checkpoint 경계를 실행 가능한 workshop으로 고정
 
-  Constraint: published bluetape4k-exposed-batch 1.12.1 API와 H2 R2DBC만 사용
+  Constraint: bluetape4k-exposed-batch 2.0.0-SNAPSHOT API와 H2 R2DBC만 사용
   Rejected: custom runner와 unreleased r2dbc metadata package | provider 계약을 가림
   Confidence: high
   Scope-risk: moderate
   Directive: provider package가 변경되면 catalog artifact와 metadata imports를 함께 재검증
   Tested: targeted module test/build, projects, diagram audits, git diff --check
-  Not-tested: root full test baseline은 300초 내 완료되지 않음
+  Not-tested: root full test baseline은 300초 내 완료되지 않음; stable provider promotion 전 개발 버전 유지
   ```
 
 - [ ] **Step 3: branch를 push하고 PR을 생성한다**
@@ -528,14 +531,16 @@
 
 ---
 
-## 현재 검증 blocker
+## 재개 기록과 현재 검증 경계
 
-`bluetape4k-exposed-batch:1.12.1`은 2026-08-06 release이며, upstream #747은
-2026-08-27 merge된 `[2.0.0]` 변경이다. 현재 Maven Central에는 2.0.0 또는
-#747 backport artifact가 없어 실패 후 keyset restart를 검증할 수 없다.
-승인된 “workshop-local workaround 금지” 경계를 유지하는 동안 STOPPED
-restart만 완료로 기록하고, FAILED restart 회귀는 provider release 후
-추가한다.
+초기 plan은 `1.12.1`에 upstream #747이 없어 FAILED 후 keyset restart를
+검증할 수 없다는 이유로 보류되었다. 2026-08-29 승인된 재개에서 중앙 개발 버전
+metadata의 `bluetape4k-dependencies:2.0.0-SNAPSHOT`와
+`bluetape4k-exposed-batch:2.0.0-SNAPSHOT` 계열을 해석하고, 개발 버전 source에
+#747 FAILED checkpoint 보존 수정이 포함된 것을 확인했다. 새 회귀 테스트는
+checkpoint `3` 보존, 동일 parameter 재시작의 key `4..8` 완료, target ID 중복
+없음을 증명한다. 안정 release 승격 전에는 이 repository가 중앙 자동 동기화
+목록 밖이라는 사실을 명시한 catalog 개발 버전 예외를 유지한다.
 
 ## Plan self-review
 

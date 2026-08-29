@@ -1,14 +1,14 @@
 # Issue #205 PR 전 최종 리뷰
 
-검토일: 2026-08-28
+검토일: 2026-08-29
 대상: `develop` 기준 `feat/issue-205-checkpointable-r2dbc-batch` 변경
 
 ## 독립 리뷰 게이트
 
 | 리뷰 영역 | 결과 | 근거 |
 |---|---|---|
-| Architecture/API | BLOCKED | published 1.12.1 API 조합은 정확하지만 #747 FAILED checkpoint 수정이 release에 없음 |
-| Correctness | BLOCKED | 8개 H2 test는 STOPPED restart를 검증하지만 FAILED 후 restart DoD를 검증하지 않음 |
+| Architecture/API | PASS | `2.0.0-SNAPSHOT` API 조합과 #747 FAILED checkpoint 보존 계약을 resolved metadata/source로 확인 |
+| Correctness | PASS | 9개 H2 test가 STOPPED와 FAILED 후 동일 parameter restart 및 no-duplicate를 검증 |
 | Coroutine/stability | PASS | `suspendTransaction`, Flow explicit collection, cancellation 재전파, caller-owned database 경계 |
 | Docs/diagram | PASS | module/chapter/root EN/KO 문서와 semantic/visual asset audit |
 | Workflow | PASS | Chapter 13 task, changed-task dynamic mapping, artifact wildcard, YAML/actionlint |
@@ -16,7 +16,7 @@
 ## Six-lens 판정
 
 - Security: P0=0, P1=0. production credential/SQL logging이나 exactly-once claim을 추가하지 않았다.
-- Correctness/API: P0=0, P1=1. metadata package와 reader signature는 맞지만 1.12.1의 FAILED checkpoint 소실이 DoD를 막는다.
+- Correctness/API: P0=0, P1=0. 개발 버전 metadata package와 reader signature가 맞고 FAILED checkpoint 보존·재시작을 회귀 테스트로 확인했다.
 - Performance/resource: P0=0, P1=0. bounded chunk/page와 timeout/부분 write 부재를 확인했다.
 - Coroutine/stability: P0=0, P1=0. STOPPED 전파/restart는 확인했지만 writer commit과 checkpoint 저장은 별도 transaction이다.
 - Developer/API: P0=0, P1=0. compile-valid README snippet과 options validation을 확인했다.
@@ -24,8 +24,11 @@
 
 ## 검증 증거
 
+- module `test -PuseDB=H2`: 9/9 PASS — PASS
 - module `build -PuseDB=H2`: `BUILD SUCCESSFUL`, Kover verify 포함 — PASS
-- Chapter 13 six-module H2 smoke: `BUILD SUCCESSFUL` — PASS
+- Chapter 13 six-module H2 smoke: 29 tests, `BUILD SUCCESSFUL` — PASS
+- online dependency resolution: `bluetape4k-dependencies:2.0.0-SNAPSHOT`와
+  `bluetape4k-exposed-batch:2.0.0-SNAPSHOT` 계열 해석 — PASS
 - root aggregate `detekt --parallel`: `NO-SOURCE`, `BUILD SUCCESSFUL` — PASS
 - root `./gradlew test` baseline: 300초 timeout — known validation gap, not hidden as pass
 - module-specific `detekt`: task 없음 — N/A
@@ -33,18 +36,18 @@
 
 PR 생성 전 남은 필수 항목은 temporary workflow evidence 파일 제거, fresh
 Issue #205 metadata read-back, Korean PR body의 마지막 `## DoD Status`, push
-후 live CI/review 확인이다. 다만 현재는 provider release/scope 결정 전
-P1 blocker가 있어 PR 생성 자체를 보류한다. 병합은 fresh exact-head `승인`
-전에는 수행하지 않는다.
+후 live CI/review 확인이다. 병합은 fresh exact-head `승인` 전에는 수행하지
+않는다.
 
-## 차단 근거
+## 재개와 blocker 해소 근거
 
-- `bluetape4k-exposed-batch:1.12.1`은 2026-08-06 release이고, #747은
-  2026-08-27 merge된 `[2.0.0]` 변경이다.
-- 1.12.1 bytecode에서 `FAILED` report checkpoint가 `null`이며 R2DBC metadata
-  update가 이를 그대로 저장한다.
-- 따라서 현재 staged 구현의 failure test는 이전 chunk와 상태만 확인할 뿐
-  동일 parameters 재실행의 keyset/no-duplicate를 증명하지 않는다.
+- 이전 `1.12.1` 경계에서는 #747이 없어 FAILED restart를 보류했지만, 승인된
+  개발 버전 재개 후 `2.0.0-SNAPSHOT` metadata/source에 해당 수정이 포함됨을
+  확인했다.
+- `:09-checkpointable-r2dbc-batch:test`의 새 회귀 테스트는 writer가 첫 chunk
+  뒤 실패할 때 `FAILED` checkpoint `3`과 typed metadata를 보존하고, 같은
+  parameter 재실행이 key `4..8`을 완료하며 target ID를 중복하지 않음을
+  증명한다.
 
 ## 후속 P2 처분
 

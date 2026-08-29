@@ -1,6 +1,6 @@
 # Issue #205 workflow 정렬 검토
 
-검토일: 2026-08-28
+검토일: 2026-08-29
 
 ## Examples workflow
 
@@ -37,7 +37,8 @@ test XML과 HTML report는 기존 wildcard
 - `./gradlew projects --no-daemon --console=plain`: `:09-checkpointable-r2dbc-batch` 확인 — PASS
 - `actionlint .github/workflows/Examples.yml`: 오류 없음 — PASS
 - `ruby -e 'require "yaml"; YAML.load_file(".github/workflows/Examples.yml")'`: yaml-ok — PASS
-- Chapter 13 six-module H2 smoke: `BUILD SUCCESSFUL` — PASS
+- Chapter 13 six-module H2 smoke: 29 tests, `BUILD SUCCESSFUL` — PASS
+- `changed-r2dbc-test-tasks.py` source-only mapping: `:09-checkpointable-r2dbc-batch:test`와 `:09-checkpointable-r2dbc-batch:koverXmlReport` — PASS
 
 새 모듈은 기존 path filter와 artifact wildcard에 자연스럽게 연결되며,
 별도 workflow 파일이나 외부 DB shard를 추가하지 않는 것이 현재 H2-only
