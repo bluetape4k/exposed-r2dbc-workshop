@@ -1,6 +1,6 @@
 # 04-cache-strategies-ktor-r2dbc
 
-[한국어](./README.ko.md)
+[Korean](./README.ko.md)
 
 Ktor + Exposed R2DBC cache strategy example for chapter 11. It mirrors the
 general cache strategy topic from `02-cache-strategies-r2dbc`, but exposes the

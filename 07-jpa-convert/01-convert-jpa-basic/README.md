@@ -1,4 +1,4 @@
-> 한국어 버전: [README.ko.md](README.ko.md)
+> Korean version: [README.ko.md](README.ko.md)
 
 # 01-convert-jpa-basic
 
@@ -269,4 +269,4 @@ Check each step when migrating JPA code to Exposed R2DBC.
 
 ## Further Reading
 
-- [9.1 JPA 기본기능 구현하기](https://debop.notion.site/1c32744526b080458ca0f7eee791cab3?v=1c32744526b081ca8b00000c231b9b43)
+- [9.1 Implementing Basic JPA Features (Korean)](https://debop.notion.site/1c32744526b080458ca0f7eee791cab3?v=1c32744526b081ca8b00000c231b9b43)

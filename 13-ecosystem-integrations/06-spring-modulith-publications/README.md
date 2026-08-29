@@ -1,6 +1,6 @@
 # Spring Modulith Custom R2DBC Publication Log
 
-English | [한국어](README.ko.md)
+English | [Korean](README.ko.md)
 
 This example demonstrates a Spring Modulith-shaped order/fulfillment boundary
 without claiming that Spring Modulith's native event publication registry is

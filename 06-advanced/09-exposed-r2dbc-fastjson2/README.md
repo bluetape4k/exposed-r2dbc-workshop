@@ -1,4 +1,4 @@
-> 한국어 버전: [README.ko.md](README.ko.md)
+> Korean version: [README.ko.md](README.ko.md)
 
 # 09 Exposed R2DBC Fastjson2 (Fastjson2-based JSON)
 

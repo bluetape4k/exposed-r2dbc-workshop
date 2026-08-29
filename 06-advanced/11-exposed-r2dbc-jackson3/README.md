@@ -1,4 +1,4 @@
-> 한국어 버전: [README.ko.md](README.ko.md)
+> Korean version: [README.ko.md](README.ko.md)
 
 # 11 Exposed R2DBC Jackson 3 (Jackson 3.x-based JSON)
 

@@ -1,6 +1,6 @@
 # DDD Bounded Context and Modulith Boundary Verification
 
-English | [한국어](README.ko.md)
+English | [Korean](README.ko.md)
 
 This example combines a small DDD order flow with Spring Modulith boundary
 verification. The order context owns its R2DBC table and exports only an

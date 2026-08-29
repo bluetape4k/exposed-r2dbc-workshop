@@ -1,6 +1,6 @@
 # Chapter 12: Production Integration
 
-[English](README.md) | [한국어](README.ko.md)
+[English](README.md) | [Korean](README.ko.md)
 
 Chapter 12 compares production-oriented Exposed R2DBC service boundaries in
 Spring Boot 4 and Ktor. The chapter keeps the domain vocabulary aligned across

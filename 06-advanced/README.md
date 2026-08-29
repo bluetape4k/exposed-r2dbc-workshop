@@ -1,4 +1,4 @@
-> 한국어 버전: [README.ko.md](README.ko.md)
+> Korean version: [README.ko.md](README.ko.md)
 
 # 06 Advanced
 
@@ -14,7 +14,7 @@ Transparently encrypt and decrypt database columns in an R2DBC environment using
 |--------------------|---------------------------------------------------------------------------|
 | Supported algorithms | `AES_256_PBE_CBC`, `AES_256_PBE_GCM`, `BLOW_FISH`, `TRIPLE_DES`        |
 | DSL/DAO support    | Both styles supported                                                     |
-| WHERE search       | **Not possible** with non-deterministic encryption → see `10-exposed-r2dbc-jasypt` if search is needed |
+| WHERE search       | **Not possible** with non-deterministic encryption; the `10-exposed-r2dbc-jasypt` module is not present in this checkout |
 
 ---
 
@@ -96,7 +96,7 @@ Handle JSON columns using Alibaba's Fastjson2 library. Suitable for applications
 
 ---
 
-### [10 Exposed R2DBC Jasypt (Deterministic Encryption)](10-exposed-r2dbc-jasypt/README.md)
+### 10 Exposed R2DBC Jasypt (Deterministic Encryption) (Not present in this checkout)
 
 Implement **deterministic (searchable)** encryption in an R2DBC environment using Jasypt. The same plaintext always produces the same ciphertext, enabling direct `WHERE` clause queries.
 

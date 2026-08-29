@@ -1,6 +1,6 @@
 # Tenant Onboarding WebFlux Example
 
-[한국어](./README.ko.md)
+[Korean](./README.ko.md)
 
 This chapter 10 module shows how a Spring WebFlux service can create tenant
 metadata, provision an isolated R2DBC resource, seed Exposed tables, and route

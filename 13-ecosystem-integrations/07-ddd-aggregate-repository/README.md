@@ -1,6 +1,6 @@
 # DDD Aggregate Repository with Exposed R2DBC
 
-English | [한국어](README.ko.md)
+English | [Korean](README.ko.md)
 
 This example implements a small order aggregate without introducing a
 JDBC/DataSource bridge. The aggregate owns its value objects, state changes,

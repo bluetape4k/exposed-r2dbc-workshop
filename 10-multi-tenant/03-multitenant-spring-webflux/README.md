@@ -1,4 +1,4 @@
-> 한국어 버전: [README.ko.md](README.ko.md)
+> Korean version: [README.ko.md](README.ko.md)
 
 # 03-multitenant-spring-webflux
 
@@ -72,8 +72,10 @@ Two tenants are used, each with a separate DB schema:
 
 | Tenant  | ID        | Schema    | Data Language                             |
 |---------|-----------|-----------|-------------------------------------------|
-| KOREAN  | `korean`  | `korean`  | Korean (조니 뎁, 글래디에이터, etc.)        |
+| KOREAN  | `korean`  | `korean`  | Korean-language sample data                 |
 | ENGLISH | `english` | `english` | English (Johnny Depp, Gladiator, etc.)    |
+
+The Korean tenant returns localized sample names; the Korean README shows the literal values.
 
 ### Request Tenant Contract
 
@@ -218,7 +220,7 @@ class ActorController(private val actorRepository: ActorR2dbcRepository) {
 On application startup, creates schemas for all tenants and inserts sample data in the respective language.
 
 ```kotlin
-// KOREAN tenant: "조니", "뎁", "글래디에이터" ...
+// KOREAN tenant: localized sample names (see README.ko.md for literal values)
 // ENGLISH tenant: "Johnny", "Depp", "Gladiator" ...
 Tenants.Tenant.entries.forEach { tenant ->
     dataInitializer.initialize(tenant)  // create schema + insert sample data
@@ -247,7 +249,7 @@ The same table structure is created as a separate schema for each tenant (`korea
 ```bash
 # Get actors for the Korean tenant
 curl -H "X-TENANT-ID: korean" http://localhost:8080/actors
-# → [{"id":1,"firstName":"조니","lastName":"뎁",...}, ...]
+# → [{"id":1,"firstName":"\uC870\uB2C8","lastName":"\uB381",...}, ...]
 
 # Get actors for the English tenant
 curl -H "X-TENANT-ID: english" http://localhost:8080/actors
@@ -255,7 +257,7 @@ curl -H "X-TENANT-ID: english" http://localhost:8080/actors
 
 # Get a specific actor
 curl -H "X-TENANT-ID: korean" http://localhost:8080/actors/2
-# → {"id":2,"firstName":"브래드","lastName":"피트",...}
+# → {"id":2,"firstName":"\uBE0C\uB798\uB4DC","lastName":"\uD53C\uD2B8",...}
 ```
 
 ## Running the Application
