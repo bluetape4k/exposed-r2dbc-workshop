@@ -6,7 +6,30 @@
 
 **Architecture:** 기존 모듈과 공개 virtual-thread API를 유지하고 Version Catalog의 versionless alias와 BOM이 결정하는 provider만 test runtime에 연결한다. `testRuntimeClasspath`에서 JDK21 provider를 전체 configuration 기준으로 제외한 뒤, 하나의 provider smoke test가 public discovery API와 bounded structured-scope lifecycle을 검증한다. Gradle verification task가 JUnit XML 실행 수와 MariaDB capability skip allowlist를 확인해 JDK 조건으로 인한 `0 tests executed` green을 차단한다.
 
-**Tech Stack:** Kotlin 2.4.0, JDK 25, Gradle Kotlin DSL, JUnit 5, Exposed R2DBC, bluetape4k virtual-thread API/provider `1.12.1`, Testcontainers, Markdown README/KDoc.
+**Tech Stack:** Kotlin 2.4.0, JDK 25, Gradle Kotlin DSL, JUnit 5, Exposed R2DBC, initial bluetape4k virtual-thread API/provider `1.12.1` with current consumer migration to `2.0.0-SNAPSHOT`, Testcontainers, Markdown README/KDoc.
+
+## 2.0.0-SNAPSHOT consumer migration addendum
+
+이 계획의 최초 구현은 `bluetape4k-dependencies:1.4.0`과
+`bluetape4k-virtualthread-jdk25:1.12.1`을 기준으로 완료되었다. 이후 현재
+stacked train이 `bluetape4k-dependencies:2.0.0-SNAPSHOT`으로 이동하면서
+`bluetape4k-virtualthread-api`의 public discovery 타입이
+`io.bluetape4k.concurrent.virtualthread.api` namespace로 이동했다.
+
+승인된 migration 범위는 기존 consumer의 네 import만 새 namespace로 정렬하는
+것이다. provider implementation, `newVT`, Exposed R2DBC transaction helper,
+ServiceLoader assertion, execution-count gate와 DB lifecycle은 변경하지 않는다.
+
+- [x] `Ex01_VirtualThreads.kt`의 네 public API import를 `.api` namespace로 변경
+- [x] `compileTestKotlin`에서 snapshot API compile 성공 확인
+- [x] fast test `tests=5, skipped=0, failures=0, errors=0` 확인
+- [x] module `check`와 Kover verify 성공 확인
+- [x] module EN/KO README, lesson, review에 current snapshot/API namespace를 기록
+
+이 addendum은 기존 #198 acceptance를 재정의하지 않고, provider train 전환으로
+발생한 source/API namespace drift를 해소한다. 향후 major train 변경 시에는
+dependency version뿐 아니라 API package와 ServiceLoader descriptor를 함께
+read-back한다.
 
 ---
 
@@ -140,10 +163,10 @@ Expected evidence: 현재 `@EnabledOnJre(JRE.JAVA_21)` 조건 때문에 JDK25에
 class를 compile-time import하지 않는다.
 
 ```kotlin
-import io.bluetape4k.concurrent.virtualthread.StructuredTaskScopeProvider
-import io.bluetape4k.concurrent.virtualthread.StructuredTaskScopes
-import io.bluetape4k.concurrent.virtualthread.VirtualThreadRuntime
-import io.bluetape4k.concurrent.virtualthread.VirtualThreads
+import io.bluetape4k.concurrent.virtualthread.api.StructuredTaskScopeProvider
+import io.bluetape4k.concurrent.virtualthread.api.StructuredTaskScopes
+import io.bluetape4k.concurrent.virtualthread.api.VirtualThreadRuntime
+import io.bluetape4k.concurrent.virtualthread.api.VirtualThreads
 import io.bluetape4k.assertions.shouldBeInstanceOf
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Timeout

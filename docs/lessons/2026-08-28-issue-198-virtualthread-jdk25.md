@@ -91,6 +91,32 @@ system property, password, secret, token 패턴은 0건이었다. report-wide sc
 - 문서의 raw `test` 명령은 진단용으로, authoritative gate는 test를 포함한
   `verifyVirtualThreadTestExecution`으로 안내한다.
 
+## 2.0.0-SNAPSHOT provider 계약 migration
+
+`bluetape4k-dependencies`를 `2.0.0-SNAPSHOT` train으로 올린 뒤 기존 #198
+consumer가 `compileTestKotlin`에서 실패했다. 새 `bluetape4k-virtualthread-api`
+artifact는 `StructuredTaskScopeProvider`, `StructuredTaskScopes`,
+`VirtualThreadRuntime`, `VirtualThreads`를
+`io.bluetape4k.concurrent.virtualthread.api` 패키지로 이동시켰고, 기존 예제는
+구 패키지를 import하고 있었다.
+
+구현은 provider implementation이나 별도 compatibility layer를 추가하지 않고
+`Ex01_VirtualThreads.kt`의 네 public API import만 새 패키지로 바꿨다. `newVT`
+및 Exposed R2DBC transaction helper처럼 core에 남은 API와 ServiceLoader
+provider implementation은 변경하지 않았다.
+
+검증 결과는 다음과 같다.
+
+- `2.0.0-SNAPSHOT` `compileTestKotlin`: `BUILD SUCCESSFUL`
+- `:02-exposed-r2dbc-virtualthreads-basic:test -PuseFastDB=true`: `tests=5,
+  skipped=0, failures=0, errors=0`
+- 같은 모듈 `check -PuseFastDB=true`: `BUILD SUCCESSFUL` 및 Kover verify 통과
+
+따라서 #198의 원래 JDK25 provider 정합화 의미는 유지하면서, 현재 snapshot
+API namespace와 consumer source를 다시 정렬했다. 이후 provider major train을
+올릴 때는 catalog resolution만 보지 말고 public API package와 ServiceLoader
+descriptor를 함께 read-back해야 한다.
+
 ## Writer gate
 
 - SPW-01: PASS — baseline failure, provider 선택, execution gate 목적을 명시했다.

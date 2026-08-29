@@ -67,3 +67,26 @@ test-only credential 출력 P2를 해결하려면 shared `bluetape4k-testcontain
   대조해 mismatch를 남기지 않았다.
 - SPW-05: PASS — 표·코드 토큰·head/authority 경계를 다시 읽고, P0/P1=0과
   P2 disposition을 확인했다.
+
+## 2.0.0-SNAPSHOT consumer migration addendum
+
+`bluetape4k-dependencies:2.0.0-SNAPSHOT`을 사용하는 현재 stacked train에서
+기존 #198 consumer가 구 `io.bluetape4k.concurrent.virtualthread` package의
+public API를 import해 `compileTestKotlin`이 실패했다. snapshot API의 현재
+계약은 `io.bluetape4k.concurrent.virtualthread.api`이며, provider
+implementation과 `newVT` 같은 core extension은 기존 경계를 유지한다.
+
+### 변경 및 검증
+
+- `Ex01_VirtualThreads.kt`의 `StructuredTaskScopeProvider`,
+  `StructuredTaskScopes`, `VirtualThreadRuntime`, `VirtualThreads` import를
+  `.api` namespace로 정렬했다.
+- 기존 smoke assertion, bounded failure propagation, ServiceLoader singleton
+  검증과 DB transaction 예제는 변경하지 않았다.
+- `compileTestKotlin`: `BUILD SUCCESSFUL`
+- fast JDK25 test: `tests=5, skipped=0, failures=0, errors=0`
+- module `check`: `BUILD SUCCESSFUL`, Kover verify 통과
+
+판정: **APPROVE (snapshot consumer migration)**. 이 addendum은 #198의 기존
+완료 의미를 바꾸지 않고, global dependency train 변경으로 드러난 source/API
+namespace drift만 보정한다.
