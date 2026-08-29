@@ -1,6 +1,6 @@
 # 05-cache-strategies-ktor-r2dbc-coroutines
 
-[한국어](./README.ko.md)
+[Korean](./README.ko.md)
 
 Ktor + Exposed R2DBC example for coroutine-oriented cache access in chapter 11.
 This module focuses on concurrent suspend callers, request cancellation, and

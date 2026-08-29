@@ -14,7 +14,7 @@
 |-------------|------------------------------------------------------------|
 | 지원 알고리즘     | `AES_256_PBE_CBC`, `AES_256_PBE_GCM`, `BLOW_FISH`, `TRIPLE_DES` |
 | DSL/DAO 지원  | 두 스타일 모두 지원                                                |
-| WHERE 검색    | 비결정적 암호화로 **불가** → 검색 필요 시 `10-exposed-r2dbc-jasypt` 참조    |
+| WHERE 검색    | 비결정적 암호화로 **불가**; `10-exposed-r2dbc-jasypt` 모듈은 이 checkout에 없습니다 |
 
 ---
 
@@ -96,7 +96,7 @@ Alibaba Fastjson2 라이브러리를 사용하여 JSON 컬럼을 처리합니다
 
 ---
 
-### [10 Exposed R2DBC Jasypt (결정적 암호화)](10-exposed-r2dbc-jasypt/README.md)
+### 10 Exposed R2DBC Jasypt (결정적 암호화) (이 checkout에는 없음)
 
 Jasypt를 사용하여 R2DBC 환경에서 **결정적(검색 가능한)** 암호화를 구현합니다. 동일 평문이 항상 동일 암호문을 생성하므로 `WHERE` 절에서 직접 쿼리할 수 있습니다.
 

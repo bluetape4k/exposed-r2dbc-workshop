@@ -1,6 +1,6 @@
 # Spring Security Tenant Authorization WebFlux Example
 
-[한국어](./README.ko.md)
+[Korean](./README.ko.md)
 
 This chapter 10 module shows tenant authorization before Exposed R2DBC routes a
 request to a tenant-specific `ConnectionFactory`.

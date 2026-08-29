@@ -1,6 +1,6 @@
 # Checkpointable Exposed R2DBC Batch
 
-[한국어](README.ko.md)
+[Korean](README.ko.md)
 
 This module is the R2DBC sibling of the JDBC checkpointable batch workshop in
 [`exposed-workshop/13-ecosystem-integrations/11-checkpointable-batch`](https://github.com/bluetape4k/exposed-workshop/tree/develop/13-ecosystem-integrations/11-checkpointable-batch).

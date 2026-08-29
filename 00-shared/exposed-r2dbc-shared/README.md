@@ -1,4 +1,4 @@
-> 한국어 버전: [README.ko.md](README.ko.md)
+> Korean version: [README.ko.md](README.ko.md)
 
 # 00 Shared: Exposed R2DBC Shared for Tests
 

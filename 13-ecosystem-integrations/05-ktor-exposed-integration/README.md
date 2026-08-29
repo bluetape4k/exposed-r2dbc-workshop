@@ -1,6 +1,6 @@
 # Explicit Ktor Exposed R2DBC Integration
 
-English | [한국어](README.ko.md)
+English | [Korean](README.ko.md)
 
 This example shows a Ktor application whose Exposed integration is explicitly
 R2DBC-first. Routes call a repository backed by `suspendTransaction`, and the

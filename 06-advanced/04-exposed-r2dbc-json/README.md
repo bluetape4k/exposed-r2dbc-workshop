@@ -1,4 +1,4 @@
-> 한국어 버전: [README.ko.md](README.ko.md)
+> Korean version: [README.ko.md](README.ko.md)
 
 # 04 Exposed R2DBC JSON (JSON/JSONB Support)
 

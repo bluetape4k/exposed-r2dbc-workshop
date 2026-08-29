@@ -1,6 +1,6 @@
 # Chapter 10 Multi-Tenant WebFlux Examples
 
-[한국어](./README.ko.md)
+[Korean](./README.ko.md)
 
 Chapter 10 compares Spring WebFlux + Exposed R2DBC tenant routing strategies.
 Start here when choosing whether tenant isolation should be a schema switch, a

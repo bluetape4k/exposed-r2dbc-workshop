@@ -1,6 +1,6 @@
 # 04-connection-factory-per-tenant-spring-webflux
 
-[English](README.md) | [한국어](README.ko.md)
+[English](README.md) | [Korean](README.ko.md)
 
 Spring WebFlux + Exposed R2DBC example that routes each tenant to a distinct
 R2DBC `ConnectionFactory` and connection pool.

@@ -1,6 +1,6 @@
 # CockroachDB Retry Boundary
 
-[English](README.md) | [한국어](README.ko.md)
+[English](README.md) | [Korean](README.ko.md)
 
 This module models the CockroachDB retry contract without starting a
 CockroachDB container by default. SQLSTATE `40001` is treated as retryable and

@@ -1,6 +1,6 @@
 # Chapter 13: Ecosystem Integrations
 
-[English](README.md) | [한국어](README.ko.md)
+[English](README.md) | [Korean](README.ko.md)
 
 Chapter 13 keeps only ecosystem examples that can be taught as real R2DBC
 workshop material. CockroachDB retry handling, Ktor integration, a custom

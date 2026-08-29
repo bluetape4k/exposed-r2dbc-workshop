@@ -1,6 +1,6 @@
 # 07-multitenant-ktor
 
-[한국어](./README.ko.md)
+[Korean](./README.ko.md)
 
 Ktor + Exposed R2DBC schema-per-tenant example for chapter 10. It mirrors the
 actor/movie workflow from `03-multitenant-spring-webflux`, but the request

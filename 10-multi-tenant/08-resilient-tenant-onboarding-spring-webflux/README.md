@@ -1,6 +1,6 @@
 # Resilient Tenant Onboarding with Spring WebFlux
 
-[한국어](./README.ko.md)
+[Korean](./README.ko.md)
 
 This workshop extends the runtime-onboarding idea without changing the introductory `06-tenant-onboarding-spring-webflux` module. It shows how durable ownership, a finite lease, and startup reconciliation make an onboarding flow recoverable after an interrupted request or process restart.
 

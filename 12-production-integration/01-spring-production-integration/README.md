@@ -1,6 +1,6 @@
 # Spring Production Integration
 
-[English](README.md) | [한국어](README.ko.md)
+[English](README.md) | [Korean](README.ko.md)
 
 This module is the Spring Boot 4 WebFlux side of chapter 12. It now includes
 the application architecture baseline from issue #44, the authentication /
