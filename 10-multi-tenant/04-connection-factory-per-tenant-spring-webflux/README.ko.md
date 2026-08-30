@@ -69,6 +69,19 @@ HTTP 요청은 fail closed 방식입니다.
 | `X-TENANT-ID: english` | English tenant pool |
 | 없음, 공백, malformed, unknown | `400 Bad Request` |
 
+## Tenant carrier
+
+TenantIdResolver가 header trim, 형식 검증, 고정된 korean/english registry를
+계속 담당합니다. 검증이 끝나면 TenantFilter가 provider TenantId를 만들고
+ReactorTenantContext.withTenant로 immutable subscription Context에 binding합니다.
+TenantRoutingConnectionFactory는 같은 provider key를 currentOrNull(contextView)로
+읽습니다.
+
+korean default는 필수 HTTP header 경로 밖에서만 사용하는 application 설정입니다.
+공유 carrier 안에 기본 tenant를 넣지 않습니다. 결정론적 테스트는 interleaved
+subscription, nested derived context, cancellation, context 없음, 외부 context
+오염 방지를 함께 검증합니다.
+
 HTTP 경로 밖에서는 Reactor lookup key가 없을 때 routing factory가 설정된
 default tenant를 사용할 수 있습니다. 알 수 없는 lookup key가 emit되면
 `setLenientFallback(false)` 때문에 라우팅이 실패합니다.

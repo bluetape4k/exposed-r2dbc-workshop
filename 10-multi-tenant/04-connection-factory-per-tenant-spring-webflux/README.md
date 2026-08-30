@@ -68,6 +68,19 @@ HTTP requests fail closed:
 | `X-TENANT-ID: english` | English tenant pool |
 | missing, blank, malformed, unknown | `400 Bad Request` |
 
+## Tenant Carrier
+
+TenantIdResolver still owns header trimming, syntax validation, and the fixed
+korean/english registry. After validation, TenantFilter creates the provider
+TenantId and binds it with ReactorTenantContext.withTenant in the immutable
+subscription Context; TenantRoutingConnectionFactory reads the same provider key
+with currentOrNull(contextView).
+
+The default korean tenant is used only outside the mandatory HTTP-header path. It
+is application configuration, not a default inside the shared carrier. The
+deterministic tests also cover interleaved subscriptions, nested derived
+contexts, cancellation, missing context, and no context leakage.
+
 Outside the HTTP path, the routing factory can use the configured default tenant
 when no Reactor lookup key is present. If an unknown lookup key is emitted,
 `setLenientFallback(false)` makes routing fail.

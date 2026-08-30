@@ -5,6 +5,8 @@ import io.bluetape4k.assertions.shouldBeNull
 import io.bluetape4k.assertions.shouldHaveSize
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.info
+import io.bluetape4k.tenant.TenantId
+import io.bluetape4k.tenant.reactor.ReactorTenantContext
 import io.r2dbc.spi.Connection
 import io.r2dbc.spi.ConnectionFactory
 import io.r2dbc.spi.ConnectionFactoryMetadata
@@ -15,6 +17,7 @@ import reactor.core.publisher.Mono
 import reactor.core.publisher.Sinks
 import reactor.core.scheduler.Schedulers
 import reactor.test.StepVerifier
+import reactor.util.context.ContextView
 import java.time.Duration
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.CopyOnWriteArrayList
@@ -58,7 +61,9 @@ class TenantRoutingConnectionFactoryTest {
             .create(
                 Mono
                     .from(factory.create())
-                    .contextWrite { it.put(TenantContextKeys.TENANT_ID, Tenants.Tenant.ENGLISH.id) },
+                    .contextWrite { context ->
+                        ReactorTenantContext.withTenant(context, TenantId(Tenants.Tenant.ENGLISH.id))
+                    },
             )
             .expectErrorSatisfies {
                 (it as SelectedTenantException).tenantId shouldBeEqualTo Tenants.Tenant.ENGLISH.id
@@ -74,7 +79,9 @@ class TenantRoutingConnectionFactoryTest {
             .create(
                 Mono
                     .from(factory.create())
-                    .contextWrite { it.put(TenantContextKeys.TENANT_ID, "unknown") },
+                    .contextWrite { context ->
+                        ReactorTenantContext.withTenant(context, TenantId("unknown"))
+                    },
             )
             .expectError(IllegalStateException::class.java)
             .verify()
@@ -167,7 +174,12 @@ class TenantRoutingConnectionFactoryTest {
                                     Mono.just(Unit)
                                 }
                             }
-                                .contextWrite { it.put(TenantContextKeys.TENANT_ID, otherTenant(expectedTenant)) }
+                                .contextWrite { context ->
+                                    ReactorTenantContext.withTenant(
+                                        context,
+                                        TenantId(otherTenant(expectedTenant)),
+                                    )
+                                }
                                 .onErrorResume {
                                     recorder.record(
                                         expectedTenant = expectedTenant,
@@ -194,7 +206,9 @@ class TenantRoutingConnectionFactoryTest {
                                 )
                         },
                     )
-            }.contextWrite { it.put(TenantContextKeys.TENANT_ID, tenant.id) }
+            }.contextWrite { context ->
+                ReactorTenantContext.withTenant(context, TenantId(tenant.id))
+            }
 
         val executor = Executors.newFixedThreadPool(subscriptions)
         try {
@@ -277,7 +291,9 @@ class TenantRoutingConnectionFactoryTest {
                 cancelled.tryEmitValue(Unit)
             }
         }
-            .contextWrite { it.put(TenantContextKeys.TENANT_ID, Tenants.Tenant.ENGLISH.id) }
+            .contextWrite { context ->
+                ReactorTenantContext.withTenant(context, TenantId(Tenants.Tenant.ENGLISH.id))
+            }
             .subscribeOn(Schedulers.boundedElastic())
             .subscribe()
 
@@ -312,8 +328,8 @@ class TenantRoutingConnectionFactoryTest {
             else -> error("unsupported fixture tenant: $tenantId")
         }
 
-    private fun reactor.util.context.ContextView.tenantOrNull(): String? =
-        getOrEmpty<String>(TenantContextKeys.TENANT_ID).orElse(null)
+    private fun ContextView.tenantOrNull(): String? =
+        ReactorTenantContext.currentOrNull(this)?.value
 
     private enum class TracePhase(private val logValue: String) {
         START("start"),
