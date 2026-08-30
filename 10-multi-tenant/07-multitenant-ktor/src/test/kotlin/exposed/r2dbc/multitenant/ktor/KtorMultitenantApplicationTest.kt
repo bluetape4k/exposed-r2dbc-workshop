@@ -6,7 +6,6 @@ import exposed.r2dbc.multitenant.ktor.config.installKtorMultitenantPlugins
 import exposed.r2dbc.multitenant.ktor.domain.model.ActorRecord
 import exposed.r2dbc.multitenant.ktor.domain.model.CreateActorRequest
 import exposed.r2dbc.multitenant.ktor.domain.model.StructuredError
-import exposed.r2dbc.multitenant.ktor.tenant.TenantAttributeKey
 import exposed.r2dbc.multitenant.ktor.tenant.TenantHeader
 import exposed.r2dbc.multitenant.ktor.tenant.currentTenant
 import exposed.r2dbc.multitenant.ktor.tenant.Tenants.Tenant
@@ -17,7 +16,10 @@ import io.bluetape4k.assertions.shouldContain
 import io.bluetape4k.assertions.shouldHaveSize
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.info
+import io.bluetape4k.ktor.tenant.KtorTenantContext
 import io.bluetape4k.ktor.testing.bluetape4kJsonClient
+import io.bluetape4k.ktor.tenant.TenantAlreadyBoundException
+import io.bluetape4k.tenant.TenantId
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.header
@@ -56,7 +58,7 @@ class KtorMultitenantApplicationTest {
     }
 
     @Test
-    fun `deterministic ktor tenant fixture preserves call attributes across dispatcher hops`() = testApplication {
+    fun `deterministic ktor tenant fixture preserves provider tenant across dispatcher hops`() = testApplication {
         val traces = ConcurrentHashMap<String, List<KtorTenantTrace>>()
         val ready = CompletableDeferred<Unit>()
         val release = CompletableDeferred<Unit>()
@@ -97,19 +99,17 @@ class KtorMultitenantApplicationTest {
                                 phase = TracePhase.RESUME,
                             )
 
-                            val nestedTenant = expectedTenant.other()
+                            recorder.record(
+                                expectedTenant = expectedTenant.id,
+                                observedTenant = call.currentTenant().id,
+                                subscriptionId = "ktor-$traceId",
+                                dispatcher = TRACE_DISPATCHER,
+                                phase = TracePhase.NESTED_ENTER,
+                            )
                             try {
-                                call.withFixtureTenant(nestedTenant) {
-                                    recorder.record(
-                                        expectedTenant = expectedTenant.id,
-                                        observedTenant = call.currentTenant().id,
-                                        subscriptionId = "ktor-$traceId",
-                                        dispatcher = TRACE_DISPATCHER,
-                                        phase = TracePhase.NESTED_ENTER,
-                                    )
-                                    if (traceId.endsWith("-failure")) {
-                                        error("fixture failure")
-                                    }
+                                if (traceId.endsWith("-failure")) {
+                                    KtorTenantContext.bindTenant(call, TenantId(expectedTenant.other().id))
+                                } else {
                                     recorder.record(
                                         expectedTenant = expectedTenant.id,
                                         observedTenant = call.currentTenant().id,
@@ -118,7 +118,7 @@ class KtorMultitenantApplicationTest {
                                         phase = TracePhase.NESTED_SUCCESS,
                                     )
                                 }
-                            } catch (_: IllegalStateException) {
+                            } catch (_: TenantAlreadyBoundException) {
                                 recorder.record(
                                     expectedTenant = expectedTenant.id,
                                     observedTenant = call.currentTenant().id,
@@ -168,7 +168,7 @@ class KtorMultitenantApplicationTest {
                     .forEach { it.observedTenant shouldBeEqualTo expectedTenant.id }
                 events
                     .filter { it.phase in setOf(TracePhase.NESTED_ENTER, TracePhase.NESTED_SUCCESS) }
-                    .forEach { it.observedTenant shouldBeEqualTo expectedTenant.other().id }
+                    .forEach { it.observedTenant shouldBeEqualTo expectedTenant.id }
                 events.map { it.phase }.toSet() shouldBeEqualTo setOf(
                     TracePhase.START,
                     TracePhase.RESUME,
@@ -348,7 +348,7 @@ class KtorMultitenantApplicationTest {
     }
 
     @Test
-    fun `overlapping tenant requests do not leak call attributes`() = testApplication {
+    fun `overlapping tenant requests do not leak tenant context`() = testApplication {
         application {
             ktorMultitenantModule(newDatabase("concurrent", maxPoolSize = 1))
         }
@@ -412,20 +412,6 @@ class KtorMultitenantApplicationTest {
             maxPoolSize = maxPoolSize,
         )
 
-    private suspend fun <T> ApplicationCall.withFixtureTenant(
-        nestedTenant: Tenant,
-        statement: suspend () -> T,
-    ): T {
-        val previousTenant = attributes.getOrNull(TenantAttributeKey)
-            ?: error("fixture call is missing resolved tenant")
-        attributes.put(TenantAttributeKey, nestedTenant)
-        return try {
-            statement()
-        } finally {
-            attributes.put(TenantAttributeKey, previousTenant)
-        }
-    }
-
     private fun Tenant.other(): Tenant =
         when (this) {
             Tenant.KOREAN -> Tenant.ENGLISH
@@ -475,7 +461,7 @@ class KtorMultitenantApplicationTest {
             KtorTenantTrace(
                 expectedTenant = expectedTenant,
                 observedTenant = observedTenant,
-                carrier = "ApplicationCall.attributes",
+                carrier = "KtorTenantContext",
                 subscriptionId = subscriptionId,
                 dispatcher = dispatcher,
                 phase = phase,
