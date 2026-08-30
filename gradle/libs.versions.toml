@@ -72,6 +72,9 @@ jetbrains-annotations = { module = "org.jetbrains:annotations", version = "26.1.
 bluetape4k-dependencies = { module = "io.github.bluetape4k:bluetape4k-dependencies", version.ref = "bluetape4k-dependencies" }
 bluetape4k-assertions = { module = "io.github.bluetape4k:bluetape4k-assertions" }
 bluetape4k-coroutines = { module = "io.github.bluetape4k:bluetape4k-coroutines" }
+bluetape4k-tenant = { module = "io.github.bluetape4k:bluetape4k-tenant" }
+bluetape4k-tenant-reactor = { module = "io.github.bluetape4k:bluetape4k-tenant-reactor" }
+bluetape4k-ktor-tenant = { module = "io.github.bluetape4k:bluetape4k-ktor-tenant" }
 exposed-core = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-core" }
 exposed-fastjson2 = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-fastjson2" }
 exposed-jackson2 = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-jackson2" }
