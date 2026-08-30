@@ -1,19 +1,19 @@
 package exposed.r2dbc.multitenant.connectionfactory.tenant
 
+import io.bluetape4k.tenant.reactor.ReactorTenantContext
 import org.springframework.r2dbc.connection.lookup.AbstractRoutingConnectionFactory
 import reactor.core.publisher.Mono
 
 /**
- * Spring R2DBC routing factory that reads the tenant ID from Reactor context.
+ * Reactor context의 tenant ID를 읽어 Spring R2DBC connection factory를 라우팅합니다.
  */
 class TenantRoutingConnectionFactory: AbstractRoutingConnectionFactory() {
 
     override fun determineCurrentLookupKey(): Mono<Any> =
         Mono.deferContextual { contextView ->
-            if (contextView.hasKey(TenantContextKeys.TENANT_ID)) {
-                Mono.just(contextView.get<String>(TenantContextKeys.TENANT_ID))
-            } else {
-                Mono.empty()
-            }
+            ReactorTenantContext.currentOrNull(contextView)
+                ?.value
+                ?.let { Mono.just(it) }
+                ?: Mono.empty()
         }
 }

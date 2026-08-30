@@ -1,6 +1,7 @@
 package exposed.r2dbc.multitenant.connectionfactory.tenant
 
 import io.bluetape4k.assertions.shouldBeEqualTo
+import io.bluetape4k.tenant.reactor.ReactorTenantContext
 import org.junit.jupiter.api.Test
 import org.springframework.mock.http.server.reactive.MockServerHttpRequest
 import org.springframework.mock.web.server.MockServerWebExchange
@@ -13,7 +14,7 @@ class TenantFilterTest {
 
     @Test
     fun `valid tenant header is written to reactor context`() {
-        val seenTenantId = AtomicReference<String>()
+        val seenTenantId = AtomicReference<String?>()
         val exchange = MockServerWebExchange.from(
             MockServerHttpRequest
                 .get("/actors")
@@ -22,7 +23,7 @@ class TenantFilterTest {
         )
         val chain = WebFilterChain {
             Mono.deferContextual { context ->
-                seenTenantId.set(context.get(TenantContextKeys.TENANT_ID))
+                seenTenantId.set(ReactorTenantContext.currentOrNull(context)?.value)
                 Mono.empty()
             }
         }
