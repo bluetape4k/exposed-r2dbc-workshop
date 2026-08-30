@@ -77,9 +77,9 @@ upstream에 scoped API를 추가하는 일은 이번 consumer 이슈의 범위�
 | 타입 | 공개 계약 | consumer 적용 |
 | --- | --- | --- |
 | `io.bluetape4k.tenant.TenantId` | inline value class, blank 값만 거부 | local 검증 후 `TenantId(value)` 생성 |
-| `io.bluetape4k.tenant.TenantContext` | `currentOrNull()`, `requireCurrent()`, `withTenant(tenantId, block)` | 일반 coroutine 경계의 공통 의미 확인 |
+| `io.bluetape4k.tenant.TenantContext` | `currentOrNull(): TenantId?`, `requireCurrent(): TenantId`, `withTenant(tenantId, block)`을 정의하는 공통 interface | provider carrier의 공통 의미를 확인하는 계약 |
 | `io.bluetape4k.tenant.reactor.ReactorTenantContext` | `currentOrNull(ContextView)`, `requireCurrent(ContextView)`, `withTenant(Context, TenantId)` | WebFlux producer/consumer |
-| `io.bluetape4k.tenant.ktor.KtorTenantContext` | `currentOrNull(ApplicationCall)`, `requireCurrent(ApplicationCall)`, `bindTenant(ApplicationCall, TenantId)` | Ktor producer/consumer |
+| `io.bluetape4k.ktor.tenant.KtorTenantContext` | `currentOrNull(ApplicationCall)`, `requireCurrent(ApplicationCall)`, `bindTenant(ApplicationCall, TenantId)` | Ktor producer/consumer |
 
 확인한 Ktor 규칙은 다음과 같다.
 
@@ -92,11 +92,12 @@ upstream에 scoped API를 추가하는 일은 이번 consumer 이슈의 범위�
 
 근거 링크:
 
-- `TenantContext`: <https://github.com/bluetape4k/bluetape4k-projects/blob/08d451e6/bluetape4k-tenant/src/main/kotlin/io/bluetape4k/tenant/TenantContext.kt>
-- `TenantId`: <https://github.com/bluetape4k/bluetape4k-projects/blob/08d451e6/bluetape4k-tenant/src/main/kotlin/io/bluetape4k/tenant/TenantId.kt>
-- `ReactorTenantContext`: <https://github.com/bluetape4k/bluetape4k-projects/blob/08d451e6/bluetape4k-tenant-reactor/src/main/kotlin/io/bluetape4k/tenant/reactor/ReactorTenantContext.kt>
-- `KtorTenantContext`: <https://github.com/bluetape4k/bluetape4k-projects/blob/08d451e6/bluetape4k-ktor-tenant/src/main/kotlin/io/bluetape4k/tenant/ktor/KtorTenantContext.kt>
-- upstream Ktor contract tests: <https://github.com/bluetape4k/bluetape4k-projects/tree/08d451e6/bluetape4k-ktor-tenant/src/test/kotlin>
+- `TenantContext`: <https://github.com/bluetape4k/bluetape4k-projects/blob/08d451e6/bluetape4k/tenant/src/main/kotlin/io/bluetape4k/tenant/TenantContext.kt>
+- `TenantId`: <https://github.com/bluetape4k/bluetape4k-projects/blob/08d451e6/bluetape4k/tenant/src/main/kotlin/io/bluetape4k/tenant/TenantId.kt>
+- `ReactorTenantContext`: <https://github.com/bluetape4k/bluetape4k-projects/blob/08d451e6/bluetape4k/tenant-reactor/src/main/kotlin/io/bluetape4k/tenant/reactor/ReactorTenantContext.kt>
+- `KtorTenantContext`: <https://github.com/bluetape4k/bluetape4k-projects/blob/08d451e6/ktor/tenant/src/main/kotlin/io/bluetape4k/ktor/tenant/KtorTenantContext.kt>
+- `TenantAlreadyBoundException`: <https://github.com/bluetape4k/bluetape4k-projects/blob/08d451e6/ktor/tenant/src/main/kotlin/io/bluetape4k/ktor/tenant/TenantAlreadyBoundException.kt>
+- upstream Ktor contract tests: <https://github.com/bluetape4k/bluetape4k-projects/tree/08d451e6/ktor/tenant/src/test/kotlin>
 
 의존성 handoff도 구현 전에 확인했다. `bluetape4k-dependencies` PR #215가
 merge되어 develop `9495811cbfeb84e378bd6eaae3e4fb85d50f4ca5`에 반영되었고,
