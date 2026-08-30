@@ -15,6 +15,8 @@ exposed {
 dependencies {
     implementation(project(":exposed-r2dbc-shared"))
     implementation(libs.bluetape4k.r2dbc)
+    implementation(libs.bluetape4k.tenant)
+    implementation(libs.bluetape4k.ktor.tenant)
 
     implementation(libs.jetbrains.exposed.r2dbc)
     implementation(libs.jetbrains.exposed.java.time)

@@ -4,7 +4,7 @@
 
 Ktor + Exposed R2DBC schema-per-tenant example for chapter 10. It mirrors the
 actor/movie workflow from `03-multitenant-spring-webflux`, but the request
-tenant is carried by Ktor call attributes instead of Reactor context.
+tenant is carried by the shared KtorTenantContext adapter.
 
 ## Architecture
 
@@ -16,7 +16,7 @@ tenant is carried by Ktor call attributes instead of Reactor context.
 |---|---|
 | Tenant header | `X-TENANT-ID` with `korean` or `english` |
 | Tenant validation | Missing, blank, conflicting duplicate, and unknown values return `400` with `INVALID_TENANT` |
-| Request context | Ktor `ApplicationCall.attributes`; no ThreadLocal, no ReactorContext |
+| Request context | `KtorTenantContext` binds one validated `TenantId` to one `ApplicationCall`; no ThreadLocal, no ReactorContext |
 | DB isolation | One H2 R2DBC pool, one schema per tenant |
 | Transaction boundary | `suspendTransactionWithTenant(tenant, db)` sets schema at transaction start |
 
@@ -45,10 +45,20 @@ overlapping Ktor requests.
 
 ## Notes
 
+TenantPlugin owns header validation and the local korean/english registry. After
+validation it calls `KtorTenantContext.bindTenant(call, TenantId(tenant.id))`.
+Routes read `KtorTenantContext.requireCurrent(call)` through the local
+`currentTenant()` mapping before selecting the tenant schema.
+
+The adapter is deliberately one-call/one-tenant. A second bind does not overwrite
+the first value; it raises `TenantAlreadyBoundException`. The deterministic fixture
+therefore treats nested success as re-observing the outer tenant, and nested failure
+as a rejected duplicate bind. Dispatcher hops, overlapping calls, and the existing
+HTTP/header tests remain covered.
+
 This module intentionally keeps a local tenant transaction helper instead of
-sharing the WebFlux helper. The two examples are parallel workshop modules:
-WebFlux demonstrates ReactorContext, while Ktor demonstrates call-scoped
-attributes.
+sharing the WebFlux helper. The two examples remain parallel workshop modules,
+while both consume their shared tenant carrier adapters.
 
 Schema-per-tenant routing issues `SET SCHEMA` inside each transaction. That is
 simple and visible for learning, but it has a per-transaction cost and depends

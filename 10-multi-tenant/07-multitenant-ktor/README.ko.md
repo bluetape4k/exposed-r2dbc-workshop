@@ -4,7 +4,7 @@
 
 Chapter 10의 Ktor + Exposed R2DBC schema-per-tenant 예제입니다.
 `03-multitenant-spring-webflux`의 actor/movie 흐름을 유지하되, 요청 tenant는
-Reactor context가 아니라 Ktor call attributes로 전달합니다.
+공유 `KtorTenantContext` adapter로 전달합니다.
 
 ## Architecture
 
@@ -16,7 +16,7 @@ Reactor context가 아니라 Ktor call attributes로 전달합니다.
 |---|---|
 | Tenant header | `X-TENANT-ID`, 값은 `korean` 또는 `english` |
 | Tenant validation | 누락, 공백, 충돌하는 중복 값, 미등록 값은 `INVALID_TENANT` JSON과 함께 `400` |
-| Request context | Ktor `ApplicationCall.attributes`; ThreadLocal/ReactorContext 미사용 |
+| Request context | `KtorTenantContext`가 검증된 `TenantId`를 하나의 `ApplicationCall`에 binding; ThreadLocal/ReactorContext 미사용 |
 | DB isolation | 하나의 H2 R2DBC pool, tenant별 schema |
 | Transaction boundary | `suspendTransactionWithTenant(tenant, db)`가 transaction 시작 시 schema 전환 |
 
@@ -43,9 +43,20 @@ isolation, pool size `1`에서 빠른 tenant 교차 호출, 겹치는 Ktor 요�
 
 ## Notes
 
+TenantPlugin은 header 검증과 local korean/english registry를 담당합니다.
+검증 후 `KtorTenantContext.bindTenant(call, TenantId(tenant.id))`를 호출하고,
+route는 local `currentTenant()` mapping을 통해
+`KtorTenantContext.requireCurrent(call)`을 읽은 뒤 tenant schema를 선택합니다.
+
+이 adapter는 의도적으로 one-call/one-tenant 계약을 사용합니다. 두 번째 binding은
+첫 값을 덮어쓰지 않고 `TenantAlreadyBoundException`을 발생시킵니다. 따라서
+결정론적 fixture에서 nested success는 바깥 tenant를 다시 관찰하는 경우이고,
+nested failure는 duplicate binding 거절입니다. dispatcher hop, 겹치는 call,
+기존 HTTP/header 테스트도 계속 검증합니다.
+
 이 모듈은 WebFlux helper를 공유하지 않고 local tenant transaction helper를
-둡니다. 두 모듈은 병렬 workshop 예제입니다. WebFlux는 ReactorContext를,
-Ktor는 call-scoped attributes를 보여줍니다.
+둡니다. 두 모듈은 각자의 transaction 예제를 유지하면서 공통 tenant carrier
+adapter를 소비합니다.
 
 Schema-per-tenant routing은 각 transaction 안에서 `SET SCHEMA`를 실행합니다.
 학습에는 단순하고 명확하지만 transaction마다 비용이 있고 connection-state reset이

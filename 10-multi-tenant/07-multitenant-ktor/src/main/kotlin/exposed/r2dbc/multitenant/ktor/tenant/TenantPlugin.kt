@@ -1,10 +1,12 @@
 package exposed.r2dbc.multitenant.ktor.tenant
 
+import io.bluetape4k.ktor.tenant.KtorTenantContext
+import io.bluetape4k.tenant.TenantId
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.createApplicationPlugin
 
 /**
- * Resolves `X-TENANT-ID` and stores only a validated tenant enum in the Ktor call.
+ * `X-TENANT-ID`를 해석하고 검증된 tenant를 Ktor call에 binding합니다.
  */
 val TenantPlugin = createApplicationPlugin(name = "TenantPlugin") {
     onCall { call ->
@@ -12,16 +14,18 @@ val TenantPlugin = createApplicationPlugin(name = "TenantPlugin") {
         val tenantId = normalizeTenantHeader(rawValues)
         val tenant = Tenants.findById(tenantId)
             ?: throw InvalidTenantException("Unknown tenant id: $tenantId")
-        call.attributes.put(TenantAttributeKey, tenant)
+        KtorTenantContext.bindTenant(call, TenantId(tenant.id))
     }
 }
 
 /**
- * Returns the resolved tenant for the current Ktor call.
+ * 현재 Ktor call의 provider tenant를 local registry 값으로 반환합니다.
  */
 fun ApplicationCall.currentTenant(): Tenants.Tenant =
-    attributes.getOrNull(TenantAttributeKey)
-        ?: error("TenantPlugin did not resolve a tenant for this call")
+    KtorTenantContext.requireCurrent(this).value.let { tenantId ->
+        Tenants.findById(tenantId)
+            ?: error("TenantPlugin resolved an unregistered tenant: $tenantId")
+    }
 
 private fun normalizeTenantHeader(values: List<String>): String {
     if (values.isEmpty()) {
