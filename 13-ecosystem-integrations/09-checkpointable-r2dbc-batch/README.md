@@ -16,22 +16,19 @@ is performed by the provider through `suspendTransaction`; this module does
 not wrap JDBC calls, add `runBlocking`, or implement a second batch runner.
 
 The provider artifact resolved by this workshop is
-`io.github.bluetape4k.exposed:bluetape4k-exposed-batch:2.0.0-SNAPSHOT` through
-the `bluetape4k-dependencies:2.0.0-SNAPSHOT` catalog and the
-`https://central.sonatype.com/repository/maven-snapshots/` repository. In that
-published snapshot, the R2DBC repository imports its metadata tables from
-`io.bluetape4k.batch.jdbc.tables.*` and its codec from
+`io.github.bluetape4k.exposed:bluetape4k-exposed-batch:2.0.0` through the stable
+`bluetape4k-dependencies:2.0.0` catalog and Maven Central. In this release, the
+R2DBC repository imports its metadata tables from
+`io.bluetape4k.batch.r2dbc.tables` and its codec from
 `io.bluetape4k.batch.CheckpointJson`. The package name is an artifact
-compatibility boundary, not a JDBC transaction requirement. The workshop does
-not import the newer, unreleased `io.bluetape4k.batch.r2dbc.tables` package and
-does not add a workaround for provider Issue #745.
+compatibility boundary, not a JDBC transaction requirement; the workshop now
+uses the provider's R2DBC table package directly.
 
-Upstream PR #747 is included in this snapshot and preserves the checkpoint in a
-`FAILED` report. The failure-restart test proves that a writer error after the
+Upstream PR #747 is included in the 2.0.0 release and preserves the checkpoint in
+a `FAILED` report. The failure-restart test proves that a writer error after the
 first committed chunk stores checkpoint `3`, and a later run with the same
-parameters resumes at source key `4` and completes through `8`. The snapshot is a
-development dependency until a stable provider release is promoted; the
-workshop keeps this catalog exception explicit and adds no source workaround.
+parameters resumes at source key `4` and completes through `8`. The provider is
+now consumed from the stable catalog and no source workaround is required.
 
 ## Schema and API
 

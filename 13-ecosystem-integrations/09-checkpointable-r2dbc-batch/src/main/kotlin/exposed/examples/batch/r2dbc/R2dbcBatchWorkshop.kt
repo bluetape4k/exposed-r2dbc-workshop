@@ -9,8 +9,8 @@ import io.bluetape4k.batch.api.BatchWriter
 import io.bluetape4k.batch.api.SkipPolicy
 import io.bluetape4k.batch.core.BatchJob
 import io.bluetape4k.batch.core.dsl.batchJob
-import io.bluetape4k.batch.jdbc.tables.BatchJobExecutionTable
-import io.bluetape4k.batch.jdbc.tables.BatchStepExecutionTable
+import io.bluetape4k.batch.r2dbc.tables.BatchJobExecutionTable
+import io.bluetape4k.batch.r2dbc.tables.BatchStepExecutionTable
 import io.bluetape4k.batch.r2dbc.ExposedR2dbcBatchJobRepository
 import io.bluetape4k.batch.r2dbc.ExposedR2dbcBatchReader
 import io.bluetape4k.batch.r2dbc.ExposedR2dbcBatchWriter

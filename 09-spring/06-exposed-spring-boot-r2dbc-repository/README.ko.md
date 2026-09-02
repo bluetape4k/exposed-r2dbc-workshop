@@ -163,4 +163,4 @@ workshop slice의 제외 범위입니다. Spring reactive transaction manager도
 추가하지 않습니다. 여기서 보여 주는 동작은 app-owned Exposed
 `suspendTransaction` 경계이기 때문입니다.
 
-Provider source/manual: [bluetape4k exposed-spring-boot-r2dbc 2.0.0-SNAPSHOT](https://github.com/bluetape4k/bluetape4k-exposed/blob/develop/spring-boot/r2dbc/README.md)
+Provider source/manual: [bluetape4k exposed-spring-boot-r2dbc 2.0.0](https://github.com/bluetape4k/bluetape4k-exposed/releases/tag/2.0.0)

@@ -21,7 +21,7 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 
 - **Reactive SQL 학습 경로** — shared test infrastructure부터 high-performance routing까지
 - **Coroutine/R2DBC 예제** — `suspendTransaction`, Flow collection, WebFlux, Ktor request handling 포함
-- **JDK 25 Virtual Threads 예제** — `bluetape4k-dependencies:1.4.0` BOM이 선택하는 `bluetape4k-virtualthread-jdk25:1.12.1` provider 사용
+- **JDK 25 Virtual Threads 예제** — `bluetape4k-dependencies:2.0.0` BOM이 선택하는 `bluetape4k-virtualthread-jdk25:2.0.0` provider 사용
 - **Multi-database 검증** — H2, PostgreSQL, MySQL, MariaDB
 - **운영형 패턴** — repository, cache, multi-tenant schema, routing datasource,
   realtime outbox, HTTP client outbox/idempotency, observability/readiness,

@@ -2,9 +2,8 @@
 # Gradle Version Catalog — migrated from buildSrc/src/main/kotlin/Libs.kt
 
 [versions]
-# Issue #205는 checkpoint 수정이 안정 dependency line으로 승격될 때까지
-# 공개된 snapshot train을 소비한다.
-bluetape4k-dependencies = "2.0.0-SNAPSHOT"
+# Issue #225: 중앙 catalog의 2.0.0 안정 릴리스를 사용한다.
+bluetape4k-dependencies = "2.0.0"
 
 kotlin = "2.4.0"
 kotlinx-coroutines = "1.11.0"

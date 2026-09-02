@@ -1,8 +1,12 @@
 # 작업 현황 - exposed-r2dbc-workshop
 
-스냅샷: 2026-06-02 KST
+스냅샷: 2026-09-02 KST
 범위: 2026-01-01 이후 생성되고 `debop`에게 할당된 열린 GitHub 이슈.
-열린 이슈 수: 1개.
+열린 이슈 수: 1개 (`#225`).
+
+## 현재 작업
+
+- [#225](https://github.com/bluetape4k/exposed-r2dbc-workshop/issues/225) `bluetape4k-dependencies:2.0.0` 안정 릴리스 참조 갱신: 중앙 catalog, 현재 독자 README, batch R2DBC 안정 package import, WIP/CHANGELOG를 정렬하고 영향 모듈 검증을 수행한다.
 
 ## 최근 완료
 
@@ -14,9 +18,9 @@
 
 ## 현재 방향
 
-chapter 10-12 예제를 확장하기 전에 shared R2DBC test infrastructure의 cancellation safety를 유지한다. 새 예제는 structured coroutine cancellation을 보존하고 cleanup failure를 명확히 보고하는 helper에 의존해야 한다.
+현재 작업은 중앙 `bluetape4k-dependencies:2.0.0` 안정 릴리스와 독자 문서의 좌표를 일치시키는 것이다. 과거 chapter 10-12 확장 로드맵과 아래 대기열은 참고용으로 유지하며, 새 예제는 structured coroutine cancellation과 cleanup failure 보고 계약을 계속 보존해야 한다.
 
-## 우선순위 대기열
+## 이전 우선순위 대기열 (참고)
 
 | 우선순위 | 이슈 | 난이도 | 메모 |
 |---|---|---:|---|
