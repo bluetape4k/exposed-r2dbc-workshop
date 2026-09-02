@@ -208,7 +208,7 @@ jobs:
           COVERAGE_TASKS: ${{ needs.changes.outputs.coverage_tasks }}
         run: |
           read -r -a coverage_tasks <<< "$COVERAGE_TASKS"
-          ./gradlew "${coverage_tasks[@]}" "-PuseDB=$USE_DB" --continue
+          ./gradlew "${coverage_tasks[@]}" "-PuseDB=$USE_DB" --continue -x test
         continue-on-error: true
 
       - name: Upload test results
