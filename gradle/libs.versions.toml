@@ -4,7 +4,7 @@
 [versions]
 # Issue #205는 checkpoint 수정이 안정 dependency line으로 승격될 때까지
 # 공개된 snapshot train을 소비한다.
-bluetape4k-dependencies = "2.0.0-SNAPSHOT"
+bluetape4k-dependencies = "2.1.0-SNAPSHOT"
 
 kotlin = "2.4.0"
 kotlinx-coroutines = "1.11.0"
