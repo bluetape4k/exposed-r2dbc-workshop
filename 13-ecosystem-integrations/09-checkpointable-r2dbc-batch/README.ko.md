@@ -17,22 +17,18 @@ job은 caller-owned `R2dbcDatabase`와 함께 `ExposedR2dbcBatchJobRepository`,
 않습니다.
 
 이 workshop이 해석하는 provider artifact는
-`io.github.bluetape4k.exposed:bluetape4k-exposed-batch:2.0.0-SNAPSHOT`입니다.
-`bluetape4k-dependencies:2.0.0-SNAPSHOT` catalog와
-`https://central.sonatype.com/repository/maven-snapshots/` repository를 통해
-해석합니다. 공개된 개발 버전에서 R2DBC repository의 metadata table import는
-`io.bluetape4k.batch.jdbc.tables.*`, codec은
-`io.bluetape4k.batch.CheckpointJson`입니다. Package 이름은 artifact
-호환성 경계이며 JDBC transaction을 사용한다는 뜻이 아닙니다. 아직 release되지
-않은 `io.bluetape4k.batch.r2dbc.tables` package는 import하지 않으며 provider
-Issue #745 workaround도 추가하지 않습니다.
+`io.github.bluetape4k.exposed:bluetape4k-exposed-batch:2.0.0`입니다. 안정
+`bluetape4k-dependencies:2.0.0` catalog와 Maven Central을 통해 해석합니다.
+이 release에서 R2DBC repository의 metadata table import는
+`io.bluetape4k.batch.r2dbc.tables`, codec은 `io.bluetape4k.batch.CheckpointJson`입니다.
+Package 이름은 artifact 호환성 경계이며 JDBC transaction을 사용한다는 뜻이
+아닙니다. Workshop도 provider의 R2DBC table package를 직접 사용합니다.
 
-upstream PR #747은 이 개발 버전에 포함되어 `FAILED` report의 checkpoint를
+upstream PR #747은 2.0.0 release에 포함되어 `FAILED` report의 checkpoint를
 보존합니다. 첫 commit chunk 뒤 writer 오류가 발생하면 checkpoint `3`을
 저장하고, 같은 parameter로 다시 실행할 때 source key `4`부터 `8`까지
-완료하는 실패·재시작 테스트로 검증합니다. 개발 버전은 안정 provider release로
-승격되기 전의 개발 dependency이므로 catalog 예외를 명시적으로 유지하며,
-source workaround는 추가하지 않습니다.
+완료하는 실패·재시작 테스트로 검증합니다. 이제 안정 catalog에서 provider를
+사용하므로 source workaround는 필요하지 않습니다.
 
 ## Schema와 API
 

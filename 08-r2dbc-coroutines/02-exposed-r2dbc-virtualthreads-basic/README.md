@@ -9,11 +9,10 @@ to achieve high-performance async processing with blocking-style code.
 > **Requirement**: JDK 25 (`@EnabledOnJre(JRE.JAVA_25)` condition applied)
 
 The Version Catalog uses a versionless `bluetape4k-virtualthread-jdk25` alias. The
-current `bluetape4k-dependencies:2.0.0-SNAPSHOT` train resolves it to
-`bluetape4k-virtualthread-jdk25:2.0.0-SNAPSHOT`. The public discovery contracts
-are now under `io.bluetape4k.concurrent.virtualthread.api`; the test must
-discover exactly `jdk25-structured-task-scope` and `jdk25` through the public
-ServiceLoader APIs.
+stable `bluetape4k-dependencies:2.0.0` release resolves it to
+`bluetape4k-virtualthread-jdk25:2.0.0`. The public discovery contracts are under
+`io.bluetape4k.concurrent.virtualthread.api`; the test must discover exactly
+`jdk25-structured-task-scope` and `jdk25` through the public ServiceLoader APIs.
 
 ---
 

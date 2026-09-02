@@ -9,8 +9,8 @@ import io.bluetape4k.batch.api.BatchReport
 import io.bluetape4k.batch.api.BatchStatus
 import io.bluetape4k.batch.api.BatchWriter
 import io.bluetape4k.batch.api.SkipPolicy
-import io.bluetape4k.batch.jdbc.tables.BatchJobExecutionTable
-import io.bluetape4k.batch.jdbc.tables.BatchStepExecutionTable
+import io.bluetape4k.batch.r2dbc.tables.BatchJobExecutionTable
+import io.bluetape4k.batch.r2dbc.tables.BatchStepExecutionTable
 import io.bluetape4k.workflow.api.RetryPolicy
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred

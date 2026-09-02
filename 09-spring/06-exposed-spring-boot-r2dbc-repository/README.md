@@ -160,4 +160,4 @@ provider capabilities. A Spring reactive transaction manager is also not added:
 the application-owned Exposed `suspendTransaction` boundary is the behavior
 being demonstrated.
 
-Provider source/manual: [bluetape4k exposed-spring-boot-r2dbc 2.0.0-SNAPSHOT](https://github.com/bluetape4k/bluetape4k-exposed/blob/develop/spring-boot/r2dbc/README.md)
+Provider source/manual: [bluetape4k exposed-spring-boot-r2dbc 2.0.0](https://github.com/bluetape4k/bluetape4k-exposed/releases/tag/2.0.0)

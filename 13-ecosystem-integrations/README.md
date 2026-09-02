@@ -38,13 +38,12 @@ example records a custom publication log because the official
 `EventPublicationRepository` SPI is synchronous and has no R2DBC implementation.
 The DDD examples make aggregate event sequencing, commit/rollback behavior, and
 named-interface boundary violations executable with local H2 R2DBC tests. The
-checkpointable batch sibling composes the published snapshot
-`io.github.bluetape4k.exposed:bluetape4k-exposed-batch:2.0.0-SNAPSHOT` R2DBC
-reader, writer, and metadata repository directly. Its H2 tests prove both
-`STOPPED` and `FAILED` restart without duplicating committed target IDs; the
-proof remains deliberately separate from the JDBC sibling in `exposed-workshop`.
-The snapshot repository and catalog exception are documented in the module
-README until the provider is promoted to a stable release.
+checkpointable batch sibling composes the published
+`io.github.bluetape4k.exposed:bluetape4k-exposed-batch:2.0.0` R2DBC reader, writer,
+and metadata repository directly. Its H2 tests prove both `STOPPED` and `FAILED`
+restart without duplicating committed target IDs; the proof remains deliberately
+separate from the JDBC sibling in `exposed-workshop`. The stable provider release
+and catalog coordinates are documented in the module README.
 
 The removed source examples are not covered by local adapter stand-ins:
 
