@@ -15,6 +15,7 @@
 
 ### 변경
 
+- **의존성 거버넌스**: `bluetape4k-dependencies` snapshot 참조를 게시된 안정 BOM `2.0.0`으로 갱신하고 현재 예제의 provider 좌표를 정렬.
 - **의존성 거버넌스**: `bluetape4k-dependencies`를 게시된 `1.2.0` BOM에 맞춤.
 - **Bluetape4k**: `1.6.2` → `1.7.0`
 - **Kotlin**: `2.3.20` → `2.3.21`

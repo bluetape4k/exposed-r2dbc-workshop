@@ -23,7 +23,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 
 - **Reactive SQL learning path** from shared test infrastructure to high-performance routing.
 - **Coroutine/R2DBC examples** with `suspendTransaction`, Flow collection, WebFlux, and Ktor request handling.
-- **JDK 25 Virtual Threads example** using the `bluetape4k-virtualthread-jdk25:1.12.1` provider selected by the `bluetape4k-dependencies:1.4.0` BOM.
+- **JDK 25 Virtual Threads example** using the `bluetape4k-virtualthread-jdk25:2.0.0` provider selected by the `bluetape4k-dependencies:2.0.0` BOM.
 - **Multi-database verification** for H2, PostgreSQL, MySQL, and MariaDB.
 - **Production patterns** for repository, cache, multi-tenant schema, routing datasource,
   realtime outbox, HTTP client outbox/idempotency, observability/readiness, and
