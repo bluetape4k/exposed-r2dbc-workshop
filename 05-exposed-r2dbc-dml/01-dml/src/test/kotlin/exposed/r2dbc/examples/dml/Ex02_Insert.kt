@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import io.bluetape4k.assertions.fail
+import io.bluetape4k.assertions.assertFailsWith
 import io.bluetape4k.assertions.shouldBeEqualTo
 import io.bluetape4k.assertions.shouldBeNull
 import io.bluetape4k.assertions.shouldBeTrue
@@ -476,7 +477,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
 
             inserted shouldHaveSize cityNames.size
             inserted.map { it[cities.name] } shouldBeEqualTo cityNames
-            kotlin.test.assertFailsWith<IllegalStateException> {
+            assertFailsWith<IllegalStateException> {
                 inserted.map { it[cities.id] }
             }
         }
