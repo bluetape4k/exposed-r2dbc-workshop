@@ -1,8 +1,8 @@
 package exposed.r2dbc.examples.connection
 
-import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
-import exposed.r2dbc.shared.tests.TestDB
-import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.exposed.r2dbc.tests.AbstractExposedR2dbcTest
+import io.bluetape4k.exposed.r2dbc.tests.TestDB
+import io.bluetape4k.exposed.r2dbc.tests.withTables
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug
 import kotlinx.coroutines.test.runTest
@@ -35,7 +35,7 @@ import java.sql.Types
  *
  * @see org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
  */
-class Ex01_Connection: AbstractR2dbcExposedTest() {
+class Ex01_Connection: AbstractExposedR2dbcTest() {
 
     companion object: KLoggingChannel()
 

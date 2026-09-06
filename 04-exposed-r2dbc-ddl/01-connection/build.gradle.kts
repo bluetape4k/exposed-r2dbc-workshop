@@ -4,7 +4,10 @@ configurations {
 
 dependencies {
 
+    // CountryTable/DMLTestData는 shared production fixture에 남아 있으므로 유지합니다.
+    // TestDB/withTables/기반 클래스는 공개 테스트 artifact에서 제공합니다.
     testImplementation(project(":exposed-r2dbc-shared"))
+    testImplementation(libs.bluetape4k.exposed.r2dbc.tests)
 
     // Exposed
     testImplementation(libs.jetbrains.exposed.r2dbc)
@@ -39,4 +42,11 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.core)
     testImplementation(libs.kotlinx.coroutines.debug)
     testImplementation(libs.kotlinx.coroutines.test)
+}
+
+// public fixture는 EXPOSED_TEST_DB를 사용하므로 기존 -PuseFastDB=true 계약을 보존합니다.
+if (project.findProperty("useFastDB")?.toString()?.toBoolean() == true) {
+    tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
+        environment("EXPOSED_TEST_DB", "H2")
+    }
 }

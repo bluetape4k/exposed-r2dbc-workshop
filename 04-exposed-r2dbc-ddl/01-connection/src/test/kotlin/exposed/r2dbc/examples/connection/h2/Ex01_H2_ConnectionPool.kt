@@ -1,7 +1,7 @@
 package exposed.r2dbc.examples.connection.h2
 
 
-import exposed.r2dbc.shared.tests.TestDB
+import io.bluetape4k.exposed.r2dbc.tests.TestDB
 import io.bluetape4k.junit5.coroutines.runSuspendIO
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import io.bluetape4k.logging.debug

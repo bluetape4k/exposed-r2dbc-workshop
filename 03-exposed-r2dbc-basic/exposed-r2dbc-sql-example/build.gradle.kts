@@ -4,7 +4,7 @@ configurations {
 
 dependencies {
 
-    testImplementation(project(":exposed-r2dbc-shared"))
+    testImplementation(libs.bluetape4k.exposed.r2dbc.tests)
 
     // Exposed
     testImplementation(libs.jetbrains.exposed.r2dbc)
@@ -38,4 +38,11 @@ dependencies {
     testImplementation(libs.bluetape4k.coroutines)
     testImplementation(libs.kotlinx.coroutines.core)
     testImplementation(libs.kotlinx.coroutines.test)
+}
+
+// public fixture는 EXPOSED_TEST_DB를 사용하므로 기존 -PuseFastDB=true 계약을 보존합니다.
+if (project.findProperty("useFastDB")?.toString()?.toBoolean() == true) {
+    tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
+        environment("EXPOSED_TEST_DB", "H2")
+    }
 }
