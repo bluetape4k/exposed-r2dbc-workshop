@@ -2,13 +2,19 @@
 
 ## 완료 조건
 
-- [ ] Exposed `1.5.0` override와 stable Bluetape BOM `2.0.0` resolved graph를
+- [x] Exposed `1.5.0` override와 stable Bluetape BOM `2.0.0` resolved graph를
   함께 증명한다.
-- [ ] multi-row VALUES 단일 statement, driver batch fallback, generated values,
+- [x] multi-row VALUES 단일 statement, driver batch fallback, generated values,
   conflict/inserted-count 관계를 테스트한다.
-- [ ] README와 lesson에 driver별 제약과 generated-key workaround를 기록한다.
-- [ ] targeted tests, static analysis, diff 검사를 통과한다.
+- [x] README와 lesson에 driver별 제약과 generated-key workaround를 기록한다.
+- [x] targeted tests와 diff 검사를 통과한다. 모듈별 `detekt` task는 존재하지
+  않아 targeted Kotlin compilation/test를 static coverage로 사용한다.
 - [ ] 한국어 PR 본문에 issue 연결과 DoD 증거를 채운다.
+
+검증 증거: `:01-dml:test --tests "exposed.r2dbc.examples.dml.Ex02_Insert" -PuseDB=H2_PSQL`
+에서 26개 실행(24 passed, 2 skipped), `dependencyInsight`에서 Exposed `1.5.0`
+및 Bluetape BOM `2.0.0`을 확인했다. PostgreSQL/MariaDB Testcontainers는 CI에서
+순차 검증할 PR 증거로 남긴다.
 
 ## 단계
 

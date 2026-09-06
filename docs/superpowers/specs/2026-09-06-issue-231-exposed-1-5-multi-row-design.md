@@ -66,12 +66,13 @@ Bluetape artifact version은 추가하지 않는다.
 
 ## 검증 기준
 
-- Gradle resolved graph에서 Exposed core/r2dbc가 `1.5.0`, Bluetape BOM이
+- [완료] Gradle resolved graph에서 Exposed core/r2dbc가 `1.5.0`, Bluetape BOM이
   `2.0.0`임을 확인한다.
-- H2 대상 테스트에서 multi-row SQL shape, fallback row count, generated values,
+- [완료] H2 대상 테스트에서 multi-row SQL shape, fallback row count, generated values,
   duplicate conflict 및 rollback을 확인한다.
-- PostgreSQL 및 MariaDB Testcontainers는 순차 실행하고 결과를 PR에 기록한다.
-- `git diff --check`, targeted test, 해당 모듈 static analysis를 통과한다.
+- [CI 대기] PostgreSQL 및 MariaDB Testcontainers는 순차 실행하고 결과를 PR에 기록한다.
+- [완료] `git diff --check`와 targeted test를 통과했다. 모듈별 static analysis
+  task는 현재 Gradle project에 등록되어 있지 않다.
 
 ## 결정 기록
 
