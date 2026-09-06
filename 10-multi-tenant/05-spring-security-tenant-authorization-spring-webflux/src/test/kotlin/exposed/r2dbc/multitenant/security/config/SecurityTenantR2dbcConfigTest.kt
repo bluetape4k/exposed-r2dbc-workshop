@@ -3,12 +3,12 @@ package exposed.r2dbc.multitenant.security.config
 import exposed.r2dbc.multitenant.security.AbstractMultitenantTest
 import exposed.r2dbc.multitenant.security.controller.ActorController
 import exposed.r2dbc.multitenant.security.tenant.DataInitializer
-import exposed.r2dbc.multitenant.security.tenant.TenantConnectionFactoryRegistry
 import exposed.r2dbc.multitenant.security.tenant.TenantInitializer
 import exposed.r2dbc.multitenant.security.tenant.TenantTransactionExecutor
 import exposed.r2dbc.multitenant.security.tenant.Tenants.Tenant
 import io.bluetape4k.assertions.shouldBeEqualTo
 import io.bluetape4k.assertions.shouldNotBeNull
+import io.bluetape4k.r2dbc.pool.R2dbcConnectionFactoryRegistry
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,7 +17,7 @@ import kotlin.test.assertNotSame
 
 class SecurityTenantR2dbcConfigTest(
     @param:Autowired private val actorController: ActorController,
-    @param:Autowired private val registry: TenantConnectionFactoryRegistry,
+    @param:Autowired private val registry: R2dbcConnectionFactoryRegistry<Tenant>,
     @param:Autowired private val dataInitializer: DataInitializer,
     @param:Autowired private val tenantInitializer: TenantInitializer,
     @param:Autowired private val transactionExecutor: TenantTransactionExecutor,
@@ -38,8 +38,8 @@ class SecurityTenantR2dbcConfigTest(
 
     @Test
     fun `registry contains distinct tenant factories`() {
-        registry.keys() shouldBeEqualTo setOf(Tenant.KOREAN.id, Tenant.ENGLISH.id)
-        assertNotSame(registry.get(Tenant.KOREAN), registry.get(Tenant.ENGLISH))
+        registry.keys.map(Tenant::id).toSet() shouldBeEqualTo setOf(Tenant.KOREAN.id, Tenant.ENGLISH.id)
+        assertNotSame(registry[Tenant.KOREAN], registry[Tenant.ENGLISH])
     }
 
     @Test
