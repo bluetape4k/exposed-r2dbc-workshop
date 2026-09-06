@@ -23,7 +23,7 @@ dependencies {
     implementation(libs.jetbrains.exposed.r2dbc)
     implementation(libs.jetbrains.exposed.java.time)
     implementation(libs.exposed.r2dbc)
-    implementation(libs.bluetape4k.http)
+    implementation(libs.bluetape4k.http.snapshot)
 
     implementation(libs.kotlinx.coroutines.reactor)
 
@@ -38,6 +38,7 @@ dependencies {
     runtimeOnly(libs.r2dbc.spi)
 
     testImplementation(libs.bluetape4k.junit5)
+    testImplementation(libs.logcaptor)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.boot:spring-boot-webtestclient")

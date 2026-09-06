@@ -18,7 +18,7 @@ dependencies {
     implementation(libs.jetbrains.exposed.r2dbc)
     implementation(libs.jetbrains.exposed.java.time)
     implementation(libs.exposed.r2dbc)
-    implementation(libs.bluetape4k.http)
+    implementation(libs.bluetape4k.http.snapshot)
 
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.netty)
@@ -43,6 +43,7 @@ dependencies {
     runtimeOnly(libs.logback)
 
     testImplementation(libs.bluetape4k.junit5)
+    testImplementation(libs.logcaptor)
     testImplementation(libs.bluetape4k.ktor.testing)
     testImplementation(libs.ktor.client.mock)
     testImplementation(libs.ktor.client.websockets)
