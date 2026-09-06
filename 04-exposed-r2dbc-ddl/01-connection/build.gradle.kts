@@ -4,7 +4,10 @@ configurations {
 
 dependencies {
 
+    // CountryTable/DMLTestData는 shared production fixture에 남아 있으므로 유지합니다.
+    // TestDB/withTables/기반 클래스는 공개 테스트 artifact에서 제공합니다.
     testImplementation(project(":exposed-r2dbc-shared"))
+    testImplementation(libs.bluetape4k.exposed.r2dbc.tests)
 
     // Exposed
     testImplementation(libs.jetbrains.exposed.r2dbc)

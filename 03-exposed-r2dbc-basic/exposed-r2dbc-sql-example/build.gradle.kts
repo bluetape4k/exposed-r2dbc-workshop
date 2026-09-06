@@ -4,7 +4,7 @@ configurations {
 
 dependencies {
 
-    testImplementation(project(":exposed-r2dbc-shared"))
+    testImplementation(libs.bluetape4k.exposed.r2dbc.tests)
 
     // Exposed
     testImplementation(libs.jetbrains.exposed.r2dbc)

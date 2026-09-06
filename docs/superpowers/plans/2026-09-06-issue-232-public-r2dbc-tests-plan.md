@@ -4,8 +4,9 @@
 
 - [ ] 두 순수 test consumer가 public `bluetape4k-exposed-r2dbc-tests:2.0.0`을
   사용한다.
-- [ ] private fixture import와 private test dependency가 두 consumer에서
-  제거된다.
+- [ ] private fixture import/base class가 두 consumer에서 제거된다.
+- [ ] SQL example은 private shared dependency도 제거하고, DDL connection은
+  shared production fixture 때문에 test-scoped dependency를 유지한다.
 - [ ] public alias가 local catalog에 추가되고 stable Bluetape BOM 정책과
   일치한다.
 - [ ] H2 targeted tests와 test-only/runtime graph 검증을 통과한다.

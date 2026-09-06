@@ -1,7 +1,7 @@
 package exposed.r2dbc.sql.example
 
-import exposed.r2dbc.shared.tests.TestDB
-import exposed.r2dbc.shared.tests.withTables
+import io.bluetape4k.exposed.r2dbc.tests.TestDB
+import io.bluetape4k.exposed.r2dbc.tests.withTables
 import io.bluetape4k.logging.coroutines.KLoggingChannel
 import kotlinx.coroutines.flow.single
 import io.bluetape4k.assertions.shouldBeEqualTo

@@ -1,7 +1,7 @@
 package exposed.r2dbc.sql.example
 
-import exposed.r2dbc.shared.tests.AbstractR2dbcExposedTest
-import exposed.r2dbc.shared.tests.TestDB
+import io.bluetape4k.exposed.r2dbc.tests.AbstractExposedR2dbcTest
+import io.bluetape4k.exposed.r2dbc.tests.TestDB
 import exposed.r2dbc.sql.example.Schema.CityTable
 import exposed.r2dbc.sql.example.Schema.UserTable
 import exposed.r2dbc.sql.example.Schema.withCityUsers
@@ -29,7 +29,7 @@ import org.junit.jupiter.params.provider.MethodSource
 /**
  * Exposed SQL DSL을 R2DBC 환경에서 사용하는 기본 예제를 검증합니다.
  */
-class R2dbcExposedSQLExample: AbstractR2dbcExposedTest() {
+class R2dbcExposedSQLExample: AbstractExposedR2dbcTest() {
 
     companion object: KLoggingChannel()
 

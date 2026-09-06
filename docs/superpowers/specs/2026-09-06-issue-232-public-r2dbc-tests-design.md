@@ -17,7 +17,9 @@ workshop의 private `exposed.r2dbc.shared.tests` fixture를 이미 게시된
 - 선택 소비자:
   - `03-exposed-r2dbc-basic/exposed-r2dbc-sql-example`
   - `04-exposed-r2dbc-ddl/01-connection`
-- 두 모듈은 private shared project를 이미 `testImplementation`으로만 사용한다.
+- 두 모듈은 private fixture를 `testImplementation`으로만 사용한다. DDL
+  connection 모듈은 `CountryTable`/`DMLTestData`라는 shared production fixture도
+  사용하므로 그 project dependency 자체는 유지한다.
 - `00-shared/exposed-r2dbc-shared`는 production config/schema와 fixture를
   `src/main`에 함께 두므로 repository 전체 이동은 별도 작업이다.
 
@@ -33,8 +35,9 @@ workshop의 private `exposed.r2dbc.shared.tests` fixture를 이미 게시된
    - 단기 compile은 쉽지만 공개 API 전환 완료 조건과 runtime leakage를
      검증하지 못한다.
 
-이번 PR은 2번을 채택한다. private shared project는 선택한 두 consumer의
-테스트 classpath에서 제거하고 public artifact alias를 추가한다.
+이번 PR은 2번을 채택한다. 선택한 두 consumer에서 private fixture import/base
+class를 제거하고 public artifact alias를 추가한다. DDL connection 모듈의 shared
+project dependency는 production fixture 사용 때문에 test scope로 유지한다.
 
 ## API 호환 계약
 
@@ -51,8 +54,9 @@ workshop의 private `exposed.r2dbc.shared.tests` fixture를 이미 게시된
 
 - `gradle/libs.versions.toml`: public `bluetape4k-exposed-r2dbc-tests` alias를
   stable BOM 정책에 맞는 versionless child alias로 추가한다.
-- 두 consumer `build.gradle.kts`: private shared test dependency를 public
-  test dependency로 교체한다.
+- 두 consumer `build.gradle.kts`: public test dependency를 추가한다. SQL example은
+  private shared dependency를 제거하고, DDL connection은 shared production
+  fixture 때문에 기존 test dependency를 유지한다.
 - 두 consumer의 test imports/base class: package/class를 공개 API로 바꾼다.
 - 각 consumer README 또는 lesson: public fixture와 test-only scope를 설명한다.
 - migration lesson: shared module 전체 추출이 별도 후속 범위임을 명시한다.
