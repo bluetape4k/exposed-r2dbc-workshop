@@ -3,6 +3,7 @@ package exposed.r2dbc.multitenant.connectionfactory.tenant
 import exposed.r2dbc.shared.config.h2ConnectionFactoryOptions
 import io.bluetape4k.assertions.shouldBeEqualTo
 import io.bluetape4k.r2dbc.pool.connectionPoolOf
+import io.bluetape4k.r2dbc.pool.R2dbcConnectionFactoryRegistry
 import io.r2dbc.pool.ConnectionPool
 import org.junit.jupiter.api.Test
 import java.time.Duration
@@ -10,19 +11,22 @@ import java.time.Duration
 class TenantConnectionFactoryRegistryTest {
 
     @Test
-    fun `destroy disposes tenant pools idempotently`() {
-        val registry = TenantConnectionFactoryRegistry(
+    fun `owned provider registry disposes tenant pools idempotently`() {
+        val korean = connectionPool("registry_lifecycle_korean")
+        val english = connectionPool("registry_lifecycle_english")
+        val registry = R2dbcConnectionFactoryRegistry.owned(
             mapOf(
-                Tenants.Tenant.KOREAN to connectionPool("registry_lifecycle_korean"),
-                Tenants.Tenant.ENGLISH to connectionPool("registry_lifecycle_english"),
+                Tenants.Tenant.KOREAN to korean,
+                Tenants.Tenant.ENGLISH to english,
             ),
         )
 
-        registry.destroy()
-        registry.destroy()
+        registry.dispose()
+        registry.dispose()
 
-        (registry.get(Tenants.Tenant.KOREAN) as ConnectionPool).isDisposed shouldBeEqualTo true
-        (registry.get(Tenants.Tenant.ENGLISH) as ConnectionPool).isDisposed shouldBeEqualTo true
+        registry.isDisposed() shouldBeEqualTo true
+        korean.isDisposed shouldBeEqualTo true
+        english.isDisposed shouldBeEqualTo true
     }
 
     private fun connectionPool(databaseName: String): ConnectionPool =

@@ -1,11 +1,11 @@
 package exposed.r2dbc.multitenant.connectionfactory.config
 
-import exposed.r2dbc.multitenant.connectionfactory.tenant.TenantConnectionFactoryRegistry
 import exposed.r2dbc.multitenant.connectionfactory.tenant.TenantRoutingConnectionFactory
 import exposed.r2dbc.multitenant.connectionfactory.tenant.Tenants
 import exposed.r2dbc.multitenant.connectionfactory.tenant.Tenants.Tenant
 import io.bluetape4k.r2dbc.pool.connectionFactoryOptionsOf
 import io.bluetape4k.r2dbc.pool.connectionPoolOf
+import io.bluetape4k.r2dbc.pool.R2dbcConnectionFactoryRegistry
 import io.r2dbc.pool.ConnectionPool
 import io.r2dbc.spi.ConnectionFactory
 import io.r2dbc.spi.ConnectionFactoryOptions
@@ -40,17 +40,19 @@ class ConnectionFactoryTenantR2dbcConfig {
     /**
      * Creates the registry that owns one bounded [ConnectionPool] per tenant.
      */
-    @Bean
+    @Bean(destroyMethod = "dispose")
     fun tenantConnectionFactoryRegistry(
         properties: TenantConnectionFactoryProperties,
         poolProperties: TenantConnectionPoolProperties,
-    ): TenantConnectionFactoryRegistry {
-        val pools = Tenants.Tenant.entries.associateWith { tenant ->
-            val definition = properties.definitionFor(tenant)
-            poolConfiguration(definition.url, poolProperties)
-                .also { it.warmup().block(poolProperties.maxCreateConnectionTime) }
-        }
-        return TenantConnectionFactoryRegistry(pools)
+    ): R2dbcConnectionFactoryRegistry<Tenant> {
+        val pools = createTenantPools(
+            tenants = Tenants.Tenant.entries,
+            poolFactory = { tenant ->
+                poolConfiguration(properties.definitionFor(tenant).url, poolProperties)
+            },
+            warmup = { pool -> pool.warmup().block(poolProperties.maxCreateConnectionTime) },
+        )
+        return R2dbcConnectionFactoryRegistry.owned(pools)
     }
 
     /**
@@ -60,12 +62,12 @@ class ConnectionFactoryTenantR2dbcConfig {
     @Primary
     fun tenantRoutingConnectionFactory(
         properties: TenantConnectionFactoryProperties,
-        registry: TenantConnectionFactoryRegistry,
+        registry: R2dbcConnectionFactoryRegistry<Tenant>,
     ): ConnectionFactory {
         val defaultTenant = properties.defaultTenant()
         val routingConnectionFactory = TenantRoutingConnectionFactory()
-        routingConnectionFactory.setTargetConnectionFactories(registry.targetConnectionFactories())
-        routingConnectionFactory.setDefaultTargetConnectionFactory(registry.get(defaultTenant))
+        routingConnectionFactory.setTargetConnectionFactories(registry.routingMap(Tenant::id))
+        routingConnectionFactory.setDefaultTargetConnectionFactory(registry[defaultTenant])
         routingConnectionFactory.setLenientFallback(false)
         routingConnectionFactory.afterPropertiesSet()
         return routingConnectionFactory
@@ -92,13 +94,13 @@ class ConnectionFactoryTenantR2dbcConfig {
      */
     @Bean("tenantInitializerDatabases")
     fun tenantInitializerDatabases(
-        registry: TenantConnectionFactoryRegistry,
+        registry: R2dbcConnectionFactoryRegistry<Tenant>,
         properties: TenantConnectionFactoryProperties,
         databaseCoroutineDispatcher: CoroutineDispatcher,
     ): Map<Tenant, R2dbcDatabase> =
         Tenants.Tenant.entries.associateWith { tenant ->
             R2dbcDatabase.connect(
-                registry.get(tenant),
+                registry[tenant],
                 r2dbcConfig(properties.definitionFor(tenant).url, databaseCoroutineDispatcher),
             )
         }
@@ -125,7 +127,33 @@ class ConnectionFactoryTenantR2dbcConfig {
         R2dbcDatabaseConfig {
             this.dispatcher = dispatcher
             this.connectionFactoryOptions = connectionFactoryOptionsOf(url)
+    }
+}
+
+/**
+ * tenant pool을 순서대로 만들고, startup 중간 실패 시 이미 만든 pool도 정리합니다.
+ * cleanup 실패는 원래 startup 예외의 suppressed 예외로 보존합니다.
+ */
+internal fun <T : Any> createTenantPools(
+    tenants: Iterable<T>,
+    poolFactory: (T) -> ConnectionPool,
+    warmup: (ConnectionPool) -> Unit,
+): Map<T, ConnectionPool> {
+    val pools = linkedMapOf<T, ConnectionPool>()
+    try {
+        tenants.forEach { tenant ->
+            val pool = poolFactory(tenant)
+            pools[tenant] = pool
+            warmup(pool)
         }
+        return pools
+    } catch (failure: Throwable) {
+        pools.values.forEach { pool ->
+            runCatching { pool.dispose() }
+                .onFailure { cleanupFailure -> failure.addSuppressed(cleanupFailure) }
+        }
+        throw failure
+    }
 }
 
 /**

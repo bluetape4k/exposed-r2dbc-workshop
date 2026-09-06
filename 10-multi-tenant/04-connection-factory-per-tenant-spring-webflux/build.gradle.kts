@@ -42,7 +42,7 @@ dependencies {
     implementation(libs.jetbrains.exposed.migration.r2dbc)
 
     // bluetape4k
-    implementation(libs.bluetape4k.r2dbc)
+    implementation(libs.bluetape4k.r2dbc.snapshot)
     implementation(libs.bluetape4k.tenant)
     implementation(libs.bluetape4k.tenant.reactor)
     implementation(libs.exposed.r2dbc)

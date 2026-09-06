@@ -24,6 +24,11 @@ connection-factory routing without an authentication boundary.
 cookie or login flow. CSRF is disabled because this example is a stateless JSON
 API; cookie-backed session flows should keep CSRF protection.
 
+The tenant registry is a static, startup-provisioned snapshot for the two demo
+tenants. Dynamic tenant onboarding is intentionally outside this example; use a
+separate provisioning/lifecycle component when the tenant set changes at
+runtime.
+
 ## Request Contract
 
 ```http

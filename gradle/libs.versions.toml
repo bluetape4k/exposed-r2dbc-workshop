@@ -4,6 +4,8 @@
 [versions]
 # 정식 2.0.0 안정 릴리스만 소비한다.
 bluetape4k-dependencies = "2.0.0"
+# Provider API 검증용으로 영향 모듈만 불변 timestamp 버전에 고정한다.
+bluetape4k-provider-snapshot = "2.1.0-20260906.213229-5"
 
 kotlin = "2.4.0"
 kotlinx-coroutines = "1.11.0"
@@ -100,6 +102,7 @@ bluetape4k-junit5 = { module = "io.github.bluetape4k:bluetape4k-junit5" }
 bluetape4k-logging = { module = "io.github.bluetape4k:bluetape4k-logging" }
 bluetape4k-money = { module = "io.github.bluetape4k:bluetape4k-money" }
 bluetape4k-r2dbc = { module = "io.github.bluetape4k:bluetape4k-r2dbc" }
+bluetape4k-r2dbc-snapshot = { module = "io.github.bluetape4k:bluetape4k-r2dbc", version.ref = "bluetape4k-provider-snapshot" }
 bluetape4k-redis = { module = "io.github.bluetape4k:bluetape4k-redis" }
 bluetape4k-spring-boot-core = { module = "io.github.bluetape4k:bluetape4k-spring-boot-core" }
 bluetape4k-testcontainers = { module = "io.github.bluetape4k:bluetape4k-testcontainers" }

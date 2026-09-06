@@ -24,6 +24,9 @@ Spring WebFlux + Exposed R2DBC 예제로, 테넌트마다 별도의 R2DBC
 공유 schema 방식보다 더 강한 운영 격리가 필요하고, 테넌트 수가 제한적이거나
 명시적으로 provision되는 경우에 이 전략을 선택합니다. 테넌트마다 pool이
 생기므로 전체 connection 수는 테넌트 수에 비례합니다.
+이 예제의 registry는 시작 시 구성되는 정적 snapshot입니다. 실행 중 tenant를
+동적으로 onboarding하는 흐름은 범위 밖이며, 별도의 provisioning/lifecycle
+컴포넌트로 분리해야 합니다.
 
 [`03-multitenant-spring-webflux`](../03-multitenant-spring-webflux/README.ko.md)와
 비교하면 다음과 같습니다.

@@ -23,6 +23,10 @@ tenant별 `ConnectionFactory`로 라우팅하는 흐름을 보여줍니다.
 플로우가 아닙니다. 이 예제는 stateless JSON API라 CSRF를 끕니다. Cookie 기반
 session 플로우에서는 CSRF 보호를 유지해야 합니다.
 
+tenant registry는 두 demo tenant를 시작 시 구성하는 정적 snapshot입니다.
+실행 중 tenant onboarding은 이 예제의 범위 밖이며, tenant 집합이 런타임에
+변경되는 경우 별도의 provisioning/lifecycle 컴포넌트를 사용해야 합니다.
+
 ## 요청 계약
 
 ```http
