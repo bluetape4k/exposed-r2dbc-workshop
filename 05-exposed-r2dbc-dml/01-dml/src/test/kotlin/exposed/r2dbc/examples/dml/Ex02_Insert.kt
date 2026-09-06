@@ -363,7 +363,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
     }
 
     /**
-     * Exposed 1.5의 [batchInsert] multi-row VALUES 경로는 PostgreSQL 계열에서
+     * Exposed 1.5의 [batchInsert] multi-row VALUES 경로는 PostgreSQL/MariaDB 계열에서
      * 하나의 INSERT 문을 만들고, 생성된 키와 입력 행의 관계를 유지합니다.
      *
      * `shouldReturnGeneratedValues = false`인 seed 경로는 기존처럼 생성 키를
@@ -372,7 +372,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `batch insert with multi row values`(testDB: TestDB) = runTest {
-        Assumptions.assumeTrue { testDB in TestDB.ALL_POSTGRES_LIKE }
+        Assumptions.assumeTrue { testDB in (TestDB.ALL_POSTGRES_LIKE + TestDB.ALL_MARIADB_LIKE) }
 
         val cities = object : IntIdTable("multi_row_cities") {
             val name = varchar("name", 50)
@@ -417,7 +417,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `batch insert falls back to driver batch`(testDB: TestDB) = runTest {
-        Assumptions.assumeTrue { testDB in TestDB.ALL_POSTGRES_LIKE }
+        Assumptions.assumeTrue { testDB in (TestDB.ALL_POSTGRES_LIKE + TestDB.ALL_MARIADB_LIKE) }
 
         val cities = object : IntIdTable("driver_batch_cities") {
             val name = varchar("name", 50)
@@ -459,7 +459,7 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
     fun `batch insert multi row values without generated keys`(testDB: TestDB) = runTest {
-        Assumptions.assumeTrue { testDB in TestDB.ALL_POSTGRES_LIKE }
+        Assumptions.assumeTrue { testDB in (TestDB.ALL_POSTGRES_LIKE + TestDB.ALL_MARIADB_LIKE) }
 
         val cities = object : IntIdTable("multi_row_without_keys") {
             val name = varchar("name", 50)
@@ -480,6 +480,37 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
             assertFailsWith<IllegalStateException> {
                 inserted.map { it[cities.id] }
             }
+        }
+    }
+
+    /**
+     * multi-row `ignore`는 실제 테이블 행 수와 반환 행 수를 동일한 계약으로
+     * 해석하지 않습니다. PostgreSQL/MariaDB driver가 per-entry update count를
+     * 제공하지 않는 경우 중복 입력도 client-side 반환 행에 남을 수 있습니다.
+     */
+    @ParameterizedTest
+    @MethodSource(ENABLE_DIALECTS_METHOD)
+    fun `multi row insert ignore records actual table count`(testDB: TestDB) = runTest {
+        Assumptions.assumeTrue { testDB in (TestDB.ALL_POSTGRES + TestDB.ALL_MARIADB) }
+
+        val tester = object : Table("multi_row_ignore") {
+            val name = varchar("name", 32).uniqueIndex()
+        }
+
+        withTables(testDB, tester) {
+            tester.insert { it[tester.name] = "skipped" }
+
+            val returned = tester.batchInsert(
+                listOf("skipped", "added"),
+                useMultiRowValues = true,
+                ignore = true,
+                shouldReturnGeneratedValues = false,
+            ) { name ->
+                this[tester.name] = name
+            }
+
+            returned.map { it[tester.name] } shouldBeEqualTo listOf("skipped", "added")
+            tester.selectAll().count() shouldBeEqualTo 2L
         }
     }
 

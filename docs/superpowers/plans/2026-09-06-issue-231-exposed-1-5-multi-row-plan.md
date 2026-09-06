@@ -13,8 +13,9 @@
 
 검증 증거: `:01-dml:test --tests "exposed.r2dbc.examples.dml.Ex02_Insert" -PuseDB=H2_PSQL`
 에서 26개 실행(24 passed, 2 skipped), `dependencyInsight`에서 Exposed `1.5.0`
-및 Bluetape BOM `2.0.0`을 확인했다. PostgreSQL/MariaDB Testcontainers는 CI에서
-순차 검증할 PR 증거로 남긴다.
+및 Bluetape BOM `2.0.0`을 확인했다. 이후 PostgreSQL은 동일한 targeted suite
+27개 통과, MariaDB는 27개 중 22개 통과/5개 skip으로 완료했으며 새 부분 충돌
+계약 테스트도 두 driver에서 통과했다. PR exact-head CI는 생성 후 확인한다.
 
 ## 단계
 

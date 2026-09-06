@@ -70,7 +70,10 @@ Bluetape artifact version은 추가하지 않는다.
   `2.0.0`임을 확인한다.
 - [완료] H2 대상 테스트에서 multi-row SQL shape, fallback row count, generated values,
   duplicate conflict 및 rollback을 확인한다.
-- [CI 대기] PostgreSQL 및 MariaDB Testcontainers는 순차 실행하고 결과를 PR에 기록한다.
+- [완료] PostgreSQL 및 MariaDB Testcontainers를 순차 실행했다. 각 dialect에서
+  `Ex02_Insert` 27개 테스트가 실행되었고 PostgreSQL은 27개 통과, MariaDB는
+  22개 통과/5개 skip이었다. 새 부분 충돌 계약 테스트도 두 driver에서 통과했다.
+- [CI 대기] PR의 exact-head workflow와 전체 CI 결과를 확인한다.
 - [완료] `git diff --check`와 targeted test를 통과했다. 모듈별 static analysis
   task는 현재 Gradle project에 등록되어 있지 않다.
 

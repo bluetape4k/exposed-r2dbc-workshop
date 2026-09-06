@@ -53,9 +53,9 @@ src/test/kotlin/exposed/r2dbc/examples/dml/
 
 ### Exposed 1.5 multi-row INSERT
 
-`Ex02_Insert`는 Exposed 1.5의 `batchInsert(..., useMultiRowValues = true)`를 PostgreSQL 계열에서 검증합니다. 이 옵션은 `INSERT ... VALUES (...), (...)` 단일 문을 만들고, 기본 `batchInsert`는 driver-level batch를 사용해 행마다 바인딩된 INSERT를 실행합니다. 지원되지 않는 driver나 generated key를 반환하지 않는 적재 경로에서는 `useMultiRowValues = false`와 `shouldReturnGeneratedValues = false` 조합으로 안전하게 fallback할 수 있습니다.
+`Ex02_Insert`는 Exposed 1.5의 `batchInsert(..., useMultiRowValues = true)`를 PostgreSQL/MariaDB 계열에서 검증합니다. 이 옵션은 `INSERT ... VALUES (...), (...)` 단일 문을 만들고, 기본 `batchInsert`는 driver-level batch를 사용해 행마다 바인딩된 INSERT를 실행합니다. 지원되지 않는 driver나 generated key를 반환하지 않는 적재 경로에서는 `useMultiRowValues = false`와 `shouldReturnGeneratedValues = false` 조합으로 안전하게 fallback할 수 있습니다.
 
-`ignore = true`인 부분 충돌 batch의 반환 행은 driver가 per-entry update count를 제공하는지에 따라 달라집니다. H2와 MariaDB는 이 count를 제공하지 않으므로 “실제로 삽입된 행만 반환”을 일반 계약으로 가정하지 않습니다. 현재 충돌 행 수 검증은 `batch insert number of inserted rows` 예제에서 별도 실행하며, PostgreSQL/MariaDB Testcontainers 검증은 CI에서 수행합니다.
+`ignore = true`인 부분 충돌 batch의 반환 행은 driver가 per-entry update count를 제공하는지에 따라 달라집니다. H2와 MariaDB는 이 count를 제공하지 않으므로 “실제로 삽입된 행만 반환”을 일반 계약으로 가정하지 않습니다. `multi row insert ignore records actual table count` 테스트는 중복 입력이 client-side 반환 행에 남을 수 있지만 실제 테이블 행 수는 새 행만큼 증가한다는 차이를 PostgreSQL/MariaDB에서 고정합니다.
 
 ## 예제 테이블 구조 (ER 다이어그램)
 
