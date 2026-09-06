@@ -51,6 +51,12 @@ src/test/kotlin/exposed/r2dbc/examples/dml/
 
 > **참고**: 이 모듈은 `src/main`이 없고, 모든 코드가 `src/test`에 위치합니다. 학습/실습 목적의 테스트 전용 모듈입니다.
 
+### Exposed 1.5 multi-row INSERT
+
+`Ex02_Insert`는 Exposed 1.5의 `batchInsert(..., useMultiRowValues = true)`를 PostgreSQL/MariaDB 계열에서 검증합니다. 이 옵션은 `INSERT ... VALUES (...), (...)` 단일 문을 만들고, 기본 `batchInsert`는 driver-level batch를 사용해 행마다 바인딩된 INSERT를 실행합니다. 지원되지 않는 driver나 generated key를 반환하지 않는 적재 경로에서는 `useMultiRowValues = false`와 `shouldReturnGeneratedValues = false` 조합으로 안전하게 fallback할 수 있습니다.
+
+`ignore = true`인 부분 충돌 batch의 반환 행은 driver가 per-entry update count를 제공하는지에 따라 달라집니다. H2와 MariaDB는 이 count를 제공하지 않으므로 “실제로 삽입된 행만 반환”을 일반 계약으로 가정하지 않습니다. `multi row insert ignore records actual table count` 테스트는 중복 입력이 client-side 반환 행에 남을 수 있지만 실제 테이블 행 수는 새 행만큼 증가한다는 차이를 PostgreSQL/MariaDB에서 고정합니다.
+
 ## 예제 테이블 구조 (ER 다이어그램)
 
 아래는 이 모듈에서 공통으로 사용되는 테이블 구조입니다.
@@ -72,7 +78,7 @@ src/test/kotlin/exposed/r2dbc/examples/dml/
 | 파일            | 설명                                                                                                           |
 |---------------|--------------------------------------------------------------------------------------------------------------|
 | `Ex01_Select` | WHERE 조건, AND/OR 결합, `inList`, `inSubQuery`, `anyFrom`, `allFrom`, DISTINCT, LIMIT/OFFSET 등 SELECT의 거의 모든 패턴 |
-| `Ex02_Insert` | 단건/대량 INSERT, `insertIgnore`, `insertAndGetId`, auto-increment, generated 컬럼(auto-derived, read-only), Sequence, UUID 기반 삽입 |
+| `Ex02_Insert` | 단건/대량 INSERT, Exposed 1.5 multi-row `VALUES`, driver-level batch fallback, `insertIgnore`, `insertAndGetId`, auto-increment, generated 컬럼(auto-derived, read-only), Sequence, UUID 기반 삽입 |
 | `Ex03_Update` | 단건 UPDATE, joinQuery를 이용한 조건부 UPDATE, alias 기반 UPDATE                                                        |
 | `Ex04_Upsert` | PK/Unique 충돌 시 INSERT or UPDATE, `batchUpsert`, `onUpdate` 커스텀 로직, `where` 조건, `onUpdateExclude`             |
 | `Ex05_Delete` | `deleteWhere`, `deleteAll`, `deleteIgnoreWhere`, JOIN 기반 삭제                                                  |

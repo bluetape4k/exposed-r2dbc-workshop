@@ -7,6 +7,7 @@ dependencies {
     testImplementation(project(":exposed-r2dbc-shared"))
 
     // Exposed
+    testImplementation(platform(libs.jetbrains.exposed.bom))
     testImplementation(libs.jetbrains.exposed.r2dbc)
     testImplementation(libs.jetbrains.exposed.java.time)
 

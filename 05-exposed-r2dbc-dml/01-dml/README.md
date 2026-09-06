@@ -57,7 +57,7 @@ src/test/kotlin/exposed/r2dbc/examples/dml/
 | File            | Description                                                                                                                          |
 |-----------------|--------------------------------------------------------------------------------------------------------------------------------------|
 | `Ex01_Select`   | Nearly all SELECT patterns: WHERE, AND/OR, `inList`, `inSubQuery`, `anyFrom`, `allFrom`, DISTINCT, LIMIT/OFFSET                      |
-| `Ex02_Insert`   | Single/batch INSERT, `insertIgnore`, `insertAndGetId`, auto-increment, generated columns (auto-derived, read-only), Sequence, UUID   |
+| `Ex02_Insert`   | Single/batch INSERT, Exposed 1.5 multi-row `VALUES`, driver-level batch fallback, `insertIgnore`, `insertAndGetId`, auto-increment, generated columns (auto-derived, read-only), Sequence, UUID   |
 | `Ex03_Update`   | Single UPDATE, conditional UPDATE via joinQuery, alias-based UPDATE                                                                  |
 | `Ex04_Upsert`   | INSERT or UPDATE on PK/Unique conflict, `batchUpsert`, custom `onUpdate` logic, `where` conditions, `onUpdateExclude`                |
 | `Ex05_Delete`   | `deleteWhere`, `deleteAll`, `deleteIgnoreWhere`, JOIN-based delete                                                                   |

@@ -24,11 +24,14 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import io.bluetape4k.assertions.fail
+import io.bluetape4k.assertions.assertFailsWith
 import io.bluetape4k.assertions.shouldBeEqualTo
 import io.bluetape4k.assertions.shouldBeNull
 import io.bluetape4k.assertions.shouldBeTrue
+import io.bluetape4k.assertions.shouldContain
 import io.bluetape4k.assertions.shouldHaveSize
 import io.bluetape4k.assertions.shouldNotBeNull
+import nl.altindag.log.LogCaptor
 import org.jetbrains.exposed.v1.core.Column
 import org.jetbrains.exposed.v1.core.CustomFunction
 import org.jetbrains.exposed.v1.core.ResultRow
@@ -50,6 +53,7 @@ import org.jetbrains.exposed.v1.core.stringLiteral
 import org.jetbrains.exposed.v1.core.substring
 import org.jetbrains.exposed.v1.core.trim
 import org.jetbrains.exposed.v1.core.wrapAsExpression
+import org.jetbrains.exposed.v1.core.exposedLogger
 import org.jetbrains.exposed.v1.javatime.CurrentTimestamp
 import org.jetbrains.exposed.v1.javatime.timestamp
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
@@ -309,6 +313,8 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
 
     /**
      * [batchInsert] 는 여러 개의 ROW를 한 번에 INSERT 작업을 수행합니다.
+     * 기본값은 driver-level batch이며, Exposed 1.5부터 [useMultiRowValues]를
+     * `true`로 지정하면 하나의 `INSERT ... VALUES (...), (...)` 문으로 접습니다.
      */
     @ParameterizedTest
     @MethodSource(ENABLE_DIALECTS_METHOD)
@@ -322,6 +328,8 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
              * INSERT INTO cities ("name") VALUES ('Paris');
              * INSERT INTO cities ("name") VALUES ('Moscow');
              * INSERT INTO cities ("name") VALUES ('Helsinki');
+             *
+             * 기본 overload는 위 SQL을 driver-level batch로 실행합니다.
              * ```
              */
             val allCitiesIDs: List<ResultRow> = cities.batchInsert(cityNames) { name ->
@@ -351,6 +359,158 @@ class Ex02_Insert: AbstractR2dbcExposedTest() {
             users.selectAll()
                 .where { users.name inList userNamesWithCityIds.map { it.first } }
                 .count() shouldBeEqualTo userNamesWithCityIds.size.toLong()
+        }
+    }
+
+    /**
+     * Exposed 1.5의 [batchInsert] multi-row VALUES 경로는 PostgreSQL/MariaDB 계열에서
+     * 하나의 INSERT 문을 만들고, 생성된 키와 입력 행의 관계를 유지합니다.
+     *
+     * `shouldReturnGeneratedValues = false`인 seed 경로는 기존처럼 생성 키를
+     * 읽지 않고 입력값만 반환하므로 MovieSchema의 seed 계약도 그대로 유지합니다.
+     */
+    @ParameterizedTest
+    @MethodSource(ENABLE_DIALECTS_METHOD)
+    fun `batch insert with multi row values`(testDB: TestDB) = runTest {
+        Assumptions.assumeTrue { testDB in (TestDB.ALL_POSTGRES_LIKE + TestDB.ALL_MARIADB_LIKE) }
+
+        val cities = object : IntIdTable("multi_row_cities") {
+            val name = varchar("name", 50)
+        }
+
+        withTables(testDB, cities) {
+            val cityNames = listOf("Paris", "Moscow", "Helsinki")
+            val logCaptor = LogCaptor.forName(exposedLogger.name)
+            logCaptor.setLogLevelToDebug()
+
+            try {
+                val inserted = cities.batchInsert(
+                    cityNames,
+                    useMultiRowValues = true,
+                    shouldReturnGeneratedValues = true,
+                ) { name ->
+                    this[cities.name] = name
+                }
+
+                inserted shouldHaveSize cityNames.size
+                inserted.map { it[cities.name] } shouldBeEqualTo cityNames
+                inserted.map { it[cities.id].value } shouldBeEqualTo listOf(1, 2, 3)
+
+                val insertLogs = logCaptor.debugLogs.filter { it.startsWith("INSERT ", ignoreCase = true) }
+                insertLogs shouldHaveSize 1
+                val valuesSql = insertLogs.single().substringAfter("VALUES").trim()
+                cityNames.forEach { valuesSql shouldContain "('$it')" }
+            } finally {
+                logCaptor.clearLogs()
+                logCaptor.resetLogLevel()
+                logCaptor.close()
+            }
+
+            cities.selectAll().count() shouldBeEqualTo cityNames.size.toLong()
+        }
+    }
+
+    /**
+     * [useMultiRowValues]를 끄면 driver-level batch로 안전하게 fallback합니다.
+     * 이 경로는 생성 키를 요청하지 않는 seed/대량 적재에 적합합니다.
+     */
+    @ParameterizedTest
+    @MethodSource(ENABLE_DIALECTS_METHOD)
+    fun `batch insert falls back to driver batch`(testDB: TestDB) = runTest {
+        Assumptions.assumeTrue { testDB in (TestDB.ALL_POSTGRES_LIKE + TestDB.ALL_MARIADB_LIKE) }
+
+        val cities = object : IntIdTable("driver_batch_cities") {
+            val name = varchar("name", 50)
+        }
+
+        withTables(testDB, cities) {
+            val cityNames = listOf("Paris", "Moscow", "Helsinki")
+            val logCaptor = LogCaptor.forName(exposedLogger.name)
+            logCaptor.setLogLevelToDebug()
+
+            try {
+                val inserted = cities.batchInsert(
+                    cityNames,
+                    useMultiRowValues = false,
+                    shouldReturnGeneratedValues = false,
+                ) { name ->
+                    this[cities.name] = name
+                }
+
+                inserted shouldHaveSize cityNames.size
+                inserted.map { it[cities.name] } shouldBeEqualTo cityNames
+
+                val insertLogs = logCaptor.debugLogs.filter { it.startsWith("INSERT ", ignoreCase = true) }
+                insertLogs shouldHaveSize cityNames.size
+            } finally {
+                logCaptor.clearLogs()
+                logCaptor.resetLogLevel()
+                logCaptor.close()
+            }
+
+            cities.selectAll().count() shouldBeEqualTo cityNames.size.toLong()
+        }
+    }
+
+    /**
+     * 생성 키를 끄면 multi-row 반환 행에는 client-side 값만 남고 generated ID는
+     * 읽을 수 없습니다. 이 계약을 지키면 기존 seed와 rollback 예제가 깨지지 않습니다.
+     */
+    @ParameterizedTest
+    @MethodSource(ENABLE_DIALECTS_METHOD)
+    fun `batch insert multi row values without generated keys`(testDB: TestDB) = runTest {
+        Assumptions.assumeTrue { testDB in (TestDB.ALL_POSTGRES_LIKE + TestDB.ALL_MARIADB_LIKE) }
+
+        val cities = object : IntIdTable("multi_row_without_keys") {
+            val name = varchar("name", 50)
+        }
+
+        withTables(testDB, cities) {
+            val cityNames = listOf("Berlin", "Amsterdam")
+            val inserted = cities.batchInsert(
+                cityNames,
+                useMultiRowValues = true,
+                shouldReturnGeneratedValues = false,
+            ) { name ->
+                this[cities.name] = name
+            }
+
+            inserted shouldHaveSize cityNames.size
+            inserted.map { it[cities.name] } shouldBeEqualTo cityNames
+            assertFailsWith<IllegalStateException> {
+                inserted.map { it[cities.id] }
+            }
+        }
+    }
+
+    /**
+     * multi-row `ignore`는 실제 테이블 행 수와 반환 행 수를 동일한 계약으로
+     * 해석하지 않습니다. PostgreSQL/MariaDB driver가 per-entry update count를
+     * 제공하지 않는 경우 중복 입력도 client-side 반환 행에 남을 수 있습니다.
+     */
+    @ParameterizedTest
+    @MethodSource(ENABLE_DIALECTS_METHOD)
+    fun `multi row insert ignore records actual table count`(testDB: TestDB) = runTest {
+        Assumptions.assumeTrue { testDB in (TestDB.ALL_POSTGRES + TestDB.ALL_MARIADB) }
+
+        val tester = object : Table("multi_row_ignore") {
+            val name = varchar("name", 32).uniqueIndex()
+        }
+
+        withTables(testDB, tester) {
+            tester.insert { it[tester.name] = "skipped" }
+
+            val returned = tester.batchInsert(
+                listOf("skipped", "added"),
+                useMultiRowValues = true,
+                ignore = true,
+                shouldReturnGeneratedValues = false,
+            ) { name ->
+                this[tester.name] = name
+            }
+
+            returned.map { it[tester.name] } shouldBeEqualTo listOf("skipped", "added")
+            tester.selectAll().count() shouldBeEqualTo 2L
         }
     }
 
