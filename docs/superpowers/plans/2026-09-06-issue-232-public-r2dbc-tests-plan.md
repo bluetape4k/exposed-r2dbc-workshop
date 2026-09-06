@@ -2,16 +2,21 @@
 
 ## 완료 조건
 
-- [ ] 두 순수 test consumer가 public `bluetape4k-exposed-r2dbc-tests:2.0.0`을
+- [x] 두 순수 test consumer가 public `bluetape4k-exposed-r2dbc-tests:2.0.0`을
   사용한다.
-- [ ] private fixture import/base class가 두 consumer에서 제거된다.
-- [ ] SQL example은 private shared dependency도 제거하고, DDL connection은
+- [x] private fixture import/base class가 두 consumer에서 제거된다.
+- [x] SQL example은 private shared dependency도 제거하고, DDL connection은
   shared production fixture 때문에 test-scoped dependency를 유지한다.
-- [ ] public alias가 local catalog에 추가되고 stable Bluetape BOM 정책과
+- [x] public alias가 local catalog에 추가되고 stable Bluetape BOM 정책과
   일치한다.
-- [ ] H2 targeted tests와 test-only/runtime graph 검증을 통과한다.
-- [ ] 호환성 차이와 repository-wide 후속 범위를 한국어 문서와 PR DoD에
+- [x] H2 targeted tests와 test-only/runtime graph 검증을 통과한다.
+- [x] 호환성 차이와 repository-wide 후속 범위를 한국어 문서와 PR DoD에
   기록한다.
+
+검증 증거: `EXPOSED_TEST_DB=H2 ./gradlew :exposed-r2dbc-sql-example:test`에서
+6개 테스트, `EXPOSED_TEST_DB=H2 ./gradlew :01-connection:test`에서 15개 테스트가
+통과했다. 두 모듈의 `testRuntimeClasspath` dependencyInsight에서 public artifact
+`2.0.0`을 확인했으며, production source/runtime scope는 변경하지 않았다.
 
 ## 단계
 

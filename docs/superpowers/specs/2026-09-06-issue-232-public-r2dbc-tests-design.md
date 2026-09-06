@@ -70,10 +70,11 @@ project dependency는 production fixture 사용 때문에 test scope로 유지�
 
 ## 검증 기준
 
-- 두 module의 runtime dependency graph에 public fixture가 들어가지 않고
+- [완료] 두 module의 runtime dependency graph에 public fixture가 들어가지 않고
   `testCompileClasspath`/`testRuntimeClasspath`에만 존재한다.
-- H2 targeted tests에서 schema create/drop, transaction cleanup, cancellation
+- [완료] H2 targeted tests에서 schema create/drop, transaction cleanup, cancellation
   경계를 통과한다.
-- private fixture import가 두 consumer test source에서 사라진다.
-- `git diff --check`, targeted tests, dependency insight/static analysis를
-  통과한다.
+- [완료] private fixture import가 두 consumer test source에서 사라진다.
+- [완료] `git diff --check`, targeted tests, dependency insight를 통과한다.
+  모듈별 static analysis task는 현재 Gradle project에 등록되어 있지 않다.
+- [CI 대기] Testcontainers dialect matrix는 PR CI에서 확인한다.
