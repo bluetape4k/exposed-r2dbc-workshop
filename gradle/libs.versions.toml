@@ -67,6 +67,9 @@ exposed = { id = "org.jetbrains.exposed.plugin", version.ref = "exposed" }
 [libraries]
 jetbrains-annotations = { module = "org.jetbrains:annotations", version = "26.1.0" }
 
+# Exposed 1.5 multi-row VALUES 검증은 DML 예제 테스트에서만 선택한다.
+jetbrains-exposed-bom = { module = "org.jetbrains.exposed:exposed-bom", version = "1.5.0" }
+
 # Bluetape4k
 bluetape4k-dependencies = { module = "io.github.bluetape4k:bluetape4k-dependencies", version.ref = "bluetape4k-dependencies" }
 bluetape4k-assertions = { module = "io.github.bluetape4k:bluetape4k-assertions" }
