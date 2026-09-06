@@ -24,6 +24,9 @@ This module demonstrates **connection-factory-per-tenant** isolation:
 Choose this strategy when tenants need stronger operational separation than a
 shared-schema model and the tenant set is bounded or explicitly provisioned.
 Each tenant gets a separate pool, so connection count grows with tenant count.
+This example uses a static, startup-provisioned registry; dynamic tenant
+onboarding is intentionally outside its scope and should use a separate
+provisioning/lifecycle component.
 
 Compared with
 [`03-multitenant-spring-webflux`](../03-multitenant-spring-webflux/README.md):

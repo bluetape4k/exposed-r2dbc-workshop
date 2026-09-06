@@ -45,11 +45,13 @@ class ConnectionFactoryTenantR2dbcConfig {
         properties: TenantConnectionFactoryProperties,
         poolProperties: TenantConnectionPoolProperties,
     ): R2dbcConnectionFactoryRegistry<Tenant> {
-        val pools = Tenants.Tenant.entries.associateWith { tenant ->
-            val definition = properties.definitionFor(tenant)
-            poolConfiguration(definition.url, poolProperties)
-                .also { it.warmup().block(poolProperties.maxCreateConnectionTime) }
-        }
+        val pools = createTenantPools(
+            tenants = Tenants.Tenant.entries,
+            poolFactory = { tenant ->
+                poolConfiguration(properties.definitionFor(tenant).url, poolProperties)
+            },
+            warmup = { pool -> pool.warmup().block(poolProperties.maxCreateConnectionTime) },
+        )
         return R2dbcConnectionFactoryRegistry.owned(pools)
     }
 
@@ -125,7 +127,33 @@ class ConnectionFactoryTenantR2dbcConfig {
         R2dbcDatabaseConfig {
             this.dispatcher = dispatcher
             this.connectionFactoryOptions = connectionFactoryOptionsOf(url)
+    }
+}
+
+/**
+ * tenant pool을 순서대로 만들고, startup 중간 실패 시 이미 만든 pool도 정리합니다.
+ * cleanup 실패는 원래 startup 예외의 suppressed 예외로 보존합니다.
+ */
+internal fun <T : Any> createTenantPools(
+    tenants: Iterable<T>,
+    poolFactory: (T) -> ConnectionPool,
+    warmup: (ConnectionPool) -> Unit,
+): Map<T, ConnectionPool> {
+    val pools = linkedMapOf<T, ConnectionPool>()
+    try {
+        tenants.forEach { tenant ->
+            val pool = poolFactory(tenant)
+            pools[tenant] = pool
+            warmup(pool)
         }
+        return pools
+    } catch (failure: Throwable) {
+        pools.values.forEach { pool ->
+            runCatching { pool.dispose() }
+                .onFailure { cleanupFailure -> failure.addSuppressed(cleanupFailure) }
+        }
+        throw failure
+    }
 }
 
 /**
