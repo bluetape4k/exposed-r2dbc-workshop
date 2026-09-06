@@ -2,6 +2,7 @@ package exposed.r2dbc.examples.production.spring.app
 
 import exposed.r2dbc.examples.production.spring.persistence.SpringProductionTables
 import io.bluetape4k.codec.Base58
+import io.bluetape4k.http.sanitizeOutboundError
 import io.bluetape4k.logging.KLogging
 import io.bluetape4k.logging.warn
 import io.bluetape4k.support.requireNotBlank
@@ -51,14 +52,9 @@ class SpringProductionRepository(
         const val defaultRegisteredPermission = "work:create"
         val defaultRegisteredRoles = setOf("USER")
         const val maxOutboxErrorLength = 240
-        const val maxOutboundErrorLength = 240
         const val maxOutboundAttempts = 3
-        // 정제된 오류 본문 앞에 보존할 가장 긴 prefix입니다. 예: "HTTP 599 ".
-        private const val maxHttpStatusPrefixLength = 9
         val outboundDispatchTimeout: Duration = Duration.ofSeconds(5)
         val idempotencyKeyPattern = Regex("[A-Za-z0-9._-]{1,120}")
-        val credentialLikeErrorPattern =
-            Regex("(?i)\\b(authorization|cookie|token|secret|api[-_ ]?key)[:=]\\s*(?:Bearer\\s+)?[^\\s,;]+")
         const val diagnosticOperationLimit = 100
         const val slowDiagnosticThresholdMs = 250L
         val diagnosticPingTimeout: Duration = Duration.ofSeconds(1)
@@ -348,7 +344,10 @@ class SpringProductionRepository(
                 } catch (e: CancellationException) {
                     throw e
                 } catch (e: Exception) {
-                    log.warn(e) { "Outbound dispatch failed for requestId=${request.id}" }
+                    log.warn {
+                        "Outbound dispatch failed for requestId=${request.id}, " +
+                            "exceptionType=${e::class.simpleName ?: "Exception"}"
+                    }
                     OutboundDispatchResult(
                         statusCode = 599,
                         error = "Transport failure: ${e::class.simpleName ?: "Exception"}",
@@ -455,12 +454,14 @@ class SpringProductionRepository(
                 }
             }
         } catch (e: TimeoutCancellationException) {
-            log.warn(e) { "Database readiness ping timed out" }
+            log.warn { "Database readiness ping timed out" }
             false
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
-            log.warn(e) { "Database readiness ping failed" }
+            log.warn {
+                "Database readiness ping failed, exceptionType=${e::class.simpleName ?: "Exception"}"
+            }
             false
         }
 
@@ -479,7 +480,10 @@ class SpringProductionRepository(
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
-            log.warn(e) { "Database readiness check failed for requestId=${requestId.orEmpty()}" }
+            log.warn {
+                "Database readiness check failed for requestId=${requestId.orEmpty()}, " +
+                    "exceptionType=${e::class.simpleName ?: "Exception"}"
+            }
             return ReadinessView("DEGRADED", "database unreachable", requestId)
         }
     }
@@ -656,18 +660,6 @@ class SpringProductionRepository(
             this in 400..499 -> OutboundStatus.PERMANENT_FAILED
             else -> OutboundStatus.RETRYABLE_FAILED
         }
-
-    private fun sanitizeOutboundError(statusCode: Int, rawMessage: String?): String {
-        val safeMessage = rawMessage
-            ?.replace(credentialLikeErrorPattern, "\$1:[redacted]")
-            ?.lineSequence()
-            ?.firstOrNull()
-            ?.take(maxOutboundErrorLength - maxHttpStatusPrefixLength)
-            ?.takeIf { it.isNotBlank() }
-        return listOfNotNull("HTTP $statusCode", safeMessage)
-            .joinToString(" ")
-            .take(maxOutboundErrorLength)
-    }
 
     private fun seedAccountsWithHashes(): List<Pair<SeedAccount, String>> =
         listOf(

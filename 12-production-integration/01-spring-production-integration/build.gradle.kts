@@ -23,6 +23,19 @@ dependencies {
     implementation(libs.jetbrains.exposed.r2dbc)
     implementation(libs.jetbrains.exposed.java.time)
     implementation(libs.exposed.r2dbc)
+    implementation(libs.bluetape4k.http.snapshot)
+
+    // HTTP provider의 published timestamp train 전체를 immutable 버전으로 고정한다.
+    constraints {
+        implementation(libs.bluetape4k.core.snapshot)
+        implementation(libs.bluetape4k.coroutines.snapshot)
+        implementation(libs.bluetape4k.io.snapshot)
+        implementation(libs.bluetape4k.logging.snapshot)
+        implementation(libs.bluetape4k.netty.snapshot)
+        implementation(libs.bluetape4k.resilience4j.snapshot)
+        implementation(libs.bluetape4k.virtualthread.api.snapshot)
+        implementation(libs.bluetape4k.virtualthread.jdk25.snapshot)
+    }
 
     implementation(libs.kotlinx.coroutines.reactor)
 
@@ -37,6 +50,7 @@ dependencies {
     runtimeOnly(libs.r2dbc.spi)
 
     testImplementation(libs.bluetape4k.junit5)
+    testImplementation(libs.logcaptor)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.boot:spring-boot-webtestclient")

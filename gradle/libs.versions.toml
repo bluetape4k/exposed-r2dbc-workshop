@@ -76,6 +76,7 @@ jetbrains-exposed-bom = { module = "org.jetbrains.exposed:exposed-bom", version 
 bluetape4k-dependencies = { module = "io.github.bluetape4k:bluetape4k-dependencies", version.ref = "bluetape4k-dependencies" }
 bluetape4k-assertions = { module = "io.github.bluetape4k:bluetape4k-assertions" }
 bluetape4k-coroutines = { module = "io.github.bluetape4k:bluetape4k-coroutines" }
+bluetape4k-coroutines-snapshot = { module = "io.github.bluetape4k:bluetape4k-coroutines", version.ref = "bluetape4k-provider-snapshot" }
 bluetape4k-tenant = { module = "io.github.bluetape4k:bluetape4k-tenant" }
 bluetape4k-tenant-reactor = { module = "io.github.bluetape4k:bluetape4k-tenant-reactor" }
 bluetape4k-ktor-tenant = { module = "io.github.bluetape4k:bluetape4k-ktor-tenant" }
@@ -93,13 +94,16 @@ exposed-tink = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-tink"
 bluetape4k-fastjson2 = { module = "io.github.bluetape4k:bluetape4k-fastjson2" }
 bluetape4k-grpc = { module = "io.github.bluetape4k:bluetape4k-grpc" }
 bluetape4k-http = { module = "io.github.bluetape4k:bluetape4k-http" }
+bluetape4k-http-snapshot = { module = "io.github.bluetape4k:bluetape4k-http", version.ref = "bluetape4k-provider-snapshot" }
 bluetape4k-idgenerators = { module = "io.github.bluetape4k:bluetape4k-idgenerators" }
 bluetape4k-io = { module = "io.github.bluetape4k:bluetape4k-io" }
+bluetape4k-io-snapshot = { module = "io.github.bluetape4k:bluetape4k-io", version.ref = "bluetape4k-provider-snapshot" }
 bluetape4k-jackson2 = { module = "io.github.bluetape4k:bluetape4k-jackson2" }
 bluetape4k-jackson3 = { module = "io.github.bluetape4k:bluetape4k-jackson3" }
 bluetape4k-jdbc = { module = "io.github.bluetape4k:bluetape4k-jdbc" }
 bluetape4k-junit5 = { module = "io.github.bluetape4k:bluetape4k-junit5" }
 bluetape4k-logging = { module = "io.github.bluetape4k:bluetape4k-logging" }
+bluetape4k-logging-snapshot = { module = "io.github.bluetape4k:bluetape4k-logging", version.ref = "bluetape4k-provider-snapshot" }
 bluetape4k-money = { module = "io.github.bluetape4k:bluetape4k-money" }
 bluetape4k-r2dbc = { module = "io.github.bluetape4k:bluetape4k-r2dbc" }
 bluetape4k-r2dbc-snapshot = { module = "io.github.bluetape4k:bluetape4k-r2dbc", version.ref = "bluetape4k-provider-snapshot" }
@@ -110,6 +114,11 @@ bluetape4k-ktor-testing = { module = "io.github.bluetape4k:bluetape4k-ktor-testi
 bluetape4k-tink = { module = "io.github.bluetape4k:bluetape4k-tink" }
 bluetape4k-virtualthread-jdk21 = { module = "io.github.bluetape4k:bluetape4k-virtualthread-jdk21" }
 bluetape4k-virtualthread-jdk25 = { module = "io.github.bluetape4k:bluetape4k-virtualthread-jdk25" }
+bluetape4k-core-snapshot = { module = "io.github.bluetape4k:bluetape4k-core", version.ref = "bluetape4k-provider-snapshot" }
+bluetape4k-netty-snapshot = { module = "io.github.bluetape4k:bluetape4k-netty", version.ref = "bluetape4k-provider-snapshot" }
+bluetape4k-resilience4j-snapshot = { module = "io.github.bluetape4k:bluetape4k-resilience4j", version.ref = "bluetape4k-provider-snapshot" }
+bluetape4k-virtualthread-api-snapshot = { module = "io.github.bluetape4k:bluetape4k-virtualthread-api", version.ref = "bluetape4k-provider-snapshot" }
+bluetape4k-virtualthread-jdk25-snapshot = { module = "io.github.bluetape4k:bluetape4k-virtualthread-jdk25", version.ref = "bluetape4k-provider-snapshot" }
 
 # Kotlin
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
