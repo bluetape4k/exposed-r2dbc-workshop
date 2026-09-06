@@ -3,7 +3,9 @@
 
 [versions]
 # 정식 2.0.0 안정 릴리스만 소비한다.
-bluetape4k-dependencies = "2.1.0-SNAPSHOT"
+bluetape4k-dependencies = "2.0.0"
+# Provider API 검증용으로 영향 모듈만 불변 timestamp 버전에 고정한다.
+bluetape4k-provider-snapshot = "2.1.0-20260906.213229-5"
 
 kotlin = "2.4.0"
 kotlinx-coroutines = "1.11.0"
@@ -91,6 +93,7 @@ exposed-tink = { module = "io.github.bluetape4k.exposed:bluetape4k-exposed-tink"
 bluetape4k-fastjson2 = { module = "io.github.bluetape4k:bluetape4k-fastjson2" }
 bluetape4k-grpc = { module = "io.github.bluetape4k:bluetape4k-grpc" }
 bluetape4k-http = { module = "io.github.bluetape4k:bluetape4k-http" }
+bluetape4k-http-snapshot = { module = "io.github.bluetape4k:bluetape4k-http", version.ref = "bluetape4k-provider-snapshot" }
 bluetape4k-idgenerators = { module = "io.github.bluetape4k:bluetape4k-idgenerators" }
 bluetape4k-io = { module = "io.github.bluetape4k:bluetape4k-io" }
 bluetape4k-jackson2 = { module = "io.github.bluetape4k:bluetape4k-jackson2" }
@@ -100,6 +103,7 @@ bluetape4k-junit5 = { module = "io.github.bluetape4k:bluetape4k-junit5" }
 bluetape4k-logging = { module = "io.github.bluetape4k:bluetape4k-logging" }
 bluetape4k-money = { module = "io.github.bluetape4k:bluetape4k-money" }
 bluetape4k-r2dbc = { module = "io.github.bluetape4k:bluetape4k-r2dbc" }
+bluetape4k-r2dbc-snapshot = { module = "io.github.bluetape4k:bluetape4k-r2dbc", version.ref = "bluetape4k-provider-snapshot" }
 bluetape4k-redis = { module = "io.github.bluetape4k:bluetape4k-redis" }
 bluetape4k-spring-boot-core = { module = "io.github.bluetape4k:bluetape4k-spring-boot-core" }
 bluetape4k-testcontainers = { module = "io.github.bluetape4k:bluetape4k-testcontainers" }
