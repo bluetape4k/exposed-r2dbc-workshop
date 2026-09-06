@@ -60,6 +60,7 @@ import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withTimeout
+import nl.altindag.log.LogCaptor
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -498,6 +499,34 @@ class KtorProductionIntegrationApplicationTest {
         stored.status.name shouldBeEqualTo "RETRYABLE_FAILED"
         stored.lastStatusCode shouldBeEqualTo 599
         stored.lastError?.contains("timeout") shouldBeEqualTo true
+    }
+
+    @Test
+    fun `outbound dispatch warning does not include throwable details`() = kotlinx.coroutines.test.runTest {
+        val repository = newRepository("outbound-log-safe")
+        repository.reset()
+        val sensitiveMessage = "Authorization:=ktor-secret-token"
+        repository.enqueueOutbound(EnqueueOutboundRequest("payment-log-safe", "https://example.test/payments", "payload"))
+        val failingDelivery = object: OutboundDelivery {
+            override suspend fun dispatch(request: OutboundRequestView): OutboundDispatchResult {
+                error(sensitiveMessage)
+            }
+        }
+        val logCaptor = LogCaptor.forRoot()
+        try {
+            logCaptor.setLogLevelToInfo()
+            logCaptor.clearLogs()
+
+            repository.dispatchPendingOutbound(failingDelivery)
+
+            val warning = logCaptor.warnLogs.single { it.contains("Outbound dispatch failed") }
+            warning.contains("exceptionType=IllegalStateException") shouldBeEqualTo true
+            warning.contains(sensitiveMessage) shouldBeEqualTo false
+        } finally {
+            logCaptor.clearLogs()
+            logCaptor.resetLogLevel()
+            logCaptor.close()
+        }
     }
 
     @Test

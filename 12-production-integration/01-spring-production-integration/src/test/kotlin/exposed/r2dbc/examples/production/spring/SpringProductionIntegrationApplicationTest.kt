@@ -12,6 +12,7 @@ import exposed.r2dbc.examples.production.spring.app.OutboxEventView
 import exposed.r2dbc.examples.production.spring.app.OutboxStatus
 import exposed.r2dbc.examples.production.spring.app.OutboundDelivery
 import exposed.r2dbc.examples.production.spring.app.OutboundDispatchResult
+import exposed.r2dbc.examples.production.spring.app.OutboundRequestView
 import exposed.r2dbc.examples.production.spring.app.PublishOutboxView
 import exposed.r2dbc.examples.production.spring.app.ReadinessView
 import exposed.r2dbc.examples.production.spring.app.RealtimeDelivery
@@ -32,6 +33,7 @@ import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.test.runTest
+import nl.altindag.log.LogCaptor
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -424,6 +426,32 @@ class SpringProductionIntegrationApplicationTest(
         stored.status.name shouldBeEqualTo "RETRYABLE_FAILED"
         stored.lastStatusCode shouldBeEqualTo 599
         stored.lastError?.contains("timeout") shouldBeEqualTo true
+    }
+
+    @Test
+    fun `outbound dispatch warning does not include throwable details`() = runTest {
+        val sensitiveMessage = "Authorization:=spring-secret-token"
+        repository.enqueueOutbound(EnqueueOutboundRequest("payment-log-safe", "https://example.test/payments", "payload"))
+        val failingDelivery = object: OutboundDelivery {
+            override suspend fun dispatch(request: OutboundRequestView): OutboundDispatchResult {
+                error(sensitiveMessage)
+            }
+        }
+        val logCaptor = LogCaptor.forRoot()
+        try {
+            logCaptor.setLogLevelToInfo()
+            logCaptor.clearLogs()
+
+            repository.dispatchPendingOutbound(failingDelivery)
+
+            val warning = logCaptor.warnLogs.single { it.contains("Outbound dispatch failed") }
+            warning.contains("exceptionType=IllegalStateException") shouldBeEqualTo true
+            warning.contains(sensitiveMessage) shouldBeEqualTo false
+        } finally {
+            logCaptor.clearLogs()
+            logCaptor.resetLogLevel()
+            logCaptor.close()
+        }
     }
 
     @Test

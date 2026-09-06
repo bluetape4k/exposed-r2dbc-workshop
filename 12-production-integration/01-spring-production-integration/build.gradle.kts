@@ -23,6 +23,7 @@ dependencies {
     implementation(libs.jetbrains.exposed.r2dbc)
     implementation(libs.jetbrains.exposed.java.time)
     implementation(libs.exposed.r2dbc)
+    implementation(libs.bluetape4k.http)
 
     implementation(libs.kotlinx.coroutines.reactor)
 
