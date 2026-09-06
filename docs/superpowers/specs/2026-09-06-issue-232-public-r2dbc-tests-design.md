@@ -46,9 +46,9 @@ project dependency는 production fixture 사용 때문에 test scope로 유지�
 - `AbstractR2dbcExposedTest` 상속은 `AbstractExposedR2dbcTest`로 바꾼다.
 - private에만 있는 `H2_ORACLE`/`H2_SQLSERVER`를 새 consumer에서 사용하지
   않는다.
-- 기존 `exposed.test.useFastDB`/`useDB` 설정과 공개 fixture의
-  `EXPOSED_TEST_DB` 차이는 이번 PR에서 compatibility note로 기록하고, 테스트
-  선택은 기본 H2로 제한한다.
+- 기존 `-PuseFastDB=true` 설정과 공개 fixture의 `EXPOSED_TEST_DB` 차이는 각
+  consumer test task에서 `EXPOSED_TEST_DB=H2`로 변환해 compatibility를 유지한다.
+  그 외 CI 환경 변수는 그대로 통과시킨다.
 
 ## 변경 범위
 
@@ -77,4 +77,5 @@ project dependency는 production fixture 사용 때문에 test scope로 유지�
 - [완료] private fixture import가 두 consumer test source에서 사라진다.
 - [완료] `git diff --check`, targeted tests, dependency insight를 통과한다.
   모듈별 static analysis task는 현재 Gradle project에 등록되어 있지 않다.
+- [완료] `-PuseFastDB=true`에서 public fixture가 H2만 선택한다.
 - [CI 대기] Testcontainers dialect matrix는 PR CI에서 확인한다.

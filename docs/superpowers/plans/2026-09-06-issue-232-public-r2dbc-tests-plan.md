@@ -16,7 +16,8 @@
 검증 증거: `EXPOSED_TEST_DB=H2 ./gradlew :exposed-r2dbc-sql-example:test`에서
 6개 테스트, `EXPOSED_TEST_DB=H2 ./gradlew :01-connection:test`에서 15개 테스트가
 통과했다. 두 모듈의 `testRuntimeClasspath` dependencyInsight에서 public artifact
-`2.0.0`을 확인했으며, production source/runtime scope는 변경하지 않았다.
+`2.0.0`을 확인했으며, `-PuseFastDB=true --rerun-tasks` 실행에서 두 모듈이
+H2-only 경로를 유지하는지 추가 확인했다. production source/runtime scope는 변경하지 않았다.
 
 ## 단계
 

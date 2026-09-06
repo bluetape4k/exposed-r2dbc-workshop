@@ -14,8 +14,8 @@ Issue #232에서 `03-exposed-r2dbc-basic/exposed-r2dbc-sql-example`와
   `CountryTable`/`DMLTestData` 때문에 기존 shared project도 test scope로
   유지한다.
 - 공개 fixture는 private fixture와 DB 선택 property/지원 dialect 목록이 다르다.
-  이번 소비자는 기본 H2 경로를 사용하므로 차이를 숨기지 않고 후속 migration의
-  compatibility 항목으로 남긴다.
+  두 consumer의 test task는 `-PuseFastDB=true`를 `EXPOSED_TEST_DB=H2`로
+  매핑해 기존 fast path를 유지하고, 그 외 CI 환경 변수는 그대로 통과시킨다.
 
 ## 범위 제한
 
