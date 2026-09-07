@@ -16,8 +16,8 @@ is performed by the provider through `suspendTransaction`; this module does
 not wrap JDBC calls, add `runBlocking`, or implement a second batch runner.
 
 The provider artifact resolved by this workshop is
-`io.github.bluetape4k.exposed:bluetape4k-exposed-batch:2.0.0` through the stable
-`bluetape4k-dependencies:2.0.0` catalog and Maven Central. In this release, the
+`io.github.bluetape4k.exposed:bluetape4k-exposed-batch:2.1.0-SNAPSHOT` through the
+`bluetape4k-dependencies:2.1.0-SNAPSHOT` catalog and the central snapshot repository. In this development line, the
 R2DBC repository imports its metadata tables from
 `io.bluetape4k.batch.r2dbc.tables` and its codec from
 `io.bluetape4k.batch.CheckpointJson`. The package name is an artifact

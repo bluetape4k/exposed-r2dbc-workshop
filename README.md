@@ -23,7 +23,7 @@ schema lifecycle, DDL/DML, multi-tenancy, cache, and routing patterns.
 
 - **Reactive SQL learning path** from shared test infrastructure to high-performance routing.
 - **Coroutine/R2DBC examples** with `suspendTransaction`, Flow collection, WebFlux, and Ktor request handling.
-- **JDK 25 Virtual Threads example** using the `bluetape4k-virtualthread-jdk25:2.0.0` provider selected by the `bluetape4k-dependencies:2.0.0` BOM.
+- **JDK 25 Virtual Threads example** using the `bluetape4k-virtualthread-jdk25:2.1.0-SNAPSHOT` provider selected by the `bluetape4k-dependencies:2.1.0-SNAPSHOT` BOM.
 - **Multi-database verification** for H2, PostgreSQL, MySQL, and MariaDB.
 - **Production patterns** for repository, cache, multi-tenant schema, routing datasource,
   realtime outbox, HTTP client outbox/idempotency, observability/readiness, and
@@ -43,7 +43,7 @@ For a detailed explanation, see the [Kotlin Exposed Book](https://debop.notion.s
 
 ## Key Points
 
-- Kotlin `2.3.20`, JDK `25+`, Exposed `1.1.1`, Spring Boot `3.5.11`, Bluetape4k `1.5.0-Beta1`
+- Kotlin `2.3.20`, JDK `25+`, Exposed `1.1.1`, Spring Boot `3.5.11`, Bluetape4k `2.1.0-SNAPSHOT`
 - Most examples are test-driven, so following the tests is a practical way to learn alongside the code.
 - Scenarios are verified with H2, PostgreSQL, and MySQL.
 - Spring/WebFlux and Ktor modules include REST API, cache, multi-tenancy, and routing examples.

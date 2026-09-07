@@ -1,12 +1,14 @@
 # 작업 현황 - exposed-r2dbc-workshop
 
-스냅샷: 2026-09-02 KST
-범위: 2026-01-01 이후 생성되고 `debop`에게 할당된 열린 GitHub 이슈.
-열린 이슈 수: 1개 (`#225`).
+기준 시각: 2026-09-07 KST
+범위: `bluetape4k-dependencies:2.1.0-SNAPSHOT` 예제 소비선 정렬.
 
 ## 현재 작업
 
-- [#225](https://github.com/bluetape4k/exposed-r2dbc-workshop/issues/225) `bluetape4k-dependencies:2.0.0` 안정 릴리스 참조 갱신: 중앙 catalog, 현재 독자 README, batch R2DBC 안정 package import, WIP/CHANGELOG를 정렬하고 영향 모듈 검증을 수행한다.
+- 중앙 catalog를 `bluetape4k-dependencies:2.1.0-SNAPSHOT`으로 전환하고,
+  Virtual Thread와 checkpointable batch 예제가 각각
+  `bluetape4k-virtualthread-jdk25:2.1.0-SNAPSHOT`,
+  `bluetape4k-exposed-batch:2.1.0-SNAPSHOT`을 해석하는지 검증한다.
 
 ## 최근 완료
 
@@ -18,9 +20,12 @@
 
 ## 현재 방향
 
-현재 작업은 중앙 `bluetape4k-dependencies:2.0.0` 안정 릴리스와 독자 문서의 좌표를 일치시키는 것이다. 과거 chapter 10-12 확장 로드맵과 아래 대기열은 참고용으로 유지하며, 새 예제는 structured coroutine cancellation과 cleanup failure 보고 계약을 계속 보존해야 한다.
+현재 작업은 모든 예제 저장소를 중앙 `bluetape4k-dependencies:2.1.0-SNAPSHOT`
+개발선에 맞추는 것이다. 과거 chapter 10-12 확장 로드맵과 아래 대기 목록은
+참고용으로 유지하며, 새 예제는 structured coroutine cancellation과 cleanup
+failure 보고 계약을 계속 보존해야 한다.
 
-## 이전 우선순위 대기열 (참고)
+## 이전 우선순위 대기 목록 (참고)
 
 | 우선순위 | 이슈 | 난이도 | 메모 |
 |---|---|---:|---|

@@ -17,9 +17,9 @@ job은 caller-owned `R2dbcDatabase`와 함께 `ExposedR2dbcBatchJobRepository`,
 않습니다.
 
 이 workshop이 해석하는 provider artifact는
-`io.github.bluetape4k.exposed:bluetape4k-exposed-batch:2.0.0`입니다. 안정
-`bluetape4k-dependencies:2.0.0` catalog와 Maven Central을 통해 해석합니다.
-이 release에서 R2DBC repository의 metadata table import는
+`io.github.bluetape4k.exposed:bluetape4k-exposed-batch:2.1.0-SNAPSHOT`입니다.
+`bluetape4k-dependencies:2.1.0-SNAPSHOT` catalog와 중앙 개발 저장소를 통해
+해석합니다. 이 개발선에서 R2DBC repository의 metadata table import는
 `io.bluetape4k.batch.r2dbc.tables`, codec은 `io.bluetape4k.batch.CheckpointJson`입니다.
 Package 이름은 artifact 호환성 경계이며 JDBC transaction을 사용한다는 뜻이
 아닙니다. Workshop도 provider의 R2DBC table package를 직접 사용합니다.
