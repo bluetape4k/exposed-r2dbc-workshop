@@ -21,7 +21,7 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 
 - **Reactive SQL 학습 경로** — shared test infrastructure부터 high-performance routing까지
 - **Coroutine/R2DBC 예제** — `suspendTransaction`, Flow collection, WebFlux, Ktor request handling 포함
-- **JDK 25 Virtual Threads 예제** — `bluetape4k-dependencies:2.0.0` BOM이 선택하는 `bluetape4k-virtualthread-jdk25:2.0.0` provider 사용
+- **JDK 25 Virtual Threads 예제** — `bluetape4k-dependencies:2.1.0-SNAPSHOT` BOM이 선택하는 `bluetape4k-virtualthread-jdk25:2.1.0-SNAPSHOT` provider 사용
 - **Multi-database 검증** — H2, PostgreSQL, MySQL, MariaDB
 - **운영형 패턴** — repository, cache, multi-tenant schema, routing datasource,
   realtime outbox, HTTP client outbox/idempotency, observability/readiness,
@@ -41,7 +41,7 @@ Reactive database access, WebFlux 통합, schema lifecycle, DDL/DML, multi-tenan
 
 ## 핵심 포인트
 
-- Kotlin `2.3.20`, JDK `25+`, Exposed `1.1.1`, Spring Boot `3.5.11`, Bluetape4k `1.5.0-Beta1`
+- Kotlin `2.3.20`, JDK `25+`, Exposed `1.1.1`, Spring Boot `3.5.11`, Bluetape4k `2.1.0-SNAPSHOT`
 - 대부분의 예제가 테스트 중심으로 구성되어 있어, 코드보다 테스트를 따라가며 학습하기 좋습니다.
 - H2, PostgreSQL, MySQL 기반 시나리오를 함께 검증합니다.
 - Spring/WebFlux와 Ktor 모듈은 REST API, 캐시, 멀티테넌시, 라우팅 예제를 포함합니다.
