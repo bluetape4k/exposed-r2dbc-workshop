@@ -55,6 +55,8 @@ jobs:
     needs: validate-wrapper
     strategy:
       fail-fast: false
+      # Maven Central rate limit을 피하도록 의존성 해석 동시성을 제한한다.
+      max-parallel: 2
       matrix:
         include:
           - db: H2
