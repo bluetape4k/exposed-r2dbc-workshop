@@ -52,11 +52,11 @@ jobs:
   test:
     name: Test / ${{ matrix.db-name }} / ${{ matrix.shard-name }}
     runs-on: ubuntu-latest
-    needs: validate-wrapper
+    needs: build
     strategy:
       fail-fast: false
-      # Maven Central rate limit을 피하도록 의존성 해석 동시성을 제한한다.
-      max-parallel: 2
+      # Build & Detekt와 test matrix의 의존성 해석이 겹치지 않도록 직렬화한다.
+      max-parallel: 1
       matrix:
         include:
           - db: H2
