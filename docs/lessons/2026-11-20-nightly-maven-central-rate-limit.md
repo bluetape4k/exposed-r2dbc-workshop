@@ -69,6 +69,11 @@ Gradle resolver만 실행된다. 여기에 test job의 Gradle cache write를 허
   [#44890709748](https://github.com/bluetape4k/exposed-r2dbc-workshop/actions/runs/44890709748)이
   전체 matrix와 Nightly Status까지 통과했다. 이는 retry-green을 최초 실패와
   합치지 않고 원인을 저장소 rate limit으로 분류한 근거다.
+- rate-limit 완화 커밋의 PR CI [#44895293834](https://github.com/bluetape4k/exposed-r2dbc-workshop/actions/runs/44895293834)은
+  `Secret Scan (gitleaks)` 설치 단계에서 익명 GitHub API의 `latest` 태그 조회가
+  빈 버전이 되어 `gitleaks__linux_x64.tar.gz` 404를 냈다. 비밀 탐지 결과가 아닌
+  설치 bootstrap 실패이므로 gitleaks `8.30.1`을 버전 경로에 고정해 API rate
+  limit과 태그 파싱에 의존하지 않도록 수정한다.
 - 로컬에서 `actionlint .github/workflows/*.yml`, `bash -n
   .github/scripts/gradle-with-rate-limit-retry.sh`, `shellcheck
   .github/scripts/gradle-with-rate-limit-retry.sh`를 통과했다.

@@ -46,9 +46,11 @@ jobs:
           fetch-depth: 0
 
       - name: Install gitleaks
+        env:
+          # 익명 GitHub API rate limit으로 latest 태그를 잃어 설치 URL이 404가 되지 않도록 고정한다.
+          GITLEAKS_VERSION: '8.30.1'
         run: |
-          GITLEAKS_VERSION=$(curl -s https://api.github.com/repos/gitleaks/gitleaks/releases/latest | grep '"tag_name"' | sed 's/.*"v\([^"]*\)".*/\1/')
-          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/latest/download/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
             | tar -xz gitleaks
           sudo mv gitleaks /usr/local/bin/
 
