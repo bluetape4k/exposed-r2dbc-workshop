@@ -19,6 +19,12 @@
   `Received status code 429 from server: Too Many Requests`로 다시 실패했다.
   같은 시각에 `Build & Detekt`, H2, PostgreSQL shard-1이 시작했으며, `max-parallel: 2`는
   test matrix 내부만 제한해 실제 Gradle 의존성 해석 job은 세 개가 겹쳤다.
+- 직렬화 후 feature HEAD `78f1231289e8aaecc1fa1982bcfc418e7f94f85e`의 수동 실행
+  [#44890709748](https://github.com/bluetape4k/exposed-r2dbc-workshop/actions/runs/44890709748)은
+  PostgreSQL shard-1에서 `log4j-over-slf4j:2.0.18` POM 요청 중 같은 429로 실패했다.
+  나머지 matrix job은 통과했고, 실패 job [#136806397666](https://github.com/bluetape4k/exposed-r2dbc-workshop/actions/runs/44890709748/job/136806397666)을
+  동일 workflow job으로 재실행한 [#136817745945](https://github.com/bluetape4k/exposed-r2dbc-workshop/actions/runs/44890709748/job/136817745945)이
+  통과했으므로 제품 코드 실패가 아닌 일시적 저장소 제한임을 확인했다.
 
 실패한 실행과 retry-green 실행을 분리해 보면 제품 코드 회귀보다 외부 저장소
 요청 폭주에 따른 일시적인 의존성 해석 실패로 분류할 수 있다. 현재 Maven
@@ -27,20 +33,23 @@ Central과 Sonatype의 개발 버전 artifact 요청이 `200`을 반환한 것�
 
 ## 실패한 가정
 
-Nightly test matrix를 두 개까지 실행하면 Maven Central 요청이 안정적이라고
-가정했다. 그러나 `Build & Detekt` job도 `validate-wrapper` 뒤에 test matrix와
-동시에 시작하고, matrix 동시 실행과
-`build.gradle.kts`의 `cacheChangingModulesFor(0, TimeUnit.SECONDS)` 설정 및
-개발 버전 의존성이 겹치면서 같은 외부 메타데이터 요청이 짧은 시간에
-집중될 수 있다.
+Nightly test matrix를 직렬화하면 Maven Central 요청이 안정적이라고 가정했다.
+그러나 각 matrix job은 새 runner에서 시작하고 `gradle/actions/setup-gradle`의
+`cache-read-only: true` 때문에 앞선 job이 받은 test 의존성을 다음 job에 저장하지
+못했다. 따라서 직렬화 뒤에도 첫 의존성 해석 요청 하나가 일시적인 429를 만나면
+같은 job이 즉시 실패했다.
 
 ## 결정
 
 `.github/workflows/nightly.yml`의 `test`가 `build` 완료를 기다리도록 하고,
 `test.strategy.max-parallel: 1`로 matrix를 직렬화한다. 이로써 Build & Detekt와
 test job의 의존성 해석이 겹치지 않고, test matrix에서도 한 번에 하나의
-Gradle resolver만 실행된다. 개발 버전 의존성의 최신 여부 계약과 캐시 TTL은
-변경하지 않는다.
+Gradle resolver만 실행된다. 여기에 test job의 Gradle cache write를 허용해
+직렬 matrix의 앞선 job이 받은 의존성을 뒤따르는 job이 재사용하도록 하고,
+`.github/scripts/gradle-with-rate-limit-retry.sh`가 `429/Too Many Requests`일
+때만 같은 runner에서 60초부터 지수 backoff로 최대 세 번 재시도한다. 일반
+컴파일·테스트 실패는 재시도하지 않으며 개발 버전 의존성의 최신 여부 계약과
+캐시 TTL은 변경하지 않는다.
 
 ## 검증 결과
 
@@ -55,6 +64,14 @@ Gradle resolver만 실행된다. 개발 버전 의존성의 최신 여부 계약
   위 직렬화가 없을 때 `jackson-bom:2.23.0` 요청에서 429가 재발한 사례로
   기록한다. 수정 후에는 변경한 정확한 HEAD의 PR CI와 hosted Nightly를
   별도로 확인한다.
+- feature HEAD `78f1231289e8aaecc1fa1982bcfc418e7f94f85e`의 최초 실행은
+  `log4j-over-slf4j:2.0.18` 429로 실패했지만, 동일 job 재실행 후
+  [#44890709748](https://github.com/bluetape4k/exposed-r2dbc-workshop/actions/runs/44890709748)이
+  전체 matrix와 Nightly Status까지 통과했다. 이는 retry-green을 최초 실패와
+  합치지 않고 원인을 저장소 rate limit으로 분류한 근거다.
+- 로컬에서 `actionlint .github/workflows/*.yml`, `bash -n
+  .github/scripts/gradle-with-rate-limit-retry.sh`, `shellcheck
+  .github/scripts/gradle-with-rate-limit-retry.sh`를 통과했다.
 
 ## 재발 방지 규칙
 
@@ -63,6 +80,8 @@ Gradle resolver만 실행된다. 개발 버전 의존성의 최신 여부 계약
    Nightly를 다시 실행한다.
 2. 최초 실패와 retry-green 결과를 하나로 합치지 말고, 실패 시 로그에서
    정확한 HTTP status와 의존성 URL을 확인한다.
-3. 동시성 제한 후에도 429가 재발할 때만 저장소 미러, 캐시, 재시도 정책을
-   별도 근거로 검토한다. 개발 버전 의존성의 최신 여부 계약을 근거 없이
-   낮추지 않는다.
+3. Nightly test cache는 read-only로 되돌리지 않는다. 직렬 matrix의 앞선 job이
+   받은 의존성을 뒤따르는 job이 재사용해야 외부 요청을 줄일 수 있다.
+4. `gradle-with-rate-limit-retry.sh`는 429 로그가 아닌 실패를 재시도하지 않는다.
+   429가 지속되면 저장소 미러나 공급자 상태를 별도 근거로 조사하고, 개발 버전
+   의존성의 최신 여부 계약을 근거 없이 낮추지 않는다.

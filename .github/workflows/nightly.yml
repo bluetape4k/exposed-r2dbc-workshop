@@ -36,11 +36,11 @@ jobs:
         with:
           gradle-version: wrapper
       - name: Build (compile only)
-        run: ./gradlew assemble --parallel
+        run: bash .github/scripts/gradle-with-rate-limit-retry.sh assemble --parallel
         env:
           GRADLE_OPTS: "-Dorg.gradle.daemon=false"
       - name: Detekt static analysis
-        run: ./gradlew detekt --parallel
+        run: bash .github/scripts/gradle-with-rate-limit-retry.sh detekt --parallel
       - name: Upload detekt report
         if: always()
         uses: actions/upload-artifact@v7
@@ -186,7 +186,8 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6
         with:
           gradle-version: wrapper
-          cache-read-only: true
+          # 직렬 matrix의 앞선 job이 받은 의존성을 다음 job이 재사용하도록 저장을 허용한다.
+          cache-read-only: false
       - name: Run tests (${{ matrix.db-name }})
         env:
           USE_DB: ${{ matrix.db }}
@@ -198,15 +199,15 @@ jobs:
         run: |
           read -r -a module_tasks <<< "$MODULE_TASKS"
           if [ "$NEEDS_DOCKER" = "true" ]; then
-            ./gradlew "${module_tasks[@]}" "-PuseDB=$USE_DB" --continue --max-workers=1
+            bash .github/scripts/gradle-with-rate-limit-retry.sh "${module_tasks[@]}" "-PuseDB=$USE_DB" --continue --max-workers=1
           else
-            ./gradlew test "-PuseDB=$USE_DB" --continue
+            bash .github/scripts/gradle-with-rate-limit-retry.sh test "-PuseDB=$USE_DB" --continue
           fi
       - name: Generate Kover XML report
         if: matrix.collect-coverage && always()
         env:
           USE_DB: ${{ matrix.db }}
-        run: ./gradlew koverXmlReport "-PuseDB=$USE_DB" --continue -x test
+        run: bash .github/scripts/gradle-with-rate-limit-retry.sh koverXmlReport "-PuseDB=$USE_DB" --continue -x test
         continue-on-error: true
       - name: Upload test results
         if: always()
