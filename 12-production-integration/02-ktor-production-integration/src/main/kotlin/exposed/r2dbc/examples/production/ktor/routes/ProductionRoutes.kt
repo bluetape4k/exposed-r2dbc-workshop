@@ -107,6 +107,7 @@ internal fun Application.productionRoutes(
                     }
                 }
                 try {
+                    realtimeHub.awaitSubscriber()
                     for (frame in incoming) {
                         if (frame is Frame.Close) {
                             break

@@ -9,6 +9,7 @@ import exposed.r2dbc.examples.production.ktor.app.DispatchOutboundView
 import exposed.r2dbc.examples.production.ktor.app.DuplicateIdempotencyKeyException
 import exposed.r2dbc.examples.production.ktor.app.EnqueueOutboundRequest
 import exposed.r2dbc.examples.production.ktor.app.KtorProductionRepository
+import exposed.r2dbc.examples.production.ktor.app.KtorRealtimeHub
 import exposed.r2dbc.examples.production.ktor.app.OutboxEventsView
 import exposed.r2dbc.examples.production.ktor.app.OutboxEventView
 import exposed.r2dbc.examples.production.ktor.app.OutboxStatus
@@ -30,6 +31,7 @@ import exposed.r2dbc.examples.production.ktor.outbound.defaultOutboundClientJson
 import exposed.r2dbc.examples.production.ktor.outbound.defaultOutboundClientTimeouts
 import io.bluetape4k.assertions.shouldBeEqualTo
 import io.bluetape4k.assertions.shouldBeGreaterThan
+import io.bluetape4k.assertions.shouldBeTrue
 import io.bluetape4k.assertions.shouldNotBeEqualTo
 import io.bluetape4k.assertions.shouldNotBeNull
 import io.bluetape4k.ktor.testing.bluetape4kJsonClient
@@ -58,8 +60,13 @@ import io.ktor.websocket.readText
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.yield
 import nl.altindag.log.LogCaptor
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.junit.jupiter.api.Test
@@ -275,6 +282,22 @@ class KtorProductionIntegrationApplicationTest {
             }
             text.contains("live update") shouldBeEqualTo true
         }
+    }
+
+    @Test
+    fun `realtime hub waits for a live collector before accepting publish`() = runTest {
+        val hub = KtorRealtimeHub()
+        val waiting = async { hub.awaitSubscriber() }
+
+        yield()
+        waiting.isActive.shouldBeTrue()
+
+        val collector = launch {
+            hub.live().collect { _ -> }
+        }
+        waiting.await()
+
+        collector.cancelAndJoin()
     }
 
     @Test
